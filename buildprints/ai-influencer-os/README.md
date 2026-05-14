@@ -1,6 +1,6 @@
 # OpenClaw AI Influencer OS
 
-> Build a Mila-style AI creator system with OpenClaw, Wavespeed images, memory, life continuity, content drafts, QA, and social publishing handoff.
+> Build a OpenClaw AI creator system with OpenClaw, Wavespeed images, memory, life continuity, content drafts, QA, and social publishing handoff.
 
 ```txt
        chat          memory          life           content          publish
@@ -33,14 +33,14 @@ Give this folder to a coding agent:
 
 ```txt
 Read BUILDPRINT.md.
-Ask questions.md unless I say “use Mila defaults”.
+Ask questions.md unless I say “use default persona preset”.
 Then build the OpenClaw AI Influencer OS.
 ```
 
 Fast path:
 
 ```txt
-Use Mila defaults.
+Use default persona preset.
 Build this in a new repo.
 Keep real posting disabled until I approve it.
 ```

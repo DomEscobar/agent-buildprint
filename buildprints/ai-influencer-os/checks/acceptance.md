@@ -2,7 +2,7 @@
 
 ## Alignment checks
 
-- User either said “Use Mila defaults” or the agent asked exactly `questions.md`.
+- User either said “Use default persona preset” or the agent asked exactly `questions.md`.
 - Agent did not ask broad product-redesign questions.
 - `VALIDATION.md` records final choices and deviations.
 

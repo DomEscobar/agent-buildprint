@@ -19,7 +19,7 @@ Keep these tokens active while planning and coding:
 TARGET_SHAPE = OpenClaw container + persona extension + skills + life modules + Wavespeed image skill + browser/noVNC publishing handoff
 RUNTIME = OpenClaw
 IMAGE_PROVIDER = Wavespeed only for production
-REFERENCE_ARCHITECTURE = Mila-style
+REFERENCE_ARCHITECTURE = OpenClaw Influencer OS default preset
 DEFAULT_OUTPUT = Dockerized bot, not SaaS app
 TEST_MODE = no external API calls, mock Wavespeed
 PUBLISHING_DEFAULT = mock/manual approval, never auto-publish by default
@@ -59,7 +59,7 @@ The build is working only when all are true:
 | SaaS dashboard | Dockerized OpenClaw bot first; dashboard is minor status UI only |
 | image abstraction | Wavespeed production path with mock fallback |
 | pure mock demo | real file/module shape + behavior tests; mock only external APIs |
-| social scheduler | Mila-style life/social planner with manager QA and grounded drafts |
+| social scheduler | default persona preset life/social planner with manager QA and grounded drafts |
 | auto-poster | mock/manual-gated publisher + browser/noVNC handoff |
 | broad product discovery | closed configuration interview only |
 
@@ -67,7 +67,7 @@ The build is working only when all are true:
 
 ## 0. Contract for the coding agent
 
-Build a **Mila-style OpenClaw AI influencer system**.
+Build an **OpenClaw AI Influencer OS with a configurable persona and a default preset**.
 
 This Buildprint is not a brainstorming prompt. Treat it as an execution contract.
 
@@ -93,7 +93,7 @@ NO auto-publishing by default
 Before implementation:
 
 ```txt
-if user said "Use Mila defaults":
+if user said "Use default persona preset":
   use section 2 and start building
 else:
   ask exactly questions.md
@@ -113,7 +113,7 @@ Record final choices in `VALIDATION.md`.
 
 ---
 
-## 2. Mila defaults
+## 2. Default persona preset
 
 Use these values unless changed by confirmed user answers:
 
@@ -388,7 +388,7 @@ Must report:
 Follow this order only:
 
 ```txt
-0 configuration interview / Mila defaults
+0 configuration interview / default persona preset
 1 package.json + file tree + .env.example
 2 OpenClaw config + Docker skeleton
 3 persona files + canon + manager docs
@@ -469,7 +469,7 @@ List any missing required file as a deviation.
 
 Fail the implementation if it:
 
-- skips the configuration interview or Mila-default confirmation;
+- skips the configuration interview or default-preset confirmation;
 - is not OpenClaw-shaped;
 - omits Wavespeed from production image generation;
 - uses real APIs in tests;

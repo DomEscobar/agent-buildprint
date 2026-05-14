@@ -3,7 +3,7 @@
 Ask these only if the user did **not** say:
 
 ```txt
-Use Mila defaults.
+Use default persona preset.
 ```
 
 Rules for the coding agent:
@@ -11,14 +11,14 @@ Rules for the coding agent:
 - Ask exactly these questions.
 - Do not ask broad product strategy questions.
 - Do not propose architecture changes.
-- These answers configure the fixed OpenClaw/Mila architecture; they do not replace it.
-- If the user skips a question, use the Mila default.
+- These answers configure the fixed OpenClaw Influencer OS architecture; they do not replace it.
+- If the user skips a question, use the default persona preset.
 
 ## Questions
 
-1. **Persona** — use Mila-style defaults, or set a new persona name + short identity?
+1. **Persona** — use default persona preset defaults, or set a new persona name + short identity?
 
-2. **Voice/language** — keep mixed DE/EN dry/direct Mila tone, or change language/tone?
+2. **Voice/language** — keep mixed DE/EN dry/direct default preset tone, or change language/tone?
 
 3. **Content lane** — keep lifestyle/gaming/gym/streetwear/coffee, or swap/add lanes?
 
@@ -46,8 +46,8 @@ Alignment summary
 - Image generation:
 - Publishing safety:
 - Autonomy:
-- Kept from Mila defaults:
-- Changed from Mila defaults:
+- Kept from default persona preset:
+- Changed from default persona preset:
 
 Reply “confirm” to build, or tell me what to change.
 ```

@@ -21,8 +21,8 @@ Read in this order:
 Mandatory flow:
 
 ```txt
-if user said "Use Mila defaults":
-  build with Mila defaults
+if user said "Use default persona preset":
+  build with default persona preset
 else:
   ask exactly questions.md
   summarize choices

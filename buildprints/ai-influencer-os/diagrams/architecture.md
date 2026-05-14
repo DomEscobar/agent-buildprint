@@ -1,4 +1,4 @@
-# OpenClaw/Mila-style Architecture Diagram
+# OpenClaw/default-preset Architecture Diagram
 
 ```txt
 Telegram / chat channel

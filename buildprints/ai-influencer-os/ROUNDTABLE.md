@@ -6,7 +6,7 @@ Goal: make the Buildprint hard for coding agents to misread, drift, or half-impl
 
 - **Build Systems Architect** — cares about deterministic file tree and runnable milestones.
 - **OpenClaw Runtime Expert** — cares that the result is actually OpenClaw-shaped.
-- **Mila Operator** — cares that it mirrors the working Mila architecture.
+- **default persona Operator** — cares that it mirrors the working reference influencer architecture.
 - **Coding-Agent Critic** — assumes agents will take shortcuts unless blocked.
 - **Safety/Policy Reviewer** — cares about public/private media, secrets, posting gates.
 - **Product/User Advocate** — cares that humans understand what they are choosing.
@@ -15,7 +15,7 @@ Goal: make the Buildprint hard for coding agents to misread, drift, or half-impl
 
 ### 1. Too many open questions create drift
 
-The old `questions.md` asked 25 questions. That invites the coding agent to redesign the product with the user instead of configuring the fixed Mila/OpenClaw architecture.
+The old `questions.md` asked 25 questions. That invites the coding agent to redesign the product with the user instead of configuring the fixed default persona/OpenClaw architecture.
 
 Decision: replace with a short, closed **configuration interview**. Questions may change parameters, not architecture.
 
@@ -29,7 +29,7 @@ Decision: the Buildprint must require OpenClaw-specific artifacts:
 - skills with `SKILL.md` + executable command;
 - extension/plugin folder;
 - Docker entrypoint that copies persona files into runtime/workspace;
-- commands that resemble the real Mila operating model.
+- commands that resemble the real reference influencer operating model.
 
 ### 3. Required file tree can become empty scaffolding
 
@@ -47,7 +47,7 @@ Decision: `influencer-image` must expose explicit real/mock mode and fail clearl
 
 Agents can get stuck asking too many questions.
 
-Decision: if the user says “use Mila defaults”, no questions. Otherwise ask exactly 8 closed questions and then ask for confirmation.
+Decision: if the user says “use default persona preset”, no questions. Otherwise ask exactly 8 closed questions and then ask for confirmation.
 
 ### 6. Need golden-path commands
 

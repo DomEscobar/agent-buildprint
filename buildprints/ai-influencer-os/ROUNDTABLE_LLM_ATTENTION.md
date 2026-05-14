@@ -8,14 +8,14 @@ Goal: optimize the Buildprint for how coding agents actually attend, plan, and d
 - **Coding-Agent Harness Designer** — cares about runnable milestones and failure feedback.
 - **LLM Failure Critic** — predicts shortcuts and familiar-template drift.
 - **OpenClaw Shape Guardian** — keeps the output from becoming generic Node/Express.
-- **Mila Fidelity Reviewer** — checks whether the system still mirrors Mila.
+- **Default Persona Reviewer** — checks whether the system still follows the default persona preset.
 - **Test-First Reviewer** — forces objective pass/fail gates.
 
 ## Findings
 
 ### 1. First 300 tokens decide the frame
 
-Coding agents overweight the first screen. If “OpenClaw + Wavespeed + Mila-style + fixed architecture” is not repeated immediately, the agent may build a generic bot.
+Coding agents overweight the first screen. If “OpenClaw + Wavespeed + default-preset + fixed architecture” is not repeated immediately, the agent may build a generic bot.
 
 Decision: add an **Attention Anchor Block** at the top with the exact target shape and priority order.
 
