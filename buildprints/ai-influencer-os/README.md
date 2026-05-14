@@ -1,21 +1,79 @@
-# OpenClaw AI Influencer OS Buildprint
+# OpenClaw AI Influencer OS
 
-This Buildprint mirrors the real Mila-style setup: an OpenClaw-powered AI influencer/persona system with memory, life continuity, Wavespeed image generation, browser-based social publishing, and a manager QA layer.
-
-The important part is **alignment before implementation**. A coding agent must ask `questions.md` first unless the user says “use Mila defaults”. The Buildprint then adapts to what the user wants different while preserving the core architecture.
-
-## Required provider assumptions
-
-- Runtime: OpenClaw
-- Image generation: Wavespeed (`WAVESPEED_API_KEY` required for real generation)
-- Default models: OpenRouter + DeepSeek style model IDs
-- Deployment: Docker
-- Publishing: visible Chromium/noVNC first, mock/manual-gated by default
-
-## Use
+> Build a Mila-style AI creator system with OpenClaw, Wavespeed images, memory, life continuity, content drafts, QA, and social publishing handoff.
 
 ```txt
-Read BUILDPRINT.md and questions.md.
-Ask the alignment questions.
-Then implement the project.
+       chat          memory          life           content          publish
+        │              │              │               │                │
+        ▼              ▼              ▼               ▼                ▼
+   ┌─────────┐   ┌─────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
+   │OpenClaw │ → │ Persona │ → │ Life loop│ → │ Draft QA │ → │ Browser  │
+   │ runtime │   │ + canon │   │ journal  │   │ + media  │   │ handoff  │
+   └─────────┘   └─────────┘   └──────────┘   └──────────┘   └──────────┘
+                                      │
+                                      ▼
+                              Wavespeed images
+```
+
+## What you get
+
+- 🧠 persona + canon + boundaries
+- 💬 Telegram/OpenClaw chat runtime
+- 🗃️ per-user relationship memory
+- 📆 simulated life state, calendar, journal
+- 🖼️ Wavespeed image generation path
+- 📝 social draft planner
+- 🧯 manager QA / audit loop
+- 🌐 visible browser/noVNC publishing handoff
+- ✅ acceptance checks for agents
+
+## Use it
+
+Give this folder to a coding agent:
+
+```txt
+Read BUILDPRINT.md.
+Ask questions.md unless I say “use Mila defaults”.
+Then build the OpenClaw AI Influencer OS.
+```
+
+Fast path:
+
+```txt
+Use Mila defaults.
+Build this in a new repo.
+Keep real posting disabled until I approve it.
+```
+
+## Required production keys
+
+```txt
+TELEGRAM_BOT_TOKEN=
+OPENROUTER_API_KEY=
+WAVESPEED_API_KEY=
+```
+
+No key? The implementation must use mock mode and clearly mark the missing key as a blocker.
+
+## Files
+
+```txt
+BUILDPRINT.md          agent alignment contract
+questions.md           user alignment interview
+prompts/implement.md   copyable coding-agent prompt
+checks/acceptance.md   what must pass
+policies/media.md      Wavespeed + public/private gates
+policies/safety.md     safety boundaries
+diagrams/architecture.md
+schemas/buildprint.meta.json
+```
+
+## Build rule
+
+This is **not** a generic chatbot blueprint.
+
+It should build around:
+
+```txt
+OpenClaw + persona plugin + skills + life loops + Wavespeed + browser publishing
 ```
