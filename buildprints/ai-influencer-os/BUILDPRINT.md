@@ -49,6 +49,7 @@ The build is working only when all are true:
 | Manager | audit reports stale, unsafe, ungrounded, blocked items |
 | Tests | `npm test` passes without external APIs and `npm run test:static` includes syntax + alignment checks |
 | Env contract | `.env.example` contains exact required names and does not enable test/mock mode by default |
+| Package identity | generated app package is `openclaw-ai-influencer-os`, not the Buildprint CLI package `agb` |
 | Validation | `VALIDATION.md` records choices, keys, deviations, blockers |
 
 ---
@@ -488,10 +489,13 @@ Keep `npm test` runnable by phase 10. If a phase is blocked, write the reason in
 
 ## 8. Commands required
 
-`package.json` must include these scripts and preserve the syntax-check chain. You may append `&& node tests/static-check.js` to `test:static`, but do not replace syntax checks with only a custom static checker.
+`package.json` must identify the generated app, not the Buildprint CLI. Use `"name": "openclaw-ai-influencer-os"`; do not use `"agb"`, `"agent-buildprint"`, `"xy"`, or any CLI/package-registry name for this scaffold.
+
+It must include these scripts and preserve the syntax-check chain. You may append `&& node tests/static-check.js` to `test:static`, but do not replace syntax checks with only a custom static checker.
 
 ```json
 {
+  "name": "openclaw-ai-influencer-os",
   "scripts": {
     "test": "node tests/runner.js",
     "test:unit": "node --test tests/*.test.js",
@@ -522,7 +526,8 @@ Tests must prove:
 12. browser/noVNC compose service or Dockerfile exists and profile storage is mounted;
 13. `.env.example` has exact required env var names and no default test/mock mode;
 14. `npm run test:static` preserves required `node --check` syntax checks plus alignment checks;
-15. `media-flow.js` imports/uses the Wavespeed client by default for real mode.
+15. `media-flow.js` imports/uses the Wavespeed client by default for real mode;
+16. `package.json.name` is `openclaw-ai-influencer-os` and not `agb`/`xy`/`agent-buildprint`.
 
 ---
 
@@ -571,6 +576,7 @@ Fail the implementation if it:
 - renames required env vars without documenting/confirming the change;
 - replaces syntax checks with only a custom static checker;
 - requires callers to inject the real Wavespeed image function for production media flow;
+- names the generated app package `agb`, `xy`, or `agent-buildprint`;
 - lacks runnable tests;
 - silently changes architecture.
 

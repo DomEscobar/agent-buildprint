@@ -18,15 +18,18 @@ Prove the build followed the Buildprint.
 1. Implement tests from `TEST_MATRIX.md`.
 2. Run `npm test`.
 3. Run syntax/static check.
-4. Fill `VALIDATION.md` from `VALIDATION_TEMPLATE.md`.
+4. Add static/alignment tests for non-keyword analyzer, concrete Wavespeed adapter, OpenClaw runtime command/blocker, noVNC compose service, exact env names, no default test/mock mode, required syntax-check chain, default media-flow Wavespeed adapter wiring, and package identity (`openclaw-ai-influencer-os`, not `agb`).
+5. Fill `VALIDATION.md` from `VALIDATION_TEMPLATE.md`.
 
 ## Do not
 
 - call external APIs;
 - mark blocked work as pass;
-- omit deviations.
+- omit deviations;
+- accept generated `package.json.name` as `agb`, `xy`, or `agent-buildprint`.
 
 ## Exit criteria
 
 - tests pass or failures are honestly documented;
-- validation lists commands, keys, deviations, blockers.
+- validation lists commands, keys, deviations, blockers;
+- static checks fail if package identity, env contract, syntax checks, analyzer, Wavespeed, OpenClaw runtime, noVNC, or media-flow wiring drifts.

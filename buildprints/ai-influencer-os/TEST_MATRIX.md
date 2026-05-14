@@ -11,6 +11,7 @@
 | External API in tests | Test runner forces mock mode and passes without keys; `.env.example` does not enable test/mock mode by default |
 | Env var drift | Static check verifies exact required env var names from `BUILDPRINT.md` |
 | Static check drift | `npm run test:static` includes required `node --check` chain plus alignment checks |
+| Package identity drift | Static check verifies `package.json.name` is `openclaw-ai-influencer-os`, not `agb`/`xy`/`agent-buildprint` |
 | Public/private media confusion | Low-trust private/sensitive media is blocked; public media requires safety/grounding |
 | Ungrounded social claims | Draft without `groundedIn` is blocked by QA |
 | Auto-publishing | Mock publisher refuses unapproved drafts and default env disables real publish |

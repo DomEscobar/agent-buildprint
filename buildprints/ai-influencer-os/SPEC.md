@@ -110,6 +110,10 @@ Given `package.json` is generated
 When static validation runs
 Then `npm run test:static` includes the required `node --check` syntax checks and alignment checks.
 
+Given `package.json` is generated
+When package identity is inspected
+Then `name` is `openclaw-ai-influencer-os`, not `agb`, `xy`, or `agent-buildprint`.
+
 ### R9 — Manager audit
 
 Given drafts/media/jobs/storage exist

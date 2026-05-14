@@ -18,24 +18,27 @@ Create the runnable OpenClaw-shaped project skeleton.
 
 ## Steps
 
-1. Create scripts required by `BUILDPRINT.md`.
-2. Add all env names from the environment contract exactly; do not enable test/mock flags in `.env.example` by default.
-3. Create Docker/runtime structure.
-4. Create OpenClaw config that loads extension and skills.
-5. Make the entrypoint call `OPENCLAW_RUNTIME_CMD` or emit a structured `openclaw_runtime_missing` blocker; do not silently run a generic Node app as if it were OpenClaw.
-6. Add Chromium/noVNC service shape or Dockerfile and persistent `storage/browser/profile` mount for browser publishing handoff.
+1. Create `package.json` for the generated app with `name: "openclaw-ai-influencer-os"`; do not use the Buildprint CLI name `agb`.
+2. Create scripts required by `BUILDPRINT.md`.
+3. Add all env names from the environment contract exactly; do not enable test/mock flags in `.env.example` by default.
+4. Create Docker/runtime structure.
+5. Create OpenClaw config that loads extension and skills.
+6. Make the entrypoint call `OPENCLAW_RUNTIME_CMD` or emit a structured `openclaw_runtime_missing` blocker; do not silently run a generic Node app as if it were OpenClaw.
+7. Add Chromium/noVNC service shape or Dockerfile and persistent `storage/browser/profile` mount for browser publishing handoff.
 
 ## Do not
 
 - build Express/Next as the main runtime;
 - omit OpenClaw config/skills;
 - pretend generic Node startup is the OpenClaw runtime;
+- name the generated app package `agb`, `xy`, or `agent-buildprint`;
 - put real secrets in files;
 - set `TEST_MODE=true` or mock mode as a default in `.env.example`.
 
 ## Exit criteria
 
 - file tree exists;
+- `package.json.name` is `openclaw-ai-influencer-os`;
 - `npm run test:static` can be added later without changing structure;
 - missing keys are placeholders only;
 - env names match `BUILDPRINT.md` exactly;
