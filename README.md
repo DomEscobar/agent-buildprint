@@ -36,3 +36,9 @@ node ./bin/agb.js map ./my-project --out ./my-project.buildprint
 ## Principle
 
 Deterministic facts first. Inference second. Low-confidence areas become questions, not fake certainty.
+
+## Format philosophy
+
+Buildprints are format-flexible. A Buildprint can be Markdown-first, contract-first YAML/JSON, hybrid, or example-first.
+
+The minimal valid Buildprint is a `BUILDPRINT.md` with a comprehensive plan, acceptance checks, risks, and a copyable agent prompt. YAML/JSON should be used when structure needs validation, not as a tax on creators. See `FORMATS.md`.
