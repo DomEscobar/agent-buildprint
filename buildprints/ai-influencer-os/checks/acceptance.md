@@ -1,36 +1,34 @@
 # Acceptance Checks
 
-A generated implementation is acceptable when all checks pass.
+## Alignment checks
 
-## Required files
+- Coding agent asked `questions.md` unless user said “use Mila defaults”.
+- Implementation records chosen deviations in `VALIDATION.md`.
 
-- `persona/SOUL.md`
-- `persona/CANON.md`
-- `persona/BOUNDARIES.md`
-- source modules for memory, self-state, context, planner, media policy, QA, mock publishing
-- tests or validation script
-- `VALIDATION.md`
+## Architecture checks
+
+- OpenClaw config exists.
+- Persona plugin exists.
+- Skills exist for image, post, social, journal, calendar, recall.
+- Life modules exist for life tick, journal, social planner/autonomy, manager audit.
+- Docker deployment exists.
+- Browser/noVNC publishing flow is documented.
+
+## Provider checks
+
+- `.env.example` includes `WAVESPEED_API_KEY`.
+- Image skill is designed around Wavespeed, with mock fallback for tests.
+- OpenRouter/OpenClaw model vars are documented.
 
 ## Behavioral checks
 
-1. Ungrounded public post claims are blocked.
-2. Grounded safe drafts can pass QA.
-3. Mock publishing requires approval.
-4. Low-trust sensitive/private media requests are blocked.
-5. Persona canon is referenced by QA.
-6. User memory is not written into public posts.
-7. No external social/image API is required for tests.
+- Public claims must be grounded in state/calendar/journal/social data.
+- Public and private media policies are separate.
+- Private sensitive media is trust/consent gated or blocked.
+- Publishing is mock/manual-gated by default.
+- Manager QA can block unsafe/canon-breaking drafts.
 
-## Command check
+## Test checks
 
-The implementation must provide one command such as:
-
-```bash
-npm test
-```
-
-or:
-
-```bash
-npm run validate
-```
+- Tests or validation scripts run without real external API calls.
+- Missing real keys are reported as setup blockers, not hidden failures.

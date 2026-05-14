@@ -1,220 +1,228 @@
 ---
-title: AI Influencer OS
+title: OpenClaw AI Influencer OS
 slug: ai-influencer-os
 category: Product OS
-stack: [Persona, Memory, Image generation, Social publishing, TypeScript, JSON storage]
+stack: [OpenClaw, Telegram, Wavespeed, OpenRouter, Docker, Browser publishing, Persona memory]
 difficulty: Advanced
 status: publishable-draft
 creator: Agent Buildprint
 ---
 
-# AI Influencer OS Buildprint
+# OpenClaw AI Influencer OS Buildprint
 
 ## 1. Product promise
 
-Build a believable AI creator system: not just a chatbot, and not just an image generator, but a coherent persona with memory, life continuity, content planning, media boundaries, manager QA, and social publishing flow.
+Build a Mila-style AI influencer operating system on top of **OpenClaw**: a believable persona with chat, memory, life continuity, image generation via **Wavespeed**, social content planning, browser-based publishing, manager QA, and safety gates.
 
-The first implementation should be local, mock-first, and safe. It should prove the architecture before connecting real social accounts, real image generation, or autonomous posting.
+This Buildprint is intentionally based on the real Mila architecture. It should not become a generic chatbot scaffold. It should create an OpenClaw-powered influencer system that can be adapted through an alignment interview before implementation.
 
-## 2. What this builds
+## 2. Blueprint principle
 
-A minimal AI Influencer OS with these modules:
+A good Buildprint is not just instructions. It is an alignment layer.
 
-1. **Persona Canon** — stable identity, voice, niche, visual rules, boundaries.
-2. **Relationship Memory** — user-specific facts, preferences, trust, recent messages, open loops.
-3. **Self-State / Life Continuity** — mood, energy, current arcs, calendar, journal, plausible recurring habits.
-4. **Runtime Context Builder** — compact private context injected into chat/planning prompts.
-5. **Content Planner** — turns life beats and content pillars into social draft ideas.
-6. **Media Policy** — separates public-safe media, private media, blocked requests, and approval gates.
-7. **Media Queue** — mock image/video jobs linked to drafts or private requests.
-8. **Manager QA** — blocks low-quality, unsafe, inconsistent, or canon-breaking drafts.
-9. **Mock Publisher** — approval-gated publishing to a local history log, not a real platform.
-10. **Tests/Checks** — prove the lifecycle and safety gates work.
-
-## 3. Non-goals for first implementation
-
-- No real Instagram/TikTok posting.
-- No real adult content generation.
-- No real impersonation of existing people.
-- No autonomous outreach to real people.
-- No hidden prompt/policy leakage.
-- No external paid API calls required.
-
-## 4. Required file structure for generated implementation
-
-Recommended minimal output:
+Before coding, the agent must ask the user the questions in `questions.md`, unless the user says:
 
 ```txt
+Use Mila defaults.
+```
+
+The agent should then adapt the implementation to the user’s answers while preserving the core architecture and safety rules.
+
+## 3. What this builds
+
+A Dockerized OpenClaw influencer bot with:
+
+1. **OpenClaw runtime** — containerized bot/app runtime.
+2. **Persona files** — `SOUL.md`, `USER.md`, canon, boundaries.
+3. **LLM-led semantic analyzer** — model returns structured JSON understanding of messages.
+4. **Runtime context injection** — private compact block with mood, life state, memory, trust, media status.
+5. **Relationship memory** — per-user trust, intimacy, stage, facts, preferences, open loops, recent messages.
+6. **Self/life state** — mood, energy, social battery, active games, gym rhythm, taste phase, upcoming plans.
+7. **Calendar/journal** — coherent simulated life, planned/done/skipped events, daily journal.
+8. **Social drafts/outbox** — content backlog, drafts, media jobs, posted history.
+9. **Wavespeed image generation** — required provider path for image generation.
+10. **Media gates** — public/private separation, trust/consent gates, identity/canon QA.
+11. **Browser publishing** — visible Chromium/noVNC publishing flow like Mila, with manual handoff.
+12. **Manager layer** — system health, canon QA, social QA, trend/taste freshness, proactive safe repairs.
+13. **Tests and audit** — syntax/tests/manager audit and publish dry-run checks.
+
+## 4. Required OpenClaw/Mila-like architecture
+
+Recommended generated project shape:
+
+```txt
+config/
+  openclaw.json
 persona/
   SOUL.md
+  USER.md
   CANON.md
   BOUNDARIES.md
-src/
-  context-builder.ts
-  memory-store.ts
-  self-state.ts
-  life-tick.ts
-  social-planner.ts
-  media-policy.ts
-  media-queue.ts
-  manager-qa.ts
-  mock-publisher.ts
-  types.ts
+extensions/
+  influencer-persona/
+    openclaw.plugin.json
+    index.js
+    intent.js
+    runtime-context.js
+    media-flow.js
+    policy.js
+    storage.js
+skills/
+  influencer-image/
+    SKILL.md
+    influencer-image
+    config.json
+  influencer-post/
+    SKILL.md
+    influencer-post
+  influencer-social/
+    SKILL.md
+    social
+  influencer-journal/
+    SKILL.md
+    journal
+  influencer-calendar/
+    SKILL.md
+    calendar
+  influencer-recall/
+    SKILL.md
+    recall
+life/
+  life-state.mjs
+  life-tick.mjs
+  social-planner.mjs
+  social-autonomy.mjs
+  social-publisher.mjs
+  journal-writer.mjs
+  reflect-memory.mjs
+  manager-audit.mjs
+docker/
+  Dockerfile
+  docker-compose.yml
+  entrypoint.sh
 storage/
   users/.gitkeep
-  self/state.json
+  influencer-self/state.json
   calendar/events.json
-  journal/.gitkeep
   social/drafts.json
-  social/published.json
+  social/media-jobs.json
+  social/posted-history.json
+  browser/profile/.gitkeep
+dashboard/
+  public/index.html
 tests/
-  influencer-os.test.ts
+  persona.test.js
+  image-generation.test.js
+  life.test.js
+  social-publish.test.js
+MANAGER.md
+LIFE_CONTINUITY.md
+README.md
 VALIDATION.md
-package.json
 ```
 
-## 5. Data model
+## 5. Required environment variables
 
-### User memory
-
-```ts
-type UserMemory = {
-  userId: string;
-  trust: number;
-  stage: 'cold' | 'warm' | 'close';
-  facts: string[];
-  preferences: string[];
-  openLoops: string[];
-  recentMessages: { role: 'user' | 'persona'; text: string; at: string }[];
-};
-```
-
-### Self-state
-
-```ts
-type SelfState = {
-  mood: string;
-  energy: number;
-  socialBattery: number;
-  currentArcs: string[];
-  recurringHabits: string[];
-  contentBacklog: string[];
-  lastUpdated: string;
-};
-```
-
-### Social draft
-
-```ts
-type SocialDraft = {
-  id: string;
-  platform: 'instagram' | 'tiktok' | 'x' | 'mock';
-  caption: string;
-  visualPrompt?: string;
-  source: 'life' | 'calendar' | 'manual' | 'trend';
-  groundedIn: string[];
-  status: 'draft' | 'needs_qa' | 'approved' | 'blocked' | 'published';
-  qaNotes: string[];
-};
-```
-
-### Media request
-
-```ts
-type MediaRequest = {
-  id: string;
-  requesterUserId?: string;
-  visibility: 'public' | 'private';
-  prompt: string;
-  adultIntent: boolean;
-  includeFace: boolean;
-  status: 'queued' | 'blocked' | 'ready' | 'failed';
-  policyReason?: string;
-};
-```
-
-## 6. Core flows
-
-### Chat context flow
+The implementation must document these names and create `.env.example`. It must never commit real values.
 
 ```txt
-incoming user message
-→ load user memory
-→ load self-state / recent journal / social state
-→ build compact private context
-→ model/persona response can use context but must not leak internals
-→ update memory/reflection after response
+TELEGRAM_BOT_TOKEN=
+OPENROUTER_API_KEY=
+OPENCLAW_AGENT_MODEL=openrouter/deepseek/deepseek-v4-flash
+OPENCLAW_ANALYZER_MODEL=openrouter/deepseek/deepseek-v4-flash
+OPENCLAW_LIFE_MODEL=openrouter/deepseek/deepseek-v4-flash
+OPENCLAW_SOCIAL_PLANNER_MODEL=openrouter/deepseek/deepseek-v4-flash
+OPENCLAW_REPAIR_MODEL=openrouter/deepseek/deepseek-v4-flash
+WAVESPEED_API_KEY=
+WAVESPEED_API_URL=
+MILA_IMAGE_GENERATION_TIMEOUT_MS=180000
+SOCIAL_VISIBLE_BROWSER_PORT=7900
+MILA_DASHBOARD_PORT=8626
+AUTO_PUBLISH_SOCIAL=false
+MILA_AUTONOMY_LOOP=false
+MILA_MANAGER_AUDIT_LOOP=true
 ```
 
-### Life continuity flow
+Wavespeed image generation is not optional for the full blueprint. If the user does not have a Wavespeed key yet, implement mock mode plus setup docs and clearly mark real image generation as blocked.
 
-```txt
-scheduled life tick
-→ read current self-state
-→ make small plausible update
-→ optionally add calendar/journal beat
-→ never invent dramatic events without approval
-```
+## 6. Implementation phases
 
-### Social content flow
+### Phase 0 — Alignment interview
 
-```txt
-life/calendar/backlog/trend input
-→ draft social post
-→ manager QA checks grounding, voice, safety, repetition, visual consistency
-→ approved draft enters mock publish queue
-→ mock publisher writes local published history
-```
+Ask `questions.md`. Summarize chosen deviations from Mila defaults. Get confirmation.
 
-### Media request flow
+### Phase 1 — OpenClaw skeleton
 
-```txt
-media request
-→ classify visibility/adult/include-face
-→ apply trust/safety/platform policy
-→ public content must be platform-safe
-→ private sensitive content requires explicit gates
-→ queue mock media job or block with reason
-```
+Create Dockerized OpenClaw project with persona files, config, plugin, and skills.
 
-## 7. Safety and ethics requirements
+### Phase 2 — Persona + memory
 
-- Persona must be fictional or explicitly authorized.
-- The system must not impersonate a real person.
-- Public posts must not claim real events unless grounded in stored state.
-- Real posting must require approval until separately enabled.
-- Media generation must have public/private policy separation.
-- Trust gates must exist for sensitive private media.
-- User memory must never be published accidentally.
-- Secrets and API keys must never be committed.
+Implement LLM-led JSON analyzer, runtime context injection, relationship memory, and no prompt/runtime leakage.
+
+### Phase 3 — Life continuity
+
+Implement self-state, calendar, journal, life tick, and reflection. Claims in chat/social must be grounded.
+
+### Phase 4 — Wavespeed media
+
+Implement `influencer-image` skill using Wavespeed env vars. Add mock mode for tests. Enforce public/private media policy.
+
+### Phase 5 — Social planning and publishing
+
+Implement drafts, media jobs, mock publishing, browser/noVNC publishing flow, handoff states, and failure capture.
+
+### Phase 6 — Manager layer
+
+Implement manager audit and safe repair loop: drafts, media jobs, trend freshness, SMM/social traces, stale failures, and canon consistency.
+
+### Phase 7 — Validation
+
+Run syntax checks, tests, manager audit, image mock test, social publish dry-run, and write `VALIDATION.md`.
+
+## 7. Core Mila defaults
+
+If the user says “use Mila defaults”, use:
+
+- mixed DE/EN, German-leaning casual chat;
+- dry, direct, understated, lightly teasing voice;
+- lifestyle/gaming/gym/streetwear/coffee content lane;
+- public content safe for Instagram/TikTok;
+- private media gated by trust/consent;
+- OpenRouter + DeepSeek model defaults;
+- Wavespeed for image generation;
+- visible Chromium/noVNC browser publishing;
+- manual approval or mock mode before auto-publish;
+- manager layer can patch safe local issues but not change persona direction.
 
 ## 8. Acceptance checks
 
 The generated project passes if:
 
-- `npm test` or equivalent validation passes.
-- A public post draft with ungrounded life claims is blocked.
-- A safe grounded draft can be approved and mock-published.
-- A private adult/sensitive media request from a low-trust user is blocked.
-- Persona canon exists and manager QA checks against it.
-- Mock publisher does not call external platforms.
-- `VALIDATION.md` explains implementation choices and ambiguities.
+- It is visibly OpenClaw-based and Dockerized.
+- `.env.example` includes `WAVESPEED_API_KEY` and OpenRouter/OpenClaw model vars.
+- The implementation asks alignment questions before coding unless “use Mila defaults” was supplied.
+- Persona files and canon exist.
+- User memory and self-state are separate.
+- Runtime context builder includes memory/life/media status but does not leak internals.
+- Image generation path uses Wavespeed or mock mode when key is absent.
+- Public media and private media have separate policies.
+- Social publishing starts mock/manual-gated.
+- Browser/noVNC publishing flow is documented.
+- Manager audit exists.
+- Tests or validation scripts run without external APIs.
+- `VALIDATION.md` documents chosen deviations, missing keys, and next steps.
 
 ## 9. Copyable agent prompt
 
 ```txt
-Build an AI Influencer OS from this Buildprint.
+Build an OpenClaw AI Influencer OS from this Buildprint.
 
-Create a minimal local TypeScript/Node implementation with persona canon files, JSON storage, context builder, user memory, self-state, life tick, social draft planner, media policy, mock media queue, manager QA, mock publisher, and tests.
+First read questions.md and ask the user the alignment questions unless they explicitly say “use Mila defaults”. After answers, summarize the chosen deviations and ask for confirmation.
 
-Do not call external APIs.
-Do not integrate real social posting.
-Do not create real-person impersonation.
-Start with mock data and approval gates.
+Then implement a Mila-style OpenClaw project with Docker, persona files, influencer-persona plugin, memory/self-state storage, life tick, journal, social planner, Wavespeed image skill, media policy, mock publishing, browser/noVNC publishing docs, manager audit, tests, .env.example, and VALIDATION.md.
 
-Run tests and write VALIDATION.md with:
-1. what you built,
-2. how to run it,
-3. what ambiguities you found,
-4. what should be improved in this Buildprint.
+Do not use real secrets.
+Do not call external APIs in tests.
+If WAVESPEED_API_KEY is missing, implement mock mode and mark real image generation as blocked.
+Preserve safety gates and public/private media separation.
 ```

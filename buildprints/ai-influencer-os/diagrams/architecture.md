@@ -1,19 +1,37 @@
-# Architecture Diagram
+# OpenClaw/Mila-style Architecture Diagram
 
 ```txt
-Telegram/app input
+Telegram / chat channel
   ↓
-Runtime context builder ← user memory + self-state + journal + social drafts
+OpenClaw Gateway + Agent Runtime
   ↓
-Persona response / planner
+influencer-persona plugin
+  ├─ LLM JSON analyzer
+  ├─ runtime context builder
+  ├─ policy/media gates
+  └─ Telegram/media delivery
   ↓
-Memory reflection     Life tick/calendar/journal
-  ↓                   ↓
-User memory       Self-state + content backlog
-                      ↓
-                Social planner
-                      ↓
-                Manager QA
-                      ↓
-              Mock publisher / handoff
+storage
+  ├─ users/<id>.json
+  ├─ influencer-self/state.json
+  ├─ calendar/events.json
+  ├─ social/drafts.json
+  └─ social/media-jobs.json
+  ↓
+life modules
+  ├─ life-tick
+  ├─ journal-writer
+  ├─ reflect-memory
+  ├─ social-planner
+  ├─ social-autonomy
+  ├─ social-publisher
+  └─ manager-audit
+  ↓
+skills
+  ├─ influencer-image → Wavespeed / mock
+  ├─ influencer-post → visible browser/noVNC / mock
+  ├─ influencer-social
+  ├─ influencer-calendar
+  ├─ influencer-journal
+  └─ influencer-recall
 ```

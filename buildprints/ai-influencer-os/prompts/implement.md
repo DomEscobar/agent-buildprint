@@ -1,24 +1,15 @@
 # Implementation Prompt
 
-You are a coding agent implementing the AI Influencer OS Buildprint.
+You are a coding agent implementing the OpenClaw AI Influencer OS Buildprint.
 
-Read `BUILDPRINT.md`, `policies/safety.md`, `policies/media.md`, and `checks/acceptance.md`.
+Mandatory order:
 
-Build a minimal local TypeScript/Node project. Use JSON files for storage. Do not call external APIs. Do not integrate real social platforms.
+1. Read `questions.md`.
+2. Ask the user the alignment questions unless they said “use Mila defaults”.
+3. Summarize all chosen deviations from Mila defaults.
+4. Ask for confirmation.
+5. Only then implement.
 
-Required modules:
+Implementation must be OpenClaw-based and Dockerized. It must include Wavespeed image generation path with `WAVESPEED_API_KEY` documented in `.env.example`. If the key is not available, implement mock mode and mark real generation blocked.
 
-- persona canon files
-- memory store
-- self-state store
-- context builder
-- life tick
-- social draft planner
-- media policy
-- media queue
-- manager QA
-- mock publisher
-- tests
-- `VALIDATION.md`
-
-Prioritize clear boring code over framework cleverness.
+Do not build a generic Node chatbot. Mirror the Mila-style architecture: plugin, skills, life modules, manager layer, storage, social drafts, visible browser/noVNC publishing docs, and tests.

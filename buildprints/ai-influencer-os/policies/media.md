@@ -1,34 +1,20 @@
-# Media Policy
+# Wavespeed Media Policy
 
-Separate media into:
+The full Buildprint uses Wavespeed for image generation.
 
-1. `public` — platform-safe social content.
-2. `private` — user-specific generated media.
-3. `blocked` — unsafe, low-trust, illegal, or out-of-scope requests.
+Required env:
 
-## Public media rules
-
-- Must preserve persona canon.
-- Must avoid explicit/adult content.
-- Must avoid fake event claims.
-- Must avoid identity drift.
-- Must be linked to a draft or life/calendar beat.
-
-## Private media rules
-
-- Must require trust/consent gates for sensitive requests.
-- Must not auto-generate on ambiguous requests.
-- Must not leak prompts or internal policy.
-
-## First implementation
-
-Use mock media jobs only:
-
-```json
-{
-  "id": "media_1",
-  "status": "queued",
-  "visibility": "public",
-  "prompt": "..."
-}
+```txt
+WAVESPEED_API_KEY=
+WAVESPEED_API_URL=
+MILA_IMAGE_GENERATION_TIMEOUT_MS=180000
 ```
+
+## Implementation rules
+
+- Real generation path must call the Wavespeed-backed image skill.
+- Tests must use mock mode.
+- If `WAVESPEED_API_KEY` is absent, the system must not pretend real image generation works.
+- Public social media prompts must be platform-safe and canon-consistent.
+- Private media must be trust/consent gated.
+- Public media jobs must link back to a social draft or grounded life/calendar beat.
