@@ -61,12 +61,18 @@ No key? The implementation must use mock mode and clearly mark the missing key a
 ## Files
 
 ```txt
-BUILDPRINT.md          agent alignment contract
-questions.md           user alignment interview
+BUILDPRINT.md          architecture contract
+SPEC.md                behavior requirements
+PLAN.md                phase index
+plans/*.md             tiny feature-by-feature task plans
+CONTRACTS.md           function/data shapes
+DEFAULT_PRESET.md      configurable defaults, no fixed name
+TEST_MATRIX.md         risks mapped to tests
+VALIDATION_TEMPLATE.md completion report template
+questions.md           configuration interview
 prompts/implement.md   copyable coding-agent prompt
 checks/acceptance.md   what must pass
-policies/media.md      Wavespeed + public/private gates
-policies/safety.md     safety boundaries
+policies/              safety and media gates
 diagrams/architecture.md
 schemas/buildprint.meta.json
 ```

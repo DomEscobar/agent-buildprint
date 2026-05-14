@@ -348,8 +348,239 @@ function writeMappedBuildprint(repoArg, outArg) {
   fs.writeFileSync(path.join(out, 'risks.md'), risksMd)
   fs.writeFileSync(path.join(out, 'prompts', 'continue-building.md'), prompt)
   fs.writeFileSync(path.join(out, 'tests', 'architecture.yaml'), checks)
+  writeMappedPackageExtras(out, facts, confidence, questions)
 
   return { out, facts, confidence, questions }
+}
+
+function mdList(items, empty = '- none detected') {
+  return items.length ? items.map((x) => `- ${x}`).join('\n') : empty
+}
+
+function writeMappedPackageExtras(out, facts, confidence, questions) {
+  fs.mkdirSync(path.join(out, 'plans'), { recursive: true })
+  const packageTier = facts.risky.length >= 2 || facts.apis.length + facts.routes.length > 12 || facts.integrations.length >= 2 ? 'agent-grade' : facts.apis.length || facts.routes.length || facts.integrations.length ? 'strong' : 'simple'
+  const observedAnchor = 'This package maps an existing repository. Preserve observed behavior unless the user confirms a change. Separate observed facts, inferred behavior, and unknowns.'
+  const buildprintMd = [
+    '---',
+    `title: ${facts.packageName} Project Buildprint`,
+    `slug: ${facts.packageName}-mapped`,
+    'category: Mapped Existing Project',
+    'status: draft-needs-review',
+    `packageTier: ${packageTier}`,
+    '---',
+    '',
+    `# BUILDPRINT: ${facts.packageName}`,
+    '',
+    observedAnchor,
+    '',
+    '## Target shape',
+    '',
+    'Keep the current stack and architecture unless the user explicitly asks for a migration.',
+    '',
+    '## Observed facts',
+    '',
+    `- Package manager: ${facts.packageManager}`,
+    `- Frameworks/capabilities: ${facts.frameworks.join(', ') || 'none detected'}`,
+    `- Integrations: ${facts.integrations.join(', ') || 'none detected'}`,
+    `- Risk areas: ${facts.risky.join(', ') || 'none detected'}`,
+    '',
+    '## Source files',
+    '',
+    '- Deterministic facts: `facts.json`',
+    '- Human map: `discovered-map.md`',
+    '- Behavior spec: `SPEC.md`',
+    '- Execution plan: `PLAN.md` and `plans/*.md`',
+    '- Interface/data contracts: `CONTRACTS.md`',
+    '- Risk-to-test map: `TEST_MATRIX.md`',
+    '- Confidence report: `confidence-report.md`',
+    '- Review questions: `questions.md`',
+    '',
+    '## Rules for coding agents',
+    '',
+    '- Treat observed facts as current repo state.',
+    '- Treat inferred behavior as draft until confirmed.',
+    '- Treat unknowns as questions, not permission to invent.',
+    '- Do not copy secret values; env var names only.',
+    '- Do not perform external writes without explicit policy.',
+    '- Update this Buildprint when routes, APIs, data models, auth, integrations, or deploy shape change.',
+    ''
+  ].join('\n')
+
+  const specMd = [
+    `# SPEC: ${facts.packageName}`,
+    '',
+    observedAnchor,
+    '',
+    '## Observed',
+    '',
+    '### Frameworks / capabilities',
+    '',
+    mdList(facts.frameworks),
+    '',
+    '### UI routes',
+    '',
+    mdList(facts.routes.slice(0, 80)),
+    '',
+    '### API routes',
+    '',
+    mdList(facts.apis.slice(0, 80)),
+    '',
+    '### Data/model files',
+    '',
+    mdList(facts.db.slice(0, 80)),
+    '',
+    '## Inferred behavior',
+    '',
+    '- UI routes imply user-facing screens, but exact UX/business rules need review.',
+    '- API route names imply server behavior, but authorization and side effects need review.',
+    '- Integrations imply external dependencies and risk policies.',
+    '',
+    '## Unknown / ask user',
+    '',
+    questions.map((q, i) => `${i + 1}. ${q}`).join('\n'),
+    '',
+    '## Acceptance behavior',
+    '',
+    '- Preserve existing public routes unless intentionally changed.',
+    '- Preserve existing API contracts unless intentionally changed.',
+    '- Do not change auth, billing, destructive actions, or external writes without explicit confirmation.',
+    ''
+  ].join('\n')
+
+  const planMd = [
+    '# PLAN',
+    '',
+    'Execute these phase plans in order.',
+    '',
+    '~~~txt',
+    'plans/00-review-facts.md',
+    'plans/01-confirm-unknowns.md',
+    'plans/02-safe-change-plan.md',
+    'plans/03-implementation.md',
+    'plans/04-tests-validation.md',
+    '~~~',
+    '',
+    '## Rules',
+    '',
+    '- Start from observed facts, not guesses.',
+    '- Ask before changing low-confidence areas.',
+    '- Add/update tests before or with risky changes.',
+    '- Update Buildprint artifacts after architecture changes.',
+    ''
+  ].join('\n')
+
+  const contractsMd = [
+    '# CONTRACTS',
+    '',
+    'This mapper cannot know every internal interface. Use this file to preserve observed contracts and mark unknowns.',
+    '',
+    '## Observed route contracts',
+    '',
+    '### UI routes',
+    '',
+    facts.routes.length ? facts.routes.slice(0, 80).map((x) => `- \`${x}\``).join('\n') : '- none detected',
+    '',
+    '### API routes',
+    '',
+    facts.apis.length ? facts.apis.slice(0, 80).map((x) => `- \`${x}\``).join('\n') : '- none detected',
+    '',
+    '## Environment contract',
+    '',
+    'Env var names observed; values were not read or copied.',
+    '',
+    facts.envNames.length ? facts.envNames.map((x) => `- \`${x}\``).join('\n') : '- none detected',
+    '',
+    '## Unknown contracts',
+    '',
+    '- Permission rules.',
+    '- Business lifecycle rules.',
+    '- External write approval semantics.',
+    '- Error handling expectations.',
+    ''
+  ].join('\n')
+
+  const testMatrixMd = [
+    '# TEST_MATRIX',
+    '',
+    '| Risk | Required check |',
+    '|---|---|',
+    '| Secret leakage | Buildprint artifacts contain env names only, never values |',
+    '| Low-confidence permission rules | Ask user before changing auth/roles/destructive actions |',
+    '| External writes | Email/SMS/payment/publish/delete flows require explicit policy |',
+    '| Route drift | Update tests and Buildprint when UI/API routes change |',
+    '| Data model drift | Update tests and Buildprint when schema/model files change |',
+    '| Integration drift | Update policies when adding/removing integrations |',
+    '',
+    '## Existing tests observed',
+    '',
+    mdList(facts.tests.slice(0, 80)),
+    ''
+  ].join('\n')
+
+  const validationTemplateMd = [
+    '# Validation',
+    '',
+    '## Review status',
+    '',
+    '- Human reviewed observed facts: no',
+    '- Human answered questions: no',
+    '',
+    '## Commands run',
+    '',
+    '~~~bash',
+    '# add project test/build/lint commands here',
+    '~~~',
+    '',
+    '## Test result',
+    '',
+    '- Overall:',
+    '',
+    '## Confirmed behavior',
+    '',
+    '- Observed facts preserved:',
+    '- Inferred behavior confirmed:',
+    '',
+    '## Missing information',
+    '',
+    questions.map((q) => `- ${q}`).join('\n'),
+    '',
+    '## Deviations / architecture changes',
+    '',
+    '- None / list changes here.',
+    '',
+    '## Next steps',
+    '',
+    '- Answer questions in `questions.md`.',
+    '- Add tests for any changed auth, billing, external writes, or data model behavior.',
+    ''
+  ].join('\n')
+
+  const questionsMd = [
+    '# Questions',
+    '',
+    'Answer these before a coding agent changes low-confidence behavior.',
+    '',
+    questions.map((q, i) => `${i + 1}. ${q}`).join('\n'),
+    ''
+  ].join('\n')
+
+  const phaseFiles = {
+    '00-review-facts.md': '# Phase 00 — Review Facts\n\nRead `facts.json`, `discovered-map.md`, and `confidence-report.md`.\n\nExit: observed facts understood; no code changed.\n',
+    '01-confirm-unknowns.md': '# Phase 01 — Confirm Unknowns\n\nAsk the questions in `questions.md` before changing low-confidence areas.\n\nExit: answers captured or blockers recorded in `VALIDATION.md`.\n',
+    '02-safe-change-plan.md': '# Phase 02 — Safe Change Plan\n\nPlan the smallest safe change. Identify affected routes, APIs, data models, integrations, and tests.\n\nExit: change scope and required tests are clear.\n',
+    '03-implementation.md': '# Phase 03 — Implementation\n\nImplement only the confirmed change. Preserve observed stack and behavior unless explicitly changed.\n\nExit: code updated and Buildprint artifacts updated if architecture changed.\n',
+    '04-tests-validation.md': '# Phase 04 — Tests and Validation\n\nRun relevant test/build/lint commands. Fill `VALIDATION.md` from `VALIDATION_TEMPLATE.md`.\n\nExit: results and remaining blockers are documented.\n',
+  }
+
+  fs.writeFileSync(path.join(out, 'BUILDPRINT.md'), buildprintMd)
+  fs.writeFileSync(path.join(out, 'SPEC.md'), specMd)
+  fs.writeFileSync(path.join(out, 'PLAN.md'), planMd)
+  fs.writeFileSync(path.join(out, 'CONTRACTS.md'), contractsMd)
+  fs.writeFileSync(path.join(out, 'TEST_MATRIX.md'), testMatrixMd)
+  fs.writeFileSync(path.join(out, 'VALIDATION_TEMPLATE.md'), validationTemplateMd)
+  fs.writeFileSync(path.join(out, 'questions.md'), questionsMd)
+  for (const [file, content] of Object.entries(phaseFiles)) fs.writeFileSync(path.join(out, 'plans', file), content)
 }
 
 if (args.length === 0 || args[0] === '--help' || args[0] === '-h') usage(0)

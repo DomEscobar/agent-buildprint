@@ -13,7 +13,7 @@ Agent Buildprint is a registry/marketplace for building plans that coding agents
 
 - `agb check` validates Buildprint folders and generated code imports.
 - `agb init langgraph` creates a LangGraph-style Vanilla TypeScript agent contract.
-- `agb map` maps an existing repo into `.project.buildprint/` with deterministic facts, confidence report, risks, questions, and a continuation prompt.
+- `agb map` maps an existing repo into `.project.buildprint/` with deterministic facts, a Buildprint package, confidence report, risks, questions, tiny phase plans, and a continuation prompt.
 
 ## Commands
 
@@ -30,9 +30,17 @@ node ./bin/agb.js map ./my-project --out ./my-project.buildprint
 ```txt
 .project.buildprint/
   facts.json
+  BUILDPRINT.md
+  SPEC.md
+  PLAN.md
+  plans/*.md
+  CONTRACTS.md
+  TEST_MATRIX.md
+  VALIDATION_TEMPLATE.md
   buildprint.yaml
   discovered-map.md
   confidence-report.md
+  questions.md
   risks.md
   prompts/continue-building.md
   tests/architecture.yaml
@@ -40,7 +48,7 @@ node ./bin/agb.js map ./my-project --out ./my-project.buildprint
 
 ## Principle
 
-Deterministic facts first. Inference second. Low-confidence areas become questions, not fake certainty.
+Deterministic facts first. Inference second. Unknowns become questions, not fake certainty. Mapper-generated packages must separate observed facts, inferred behavior, and unknowns.
 
 ## Format philosophy
 

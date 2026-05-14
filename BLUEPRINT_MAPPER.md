@@ -1,54 +1,66 @@
 # Agent Buildprint Mapper
 
-Goal: map an existing codebase into a Buildprint so coding agents can understand, extend, refactor, or reproduce the project without guessing architecture from scattered files.
+Goal: map an existing codebase into a Buildprint package so coding agents can understand, extend, refactor, or reproduce the project without guessing architecture from scattered files.
 
-## Core idea
+The mapper is an inspector, not a magical reverse-engineer. It must expose uncertainty clearly.
 
-Do not ask the user to write a buildprint manually.
-
-Instead:
+## Pipeline
 
 ```txt
 existing repo
-→ repo scan
-→ architecture inference
-→ confidence-scored buildprint draft
+→ deterministic facts
+→ observed / inferred / unknown split
+→ package-tier selection
+→ Buildprint package draft
+→ confidence report + questions
 → human review
-→ generated checks
-→ reusable buildprint
+→ safer coding-agent work
 ```
-
-The mapper is an inspector, not a magical reverse-engineer. It should expose uncertainty clearly.
 
 ## Inputs
 
-- repository path or GitHub URL
-- optional product description from user
-- optional target stack or goal
+- repository path or GitHub URL later
+- optional product description
+- optional target goal
 - optional ignore paths
 
-## Outputs
+## Output package
 
 ```txt
 .project.buildprint/
   facts.json                 # deterministic scan facts, no LLM guesses
-  buildprint.yaml
+  BUILDPRINT.md              # architecture / agent contract
+  SPEC.md                    # observed/inferred/unknown behavior contract
+  PLAN.md                    # phase index
+  plans/                     # tiny task plans for complex projects
+  CONTRACTS.md               # route/env/interface contracts
+  TEST_MATRIX.md             # risk → checks
+  VALIDATION_TEMPLATE.md     # honest completion report
+  buildprint.yaml            # machine-readable summary, optional legacy-compatible
   discovered-map.md
   confidence-report.md
-  ui/screens.yaml
-  backend/api.yaml
-  data/entities.yaml
-  integrations/services.yaml
-  policies/security.md
+  risks.md
+  questions.md
+  policies/security.md       # planned deeper output
   tests/architecture.yaml
   prompts/continue-building.md
 ```
 
-## Clever mapping pipeline
+## Core rule
 
-### 1. Inventory pass
+Every mapped item must be one of:
 
-Collect boring facts deterministically:
+```txt
+observed   = deterministic scan found it
+inferred   = likely from code shape, needs review
+unknown    = ask user before coding
+```
+
+Never turn unknown business rules into fake facts.
+
+## Deterministic inventory
+
+Collect:
 
 - package manager and scripts
 - frameworks and dependencies
@@ -61,47 +73,12 @@ Collect boring facts deterministically:
 - tests and coverage shape
 - Docker/deploy files
 
-### 2. Architecture clustering
+## Risk detection
 
-Group files into product modules:
-
-- UI surfaces
-- backend routes
-- domain services
-- data layer
-- integrations
-- auth/permissions
-- jobs/workers
-- observability
-
-This should use file paths, imports, route conventions, and naming patterns before LLM inference.
-
-### 3. Behavior extraction
-
-Infer user-visible flows:
-
-- signup/login
-- billing
-- dashboard
-- CRUD flows
-- admin flows
-- agent/tool flows
-
-Sources:
-
-- route names
-- page titles/components
-- API verbs
-- tests
-- README/docs
-- seed data
-
-### 4. Risk and policy detection
-
-Detect risky areas:
+Flag:
 
 - payments
-- external writes
+- external messaging
 - destructive actions
 - PII handling
 - auth/role checks
@@ -110,23 +87,19 @@ Detect risky areas:
 - email/SMS sending
 - AI tool calls
 
-Generate policies/checks for these areas.
+Risks become `TEST_MATRIX.md` rows and review questions.
 
-### 5. Confidence scoring
+## Package tiers
 
-Every inferred item gets confidence:
-
-```yaml
-confidence:
-  api_map: high
-  ui_flows: medium
-  permission_model: low
-  billing_rules: medium
+```txt
+simple      = small repo / few risks
+strong      = normal app with routes/integrations
+agent-grade = multi-module, high-risk, many routes, or many integrations
 ```
 
-Low-confidence areas become questions, not fake certainty.
+Mapper should generate stronger packages automatically as complexity rises.
 
-### 6. Human review loop
+## Human review loop
 
 Ask only high-leverage questions:
 
@@ -135,46 +108,15 @@ Ask only high-leverage questions:
 - “Is Stripe subscription state the source of truth?”
 - “Which flows are legacy and should not be copied?”
 
-### 7. Buildprint generation
-
-Create a buildprint that can be used for:
-
-- onboarding a coding agent
-- refactoring safely
-- rebuilding the project in another stack
-- extracting reusable public buildprints
-- documenting architecture drift
-
-## Commands / UX
-
-```bash
-agb map ./my-project
-agb map ./my-project --out ./my-project.buildprint
-# planned later: agb map https://github.com/acme/app
-agent-buildprint explain ./.project.buildprint
-agent-buildprint diff ./.project.buildprint ./my-project
-```
-
-## Website UX
-
-A detail page/card should say:
-
-> Turn an existing repo into a Buildprint. The mapper scans structure, routes, data models, integrations, and risks, then creates an architecture contract coding agents can follow.
-
 ## Anti-goals
 
 - Do not leak secrets.
 - Do not claim perfect understanding.
-- Do not generate a huge unreadable YAML dump.
+- Do not generate huge unreadable dumps.
 - Do not overwrite source code.
 - Do not make LLM guesses look like facts.
+- Do not treat legacy code as desired architecture without review.
 
 ## Killer feature
 
-The mapper should produce a **confidence report** and **question list**. That is what makes it trustworthy.
-
-```txt
-I wrote facts.json from deterministic scanning. I found your API and data model with high confidence.
-I am unsure about permission rules and billing lifecycle.
-Answer these 4 questions to finalize the Buildprint.
-```
+The mapper should produce a confidence report and question list that coding agents must read before changing low-confidence behavior.

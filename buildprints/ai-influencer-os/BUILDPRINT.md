@@ -65,6 +65,26 @@ The build is working only when all are true:
 
 ---
 
+
+## 0D. Buildprint package map
+
+Use the files as separate alignment rails:
+
+```txt
+BUILDPRINT.md          architecture truth
+SPEC.md                behavior truth
+PLAN.md                execution index
+plans/*.md             feature-by-feature task rails
+CONTRACTS.md           interface/data truth
+DEFAULT_PRESET.md      configurable default values, no fixed persona name
+TEST_MATRIX.md         risk → test truth
+VALIDATION_TEMPLATE.md completion report shape
+```
+
+Do not collapse these into one vague implementation plan.
+
+---
+
 ## 0. Contract for the coding agent
 
 Build an **OpenClaw AI Influencer OS with a configurable persona and a default preset**.

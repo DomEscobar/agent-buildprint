@@ -1,141 +1,92 @@
 # Agent Buildprint Formats
 
-Agent Buildprint is format-flexible.
+Agent Buildprint is format-flexible. A Buildprint is not “a YAML file”; it is a package of instructions, contracts, policies, examples, and checks that help coding agents build reliably.
 
-A Buildprint is not “a YAML file”. It is a package of instructions, contracts, examples, policies, and checks that help coding agents build reliably.
+## Package tiers
 
-Different creators should be able to publish in the format that best fits the job.
+### Level 1 — Simple Buildprint
 
-## Supported format types
-
-### 1. Markdown-first Buildprint
-
-Best for comprehensive plans, spec-driven design, product requirements, architecture rationale, and implementation guidance.
+For small features or integrations.
 
 ```txt
-stripe-billing.buildprint/
-  BUILDPRINT.md
-  acceptance.md
-  risks.md
-  prompts/implement.md
+BUILDPRINT.md
+TEST_MATRIX.md
 ```
 
-Use when:
-- the plan is mostly human-readable;
-- the build requires judgment;
-- the creator wants narrative explanation;
-- coding agents need context, constraints, and tradeoffs.
-
-### 2. Contract-first Buildprint
-
-Best for machine validation, graph workflows, APIs, permissions, tests, and strict implementation contracts.
-
-```txt
-langgraph-agent.buildprint/
-  buildprint.yaml
-  schemas/state.ts
-  policies/side-effects.yaml
-  tests/routes.spec.yaml
-```
-
-Use when:
-- structure must be validated;
-- routes, nodes, permissions, or APIs must be explicit;
-- checks should fail on missing pieces.
-
-### 3. Hybrid Buildprint
+### Level 2 — Strong Buildprint
 
 Recommended default for serious Buildprints.
 
 ```txt
-saas-billing.buildprint/
-  BUILDPRINT.md          # human-readable master plan
-  buildprint.yaml        # machine-readable summary/check target
-  diagrams/
-  prompts/
-  policies/
-  tests/
-  examples/
+BUILDPRINT.md          # architecture truth
+SPEC.md                # behavior truth
+PLAN.md                # execution index
+CONTRACTS.md           # interfaces/data contracts
+TEST_MATRIX.md         # risk → test mapping
+VALIDATION_TEMPLATE.md # completion report shape
 ```
 
-Use Markdown for intent and explanation. Use YAML/JSON for metadata and checkable structure.
+### Level 3 — Agent-grade Buildprint
 
-### 4. Example-first Buildprint
-
-Best when the creator has a reference implementation.
-
-```txt
-admin-dashboard.buildprint/
-  BUILDPRINT.md
-  examples/nextjs/
-  tests/acceptance.yaml
-  prompts/adapt-to-my-repo.md
-```
-
-Use when:
-- users want to adapt a known-good implementation;
-- examples are clearer than abstract schemas.
-
-## Minimal valid Buildprint
-
-A minimal Buildprint can be just:
+For multi-module apps, agent systems, or high-risk integrations.
 
 ```txt
 BUILDPRINT.md
+SPEC.md
+PLAN.md
+plans/
+  00-alignment.md
+  01-runtime.md
+  02-feature.md
+CONTRACTS.md
+TEST_MATRIX.md
+VALIDATION_TEMPLATE.md
+DEFAULT_PRESET.md      # optional defaults, never forced identity
+policies/
+prompts/
+checks/
+examples/
+diagrams/
+schemas/
 ```
 
-Required sections for registry listing:
-
-```md
-# Title
-
-## What this builds
-
-## When to use
-
-## Inputs / assumptions
-
-## Implementation plan
-
-## Acceptance checks
-
-## Risks / when not to use
-
-## Copyable agent prompt
-```
-
-## Recommended registry metadata
-
-For search cards and marketplace listing, add either frontmatter in `BUILDPRINT.md`:
-
-```md
----
-title: Stripe Billing for Next.js
-slug: stripe-billing-nextjs
-category: Integration
-stack: [Next.js, TypeScript, Stripe, Postgres]
-difficulty: Medium
-creator: Alice
-license: MIT
----
-```
-
-or a separate file:
+## File responsibilities
 
 ```txt
-buildprint.meta.json
+README.md              humans decide if they want it
+BUILDPRINT.md          coding-agent architecture contract
+SPEC.md                user-visible behavior and must/must-not rules
+PLAN.md                phase index
+plans/*.md             tiny feature-by-feature task rails
+CONTRACTS.md           function/data/interface names and shapes
+DEFAULT_PRESET.md      configurable defaults only
+TEST_MATRIX.md         alignment risks mapped to tests
+VALIDATION_TEMPLATE.md honest completion report
 ```
 
-## Design principle
+## Minimal registry requirements
 
-Do not make creators write complex YAML unless the Buildprint actually needs strict machine validation.
+A minimal Buildprint can still be just `BUILDPRINT.md`, but registry quality badges should reflect package strength:
 
-The product promise is:
+- `basic`: has `BUILDPRINT.md`
+- `tested`: has `TEST_MATRIX.md` or tests/checks
+- `strong`: has `SPEC.md`, `PLAN.md`, `CONTRACTS.md`
+- `agent-grade`: has `plans/*.md` and `VALIDATION_TEMPLATE.md`
+
+## Design principles
+
+- Markdown first; YAML/JSON optional.
+- Do not make creators write complex schemas unless useful.
+- Keep each file short and single-purpose.
+- Strong Buildprints repeat the same target shape across architecture, spec, plan, contracts, and tests.
+- Existing-project mappings must label facts as observed, inferred, or unknown.
+
+## Product promise
 
 ```txt
 Any good software construction plan
 → packaged as a Buildprint
 → readable by humans
-→ usable by coding agents
+→ aligned for coding agents
 → optionally checkable by tools
 ```
