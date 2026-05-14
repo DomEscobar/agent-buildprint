@@ -148,9 +148,9 @@ Create a buildprint that can be used for:
 ## Commands / UX
 
 ```bash
-agent-buildprint map ./my-project
-agent-buildprint map ./my-project --out ./my-project.buildprint
-# planned later: agent-buildprint map https://github.com/acme/app
+agb map ./my-project
+agb map ./my-project --out ./my-project.buildprint
+# planned later: agb map https://github.com/acme/app
 agent-buildprint explain ./.project.buildprint
 agent-buildprint diff ./.project.buildprint ./my-project
 ```

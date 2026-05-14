@@ -16,7 +16,7 @@ First wedge:
 
 - A source-of-truth architecture contract for AI coding agents.
 - A set of schemas, prompts, policies, and tests that guide code generation.
-- A lightweight check target for `agent-buildprint check`.
+- A lightweight check target for `agb check`.
 
 ## What this is not
 
@@ -43,15 +43,15 @@ langgraph/
 From `/root/blueprint`:
 
 ```bash
-node ./bin/xy.js check ./langgraph
+node ./bin/agb.js check ./langgraph
 # or, if linked/installed:
-agent-buildprint check ./langgraph
+agb check ./langgraph
 ```
 
 When generated code exists:
 
 ```bash
-agent-buildprint check ./langgraph --code ./generated-agent
+agb check ./langgraph --code ./generated-agent
 ```
 
 ## Prompt for an AI coding agent
@@ -61,5 +61,5 @@ Read /root/blueprint/langgraph/blueprint.yaml first.
 Generate Vanilla TypeScript that satisfies the blueprint, schemas, policies, and tests.
 Do not import LangGraph or any graph-agent runtime.
 Keep the graph runner local, small, and explicit.
-Run `node /root/blueprint/bin/xy.js check /root/blueprint/langgraph` before claiming done.
+Run `node /root/blueprint/bin/agb.js check /root/blueprint/langgraph` before claiming done.
 ```

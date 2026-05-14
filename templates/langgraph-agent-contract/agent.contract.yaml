@@ -14,9 +14,9 @@ non_goals:
   - Not a hidden LangGraph clone.
 
 mvp_commands:
-  check_contract: agent-buildprint check ./langgraph
-  check_generated_code: agent-buildprint check ./langgraph --code ./generated-agent
+  check_contract: agb check ./langgraph
+  check_generated_code: agb check ./langgraph --code ./generated-agent
 
 success_metric:
   - A coding agent can generate a local TS graph runner from this folder.
-  - agent-buildprint check catches missing referenced files, underspecified nodes, unknown routes, and forbidden framework imports.
+  - agb check catches missing referenced files, underspecified nodes, unknown routes, and forbidden framework imports.

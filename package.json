@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "bin": {
-    "xy": "./bin/xy.js",
-    "agent-buildprint": "./bin/xy.js"
+    "xy": "./bin/agb.js",
+    "agent-buildprint": "./bin/agb.js"
   },
   "scripts": {
-    "check": "node ./bin/xy.js check ./langgraph",
-    "test": "node ./bin/xy.js check ./langgraph"
+    "check": "node ./bin/agb.js check ./langgraph",
+    "test": "node ./bin/agb.js check ./langgraph"
   },
   "dependencies": {}
 }

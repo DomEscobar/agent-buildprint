@@ -6,18 +6,18 @@ Agent Buildprint turns product ideas or existing repositories into AI-readable a
 
 ## Current MVP
 
-- `agent-buildprint check` validates Buildprint folders and generated code imports.
-- `agent-buildprint init langgraph` creates a LangGraph-style Vanilla TypeScript agent contract.
-- `agent-buildprint map` maps an existing repo into `.project.buildprint/` with deterministic facts, confidence report, risks, questions, and a continuation prompt.
+- `agb check` validates Buildprint folders and generated code imports.
+- `agb init langgraph` creates a LangGraph-style Vanilla TypeScript agent contract.
+- `agb map` maps an existing repo into `.project.buildprint/` with deterministic facts, confidence report, risks, questions, and a continuation prompt.
 
 ## Commands
 
 ```bash
-node ./bin/xy.js check ./langgraph
-node ./bin/xy.js check ./langgraph --code ./langgraph/examples
-node ./bin/xy.js init langgraph ./my-agent-contract
-node ./bin/xy.js map ./my-project
-node ./bin/xy.js map ./my-project --out ./my-project.buildprint
+node ./bin/agb.js check ./langgraph
+node ./bin/agb.js check ./langgraph --code ./langgraph/examples
+node ./bin/agb.js init langgraph ./my-agent-contract
+node ./bin/agb.js map ./my-project
+node ./bin/agb.js map ./my-project --out ./my-project.buildprint
 ```
 
 ## Mapper output
