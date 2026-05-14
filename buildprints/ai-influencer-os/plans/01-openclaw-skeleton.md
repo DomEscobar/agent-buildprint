@@ -19,7 +19,7 @@ Create the runnable OpenClaw-shaped project skeleton.
 ## Steps
 
 1. Create scripts required by `BUILDPRINT.md`.
-2. Add all env names from the environment contract.
+2. Add all env names from the environment contract exactly; do not enable test/mock flags in `.env.example` by default.
 3. Create Docker/runtime structure.
 4. Create OpenClaw config that loads extension and skills.
 5. Make the entrypoint call `OPENCLAW_RUNTIME_CMD` or emit a structured `openclaw_runtime_missing` blocker; do not silently run a generic Node app as if it were OpenClaw.
@@ -30,12 +30,15 @@ Create the runnable OpenClaw-shaped project skeleton.
 - build Express/Next as the main runtime;
 - omit OpenClaw config/skills;
 - pretend generic Node startup is the OpenClaw runtime;
-- put real secrets in files.
+- put real secrets in files;
+- set `TEST_MODE=true` or mock mode as a default in `.env.example`.
 
 ## Exit criteria
 
 - file tree exists;
 - `npm run test:static` can be added later without changing structure;
 - missing keys are placeholders only;
+- env names match `BUILDPRINT.md` exactly;
+- `.env.example` does not default to test/mock mode;
 - entrypoint/config exposes the OpenClaw runtime command or structured blocker;
 - noVNC/Chromium service shape exists for browser handoff.

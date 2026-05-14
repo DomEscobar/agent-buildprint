@@ -44,6 +44,10 @@ Given `WAVESPEED_API_KEY` is present
 When real image generation is requested
 Then the production path uses a concrete Wavespeed client adapter with request/response normalization.
 
+Given media flow enters real mode
+When no test mock is injected
+Then `media-flow.js` uses the default Wavespeed client adapter and does not require the caller to pass the real image function manually.
+
 Given `WAVESPEED_API_KEY` is missing
 When tests or local validation run
 Then image generation uses mock mode or blocks real mode with a structured reason.
@@ -95,6 +99,16 @@ Then the system uses browser/noVNC handoff docs and does not auto-publish.
 Given the container stack is generated
 When compose files are inspected
 Then a Chromium/noVNC service or Dockerfile exists, exposes `SOCIAL_VISIBLE_BROWSER_PORT`, and mounts `storage/browser/profile` for persistent operator login.
+
+### R10 — Env and static validation contract
+
+Given `.env.example` is generated
+When static validation runs
+Then exact required env names from `BUILDPRINT.md` are present and no test/mock mode is enabled by default.
+
+Given `package.json` is generated
+When static validation runs
+Then `npm run test:static` includes the required `node --check` syntax checks and alignment checks.
 
 ### R9 — Manager audit
 

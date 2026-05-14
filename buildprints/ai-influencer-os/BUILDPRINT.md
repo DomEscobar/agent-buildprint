@@ -21,7 +21,7 @@ RUNTIME = OpenClaw
 IMAGE_PROVIDER = Wavespeed only for production
 REFERENCE_ARCHITECTURE = OpenClaw Influencer OS default preset
 DEFAULT_OUTPUT = Dockerized bot, not SaaS app
-TEST_MODE = no external API calls, mock Wavespeed
+TEST_MODE = no external API calls, tests set mock mode themselves; .env.example must not enable test mode
 PUBLISHING_DEFAULT = mock/manual approval, never auto-publish by default
 ALIGNMENT = ask closed config questions only, then build
 ```
@@ -47,7 +47,8 @@ The build is working only when all are true:
 | Social | drafts require `groundedIn`; publisher is mock/manual by default |
 | Browser handoff | runnable Chromium/noVNC service or compose profile exists and handoff is documented |
 | Manager | audit reports stale, unsafe, ungrounded, blocked items |
-| Tests | `npm test` passes without external APIs |
+| Tests | `npm test` passes without external APIs and `npm run test:static` includes syntax + alignment checks |
+| Env contract | `.env.example` contains exact required names and does not enable test/mock mode by default |
 | Validation | `VALIDATION.md` records choices, keys, deviations, blockers |
 
 ---
@@ -290,7 +291,7 @@ OPENCLAW_ANALYZER_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_LIFE_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_SOCIAL_PLANNER_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_REPAIR_MODEL=openrouter/deepseek/deepseek-v4-flash
-OPENCLAW_RUNTIME_CMD=openclaw
+OPENCLAW_RUNTIME_CMD=openclaw run --config config/openclaw.json
 SOCIAL_VISIBLE_BROWSER_PORT=7900
 INFLUENCER_DASHBOARD_PORT=8626
 AUTO_PUBLISH_SOCIAL=false
@@ -300,6 +301,9 @@ INFLUENCER_MANAGER_AUDIT_LOOP=true
 
 Rules:
 
+- Use exactly these env var names. Do not rename `WAVESPEED_API_URL` to `WAVESPEED_BASE_URL`; do not collapse model envs into one generic model var.
+- `.env.example` must not set `TEST_MODE=true`, `INFLUENCER_TEST_MODE=mock`, or any other test/mock flag by default.
+- Tests must set their own mock/test env inside `tests/runner.js` or the individual test process.
 - `WAVESPEED_API_KEY` gates real image generation.
 - No production key is required for tests.
 - Tests must use mock mode.
@@ -399,6 +403,8 @@ pollWavespeedJob(id)
 
 If the exact Wavespeed endpoint/model is uncertain, isolate it behind `skills/influencer-image/wavespeed-client.js`, document the assumed endpoint in `VALIDATION.md`, and keep tests on a mocked fetch/client. Do not replace Wavespeed with another provider.
 
+`extensions/influencer-persona/media-flow.js` must import/use the Wavespeed client by default for real mode. It may accept an injected mock/client for tests, but production behavior must not depend on a caller remembering to pass `createImage`.
+
 Required behavior:
 
 ```txt
@@ -482,14 +488,14 @@ Keep `npm test` runnable by phase 10. If a phase is blocked, write the reason in
 
 ## 8. Commands required
 
-`package.json` must include:
+`package.json` must include these scripts and preserve the syntax-check chain. You may append `&& node tests/static-check.js` to `test:static`, but do not replace syntax checks with only a custom static checker.
 
 ```json
 {
   "scripts": {
     "test": "node tests/runner.js",
     "test:unit": "node --test tests/*.test.js",
-    "test:static": "node --check extensions/influencer-persona/index.js && node --check extensions/influencer-persona/runtime-context.js && node --check extensions/influencer-persona/media-flow.js && node --check life/life-tick.mjs && node --check life/social-planner.mjs && node --check life/social-publisher.mjs && node --check life/manager-audit.mjs"
+    "test:static": "node --check extensions/influencer-persona/index.js && node --check extensions/influencer-persona/analyzer-adapter.js && node --check extensions/influencer-persona/runtime-context.js && node --check extensions/influencer-persona/media-flow.js && node --check extensions/influencer-persona/runtime-check.js && node --check skills/influencer-image/wavespeed-client.js && node --check life/life-tick.mjs && node --check life/social-planner.mjs && node --check life/social-publisher.mjs && node --check life/manager-audit.mjs && node tests/static-check.js"
   }
 }
 ```
@@ -513,7 +519,10 @@ Tests must prove:
 9. production analyzer path is not keyword-only and references/calls the LLM adapter;
 10. Wavespeed client module builds a real provider request shape and tests mock the client/fetch;
 11. Docker/compose includes OpenClaw runtime command or structured missing-runtime blocker;
-12. browser/noVNC compose service or Dockerfile exists and profile storage is mounted.
+12. browser/noVNC compose service or Dockerfile exists and profile storage is mounted;
+13. `.env.example` has exact required env var names and no default test/mock mode;
+14. `npm run test:static` preserves required `node --check` syntax checks plus alignment checks;
+15. `media-flow.js` imports/uses the Wavespeed client by default for real mode.
 
 ---
 
@@ -558,6 +567,10 @@ Fail the implementation if it:
 - lacks browser/noVNC handoff docs or runnable noVNC/Chromium service shape;
 - implements production analyzer as keyword/regex only;
 - only checks `WAVESPEED_API_KEY` without a real Wavespeed client adapter shape;
+- leaves `.env.example` in test/mock mode by default;
+- renames required env vars without documenting/confirming the change;
+- replaces syntax checks with only a custom static checker;
+- requires callers to inject the real Wavespeed image function for production media flow;
 - lacks runnable tests;
 - silently changes architecture.
 

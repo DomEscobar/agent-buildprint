@@ -19,13 +19,15 @@ Implement the image skill with Wavespeed real mode and mock test mode.
 2. Implement `wavespeed-client.js` with concrete `createWavespeedImage` and `pollWavespeedJob` functions that build Wavespeed HTTP requests and normalize responses.
 3. Implement mock mode for tests by injecting/mocking fetch/client; tests must not call the network.
 4. Route public/private media through policy.
-5. Return structured block reasons.
+5. Make `media-flow.js` import/use the Wavespeed client by default in real mode; injected clients are for tests only.
+6. Return structured block reasons.
 
 ## Do not
 
 - use another production image provider;
 - call Wavespeed in tests;
 - stop at checking whether `WAVESPEED_API_KEY` exists without implementing a client adapter shape;
+- require production callers to inject the real Wavespeed function manually;
 - treat public and private media the same.
 
 ## Exit criteria
@@ -33,4 +35,5 @@ Implement the image skill with Wavespeed real mode and mock test mode.
 - missing key uses mock/blocked real mode;
 - low-trust sensitive request is blocked;
 - public request requires platform-safe/canon/grounding checks;
-- tests verify the client uses Wavespeed URL, bearer auth, and normalized status without making external calls.
+- tests verify the client uses Wavespeed URL, bearer auth, and normalized status without making external calls;
+- tests/static checks verify media flow references the default Wavespeed client adapter.
