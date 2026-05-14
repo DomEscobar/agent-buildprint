@@ -4,8 +4,7 @@
   "private": true,
   "type": "module",
   "bin": {
-    "xy": "./bin/agb.js",
-    "agent-buildprint": "./bin/agb.js"
+    "agb": "./bin/agb.js"
   },
   "scripts": {
     "check": "node ./bin/agb.js check ./langgraph",
