@@ -10,6 +10,61 @@ agentFile: true
 
 # BUILDPRINT: OpenClaw AI Influencer OS
 
+
+## 0A. Attention anchors for coding agents
+
+Keep these tokens active while planning and coding:
+
+```txt
+TARGET_SHAPE = OpenClaw container + persona extension + skills + life modules + Wavespeed image skill + browser/noVNC publishing handoff
+RUNTIME = OpenClaw
+IMAGE_PROVIDER = Wavespeed only for production
+REFERENCE_ARCHITECTURE = Mila-style
+DEFAULT_OUTPUT = Dockerized bot, not SaaS app
+TEST_MODE = no external API calls, mock Wavespeed
+PUBLISHING_DEFAULT = mock/manual approval, never auto-publish by default
+ALIGNMENT = ask closed config questions only, then build
+```
+
+When instructions conflict, preserve `TARGET_SHAPE`.
+
+If you notice yourself building a generic Node/Express/Next/SaaS/chatbot template, stop and return to `TARGET_SHAPE`.
+
+---
+
+## 0B. Definition of working
+
+The build is working only when all are true:
+
+| Gate | Must be true |
+|---|---|
+| OpenClaw shape | config, extension, skills, Docker entrypoint exist |
+| Persona runtime | SOUL/USER/canon feed runtime context |
+| Memory split | user relationship memory separate from persona self-state |
+| Images | Wavespeed real path exists; tests use mock mode |
+| Media safety | public/private media have different gates |
+| Social | drafts require `groundedIn`; publisher is mock/manual by default |
+| Browser handoff | noVNC/Chromium publishing handoff documented |
+| Manager | audit reports stale, unsafe, ungrounded, blocked items |
+| Tests | `npm test` passes without external APIs |
+| Validation | `VALIDATION.md` records choices, keys, deviations, blockers |
+
+---
+
+## 0C. Common drift map
+
+| If you drift toward... | Correct back to... |
+|---|---|
+| generic chatbot | OpenClaw persona extension + runtime context + memory/life state |
+| SaaS dashboard | Dockerized OpenClaw bot first; dashboard is minor status UI only |
+| image abstraction | Wavespeed production path with mock fallback |
+| pure mock demo | real file/module shape + behavior tests; mock only external APIs |
+| social scheduler | Mila-style life/social planner with manager QA and grounded drafts |
+| auto-poster | mock/manual-gated publisher + browser/noVNC handoff |
+| broad product discovery | closed configuration interview only |
+
+---
+
 ## 0. Contract for the coding agent
 
 Build a **Mila-style OpenClaw AI influencer system**.

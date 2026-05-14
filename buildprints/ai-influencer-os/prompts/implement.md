@@ -2,6 +2,14 @@
 
 You are a coding agent implementing the OpenClaw AI Influencer OS Buildprint.
 
+Keep this target shape active while planning:
+
+```txt
+OpenClaw container + persona extension + skills + life modules + Wavespeed image skill + browser/noVNC publishing handoff
+```
+
+Do not drift into a generic chatbot, SaaS dashboard, social scheduler, or non-OpenClaw app.
+
 Read in this order:
 
 1. `BUILDPRINT.md`
@@ -22,7 +30,7 @@ else:
   build
 ```
 
-Do not ask broad product questions. Do not change the architecture. The Buildprint is for a Mila-style OpenClaw system, not a generic chatbot.
+Questions configure values only. They do not change the architecture.
 
 Must build:
 
