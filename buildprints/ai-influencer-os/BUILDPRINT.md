@@ -2,78 +2,219 @@
 title: AI Influencer OS
 slug: ai-influencer-os
 category: Product OS
-stack: [Persona, Memory, Image generation, Social publishing, OpenClaw]
+stack: [Persona, Memory, Image generation, Social publishing, TypeScript, JSON storage]
 difficulty: Advanced
+status: publishable-draft
+creator: Agent Buildprint
 ---
 
 # AI Influencer OS Buildprint
 
-## What this builds
+## 1. Product promise
 
-A believable AI creator/persona system with:
+Build a believable AI creator system: not just a chatbot, and not just an image generator, but a coherent persona with memory, life continuity, content planning, media boundaries, manager QA, and social publishing flow.
 
-- persona canon and voice
-- relationship/user memory
-- own-life state, journal, calendar, and continuity
-- content drafts and content calendar
-- public/private media policy
-- image generation workflow
-- manager QA/audit loop
-- social publishing flow with manual handoff
+The first implementation should be local, mock-first, and safe. It should prove the architecture before connecting real social accounts, real image generation, or autonomous posting.
 
-Reference inspiration: Mila Miun-style system.
+## 2. What this builds
 
-## When to use
+A minimal AI Influencer OS with these modules:
 
-Use this when building a synthetic creator, AI companion, AI influencer, character-led content system, or persona-driven social product.
+1. **Persona Canon** — stable identity, voice, niche, visual rules, boundaries.
+2. **Relationship Memory** — user-specific facts, preferences, trust, recent messages, open loops.
+3. **Self-State / Life Continuity** — mood, energy, current arcs, calendar, journal, plausible recurring habits.
+4. **Runtime Context Builder** — compact private context injected into chat/planning prompts.
+5. **Content Planner** — turns life beats and content pillars into social draft ideas.
+6. **Media Policy** — separates public-safe media, private media, blocked requests, and approval gates.
+7. **Media Queue** — mock image/video jobs linked to drafts or private requests.
+8. **Manager QA** — blocks low-quality, unsafe, inconsistent, or canon-breaking drafts.
+9. **Mock Publisher** — approval-gated publishing to a local history log, not a real platform.
+10. **Tests/Checks** — prove the lifecycle and safety gates work.
 
-Do not use this for fully autonomous spam accounts or deceptive impersonation.
+## 3. Non-goals for first implementation
 
-## Inputs / assumptions
+- No real Instagram/TikTok posting.
+- No real adult content generation.
+- No real impersonation of existing people.
+- No autonomous outreach to real people.
+- No hidden prompt/policy leakage.
+- No external paid API calls required.
 
-- One clear persona niche and voice.
-- A private storage layer for user memory and persona self-state.
-- Optional image generation provider.
-- Optional social posting integration; start in mock/manual mode.
-- Human approval for public posting until safety and quality gates are proven.
+## 4. Required file structure for generated implementation
 
-## Implementation plan
+Recommended minimal output:
 
-1. Create persona files:
-   - `persona/SOUL.md`
-   - `persona/CANON.md`
-   - `persona/BOUNDARIES.md`
-2. Create state storage:
-   - `storage/users/*.json`
-   - `storage/self/state.json`
-   - `storage/calendar/events.json`
-   - `storage/social/drafts.json`
-3. Add chat/runtime context builder that injects compact private state.
-4. Add memory extraction/reflection pass.
-5. Add life tick/journal/calendar loop.
-6. Add social draft planner.
-7. Add media generation policy and queue.
-8. Add manager QA/audit loop.
-9. Add social publishing in mock mode first, then browser/API/manual handoff.
-10. Add tests for persona boundaries, memory updates, draft lifecycle, and publishing gates.
+```txt
+persona/
+  SOUL.md
+  CANON.md
+  BOUNDARIES.md
+src/
+  context-builder.ts
+  memory-store.ts
+  self-state.ts
+  life-tick.ts
+  social-planner.ts
+  media-policy.ts
+  media-queue.ts
+  manager-qa.ts
+  mock-publisher.ts
+  types.ts
+storage/
+  users/.gitkeep
+  self/state.json
+  calendar/events.json
+  journal/.gitkeep
+  social/drafts.json
+  social/published.json
+tests/
+  influencer-os.test.ts
+VALIDATION.md
+package.json
+```
 
-## Acceptance checks
+## 5. Data model
 
-- Public posts only reference grounded life/calendar/journal/social state.
-- Public media is platform-safe.
-- Private/adult/sensitive media requests require explicit trust/consent gates or are refused.
-- Persona canon remains stable across sessions.
-- Manager QA can block low-quality or unsafe drafts.
-- Publishing supports dry-run/mock mode.
-- No secrets or private user memory are exposed in public content.
+### User memory
 
-## Risks / when not to use
+```ts
+type UserMemory = {
+  userId: string;
+  trust: number;
+  stage: 'cold' | 'warm' | 'close';
+  facts: string[];
+  preferences: string[];
+  openLoops: string[];
+  recentMessages: { role: 'user' | 'persona'; text: string; at: string }[];
+};
+```
 
-- Do not create deceptive real-person impersonation.
-- Do not automate platform spam.
-- Do not auto-publish until login, CAPTCHA, failure, and approval gates are proven.
-- Do not let image generation drift from identity/canon.
+### Self-state
 
-## Copyable agent prompt
+```ts
+type SelfState = {
+  mood: string;
+  energy: number;
+  socialBattery: number;
+  currentArcs: string[];
+  recurringHabits: string[];
+  contentBacklog: string[];
+  lastUpdated: string;
+};
+```
 
-Build an AI Influencer OS from this Buildprint. Create a minimal but working local TypeScript/Node implementation with persona files, JSON storage, chat context builder, memory reflection stub, life-state loop, social draft planner, media policy, manager QA, and mock publishing. Add tests for persona boundary behavior, draft lifecycle, and publish gating. Do not integrate real social posting yet; use mock publishing and explicit approval gates.
+### Social draft
+
+```ts
+type SocialDraft = {
+  id: string;
+  platform: 'instagram' | 'tiktok' | 'x' | 'mock';
+  caption: string;
+  visualPrompt?: string;
+  source: 'life' | 'calendar' | 'manual' | 'trend';
+  groundedIn: string[];
+  status: 'draft' | 'needs_qa' | 'approved' | 'blocked' | 'published';
+  qaNotes: string[];
+};
+```
+
+### Media request
+
+```ts
+type MediaRequest = {
+  id: string;
+  requesterUserId?: string;
+  visibility: 'public' | 'private';
+  prompt: string;
+  adultIntent: boolean;
+  includeFace: boolean;
+  status: 'queued' | 'blocked' | 'ready' | 'failed';
+  policyReason?: string;
+};
+```
+
+## 6. Core flows
+
+### Chat context flow
+
+```txt
+incoming user message
+→ load user memory
+→ load self-state / recent journal / social state
+→ build compact private context
+→ model/persona response can use context but must not leak internals
+→ update memory/reflection after response
+```
+
+### Life continuity flow
+
+```txt
+scheduled life tick
+→ read current self-state
+→ make small plausible update
+→ optionally add calendar/journal beat
+→ never invent dramatic events without approval
+```
+
+### Social content flow
+
+```txt
+life/calendar/backlog/trend input
+→ draft social post
+→ manager QA checks grounding, voice, safety, repetition, visual consistency
+→ approved draft enters mock publish queue
+→ mock publisher writes local published history
+```
+
+### Media request flow
+
+```txt
+media request
+→ classify visibility/adult/include-face
+→ apply trust/safety/platform policy
+→ public content must be platform-safe
+→ private sensitive content requires explicit gates
+→ queue mock media job or block with reason
+```
+
+## 7. Safety and ethics requirements
+
+- Persona must be fictional or explicitly authorized.
+- The system must not impersonate a real person.
+- Public posts must not claim real events unless grounded in stored state.
+- Real posting must require approval until separately enabled.
+- Media generation must have public/private policy separation.
+- Trust gates must exist for sensitive private media.
+- User memory must never be published accidentally.
+- Secrets and API keys must never be committed.
+
+## 8. Acceptance checks
+
+The generated project passes if:
+
+- `npm test` or equivalent validation passes.
+- A public post draft with ungrounded life claims is blocked.
+- A safe grounded draft can be approved and mock-published.
+- A private adult/sensitive media request from a low-trust user is blocked.
+- Persona canon exists and manager QA checks against it.
+- Mock publisher does not call external platforms.
+- `VALIDATION.md` explains implementation choices and ambiguities.
+
+## 9. Copyable agent prompt
+
+```txt
+Build an AI Influencer OS from this Buildprint.
+
+Create a minimal local TypeScript/Node implementation with persona canon files, JSON storage, context builder, user memory, self-state, life tick, social draft planner, media policy, mock media queue, manager QA, mock publisher, and tests.
+
+Do not call external APIs.
+Do not integrate real social posting.
+Do not create real-person impersonation.
+Start with mock data and approval gates.
+
+Run tests and write VALIDATION.md with:
+1. what you built,
+2. how to run it,
+3. what ambiguities you found,
+4. what should be improved in this Buildprint.
+```

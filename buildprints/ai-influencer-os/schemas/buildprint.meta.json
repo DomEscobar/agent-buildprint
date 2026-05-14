@@ -1,0 +1,10 @@
+{
+  "title": "AI Influencer OS",
+  "slug": "ai-influencer-os",
+  "category": "Product OS",
+  "difficulty": "Advanced",
+  "format": "hybrid-markdown-first",
+  "primaryFile": "BUILDPRINT.md",
+  "requiresExternalAPIsForDryRun": false,
+  "validationCommandExpected": "npm test"
+}
