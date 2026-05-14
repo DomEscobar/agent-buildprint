@@ -13,12 +13,14 @@ Usage:
   agb check <blueprint-folder> [--code <generated-code-folder>]
   agb init langgraph <target-folder>
   agb map <repo-folder> [--out <output-folder>]
+  agb start <buildprint-package-json-url-or-file>
 
 Examples:
   agb check ./langgraph
   agb check ./langgraph --code ./my-agent
   agb map ./my-project
   agb map ./my-project --out ./my-project.buildprint
+  agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json
 `)
   process.exit(exitCode)
 }
@@ -583,8 +585,116 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   for (const [file, content] of Object.entries(phaseFiles)) fs.writeFileSync(path.join(out, 'plans', file), content)
 }
 
+function isUrl(value) {
+  return /^https?:\/\//.test(value)
+}
+
+async function readJsonFromUrlOrFile(ref) {
+  if (isUrl(ref)) {
+    const res = await fetch(ref)
+    if (!res.ok) throw new Error(`failed to fetch ${ref}: HTTP ${res.status}`)
+    return { json: await res.json(), baseUrl: ref }
+  }
+  const absolute = path.resolve(cwd, ref)
+  return { json: JSON.parse(readText(absolute)), baseUrl: `file://${absolute}` }
+}
+
+function resolveManifestUrl(manifestRef, maybeRelative) {
+  if (!maybeRelative) return null
+  if (isUrl(maybeRelative)) return maybeRelative
+  if (isUrl(manifestRef)) return new URL(maybeRelative, manifestRef).href
+  if (manifestRef.startsWith('file://')) {
+    const manifestPath = fileURLToPath(manifestRef)
+    return `file://${path.resolve(path.dirname(manifestPath), maybeRelative)}`
+  }
+  return maybeRelative
+}
+
+async function fetchTextExact(url) {
+  if (url.startsWith('file://')) return readText(fileURLToPath(url))
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`failed to fetch ${url}: HTTP ${res.status}`)
+  return await res.text()
+}
+
+function writeJson(file, data) {
+  fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
+}
+
+async function startBuildprint(manifestRef) {
+  const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
+  if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
+
+  const stateDir = path.join(cwd, '.buildprint')
+  const snapshotDir = path.join(stateDir, 'snapshots')
+  fs.mkdirSync(snapshotDir, { recursive: true })
+
+  const downloaded = []
+  for (const file of manifest.files) {
+    if (!file.path || file.path.includes('*')) continue
+    const source = resolveManifestUrl(baseUrl, file.siteUrl || file.rawUrl)
+    if (!source) throw new Error(`missing source URL for ${file.path}`)
+    const text = await fetchTextExact(source)
+    if (!text.trim()) throw new Error(`downloaded empty snapshot for ${file.path}`)
+    const dest = path.join(snapshotDir, file.path)
+    fs.mkdirSync(path.dirname(dest), { recursive: true })
+    fs.writeFileSync(dest, text)
+    downloaded.push({ path: file.path, sourceUrl: source, bytes: Buffer.byteLength(text) })
+  }
+
+  const now = new Date().toISOString()
+  writeJson(path.join(stateDir, 'source.json'), {
+    slug: manifest.slug,
+    title: manifest.title,
+    category: manifest.category,
+    tier: manifest.tier,
+    status: manifest.status,
+    manifestUrl: isUrl(manifestRef) ? manifestRef : path.resolve(cwd, manifestRef),
+    agentUrl: resolveManifestUrl(baseUrl, manifest.entrypoints?.agent),
+    promptUrl: resolveManifestUrl(baseUrl, manifest.entrypoints?.prompt),
+    githubUrl: manifest.entrypoints?.github,
+    rawBase: manifest.entrypoints?.rawBase,
+    snapshotMode: 'download_exact',
+    startedAt: now,
+    downloaded,
+  })
+
+  writeJson(path.join(stateDir, 'state.json'), {
+    buildprint: manifest.slug,
+    currentPhase: '00-alignment',
+    completedPhases: [],
+    blocked: false,
+    lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
+    nextAction: 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
+    updatedAt: now,
+  })
+
+  fs.writeFileSync(path.join(stateDir, 'progress.md'), `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 — Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
+  fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
+  fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
+  fs.writeFileSync(path.join(stateDir, 'next-agent.md'), `# Next Agent Instructions\n\nStart here.\n\n1. Read \`.buildprint/source.json\`.\n2. Read \`.buildprint/state.json\`.\n3. Read \`.buildprint/snapshots/BUILDPRINT.md\`.\n4. Read \`.buildprint/snapshots/PLAN.md\` if present.\n5. Continue current phase: \`00-alignment\`.\n\nRules:\n\n- Snapshot files were downloaded exactly from the manifest. Do not rewrite them manually.\n- Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.\n- If blocked, update \`.buildprint/blockers.md\`.\n`)
+
+  console.log(`✓ Created ${stateDir}`)
+  console.log(`✓ Downloaded ${downloaded.length} snapshot files`)
+  console.log('✓ Wrote source.json, state.json, progress.md, decisions.md, blockers.md, next-agent.md')
+  console.log('\nNext: read .buildprint/next-agent.md')
+}
+
 if (args.length === 0 || args[0] === '--help' || args[0] === '-h') usage(0)
 
+
+
+if (args[0] === 'start') {
+  const manifest = args[1]
+  if (!manifest) usage(1)
+  try {
+    await startBuildprint(manifest)
+    process.exit(0)
+  } catch (error) {
+    console.error(`Start failed: ${error.message}`)
+    process.exit(1)
+  }
+}
 
 if (args[0] === 'map') {
   const repo = args[1]

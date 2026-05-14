@@ -8,7 +8,7 @@
   },
   "scripts": {
     "check": "node ./bin/agb.js check ./langgraph",
-    "test": "node ./bin/agb.js check ./langgraph && node ./bin/agb.js check ./langgraph --code ./langgraph/examples && rm -rf /tmp/agb-map-smoke && node ./bin/agb.js map . --out /tmp/agb-map-smoke && test -f /tmp/agb-map-smoke/BUILDPRINT.md && test -f /tmp/agb-map-smoke/SPEC.md && test -f /tmp/agb-map-smoke/PLAN.md && test -f /tmp/agb-map-smoke/CONTRACTS.md && test -f /tmp/agb-map-smoke/TEST_MATRIX.md && test -f /tmp/agb-map-smoke/VALIDATION_TEMPLATE.md && test -f /tmp/agb-map-smoke/plans/00-review-facts.md"
+    "test": "node ./bin/agb.js check ./langgraph && node ./bin/agb.js check ./langgraph --code ./langgraph/examples && rm -rf /tmp/agb-map-smoke && node ./bin/agb.js map . --out /tmp/agb-map-smoke && test -f /tmp/agb-map-smoke/BUILDPRINT.md && test -f /tmp/agb-map-smoke/SPEC.md && test -f /tmp/agb-map-smoke/PLAN.md && test -f /tmp/agb-map-smoke/CONTRACTS.md && test -f /tmp/agb-map-smoke/TEST_MATRIX.md && test -f /tmp/agb-map-smoke/VALIDATION_TEMPLATE.md && test -f /tmp/agb-map-smoke/plans/00-review-facts.md && rm -rf /tmp/agb-start-smoke && mkdir /tmp/agb-start-smoke && cd /tmp/agb-start-smoke && node /root/blueprint/bin/agb.js start http://152.53.118.78:43117/buildprints/ai-influencer-os/package.json && test -s .buildprint/snapshots/BUILDPRINT.md && test -s .buildprint/snapshots/plans/04-wavespeed-image.md"
   },
   "dependencies": {}
 }

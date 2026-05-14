@@ -90,3 +90,26 @@ Any good software construction plan
 → aligned for coding agents
 → optionally checkable by tools
 ```
+
+## Implementation state folder
+
+Agent-grade Buildprints should be started with:
+
+```bash
+agb start <buildprint-package-json-url-or-file>
+```
+
+This creates an implementation-local `.buildprint/` folder:
+
+```txt
+.buildprint/
+  source.json
+  state.json
+  progress.md
+  decisions.md
+  blockers.md
+  next-agent.md
+  snapshots/
+```
+
+Snapshot files must be downloaded/copied exactly from the package manifest. Agents must not rewrite, summarize, or regenerate snapshot content manually.
