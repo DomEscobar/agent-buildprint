@@ -6,11 +6,16 @@ Use these names and shapes unless the user explicitly confirms alternatives.
 
 ```ts
 buildRuntimeContext(userId: string): Promise<RuntimeContext>
-classifyIntent(message: string, context: RuntimeContext): Promise<AnalyzerResult>
+classifyIntent(message: string, context: RuntimeContext, options?: { mockAnalyzer?: AnalyzerAdapter }): Promise<AnalyzerResult>
+analyzeIntentWithLLM(message: string, context: RuntimeContext): Promise<AnalyzerResult>
+validateAnalyzerResult(value: unknown): AnalyzerResult
 evaluateMediaRequest(request: MediaRequest, user: UserMemory, self: SelfState): PolicyDecision
 planSocialDraft(input: PlanningInput): SocialDraft
 auditSystemState(input: AuditInput): AuditReport
+createWavespeedImage(input: WavespeedImageInput, client?: FetchLike): Promise<WavespeedImageResult>
+pollWavespeedJob(id: string, client?: FetchLike): Promise<WavespeedImageResult>
 publishDraft(draftId: string, options: PublishOptions): PublishResult
+checkOpenClawRuntime(): Promise<RuntimeCheck>
 ```
 
 ## Data shapes
@@ -47,6 +52,8 @@ type RuntimeContext = {
   mediaStatus: string[]
 }
 
+type AnalyzerAdapter = (message: string, context: RuntimeContext) => Promise<AnalyzerResult> | AnalyzerResult
+
 type AnalyzerResult = {
   intent: 'chat' | 'recall' | 'media_request' | 'social_question' | 'calendar_question'
   mediaRequest?: MediaRequest
@@ -77,6 +84,28 @@ type SocialDraft = {
   status: 'draft' | 'needs_qa' | 'approved' | 'blocked' | 'published'
   qaNotes: string[]
 }
+
+type FetchLike = (url: string, init?: { method?: string; headers?: Record<string, string>; body?: string }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown>; text?(): Promise<string> }>
+
+type WavespeedImageInput = {
+  prompt: string
+  aspectRatio?: '1:1' | '4:5' | '9:16' | '16:9'
+  seed?: number
+  safety?: 'public' | 'private'
+  webhookUrl?: string
+}
+
+type WavespeedImageResult = {
+  id: string
+  provider: 'wavespeed'
+  status: 'queued' | 'processing' | 'succeeded' | 'failed'
+  assetUrl?: string
+  raw: unknown
+}
+
+type RuntimeCheck =
+  | { ok: true; command: string; version?: string }
+  | { ok: false; code: 'openclaw_runtime_missing'; command: string; reason: string }
 
 type AuditReport = {
   status: 'pass' | 'warn' | 'fail'

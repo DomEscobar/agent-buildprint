@@ -18,7 +18,8 @@ Implement mock/manual-gated publishing and document browser/noVNC handoff.
 1. Implement mock publisher.
 2. Refuse unapproved drafts.
 3. Document browser/noVNC commands.
-4. Keep real publishing disabled unless env flags and approval allow it.
+4. Add runnable browser handoff service shape: expose `SOCIAL_VISIBLE_BROWSER_PORT`, mount `storage/browser/profile`, and keep operator login persistent.
+5. Keep real publishing disabled unless env flags and approval allow it.
 
 ## Do not
 
@@ -30,4 +31,5 @@ Implement mock/manual-gated publishing and document browser/noVNC handoff.
 
 - unapproved draft is refused;
 - approved mock draft records posted history;
-- handoff docs exist.
+- handoff docs exist;
+- compose/Docker contains Chromium/noVNC service shape and persistent browser profile mount.

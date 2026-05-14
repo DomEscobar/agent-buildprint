@@ -20,6 +20,10 @@ Given the project starts
 When the OpenClaw container/runtime loads
 Then it loads persona files, the influencer persona extension, and the required skills.
 
+Given the real OpenClaw CLI/runtime is unavailable
+When startup validation runs
+Then the system records a structured `openclaw_runtime_missing` blocker instead of pretending a generic Node process is the runtime.
+
 ### R3 — Private runtime context
 
 Given a message arrives
@@ -38,7 +42,7 @@ Then user relationship memory and persona self-state remain separate JSON docume
 
 Given `WAVESPEED_API_KEY` is present
 When real image generation is requested
-Then the production path uses Wavespeed.
+Then the production path uses a concrete Wavespeed client adapter with request/response normalization.
 
 Given `WAVESPEED_API_KEY` is missing
 When tests or local validation run
@@ -53,6 +57,20 @@ Then it must be platform-safe, canon-consistent, and grounded in a draft/life/ca
 Given a private or sensitive media request
 When policy evaluates it
 Then trust/consent gates apply or the request is blocked.
+
+### R6A — LLM analyzer
+
+Given tests run
+When intent classification is needed
+Then a mock analyzer may be injected and no external LLM call occurs.
+
+Given production intent classification runs
+When no mock analyzer is injected
+Then classification goes through a mockable LLM JSON analyzer adapter and validates the returned `AnalyzerResult` shape.
+
+Given the production analyzer is implemented only with keyword or regex matching
+When validation tests inspect the implementation
+Then validation fails with analyzer drift.
 
 ### R7 — Social drafts
 
@@ -74,6 +92,10 @@ Given real publishing is requested
 When default env flags are unchanged
 Then the system uses browser/noVNC handoff docs and does not auto-publish.
 
+Given the container stack is generated
+When compose files are inspected
+Then a Chromium/noVNC service or Dockerfile exists, exposes `SOCIAL_VISIBLE_BROWSER_PORT`, and mounts `storage/browser/profile` for persistent operator login.
+
 ### R9 — Manager audit
 
 Given drafts/media/jobs/storage exist
@@ -84,6 +106,7 @@ Then it reports stale drafts, stuck media jobs, unsafe media, canon drift, ungro
 
 - real auto-publishing by default;
 - real API calls in tests;
+- keyword-only production analyzer;
 - provider swap away from Wavespeed;
 - SaaS dashboard as primary product;
 - merging memory and self-state;

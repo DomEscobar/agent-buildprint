@@ -38,13 +38,14 @@ The build is working only when all are true:
 
 | Gate | Must be true |
 |---|---|
-| OpenClaw shape | config, extension, skills, Docker entrypoint exist |
+| OpenClaw shape | config, extension, skills, Docker entrypoint exist and call the OpenClaw CLI/runtime |
 | Persona runtime | SOUL/USER/canon feed runtime context |
+| Analyzer | production intent analysis goes through a mockable LLM JSON adapter, not keyword-only regex |
 | Memory split | user relationship memory separate from persona self-state |
-| Images | Wavespeed real path exists; tests use mock mode |
+| Images | Wavespeed real adapter path exists; tests use mock mode |
 | Media safety | public/private media have different gates |
 | Social | drafts require `groundedIn`; publisher is mock/manual by default |
-| Browser handoff | noVNC/Chromium publishing handoff documented |
+| Browser handoff | runnable Chromium/noVNC service or compose profile exists and handoff is documented |
 | Manager | audit reports stale, unsafe, ungrounded, blocked items |
 | Tests | `npm test` passes without external APIs |
 | Validation | `VALIDATION.md` records choices, keys, deviations, blockers |
@@ -56,8 +57,9 @@ The build is working only when all are true:
 | If you drift toward... | Correct back to... |
 |---|---|
 | generic chatbot | OpenClaw persona extension + runtime context + memory/life state |
+| keyword-only bot | mockable LLM JSON analyzer adapter with tests proving production is not regex-only |
 | SaaS dashboard | Dockerized OpenClaw bot first; dashboard is minor status UI only |
-| image abstraction | Wavespeed production path with mock fallback |
+| image abstraction | Wavespeed production adapter path with mock fallback |
 | pure mock demo | real file/module shape + behavior tests; mock only external APIs |
 | social scheduler | default persona preset life/social planner with manager QA and grounded drafts |
 | auto-poster | mock/manual-gated publisher + browser/noVNC handoff |
@@ -103,6 +105,7 @@ NO SaaS dashboard-first rewrite
 NO non-OpenClaw runtime
 NO image provider swap away from Wavespeed
 NO real external API calls in tests
+NO keyword-only production analyzer
 NO auto-publishing by default
 ```
 
@@ -171,7 +174,7 @@ Dockerized OpenClaw runtime
   |   |-- SOUL.md
   |   `-- USER.md
   |-- influencer-persona extension/plugin
-  |   |-- LLM JSON analyzer adapter
+  |   |-- LLM JSON analyzer adapter (production path must call configured LLM/OpenRouter-compatible endpoint)
   |   |-- runtime context builder
   |   |-- policy gate
   |   |-- media flow
@@ -217,6 +220,7 @@ persona/BOUNDARIES.md
 extensions/influencer-persona/openclaw.plugin.json
 extensions/influencer-persona/index.js
 extensions/influencer-persona/intent.js
+extensions/influencer-persona/analyzer-adapter.js
 extensions/influencer-persona/runtime-context.js
 extensions/influencer-persona/media-flow.js
 extensions/influencer-persona/policy.js
@@ -224,6 +228,7 @@ extensions/influencer-persona/storage.js
 skills/influencer-image/SKILL.md
 skills/influencer-image/influencer-image
 skills/influencer-image/config.json
+skills/influencer-image/wavespeed-client.js
 skills/influencer-post/SKILL.md
 skills/influencer-post/influencer-post
 skills/influencer-social/SKILL.md
@@ -245,6 +250,7 @@ life/manager-audit.mjs
 docker/Dockerfile
 docker/docker-compose.yml
 docker/entrypoint.sh
+docker/novnc.Dockerfile
 storage/users/.gitkeep
 storage/influencer-self/state.json
 storage/calendar/events.json
@@ -284,6 +290,7 @@ OPENCLAW_ANALYZER_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_LIFE_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_SOCIAL_PLANNER_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_REPAIR_MODEL=openrouter/deepseek/deepseek-v4-flash
+OPENCLAW_RUNTIME_CMD=openclaw
 SOCIAL_VISIBLE_BROWSER_PORT=7900
 INFLUENCER_DASHBOARD_PORT=8626
 AUTO_PUBLISH_SOCIAL=false
@@ -309,20 +316,39 @@ Must include:
 - OpenClaw config that loads the extension and skills;
 - Docker compose service for the bot/runtime;
 - entrypoint that prepares workspace/persona files;
-- documented startup command.
+- documented startup command;
+- concrete `OPENCLAW_RUNTIME_CMD`/CLI invocation path or an explicit adapter module that can be swapped for the real OpenClaw runtime;
+- a static/test check proving the Docker entrypoint starts OpenClaw or deliberately fails with a structured `openclaw_runtime_missing` blocker instead of silently running a generic Node app.
 
 ### 6.2 Persona extension
 
 Must include:
 
 - message entrypoint;
-- mockable LLM JSON analyzer adapter;
+- mockable LLM JSON analyzer adapter in `extensions/influencer-persona/analyzer-adapter.js`;
 - runtime context builder;
 - user/self storage reads/writes;
 - media request routing through policy;
 - no direct image generation without policy gate.
 
 The analyzer may be mocked in tests, but production path must be LLM-led, not only keyword regex.
+
+Required analyzer contract:
+
+```txt
+classifyIntent(message, context, options)
+  if options.mockAnalyzer exists: use it for tests
+  else call analyzeIntentWithLLM(message, context)
+
+analyzeIntentWithLLM(message, context)
+  reads OPENROUTER_API_KEY and OPENCLAW_ANALYZER_MODEL
+  sends compact private RuntimeContext + user message to an OpenRouter-compatible chat/completions endpoint
+  requests strict JSON matching AnalyzerResult
+  validates JSON shape before returning
+  if key is missing in production: return/block with structured analyzer_unconfigured reason
+```
+
+Keyword heuristics may only be a test fixture, local fallback explicitly named `mock`/`heuristic`, or a repair fallback after the LLM adapter fails. They must not be the normal production path.
 
 ### 6.3 Runtime context
 
@@ -357,6 +383,22 @@ Self-state includes mood, energy, social battery, current arcs, calendar, journa
 
 Only real provider path: Wavespeed.
 
+Implement a concrete client module, not only an env-key check:
+
+```txt
+createWavespeedImage({ prompt, aspectRatio, seed, safety, webhookUrl? })
+  requires WAVESPEED_API_KEY
+  POST ${WAVESPEED_API_URL || "https://api.wavespeed.ai/api/v3"}/<model-or-endpoint>
+  Authorization: Bearer <WAVESPEED_API_KEY>
+  returns { id, status, assetUrl?, raw }
+
+pollWavespeedJob(id)
+  GET the provider job/result endpoint
+  normalizes queued/processing/succeeded/failed into local MediaJob status
+```
+
+If the exact Wavespeed endpoint/model is uncertain, isolate it behind `skills/influencer-image/wavespeed-client.js`, document the assumed endpoint in `VALIDATION.md`, and keep tests on a mocked fetch/client. Do not replace Wavespeed with another provider.
+
 Required behavior:
 
 ```txt
@@ -381,6 +423,15 @@ id, platform, caption, visualPrompt, groundedIn, status, qaNotes
 Default publisher is mock/manual-gated.
 
 Real publishing is browser/noVNC handoff only until explicitly enabled.
+
+The repo must include a runnable browser handoff surface:
+
+```txt
+docker/novnc.Dockerfile or compose service using a Chromium/noVNC image
+compose service exposes SOCIAL_VISIBLE_BROWSER_PORT (default 7900)
+storage/browser/profile is mounted for persistent operator login
+publisher returns browser_handoff_required until manual approval/session checks pass
+```
 
 Must document commands equivalent to:
 
@@ -458,7 +509,11 @@ Tests must prove:
 5. ungrounded public draft is blocked;
 6. grounded public draft can pass QA;
 7. mock publisher refuses unapproved drafts;
-8. manager audit reports stale or unsafe drafts.
+8. manager audit reports stale or unsafe drafts;
+9. production analyzer path is not keyword-only and references/calls the LLM adapter;
+10. Wavespeed client module builds a real provider request shape and tests mock the client/fetch;
+11. Docker/compose includes OpenClaw runtime command or structured missing-runtime blocker;
+12. browser/noVNC compose service or Dockerfile exists and profile storage is mounted.
 
 ---
 
@@ -500,7 +555,9 @@ Fail the implementation if it:
 - lacks public/private media policy separation;
 - auto-publishes by default;
 - lacks manager audit;
-- lacks browser/noVNC handoff docs;
+- lacks browser/noVNC handoff docs or runnable noVNC/Chromium service shape;
+- implements production analyzer as keyword/regex only;
+- only checks `WAVESPEED_API_KEY` without a real Wavespeed client adapter shape;
 - lacks runnable tests;
 - silently changes architecture.
 
