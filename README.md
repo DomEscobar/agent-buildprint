@@ -4,6 +4,11 @@ Construction plans for coding agents.
 
 Agent Buildprint turns product ideas or existing repositories into AI-readable architecture contracts, prompts, policies, tests, and checks that coding agents can follow without forcing a framework runtime.
 
+
+## Positioning
+
+Agent Buildprint is a registry/marketplace for building plans that coding agents can follow. The value is that creators can share their expertise as agent-ready Buildprints. Our own format is only an optional alignment layer for metadata, prompts, risks, acceptance checks, and validation. Useful Markdown specs, prompt packs, diagrams, examples, and test plans should be accepted without forcing creators into complex YAML. See `POSITIONING.md` and `FORMATS.md`.
+
 ## Current MVP
 
 - `agb check` validates Buildprint folders and generated code imports.
