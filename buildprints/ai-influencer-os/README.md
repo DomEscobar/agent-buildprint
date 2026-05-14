@@ -17,6 +17,9 @@
 
 ## What you get
 
+Default persona name is generated fresh unless the user provides one.
+
+
 - 🧠 persona + canon + boundaries
 - 💬 Telegram/OpenClaw chat runtime
 - 🗃️ per-user relationship memory

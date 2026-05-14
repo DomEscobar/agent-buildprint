@@ -16,7 +16,7 @@ Rules for the coding agent:
 
 ## Questions
 
-1. **Persona** — use default persona preset defaults, or set a new persona name + short identity?
+1. **Persona** — should the user choose the persona name/identity, or should the coding agent generate a fresh fictional name and identity from the default preset?
 
 2. **Voice/language** — keep mixed DE/EN dry/direct default preset tone, or change language/tone?
 
@@ -38,7 +38,7 @@ After answers, output:
 
 ```txt
 Alignment summary
-- Persona:
+- Persona name/identity source:
 - Voice/language:
 - Content lane:
 - Chat channel:
