@@ -2,26 +2,30 @@
 
 ## Alignment checks
 
-- Coding agent asked `questions.md` unless user said “use Mila defaults”.
-- Implementation records chosen deviations in `VALIDATION.md`.
+- User either said “Use Mila defaults” or the agent asked exactly `questions.md`.
+- Agent did not ask broad product-redesign questions.
+- `VALIDATION.md` records final choices and deviations.
 
-## Architecture checks
+## OpenClaw shape checks
 
-- OpenClaw config exists.
-- Persona plugin exists.
+- `AGENTS.md`, `SOUL.md`, and `USER.md` exist.
+- `config/openclaw.json` exists.
+- `extensions/influencer-persona/` exists with entrypoint, context, policy, media flow, and storage modules.
 - Skills exist for image, post, social, journal, calendar, recall.
-- Life modules exist for life tick, journal, social planner/autonomy, manager audit.
 - Docker deployment exists.
-- Browser/noVNC publishing flow is documented.
+- Browser/noVNC handoff is documented.
 
 ## Provider checks
 
 - `.env.example` includes `WAVESPEED_API_KEY`.
-- Image skill is designed around Wavespeed, with mock fallback for tests.
+- Wavespeed is the only production image provider path.
+- Missing Wavespeed key triggers mock mode or blocked real mode.
 - OpenRouter/OpenClaw model vars are documented.
 
-## Behavioral checks
+## Behavior checks
 
+- User memory and persona self-state are separate.
+- Runtime context includes memory/life/media status but is not leaked.
 - Public claims must be grounded in state/calendar/journal/social data.
 - Public and private media policies are separate.
 - Private sensitive media is trust/consent gated or blocked.
@@ -30,5 +34,10 @@
 
 ## Test checks
 
-- Tests or validation scripts run without real external API calls.
-- Missing real keys are reported as setup blockers, not hidden failures.
+- `npm test` runs without real external API calls.
+- `npm run test:static` or equivalent syntax check exists.
+- Tests cover mock image mode, blocked unsafe media, grounded/ungrounded drafts, publisher approval, and manager audit.
+
+## Failure checks
+
+Fail if the implementation is a generic chatbot, omits OpenClaw shape, omits Wavespeed, auto-publishes by default, or silently changes the Buildprint architecture.

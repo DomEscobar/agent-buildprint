@@ -10,111 +10,130 @@ agentFile: true
 
 # BUILDPRINT: OpenClaw AI Influencer OS
 
-## 0. Read this as a contract
+## 0. Contract for the coding agent
 
-You are a coding agent. Build exactly this architecture unless the user explicitly changes it in the alignment step.
+Build a **Mila-style OpenClaw AI influencer system**.
 
-Do **not** reinterpret this as:
+This Buildprint is not a brainstorming prompt. Treat it as an execution contract.
 
-- a generic chatbot;
-- a generic social scheduler;
-- a SaaS dashboard;
-- a LangGraph agent;
-- a non-OpenClaw project;
-- a pure mock/demo with no OpenClaw shape.
+You may configure names, voice, channels, content lanes, and approval settings from the user answers. You may **not** change the architecture unless the user explicitly asks to abandon this Buildprint.
 
-The output must be a **Mila-style OpenClaw influencer system**.
+Hard no:
+
+```txt
+NO generic chatbot
+NO generic social scheduler
+NO LangGraph replacement
+NO SaaS dashboard-first rewrite
+NO non-OpenClaw runtime
+NO image provider swap away from Wavespeed
+NO real external API calls in tests
+NO auto-publishing by default
+```
 
 ---
 
-## 1. Required first step: alignment checkpoint
+## 1. First action: configuration interview
 
-Before editing files, do one of these:
-
-### Path A — user said “Use Mila defaults”
-
-Proceed with the defaults in section 2.
-
-### Path B — user did not say that
-
-Ask only the questions in `questions.md`. Do not ask extra broad product questions.
-
-Then produce this summary and wait for confirmation:
+Before implementation:
 
 ```txt
-Alignment summary
-- Persona name:
-- Language/voice:
-- Content lane:
-- Chat channel:
-- Public platforms:
-- Image provider:
-- Publishing mode:
-- Autonomy level:
-- Differences from Mila defaults:
-
-Reply “confirm” to build, or tell me what to change.
+if user said "Use Mila defaults":
+  use section 2 and start building
+else:
+  ask exactly questions.md
+  summarize answers using the required summary template
+  wait for confirmation
 ```
 
-Do not implement until confirmed.
+The questions configure the fixed system. They do not invite product redesign.
+
+If the user refuses Wavespeed, stop and explain:
+
+```txt
+This Buildprint requires Wavespeed for production image generation. I can continue with mock mode, but a non-Wavespeed production provider is outside this Buildprint.
+```
+
+Record final choices in `VALIDATION.md`.
 
 ---
 
 ## 2. Mila defaults
 
-Use these defaults unless changed by the user:
+Use these values unless changed by confirmed user answers:
 
 ```yaml
 runtime: OpenClaw
 primary_chat: Telegram
 persona_style: dry, direct, understated, lightly teasing
-language: mixed German/English, German-leaning in casual chat
+language: mixed German/English, German-leaning casual chat
 content_lane: lifestyle + gaming + gym + streetwear + coffee
 memory: per-user relationship memory
 life: simulated self-state + calendar + journal + continuity arcs
 image_provider: Wavespeed
 model_provider: OpenRouter
 model_default: openrouter/deepseek/deepseek-v4-flash
-social_publishing: visible Chromium/noVNC handoff
+publishing_handoff: visible Chromium/noVNC
 publishing_default: mock/manual approval only
 auto_publish_default: false
+autonomy_default: disabled until tests pass
 manager_layer: health audit + QA + safe local repairs only
+storage: JSON files first
 ```
 
 ---
 
-## 3. Non-negotiable architecture
+## 3. Fixed architecture
 
-The implementation must have these layers:
+Implement this exact architecture:
 
 ```txt
-OpenClaw container
-  ↓
-influencer-persona plugin
-  ↓
-LLM JSON analyzer + runtime context
-  ↓
-memory + self-state + calendar + journal
-  ↓
-social planner + media queue
-  ↓
-manager QA
-  ↓
-mock publisher + browser/noVNC handoff
+Dockerized OpenClaw runtime
+  |-- workspace persona files
+  |   |-- SOUL.md
+  |   `-- USER.md
+  |-- influencer-persona extension/plugin
+  |   |-- LLM JSON analyzer adapter
+  |   |-- runtime context builder
+  |   |-- policy gate
+  |   |-- media flow
+  |   `-- storage adapter
+  |-- skills
+  |   |-- influencer-image  -> Wavespeed real mode / mock test mode
+  |   |-- influencer-post   -> browser/noVNC publish handoff
+  |   |-- influencer-social -> drafts/outbox/history
+  |   |-- influencer-journal
+  |   |-- influencer-calendar
+  |   `-- influencer-recall
+  |-- life modules
+  |   |-- life tick
+  |   |-- journal writer
+  |   |-- memory reflection
+  |   |-- social planner
+  |   |-- social autonomy
+  |   `-- manager audit
+  `-- storage
+      |-- users/<id>.json
+      |-- influencer-self/state.json
+      |-- calendar/events.json
+      |-- social/drafts.json
+      |-- social/media-jobs.json
+      `-- social/posted-history.json
 ```
 
-If a simpler implementation is requested, keep the same layers but reduce internals. Do not remove the layer names or contracts.
+If the user asks for an MVP, keep all boxes but simplify internals. Do not remove boxes.
 
 ---
 
-## 4. Required generated files
+## 4. Required file tree
 
-Create this structure. Empty placeholder files are allowed only when marked “stub ok”.
+Create these files. Do not replace this tree with a different framework layout.
 
 ```txt
+AGENTS.md
+SOUL.md
+USER.md
 config/openclaw.json
-persona/SOUL.md
-persona/USER.md
 persona/CANON.md
 persona/BOUNDARIES.md
 extensions/influencer-persona/openclaw.plugin.json
@@ -169,11 +188,13 @@ VALIDATION.md
 package.json
 ```
 
+Minimum behavior is required. Empty stubs do not pass unless `VALIDATION.md` marks the phase blocked.
+
 ---
 
 ## 5. Environment contract
 
-Create `.env.example` with these names. Never write real secrets.
+Create `.env.example` exactly with these names. Never commit real secrets.
 
 ```txt
 TELEGRAM_BOT_TOKEN=
@@ -194,141 +215,178 @@ INFLUENCER_MANAGER_AUDIT_LOOP=true
 
 Rules:
 
-- `WAVESPEED_API_KEY` is required for real image generation.
-- Tests must run without it by using mock mode.
-- Missing production keys must be listed in `VALIDATION.md` as setup blockers, not silently ignored.
+- `WAVESPEED_API_KEY` gates real image generation.
+- No production key is required for tests.
+- Tests must use mock mode.
+- Missing keys must appear in `VALIDATION.md`.
 
 ---
 
-## 6. Module contracts
+## 6. Runtime behavior contracts
 
-### 6.1 OpenClaw config
+### 6.1 OpenClaw runtime
 
-Must define an OpenClaw bot/plugin setup that loads the persona extension and skills.
+Must include:
 
-Minimum acceptable: structurally valid config with placeholders and clear TODOs for tokens/models.
+- OpenClaw config that loads the extension and skills;
+- Docker compose service for the bot/runtime;
+- entrypoint that prepares workspace/persona files;
+- documented startup command.
 
-### 6.2 Persona plugin
+### 6.2 Persona extension
 
-Must implement:
+Must include:
 
 - message entrypoint;
-- LLM JSON analyzer interface or mockable adapter;
+- mockable LLM JSON analyzer adapter;
 - runtime context builder;
-- storage access;
-- media request routing;
-- policy decision handoff.
+- user/self storage reads/writes;
+- media request routing through policy;
+- no direct image generation without policy gate.
 
-Must not:
-
-- hardcode semantic behavior with only keyword regex;
-- leak system prompts, env vars, or private state;
-- generate/send media directly without policy gate.
+The analyzer may be mocked in tests, but production path must be LLM-led, not only keyword regex.
 
 ### 6.3 Runtime context
 
-Must include compact private context:
+Must build a compact private block with:
 
 ```txt
 persona mood/energy
-recent life state
+life state summary
 relationship stage/trust
-recent user memory highlights
-recent journal/calendar/social state
+recent memory highlights
+journal/calendar/social status
 media status
 ```
 
+Never expose this private block in normal chat responses.
+
 ### 6.4 Storage
 
-Use JSON files for the first implementation.
+Use JSON first.
 
-User memory and persona self-state must be separate.
+Separate:
+
+```txt
+user relationship memory  ≠  persona self-state
+```
+
+User memory includes trust, stage, facts, preferences, open loops, recent messages, relationship notes, media budget.
+
+Self-state includes mood, energy, social battery, current arcs, calendar, journal, content backlog.
 
 ### 6.5 Wavespeed image skill
 
-Must be the only real image provider path.
+Only real provider path: Wavespeed.
 
 Required behavior:
 
 ```txt
-if WAVESPEED_API_KEY exists → real mode possible
-if missing → mock mode only
-public image → platform-safe + canon check
-private image → trust/consent gate
-blocked request → return structured block reason
+missing WAVESPEED_API_KEY → mock mode / blocked real mode
+public media → platform-safe + canon check + draft/life grounding
+private media → trust/consent gate
+blocked media → structured reason
 ```
 
 ### 6.6 Social planner
 
-Must create drafts from grounded sources only:
+Drafts must include:
 
-- self-state;
-- calendar;
-- journal;
-- manual input;
-- approved trend brief.
+```txt
+id, platform, caption, visualPrompt, groundedIn, status, qaNotes
+```
 
-Drafts must include `groundedIn` references.
+`groundedIn` must reference self-state, calendar, journal, manual input, or approved trend brief.
 
 ### 6.7 Publisher
 
-Default is mock publishing.
+Default publisher is mock/manual-gated.
 
-Real publishing must be documented as browser/noVNC handoff and disabled unless explicitly enabled.
+Real publishing is browser/noVNC handoff only until explicitly enabled.
+
+Must document commands equivalent to:
+
+```bash
+influencer-post browser --login-url
+influencer-post auth --check instagram
+influencer-post queue
+influencer-post publish --draft-id <id> --dry-run
+influencer-post handoff --draft-id <id>
+```
 
 ### 6.8 Manager audit
 
-Must check at least:
+Must report:
 
 - stale drafts;
 - stuck media jobs;
-- unsafe/canon-breaking drafts;
+- unsafe media;
 - ungrounded claims;
-- missing auth/login/publishing blockers.
+- canon drift;
+- missing auth/login blockers;
+- publishing failures.
 
 ---
 
 ## 7. Implementation sequence
 
-Follow this order. Do not jump ahead.
+Follow this order only:
 
 ```txt
-0 alignment checkpoint
-1 file tree + package.json + .env.example
-2 persona files + canon + manager docs
-3 storage helpers + seed JSON state
-4 persona plugin + runtime context
-5 life modules
-6 Wavespeed image skill + mock mode
-7 social planner + media queue + manager QA
-8 mock publisher + browser handoff docs
-9 tests
-10 VALIDATION.md
+0 configuration interview / Mila defaults
+1 package.json + file tree + .env.example
+2 OpenClaw config + Docker skeleton
+3 persona files + canon + manager docs
+4 storage helpers + seed JSON
+5 persona extension + runtime context
+6 life modules
+7 Wavespeed image skill + mock mode
+8 social planner + media queue + QA
+9 mock publisher + browser/noVNC handoff docs
+10 tests
+11 VALIDATION.md
 ```
 
-After each phase, keep code runnable. If blocked, write the blocker in `VALIDATION.md`.
+Keep `npm test` runnable by phase 10. If a phase is blocked, write the reason in `VALIDATION.md` and continue only where safe.
 
 ---
 
-## 8. Tests required
+## 8. Commands required
+
+`package.json` must include:
+
+```json
+{
+  "scripts": {
+    "test": "node tests/runner.js",
+    "test:unit": "node --test tests/*.test.js",
+    "test:static": "node --check extensions/influencer-persona/index.js && node --check extensions/influencer-persona/runtime-context.js && node --check extensions/influencer-persona/media-flow.js && node --check life/life-tick.mjs && node --check life/social-planner.mjs && node --check life/social-publisher.mjs && node --check life/manager-audit.mjs"
+  }
+}
+```
+
+---
+
+## 9. Tests required
 
 `npm test` must run without external APIs.
 
 Tests must prove:
 
 1. runtime context separates user memory and self-state;
-2. ungrounded public draft is blocked;
-3. grounded public draft can pass QA;
+2. private runtime context is not leaked;
+3. missing `WAVESPEED_API_KEY` uses mock mode / blocks real mode;
 4. low-trust private/sensitive media request is blocked;
-5. missing `WAVESPEED_API_KEY` uses mock mode;
-6. mock publisher refuses unapproved drafts;
-7. manager audit reports stale or unsafe drafts.
+5. ungrounded public draft is blocked;
+6. grounded public draft can pass QA;
+7. mock publisher refuses unapproved drafts;
+8. manager audit reports stale or unsafe drafts.
 
 ---
 
-## 9. Completion output
+## 10. `VALIDATION.md` format
 
-Write `VALIDATION.md` with exactly these sections:
+Write exactly:
 
 ```md
 # Validation
@@ -348,28 +406,30 @@ Write `VALIDATION.md` with exactly these sections:
 ## Blockers / next steps
 ```
 
-If any required file is missing, say why.
+List any missing required file as a deviation.
 
 ---
 
-## 10. Failure conditions
+## 11. Failure conditions
 
-The implementation fails this Buildprint if it:
+Fail the implementation if it:
 
-- is not OpenClaw-based;
-- omits Wavespeed from the image generation path;
-- skips the alignment checkpoint;
-- merges user memory and persona self-state;
+- skips the configuration interview or Mila-default confirmation;
+- is not OpenClaw-shaped;
+- omits Wavespeed from production image generation;
+- uses real APIs in tests;
+- merges user memory and self-state;
+- lacks public/private media policy separation;
 - auto-publishes by default;
-- uses real external APIs in tests;
-- lacks manager QA;
-- lacks `VALIDATION.md`;
-- silently chooses architecture alternatives not confirmed by the user.
+- lacks manager audit;
+- lacks browser/noVNC handoff docs;
+- lacks runnable tests;
+- silently changes architecture.
 
 ---
 
-## 11. If uncertain
+## 12. If uncertain
 
-Do not improvise a new product direction.
+Ask one targeted question about the uncertain contract item. Then continue.
 
-Ask only targeted questions about the uncertain contract item, then continue.
+Do not ask broad strategy questions. Do not invent a different product.

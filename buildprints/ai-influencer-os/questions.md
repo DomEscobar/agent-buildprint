@@ -1,49 +1,55 @@
-# Alignment Interview Questions
+# Configuration Interview
 
-Before implementation, the coding agent must ask these questions and wait for answers unless the user explicitly says “use Mila defaults”.
+Ask these only if the user did **not** say:
 
-## Identity and positioning
+```txt
+Use Mila defaults.
+```
 
-1. Should this be a new persona or a Mila-like reference implementation?
-2. What is the persona name, language mix, niche, and public content lane?
-3. Should the vibe be close to Mila: dry, direct, understated, mixed DE/EN, lifestyle/gaming/gym/streetwear?
-4. What should be forbidden for the persona voice?
+Rules for the coding agent:
 
-## Platform and channels
+- Ask exactly these questions.
+- Do not ask broad product strategy questions.
+- Do not propose architecture changes.
+- These answers configure the fixed OpenClaw/Mila architecture; they do not replace it.
+- If the user skips a question, use the Mila default.
 
-5. Which chat channel should OpenClaw connect to first: Telegram, WhatsApp, Discord, web chat, or something else?
-6. Which public platforms should be supported: Instagram, TikTok, X, YouTube Shorts, none/mock only?
-7. Should browser-based publishing through visible Chromium/noVNC be included exactly like Mila?
+## Questions
 
-## Image/video generation
+1. **Persona** — use Mila-style defaults, or set a new persona name + short identity?
 
-8. Should image generation use Wavespeed like Mila?
-9. Do you already have `WAVESPEED_API_KEY`, or should the implementation create placeholders and setup docs?
-10. Should reference-image / identity-preserving workflows be required from day one?
-11. What public image style should be canon: realistic lifestyle, gaming desk, fashion, gym, travel, or other?
+2. **Voice/language** — keep mixed DE/EN dry/direct Mila tone, or change language/tone?
 
-## Autonomy and safety
+3. **Content lane** — keep lifestyle/gaming/gym/streetwear/coffee, or swap/add lanes?
 
-12. Should public posts require manual approval, auto-publish after QA, or mock-only at first?
-13. Should private media requests exist at all? If yes, what trust/consent gates are required?
-14. What should the system always refuse?
-15. Who is allowed to manage/approve posts?
+4. **Chat channel** — Telegram first, or another OpenClaw-supported channel first?
 
-## Memory and life simulation
+5. **Public platforms** — mock only first, or prepare Instagram/TikTok/X/YouTube Shorts handoff?
 
-16. Should user relationship memory be stored per chat/user like Mila?
-17. Should the persona have simulated life state, journal, calendar, and recurring arcs?
-18. How often should life/social autonomy loops run?
-19. Should the manager be allowed to patch prompts/code autonomously, or only report issues?
+6. **Image generation** — use Wavespeed production path with mock fallback? If not, stop and ask because this Buildprint requires Wavespeed.
 
-## Deployment
+7. **Publishing safety** — keep manual approval + mock publishing by default, or allow any auto-publish later behind env flags?
 
-20. Should the result be a Dockerized OpenClaw bot like Mila?
-21. What ports are acceptable for noVNC/dashboard/browser publishing?
-22. Which model provider should be used: OpenRouter/DeepSeek like Mila, OpenAI, Anthropic, or user choice?
-23. Should the implementation include a dashboard?
+8. **Autonomy** — keep life/social loops disabled by default, or enable scheduled loops after tests pass?
 
-## Output preference
+## Required confirmation summary
 
-24. Do you want a faithful Mila clone architecture, a simplified MVP, or a production-ready starter?
-25. Which parts should intentionally differ from Mila?
+After answers, output:
+
+```txt
+Alignment summary
+- Persona:
+- Voice/language:
+- Content lane:
+- Chat channel:
+- Public platforms:
+- Image generation:
+- Publishing safety:
+- Autonomy:
+- Kept from Mila defaults:
+- Changed from Mila defaults:
+
+Reply “confirm” to build, or tell me what to change.
+```
+
+Do not implement before confirmation.

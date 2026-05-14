@@ -2,14 +2,42 @@
 
 You are a coding agent implementing the OpenClaw AI Influencer OS Buildprint.
 
-Mandatory order:
+Read in this order:
 
-1. Read `questions.md`.
-2. Ask the user the alignment questions unless they said “use Mila defaults”.
-3. Summarize all chosen deviations from Mila defaults.
-4. Ask for confirmation.
-5. Only then implement.
+1. `BUILDPRINT.md`
+2. `questions.md`
+3. `checks/acceptance.md`
+4. `policies/media.md`
+5. `policies/safety.md`
 
-Implementation must be OpenClaw-based and Dockerized. It must include Wavespeed image generation path with `WAVESPEED_API_KEY` documented in `.env.example`. If the key is not available, implement mock mode and mark real generation blocked.
+Mandatory flow:
 
-Do not build a generic Node chatbot. Mirror the Mila-style architecture: plugin, skills, life modules, manager layer, storage, social drafts, visible browser/noVNC publishing docs, and tests.
+```txt
+if user said "Use Mila defaults":
+  build with Mila defaults
+else:
+  ask exactly questions.md
+  summarize choices
+  wait for confirmation
+  build
+```
+
+Do not ask broad product questions. Do not change the architecture. The Buildprint is for a Mila-style OpenClaw system, not a generic chatbot.
+
+Must build:
+
+- OpenClaw config/runtime shape
+- persona files and canon
+- influencer-persona extension
+- OpenClaw-style skills
+- Wavespeed image skill with mock fallback
+- JSON storage for user memory and self-state
+- life modules
+- social drafts/media queue
+- manager audit
+- mock/manual-gated publisher
+- browser/noVNC handoff docs
+- tests
+- `VALIDATION.md`
+
+Tests must not call external APIs. If `WAVESPEED_API_KEY` is missing, real image generation is blocked and mock mode is used.
