@@ -1,0 +1,25 @@
+name: node-contracts
+
+contracts:
+  classify:
+    must_read: [messages]
+    must_write: [intent]
+    must_not_write: [context, answer]
+    side_effects: []
+
+  retrieve:
+    must_read: [intent]
+    must_write: [context]
+    must_not_write: [messages, answer]
+    side_effects: [docs.read]
+
+  answer:
+    must_read: [messages, intent, context]
+    must_write: [messages, answer, done]
+    side_effects: []
+
+global:
+  nodes_return_patch: true
+  nodes_do_not_mutate_input_state: true
+  tests_use_fake_llm: true
+  tests_use_fake_tools: true

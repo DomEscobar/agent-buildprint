@@ -1,0 +1,180 @@
+name: langgraph-vanilla-typescript-blueprint
+kind: agent-buildprint/langgraph-like-agent
+version: 0.1.0
+status: draft
+
+purpose: >
+  Define a portable, framework-light blueprint for building LangGraph-like agent workflows
+  in Vanilla TypeScript. The blueprint describes graph architecture and contracts; generated
+  code remains ordinary TypeScript owned by the project.
+
+source_of_truth:
+  root: ./blueprint.yaml
+  state_schema: ./schemas/state.ts
+  node_output_schemas:
+    classify: ./schemas/classify.output.schema.json
+    retrieve: ./schemas/retrieve.output.schema.json
+    answer: ./schemas/answer.output.schema.json
+  prompts:
+    classify: ./prompts/classify.md
+    answer: ./prompts/answer.md
+  policies:
+    runtime: ./policies/runtime.md
+    side_effects: ./policies/side-effects.yaml
+    safety: ./policies/safety.md
+  tests:
+    routes: ./tests/routes.spec.yaml
+    node_contracts: ./tests/node-contracts.spec.yaml
+
+runtime:
+  language: typescript
+  style: vanilla
+  module_system: esm
+  target: node
+  forbidden_dependencies:
+    - langgraph
+    - '@langchain/langgraph'
+    - agent-framework-runtime
+  allowed_dependency_types:
+    - test_runner
+    - schema_validator
+    - llm_sdk
+    - project_local_tools
+  generated_code_constraints:
+    - Nodes must be plain async functions.
+    - The graph runner must be project-local TypeScript.
+    - State transitions must be explicit and testable.
+    - External side effects must sit behind interfaces.
+    - The graph must be testable without real LLM calls.
+    - Prefer boring code over clever abstractions.
+    - Runner should stay under 150 lines unless the blueprint is updated with justification.
+
+langgraph_concepts_mapped:
+  state: Shared typed object passed through every node.
+  node: Plain async function that reads state and returns a partial state patch.
+  edge: Explicit route from one node to another.
+  conditional_edge: Function or rule that chooses next node from state.
+  checkpoint: Optional persistence interface for loading/saving state per thread.
+  tool: Side-effecting capability behind a declared interface.
+  interrupt: Explicit human approval point before risky actions.
+
+state:
+  schema: ./schemas/state.ts
+  merge_strategy: shallow_patch
+  mutation_rule: nodes_return_patches_never_mutate_state_directly
+  required_fields:
+    - messages
+    - done
+    - stepCount
+  optional_fields:
+    - intent
+    - context
+    - answer
+    - error
+    - approvals
+
+entry: classify
+finish: end
+max_steps: 12
+
+nodes:
+  classify:
+    type: llm
+    description: Classify the user's latest message into an actionable intent.
+    prompt: ./prompts/classify.md
+    input:
+      reads:
+        - messages
+    output:
+      schema: ./schemas/classify.output.schema.json
+      writes:
+        - intent
+    side_effects: []
+    next: retrieve
+
+  retrieve:
+    type: tool
+    description: Retrieve relevant project or documentation context for the detected intent.
+    input:
+      reads:
+        - intent
+    tool:
+      name: docs.search
+      contract: ./policies/side-effects.yaml#/tools/docs.search
+    output:
+      schema: ./schemas/retrieve.output.schema.json
+      writes:
+        - context
+    side_effects:
+      - docs.read
+    next: answer
+
+  answer:
+    type: llm
+    description: Produce the next assistant message using messages and retrieved context.
+    prompt: ./prompts/answer.md
+    input:
+      reads:
+        - messages
+        - intent
+        - context
+    output:
+      schema: ./schemas/answer.output.schema.json
+      writes:
+        - messages
+        - answer
+        - done
+    side_effects: []
+    next:
+      condition: state.done == true
+      then: end
+      else: classify
+
+edges:
+  - from: start
+    to: classify
+  - from: classify
+    to: retrieve
+  - from: retrieve
+    to: answer
+  - from: answer
+    to: end
+    when: state.done == true
+  - from: answer
+    to: classify
+    when: state.done != true
+
+checkpointing:
+  enabled: optional
+  interface: CheckpointStore
+  required_methods:
+    - load(threadId: string): Promise<AgentState | null>
+    - save(threadId: string, state: AgentState): Promise<void>
+  save_after_each_node: true
+
+human_interrupts:
+  required_before:
+    - external_write
+    - purchase
+    - delete
+    - public_post
+    - sending_message_to_third_party
+  pattern: >
+    Node returns an approval request in state.approvals and routes to an approval handler
+    before continuing.
+
+generation_tasks:
+  - Create src/agent/state.ts from schemas/state.ts.
+  - Create src/agent/nodes/*.ts as plain async functions.
+  - Create src/agent/runner.ts as a tiny local graph runner.
+  - Create src/agent/checkpoint.ts interface only, no database requirement.
+  - Create tests proving route behavior and node contracts.
+  - Add fake LLM/tool adapters for tests.
+
+acceptance_criteria:
+  - No forbidden dependency is imported.
+  - Every node declares reads/writes/side effects in the blueprint.
+  - Tests can run without network access.
+  - Conditional routing from answer is covered by tests.
+  - State is never mutated directly inside nodes.
+  - External tools are mocked in tests.

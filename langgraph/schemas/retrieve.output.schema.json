@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RetrieveNodeOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["context"],
+  "properties": {
+    "context": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Relevant retrieved snippets for answering the user."
+    }
+  }
+}

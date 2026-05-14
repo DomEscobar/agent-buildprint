@@ -1,0 +1,15 @@
+{
+  "name": "agent-buildprint",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "xy": "./bin/xy.js",
+    "agent-buildprint": "./bin/xy.js"
+  },
+  "scripts": {
+    "check": "node ./bin/xy.js check ./langgraph",
+    "test": "node ./bin/xy.js check ./langgraph"
+  },
+  "dependencies": {}
+}
