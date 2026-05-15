@@ -323,9 +323,10 @@ function detectProjectFacts(repo) {
   if (integrations.includes('storage') || relFiles.some((f) => /upload|multipart|s3|blob|storage|file-manager/i.test(f)) || apis.some((x) => /upload|multipart|s3|blob|storage|file-manager/i.test(x))) risky.push('file upload / storage')
 
   const subprojects = detectSubprojects(repo, relFiles)
-  const candidateBuildprints = suggestBuildprintCandidates({ relFiles, frameworks, routes, apis, tests, db, deploy, integrations, envNames: [...envNames].sort(), risky, subprojects, deps })
+  const codeSignals = collectCodeSignals(files, repo)
+  const candidateBuildprints = suggestBuildprintCandidates({ relFiles, frameworks, routes, apis, tests, db, deploy, integrations, envNames: [...envNames].sort(), risky, subprojects, deps, codeSignals })
   const needsScopeSelection = relFiles.length > 180 || subprojects.length > 1 || candidateBuildprints.length > 3
-  return { root: repo, totalFilesScanned: relFiles.length, packageManager: exists(path.join(repo, 'package-lock.json')) ? 'npm' : exists(path.join(repo, 'pnpm-lock.yaml')) ? 'pnpm' : exists(path.join(repo, 'yarn.lock')) ? 'yarn' : 'unknown', packageName: packageJson?.name ?? path.basename(repo), scripts, dependencies: deps, frameworks, routes, apis, tests, db, deploy, integrations, envNames: [...envNames].sort(), risky, subprojects, candidateBuildprints, needsScopeSelection }
+  return { root: repo, totalFilesScanned: relFiles.length, packageManager: exists(path.join(repo, 'package-lock.json')) ? 'npm' : exists(path.join(repo, 'pnpm-lock.yaml')) ? 'pnpm' : exists(path.join(repo, 'yarn.lock')) ? 'yarn' : 'unknown', packageName: packageJson?.name ?? path.basename(repo), scripts, dependencies: deps, frameworks, routes, apis, tests, db, deploy, integrations, envNames: [...envNames].sort(), risky, subprojects, codeSignals, candidateBuildprints, needsScopeSelection }
 }
 
 function detectCodeEndpoints(files, repo) {
@@ -354,6 +355,36 @@ function detectSubprojects(repo, relFiles) {
   }).sort((a, b) => a.path.localeCompare(b.path))
 }
 
+function collectCodeSignals(files, repo) {
+  const signals = {
+    requestSchemas: [],
+    responseContracts: [],
+    streamProtocols: [],
+    providerAdapters: [],
+    toolContracts: [],
+    authSessionTouchpoints: [],
+    persistenceTouchpoints: [],
+    uiContracts: [],
+  }
+  const add = (key, file, signal) => {
+    const entry = `${path.relative(repo, file)} — ${signal}`
+    if (!signals[key].includes(entry)) signals[key].push(entry)
+  }
+  for (const file of files.filter((f) => /\.[cm]?[tj]sx?$|\.astro$|\.mdx?$/.test(f)).slice(0, 1600)) {
+    let text = ''
+    try { text = readText(file) } catch { continue }
+    if (/\b(z|zod)\.object\s*\(|valibot|yup\.object|typebox|superstruct|Schema\s*=|schema\s*=|validate[A-Z][A-Za-z]*Request|parse\s*\(/.test(text)) add('requestSchemas', file, 'request/schema validation marker')
+    if (/Response\.json|NextResponse\.json|return\s+new\s+Response|to[A-Za-z]*Response\s*\(|json\s*\(/.test(text)) add('responseContracts', file, 'response/output contract marker')
+    if (/streamText|toDataStreamResponse|toTextStreamResponse|ReadableStream|text\/event-stream|Server-Sent Events|SSE|createDataStream|resumeStream|streamId/.test(text)) add('streamProtocols', file, 'streaming/resumable protocol marker')
+    if (/customProvider|create[A-Za-z]*Provider|LanguageModel|ModelProvider|openai\(|anthropic\(|google\(|myProvider|providerRegistry|modelProvider|generateText|streamText/.test(text)) add('providerAdapters', file, 'model/provider adapter marker')
+    if (/\btool\s*\(|toolCall|toolCalls|execute\s*:\s*async|experimental_[A-Za-z]*Tool|ToolInvocation|tools\s*:\s*{/.test(text)) add('toolContracts', file, 'tool-call contract marker')
+    if (/auth\s*\(|getServerSession|NextAuth|authOptions|session\b|currentUser|clerkClient|withAuth|cookies\s*\(/.test(text)) add('authSessionTouchpoints', file, 'auth/session boundary marker')
+    if (/drizzle|prisma|db\.|database|postgres|insert\s*\(|select\s*\(|update\s*\(|delete\s*\(|redis|upstash|kv\.|save[A-Z]|create[A-Z].*Message/.test(text)) add('persistenceTouchpoints', file, 'persistence/state boundary marker')
+    if (/useChat|useCompletion|messages\.map|Chat[A-Za-z]*|Message[A-Za-z]*|Conversation[A-Za-z]*/.test(text)) add('uiContracts', file, 'chat/UI interaction marker')
+  }
+  return Object.fromEntries(Object.entries(signals).map(([k, v]) => [k, v.slice(0, 40)]))
+}
+
 function unique(items) { return [...new Set(items.filter(Boolean))] }
 
 function candidate(title, scope, includedPaths, whyReusable, risks = [], questions = [], estimatedTier = 'strong') {
@@ -377,7 +408,15 @@ function suggestBuildprintCandidates(facts) {
   const aiPathPattern = /(^|[\/_.-])(ai|openai|anthropic|genkit|assistant|assistants|embedding|embeddings|completion|completions|chat|prompt|prompts|batch|fine[-_]?tuning|moderation|vision)([\/_.-]|$)/i
   const authPathPattern = /(^|[\/_.-])(auth|login|register|rbac|permission|permissions|invite|invites)([\/_.-]|$)/i
   if (facts.integrations.includes('ai') || hasPath(aiPathPattern)) {
-    c.push(candidate('AI Workflow Buildprint', 'LLM calls, prompts, tools, model adapters, grounding and safety checks', matching(aiPathPattern), 'AI workflows need explicit contracts for inputs, outputs, tools, costs, and safety gates.', ['AI/tool calls', 'ungrounded output', 'external API dependency'], ['Which model/provider behavior is required vs replaceable?'], 'agent-grade'))
+    const aiPaths = unique([
+      ...matching(aiPathPattern),
+      ...(facts.codeSignals?.requestSchemas ?? []).map((x) => x.split(' — ')[0]),
+      ...(facts.codeSignals?.streamProtocols ?? []).map((x) => x.split(' — ')[0]),
+      ...(facts.codeSignals?.providerAdapters ?? []).map((x) => x.split(' — ')[0]),
+      ...(facts.codeSignals?.toolContracts ?? []).map((x) => x.split(' — ')[0]),
+      ...(facts.codeSignals?.uiContracts ?? []).map((x) => x.split(' — ')[0]),
+    ])
+    c.push(candidate('AI Workflow Buildprint', 'LLM calls, prompts, tools, model adapters, request/response schemas, stream protocol, grounding and safety checks', aiPaths, 'AI workflows need explicit contracts for inputs, outputs, stream frames, tools, model/provider behavior, costs, persistence, and safety gates.', ['AI/tool calls', 'ungrounded output', 'external API dependency', 'stream protocol drift', 'tool contract drift'], ['What exact request schema is accepted?', 'What stream protocol/framing must clients consume?', 'Which model/provider behavior is required vs replaceable?', 'Which tool calls exist and what are their input/output contracts?', 'How do auth/session and persistence boundaries affect AI calls?'], 'agent-grade'))
   }
   if (facts.integrations.includes('auth') || hasPath(authPathPattern)) {
     c.push(candidate('Auth / Session Buildprint', 'login, registration, sessions, roles, permission checks', matching(authPathPattern), 'Auth and permission rules are high-risk and reusable across SaaS products.', ['auth/session handling', 'permission drift'], ['What roles and permissions are intended?']))
@@ -441,11 +480,12 @@ function writeMappedBuildprint(repoArg, outArg, options = {}) {
   if (confidence.data_model === 'low') questions.push('Where is the source of truth for the data model? Database schema, ORM models, or external service?')
   if (facts.risky.includes('payments')) questions.push('What is the intended billing lifecycle and source of truth for subscription/access state?')
   if (facts.risky.includes('external messaging')) questions.push('Which user actions require human approval before email/SMS/external messages are sent?')
+  for (const q of fidelityQuestionsFor(facts)) questions.push(q)
   questions.push('Which observed modules are legacy and should not be copied as desired architecture?')
 
   const discovered = `# Discovered Project Map\n\nProject: ${facts.packageName}\nRoot: ${facts.root}\nFiles scanned: ${facts.totalFilesScanned}\nPackage manager: ${facts.packageManager}\n\n## Frameworks / major capabilities\n${facts.frameworks.length ? facts.frameworks.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Scripts\n${facts.scripts.length ? facts.scripts.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## UI routes/pages\n${facts.routes.length ? facts.routes.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## API routes/endpoints\n${facts.apis.length ? facts.apis.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Data/model files\n${facts.db.length ? facts.db.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Tests\n${facts.tests.length ? facts.tests.slice(0, 80).map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Deploy / ops files\n${facts.deploy.length ? facts.deploy.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Integrations inferred from dependencies\n${facts.integrations.length ? facts.integrations.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Environment variables referenced by name only\n${facts.envNames.length ? facts.envNames.map((x) => `- ${x}`).join('\n') : '- none detected'}\n`;
 
-  const systemMap = `# SYSTEM_MAP\n\n## Project\n\n- Name: ${facts.packageName}\n- Root: ${facts.root}\n- Files scanned: ${facts.totalFilesScanned}\n- Package manager: ${facts.packageManager}\n- Scope selection required: ${facts.needsScopeSelection ? 'yes' : 'no'}\n\n## Architecture zones\n\n### Frontend / UI\n${facts.routes.length ? facts.routes.slice(0, 60).map((x) => `- OBSERVED route: ${x}`).join('\n') : '- QUESTION: no UI routes detected'}\n\n### API / backend\n${facts.apis.length ? facts.apis.slice(0, 60).map((x) => `- OBSERVED API: ${x}`).join('\n') : '- QUESTION: no API routes detected'}\n\n### Data model\n${facts.db.length ? facts.db.slice(0, 60).map((x) => `- OBSERVED data/model file: ${x}`).join('\n') : '- QUESTION: no data model files detected'}\n\n### Integrations\n${facts.integrations.length ? facts.integrations.map((x) => `- INFERRED integration: ${x}`).join('\n') : '- none detected'}\n\n### Subprojects / examples\n${facts.subprojects.length ? facts.subprojects.map((x) => `- OBSERVED ${x.kind}: ${x.path} (${x.name})`).join('\n') : '- none detected'}\n\n## Risk zones\n${facts.risky.length ? facts.risky.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Human review needed\n\n- Confirm which candidate Buildprint should be extracted.\n- Confirm which observed modules are legacy vs desired architecture.\n- Confirm auth, billing, external-write, and data lifecycle rules.\n`;
+  const systemMap = `# SYSTEM_MAP\n\n## Project\n\n- Name: ${facts.packageName}\n- Root: ${facts.root}\n- Files scanned: ${facts.totalFilesScanned}\n- Package manager: ${facts.packageManager}\n- Scope selection required: ${facts.needsScopeSelection ? 'yes' : 'no'}\n\n## Architecture zones\n\n### Frontend / UI\n${facts.routes.length ? facts.routes.slice(0, 60).map((x) => `- OBSERVED route: ${x}`).join('\n') : '- QUESTION: no UI routes detected'}\n\n### API / backend\n${facts.apis.length ? facts.apis.slice(0, 60).map((x) => `- OBSERVED API: ${x}`).join('\n') : '- QUESTION: no API routes detected'}\n\n### Data model\n${facts.db.length ? facts.db.slice(0, 60).map((x) => `- OBSERVED data/model file: ${x}`).join('\n') : '- QUESTION: no data model files detected'}\n\n### Integrations\n${facts.integrations.length ? facts.integrations.map((x) => `- INFERRED integration: ${x}`).join('\n') : '- none detected'}\n\n### Subprojects / examples\n${facts.subprojects.length ? facts.subprojects.map((x) => `- OBSERVED ${x.kind}: ${x.path} (${x.name})`).join('\n') : '- none detected'}\n\n## Risk zones\n${facts.risky.length ? facts.risky.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n${fidelityProfileMd(facts)}\n## Human review needed\n\n- Confirm which candidate Buildprint should be extracted.\n- Confirm which observed modules are legacy vs desired architecture.\n- Confirm auth, billing, external-write, data lifecycle, and reversal-fidelity rules.\n`;
 
   const candidatesMd = `# BUILDPRINT_CANDIDATES\n\n${facts.needsScopeSelection ? '> Scope selection required before final extraction. This repo appears large, mixed, or multi-scope.\n\n' : ''}${facts.candidateBuildprints.length ? facts.candidateBuildprints.map((c, i) => `## ${i + 1}. ${c.title}\n\n- Scope: ${c.scope}\n- Estimated tier: ${c.estimatedTier}\n- Why reusable: ${c.whyReusable}\n- Included paths:\n${c.includedPaths.length ? c.includedPaths.map((x) => `  - ${x}`).join('\n') : '  - QUESTION: no paths selected'}\n- Excluded paths:\n${c.excludedPaths.length ? c.excludedPaths.map((x) => `  - ${x}`).join('\n') : '  - none yet'}\n- Risks:\n${c.risks.length ? c.risks.map((x) => `  - ${x}`).join('\n') : '  - none detected'}\n- Questions:\n${c.questions.length ? c.questions.map((x) => `  - ${x}`).join('\n') : '  - none'}\n`).join('\n') : 'No strong candidates detected. Use SYSTEM_MAP.md and questions.md for human scoping.\n'}\n`;
 
@@ -469,6 +509,7 @@ ${selectedCandidate.risks.length ? selectedCandidate.risks.map((x) => `- ${x}`).
 ## Questions before implementation
 ${selectedCandidate.questions.length ? selectedCandidate.questions.map((x) => `- ${x}`).join('\n') : '- none'}
 
+${fidelityProfileMd(facts)}
 ## Agent instruction
 
 Use this selected candidate as the extraction scope. Treat listed paths as the starting boundary, then ask before crossing into unrelated modules. Do not claim validation until checks have actually run.
@@ -504,6 +545,113 @@ Use this selected candidate as the extraction scope. Treat listed paths as the s
 
 function mdList(items, empty = '- none detected') {
   return items.length ? items.map((x) => `- ${x}`).join('\n') : empty
+}
+
+function signalList(signals, key, empty = '- QUESTION: no markers detected; preserve behavior only after source review or human confirmation') {
+  return mdList(signals?.[key] ?? [], empty)
+}
+
+function fidelityQuestionsFor(facts) {
+  const q = []
+  if (facts.integrations.includes('ai') || facts.risky.includes('AI/tool calls')) {
+    q.push('What exact AI request schema is accepted, including roles, attachments, tool choices, model options, and validation errors?')
+    q.push('What exact stream protocol must be preserved: event names, frame format, resume IDs, finish/error frames, and client compatibility requirements?')
+    q.push('Which model/provider adapter behavior is required vs replaceable, including retries, fallbacks, temperature/default model, token limits, and rate limits?')
+    q.push('Which tool calls exist, what are their input/output schemas, and which require approval or sandboxing?')
+    q.push('How do auth/session, persistence, and resumable streams affect each AI call?')
+  }
+  if (facts.integrations.includes('auth')) q.push('Which routes/API calls require auth, session ownership, roles, or tenant checks?')
+  if (facts.db.length || facts.integrations.includes('database') || facts.integrations.includes('cache')) q.push('Which persistence writes are required for the selected workflow, and what idempotency/retry behavior is expected?')
+  return unique(q)
+}
+
+function decisionPromptsFor(facts) {
+  const decisions = []
+  const add = (decision, defaultAnswer, priority = 5) => decisions.push({ decision, defaultAnswer, priority })
+  if (facts.selectedCandidate) add(`Confirm selected candidate: ${facts.selectedCandidate.title}`, 'Use selected candidate as scope', 1)
+  else add('Choose one Buildprint candidate', 'Pick one candidate; do not merge unrelated scopes', 1)
+  if (facts.needsScopeSelection) add('Confirm scope boundary', 'Use the smallest folder/candidate boundary that matches the goal', 2)
+  if (facts.integrations.includes('ai') || facts.risky.includes('AI/tool calls')) {
+    add('Choose reversal fidelity target', 'Architecture skeleton now; exact behavior only after source/human confirmation', 2)
+    add('Confirm AI safety/default provider posture', 'Mock/injectable provider; no real API keys or network by default', 3)
+  }
+  if (facts.risky.includes('payments')) add('Confirm billing source of truth', 'Block billing changes until explicitly answered', 2)
+  else if (facts.integrations.includes('auth')) add('Confirm auth posture', 'Require auth/ownership checks for private user data', 3)
+  else if (facts.db.length || facts.integrations.includes('database') || facts.integrations.includes('cache')) add('Confirm persistence posture', 'Persist only after success; make retries idempotent', 4)
+  if (facts.risky.includes('external messaging')) add('Confirm external-write approval', 'Require human approval before sending external messages', 3)
+  const seen = new Set()
+  return decisions
+    .sort((a, b) => a.priority - b.priority)
+    .filter((d) => {
+      const key = d.decision.toLowerCase()
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    .slice(0, 5)
+}
+
+function appendixQuestionsFor(questions, decisions) {
+  const decisionText = decisions.map((d) => d.decision.toLowerCase()).join(' ')
+  return questions.filter((q) => !decisionText.includes(q.toLowerCase().slice(0, 24))).slice(0, 8)
+}
+
+function whyQuestionMatters(question) {
+  if (/schema|request|validation/i.test(question)) return 'schema drift is one of the fastest ways a reversal build stops matching the original behavior'
+  if (/stream|framing|resume|protocol/i.test(question)) return 'stream clients are brittle; event names, frames, resume IDs, and errors must match intentionally'
+  if (/tool/i.test(question)) return 'tool calls can have side effects and need precise input/output contracts'
+  if (/auth|session|permission|roles/i.test(question)) return 'permission mistakes are security bugs, not UX details'
+  if (/billing|subscription|entitlement|payment/i.test(question)) return 'billing state must have one source of truth and webhook-safe behavior'
+  if (/external|email|SMS|message/i.test(question)) return 'external writes need approval and retry policy to avoid accidental spam or user harm'
+  if (/data|database|persistence|state/i.test(question)) return 'state changes need ownership, idempotency, and recovery rules'
+  if (/legacy|copied|desired architecture/i.test(question)) return 'existing code may contain experiments or legacy paths that should not become the blueprint'
+  return 'the mapper can observe structure, but this decision needs human/product intent'
+}
+
+function fidelityProfileMd(facts) {
+  const signals = facts.codeSignals ?? {}
+  return [
+    '## Reversal fidelity profile',
+    '',
+    'These fields exist to make clean-room reversal tests stronger. OBSERVED markers are starting points, not full behavioral proof.',
+    '',
+    '### Request schema / validation markers',
+    '',
+    signalList(signals, 'requestSchemas'),
+    '',
+    '### Response / output contract markers',
+    '',
+    signalList(signals, 'responseContracts'),
+    '',
+    '### Stream protocol / resumability markers',
+    '',
+    signalList(signals, 'streamProtocols'),
+    '',
+    '### Model/provider adapter markers',
+    '',
+    signalList(signals, 'providerAdapters'),
+    '',
+    '### Tool-call contract markers',
+    '',
+    signalList(signals, 'toolContracts'),
+    '',
+    '### Auth/session boundaries',
+    '',
+    signalList(signals, 'authSessionTouchpoints'),
+    '',
+    '### Persistence / state boundaries',
+    '',
+    signalList(signals, 'persistenceTouchpoints'),
+    '',
+    '### UI/client contract markers',
+    '',
+    signalList(signals, 'uiContracts'),
+    '',
+    '### Fidelity questions before claiming behavior parity',
+    '',
+    mdList(fidelityQuestionsFor(facts), '- none detected'),
+    ''
+  ].join('\n')
 }
 
 function writeMappedPackageExtras(out, facts, confidence, questions) {
@@ -579,6 +727,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     mdList(facts.db.slice(0, 80)),
     '',
+    fidelityProfileMd(facts),
     '## Inferred behavior',
     '',
     '- UI routes imply user-facing screens, but exact UX/business rules need review.',
@@ -640,8 +789,12 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     facts.envNames.length ? facts.envNames.map((x) => `- \`${x}\``).join('\n') : '- none detected',
     '',
+    fidelityProfileMd(facts),
     '## Unknown contracts',
     '',
+    '- Exact request schemas and validation error shape for selected API/AI workflows.',
+    '- Exact stream/event protocol and resumability behavior for selected AI workflows.',
+    '- Tool-call input/output schemas, approval gates, and sandbox boundaries.',
     '- Permission rules.',
     '- Business lifecycle rules.',
     '- External write approval semantics.',
@@ -660,6 +813,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '| Route drift | Update tests and Buildprint when UI/API routes change |',
     '| Data model drift | Update tests and Buildprint when schema/model files change |',
     '| Integration drift | Update policies when adding/removing integrations |',
+    '| AI request schema drift | Reversal test must verify accepted payloads and validation errors |',
+    '| Stream protocol drift | Reversal test must verify event/frame names, finish/error frames, and resume behavior |',
+    '| Tool contract drift | Reversal test must verify tool input/output schemas and approval/sandbox rules |',
     '',
     '## Existing tests observed',
     '',
@@ -694,6 +850,14 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     questions.map((q) => `- ${q}`).join('\n'),
     '',
+    '## Reversal validation',
+    '',
+    '- Clean-room reversal attempted: no',
+    '- Original repo/source withheld from implementing agent: no',
+    '- Minimal architecture reversal passed: no',
+    '- Behavioral fidelity gaps:',
+    '- Exact commands/results:',
+    '',
     '## Deviations / architecture changes',
     '',
     '- None / list changes here.',
@@ -705,14 +869,30 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     ''
   ].join('\n')
 
+  const decisions = decisionPromptsFor(facts)
+  const appendixQuestions = appendixQuestionsFor(questions, decisions)
   const questionsMd = [
-    '# Questions',
+    '# Decisions',
     '',
-    'Answer these before a coding agent changes low-confidence behavior.',
+    'Answer only the few decisions that block the selected Buildprint. Do not turn mapping into an interview.',
     '',
-    questions.map((q, i) => `${i + 1}. ${q}`).join('\n'),
+    '## Required now',
+    '',
+    '| # | Decision | Safe default | Human answer |',
+    '|---|---|---|---|',
+    decisions.map((d, i) => `| ${i + 1} | ${d.decision} | ${d.defaultAnswer} |  |`).join('\n'),
+    '',
+    '## Agent rule',
+    '',
+    '- Ask at most one unresolved required decision at a time.',
+    '- Use the safe default only if the user accepts it or the task is explicitly a low-fidelity skeleton/dry-run.',
+    '- Do not block on appendix questions unless implementation touches that risk area.',
+    '- Never invent answers for auth, money, external writes, persistence, AI/tool calls, or stream protocol parity.',
+    '',
+    appendixQuestions.length ? '## Appendix — ask only if touched' : '',
+    appendixQuestions.length ? appendixQuestions.map((q, i) => `### A${i + 1}. ${q}\n\n- Why it matters: ${whyQuestionMatters(q)}\n- Default handling: keep as unknown; do not claim behavioral parity.`).join('\n\n') : '',
     ''
-  ].join('\n')
+  ].filter(Boolean).join('\n')
 
   const phaseFiles = {
     '00-review-facts.md': '# Phase 00 — Review Facts\n\nRead `facts.json`, `discovered-map.md`, and `confidence-report.md`.\n\nExit: observed facts understood; no code changed.\n',
