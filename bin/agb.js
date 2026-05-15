@@ -11,25 +11,17 @@ function usage(exitCode = 0) {
 
 Usage:
   agb check <blueprint-folder> [--code <generated-code-folder>]
-  agb index <repo-folder> [--out <index-folder>]
-  agb map begin <repo-folder> [--out <map-workspace>]
-  agb map checkpoint --workspace <map-workspace> --phase <phase>
-  agb map select --workspace <map-workspace> --candidate <number>
-  agb map finalize --workspace <map-workspace>
-  agb map <repo-folder> [--out <output-folder>] [--scope <path>] [--candidate <number>]  # legacy deterministic draft
-  agb reverse <buildprint-folder> [--out <reversal-folder>]
   agb init langgraph <target-folder>
+  agb map <repo-folder> [--out <output-folder>] [--scope <path>] [--candidate <number>]
   agb start <buildprint-package-json-url-or-file>
 
 Examples:
   agb check ./langgraph
   agb check ./langgraph --code ./my-agent
-  agb index ./my-project --out .buildprint/index
-  agb map begin ./my-project --out .buildprint/map
-  agb map checkpoint --workspace .buildprint/map --phase system-map
-  agb map select --workspace .buildprint/map --candidate 1
-  agb reverse .buildprint/map/final --out .buildprint/reversal
-  agb map ./my-project --out ./my-project.buildprint  # legacy deterministic draft
+  agb map ./my-project
+  agb map ./my-project --out ./my-project.buildprint
+  agb map ./my-project --candidate 1 --out ./selected.buildprint
+  agb map ./my-project --scope apps/web --out ./web.buildprint
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json
 `)
   process.exit(exitCode)
@@ -968,190 +960,6 @@ function writeJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
 }
 
-
-const mapPhases = [
-  { id: 'system-map', dir: '01-system-map', required: ['SYSTEM_MAP.md'], next: 'Read index/facts.json, inspect evidence-bearing files, then write 02-candidates/BUILDPRINT_CANDIDATES.md.' },
-  { id: 'candidates', dir: '02-candidates', required: ['BUILDPRINT_CANDIDATES.md'], next: 'Ask for or record candidate choice. Use `agb map select --candidate <n>` after the human chooses.' },
-  { id: 'decision-gate', dir: '03-decision-gate', required: ['DECISIONS.md'], next: 'Extract only the selected candidate into 04-selected-extraction/ with contracts and tests.' },
-  { id: 'selected-extraction', dir: '04-selected-extraction', required: ['SELECTED_CANDIDATE.md', 'BUILDPRINT.md', 'SPEC.md', 'CONTRACTS.md', 'TEST_MATRIX.md'], next: 'Run clean-room reversal, then write 05-reversal/REVERSAL_REPORT.md.' },
-  { id: 'reversal', dir: '05-reversal', required: ['REVERSAL_REPORT.md'], next: 'Run `agb map finalize --workspace <map-workspace>`.' },
-]
-
-function argValue(name, fallback = null) {
-  const i = args.indexOf(name)
-  return i >= 0 ? args[i + 1] : fallback
-}
-
-function writeIndex(repoArg, outArg) {
-  const repo = path.resolve(cwd, repoArg)
-  if (!exists(repo) || !fs.statSync(repo).isDirectory()) throw new Error(`repo folder missing: ${repo}`)
-  const out = path.resolve(cwd, outArg ?? '.buildprint/index')
-  fs.mkdirSync(out, { recursive: true })
-  const facts = detectProjectFacts(repo)
-  writeJson(path.join(out, 'facts.json'), facts)
-  fs.writeFileSync(path.join(out, 'inventory.md'), [
-    '# Repo Index', '',
-    `- Root: ${facts.root}`,
-    `- Files scanned: ${facts.totalFilesScanned}`,
-    `- Package manager: ${facts.packageManager}`,
-    `- Frameworks: ${facts.frameworks.join(', ') || 'none detected'}`,
-    `- Integrations: ${facts.integrations.join(', ') || 'none detected'}`,
-    '',
-    '## Candidate evidence pointers', '',
-    'Use these as starting points only. The coding agent must inspect files and cite evidence before making architecture claims.', '',
-    '### Routes', mdList(facts.routes.slice(0, 80)), '',
-    '### APIs / endpoints', mdList(facts.apis.slice(0, 80)), '',
-    '### Data / model files', mdList(facts.db.slice(0, 80)), '',
-    '### Tests', mdList(facts.tests.slice(0, 80)), '',
-    '### Environment variable names only', mdList(facts.envNames), '',
-    fidelityProfileMd(facts),
-  ].join('\n'))
-  fs.writeFileSync(path.join(out, 'README.md'), '# Index README\n\nThis is deterministic inventory only. It is not a Buildprint and must not be presented as architecture truth.\n')
-  return { out, facts }
-}
-
-function writeMapNextAgent(workspace, state) {
-  const phase = mapPhases.find((p) => p.id === state.currentPhase)
-  const phaseLine = phase ? `Current phase: ${phase.id} (${phase.dir})` : `Current phase: ${state.currentPhase}`
-  const required = phase ? phase.required.map((x) => `- ${phase.dir}/${x}`).join('\n') : '- none'
-  fs.writeFileSync(path.join(workspace, 'next-agent.md'), [
-    '# Next Agent Instructions', '',
-    phaseLine, '',
-    'This is an agentic mapper harness. The CLI scaffolds state and checks artifacts; the coding agent does the reasoning.', '',
-    '## Rules', '',
-    '- Read `state.json`, `index/facts.json`, and existing phase artifacts first.',
-    '- Cite file evidence in every architecture claim.',
-    '- Do not use deterministic index facts as final architecture truth without source inspection.',
-    '- Do not read or copy secret values. Env names only.',
-    '- Ask at most one blocking decision at a time.',
-    '- Do not claim behavioral parity until reversal has run.', '',
-    '## Required artifacts for this phase', '',
-    required, '',
-    '## Next', '',
-    phase?.next ?? 'No next phase.', '',
-    'After writing required artifacts, run:', '',
-    `~~~bash\nagb map checkpoint --workspace ${workspace} --phase ${state.currentPhase}\n~~~`, ''
-  ].join('\n'))
-}
-
-function beginMapHarness(repoArg, outArg) {
-  const workspace = path.resolve(cwd, outArg ?? '.buildprint/map')
-  fs.mkdirSync(workspace, { recursive: true })
-  for (const phase of mapPhases) fs.mkdirSync(path.join(workspace, phase.dir), { recursive: true })
-  const { facts } = writeIndex(repoArg, path.join(workspace, 'index'))
-  const state = {
-    mode: 'agentic-map-harness',
-    repo: path.resolve(cwd, repoArg),
-    workspace,
-    currentPhase: 'system-map',
-    completedPhases: [],
-    selectedCandidate: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  }
-  writeJson(path.join(workspace, 'state.json'), state)
-  fs.writeFileSync(path.join(workspace, 'evidence.jsonl'), '')
-  fs.writeFileSync(path.join(workspace, 'decisions.md'), '# Decisions\n\nNo human decisions recorded yet.\n')
-  fs.writeFileSync(path.join(workspace, 'progress.md'), `# Mapper Progress\n\n- Created harness workspace.\n- Indexed ${facts.totalFilesScanned} files.\n- Current phase: system-map.\n`)
-  fs.writeFileSync(path.join(workspace, '01-system-map', 'README.md'), '# Phase 01 — System Map\n\nCoding agent: inspect source files, cite evidence, and write `SYSTEM_MAP.md`.\n')
-  fs.writeFileSync(path.join(workspace, '02-candidates', 'README.md'), '# Phase 02 — Candidates\n\nCoding agent: propose scoped Buildprint candidates with evidence and tradeoffs in `BUILDPRINT_CANDIDATES.md`.\n')
-  fs.writeFileSync(path.join(workspace, '03-decision-gate', 'README.md'), '# Phase 03 — Decision Gate\n\nCoding agent: write max 3-5 blocking decisions in `DECISIONS.md`.\n')
-  fs.writeFileSync(path.join(workspace, '04-selected-extraction', 'README.md'), '# Phase 04 — Selected Extraction\n\nCoding agent: extract the selected Buildprint package here.\n')
-  fs.writeFileSync(path.join(workspace, '05-reversal', 'README.md'), '# Phase 05 — Reversal\n\nCoding agent: run clean-room reversal and write `REVERSAL_REPORT.md`.\n')
-  writeMapNextAgent(workspace, state)
-  return { workspace, facts }
-}
-
-function readMapState(workspaceArg) {
-  const workspace = path.resolve(cwd, workspaceArg ?? '.buildprint/map')
-  const stateFile = path.join(workspace, 'state.json')
-  if (!exists(stateFile)) throw new Error(`map workspace missing state.json: ${workspace}`)
-  return { workspace, state: JSON.parse(readText(stateFile)) }
-}
-
-function checkpointMapHarness(workspaceArg, phaseId) {
-  const { workspace, state } = readMapState(workspaceArg)
-  const phase = mapPhases.find((p) => p.id === phaseId)
-  if (!phase) throw new Error(`unknown phase: ${phaseId}`)
-  const missing = phase.required.filter((file) => !exists(path.join(workspace, phase.dir, file)) || !readText(path.join(workspace, phase.dir, file)).trim())
-  if (missing.length) throw new Error(`phase ${phase.id} missing required artifacts: ${missing.join(', ')}`)
-  if (!state.completedPhases.includes(phase.id)) state.completedPhases.push(phase.id)
-  const nextPhase = mapPhases.find((p) => !state.completedPhases.includes(p.id))
-  state.currentPhase = nextPhase?.id ?? 'complete'
-  state.updatedAt = new Date().toISOString()
-  writeJson(path.join(workspace, 'state.json'), state)
-  fs.appendFileSync(path.join(workspace, 'progress.md'), `\n- Completed phase: ${phase.id}. Next: ${state.currentPhase}.\n`)
-  writeMapNextAgent(workspace, state)
-  return { workspace, state }
-}
-
-function selectMapCandidate(workspaceArg, candidateNumber) {
-  const { workspace, state } = readMapState(workspaceArg)
-  if (!candidateNumber) throw new Error('missing --candidate <number>')
-  state.selectedCandidate = Number(candidateNumber)
-  state.currentPhase = 'decision-gate'
-  state.updatedAt = new Date().toISOString()
-  writeJson(path.join(workspace, 'state.json'), state)
-  fs.writeFileSync(path.join(workspace, '03-decision-gate', 'DECISIONS.md'), [
-    '# Decisions', '',
-    `Selected candidate: ${candidateNumber}`, '',
-    '## Required now', '',
-    '| # | Decision | Safe default | Human answer |',
-    '|---|---|---|---|',
-    '| 1 | Confirm selected candidate and scope | Use selected candidate as scope |  |',
-    '| 2 | Choose fidelity target | Architecture skeleton first; exact parity only after evidence/reversal |  |',
-    '| 3 | Confirm external side-effect posture | No real external writes during mapping/reversal |  |', '',
-    '## Agent rule', '',
-    '- Ask at most one unresolved decision at a time.',
-    '- Do not block on non-touched appendix issues.', ''
-  ].join('\n'))
-  writeMapNextAgent(workspace, state)
-  return { workspace, state }
-}
-
-function finalizeMapHarness(workspaceArg) {
-  const { workspace, state } = readMapState(workspaceArg)
-  const finalDir = path.join(workspace, 'final')
-  fs.mkdirSync(finalDir, { recursive: true })
-  const extraction = path.join(workspace, '04-selected-extraction')
-  const files = ['SELECTED_CANDIDATE.md', 'BUILDPRINT.md', 'SPEC.md', 'CONTRACTS.md', 'TEST_MATRIX.md']
-  for (const file of files) if (exists(path.join(extraction, file))) fs.copyFileSync(path.join(extraction, file), path.join(finalDir, file))
-  if (exists(path.join(workspace, '03-decision-gate', 'DECISIONS.md'))) fs.copyFileSync(path.join(workspace, '03-decision-gate', 'DECISIONS.md'), path.join(finalDir, 'DECISIONS.md'))
-  if (exists(path.join(workspace, '05-reversal', 'REVERSAL_REPORT.md'))) fs.copyFileSync(path.join(workspace, '05-reversal', 'REVERSAL_REPORT.md'), path.join(finalDir, 'REVERSAL_REPORT.md'))
-  state.currentPhase = 'complete'
-  state.finalDir = finalDir
-  state.updatedAt = new Date().toISOString()
-  writeJson(path.join(workspace, 'state.json'), state)
-  writeMapNextAgent(workspace, state)
-  return { workspace, finalDir }
-}
-
-function beginReverseHarness(buildprintArg, outArg) {
-  const source = path.resolve(cwd, buildprintArg)
-  if (!exists(source) || !fs.statSync(source).isDirectory()) throw new Error(`Buildprint folder missing: ${source}`)
-  const out = path.resolve(cwd, outArg ?? '.buildprint/reversal')
-  fs.mkdirSync(out, { recursive: true })
-  fs.writeFileSync(path.join(out, 'README.md'), [
-    '# Reversal Harness', '',
-    'Clean-room reversal validation workspace.', '',
-    'Rules:', '',
-    '- Do not read the original source repo.',
-    '- Use only the Buildprint package as input.',
-    '- Build the smallest implementation skeleton that satisfies the contracts.',
-    '- Run tests/build and write `REVERSAL_REPORT.md` with exact results and fidelity gaps.', ''
-  ].join('\n'))
-  fs.writeFileSync(path.join(out, 'REVERSAL_PROMPT.md'), [
-    '# Reversal Prompt', '',
-    `Use Buildprint source: ${source}`, '',
-    '1. Read BUILDPRINT.md, SPEC.md, CONTRACTS.md, TEST_MATRIX.md, DECISIONS.md if present.',
-    '2. Implement a minimal clean-room skeleton.',
-    '3. Add tests for contracts and risk areas.',
-    '4. Run tests/build.',
-    '5. Write REVERSAL_REPORT.md with pass/fail and gaps.', ''
-  ].join('\n'))
-  return { out, source }
-}
-
 async function startBuildprint(manifestRef) {
   const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
@@ -1227,84 +1035,7 @@ if (args[0] === 'start') {
   }
 }
 
-if (args[0] === 'index') {
-  const repo = args[1]
-  if (!repo) usage(1)
-  try {
-    const result = writeIndex(repo, argValue('--out'))
-    console.log(`Created repo index: ${result.out}`)
-    console.log(`Files scanned: ${result.facts.totalFilesScanned}`)
-    console.log('Note: index is inventory only, not a Buildprint.')
-    process.exit(0)
-  } catch (error) {
-    console.error(`Index failed: ${error.message}`)
-    process.exit(1)
-  }
-}
-
-if (args[0] === 'reverse') {
-  const buildprint = args[1]
-  if (!buildprint) usage(1)
-  try {
-    const result = beginReverseHarness(buildprint, argValue('--out'))
-    console.log(`Created reversal harness: ${result.out}`)
-    console.log(`Buildprint source: ${result.source}`)
-    console.log('Next: coding agent reads REVERSAL_PROMPT.md and writes REVERSAL_REPORT.md')
-    process.exit(0)
-  } catch (error) {
-    console.error(`Reverse failed: ${error.message}`)
-    process.exit(1)
-  }
-}
-
 if (args[0] === 'map') {
-  if (args[1] === 'begin') {
-    const repo = args[2]
-    if (!repo) usage(1)
-    try {
-      const result = beginMapHarness(repo, argValue('--out'))
-      console.log(`Created agentic map harness: ${result.workspace}`)
-      console.log(`Files indexed: ${result.facts.totalFilesScanned}`)
-      console.log('Next: coding agent reads next-agent.md')
-      process.exit(0)
-    } catch (error) {
-      console.error(`Map begin failed: ${error.message}`)
-      process.exit(1)
-    }
-  }
-  if (args[1] === 'checkpoint') {
-    try {
-      const result = checkpointMapHarness(argValue('--workspace'), argValue('--phase'))
-      console.log(`Checkpoint accepted: ${result.state.completedPhases.at(-1)}`)
-      console.log(`Next phase: ${result.state.currentPhase}`)
-      process.exit(0)
-    } catch (error) {
-      console.error(`Map checkpoint failed: ${error.message}`)
-      process.exit(1)
-    }
-  }
-  if (args[1] === 'select') {
-    try {
-      const result = selectMapCandidate(argValue('--workspace'), argValue('--candidate'))
-      console.log(`Selected candidate: ${result.state.selectedCandidate}`)
-      console.log(`Workspace: ${result.workspace}`)
-      process.exit(0)
-    } catch (error) {
-      console.error(`Map select failed: ${error.message}`)
-      process.exit(1)
-    }
-  }
-  if (args[1] === 'finalize') {
-    try {
-      const result = finalizeMapHarness(argValue('--workspace'))
-      console.log(`Finalized Buildprint package: ${result.finalDir}`)
-      process.exit(0)
-    } catch (error) {
-      console.error(`Map finalize failed: ${error.message}`)
-      process.exit(1)
-    }
-  }
-
   const repo = args[1]
   if (!repo) usage(1)
   const outIndex = args.indexOf('--out')
@@ -1315,12 +1046,11 @@ if (args[0] === 'map') {
   const candidate = candidateIndex >= 0 ? args[candidateIndex + 1] : null
   try {
     const result = writeMappedBuildprint(repo, out, { scope, candidate })
-    console.log(`Created legacy deterministic Buildprint draft: ${result.out}`)
+    console.log(`Created mapped Buildprint: ${result.out}`)
     console.log(`Files scanned: ${result.facts.totalFilesScanned}`)
     console.log(`Frameworks: ${result.facts.frameworks.join(', ') || 'none detected'}`)
     console.log(`Risk areas: ${result.facts.risky.join(', ') || 'none detected'}`)
     console.log(`Review questions: ${result.questions.length}`)
-    console.log('Note: for product-grade mapping, use `agb map begin` with a coding agent.')
     if (result.facts.scope) console.log(`Scope: ${result.facts.scope}`)
     if (result.facts.selectedCandidate) console.log(`Selected candidate: ${result.facts.selectedCandidate.title}`)
     process.exit(0)
