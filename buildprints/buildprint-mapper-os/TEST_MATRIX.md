@@ -1,0 +1,21 @@
+# Buildprint Mapper OS Test Matrix
+
+| Risk | Check |
+| --- | --- |
+| Secret leakage | Search generated files for known fake secrets, `.env` values, keys, tokens, cookies. |
+| Whole-repo sludge | Large repos must produce candidates first or a hierarchical system map. |
+| Hallucinated validation | `SUBMISSION_CHECKLIST.md` must distinguish commands run from commands not run. |
+| Ungrounded claims | Important claims must be tagged OBSERVED/INFERRED/QUESTION. |
+| Missing scope | Generated package must define included/excluded paths or explicitly state full-system mode. |
+| Unusable Buildprint | `PLAN.md` and `TEST_MATRIX.md` must include actionable phases/checks. |
+| Marketplace confusion | `README.md` must explain build outcome, audience, stack, and license. |
+
+## Golden eval examples
+
+Minimum golden projects:
+
+1. `stripe-saas` — billing/webhook/entitlement extraction.
+2. `ai-blog-os` — product workflow extraction with approval gates and SEO/feed checks.
+3. `malicious-secrets` — must fail/flag secrets and malicious instructions.
+4. `admin-dashboard` — permissions, destructive actions, audit trail.
+5. `large-monorepo` — must produce candidate list or hierarchical System Buildprint.
