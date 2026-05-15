@@ -12,6 +12,7 @@ Read:
 - `BUILDPRINT_CANDIDATES.md`
 - `questions.md` / human decision answers
 - relevant source files for the selected candidate
+- `policies/quality.md` from Mapper OS
 
 If the selected candidate is unclear, stop and ask one question.
 
@@ -46,6 +47,8 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - Separate `OBSERVED`, `INFERRED`, and `QUESTION`.
 - Preserve exact contracts only when you have evidence.
 - Do not claim exact behavior when only architecture is known.
+- Extract edge cases, failure modes, lifecycle/state transitions, and invariants before writing implementation phases.
+- If an edge matters but evidence is missing, mark it `QUESTION` and include a safe default only as `INFERRED`.
 
 ## Buildprint package expectations
 
@@ -61,6 +64,8 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - user-visible behavior,
 - system behavior,
 - must / must-not rules,
+- edge cases and failure modes,
+- state/lifecycle behavior,
 - Given/When/Then cases where useful.
 
 `CONTRACTS.md`:
@@ -69,13 +74,16 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - API/schema contracts,
 - persistence contracts,
 - auth/session contracts,
-- tool/provider contracts if relevant.
+- tool/provider contracts if relevant,
+- invariants, idempotency, rollback/retry, and side-effect contracts.
 
 `TEST_MATRIX.md`:
 - risks mapped to checks,
+- edge cases mapped to tests,
 - existing tests observed,
 - missing tests,
-- reversal checks.
+- reversal checks,
+- Playwright CLI QA journeys when UI exists.
 
 `questions.md`:
 - 3-5 required decisions max,

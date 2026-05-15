@@ -14,7 +14,7 @@ Create these files at the repo root or in the user-requested output folder:
 
 ## Process
 
-1. Read `README.md`, `BUILDPRINT.md`, `PLAN.md`, `SPEC.md`, and `CONTRACTS.md` from this Mapper OS package.
+1. Read `README.md`, `BUILDPRINT.md`, `PLAN.md`, `SPEC.md`, `CONTRACTS.md`, and `policies/quality.md` from this Mapper OS package.
 2. Do a safe repo census:
    - package/dependency manifests,
    - app entrypoints,
@@ -48,8 +48,10 @@ Do not copy secrets or `.env` values. Environment variable names are allowed; va
 - Auth/session/permission boundaries.
 - External integrations and side-effect surfaces.
 - Tests/validation already present.
+- State machines/lifecycles for major workflows.
+- Edge cases and failure modes.
 - Risk zones.
-- Unknowns.
+- Unknowns with confidence.
 
 ## `BUILDPRINT_CANDIDATES.md` must include 2-5 candidates
 
@@ -63,6 +65,8 @@ For each candidate:
 - main risks,
 - evidence,
 - confidence,
+- edge cases to preserve,
+- QA/product proof strategy,
 - what decision is needed before extraction.
 
 Do not merge unrelated scopes just to make one big Buildprint.

@@ -50,4 +50,29 @@ OUT_OF_SCOPE: intentionally excluded from selected Buildprint.
 - data stores/models,
 - side effects,
 - tests/checks present,
+- state machines/lifecycles for major workflows,
+- edge cases and failure modes,
 - unknowns and confidence.
+
+## Precision map contract
+
+For every selected candidate or system module, record:
+
+```json
+{
+  "module": "canvas-scene",
+  "responsibilities": ["..."],
+  "inputs": ["..."],
+  "outputs": ["..."],
+  "state": ["..."],
+  "invariants": ["..."],
+  "edgeCases": ["..."],
+  "failureModes": ["..."],
+  "sideEffects": ["..."],
+  "testsOrQa": ["..."],
+  "confidence": "high|medium|low|unknown",
+  "evidence": ["OBSERVED(path:line): ..."]
+}
+```
+
+If a field has no evidence, write `QUESTION` or `unknown`; never silently omit risky edges.

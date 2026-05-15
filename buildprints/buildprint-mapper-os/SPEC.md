@@ -10,6 +10,10 @@
 - Must pause for human scope selection unless a clear scope was provided.
 - Must support both single-module Buildprints and hierarchical System Buildprints.
 - Must include quality gates and acceptance checks for any extracted Buildprint.
+- Must include edge-case inventory for selected product/module scopes.
+- Must document state machines, lifecycles, invariants, and failure modes for non-trivial workflows.
+- Must include confidence levels per module and per high-risk claim.
+- Must distinguish product-proof defects from Buildprint gaps after QA.
 - Must include a submission checklist with known gaps and commands run.
 
 ## Must not
@@ -19,6 +23,7 @@
 - Must not turn unrelated subsystems into one vague Buildprint.
 - Must not treat generated summaries as source-of-truth if they conflict with repository facts.
 - Must not publish or submit automatically.
+- Must not collapse edge cases into generic phrases like “handle errors”; concrete errors and recovery behavior must be listed or marked unknown.
 
 ## Modes
 
@@ -54,5 +59,8 @@ A generated package is publishable only if:
 - files are complete for the tier,
 - secrets check is clean,
 - unknowns are listed,
+- edge cases/failure modes are inventoried,
+- state/lifecycle behavior is explicit where relevant,
 - validation status is honest,
+- product/browser QA status is recorded when applicable,
 - review checklist is present.
