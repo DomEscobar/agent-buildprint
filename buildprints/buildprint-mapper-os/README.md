@@ -1,6 +1,16 @@
 # Buildprint Mapper OS
 
-Turn an existing repo into a scoped, reviewable Buildprint submission.
+Turn an existing repo into a scoped, reviewable Buildprint using a coding agent and this Buildprint package only.
+
+No CLI is required. The mapper is the process described by these files:
+
+1. create a safe repo census,
+2. map the system with evidence,
+3. propose scoped Buildprint candidates,
+4. ask for one small scope decision,
+5. extract the selected Buildprint,
+6. run clean-room reversal validation,
+7. report gaps honestly.
 
 Use it when:
 
@@ -9,16 +19,37 @@ Use it when:
 - you need candidate Buildprints before choosing scope,
 - you want a full hierarchical System Buildprint.
 
-Recommended flow:
+## Coding-agent starter prompt
 
-```bash
-agb map ./my-project --out .project.buildprint
+Paste this into Codex, Cursor, Claude Code, or another coding agent inside the repo you want mapped:
+
+```txt
+Use Buildprint Mapper OS.
+
+Read the mapper package files first:
+- README.md
+- BUILDPRINT.md
+- PLAN.md
+- SPEC.md
+- CONTRACTS.md
+- TEST_MATRIX.md
+- prompts/discover.md
+
+Then map this repo without modifying source code.
+
+Start with discovery only:
+1. create SYSTEM_MAP.md
+2. create BUILDPRINT_CANDIDATES.md
+3. create questions.md with at most 3-5 required decisions
+
+Rules:
+- cite repo file paths for important claims
+- label every claim OBSERVED, INFERRED, or QUESTION
+- do not copy secrets or .env values
+- do not create the final Buildprint until I choose a candidate
+- ask at most one blocking question at a time
 ```
 
-Then use the mapper prompt to produce either:
-
-- candidate Buildprints,
-- one selected module Buildprint,
-- or a full System Buildprint with submodules.
+After a candidate is chosen, use `prompts/extract-selected.md`.
 
 Safety posture: no secrets, no app-code modification, no invented validation results.

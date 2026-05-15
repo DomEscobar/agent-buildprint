@@ -4,26 +4,27 @@
 
 Buildprint Mapper OS turns an existing software project into a scoped, reviewable Agent Buildprint package without flattening the project into a vague summary or copying secrets.
 
-It is the official process for creator submissions when the source is an existing repo, especially a large project.
+It is a coding-agent process, not a scanner. The agent reads source files, cites evidence, separates observed facts from inference, asks only blocking decisions, and validates the result through reversal.
 
 ## Core idea
 
 Small project:
 
 ```txt
-repo → one scoped Buildprint
+repo → one scoped Buildprint → reversal validation
 ```
 
 Large project:
 
 ```txt
 repo
-→ deterministic facts
-→ system map
+→ safe census
+→ evidence-backed system map
 → candidate Buildprints
 → human scope decision
 → one module Buildprint OR hierarchical System Buildprint
-→ validation report
+→ reversal validation
+→ final gap report
 ```
 
 ## Non-goals
@@ -32,24 +33,23 @@ repo
 - Do not copy secrets, private keys, tokens, `.env` values, customer data, or private production URLs.
 - Do not pretend to understand business rules that are not present in the repo.
 - Do not create a 100-page project summary and call it a Buildprint.
-- Do not mark validation as passed unless commands actually ran.
+- Do not mark validation as passed unless commands/tests actually ran.
+- Do not require a CLI to use this Buildprint.
 
 ## Inputs
 
 - Existing project repository.
-- Optional `agb map <repo> --out .project.buildprint` deterministic scan output.
-- Optional human-provided scope: feature, workflow, architecture, or full system.
+- Human-provided goal, if available.
+- Optional scope: feature, workflow, architecture, or full system.
+- Optional prior inventory/index. Treat inventory as hints only, not architecture truth.
 
-## Outputs
+## Discovery outputs
 
-For discovery mode:
-
-- `facts.json` or imported mapper facts.
 - `SYSTEM_MAP.md`.
 - `BUILDPRINT_CANDIDATES.md`.
-- `questions.md`.
+- `questions.md` with only 3-5 required decisions and appendix questions.
 
-For single Buildprint extraction:
+## Single Buildprint extraction outputs
 
 - `buildprint-submission/BUILDPRINT.md`.
 - `buildprint-submission/SPEC.md`.
@@ -60,8 +60,9 @@ For single Buildprint extraction:
 - `buildprint-submission/questions.md`.
 - `buildprint-submission/README.md`.
 - `buildprint-submission/SUBMISSION_CHECKLIST.md`.
+- `buildprint-submission/REVERSAL_REPORT.md` after clean-room validation.
 
-For full large-system extraction:
+## Full large-system extraction outputs
 
 - `project.buildprint/BUILDPRINT.md`.
 - `project.buildprint/SYSTEM_MAP.md`.
@@ -72,13 +73,31 @@ For full large-system extraction:
 - `project.buildprint/modules/*/BUILDPRINT.md` for major subsystems.
 - `project.buildprint/questions.md`.
 - `project.buildprint/SUBMISSION_CHECKLIST.md`.
+- `project.buildprint/REVERSAL_REPORT.md` or per-module reversal reports.
 
-## Critical rule
+## Evidence labels
 
-Every claim must be labeled as one of:
+Every important claim must be labeled as one of:
 
-- `OBSERVED` — directly grounded in repo files or mapper facts.
+- `OBSERVED` — directly grounded in repo files.
 - `INFERRED` — likely but not proven.
 - `QUESTION` — requires human review.
 
 If a claim cannot be grounded, it cannot be presented as fact.
+
+## Reversal requirement
+
+A Buildprint is not validated just because it reads well. Validation requires a clean-room reversal attempt:
+
+1. hide or ignore the original repo,
+2. give the implementing agent only the extracted Buildprint package,
+3. build the smallest implementation skeleton that satisfies the contracts,
+4. run tests/build/checks,
+5. write `REVERSAL_REPORT.md` with pass/fail and fidelity gaps.
+
+Use honest grades:
+
+- `architecture reversal passed`,
+- `behavioral fidelity partial`,
+- `behavioral parity not claimed`,
+- `blocked` with missing evidence or decisions.
