@@ -589,11 +589,21 @@ function isUrl(value) {
   return /^https?:\/\//.test(value)
 }
 
+function looksLikeHtml(text) {
+  return /^\s*<!doctype html/i.test(text) || /^\s*<html[\s>]/i.test(text)
+}
+
 async function readJsonFromUrlOrFile(ref) {
   if (isUrl(ref)) {
     const res = await fetch(ref)
     if (!res.ok) throw new Error(`failed to fetch ${ref}: HTTP ${res.status}`)
-    return { json: await res.json(), baseUrl: ref }
+    const text = await res.text()
+    if (looksLikeHtml(text)) throw new Error(`expected JSON manifest but received HTML from ${ref}`)
+    try {
+      return { json: JSON.parse(text), baseUrl: ref }
+    } catch (error) {
+      throw new Error(`invalid JSON manifest from ${ref}: ${error.message}`)
+    }
   }
   const absolute = path.resolve(cwd, ref)
   return { json: JSON.parse(readText(absolute)), baseUrl: `file://${absolute}` }
@@ -614,7 +624,9 @@ async function fetchTextExact(url) {
   if (url.startsWith('file://')) return readText(fileURLToPath(url))
   const res = await fetch(url)
   if (!res.ok) throw new Error(`failed to fetch ${url}: HTTP ${res.status}`)
-  return await res.text()
+  const text = await res.text()
+  if (looksLikeHtml(text)) throw new Error(`expected Buildprint snapshot text but received HTML from ${url}`)
+  return text
 }
 
 function writeJson(file, data) {
