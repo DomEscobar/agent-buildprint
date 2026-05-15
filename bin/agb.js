@@ -12,7 +12,7 @@ function usage(exitCode = 0) {
 Usage:
   agb check <blueprint-folder> [--code <generated-code-folder>]
   agb init langgraph <target-folder>
-  agb map <repo-folder> [--out <output-folder>]
+  agb map <repo-folder> [--out <output-folder>] [--scope <path>] [--candidate <number>]
   agb start <buildprint-package-json-url-or-file>
 
 Examples:
@@ -20,6 +20,8 @@ Examples:
   agb check ./langgraph --code ./my-agent
   agb map ./my-project
   agb map ./my-project --out ./my-project.buildprint
+  agb map ./my-project --candidate 1 --out ./selected.buildprint
+  agb map ./my-project --scope apps/web --out ./web.buildprint
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json
 `)
   process.exit(exitCode)
@@ -413,16 +415,26 @@ function confidenceFor(facts) {
   }
 }
 
-function writeMappedBuildprint(repoArg, outArg) {
-  const repo = path.resolve(cwd, repoArg)
-  if (!exists(repo) || !fs.statSync(repo).isDirectory()) throw new Error(`repo folder missing: ${repo}`)
-  const out = path.resolve(cwd, outArg ?? path.join(repo, '.project.buildprint'))
+function writeMappedBuildprint(repoArg, outArg, options = {}) {
+  const baseRepo = path.resolve(cwd, repoArg)
+  if (!exists(baseRepo) || !fs.statSync(baseRepo).isDirectory()) throw new Error(`repo folder missing: ${baseRepo}`)
+  const repo = options.scope ? path.resolve(baseRepo, options.scope) : baseRepo
+  if (!repo.startsWith(baseRepo)) throw new Error(`scope must stay inside repo: ${options.scope}`)
+  if (!exists(repo) || !fs.statSync(repo).isDirectory()) throw new Error(`scope folder missing: ${repo}`)
+  const out = path.resolve(cwd, outArg ?? path.join(baseRepo, '.project.buildprint'))
   fs.mkdirSync(out, { recursive: true })
   fs.mkdirSync(path.join(out, 'prompts'), { recursive: true })
   fs.mkdirSync(path.join(out, 'tests'), { recursive: true })
   fs.mkdirSync(path.join(out, 'policies'), { recursive: true })
 
   const facts = detectProjectFacts(repo)
+  if (options.scope) {
+    facts.sourceRoot = baseRepo
+    facts.scope = options.scope
+  }
+  const selectedCandidate = options.candidate ? facts.candidateBuildprints[Number(options.candidate) - 1] : null
+  if (options.candidate && !selectedCandidate) throw new Error(`candidate ${options.candidate} not found; available candidates: ${facts.candidateBuildprints.length}`)
+  if (selectedCandidate) facts.selectedCandidate = selectedCandidate
   const confidence = confidenceFor(facts)
   const questions = []
   if (confidence.permission_model === 'low') questions.push('What is the intended permission model? Which roles may create, update, delete, or invite?')
@@ -436,6 +448,31 @@ function writeMappedBuildprint(repoArg, outArg) {
   const systemMap = `# SYSTEM_MAP\n\n## Project\n\n- Name: ${facts.packageName}\n- Root: ${facts.root}\n- Files scanned: ${facts.totalFilesScanned}\n- Package manager: ${facts.packageManager}\n- Scope selection required: ${facts.needsScopeSelection ? 'yes' : 'no'}\n\n## Architecture zones\n\n### Frontend / UI\n${facts.routes.length ? facts.routes.slice(0, 60).map((x) => `- OBSERVED route: ${x}`).join('\n') : '- QUESTION: no UI routes detected'}\n\n### API / backend\n${facts.apis.length ? facts.apis.slice(0, 60).map((x) => `- OBSERVED API: ${x}`).join('\n') : '- QUESTION: no API routes detected'}\n\n### Data model\n${facts.db.length ? facts.db.slice(0, 60).map((x) => `- OBSERVED data/model file: ${x}`).join('\n') : '- QUESTION: no data model files detected'}\n\n### Integrations\n${facts.integrations.length ? facts.integrations.map((x) => `- INFERRED integration: ${x}`).join('\n') : '- none detected'}\n\n### Subprojects / examples\n${facts.subprojects.length ? facts.subprojects.map((x) => `- OBSERVED ${x.kind}: ${x.path} (${x.name})`).join('\n') : '- none detected'}\n\n## Risk zones\n${facts.risky.length ? facts.risky.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Human review needed\n\n- Confirm which candidate Buildprint should be extracted.\n- Confirm which observed modules are legacy vs desired architecture.\n- Confirm auth, billing, external-write, and data lifecycle rules.\n`;
 
   const candidatesMd = `# BUILDPRINT_CANDIDATES\n\n${facts.needsScopeSelection ? '> Scope selection required before final extraction. This repo appears large, mixed, or multi-scope.\n\n' : ''}${facts.candidateBuildprints.length ? facts.candidateBuildprints.map((c, i) => `## ${i + 1}. ${c.title}\n\n- Scope: ${c.scope}\n- Estimated tier: ${c.estimatedTier}\n- Why reusable: ${c.whyReusable}\n- Included paths:\n${c.includedPaths.length ? c.includedPaths.map((x) => `  - ${x}`).join('\n') : '  - QUESTION: no paths selected'}\n- Excluded paths:\n${c.excludedPaths.length ? c.excludedPaths.map((x) => `  - ${x}`).join('\n') : '  - none yet'}\n- Risks:\n${c.risks.length ? c.risks.map((x) => `  - ${x}`).join('\n') : '  - none detected'}\n- Questions:\n${c.questions.length ? c.questions.map((x) => `  - ${x}`).join('\n') : '  - none'}\n`).join('\n') : 'No strong candidates detected. Use SYSTEM_MAP.md and questions.md for human scoping.\n'}\n`;
+
+  const selectedCandidateMd = selectedCandidate ? `# SELECTED_CANDIDATE
+
+## ${selectedCandidate.title}
+
+- Scope: ${selectedCandidate.scope}
+- Estimated tier: ${selectedCandidate.estimatedTier}
+- Why reusable: ${selectedCandidate.whyReusable}
+
+## Included paths
+${selectedCandidate.includedPaths.length ? selectedCandidate.includedPaths.map((x) => `- ${x}`).join('\n') : '- QUESTION: no paths selected'}
+
+## Excluded paths
+${selectedCandidate.excludedPaths.length ? selectedCandidate.excludedPaths.map((x) => `- ${x}`).join('\n') : '- none yet'}
+
+## Risks
+${selectedCandidate.risks.length ? selectedCandidate.risks.map((x) => `- ${x}`).join('\n') : '- none detected'}
+
+## Questions before implementation
+${selectedCandidate.questions.length ? selectedCandidate.questions.map((x) => `- ${x}`).join('\n') : '- none'}
+
+## Agent instruction
+
+Use this selected candidate as the extraction scope. Treat listed paths as the starting boundary, then ask before crossing into unrelated modules. Do not claim validation until checks have actually run.
+` : '';
 
   const confidenceMd = `# Confidence Report\n\nThe mapper separates deterministic facts from inference. Low-confidence areas must be reviewed before coding agents make changes.\n\n${Object.entries(confidence).map(([k, v]) => `- ${k}: **${v}**`).join('\n')}\n\n## Questions to finalize this Buildprint\n${questions.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n`;
 
@@ -452,6 +489,10 @@ function writeMappedBuildprint(repoArg, outArg) {
   fs.writeFileSync(path.join(out, 'discovered-map.md'), discovered)
   fs.writeFileSync(path.join(out, 'SYSTEM_MAP.md'), systemMap)
   fs.writeFileSync(path.join(out, 'BUILDPRINT_CANDIDATES.md'), candidatesMd)
+  if (selectedCandidate) {
+    fs.writeFileSync(path.join(out, 'SELECTED_CANDIDATE.md'), selectedCandidateMd)
+    fs.writeFileSync(path.join(out, 'selected-candidate.json'), JSON.stringify(selectedCandidate, null, 2) + '\n')
+  }
   fs.writeFileSync(path.join(out, 'confidence-report.md'), confidenceMd)
   fs.writeFileSync(path.join(out, 'risks.md'), risksMd)
   fs.writeFileSync(path.join(out, 'prompts', 'continue-building.md'), prompt)
@@ -819,13 +860,19 @@ if (args[0] === 'map') {
   if (!repo) usage(1)
   const outIndex = args.indexOf('--out')
   const out = outIndex >= 0 ? args[outIndex + 1] : null
+  const scopeIndex = args.indexOf('--scope')
+  const scope = scopeIndex >= 0 ? args[scopeIndex + 1] : null
+  const candidateIndex = args.indexOf('--candidate')
+  const candidate = candidateIndex >= 0 ? args[candidateIndex + 1] : null
   try {
-    const result = writeMappedBuildprint(repo, out)
+    const result = writeMappedBuildprint(repo, out, { scope, candidate })
     console.log(`Created mapped Buildprint: ${result.out}`)
     console.log(`Files scanned: ${result.facts.totalFilesScanned}`)
     console.log(`Frameworks: ${result.facts.frameworks.join(', ') || 'none detected'}`)
     console.log(`Risk areas: ${result.facts.risky.join(', ') || 'none detected'}`)
     console.log(`Review questions: ${result.questions.length}`)
+    if (result.facts.scope) console.log(`Scope: ${result.facts.scope}`)
+    if (result.facts.selectedCandidate) console.log(`Selected candidate: ${result.facts.selectedCandidate.title}`)
     process.exit(0)
   } catch (error) {
     console.error(`Map failed: ${error.message}`)
