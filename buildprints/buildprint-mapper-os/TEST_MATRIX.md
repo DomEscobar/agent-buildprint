@@ -12,6 +12,9 @@
 | Overbuilt reversal | Reversal skeleton should stay compact, use mocked externals, and stop at architecture reconstruction unless deeper fidelity is requested. |
 | Harness bug mistaken for Buildprint gap | `REVERSAL_REPORT.md` must separate Buildprint gaps from scratch harness/tooling issues. |
 | TypeScript scratch drift | TS/NodeNext reversal tests must use compatible import specifiers/config and validate with both typecheck and test commands when applicable. |
+| Product proof missing | Product/feature Buildprints must include a final setup step that runs the generated app/thing on the user machine when feasible. |
+| Browser UI unverified | Browser-based proofs must run Playwright CLI QA against realistic user journeys and save command/evidence in `QA_REPORT.md`. |
+| One-shot-looking demo | Public proof should show Buildprint/module evidence + QA/gap report, not only a rough generated UI. |
 
 ## Golden eval examples
 

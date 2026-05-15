@@ -85,19 +85,23 @@ Every important claim must be labeled as one of:
 
 If a claim cannot be grounded, it cannot be presented as fact.
 
-## Reversal requirement
+## Reversal and product proof requirement
 
-A Buildprint is not validated just because it reads well. Validation requires a clean-room reversal attempt:
+A Buildprint is not validated just because it reads well. Validation requires a clean-room reversal attempt and, for product/feature Buildprints, a runnable product proof:
 
 1. hide or ignore the original repo,
 2. give the implementing agent only the extracted Buildprint package,
-3. build the smallest implementation skeleton that satisfies the contracts,
-4. run tests/build/checks,
-5. write `REVERSAL_REPORT.md` with pass/fail and fidelity gaps.
+3. build the smallest implementation skeleton or MVP that satisfies the contracts,
+4. set up the generated app/feature on the user's machine,
+5. run tests/build/checks,
+6. run user-facing QA with Playwright CLI (`@playwright/cli`, https://github.com/microsoft/playwright-cli) when there is any browser UI,
+7. write `REVERSAL_REPORT.md` and `QA_REPORT.md` with pass/fail, evidence, screenshots/snapshots where useful, and fidelity gaps.
 
 Use honest grades:
 
 - `architecture reversal passed`,
+- `runnable product proof passed`,
+- `browser QA passed`,
 - `behavioral fidelity partial`,
 - `behavioral parity not claimed`,
-- `blocked` with missing evidence or decisions.
+- `blocked` with missing evidence, setup failure, or decisions.

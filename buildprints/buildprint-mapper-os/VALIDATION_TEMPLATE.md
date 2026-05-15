@@ -61,6 +61,36 @@ Intentional omissions / mocked systems:
 
 - 
 
+## Runnable product / feature proof
+
+- [ ] Generated app/feature was set up locally when applicable.
+- [ ] Setup command recorded.
+- [ ] Local/public URL recorded.
+- [ ] Browser UI QA run with Playwright CLI when applicable.
+- [ ] `QA_REPORT.md` created when applicable.
+
+Setup command:
+
+```txt
+
+```
+
+URL tested:
+
+```txt
+
+```
+
+Playwright CLI commands run:
+
+```txt
+
+```
+
+Product proof defects:
+
+- 
+
 ## Result
 
 Status: PASS / BLOCKED / NEEDS HUMAN REVIEW

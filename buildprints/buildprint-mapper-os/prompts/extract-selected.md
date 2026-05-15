@@ -36,6 +36,7 @@ After reversal validation, also create:
 
 ```txt
 buildprint-submission/REVERSAL_REPORT.md
+buildprint-submission/QA_REPORT.md        # required for runnable product/feature proofs
 ```
 
 ## Extraction rules
@@ -86,7 +87,9 @@ buildprint-submission/REVERSAL_REPORT.md
 - commands run,
 - commands not run,
 - known gaps,
-- whether reversal was attempted.
+- whether reversal was attempted,
+- whether a runnable product/feature proof was set up,
+- whether Playwright CLI QA was run for browser UI.
 
 ## Reversal validation
 
@@ -99,7 +102,9 @@ For reversal:
 3. Do not let it read the original repo after reversal starts.
 4. Build the smallest skeleton that satisfies the Buildprint.
 5. Run tests/build/checks.
-6. Write `REVERSAL_REPORT.md`.
+6. If the Buildprint describes a product/app/feature, set up the generated result on the user's machine and record the command and URL.
+7. If the result has browser UI, run Playwright CLI QA with `@playwright/cli` (https://github.com/microsoft/playwright-cli). Prefer commands such as `open`/`attach`, `snapshot`, `click`, `eval`, and `screenshot` to verify realistic user journeys.
+8. Write `REVERSAL_REPORT.md` and, when product/browser QA applies, `QA_REPORT.md`.
 
 ### Reversal timebox and size
 
@@ -124,16 +129,18 @@ If the clean-room skeleton uses TypeScript with `module` or `moduleResolution` s
 
 ### Report gap types separately
 
-`REVERSAL_REPORT.md` must distinguish:
+`REVERSAL_REPORT.md` and `QA_REPORT.md` must distinguish:
 
 - `Buildprint gaps` — missing or ambiguous architecture/contracts in the generated Buildprint,
 - `Scratch harness issues` — test runner, TypeScript config, dependency, or local skeleton mistakes,
+- `Product proof defects` — runnable app/UI bugs found during setup or Playwright CLI QA,
 - `Intentional omissions` — mocked/excluded systems that were outside the selected scope.
 
 Use honest wording:
 
 - `architecture reversal passed`,
 - `behavioral fidelity partial`,
+- `browser QA passed`,
 - `behavioral parity not claimed`,
 - `blocked: <reason>`.
 

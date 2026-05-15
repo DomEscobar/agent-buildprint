@@ -23,7 +23,9 @@ repo
 → one human scope decision
 → selected Buildprint extraction
 → compact clean-room reversal validation
-→ final package + separated Buildprint/harness gap report
+→ runnable product/feature proof on the user machine when applicable
+→ Playwright CLI QA for browser UI when applicable
+→ final package + separated Buildprint/harness/product-QA gap report
 ```
 
 ## Operating rules
@@ -36,6 +38,8 @@ repo
 - Do not claim behavioral parity until reversal validation has run.
 - Keep reversal validation compact: prove reconstructability with mocked services and focused tests, not a full clone.
 - Separate real Buildprint gaps from scratch-harness/tooling bugs in validation reports.
+- For product or feature Buildprints, the final proof should set up the generated app/thing locally and run user-facing QA, not stop at unit tests.
+- Use Playwright CLI (`@playwright/cli`) for browser QA when the generated proof has a UI.
 
 ## Decision gate
 
