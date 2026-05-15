@@ -1,11 +1,27 @@
-# Buildprint Mapper OS Questions
+# Mapper OS Questions
 
-Ask these before final extraction when unclear:
+The mapper should not ask a long questionnaire before discovery. Use safe defaults, run soft discovery, then ask contextual questions.
 
-1. Do you want one scoped Buildprint or a full System Buildprint?
-2. Which feature/workflow/architecture should be extracted first?
-3. Which parts of the repo are intentionally out of scope?
-4. What license should the submitted Buildprint use?
-5. Which claims are safe to publish publicly?
-6. Are there private business rules that the repo does not reveal?
-7. Which commands can be run safely for validation?
+## Minimal preflight
+
+Ask only if unclear or unsafe:
+
+| # | Decision | Safe default | Human answer |
+|---|---|---|---|
+| 1 | Read/export boundary | Read source/docs/tests/config names; export generated Buildprint files only; never copy secrets or `.env` values | |
+| 2 | Mapping goal | Discover candidates first, then ask which to extract | |
+| 3 | Portability preference | Keep product behavior portable; source stack is reference | |
+
+## Decisions after soft discovery
+
+| # | Decision | Why it matters | Safe default | Human answer |
+|---|---|---|---|---|
+| 1 | Which candidate/system scope should be extracted? | Sets output boundary | Highest-confidence product scope | |
+| 2 | Preserve source stack or keep portable? | Controls implementation constraints | Keep portable | |
+| 3 | Target stack, if any? | Needed only for cross-stack rebuild | Not set yet | |
+| 4 | Proof target? | Controls validation depth | Runnable MVP proof for products; architecture proof for libraries | |
+| 5 | MVP vs out-of-scope capabilities? | Prevents vague clone/sludge | Use capability baseline safe defaults | |
+
+## Appendix — ask only if touched
+
+Add subsystem-specific questions only after that subsystem is observed or selected.

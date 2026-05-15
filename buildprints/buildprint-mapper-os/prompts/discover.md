@@ -4,6 +4,10 @@ You are using Buildprint Mapper OS to map an existing repo.
 
 Your job is discovery only. Do not modify source code. Do not create a final Buildprint package yet unless the repo is clearly small and the user explicitly asked for one.
 
+## Question policy
+
+Do not run a long preflight questionnaire. If safe, assume read/export defaults and start soft discovery. Ask only for missing boundaries that would make discovery unsafe.
+
 ## Required outputs
 
 Create these files at the repo root or in the user-requested output folder:
@@ -14,7 +18,7 @@ Create these files at the repo root or in the user-requested output folder:
 
 ## Process
 
-1. Read `README.md`, `BUILDPRINT.md`, `PLAN.md`, `SPEC.md`, `CONTRACTS.md`, `policies/quality.md`, and the relevant `templates/*.md` from this Mapper OS package.
+1. Read `README.md`, `BUILDPRINT.md`, `PLAN.md`, `SPEC.md`, `CONTRACTS.md`, `policies/quality.md`, `policies/questions.md`, and the relevant `templates/*.md` from this Mapper OS package.
 2. Do a safe repo census:
    - package/dependency manifests,
    - app entrypoints,
@@ -73,7 +77,7 @@ Do not merge unrelated scopes just to make one big Buildprint.
 
 ## `questions.md` must not flood the user
 
-Use this structure:
+Use this structure after soft discovery:
 
 ```md
 # Decisions
@@ -91,7 +95,7 @@ Use this structure:
 
 Rules:
 
-- 3-5 required decisions max.
+- 3-5 required decisions max after discovery.
 - Ask at most one blocking question at a time.
 - Put non-blocking unknowns in the appendix.
 - If no candidate was chosen yet, end by asking which candidate should be extracted.

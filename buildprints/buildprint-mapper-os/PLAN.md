@@ -17,7 +17,8 @@ This plan is designed for a coding agent. The agent reads repo files, reasons ab
 
 ```txt
 repo
-→ safe census
+→ minimal preflight only if needed
+→ soft discovery / safe census
 → evidence-backed system map
 → 2-5 candidate Buildprints
 → one human scope decision
@@ -35,7 +36,7 @@ repo
 - Do not modify source code.
 - Do not copy `.env` values, tokens, private keys, customer data, or production secrets.
 - Do not flatten the entire repo into one vague document.
-- Do not ask a long questionnaire. Ask at most one blocking question at a time.
+- Do not ask a long questionnaire. Ask almost nothing before soft discovery; after discovery ask max 5 required decisions and at most one blocking question in chat at a time.
 - Keep most unknowns in `questions.md` appendix unless they block the selected scope.
 - Do not claim behavioral parity until reversal validation has run.
 - Keep reversal validation compact: prove reconstructability with mocked services and focused tests, not a full clone.

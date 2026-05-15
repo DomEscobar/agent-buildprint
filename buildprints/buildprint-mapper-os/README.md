@@ -38,6 +38,7 @@ Read the mapper package files first:
 - TEST_MATRIX.md
 - prompts/discover.md
 - policies/quality.md
+- policies/questions.md
 - templates/QA_PLAN.md
 - templates/TRACEABILITY_MATRIX.md
 
@@ -55,6 +56,7 @@ After scope selection, final packages must include scope-derived QA and traceabi
 - THREAT_MODEL.md / DATA_LIFECYCLE.md / OBSERVABILITY.md when relevant
 
 Rules:
+- ask almost nothing before soft discovery; use safe defaults
 - cite repo file paths for important claims
 - label every claim OBSERVED, INFERRED, or QUESTION
 - do not copy secrets or .env values

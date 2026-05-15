@@ -7,7 +7,8 @@
 - Must record environment variable names only, never values.
 - Must separate observed facts from inferred claims and human questions.
 - Must identify candidate Buildprints before extracting a huge repo into final package files.
-- Must pause for human scope selection unless a clear scope was provided.
+- Must pause for human scope selection after soft discovery unless a clear scope was provided.
+- Must use minimal preflight and dynamic contextual questions; no long upfront questionnaire.
 - Must support both single-module Buildprints and hierarchical System Buildprints.
 - Must include quality gates and acceptance checks for any extracted Buildprint.
 - Must include edge-case inventory for selected product/module scopes.
@@ -27,6 +28,7 @@
 - Must not publish or submit automatically.
 - Must not collapse edge cases into generic phrases like “handle errors”; concrete errors and recovery behavior must be listed or marked unknown.
 - Must not use generic QA checklists as a substitute for scope-derived QA journeys.
+- Must not ask product/business questions before discovering that the relevant subsystem exists.
 
 ## Modes
 
