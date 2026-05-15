@@ -201,7 +201,7 @@ function copyDir(src, dest) {
 
 
 function walkProject(dir, options = {}) {
-  const ignored = new Set(options.ignored ?? ['node_modules', '.git', 'dist', 'build', '.next', '.astro', 'coverage', '.turbo', '.cache'])
+  const ignored = new Set(options.ignored ?? ['node_modules', '.git', 'dist', 'build', '.next', '.astro', 'coverage', '.turbo', '.cache', '.project.buildprint', 'buildprint-submission', 'project.buildprint'])
   const maxFiles = options.maxFiles ?? 3000
   const out = []
   function visit(current) {
@@ -231,7 +231,14 @@ function detectProjectFacts(repo) {
   const files = walkProject(repo)
   const relFiles = files.map((f) => path.relative(repo, f))
   const packageJson = exists(path.join(repo, 'package.json')) ? readJsonMaybe(path.join(repo, 'package.json')) : null
-  const deps = packageJson ? Object.keys({ ...(packageJson.dependencies ?? {}), ...(packageJson.devDependencies ?? {}) }).sort() : []
+  const packageJsonFiles = relFiles.filter((f) => /(^|\/)package\.json$/.test(f)).slice(0, 200)
+  const depSet = new Set()
+  for (const pkgFile of packageJsonFiles) {
+    const pkg = readJsonMaybe(path.join(repo, pkgFile))
+    if (!pkg) continue
+    for (const dep of Object.keys({ ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}), ...(pkg.peerDependencies ?? {}), ...(pkg.optionalDependencies ?? {}) })) depSet.add(dep)
+  }
+  const deps = [...depSet].sort()
   const scripts = packageJson ? Object.keys(packageJson.scripts ?? {}).sort() : []
 
   const frameworks = []
@@ -249,6 +256,7 @@ function detectProjectFacts(repo) {
   if (has('stripe')) frameworks.push('Stripe integration')
   if (has('openai')) frameworks.push('OpenAI integration')
   if (has('@anthropic-ai/sdk')) frameworks.push('Anthropic integration')
+  if (has('ai') || deps.some((d) => d.startsWith('@ai-sdk/'))) frameworks.push('Vercel AI SDK integration')
 
   const routePatterns = [
     /^src\/pages\/(.+)\.(astro|tsx|ts|jsx|js|mdx)$/,
@@ -259,10 +267,12 @@ function detectProjectFacts(repo) {
   const apiPatterns = [
     /^src\/pages\/api\/(.+)\.(ts|js)$/,
     /^pages\/api\/(.+)\.(ts|js)$/,
-    /^src\/app\/api\/(.+)\/route\.(ts|js)$/,
-    /^app\/api\/(.+)\/route\.(ts|js)$/,
+    /^src\/app\/(?:.+\/)?api\/(.+)\/route\.(ts|js)$/,
+    /^app\/(?:.+\/)?api\/(.+)\/route\.(ts|js)$/,
   ]
   const apis = relFiles.filter((f) => apiPatterns.some((p) => p.test(f))).sort()
+  for (const endpoint of detectCodeEndpoints(files, repo)) apis.push(endpoint)
+  apis.sort()
   const apiSet = new Set(apis)
   const routes = relFiles.filter((f) => routePatterns.some((p) => p.test(f)) && !apiSet.has(f) && !f.includes('/api/')).sort()
   const tests = relFiles.filter((f) => /(^|\/)(__tests__|tests?|specs?)\/|\.(test|spec)\.[cm]?[tj]sx?$|\.spec\.yaml$/.test(f)).sort()
@@ -272,17 +282,30 @@ function detectProjectFacts(repo) {
   const integrationNeedles = {
     stripe: ['stripe', '@stripe'],
     email: ['resend', 'nodemailer', 'sendgrid', 'postmark', 'mailgun'],
-    ai: ['openai', '@anthropic-ai/sdk', 'genkit', '@google/generative-ai', 'langchain'],
+    ai: ['openai', '@anthropic-ai/sdk', 'genkit', '@google/generative-ai', 'langchain', 'ai', '@ai-sdk'],
     auth: ['next-auth', '@auth', 'clerk', '@clerk', 'lucia', 'passport', 'firebase'],
     storage: ['s3', '@aws-sdk/client-s3', 'cloudinary', 'uploadthing'],
     analytics: ['posthog', 'plausible', 'mixpanel', 'segment'],
+    database: ['postgres', 'pg', 'mysql2', 'better-sqlite3', 'sqlite3', '@supabase/supabase-js', 'mongoose'],
+    cache: ['@upstash/redis', 'ioredis', 'redis', '@vercel/kv'],
+    queue: ['bullmq', 'bull', '@upstash/qstash', 'inngest'],
+    search: ['algoliasearch', '@elastic/elasticsearch', 'meilisearch'],
   }
+  const depMatches = (dep, needle) => needle.startsWith('@') ? dep === needle || dep.startsWith(`${needle}/`) : dep === needle || dep.startsWith(`${needle}-`) || dep.startsWith(`@${needle}/`)
   const integrations = Object.entries(integrationNeedles)
-    .filter(([, names]) => names.some((n) => deps.some((d) => d.includes(n))))
+    .filter(([, names]) => names.some((n) => deps.some((d) => depMatches(d, n))))
     .map(([kind]) => kind)
 
   const envNames = new Set()
-  for (const file of files.filter((f) => /\.[cm]?[tj]sx?$|\.astro$|\.mdx?$/.test(f)).slice(0, 800)) {
+  for (const envFile of files.filter((f) => /(^|\/)\.env(\.|$)|\.env\.example$|example\.env$/i.test(path.basename(f)) || /\.env\.example$/i.test(f)).slice(0, 80)) {
+    let text = ''
+    try { text = readText(envFile) } catch { continue }
+    for (const line of text.split(/\r?\n/)) {
+      const m = line.match(/^\s*([A-Z][A-Z0-9_]{2,})\s*=/)
+      if (m) envNames.add(m[1])
+    }
+  }
+  for (const file of files.filter((f) => /\.[cm]?[tj]sx?$|\.astro$|\.mdx?$/.test(f)).slice(0, 1200)) {
     let text = ''
     try { text = readText(file) } catch { continue }
     for (const m of text.matchAll(/process\.env\.([A-Z0-9_]+)/g)) envNames.add(m[1])
@@ -295,9 +318,86 @@ function detectProjectFacts(repo) {
   if (integrations.includes('ai')) risky.push('AI/tool calls')
   if (integrations.includes('auth')) risky.push('auth/session handling')
   if (relFiles.some((f) => /admin/i.test(f))) risky.push('admin surfaces')
-  if (relFiles.some((f) => /upload|file/i.test(f))) risky.push('file upload / storage')
+  if (integrations.includes('storage') || relFiles.some((f) => /upload|multipart|s3|blob|storage|file-manager/i.test(f)) || apis.some((x) => /upload|multipart|s3|blob|storage|file-manager/i.test(x))) risky.push('file upload / storage')
 
-  return { root: repo, totalFilesScanned: relFiles.length, packageManager: exists(path.join(repo, 'package-lock.json')) ? 'npm' : exists(path.join(repo, 'pnpm-lock.yaml')) ? 'pnpm' : exists(path.join(repo, 'yarn.lock')) ? 'yarn' : 'unknown', packageName: packageJson?.name ?? path.basename(repo), scripts, dependencies: deps, frameworks, routes, apis, tests, db, deploy, integrations, envNames: [...envNames].sort(), risky }
+  const subprojects = detectSubprojects(repo, relFiles)
+  const candidateBuildprints = suggestBuildprintCandidates({ relFiles, frameworks, routes, apis, tests, db, deploy, integrations, envNames: [...envNames].sort(), risky, subprojects, deps })
+  const needsScopeSelection = relFiles.length > 180 || subprojects.length > 1 || candidateBuildprints.length > 3
+  return { root: repo, totalFilesScanned: relFiles.length, packageManager: exists(path.join(repo, 'package-lock.json')) ? 'npm' : exists(path.join(repo, 'pnpm-lock.yaml')) ? 'pnpm' : exists(path.join(repo, 'yarn.lock')) ? 'yarn' : 'unknown', packageName: packageJson?.name ?? path.basename(repo), scripts, dependencies: deps, frameworks, routes, apis, tests, db, deploy, integrations, envNames: [...envNames].sort(), risky, subprojects, candidateBuildprints, needsScopeSelection }
+}
+
+function detectCodeEndpoints(files, repo) {
+  const endpoints = []
+  const methodPattern = /\b(?:app|router|server|fastify)\.(get|post|put|patch|delete|options|head|all)\s*\(\s*['"`]([^'"`]+)['"`]/gi
+  for (const file of files.filter((f) => /\.[cm]?[tj]sx?$/.test(f) && !/(^|\/)(__tests__|tests?|specs?)\/|\.(test|spec)\.[cm]?[tj]sx?$/.test(path.relative(repo, f))).slice(0, 1200)) {
+    let text = ''
+    try { text = readText(file) } catch { continue }
+    const rel = path.relative(repo, file)
+    for (const m of text.matchAll(methodPattern)) endpoints.push(`${rel} ${m[1].toUpperCase()} ${m[2]}`)
+  }
+  return unique(endpoints).slice(0, 120)
+}
+
+function detectSubprojects(repo, relFiles) {
+  const markers = relFiles.filter((f) => /(^|\/)(package.json|pyproject.toml|requirements.txt|go.mod|pom.xml|Gemfile|Cargo.toml|composer.json|server.csproj)$/.test(f))
+  return markers.map((marker) => {
+    const dir = path.dirname(marker) === '.' ? '.' : path.dirname(marker)
+    let kind = path.basename(marker)
+    let name = dir
+    if (path.basename(marker) === 'package.json') {
+      const json = readJsonMaybe(path.join(repo, marker))
+      if (json?.name) name = json.name
+    }
+    return { path: dir, marker, kind, name }
+  }).sort((a, b) => a.path.localeCompare(b.path))
+}
+
+function unique(items) { return [...new Set(items.filter(Boolean))] }
+
+function candidate(title, scope, includedPaths, whyReusable, risks = [], questions = [], estimatedTier = 'strong') {
+  return { title, scope, includedPaths: unique(includedPaths).slice(0, 24), excludedPaths: [], whyReusable, estimatedTier, risks: unique(risks), questions: unique(questions) }
+}
+
+function suggestBuildprintCandidates(facts) {
+  const c = []
+  const paths = facts.relFiles
+  const hasPath = (re) => paths.some((f) => re.test(f))
+  const matching = (re) => paths.filter((f) => re.test(f)).slice(0, 30)
+
+  if (facts.subprojects.length > 1) {
+    for (const sp of facts.subprojects.slice(0, 8)) {
+      if (sp.path !== '.') c.push(candidate(`${sp.name} Subproject Buildprint`, `Subproject at ${sp.path}`, [sp.path], 'This subproject has its own package/runtime marker and can be mapped independently.', ['cross-project coupling'], ['Is this subproject intended as a standalone reusable blueprint?'], 'basic'))
+    }
+  }
+  if (facts.integrations.includes('stripe') || hasPath(/stripe|billing|checkout|subscription|webhook/i)) {
+    c.push(candidate('Billing / Stripe Workflow Buildprint', 'checkout, subscriptions, webhooks, customer portal, entitlement state', matching(/stripe|billing|checkout|subscription|webhook|price/i), 'Billing flows are reusable and commonly drift when agents miss webhook, subscription, and entitlement details.', ['payments', 'webhook signature', 'subscription state drift'], ['What is the source of truth for customer entitlement state?']))
+  }
+  const aiPathPattern = /(^|[\/_.-])(ai|openai|anthropic|genkit|assistant|assistants|embedding|embeddings|completion|completions|chat|prompt|prompts|batch|fine[-_]?tuning|moderation|vision)([\/_.-]|$)/i
+  const authPathPattern = /(^|[\/_.-])(auth|login|register|rbac|permission|permissions|invite|invites)([\/_.-]|$)/i
+  if (facts.integrations.includes('ai') || hasPath(aiPathPattern)) {
+    c.push(candidate('AI Workflow Buildprint', 'LLM calls, prompts, tools, model adapters, grounding and safety checks', matching(aiPathPattern), 'AI workflows need explicit contracts for inputs, outputs, tools, costs, and safety gates.', ['AI/tool calls', 'ungrounded output', 'external API dependency'], ['Which model/provider behavior is required vs replaceable?'], 'agent-grade'))
+  }
+  if (facts.integrations.includes('auth') || hasPath(authPathPattern)) {
+    c.push(candidate('Auth / Session Buildprint', 'login, registration, sessions, roles, permission checks', matching(authPathPattern), 'Auth and permission rules are high-risk and reusable across SaaS products.', ['auth/session handling', 'permission drift'], ['What roles and permissions are intended?']))
+  }
+  if (hasPath(/admin/i)) {
+    c.push(candidate('Admin Surface Buildprint', 'admin screens, guarded actions, auditability, destructive controls', matching(/admin/i), 'Admin areas need explicit permission, audit, and destructive-action checks.', ['admin surfaces', 'destructive actions'], ['Which admin actions require confirmation or audit events?']))
+  }
+  if (facts.integrations.includes('cache') || facts.integrations.includes('queue') || facts.integrations.includes('search') || facts.envNames.some((x) => /REDIS|UPSTASH|QSTASH|ALGOLIA|ELASTIC|MEILI/i.test(x))) {
+    c.push(candidate('Data Infrastructure Buildprint', 'cache, queues, search, background jobs, and provider lifecycle', matching(/redis|upstash|qstash|queue|bull|search|algolia|elastic|meili|cache|kv|vercel/i), 'Infrastructure integrations are reusable but need explicit failure, retry, and local-development contracts.', ['external infrastructure dependency', 'data consistency drift'], ['Which provider resources are production-critical vs optional?']))
+  }
+  if (facts.routes.length || facts.apis.length) {
+    c.push(candidate('Web App Route/API Buildprint', 'public pages, API routes, routing contracts, page/data boundaries', [...facts.routes.slice(0, 12), ...facts.apis.slice(0, 12)], 'Routes and API handlers provide a reusable implementation map for web app structure.', ['route drift', 'API contract drift'], ['Which routes are public, authenticated, or internal?'], 'strong'))
+  }
+  const topFolders = unique(paths.map((f) => f.split('/')[0]).filter((x) => !x.startsWith('.')))
+  const folderCandidateNames = /^(examples?|samples?|apps?|packages?|server|client|src|workers?|assistants?|chat_?completions?|embeddings?|batch|fine_?tuning|moderation|vision)$/i
+  for (const folder of topFolders.filter((x) => folderCandidateNames.test(x)).slice(0, 10)) {
+    const safeFolder = folder.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+    const files = matching(new RegExp(`^${safeFolder}/`))
+    if (files.length) c.push(candidate(`${folder} Folder Buildprint`, `Reusable slice under ${folder}/`, files, 'This folder appears to define a major implementation slice or example set.', [], ['Should this folder be extracted as one Buildprint or split further?'], 'basic'))
+  }
+  const tierRank = { 'agent-grade': 0, strong: 1, basic: 2 }
+  return c.sort((a, b) => (tierRank[a.estimatedTier] ?? 9) - (tierRank[b.estimatedTier] ?? 9)).slice(0, 10)
 }
 
 function confidenceFor(facts) {
@@ -333,6 +433,10 @@ function writeMappedBuildprint(repoArg, outArg) {
 
   const discovered = `# Discovered Project Map\n\nProject: ${facts.packageName}\nRoot: ${facts.root}\nFiles scanned: ${facts.totalFilesScanned}\nPackage manager: ${facts.packageManager}\n\n## Frameworks / major capabilities\n${facts.frameworks.length ? facts.frameworks.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Scripts\n${facts.scripts.length ? facts.scripts.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## UI routes/pages\n${facts.routes.length ? facts.routes.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## API routes/endpoints\n${facts.apis.length ? facts.apis.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Data/model files\n${facts.db.length ? facts.db.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Tests\n${facts.tests.length ? facts.tests.slice(0, 80).map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Deploy / ops files\n${facts.deploy.length ? facts.deploy.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Integrations inferred from dependencies\n${facts.integrations.length ? facts.integrations.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Environment variables referenced by name only\n${facts.envNames.length ? facts.envNames.map((x) => `- ${x}`).join('\n') : '- none detected'}\n`;
 
+  const systemMap = `# SYSTEM_MAP\n\n## Project\n\n- Name: ${facts.packageName}\n- Root: ${facts.root}\n- Files scanned: ${facts.totalFilesScanned}\n- Package manager: ${facts.packageManager}\n- Scope selection required: ${facts.needsScopeSelection ? 'yes' : 'no'}\n\n## Architecture zones\n\n### Frontend / UI\n${facts.routes.length ? facts.routes.slice(0, 60).map((x) => `- OBSERVED route: ${x}`).join('\n') : '- QUESTION: no UI routes detected'}\n\n### API / backend\n${facts.apis.length ? facts.apis.slice(0, 60).map((x) => `- OBSERVED API: ${x}`).join('\n') : '- QUESTION: no API routes detected'}\n\n### Data model\n${facts.db.length ? facts.db.slice(0, 60).map((x) => `- OBSERVED data/model file: ${x}`).join('\n') : '- QUESTION: no data model files detected'}\n\n### Integrations\n${facts.integrations.length ? facts.integrations.map((x) => `- INFERRED integration: ${x}`).join('\n') : '- none detected'}\n\n### Subprojects / examples\n${facts.subprojects.length ? facts.subprojects.map((x) => `- OBSERVED ${x.kind}: ${x.path} (${x.name})`).join('\n') : '- none detected'}\n\n## Risk zones\n${facts.risky.length ? facts.risky.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Human review needed\n\n- Confirm which candidate Buildprint should be extracted.\n- Confirm which observed modules are legacy vs desired architecture.\n- Confirm auth, billing, external-write, and data lifecycle rules.\n`;
+
+  const candidatesMd = `# BUILDPRINT_CANDIDATES\n\n${facts.needsScopeSelection ? '> Scope selection required before final extraction. This repo appears large, mixed, or multi-scope.\n\n' : ''}${facts.candidateBuildprints.length ? facts.candidateBuildprints.map((c, i) => `## ${i + 1}. ${c.title}\n\n- Scope: ${c.scope}\n- Estimated tier: ${c.estimatedTier}\n- Why reusable: ${c.whyReusable}\n- Included paths:\n${c.includedPaths.length ? c.includedPaths.map((x) => `  - ${x}`).join('\n') : '  - QUESTION: no paths selected'}\n- Excluded paths:\n${c.excludedPaths.length ? c.excludedPaths.map((x) => `  - ${x}`).join('\n') : '  - none yet'}\n- Risks:\n${c.risks.length ? c.risks.map((x) => `  - ${x}`).join('\n') : '  - none detected'}\n- Questions:\n${c.questions.length ? c.questions.map((x) => `  - ${x}`).join('\n') : '  - none'}\n`).join('\n') : 'No strong candidates detected. Use SYSTEM_MAP.md and questions.md for human scoping.\n'}\n`;
+
   const confidenceMd = `# Confidence Report\n\nThe mapper separates deterministic facts from inference. Low-confidence areas must be reviewed before coding agents make changes.\n\n${Object.entries(confidence).map(([k, v]) => `- ${k}: **${v}**`).join('\n')}\n\n## Questions to finalize this Buildprint\n${questions.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n`;
 
   const risksMd = `# Risk Report\n\nDetected risk areas:\n\n${facts.risky.length ? facts.risky.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Default guardrails\n\n- Do not copy secret values into the Buildprint.\n- Do not perform external writes without an explicit approval rule.\n- Treat business rules and permissions as low confidence until a human confirms them.\n- Do not treat legacy code as desired architecture without review.\n`;
@@ -346,6 +450,8 @@ function writeMappedBuildprint(repoArg, outArg) {
   fs.writeFileSync(path.join(out, 'facts.json'), JSON.stringify(facts, null, 2) + '\n')
   fs.writeFileSync(path.join(out, 'buildprint.yaml'), buildprintYaml)
   fs.writeFileSync(path.join(out, 'discovered-map.md'), discovered)
+  fs.writeFileSync(path.join(out, 'SYSTEM_MAP.md'), systemMap)
+  fs.writeFileSync(path.join(out, 'BUILDPRINT_CANDIDATES.md'), candidatesMd)
   fs.writeFileSync(path.join(out, 'confidence-report.md'), confidenceMd)
   fs.writeFileSync(path.join(out, 'risks.md'), risksMd)
   fs.writeFileSync(path.join(out, 'prompts', 'continue-building.md'), prompt)

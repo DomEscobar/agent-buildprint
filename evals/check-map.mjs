@@ -33,6 +33,9 @@ for (const name of names) {
   assert(fs.existsSync(path.join(out, 'SPEC.md')), `${name}: SPEC.md exists`);
   assert(fs.existsSync(path.join(out, 'PLAN.md')), `${name}: PLAN.md exists`);
   assert(fs.existsSync(path.join(out, 'TEST_MATRIX.md')), `${name}: TEST_MATRIX.md exists`);
+  assert(fs.existsSync(path.join(out, 'SYSTEM_MAP.md')), `${name}: SYSTEM_MAP.md exists`);
+  assert(fs.existsSync(path.join(out, 'BUILDPRINT_CANDIDATES.md')), `${name}: BUILDPRINT_CANDIDATES.md exists`);
+  assert(Array.isArray(facts.candidateBuildprints) && facts.candidateBuildprints.length > 0, `${name}: candidate Buildprints generated`);
   assert(containsAll(facts.integrations, expected.integrations ?? []), `${name}: expected integrations detected`);
   assert(containsAll(facts.risky, expected.riskIncludes ?? []), `${name}: expected risk areas detected`);
   assert(containsAll(facts.envNames, expected.envNames ?? []), `${name}: env names detected without values`);
