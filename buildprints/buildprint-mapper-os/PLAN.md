@@ -22,8 +22,8 @@ repo
 → 2-5 candidate Buildprints
 → one human scope decision
 → selected Buildprint extraction
-→ clean-room reversal validation
-→ final package + gap report
+→ compact clean-room reversal validation
+→ final package + separated Buildprint/harness gap report
 ```
 
 ## Operating rules
@@ -34,6 +34,8 @@ repo
 - Do not ask a long questionnaire. Ask at most one blocking question at a time.
 - Keep most unknowns in `questions.md` appendix unless they block the selected scope.
 - Do not claim behavioral parity until reversal validation has run.
+- Keep reversal validation compact: prove reconstructability with mocked services and focused tests, not a full clone.
+- Separate real Buildprint gaps from scratch-harness/tooling bugs in validation reports.
 
 ## Decision gate
 

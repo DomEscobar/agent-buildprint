@@ -96,10 +96,39 @@ For reversal:
 
 1. Create a separate scratch folder.
 2. Give the implementing agent only `buildprint-submission/`.
-3. Do not let it read the original repo.
+3. Do not let it read the original repo after reversal starts.
 4. Build the smallest skeleton that satisfies the Buildprint.
 5. Run tests/build/checks.
 6. Write `REVERSAL_REPORT.md`.
+
+### Reversal timebox and size
+
+Keep reversal compact. The goal is architecture reconstruction, not cloning the original product. Default budget:
+
+- 1-3 core modules,
+- 5-10 focused tests,
+- mocked external services,
+- no UI polish,
+- no live provider/database/network calls unless the Buildprint explicitly requires them.
+
+If the skeleton is growing beyond this, stop and report the highest-risk missing contract instead of continuing to build.
+
+### TypeScript / NodeNext scratch guidance
+
+If the clean-room skeleton uses TypeScript with `module` or `moduleResolution` set to `NodeNext`:
+
+- test files should import emitted runtime paths such as `../src/workflow.js`, even when the source file is `workflow.ts`;
+- do not use `.ts` import specifiers unless `allowImportingTsExtensions` is valid for the chosen no-emit setup;
+- if tests compile before running, keep `tsc --noEmit` and emitted JS test execution compatible;
+- treat TS config/import mistakes as scratch-harness issues, not Buildprint fidelity gaps, and fix them before judging the Buildprint.
+
+### Report gap types separately
+
+`REVERSAL_REPORT.md` must distinguish:
+
+- `Buildprint gaps` — missing or ambiguous architecture/contracts in the generated Buildprint,
+- `Scratch harness issues` — test runner, TypeScript config, dependency, or local skeleton mistakes,
+- `Intentional omissions` — mocked/excluded systems that were outside the selected scope.
 
 Use honest wording:
 

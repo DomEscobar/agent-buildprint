@@ -9,6 +9,9 @@
 | Missing scope | Generated package must define included/excluded paths or explicitly state full-system mode. |
 | Unusable Buildprint | `PLAN.md` and `TEST_MATRIX.md` must include actionable phases/checks. |
 | Marketplace confusion | `README.md` must explain build outcome, audience, stack, and license. |
+| Overbuilt reversal | Reversal skeleton should stay compact, use mocked externals, and stop at architecture reconstruction unless deeper fidelity is requested. |
+| Harness bug mistaken for Buildprint gap | `REVERSAL_REPORT.md` must separate Buildprint gaps from scratch harness/tooling issues. |
+| TypeScript scratch drift | TS/NodeNext reversal tests must use compatible import specifiers/config and validate with both typecheck and test commands when applicable. |
 
 ## Golden eval examples
 

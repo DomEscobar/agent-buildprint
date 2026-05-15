@@ -40,6 +40,27 @@
 - [ ] Unknowns/questions listed.
 - [ ] No invented validation results.
 
+## Reversal validation
+
+- [ ] Clean-room scratch folder used.
+- [ ] Original repo was not read after reversal started.
+- [ ] External services mocked unless explicitly in scope.
+- [ ] Checks/tests/build commands were run or blocker is stated.
+
+Reversal status: NOT ATTEMPTED / ARCHITECTURE PASSED / BLOCKED / FAILED
+
+Buildprint gaps:
+
+- 
+
+Scratch harness issues:
+
+- 
+
+Intentional omissions / mocked systems:
+
+- 
+
 ## Result
 
 Status: PASS / BLOCKED / NEEDS HUMAN REVIEW
