@@ -19,6 +19,10 @@
 | Missing state model | Non-trivial product flows must include lifecycle/state-machine behavior and invariants. |
 | Weak evidence density | Critical modules require enough `OBSERVED(path:line)` citations to ground responsibilities, contracts, and edge behavior. |
 | Vague QA | Acceptance criteria must be executable or manually verifiable; avoid “works correctly” style checks. |
+| Missing traceability | Critical requirements must appear in `TRACEABILITY_MATRIX.md` with source evidence and reversal/QA checks. |
+| Generic QA plan | `QA_PLAN.md` must be generated from the mapped scope and product flows, not copied from a generic checklist. |
+| Missing capability baseline | Famous-product/system proofs must include `CAPABILITY_BASELINE.md` to avoid false clone/parity claims. |
+| Missing conditional precision artifact | Threat model, data lifecycle, architecture views, decisions, observability, and scorecard must be present when their scope triggers apply. |
 
 ## Golden eval examples
 

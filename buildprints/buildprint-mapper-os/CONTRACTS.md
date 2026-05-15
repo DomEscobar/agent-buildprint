@@ -76,3 +76,41 @@ For every selected candidate or system module, record:
 ```
 
 If a field has no evidence, write `QUESTION` or `unknown`; never silently omit risky edges.
+
+## Precision artifact contracts
+
+### `QA_PLAN.md`
+
+Must derive QA from the selected scope, not from a generic checklist. For every critical flow, include:
+
+- mapped flow/job,
+- risk or edge case,
+- expected behavior,
+- check type (`unit`, `API`, `browser`, `manual`, `security`, `performance`, `accessibility`),
+- command/assertion when known,
+- evidence/result and status.
+
+### `TRACEABILITY_MATRIX.md`
+
+Must link each critical Buildprint requirement to:
+
+- source evidence,
+- confidence,
+- edge cases covered,
+- reversal check,
+- QA check,
+- status.
+
+Unverified requirements must be listed separately and excluded from publish claims.
+
+### Conditional artifacts
+
+Create these when relevant to the selected scope:
+
+- `CAPABILITY_BASELINE.md` — required for famous-product or product-inspired System Buildprints.
+- `THREAT_MODEL.md` — required for auth, payments, admin, public APIs, uploads, secrets, AI tools, or sensitive data.
+- `DATA_LIFECYCLE.md` — required for persistent data, sync, imports/exports, deletion, migrations, or privacy concerns.
+- `ARCHITECTURE_VIEWS.md` — required for System Buildprints.
+- `DECISIONS.md` — required when defaults, assumptions, scope tradeoffs, or non-parity decisions are made.
+- `OBSERVABILITY.md` — required for deployable products/services.
+- `QUALITY_SCORECARD.md` — required before claiming product-proofed or publish-ready status.

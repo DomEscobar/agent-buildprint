@@ -9,8 +9,11 @@ No CLI is required. The mapper is the process described by these files:
 3. propose scoped Buildprint candidates,
 4. ask for one small scope decision,
 5. extract the selected Buildprint,
-6. run clean-room reversal validation,
-7. report gaps honestly.
+6. derive QA from mapped product behavior,
+7. link evidence to requirements and checks,
+8. run clean-room reversal validation,
+9. set up product/feature proof when applicable,
+10. report gaps honestly.
 
 Use it when:
 
@@ -34,6 +37,9 @@ Read the mapper package files first:
 - CONTRACTS.md
 - TEST_MATRIX.md
 - prompts/discover.md
+- policies/quality.md
+- templates/QA_PLAN.md
+- templates/TRACEABILITY_MATRIX.md
 
 Then map this repo without modifying source code.
 
@@ -41,6 +47,12 @@ Start with discovery only:
 1. create SYSTEM_MAP.md
 2. create BUILDPRINT_CANDIDATES.md
 3. create questions.md with at most 3-5 required decisions
+
+After scope selection, final packages must include scope-derived QA and traceability:
+- QA_PLAN.md
+- TRACEABILITY_MATRIX.md
+- CAPABILITY_BASELINE.md for famous/product-inspired systems
+- THREAT_MODEL.md / DATA_LIFECYCLE.md / OBSERVABILITY.md when relevant
 
 Rules:
 - cite repo file paths for important claims

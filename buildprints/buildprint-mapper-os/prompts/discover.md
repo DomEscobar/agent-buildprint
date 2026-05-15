@@ -14,7 +14,7 @@ Create these files at the repo root or in the user-requested output folder:
 
 ## Process
 
-1. Read `README.md`, `BUILDPRINT.md`, `PLAN.md`, `SPEC.md`, `CONTRACTS.md`, and `policies/quality.md` from this Mapper OS package.
+1. Read `README.md`, `BUILDPRINT.md`, `PLAN.md`, `SPEC.md`, `CONTRACTS.md`, `policies/quality.md`, and the relevant `templates/*.md` from this Mapper OS package.
 2. Do a safe repo census:
    - package/dependency manifests,
    - app entrypoints,

@@ -10,6 +10,8 @@ Before submission:
 - if the result has browser UI, run Playwright CLI QA (`npx --yes @playwright/cli@latest ...`) and save snapshot/eval/screenshot evidence where possible,
 - inspect generated files for secrets,
 - ensure claims are labeled,
+- ensure critical requirements trace to source evidence and reversal/QA checks,
+- ensure QA plan is derived from mapped flows and edges,
 - ensure unknowns are explicit,
 - ensure license and creator/source identity are clear,
 - create `SUBMISSION_CHECKLIST.md`.

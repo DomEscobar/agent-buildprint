@@ -15,6 +15,8 @@
 - Must include confidence levels per module and per high-risk claim.
 - Must distinguish product-proof defects from Buildprint gaps after QA.
 - Must include a submission checklist with known gaps and commands run.
+- Must include `QA_PLAN.md` and `TRACEABILITY_MATRIX.md` for extracted product/feature/system outputs.
+- Must include conditional precision artifacts when relevant: capability baseline, threat model, data lifecycle, architecture views, decisions, observability, and scorecard.
 
 ## Must not
 
@@ -24,6 +26,7 @@
 - Must not treat generated summaries as source-of-truth if they conflict with repository facts.
 - Must not publish or submit automatically.
 - Must not collapse edge cases into generic phrases like “handle errors”; concrete errors and recovery behavior must be listed or marked unknown.
+- Must not use generic QA checklists as a substitute for scope-derived QA journeys.
 
 ## Modes
 
@@ -63,4 +66,5 @@ A generated package is publishable only if:
 - state/lifecycle behavior is explicit where relevant,
 - validation status is honest,
 - product/browser QA status is recorded when applicable,
+- critical requirements trace to source evidence and checks,
 - review checklist is present.

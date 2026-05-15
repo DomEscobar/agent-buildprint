@@ -22,6 +22,8 @@ repo
 → 2-5 candidate Buildprints
 → one human scope decision
 → selected Buildprint extraction
+→ scope-derived QA plan + traceability matrix
+→ conditional precision artifacts
 → compact clean-room reversal validation
 → runnable product/feature proof on the user machine when applicable
 → Playwright CLI QA for browser UI when applicable

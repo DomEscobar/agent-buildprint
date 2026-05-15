@@ -13,6 +13,7 @@ Read:
 - `questions.md` / human decision answers
 - relevant source files for the selected candidate
 - `policies/quality.md` from Mapper OS
+- relevant templates under `templates/` from Mapper OS
 
 If the selected candidate is unclear, stop and ask one question.
 
@@ -29,8 +30,17 @@ buildprint-submission/
   CONTRACTS.md
   TEST_MATRIX.md
   VALIDATION_TEMPLATE.md
+  QA_PLAN.md
+  TRACEABILITY_MATRIX.md
   questions.md
   SUBMISSION_CHECKLIST.md
+  CAPABILITY_BASELINE.md      # required for famous/product-inspired systems
+  THREAT_MODEL.md             # when auth/payments/admin/API/upload/sensitive data applies
+  DATA_LIFECYCLE.md           # when persistent/synced/imported/exported data applies
+  ARCHITECTURE_VIEWS.md       # required for System Buildprints
+  DECISIONS.md                # when assumptions/scope/default decisions exist
+  OBSERVABILITY.md            # when deployable services/products apply
+  QUALITY_SCORECARD.md        # required before product-proof/publish-ready claims
 ```
 
 After reversal validation, also create:
@@ -84,6 +94,16 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - missing tests,
 - reversal checks,
 - Playwright CLI QA journeys when UI exists.
+
+`QA_PLAN.md`:
+- derive QA from mapped flows/jobs,
+- map each risk/edge to expected behavior,
+- choose check type and concrete command/assertion where possible,
+- include Playwright CLI journeys only for browser-relevant flows.
+
+`TRACEABILITY_MATRIX.md`:
+- link requirement → source evidence → confidence → reversal check → QA check → status,
+- list unverified requirements separately.
 
 `questions.md`:
 - 3-5 required decisions max,

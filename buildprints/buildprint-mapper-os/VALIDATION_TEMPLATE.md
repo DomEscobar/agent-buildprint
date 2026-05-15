@@ -25,6 +25,15 @@
 - [ ] questions.md
 - [ ] README.md
 - [ ] SUBMISSION_CHECKLIST.md
+- [ ] QA_PLAN.md
+- [ ] TRACEABILITY_MATRIX.md
+- [ ] CAPABILITY_BASELINE.md, if product-inspired/famous-product scope
+- [ ] THREAT_MODEL.md, if security-sensitive scope
+- [ ] DATA_LIFECYCLE.md, if persistent data scope
+- [ ] ARCHITECTURE_VIEWS.md, if System Buildprint
+- [ ] DECISIONS.md, if assumptions/defaults were made
+- [ ] OBSERVABILITY.md, if deployable service/product
+- [ ] QUALITY_SCORECARD.md, before product-proof/publish-ready claims
 
 ## Secrets check
 
@@ -33,12 +42,14 @@
 - [ ] No tokens/cookies copied.
 - [ ] Env var names only.
 
-## Grounding check
+## Grounding and traceability check
 
 - [ ] Observed facts labeled.
 - [ ] Inferences labeled.
 - [ ] Unknowns/questions listed.
 - [ ] No invented validation results.
+- [ ] Critical requirements appear in TRACEABILITY_MATRIX.md.
+- [ ] QA_PLAN.md is derived from mapped flows, not generic.
 
 ## Reversal validation
 
