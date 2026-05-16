@@ -9,7 +9,7 @@
 - Must identify candidate Buildprints before extracting a huge repo into final package files.
 - Must pause for human scope selection after soft discovery unless a clear scope was provided.
 - Must treat mapping depth / parity target as a first-class user decision, not an implicit default.
-- Must make claims match the selected depth: workflow, contract, runtime, UI/workbench, provider, export/media, or full parity.
+- Must make claims match the selected depth: workflow, contract, mocked runtime proof, runtime parity, UI/workbench, provider, feed/source, export/media, or full parity.
 - Must use minimal preflight and dynamic contextual questions; no long upfront questionnaire.
 - Must support both single-module Buildprints and hierarchical System Buildprints.
 - Must include quality gates and acceptance checks for any extracted Buildprint.
@@ -44,19 +44,22 @@ Every candidate and extracted Buildprint must declare one selected depth and any
 
 1. `workflow-proof` — reproduce the core user/product workflow with mocks and fixtures.
 2. `contract-parity` — preserve data models, states, APIs, adapters, validation, and edge behavior.
-3. `runtime-parity` — generated product runs locally with build/test/runtime QA, persistence, async jobs, and real user journeys.
-4. `ui-workbench-parity` — map screens, panels, routes, UX flows, workbench/canvas behavior, and visual QA evidence.
-5. `provider-parity` — validate real external providers, credentials, latency/failure behavior, cost/safety boundaries, and media handling.
-6. `export-media-parity` — validate final export/render/media behavior such as files, audio/video sync, stitching, feeds, or downloadable artifacts.
-7. `full-clone-parity` — all relevant depths above. This is never the default.
+3. `mocked-runtime-proof` — generated proof runs locally with mocked providers/fixtures and proves workflow contracts without claiming live runtime parity.
+4. `runtime-parity` — generated product runs locally with build/test/runtime QA, persistence, async jobs, and real user journeys.
+5. `ui-workbench-parity` — map screens, panels, routes, UX flows, workbench/canvas behavior, and visual QA evidence.
+6. `provider-parity` — validate real external providers, credentials, latency/failure behavior, cost/safety boundaries, and media handling.
+7. `feed-source-parity` — validate real feed/API source availability, redirects/proxies, schema drift, stale/deleted records, representative live payloads, and source freshness behavior.
+8. `export-media-parity` — validate final export/render/media behavior such as files, audio/video sync, stitching, feeds, or downloadable artifacts.
+9. `full-clone-parity` — all relevant depths above. This is never the default.
 
-Default if the user does not decide: `workflow-proof` plus `contract-parity`, with runtime proof only when cheap/applicable. Ask before adding UI/provider/export/full parity.
+Default if the user does not decide: `workflow-proof` plus `contract-parity`, with `mocked-runtime-proof` only when cheap/applicable. Ask before adding runtime parity, UI/provider/feed-source/export/full parity.
 
 Candidates must include:
 
 - recommended depth,
 - optional deeper depths,
 - explicitly excluded depths,
+- explicitly excluded source/provider/hosted parity categories when relevant,
 - evidence required to upgrade depth,
 - safe claims at the selected depth.
 

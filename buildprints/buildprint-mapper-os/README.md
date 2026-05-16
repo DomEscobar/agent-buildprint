@@ -2,7 +2,7 @@
 
 Turn an existing repo into a scoped, reviewable Buildprint using a coding agent and this Buildprint package only.
 
-No CLI is required. The mapper is the process described by these files:
+No CLI is required for the mapping logic. `agb start` is only a snapshot bootstrap helper; agents may also read the package files directly from the manifest. The mapper is the process described by these files:
 
 1. create a safe repo census,
 2. map the system with evidence,
@@ -67,6 +67,7 @@ Rules:
 - do not copy secrets or .env values
 - do not create the final Buildprint until I choose a candidate and depth target
 - ask at most one blocking question at a time
+- for CI/dogfood runs, accept an explicit simulated candidate/depth choice and record it in selection.md
 ```
 
 After a candidate is chosen, use `prompts/extract-selected.md`.

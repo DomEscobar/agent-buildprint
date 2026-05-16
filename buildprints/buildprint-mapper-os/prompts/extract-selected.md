@@ -57,9 +57,11 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 
 - Stay inside the selected scope unless a dependency is required to understand the contract.
 - If you cross the boundary, document why.
+- If you discover source defects or suspicious mismatches, document them as observed risks unless the selected task explicitly includes source repair.
 - Separate `OBSERVED`, `INFERRED`, and `QUESTION`.
 - Preserve exact contracts only when you have evidence.
 - Do not claim exact behavior when only architecture is known.
+- Do not upgrade a mocked runtime proof into `runtime-parity`; label it `mocked-runtime-proof` or `workflow-proof` evidence unless live runtime conditions were tested.
 - Extract edge cases, failure modes, lifecycle/state transitions, and invariants before writing implementation phases.
 - If an edge matters but evidence is missing, mark it `QUESTION` and include a safe default only as `INFERRED`.
 
