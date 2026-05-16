@@ -71,6 +71,10 @@ For each candidate:
 - confidence,
 - edge cases to preserve,
 - QA/product proof strategy,
+- recommended fidelity target,
+- optional deeper parity targets,
+- explicitly excluded parity targets,
+- evidence needed to upgrade depth,
 - what decision is needed before extraction.
 
 Do not merge unrelated scopes just to make one big Buildprint.
@@ -86,8 +90,9 @@ Use this structure after soft discovery:
 | # | Decision | Safe default | Human answer |
 |---|---|---|---|
 | 1 | Confirm selected candidate/scope | Use candidate N as scope | |
-| 2 | Choose fidelity target | Architecture skeleton first; parity only after reversal | |
-| 3 | Confirm side-effect posture | No external writes during mapping/reversal | |
+| 2 | Choose fidelity target | workflow-proof + contract-parity; runtime QA if UI exists | |
+| 3 | Confirm provider/export posture | mock providers; manifest/preview export unless explicitly upgraded | |
+| 4 | Confirm side-effect posture | No external writes during mapping/reversal | |
 
 ## Appendix — ask only if touched
 - ...

@@ -17,6 +17,10 @@ OUT_OF_SCOPE: intentionally excluded from selected Buildprint.
   "scope": "billing routes, webhook handler, entitlement checks",
   "includedPaths": ["src/api/billing", "src/lib/stripe.ts"],
   "excludedPaths": ["src/admin", "src/marketing"],
+  "recommendedFidelityTarget": "workflow-proof|contract-parity|runtime-parity|ui-workbench-parity|provider-parity|export-media-parity|full-clone-parity",
+  "optionalDeeperTargets": ["runtime-parity"],
+  "explicitlyExcludedTargets": ["provider-parity", "export-media-parity"],
+  "safeClaims": ["..."],
   "whyReusable": "Common SaaS billing pattern",
   "estimatedTier": "strong",
   "observedSignals": ["Stripe dependency", "webhook route"],
@@ -37,7 +41,10 @@ OUT_OF_SCOPE: intentionally excluded from selected Buildprint.
 - secrets check result,
 - known gaps,
 - human review questions,
-- estimated package tier.
+- estimated package tier,
+- selected fidelity target,
+- safe/unsafe parity claims,
+- runtime/browser QA status when applicable.
 
 ## System map contract
 
@@ -79,6 +86,30 @@ If a field has no evidence, write `QUESTION` or `unknown`; never silently omit r
 
 ## Precision artifact contracts
 
+### `PARITY_CLAIMS.md`
+
+Required for product-inspired, clone-like, compatibility, agentic, webapp, or user-facing rebuild scopes. Must include:
+
+- selected fidelity target,
+- optional deeper targets,
+- explicitly excluded targets,
+- safe claims,
+- unsafe claims,
+- exact allowed wording,
+- evidence required to upgrade depth.
+
+### `HEAD_TO_FOOT_QA.md`
+
+Required for runnable product/app/feature scopes. Must include layered gates:
+
+- static safety,
+- unit/contract tests,
+- build/typecheck,
+- real runtime happy path,
+- runtime negative paths,
+- responsive/UX smoke where UI exists,
+- optional live provider/export gates only if selected.
+
 ### `QA_PLAN.md`
 
 Must derive QA from the selected scope, not from a generic checklist. For every critical flow, include:
@@ -114,3 +145,6 @@ Create these when relevant to the selected scope:
 - `DECISIONS.md` — required when defaults, assumptions, scope tradeoffs, or non-parity decisions are made.
 - `OBSERVABILITY.md` — required for deployable products/services.
 - `QUALITY_SCORECARD.md` — required before claiming product-proofed or publish-ready status.
+- `PARITY_CLAIMS.md` — required for product-inspired/rebuild/parity scopes.
+- `HEAD_TO_FOOT_QA.md` — required for runnable product/app/feature scopes.
+- `RUNTIME_LIVE_TEST_PLAN.md` — optional separate plan when runtime/browser harness details are substantial.

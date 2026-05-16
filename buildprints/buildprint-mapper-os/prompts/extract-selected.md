@@ -31,6 +31,8 @@ buildprint-submission/
   TEST_MATRIX.md
   VALIDATION_TEMPLATE.md
   QA_PLAN.md
+  HEAD_TO_FOOT_QA.md        # required for runnable product/app/feature scopes
+  PARITY_CLAIMS.md          # required for product-inspired/rebuild/parity scopes
   TRACEABILITY_MATRIX.md
   questions.md
   SUBMISSION_CHECKLIST.md
@@ -41,6 +43,7 @@ buildprint-submission/
   DECISIONS.md                # when assumptions/scope/default decisions exist
   OBSERVABILITY.md            # when deployable services/products apply
   QUALITY_SCORECARD.md        # required before product-proof/publish-ready claims
+  RUNTIME_LIVE_TEST_PLAN.md    # optional; use when browser/product runtime QA needs a separate harness plan
 ```
 
 After reversal validation, also create:
@@ -68,7 +71,8 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - selected scope,
 - boundaries,
 - non-goals,
-- required validation.
+- required validation,
+- selected fidelity target and explicitly excluded parity depths.
 
 `SPEC.md`:
 - user-visible behavior,
@@ -99,7 +103,18 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - derive QA from mapped flows/jobs,
 - map each risk/edge to expected behavior,
 - choose check type and concrete command/assertion where possible,
-- include Playwright CLI journeys only for browser-relevant flows.
+- include Playwright CLI or equivalent browser-runtime journeys only for browser-relevant flows.
+
+`HEAD_TO_FOOT_QA.md`:
+- define static safety, unit/contract, build, runtime happy path, runtime negative paths, responsive/UX, and optional live-provider gates,
+- require real browser/runtime validation for UI proofs,
+- require screenshot(s), parsed manifest/artifact sample, command summaries, and remaining gaps.
+
+`PARITY_CLAIMS.md`:
+- list safe claims for selected depth,
+- list unsafe claims for excluded depths,
+- include exact wording allowed in reports/public copy,
+- prohibit full-clone/drop-in/export/live-provider claims unless explicitly selected and validated.
 
 `TRACEABILITY_MATRIX.md`:
 - link requirement → source evidence → confidence → reversal check → QA check → status,
@@ -131,17 +146,17 @@ For reversal:
 4. Build the smallest skeleton that satisfies the Buildprint.
 5. Run tests/build/checks.
 6. If the Buildprint describes a product/app/feature, set up the generated result on the user's machine and record the command and URL.
-7. If the result has browser UI, run Playwright CLI QA with `@playwright/cli` (https://github.com/microsoft/playwright-cli). Prefer commands such as `open`/`attach`, `snapshot`, `click`, `eval`, and `screenshot` to verify realistic user journeys.
+7. If the result has browser UI, run real runtime/browser QA. Prefer Playwright CLI (`@playwright/cli`) or an equivalent CDP/browser harness that clicks actual rendered controls, parses rendered state/artifacts, and captures screenshots.
 8. Write `REVERSAL_REPORT.md` and, when product/browser QA applies, `QA_REPORT.md`.
 
 ### Reversal timebox and size
 
-Keep reversal compact. The goal is architecture reconstruction, not cloning the original product. Default budget:
+Keep reversal compact. The goal is architecture reconstruction, not cloning the original product. Default budget depends on selected fidelity target. For `workflow-proof`/`contract-parity` keep it compact:
 
 - 1-3 core modules,
 - 5-10 focused tests,
 - mocked external services,
-- no UI polish,
+- no UI polish unless UI/workbench parity is selected,
 - no live provider/database/network calls unless the Buildprint explicitly requires them.
 
 If the skeleton is growing beyond this, stop and report the highest-risk missing contract instead of continuing to build.

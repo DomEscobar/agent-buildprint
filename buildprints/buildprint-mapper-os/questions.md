@@ -19,8 +19,9 @@ Ask only if unclear or unsafe:
 | 1 | Which candidate/system scope should be extracted? | Sets output boundary | Highest-confidence product scope | |
 | 2 | Preserve source stack or keep portable? | Controls implementation constraints | Keep portable | |
 | 3 | Target stack, if any? | Needed only for cross-stack rebuild | Not set yet | |
-| 4 | Proof target? | Controls validation depth | Runnable MVP proof for products; architecture proof for libraries | |
-| 5 | MVP vs out-of-scope capabilities? | Prevents vague clone/sludge | Use capability baseline safe defaults | |
+| 4 | Fidelity / parity target? | Controls validation depth and safe claims | workflow-proof + contract-parity; add runtime QA for UI products when cheap | |
+| 5 | Provider/export/full-parity posture? | Prevents accidental expensive or false parity claims | mock providers; manifest/preview export; no full clone unless explicit | |
+| 6 | MVP vs out-of-scope capabilities? | Prevents vague clone/sludge | Use capability baseline safe defaults | |
 
 ## Appendix — ask only if touched
 

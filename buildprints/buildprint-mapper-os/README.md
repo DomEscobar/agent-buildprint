@@ -7,13 +7,14 @@ No CLI is required. The mapper is the process described by these files:
 1. create a safe repo census,
 2. map the system with evidence,
 3. propose scoped Buildprint candidates,
-4. ask for one small scope decision,
-5. extract the selected Buildprint,
+4. ask for one small scope + fidelity/depth decision,
+5. extract the selected Buildprint with explicit parity boundaries,
 6. derive QA from mapped product behavior,
 7. link evidence to requirements and checks,
 8. run clean-room reversal validation,
 9. set up product/feature proof when applicable,
-10. report gaps honestly.
+10. run runtime/browser QA when applicable,
+11. report gaps honestly.
 
 Use it when:
 
@@ -36,6 +37,8 @@ Read the mapper package files first:
 - SPEC.md
 - CONTRACTS.md
 - TEST_MATRIX.md
+- templates/PARITY_CLAIMS.md
+- templates/HEAD_TO_FOOT_QA.md
 - prompts/discover.md
 - policies/quality.md
 - policies/questions.md
@@ -47,10 +50,12 @@ Then map this repo without modifying source code.
 Start with discovery only:
 1. create SYSTEM_MAP.md
 2. create BUILDPRINT_CANDIDATES.md
-3. create questions.md with at most 3-5 required decisions
+3. create questions.md with at most 3-5 required decisions, including selected candidate and fidelity/depth target
 
-After scope selection, final packages must include scope-derived QA and traceability:
+After scope/depth selection, final packages must include scope-derived QA, parity boundaries, and traceability:
 - QA_PLAN.md
+- HEAD_TO_FOOT_QA.md for runnable product/app/feature scopes
+- PARITY_CLAIMS.md for product-inspired/rebuild/parity scopes
 - TRACEABILITY_MATRIX.md
 - CAPABILITY_BASELINE.md for famous/product-inspired systems
 - THREAT_MODEL.md / DATA_LIFECYCLE.md / OBSERVABILITY.md when relevant
@@ -60,7 +65,7 @@ Rules:
 - cite repo file paths for important claims
 - label every claim OBSERVED, INFERRED, or QUESTION
 - do not copy secrets or .env values
-- do not create the final Buildprint until I choose a candidate
+- do not create the final Buildprint until I choose a candidate and depth target
 - ask at most one blocking question at a time
 ```
 
