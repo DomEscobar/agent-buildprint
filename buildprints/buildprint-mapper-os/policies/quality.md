@@ -86,4 +86,4 @@ For product/feature Buildprints, validation is incomplete until:
 6. no-fake implementation scan passes for included capabilities,
 7. QA defects are fed back into the Buildprint as gaps or acceptance criteria.
 
-A rough one-shot-looking demo is not enough. The proof must show the Buildprint improved systematic iteration: architecture, modules, evidence, QA, and gap closure.
+A rough one-shot-looking demo is not enough. Product proof must show the Buildprint improved systematic iteration: architecture, modules, evidence, real included capabilities, QA, and gap closure.

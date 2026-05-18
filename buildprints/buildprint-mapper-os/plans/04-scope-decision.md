@@ -6,7 +6,7 @@ If no explicit scope was provided, stop after discovery and ask the human to cho
 - multiple candidates,
 - or full System Buildprint.
 
-Also ask/record the production-grade selected scope and fidelity target. Do **not** silently escalate to full parity, but also do **not** silently downgrade into a lazy MVP/proof.
+Also ask/record the production-grade selected scope and fidelity target. Do **not** silently escalate to full parity, but also do **not** silently downgrade product/app scope into a lazy MVP or proof-only demo.
 
 Core rule:
 
@@ -18,7 +18,7 @@ Prefer a smaller complete scope over a broad fake implementation. If a capabilit
 
 | Target | Use when | Default claim | Extra evidence needed |
 |---|---|---|---|
-| `workflow-proof` | non-product research only | core flow is illustrated; not a product implementation | core workflow evidence + explicit non-product label |
+| `workflow-proof` | non-product research only | core flow is illustrated with explicit fixture boundaries; not a product implementation | core workflow evidence + explicit non-product label + excluded product-scope list |
 | `contract-parity` | reusable architecture/contracts | data/states/API/adapters are preserved | schema/state/API evidence |
 | `runtime-parity` | default for selected product/app/feature scope | generated app runs with real included features, persistence where relevant, and QA | runnable build + runtime QA + no-fake scan |
 | `ui-workbench-parity` | UX/workbench matters | screens/flows approximate observed UI | screenshots/browser/component evidence |

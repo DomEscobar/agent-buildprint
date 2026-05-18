@@ -17,10 +17,10 @@ Phase 0 — not started.
 ## Active constraints
 
 - Scope may be limited, but included capabilities must be complete.
-- No mocks/fixtures as product implementation.
+- No mocks/fixtures as product implementation; fixtures may exist only in named test/demo paths.
 - No placeholder routes, no-op controls, fake success states, or skeleton adapters inside included scope.
 - Product data must be durable if persistence is claimed.
-- Tests/build/runtime QA/no-fake scan required before done.
+- Tests/build/runtime QA/no-fake scan required before done; persistence/restart proof required when state is claimed.
 
 ## Included capabilities
 

@@ -62,7 +62,7 @@ Rules:
 
 Every candidate and extracted Buildprint must declare one selected depth and any explicitly excluded depths:
 
-1. `workflow-proof` — reproduce the core user/product workflow with mocks and fixtures.
+1. `workflow-proof` — illustrate a non-product workflow or architecture path with explicit fixture boundaries. It is not enough for product/app/feature scope and must never be marketed as implemented product behavior.
 2. `contract-parity` — preserve data models, states, APIs, adapters, validation, and edge behavior.
 3. `runtime-parity` — generated product runs locally with build/test/runtime QA, persistence, async jobs, and real user journeys.
 4. `ui-workbench-parity` — map screens, panels, routes, UX flows, workbench/canvas behavior, and visual QA evidence.
@@ -71,7 +71,7 @@ Every candidate and extracted Buildprint must declare one selected depth and any
 7. `export-media-parity` — validate final export/render/media behavior such as files, audio/video sync, stitching, feeds, or downloadable artifacts.
 8. `full-clone-parity` — all relevant depths above. This is never the default.
 
-Default if the user does not decide: choose the smallest production-grade selected scope that can be implemented fully, usually `contract-parity` plus local `runtime-parity` for that scope when it is an app/feature. Do not default to mock-only workflow proof for product Buildprints. Ask before adding UI/provider/feed-source/export/full parity beyond the selected complete scope.
+Default if the user does not decide: choose the smallest production-grade selected scope that can be implemented fully, usually `contract-parity` plus local `runtime-parity` for that scope when it is an app/feature. Do not default to workflow-proof or fixture-only evidence for product Buildprints. Ask before adding UI/provider/feed-source/export/full parity beyond the selected complete scope.
 
 Candidates must include:
 

@@ -72,7 +72,7 @@ After scope/depth selection, final packages must include scope-derived QA, parit
 - THREAT_MODEL.md / DATA_LIFECYCLE.md / OBSERVABILITY.md when relevant
 
 Rules:
-- production-grade selected scope is the default; do not generate lazy MVP/proof apps
+- production-grade selected scope is the default; do not generate lazy MVP or proof-only product apps
 - scope cuts must remove capabilities, not fake them with mocks/placeholders
 - mocks are allowed only as explicitly named test/demo fixtures, never counted as product implementation
 - every included route, service, provider, persistence path, job, setting, export, and UI control must be real, wired, error-handled, and QA-testable

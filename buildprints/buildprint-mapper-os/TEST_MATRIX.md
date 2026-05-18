@@ -23,7 +23,7 @@
 | Product proof missing | Product/feature Buildprints must include a final setup step that runs the generated app/thing on the user machine when feasible. |
 | Browser UI unverified | Browser-based proofs must run Playwright CLI QA against realistic user journeys and save command/evidence in `QA_REPORT.md`. |
 | No-fake scan missing | `IMPLEMENTATION_COMPLETENESS.md` must record placeholder/no-op/mock/skeleton/in-memory checks and verdict. |
-| One-shot-looking demo | Public proof should show Buildprint/module evidence + QA/gap report, not only a rough generated UI. |
+| One-shot-looking demo | Public proof should show Buildprint/module evidence + QA/gap report, not only a rough generated UI or proof-only shell. |
 | Missing edge cases | Selected Buildprint must include edge-case/failure-mode inventory mapped to tests or questions. |
 | Missing state model | Non-trivial product flows must include lifecycle/state-machine behavior and invariants. |
 | Weak evidence density | Critical modules require enough `OBSERVED(path:line)` citations to ground responsibilities, contracts, and edge behavior. |

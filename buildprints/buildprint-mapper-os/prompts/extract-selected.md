@@ -187,16 +187,16 @@ Keep reversal compact. The goal is architecture reconstruction, not cloning the 
 
 - 1-3 core modules if needed,
 - 5-10 focused tests minimum for compact proofs,
-- mocks only in test/demo fixture paths,
+- fixtures only in test/demo paths, never selected product behavior,
 - real durable storage if persistence is claimed,
 - real routes/controls for included UI,
 - real provider/database/network calls only when explicitly included; otherwise exclude those capabilities from product scope.
 
-If the skeleton is growing beyond this, stop and report the highest-risk missing contract instead of continuing to build.
+If the implementation is growing beyond this, stop and report the highest-risk missing contract or scope cut instead of continuing with fake coverage.
 
 ### TypeScript / NodeNext scratch guidance
 
-If the clean-room skeleton uses TypeScript with `module` or `moduleResolution` set to `NodeNext`:
+If the clean-room implementation uses TypeScript with `module` or `moduleResolution` set to `NodeNext`:
 
 - test files should import emitted runtime paths such as `../src/workflow.js`, even when the source file is `workflow.ts`;
 - do not use `.ts` import specifiers unless `allowImportingTsExtensions` is valid for the chosen no-emit setup;
@@ -208,7 +208,7 @@ If the clean-room skeleton uses TypeScript with `module` or `moduleResolution` s
 `REVERSAL_REPORT.md` and `QA_REPORT.md` must distinguish:
 
 - `Buildprint gaps` — missing or ambiguous architecture/contracts in the generated Buildprint,
-- `Scratch harness issues` — test runner, TypeScript config, dependency, or local skeleton mistakes,
+- `Scratch harness issues` — test runner, TypeScript config, dependency, or local implementation mistakes,
 - `Product proof defects` — runnable app/UI bugs found during setup or Playwright CLI QA,
 - `Intentional omissions` — mocked/excluded systems that were outside the selected scope.
 
