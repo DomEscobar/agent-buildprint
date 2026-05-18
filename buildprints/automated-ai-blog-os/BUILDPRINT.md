@@ -226,3 +226,18 @@ Auto-schedule is allowed only when explicitly configured and the same gates pass
 - Manager audit reports stale drafts, repeated angles, weak source maps, and blocked publish attempts.
 - `VALIDATION.md` follows `VALIDATION_TEMPLATE.md`.
 
+
+
+---
+
+## Consolidated notes from `architecture.md`
+
+# Architecture diagram
+
+```txt
+Sources -> Scanner -> SourceRecords -> Idea Scorer -> IdeaRecords
+                                      -> Content Memory
+IdeaRecord + Memory -> Draft Generator -> DraftRecord + MD/MDX
+DraftRecord -> Claim Validator -> SEO Validator -> Approval Queue -> Publisher/Scheduler
+All storage -> Manager Audit -> Audit Report
+```

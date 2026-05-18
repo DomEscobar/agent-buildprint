@@ -68,3 +68,123 @@ Produce machine-readable and human reports: JSON, Markdown, HTML/JUnit if implem
 ## Implementation rule
 
 Default proof mode must be offline and deterministic. Live agent/provider runs are optional adapters behind explicit configuration.
+
+
+---
+
+## Consolidated notes from `PLAN.md`
+
+# PLAN — Implementation rails
+
+## Phase 0 — Scope and policy
+- Define target agent platforms.
+- Define allowed live adapters and offline mode.
+- Define safety policy for external actions, credentials, browser use, and destructive commands.
+
+## Phase 1 — Snapshot
+- Discover setup artifacts.
+- Normalize to `SetupSnapshot`.
+- Record source versions and install target.
+- Redact secrets.
+
+## Phase 2 — Static lint
+- Validate `SKILL.md` frontmatter and body.
+- Validate agent/command/hook/MCP references.
+- Validate permission boundaries.
+- Block behavior tests on critical errors.
+
+## Phase 3 — Loadout inventory
+- Compute loaded token/context footprint.
+- Detect duplicates, dormant artifacts, and unused high-cost components.
+- Emit inventory report.
+
+## Phase 4 — Skill unit suites
+- Add `*.skill-test.yml` or equivalent cases.
+- Run sandboxed tests.
+- Assert file, command, JSON, output, duration, and token contracts.
+
+## Phase 5 — Activation suites
+- Generate positive and negative prompts per component.
+- Run with base setup and optionally with router enabled.
+- Score recall, precision, ambiguity handling, and wrong-route rate.
+
+## Phase 6 — Transcript invariants
+- Define required event order.
+- Parse transcripts/events.
+- Fail forbidden shortcuts and missing process steps.
+
+## Phase 7 — E2E benchmark
+- Run representative repo tasks.
+- Score final artifacts, tests, process evidence, safety, and recovery.
+
+## Phase 8 — Multi-agent safety
+- Test delegation briefs, output schemas, file ownership, worktree/session coordination, and merge recovery.
+
+## Phase 9 — Reports
+- Aggregate scorecard.
+- Store redacted evidence.
+- Emit CI-friendly JSON/Markdown/JUnit/HTML reports.
+
+
+---
+
+## Consolidated notes from `README.md`
+
+# Complete Agent Skills Evaluation OS Buildprint
+
+A stack-adaptable Buildprint for evaluating a complete coding-agent skills setup - not just one `SKILL.md` file.
+
+The blueprint combines static config linting, install snapshot/parity, loadout/token inventory, skill-level sandbox tests, component activation tests, transcript/order checks, end-to-end task benchmarks, multi-agent safety cases, and CI scorecards.
+
+## Why this exists
+
+A skills setup can look good while failing in practice:
+
+- the files are invalid or silently ignored;
+- the installed setup is not the setup you think you are testing;
+- the right skill exists but does not activate;
+- the agent produces plausible output while skipping the required process;
+- subagents collide on files or lose parent context;
+- the loadout taxes every turn with unused context.
+
+This Buildprint evaluates the whole system from install to behavior.
+
+## Default proof
+
+The included proof is an offline JavaScript implementation of the evaluation pipeline and scoring model. It uses fixture objects only and makes no network or agent calls.
+
+```bash
+cd proof
+npm test
+```
+
+## Research basis
+
+Research artifacts:
+
+- `/root/.openclaw/workspace/research/newer-superpowers-like-2026-05-17/`
+- `/root/.openclaw/workspace/research/complete-agent-skills-eval-stack-2026-05-17/`
+
+Primary source pressure came from `balyakin/skill-eval-runner`, `sjnims/cc-plugin-eval`, `obra/superpowers`, `agent-sh/agnix`, `David-CKS/claude-skill-router`, `robester0403/Local-Loadout-Smithery`, `Powerjackie/delegate-kit`, `wan-huiyan/agent-traffic-control`, `slash9494/ai-config-sync-manager`, `TakumaAida/agents-deploy`, `motiful/skill-forge`, and `agent-sh/agentsys`.
+
+
+---
+
+## Consolidated notes from `TOOL_COMPARISON.md`
+
+# TOOL_COMPARISON
+
+| Tool/repo | Best role in this Buildprint | Use carefully because |
+| --- | --- | --- |
+| `balyakin/skill-eval-runner` | Core per-skill sandbox runner | Does not prove activation/routing by itself |
+| `sjnims/cc-plugin-eval` | Component trigger/activation evals | Claude-plugin-oriented |
+| `obra/superpowers` | Transcript/process philosophy and workflow examples | Methodology-specific, not generic scoring |
+| `agent-sh/agnix` | Static config and agent-file linting | Rule set may need target tuning |
+| `robester0403/Local-Loadout-Smithery` | Loadout/cost/dormancy inventory | Claude/Cursor loadout focus |
+| `David-CKS/claude-skill-router` | Router intervention to A/B test activation | Router success is not same as skill quality |
+| `slash9494/ai-config-sync-manager` | Claude/Codex config sync | Sync parity must be tested after conversion |
+| `TakumaAida/agents-deploy` | One-source `.agents/` deployment | Young project; validate generated targets |
+| `Powerjackie/delegate-kit` | Subagent delegation contracts | v0.1 rough edges; good conceptual module |
+| `wan-huiyan/agent-traffic-control` | Parallel-session/worktree safety | Claude-session-specific details |
+| `motiful/skill-forge` | Skill publish readiness/security checks | Complements lint, not runtime behavior proof |
+| `agent-sh/agentsys` | Cross-agent runtime/orchestration reference | Larger platform scope than evaluation OS |

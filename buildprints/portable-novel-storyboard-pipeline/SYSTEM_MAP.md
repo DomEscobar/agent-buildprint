@@ -66,3 +66,39 @@ Adapters depend inward on provider interfaces. Workflow services should not depe
 ## Evidence Pointer
 
 Detailed evidence-backed discovery map lives one level up at `../SYSTEM_MAP.md` in this generated output directory. The selected package must remain usable even if only `project.buildprint/` is handed to a coding agent.
+
+
+---
+
+## Consolidated notes from `DATA_LIFECYCLE.md`
+
+# Data Lifecycle
+
+1. Project created with model/style settings.
+2. Chapters imported into chapter store.
+3. Event extraction writes event summary or error per chapter.
+4. ScriptAgent writes plan workspace and scripts.
+5. Asset extraction creates assets and script links.
+6. Production workspace creates director plan, storyboard table, storyboard rows, asset links, tracks.
+7. Media generation creates task records and media refs.
+8. Preview selects track videos and resolves file URLs.
+9. Export package snapshots all selected records and refs.
+
+Retention/deletion: partially outside selected scope. Toonflow has deletion routes, but this Buildprint requires explicit retention policy before production use.
+
+
+---
+
+## Consolidated notes from `MODULES.md`
+
+# Modules
+
+| Module | Responsibilities | Evidence | Confidence |
+|---|---|---|---|
+| Import/Event | Chapter import, event extraction, event state polling | `src/routes/novel/addNovel.ts:11-52`, `src/utils/cleanNovel.ts:27-89` | high |
+| ScriptAgent | Decision layer, subagents, tools, plan/script workspace | `src/agents/scriptAgent/index.ts:41-225`, `src/agents/scriptAgent/tools.ts:34-117` | high |
+| Skill Library | Markdown behavior rules for agents and production style | `data/skills/script_agent_decision.md:69-89`, `data/skills/production_execution_storyboard_panel.md:41-73` | high |
+| ProductionAgent | Director plan, storyboard table, panel, generation tools | `src/agents/productionAgent/index.ts:196-374` | high |
+| Asset Store | Script assets, derived assets, image refs | `src/routes/script/extractAssets.ts:56-149`, `src/routes/production/assets/batchGenerateAssetsImage.ts:54-132` | high |
+| Provider Adapter | Dynamic text/image/video providers and task recording | `src/utils/ai.ts:113-321`, `src/utils/vendor.ts:22-41` | high |
+| Preview/Export | Video list, track selection, file URL resolution, script zip | `src/routes/production/workbench/getVideoList.ts:15-30`, `src/routes/script/exportScript.ts:15-25` | medium |

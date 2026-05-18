@@ -9,7 +9,7 @@ Validated locally as a Buildprint package with an offline proof.
 Command:
 
 ```bash
-cd public/buildprint-files/complete-agent-skills-evaluation-os/proof
+cd proof
 npm test
 ```
 
