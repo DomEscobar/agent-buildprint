@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Buildprint Markdown Quality Audit",
+  "type": "object",
+  "required": ["schemaVersion", "auditedAt", "buildprints"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "auditedAt": { "type": "string" },
+    "buildprints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "verdict", "files", "packageChecks", "edgeChecks", "actions"],
+        "properties": {
+          "slug": { "type": "string" },
+          "verdict": { "enum": ["PASS", "PASS_WITH_WARNINGS", "FIX_REQUIRED", "BLOCKED"] },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["path", "classification", "attentionScore", "alignmentIssues", "contextRotIssues", "fakeRiskIssues", "edgeCoverageIssues", "action"],
+              "properties": {
+                "path": { "type": "string" },
+                "classification": { "enum": ["CORE", "CONTRACT", "PLAN", "QA", "POLICY", "TRACE", "PROOF", "SUPPORT", "QUESTIONABLE"] },
+                "attentionScore": { "type": "integer", "minimum": 0, "maximum": 3 },
+                "alignmentIssues": { "type": "array", "items": { "type": "string" } },
+                "contextRotIssues": { "type": "array", "items": { "type": "string" } },
+                "fakeRiskIssues": { "type": "array", "items": { "type": "string" } },
+                "edgeCoverageIssues": { "type": "array", "items": { "type": "string" } },
+                "action": { "enum": ["KEEP", "TIGHTEN", "MERGE", "DELETE", "REWRITE", "BLOCK"] }
+              }
+            }
+          },
+          "packageChecks": {
+            "type": "object",
+            "required": ["hasCoreContract", "hasExecutionPlan", "hasTestMatrix", "hasValidationEvidence", "manifestFilesExist", "rawUrlsCanonical"],
+            "properties": {
+              "hasCoreContract": { "type": "boolean" },
+              "hasExecutionPlan": { "type": "boolean" },
+              "hasTestMatrix": { "type": "boolean" },
+              "hasValidationEvidence": { "type": "boolean" },
+              "manifestFilesExist": { "type": "boolean" },
+              "rawUrlsCanonical": { "type": "boolean" }
+            }
+          },
+          "edgeChecks": {
+            "type": "object",
+            "required": ["scopeBoundary", "stopConditions", "statePersistence", "routeControlReality", "providerBoundary", "qaEvidence", "securitySafety", "excludedCapabilities", "noContextRot"],
+            "properties": {
+              "scopeBoundary": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "stopConditions": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "statePersistence": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "routeControlReality": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "providerBoundary": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "qaEvidence": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "securitySafety": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "excludedCapabilities": { "enum": ["PASS", "WARN", "FAIL", "N/A"] },
+              "noContextRot": { "enum": ["PASS", "WARN", "FAIL", "N/A"] }
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["severity", "path", "action", "reason"],
+              "properties": {
+                "severity": { "enum": ["blocker", "high", "medium", "low"] },
+                "path": { "type": "string" },
+                "action": { "enum": ["KEEP", "TIGHTEN", "MERGE", "DELETE", "REWRITE", "BLOCK"] },
+                "reason": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
