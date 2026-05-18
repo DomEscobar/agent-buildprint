@@ -2,7 +2,7 @@
 
 Buildprint: Portable Durable Agent Graph Runtime.
 
-This submission specifies a clean-room implementation target, not a LangGraph clone. The source trace in `SOURCE_TRACE.md` provides evidence for the architectural ideas. Implementation must use original code and tests written from this specification.
+This submission specifies a clean-room implementation target, not a LangGraph clone. `BUILDPRINT.md` is the canonical authority. The source trace in `SOURCE_TRACE.md` provides evidence for the architectural ideas. Implementation must use original code and tests written from this specification.
 
 `Durable` here means selected checkpoint and pending-write semantics suitable for local proof and debugging. Production restart-safe storage is not claimed unless a durable storage adapter is implemented and tested.
 
@@ -14,6 +14,6 @@ Core deliverables:
 - Interrupt/resume via `Command`.
 - Pending-write recovery simulation.
 - Serializer safety gate.
-- Optional mocked ToolNode/ReAct demo marked non-core.
+- Optional local ToolNode/ReAct-style demo marked non-core.
 
-Hard non-goals are recorded in `PARITY_CLAIMS.md`.
+Hard non-goals and unsafe compatibility claims are recorded in `BUILDPRINT.md` and `PARITY_CLAIMS.md`.

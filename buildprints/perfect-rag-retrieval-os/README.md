@@ -4,7 +4,7 @@ A stack-adaptable Buildprint for production-grade RAG: ingestion, chunking, perm
 
 This is not "vector DB + prompt". The blueprint encodes the benchmark-backed pattern: **hybrid first-stage retrieval + reranking/late interaction + citation-grounded generation + repeatable evals**.
 
-## Default proof
+## Local proof
 
 The included proof is an offline TypeScript fixture implementation. It makes no network calls and uses deterministic lexical/dense-like scoring so coding agents can test the architecture without API keys.
 

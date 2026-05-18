@@ -2,7 +2,7 @@
 
 Turn an existing repo into a scoped, reviewable Buildprint using a coding agent and this Buildprint package only.
 
-No CLI is required for the mapping logic. `agb start` is only a snapshot bootstrap helper; agents may also read the package files directly from the manifest. The mapper is the process described by these files:
+No CLI is required for the mapping logic. `agb start` is only a snapshot bootstrap helper; agents may also read the package files directly from the manifest. Start with `BUILDPRINT.md`; the canonical contract defines the required read order. The mapper process:
 
 1. create a safe repo census,
 2. map the system with evidence,
@@ -31,26 +31,7 @@ Paste this into Codex, Cursor, Claude Code, or another coding agent inside the r
 ```txt
 Use Buildprint Mapper OS.
 
-Read the mapper package files first:
-- README.md
-- BUILDPRINT.md
-- PLAN.md
-- SPEC.md
-- CONTRACTS.md
-- TEST_MATRIX.md
-- templates/PARITY_CLAIMS.md
-- templates/HEAD_TO_FOOT_QA.md
-- templates/IMPLEMENTATION_COMPLETENESS.md
-- templates/AGENT_EXECUTION_BRIEF.md
-- templates/agent-contract.xml
-- templates/CURRENT_STATE.md
-- templates/manifest.json
-- templates/AGENT_PROMPTING_STANDARD.md
-- prompts/discover.md
-- policies/quality.md
-- policies/questions.md
-- templates/QA_PLAN.md
-- templates/TRACEABILITY_MATRIX.md
+Read BUILDPRINT.md first and follow its Required Read Order.
 
 Then map this repo without modifying source code.
 
@@ -72,7 +53,7 @@ After scope/depth selection, final packages must include scope-derived QA, parit
 - THREAT_MODEL.md / DATA_LIFECYCLE.md / OBSERVABILITY.md when relevant
 
 Rules:
-- production-grade selected scope is the default; do not generate lazy MVP or proof-only product apps
+- production-grade selected scope is the default; do not generate broad proof-only product apps
 - scope cuts must remove capabilities, not fake them with mocks/placeholders
 - mocks are allowed only as explicitly named test/demo fixtures, never counted as product implementation
 - every included route, service, provider, persistence path, job, setting, export, and UI control must be real, wired, error-handled, and QA-testable

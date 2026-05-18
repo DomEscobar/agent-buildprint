@@ -1,4 +1,4 @@
-# Parity Claims
+# Capability Claims
 
 ## Supported Claims
 
@@ -18,8 +18,7 @@
 
 ## Not Claimed
 
-- Full parity with commercial clip-generation products.
 - Direct official platform API publishing to TikTok, Instagram, or YouTube.
 - Provider-level availability, moderation, policy compliance, quality, or cost.
 - Multi-tenant secure SaaS production readiness.
-
+- Commercial product equivalence.

@@ -2,7 +2,7 @@
 
 ## Phase 0 — Scope and safety
 
-- Choose fidelity target: default `workflow-proof + contract-parity + mocked-runtime-proof`.
+- Choose proof target: local deterministic workflow proof with contract tests.
 - Choose stack and UI framework.
 - Decide enabled channels: WebUI first; CLI/Telegram/Discord optional.
 - Define allowed tool risk policy and filesystem root.
@@ -15,7 +15,7 @@
 
 ## Phase 2 — Provider router and streaming loop
 
-- Add provider registry with fake provider for tests.
+- Add provider registry with deterministic test provider.
 - Implement streaming turn lifecycle and checkpoint persistence.
 - Add context builder and compaction threshold behavior.
 
@@ -42,6 +42,6 @@
 ## Phase 6 — QA
 
 - Run unit/contract tests.
-- Run mocked end-to-end chat turn.
+- Run deterministic end-to-end chat turn.
 - Run browser/runtime click path if UI is built.
-- Record remaining parity gaps in `PARITY_CLAIMS.md` or a validation report.
+- Record remaining unsupported claims in `PARITY_CLAIMS.md` or a validation report.

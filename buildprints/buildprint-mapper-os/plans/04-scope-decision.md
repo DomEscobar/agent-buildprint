@@ -6,7 +6,7 @@ If no explicit scope was provided, stop after discovery and ask the human to cho
 - multiple candidates,
 - or full System Buildprint.
 
-Also ask/record the production-grade selected scope and fidelity target. Do **not** silently escalate to full parity, but also do **not** silently downgrade product/app scope into a lazy MVP or proof-only demo.
+Also ask/record the production-grade selected scope and fidelity target. Do **not** silently escalate to full parity, but also do **not** silently downgrade product/app scope into proof-only behavior.
 
 Core rule:
 
@@ -37,7 +37,7 @@ Use this in `questions.md` after soft discovery:
 | # | Decision | Safe default | Human answer |
 |---|---|---|---|
 | 1 | Confirm selected candidate/scope | Candidate N | |
-| 2 | Confirm production-grade selected scope | Smaller complete scope; no fake MVP surfaces | |
+| 2 | Confirm production-grade selected scope | Smaller complete scope; no proof-only product surfaces | |
 | 3 | Choose fidelity target | contract-parity + runtime-parity for included product/app features | |
 | 4 | Choose provider/export posture | Exclude provider/export unless real implementation is selected; mocks only as test fixtures | |
 

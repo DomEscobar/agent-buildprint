@@ -18,7 +18,7 @@
 ## Non-Functional Requirements
 
 - Background job status must be pollable. Evidence: `app.py:2219-2230`, `dashboard/src/components/SaaShortsTab.jsx:136-171`.
-- Production claims require durable job storage, durable job logs, provider request IDs, and restart recovery tests. In-memory job maps are acceptable only for prototype/mock proof.
+- Production claims require durable job storage, durable job logs, provider request IDs, and restart recovery tests. In-memory job maps are acceptable only for local proof mode.
 - Hosted deployments must handle provider keys server-side through environment or secret storage; browser localStorage key handling is not production-grade.
 - URL scraping/downloading requires an explicit URL allow/deny and egress policy.
 - Uploaded/generated actor use requires explicit likeness consent and moderation gates before publish.
@@ -30,7 +30,7 @@
 
 ## Explicit Non-Claims
 
-- No direct TikTok/Instagram/YouTube API parity.
+- No direct official TikTok/Instagram/YouTube API publishing.
 - No guarantee of provider model availability or output quality.
 - No guarantee of S3/public gallery behavior without configured buckets.
 - No publish-ready or production restart-safe claim without the required durability, security, consent, privacy, egress, and provider validation gates.

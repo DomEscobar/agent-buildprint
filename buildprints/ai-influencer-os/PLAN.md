@@ -4,7 +4,7 @@ Read `BUILDPRINT.md` first. Then execute the phase files in order.
 
 ```txt
 plans/00-alignment.md
-plans/01-openclaw-skeleton.md
+plans/01-openclaw-runtime-shape.md
 plans/02-persona-runtime.md
 plans/03-memory-life-state.md
 plans/04-wavespeed-image.md

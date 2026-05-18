@@ -4,7 +4,7 @@
 
 - Provider registry maps `providerId -> provider adapter`.
 - Provider capabilities include streaming, tools, vision, reasoning, context window, and token accounting shape.
-- Tests use `FakeProvider` with deterministic streamed chunks and tool-call scripts.
+- Tests use a deterministic test provider with streamed chunks and tool-call scripts.
 
 ## Adapter families
 

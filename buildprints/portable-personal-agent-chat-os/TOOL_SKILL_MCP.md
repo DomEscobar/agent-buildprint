@@ -35,4 +35,4 @@ Rules:
 - deny disabled tools
 - enforce timeout
 - record `mcp.tool_mapped` and `tool.result` events
-- fake MCP implementation for tests
+- deterministic local MCP test implementation

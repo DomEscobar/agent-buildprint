@@ -1,6 +1,6 @@
 # Portable Personal Agent Chat OS
 
-Clean-room Buildprint for a self-hosted personal agent chatbot inspired by the mapped architecture of [`TheSyart/emperor-agent`](https://github.com/TheSyart/emperor-agent), with comparison pressure from JARVIS and ToFu so the result is not a narrow chat clone.
+Clean-room Buildprint for a self-hosted personal agent chatbot inspired by the mapped architecture of [`TheSyart/emperor-agent`](https://github.com/TheSyart/emperor-agent), with comparison references from JARVIS and ToFu so the result covers a complete personal-agent OS contract.
 
 ## Scope
 
@@ -15,30 +15,15 @@ Build a portable personal agent OS with:
 - subagent/team delegation
 - token telemetry
 - safety gates for filesystem/shell/network tools
-- head-to-foot QA and explicit non-parity claims
+- head-to-foot QA and explicit unsafe-claim boundaries
 
 ## Clean-room boundary
 
 This package is a mapped-project Buildprint, not a source copy. It captures portable architecture and contracts. Do not copy Emperor Agent implementation files, art assets, prompts, or UI styling. Use the contracts and proof here to rebuild the architecture in your own stack.
 
-## Read order
+## Authority
 
-1. `BUILDPRINT.md`
-2. `SPEC.md`
-3. `PLAN.md`
-4. `CONTRACTS.md`
-5. `AGENT_RUNTIME.md`
-6. `PROVIDER_ROUTER.md`
-7. `TOOL_SKILL_MCP.md`
-8. `MEMORY_CONTEXT.md`
-9. `STREAMING_WEBUI.md`
-10. `SUBAGENTS_TEAM.md`
-11. `TOKEN_TELEMETRY.md`
-12. `SECURITY_POLICY.md`
-13. `TEST_MATRIX.md`
-14. `HEAD_TO_FOOT_QA.md`
-15. `PARITY_CLAIMS.md`
-16. `TRACEABILITY_MATRIX.md`
+`BUILDPRINT.md` is the canonical authority and contains the required read order.
 
 ## Validation status
 

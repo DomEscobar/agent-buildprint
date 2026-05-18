@@ -8,7 +8,7 @@
 - Must separate observed facts from inferred claims and human questions.
 - Must identify candidate Buildprints before extracting a huge repo into final package files.
 - Must pause for human scope selection after soft discovery unless a clear scope was provided.
-- Must treat production-grade selected scope as the default output posture: smaller scope is acceptable, fake MVP implementation is not.
+- Must treat production-grade selected scope as the default output posture: smaller scope is acceptable, proof-only implementation is not product behavior.
 - Must treat mapping depth / parity target as a first-class user decision, but secondary to implementation completeness.
 - Must make claims match the selected depth: workflow, contract, runtime parity, UI/workbench, provider, feed/source, export/media, or full parity.
 - Must include `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, and `manifest.json` for every extracted Buildprint.
@@ -41,7 +41,7 @@
 - Must not use generic QA checklists as a substitute for scope-derived QA journeys.
 - Must not ask product/business questions before discovering that the relevant subsystem exists.
 - Must not silently escalate to full parity. Full parity requires explicit user selection and evidence for UI, provider, data, runtime, and export behavior.
-- Must not generate lazy MVP apps, fake product surfaces, route-shaped links, no-op controls, placeholder settings, fake success states, in-memory-only product persistence, skeleton adapters counted as implemented, or mock services counted as product behavior.
+- Must not generate proof-only apps as product behavior, fake product surfaces, route-shaped links, no-op controls, placeholder settings, fake success states, in-memory-only product persistence, skeleton adapters counted as implemented, or mock services counted as product behavior.
 - Must not use mocked providers, fixtures, or no-network demos as evidence that an included production provider/export/service is implemented. Mocks are allowed only as test/demo fixtures with a documented boundary.
 
 ## Modes
@@ -53,7 +53,7 @@ Mapper OS defaults to production-grade implementation for the selected scope. Th
 Rules:
 
 - Scope may be limited, but implemented scope must be complete.
-- Prefer a smaller complete Buildprint over a broad fake MVP.
+- Prefer a smaller complete Buildprint over broad proof-only coverage.
 - If a provider/export/job/route/auth flow/persistence layer cannot be implemented fully, exclude it and list what is required to add it later.
 - Test fixtures and mocks may be generated, but they must not be the production path or be counted as feature completion.
 - Product proof must include no-fake implementation checks, persistence/restart checks when data exists, and route/control checks when UI exists.

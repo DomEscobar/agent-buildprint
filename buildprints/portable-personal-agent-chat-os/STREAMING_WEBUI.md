@@ -18,4 +18,4 @@ Use WebSocket, SSE, or equivalent event stream. The contract is `RuntimeEvent[]`
 
 ## Browser QA path
 
-Bootstrap → select fake provider → send message → observe deltas → tool trace → final answer → token count changes → memory/history updated.
+Bootstrap -> select test provider -> send message -> observe deltas -> tool trace -> final answer -> token count changes -> memory/history updated.

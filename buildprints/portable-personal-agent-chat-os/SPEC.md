@@ -61,7 +61,7 @@
 - Represent MCP tools as `ToolSpec` instances through an adapter.
 - Allow per-server and per-tool enable/disable.
 - Enforce timeouts and deny unknown tools.
-- In tests, use fake MCP servers and deterministic tool responses.
+- In tests, use deterministic local MCP test servers and deterministic tool responses.
 
 ### 6. Subagents/team
 

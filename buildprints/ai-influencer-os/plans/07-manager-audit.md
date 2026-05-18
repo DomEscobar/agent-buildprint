@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create QA/audit layer that catches drift, unsafe content, stale queues, and publishing blockers.
+Create QA/audit layer that catches contract violations, unsafe content, stale queues, and publishing blockers.
 
 ## Files
 

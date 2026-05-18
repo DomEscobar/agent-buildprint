@@ -52,7 +52,7 @@ export class Telemetry {
   get total() { return this.input + this.output; }
 }
 
-export class FakeProvider {
+export class DeterministicTestProvider {
   constructor(public config: ProviderConfig) {}
   async *stream(prompt: string): AsyncGenerator<string> {
     if (prompt.toLowerCase().includes('audit')) {
@@ -94,7 +94,7 @@ export class SkillRegistry {
   }
 }
 
-export class FakeMcpAdapter {
+export class DeterministicMcpAdapter {
   constructor(private tools: ToolRegistry) {}
   map(serverId: string, tool: string, handler: (input: unknown) => Promise<unknown>): RuntimeEvent {
     const name = `mcp.${tool}`;
@@ -134,12 +134,12 @@ export class AgentRuntime {
   public tools = new ToolRegistry();
   public skills = new SkillRegistry([{ name: 'code-audit', triggers: ['audit'], instructions: 'Audit code with evidence.', enabled: true }]);
   public team = new TeamBus();
-  public mcp = new FakeMcpAdapter(this.tools);
+  public mcp = new DeterministicMcpAdapter(this.tools);
 
-  constructor(public provider = new FakeProvider({ id: 'fake', model: 'fake-agent', contextWindowTokens: 120, supportsStreaming: true, supportsTools: true })) {
+  constructor(public provider = new DeterministicTestProvider({ id: 'test', model: 'test-agent', contextWindowTokens: 120, supportsStreaming: true, supportsTools: true })) {
     this.tools.register({ name: 'todo.create', risk: 'write', description: 'Create a todo', handler: async (input) => ({ id: 'todo-1', ...input as object }) });
     this.tools.register({ name: 'shell.run', risk: 'shell', description: 'Run shell command', handler: async () => 'should-not-run' });
-    this.events.push(this.mcp.map('fake-server', 'echo', async (input) => input));
+    this.events.push(this.mcp.map('test-server', 'echo', async (input) => input));
   }
 
   async turn(message: string) {

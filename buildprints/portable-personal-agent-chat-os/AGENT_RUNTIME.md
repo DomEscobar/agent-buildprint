@@ -12,7 +12,7 @@ The runtime is an evented loop, not a single LLM call wrapper.
 6. emit `model.delta` events
 7. model requests tools or delegation
 8. validate and policy-check each request
-9. execute safe tools / fake MCP tools / subagents
+9. execute allowed tools, deterministic local MCP test tools, or subagent tasks
 10. feed results back into the context
 11. emit usage telemetry
 12. append final answer to memory

@@ -3,7 +3,7 @@
 | Risk | Test |
 | --- | --- |
 | Invalid skill/config silently ignored | Static lint rejects invalid frontmatter/broken refs |
-| Wrong setup tested | Snapshot includes versions/files and install parity check |
+| Wrong setup tested | Snapshot includes versions/files and integrity check |
 | Skill works only when manually selected | Activation natural-prompt evals fail until routing works |
 | Agent skips required process | Transcript order invariant catches shortcut |
 | Generic final answer hides artifact failure | Skill unit assertions inspect files/commands/JSON |

@@ -12,7 +12,7 @@
 | Agent context rot | Generated Buildprint must include AGENT_EXECUTION_BRIEF.md, agent-contract.xml, CURRENT_STATE.md, and manifest.json with read order and phase gates. |
 | Invalid agent contract | agent-contract.xml must parse and contain mission/read-order/must/must-not/stop-if/done-criteria. |
 | Invalid manifest | manifest.json must parse and list required files/gates. |
-| Lazy MVP output | Product/app/feature Buildprints must default to production-grade selected scope: smaller scope is OK, fake included features are not. |
+| Proof-only product claims | Product/app/feature Buildprints must default to production-grade selected scope: smaller scope is OK, fake included features are not. |
 | Mock-as-product | Mocks/fixtures may exist only in test/demo paths and must not be counted as product implementation. |
 | Placeholder routes/controls | Crawl/click primary routes and controls; included surfaces must be real pages/actions or explicit blockers. |
 | In-memory product persistence | If persistence is claimed, run write → restart/reload → read proof through real app/API. |

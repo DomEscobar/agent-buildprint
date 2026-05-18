@@ -1,6 +1,6 @@
 # DEFAULT_PRESET
 
-The default preset is unnamed. It is not a clone of any existing persona.
+The default preset is unnamed. It must not copy or reference any existing persona.
 
 If the user does not provide a persona name, generate a fresh fictional name and short identity.
 

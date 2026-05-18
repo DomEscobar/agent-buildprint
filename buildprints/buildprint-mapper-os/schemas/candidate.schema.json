@@ -22,7 +22,7 @@
     "estimatedTier": { "enum": ["basic", "strong", "agent-grade", "system"] },
     "productionGradeScope": {
       "type": "string",
-      "description": "Smallest selected scope that should be implemented fully rather than as a lazy MVP."
+      "description": "Smallest selected scope that should be implemented fully rather than as proof-only product behavior."
     },
     "capabilitiesToExcludeRatherThanFake": {
       "type": "array",

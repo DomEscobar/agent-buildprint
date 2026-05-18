@@ -6,7 +6,7 @@
 - Multi-provider routing contract.
 - Streaming runtime event contract.
 - Tool/skill/MCP/subagent/memory/telemetry boundaries.
-- Mocked runtime proof with deterministic tests.
+- Deterministic local runtime proof.
 
 ## Unsafe claims unless separately proven
 
@@ -18,6 +18,6 @@
 - Production multi-user auth/multi-tenant SaaS parity.
 - JARVIS/ToFu feature completeness.
 
-## Upgrade evidence
+## Additional evidence for broader claims
 
-To upgrade parity, provide browser QA, live provider smoke with env-gated keys, real MCP server smoke, shell/filesystem sandbox tests, and source-to-contract trace updates.
+To claim broader live behavior, provide browser QA, live provider smoke with env-gated keys, real MCP server smoke, shell/filesystem sandbox tests, and source-to-contract trace updates.

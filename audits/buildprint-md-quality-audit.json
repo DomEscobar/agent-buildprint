@@ -31,7 +31,7 @@
           "action": "KEEP"
         },
         {
-          "path": "plans/01-openclaw-skeleton.md",
+          "path": "plans/01-openclaw-runtime-shape.md",
           "classification": "PLAN",
           "attentionScore": 3,
           "alignmentIssues": [],

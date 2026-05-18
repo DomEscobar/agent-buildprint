@@ -8,120 +8,113 @@ status: publishable-draft
 agentFile: true
 ---
 
-# BUILDPRINT: Automated AI Blog OS
+# Automated AI Blog OS Buildprint
 
-## 0A. Attention anchors for coding agents
+## Agent Operating Contract
 
-Keep these tokens active while planning and coding:
+Build an Automated AI Blog OS: a Markdown/MDX-first content pipeline that scans sources, scores ideas, reads content memory, drafts useful posts, validates claims and SEO/build outputs, queues approval, publishes or schedules only through configured gates, and audits stale or unsafe work.
 
-```txt
-TARGET_SHAPE = research scanner + idea scorer + content memory + draft generator + visual post templates + SEO validator + approval queue + publisher/scheduler + manager audit
-DEFAULT_OUTPUT = Markdown/MDX-first automated blog pipeline, not a generic CMS
-PUBLISHING_DEFAULT = draft/manual approval, never raw auto-publish by default
-SOURCE_RULE = every factual claim must be grounded in captured sources or marked opinion
-SEO_RULE = publish only after metadata, canonical, sitemap/RSS/llms, structured data, and build checks pass
-AUTO_MODE = optional scheduled publishing only after explicit config + approval policy + checks
-ANTI_SLOP = no generic SEO filler, no fake expertise, no source laundering
-```
-
-When instructions conflict, preserve `TARGET_SHAPE` and `PUBLISHING_DEFAULT`.
-
-If you notice yourself building a generic blog template, CMS admin, or keyword-stuffed content mill, stop and return to this Buildprint.
-
----
-
-## 0B. Definition of working
-
-The build is working only when all are true:
-
-| Gate | Must be true |
-|---|---|
-| Source scanner | Configured sources are captured with URL, title, excerpt, observed signal, timestamp, and retrieval status |
-| Idea scoring | Ideas are scored with explicit rubric fields, not vague ranking |
-| Content memory | Previous posts, used angles, banned topics, and internal links are read before drafting |
-| Draft generator | Drafts include source map, reusable workflow/prompt value, visual plan, and frontmatter |
-| Claim grounding | Factual claims are linked to source IDs or blocked for review |
-| SEO validator | title, description, canonical, robots, OG/Twitter, dates, tags, language, JSON-LD, breadcrumbs/FAQ where applicable are checked |
-| Output feeds | sitemap, RSS/feed, and llms outputs include publishable posts |
-| Approval queue | Default publish state is draft/needs_review; publishing refuses unapproved drafts |
-| Publisher | Optional schedule/publish step only runs after approval + checks + build pass |
-| Manager audit | Reports stale drafts, weak sources, repeated angles, SEO drift, broken feeds, and blocked publish attempts |
-| Tests | Test command passes without network or real publishing credentials |
-| Validation | `VALIDATION.md` records configuration, commands, test results, deviations, blockers |
-
----
-
-## 0C. Common drift map
-
-| If you drift toward... | Correct back to... |
-|---|---|
-| generic AI article generator | research-to-approval publishing OS with source contracts |
-| SEO spam | useful workflow-first posts with sources and original angle |
-| fake expertise | grounded claims, opinion labels, and human review |
-| auto-posting everything | approval-gated publishing by default |
-| thin Astro blog | scanner, scorer, draft queue, SEO validator, feeds, manager audit |
-| source laundering | direct source IDs attached to ideas, claims, and drafts |
-| broken publish | build + sitemap/RSS/llms + metadata checks before publish |
-
----
-
-## 0D. Buildprint package map
+Preserve this target shape:
 
 ```txt
-BUILDPRINT.md          architecture truth
-SPEC.md                behavior truth
-PLAN.md                execution index
-plans/*.md             phase-by-phase task rails
-CONTRACTS.md           data/interface truth
-DEFAULT_PRESET.md      safe default content ops settings
-TEST_MATRIX.md         risk → test truth
-VALIDATION_TEMPLATE.md completion report shape
-questions.md           closed configuration interview
+research scanner + idea scorer + content memory + draft generator + visual post templates + SEO validator + approval queue + publisher/scheduler + manager audit
 ```
 
-Do not collapse these into one vague implementation prompt.
+Default publishing is draft/manual approval. Direct publishing is never enabled by default.
 
----
+## Binding Implementation Slice
 
-## 1. Contract for the coding agent
+The minimum included behavior is the content-operations pipeline, not a generic CMS or theme:
 
-Build an **Automated AI Blog OS**: a Markdown/MDX-first content pipeline that researches topics, scores ideas, drafts useful posts, validates SEO/build outputs, and publishes only through configured approval gates.
+- configured sources are captured with URL, title, excerpt, observed signal, timestamp, quality, and retrieval status;
+- ideas are scored with explicit rubric fields;
+- previous posts, used angles, banned topics, and internal links are read before drafting;
+- drafts include frontmatter, source map, claim map, reusable prompt/workflow value, visual plan, internal links, CTA or next step, and publish checklist state;
+- factual claims are linked to source IDs or blocked;
+- SEO validation checks metadata, canonical, robots, OG/Twitter, dates, tags, language, JSON-LD, schema where applicable, sitemap, RSS/feed, llms output, and build status;
+- publishing refuses unapproved drafts and requires passing claim, SEO, feed, and build gates;
+- manager audit reports stale drafts, weak sources, repeated angles, SEO drift, broken feeds, and blocked publish attempts;
+- tests pass without network or real publishing credentials.
 
-Hard no:
+## Non-Goals / Unsafe Claims
+
+- Do not replace the system with a plain blog template, CMS admin, or keyword list.
+- Do not publish without approval by default.
+- Do not invent sources.
+- Do not include unsourced factual claims.
+- Do not launder sources by attaching source IDs to unsupported claims.
+- Do not present fake expertise, fake case studies, or generic SEO filler as product output.
+- Do not hide broken sitemap, RSS/feed, llms, metadata, or build outputs.
+- Do not call external source, LLM, deployment, or publishing services in tests.
+- Do not count route-shaped, command-shaped, or service-shaped placeholders as implemented behavior.
+
+## Required Read Order
+
+1. `BUILDPRINT.md`
+2. `SPEC.md`
+3. `CONTRACTS.md`
+4. `DEFAULT_PRESET.md`
+5. `questions.md`
+6. `PLAN.md`
+7. `plans/*.md` in listed phase order
+8. `TEST_MATRIX.md`
+9. `VALIDATION_TEMPLATE.md`
+10. `checks/acceptance.md`
+11. `policies/publishing.md`
+
+## Phase Gates
+
+1. Configuration: if the user says `Use default blog preset`, apply `DEFAULT_PRESET.md`; otherwise ask exactly `questions.md`, summarize answers with its template, and wait for confirmation.
+2. Alignment: record content lane, audience, source types, publisher mode, approval policy, excluded capabilities, fixture policy, and blockers in `VALIDATION.md`.
+3. Content skeleton: create the required config, source, memory, post, visual/component, storage, script, test, and fixture surfaces with implemented behavior or explicit blocked status.
+4. Source scanner: capture `SourceRecord` files and mark inaccessible sources as `failed` or `skipped` without inventing content.
+5. Idea scoring: generate `IdeaRecord` candidates from captured source IDs and explicit rubric fields.
+6. Drafting and visuals: write `DraftRecord` and Markdown/MDX output with source maps, claim maps, original angle, visual plan, internal links, and checklist state.
+7. Claim and SEO validation: block ungrounded factual claims and invalid metadata, schema, feeds, llms output, or build status.
+8. Approval and publishing: require approval plus passing claim, SEO, feed, and build gates before manual preparation, scheduling, or publishing.
+9. Manager audit: report stale, weak, repeated, broken, blocked, and contradictory records with evidence and recommended action.
+10. Tests and validation: run the target test/build commands and map every `TEST_MATRIX.md` risk to evidence or an explicit blocker.
+
+## Acceptance Gates
+
+- Source scanner produces valid `SourceRecord` fixtures.
+- Idea scorer produces rubric-based `IdeaRecord` files.
+- Draft generator writes frontmatter, source map, claim map, visual plan, internal links, CTA or next step, and checklist state.
+- Content memory is read before drafting and repeated angles are avoided or flagged.
+- Claim validator blocks ungrounded factual claims.
+- SEO validator checks metadata, structured data, sitemap/RSS/feed, llms output, and build command.
+- Publisher refuses unapproved drafts by default.
+- Schedule or auto mode requires explicit configuration and the same gates.
+- Manager audit reports stale drafts, repeated angles, weak sources, SEO/feed failures, failed builds, and blocked publish attempts.
+- Tests pass without network or publishing credentials.
+- `VALIDATION.md` follows `VALIDATION_TEMPLATE.md`.
+
+## Purpose
+
+Use this Buildprint to create an editorial automation system for practical, source-grounded blog publishing. The output should be useful workflow-first posts with visible evidence and human-controlled publishing gates.
+
+## Architecture
 
 ```txt
-NO unsourced factual claims
-NO generic SEO filler
-NO fake expertise or fake case studies
-NO source laundering
-NO publishing without approval by default
-NO real network/API calls in tests
-NO hiding broken sitemap/RSS/llms outputs
-NO replacing the pipeline with a plain blog theme
+Sources
+  -> Scanner
+  -> SourceRecords
+  -> Idea Scorer
+  -> IdeaRecords
+  -> Content Memory
+  -> Draft Generator
+  -> DraftRecord + Markdown/MDX
+  -> Claim Validator
+  -> SEO Validator
+  -> Approval Queue
+  -> Publisher/Scheduler
+
+All storage
+  -> Manager Audit
+  -> Audit Report
 ```
 
----
-
-## 2. First action: configuration interview
-
-Before implementation:
-
-```txt
-if user said "Use default blog preset":
-  use DEFAULT_PRESET.md and start building
-else:
-  ask exactly questions.md
-  summarize answers using the required summary template
-  wait for confirmation
-```
-
-Record final choices in `VALIDATION.md`.
-
----
-
-## 3. Fixed architecture
-
-Implement this architecture with the smallest real behavior that satisfies the contracts. Every represented box must have working behavior and tests, or be marked blocked/excluded in `VALIDATION.md`; route-shaped or service-shaped placeholders do not count.
+Required project surface:
 
 ```txt
 Automated AI Blog OS
@@ -167,77 +160,25 @@ Automated AI Blog OS
       `-- approval-publishing.test.*
 ```
 
----
+## Evidence Boundary
 
-## 4. Required implementation behavior
+Fixture and local tests are evidence for pipeline behavior, source grounding, validation gates, and fail-closed publishing. They are not evidence of live source access, live LLM generation, deployed publishing, analytics, or external scheduler behavior.
 
-### Research scan
-- Rotate configured sources.
-- Capture source facts, not just links.
-- Mark source quality and retrieval status.
-- Never invent sources.
+Any unavailable source access, LLM/provider integration, deployment access, or publishing integration must be recorded in `VALIDATION.md` as blocked or excluded, not represented as working.
 
-### Idea scoring
-Score each idea against:
-- audience fit;
-- novelty/unusualness;
-- practical workflow value;
-- visual explainability;
-- source strength;
-- business relevance;
-- publish effort;
-- risk of slop/factual weakness.
+## Required Validation
 
-### Draft generation
-Every draft must include:
-- frontmatter;
-- source map;
-- claim map;
-- original angle;
-- reusable prompt/workflow;
-- visual component plan;
-- internal links;
-- CTA or next step;
-- publish checklist state.
+Default command gate:
 
-### Approval and publishing
-Default state is `draft` or `needs_review`.
-
-Publishing requires:
-
-```txt
-approval.status == approved
-claim_validation.status == pass
-seo_report.status == pass
-build.status == pass
-publisher.mode allowed by config
+```bash
+npm test
+npm run build
 ```
 
-Auto-schedule is allowed only when explicitly configured and the same gates pass.
+If the target project does not use npm, run equivalent test/build commands and record the substitution in `VALIDATION.md`.
 
----
+`VALIDATION.md` must include configuration, generated modules/files, exact commands and results, risk coverage mapped to `TEST_MATRIX.md`, deviations, blockers, and the publish safety statement.
 
-## 5. Acceptance checks
+## Copyable Agent Prompt
 
-- `npm test` or equivalent passes without network/publishing credentials.
-- Source fixtures prove ideas and claims are grounded.
-- Draft fixture cannot publish until approved.
-- SEO validator catches missing title, description, canonical, OG/Twitter, JSON-LD, sitemap/RSS/llms output, and build failure.
-- Manager audit reports stale drafts, repeated angles, weak source maps, and blocked publish attempts.
-- `VALIDATION.md` follows `VALIDATION_TEMPLATE.md`.
-
-
-
----
-
-## Consolidated notes from `architecture.md`
-
-# Architecture diagram
-
-```txt
-Sources -> Scanner -> SourceRecords -> Idea Scorer -> IdeaRecords
-                                      -> Content Memory
-IdeaRecord + Memory -> Draft Generator -> DraftRecord + MD/MDX
-DraftRecord -> Claim Validator -> SEO Validator -> Approval Queue -> Publisher/Scheduler
-All storage -> Manager Audit -> Audit Report
-```
+Build the Automated AI Blog OS from this Buildprint. If I say `Use default blog preset`, use `DEFAULT_PRESET.md`; otherwise ask exactly `questions.md`, summarize the answers using its template, and wait for confirmation. Then implement a Markdown/MDX-first pipeline with source scanning, idea scoring, content memory, draft generation, visual post templates, claim validation, SEO/build/feed validation, approval queue, publisher/scheduler, manager audit, tests, and `VALIDATION.md`. Default publishing must be draft/manual approval. Tests must use fixtures and must not call real source, LLM, deployment, or publishing services. Every represented command, route, service, or capability must work end to end or be recorded as blocked/excluded.

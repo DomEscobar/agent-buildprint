@@ -19,7 +19,7 @@ Ask only if unclear or unsafe:
 | 1 | Which candidate/system scope should be extracted? | Sets output boundary | Highest-confidence product scope | |
 | 2 | Preserve source stack or keep portable? | Controls implementation constraints | Keep portable | |
 | 3 | Target stack, if any? | Needed only for cross-stack rebuild | Not set yet | |
-| 4 | Production-grade selected scope? | Prevents lazy MVP output | Smaller complete scope; included capabilities must be real | |
+| 4 | Production-grade selected scope? | Prevents proof-only product claims | Smaller complete scope; included capabilities must be real | |
 | 5 | Fidelity / parity target? | Controls validation depth and safe claims | contract-parity + runtime-parity for included product/app features | |
 | 6 | Provider/export/full-parity posture? | Prevents accidental expensive or false parity claims | Exclude provider/export unless real implementation is selected; mocks only as test fixtures | |
 | 7 | Capabilities to exclude rather than fake? | Keeps scope honest | Cut hard features from scope instead of mocking/placeholding them | |

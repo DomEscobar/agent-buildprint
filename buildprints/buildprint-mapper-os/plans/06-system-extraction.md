@@ -28,7 +28,7 @@ For a System Buildprint that describes a product or app, include a final proof p
 - run Playwright CLI browser QA if there is a UI,
 - report what is product-complete, what is excluded, and what remains a blocker.
 
-The proof target is not exact clone/parity. The proof target is that the Buildprint can guide a coding agent to a coherent runnable implementation whose included capabilities are real, not fake MVP placeholders, with traceable gaps for excluded capabilities.
+The proof target is not exact source equivalence. The proof target is that the Buildprint can guide a coding agent to a coherent runnable implementation whose included capabilities are real, not proof-only placeholders, with traceable gaps for excluded capabilities.
 
 
 ## System precision requirements

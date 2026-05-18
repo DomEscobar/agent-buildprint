@@ -28,7 +28,7 @@
 ## Recommended score weights
 
 - Static validity: 10%
-- Install parity / snapshot integrity: 10%
+- Snapshot integrity: 10%
 - Loadout hygiene: 10%
 - Skill unit correctness: 20%
 - Activation precision/recall: 15%

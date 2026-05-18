@@ -27,7 +27,7 @@
 - Compile validation rejects invalid graph topology.
 - Runtime validates update keys.
 - Interrupts include IDs; resume maps to an interrupt or next pending interrupt.
-- Pending writes are persisted before superstep checkpoint commit in the simulation.
+- Pending writes are persisted before superstep checkpoint commit when the configured checkpointer supports that path.
 
 ## Out of Scope Security Controls
 

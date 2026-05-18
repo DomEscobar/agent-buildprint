@@ -93,7 +93,7 @@ Use this structure after soft discovery:
 | # | Decision | Safe default | Human answer |
 |---|---|---|---|
 | 1 | Confirm selected candidate/scope | Use candidate N as scope | |
-| 2 | Confirm production-grade selected scope | Smaller complete scope; no fake MVP surfaces | |
+| 2 | Confirm production-grade selected scope | Smaller complete scope; no proof-only product surfaces | |
 | 3 | Choose fidelity target | contract-parity + runtime-parity for included product/app features | |
 | 4 | Confirm provider/export posture | Exclude provider/export unless real implementation is selected; mocks only as test fixtures | |
 | 5 | Confirm side-effect posture | No external writes during mapping/reversal | |

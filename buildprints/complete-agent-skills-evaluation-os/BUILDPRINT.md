@@ -1,190 +1,178 @@
-# BUILDPRINT — Complete Agent Skills Evaluation OS
+# BUILDPRINT: Complete Agent Skills Evaluation OS
 
-## Mission
+## Agent Operating Contract
 
-Build an evaluation operating system for complete coding-agent setups: skills, agents, commands, hooks, MCP servers, instructions, permissions, routers, subagents, and workflow rules.
+Build an offline deterministic evaluation proof for complete coding-agent setup contracts: skills, agents, commands, hooks, MCP servers, instructions, permissions, routers, subagents, and workflow rules. Production/live adapters can extend the same contract only after separate validation.
 
-The system must answer:
+The default evaluator measures both structure and fixture-backed behavior. It must answer whether the setup is valid, installed as expected, discoverable without manual prompting, useful in sandboxed tasks, compliant with required process order, safe under multi-agent execution, worth its token/context cost, and reproducible in CI with stored evidence.
 
-1. Is the setup valid and installed exactly as expected?
-2. Are skills and components discoverable without manual prompting?
-3. Do individual skills work in sandboxed tasks?
-4. Does the agent follow required process order, not only final output?
-5. Do subagents and parallel sessions preserve context, ownership, and merge safety?
-6. Is the loadout worth its token/context cost?
-7. Can results be reproduced in CI with stored evidence?
+Default proof mode is offline and deterministic. Its accepted status is `offline proof accepted`; live agent, provider, browser, or runtime adapters require `production adapter accepted` evidence behind explicit configuration and separate validation.
+
+## Binding Implementation Slice
+
+The included proof is an offline JavaScript implementation of the evaluation pipeline and scoring model. It uses fixture objects only and makes no network or agent calls.
+
+Included in the validated slice:
+
+- setup snapshot contract;
+- static lint layer;
+- loadout inventory metrics;
+- skill unit evaluation contract;
+- activation evaluation contract;
+- transcript process invariant checks;
+- E2E task benchmark contract;
+- multi-agent safety checks;
+- weighted scorecard and hard-fail model;
+- deterministic proof tests under `proof/`.
+
+Excluded until adapter work is implemented:
+
+- live coding-agent execution;
+- sandboxed real skill runs;
+- transcript capture from a real runtime;
+- provider or browser automation;
+- CI publishing adapters beyond local report generation;
+- exact behavioral equivalence to any referenced external project.
+
+## Non-Goals / Unsafe Claims
+
+- Do not claim deterministic evaluation of model intelligence.
+- Do not treat one successful chat transcript as proof.
+- Do not require one specific agent vendor.
+- Do not auto-install untrusted tools without explicit approval.
+- Do not publish credentials, transcripts containing secrets, or private repo content.
+- Do not count offline fixtures as live adapter behavior.
+- Do not claim complete production evaluation coverage until real runtime, sandbox, transcript, and reporting adapters are implemented and validated.
+
+## Required Read Order
+
+1. `BUILDPRINT.md`
+2. `SPEC.md`
+3. `CONTRACTS.md`
+4. `SAFETY_POLICY.md`
+5. `STATIC_LINT.md`
+6. `LOADOUT_INVENTORY.md`
+7. `SKILL_UNIT_EVALS.md`
+8. `ACTIVATION_EVALS.md`
+9. `TRANSCRIPT_PROCESS_EVALS.md`
+10. `E2E_TASK_BENCH.md`
+11. `MULTI_AGENT_SAFETY.md`
+12. `SCORECARD.md`
+13. `TEST_MATRIX.md`
+14. `VALIDATION_REPORT.md`
+
+## Phase Gates
+
+| Phase | Gate | Exit evidence |
+| --- | --- | --- |
+| Scope and policy | Define target platforms, allowed live adapters, permissions, redaction, and destructive-action policy. | Policy object and safety hard-fail list exist. |
+| Snapshot | Capture skills, commands, agents, hooks, MCP servers, permissions, router settings, versions, and source refs. | `SetupSnapshot` validates and secrets are redacted. |
+| Static lint | Validate files and references before behavior tests. | Critical static errors block expensive/live tests unless exploratory mode is explicit. |
+| Loadout inventory | Measure loaded context, active usage, duplicates, dormant artifacts, and router misses. | Inventory metrics feed the scorecard. |
+| Skill unit evals | Run selected skills in fresh sandboxes or deterministic fixtures. | Assertions cover files, commands, JSON, output, duration, and token guards. |
+| Activation evals | Test positive and negative natural prompts for each component. | Recall, precision, wrong-component rate, and clarification behavior are scored. |
+| Transcript checks | Parse events and enforce process order. | Required event-order invariants pass or produce findings. |
+| E2E task bench | Run representative complete tasks for the selected adapter mode. | Artifacts, tests, process, safety, recovery, and evidence are scored. |
+| Multi-agent safety | Evaluate delegation briefs, ownership, worktree/session isolation, and merge safety. | File ownership and coordination checks pass or hard-fail. |
+| Reports | Aggregate findings and scores. | JSON and Markdown reports plus redacted artifacts are stored. |
+
+## Acceptance Gates
+
+The offline proof is accepted only as `offline proof accepted` when:
+
+- snapshot, lint, loadout, unit, activation, transcript, E2E, and multi-agent layers execute through deterministic fixtures;
+- scoring weights and hard-fail overrides are applied;
+- findings include evidence and remediation context;
+- all local proof tests pass with `npm test`.
+
+A production adapter is accepted only when:
+
+- it captures a real setup snapshot;
+- it runs sandboxed behavior tests or records explicit blockers;
+- it stores redacted transcripts and artifacts;
+- it separates skill correctness from activation behavior;
+- it records command output and reproducible evidence;
+- it fails hard on secret leakage, unsafe external writes, destructive actions without approval, missing snapshots, irreproducible results, or fabricated evidence.
+
+## Purpose
+
+Complete skills setups can appear healthy while failing operationally: invalid files may be ignored, installed artifacts may differ from the intended setup, skills may not activate, agents may skip required process, subagents may collide, and loadouts may tax every turn with unused context. This Buildprint evaluates the whole setup from install snapshot to behavior evidence.
 
 ## Architecture
 
 ```text
 Setup Snapshot
-  → Static Lint
-  → Loadout Inventory
-  → Skill Unit Tests
-  → Activation Evals
-  → Transcript Process Checks
-  → E2E Task Bench
-  → Multi-Agent Safety
-  → Scorecard + CI Reports
+  -> Static Lint
+  -> Loadout Inventory
+  -> Skill Unit Tests
+  -> Activation Evals
+  -> Transcript Process Checks
+  -> E2E Task Bench
+  -> Multi-Agent Safety
+  -> Scorecard + CI Reports
 ```
 
-## Canonical modules
+Canonical modules:
 
-### 1. Setup Snapshot
-Capture the target setup under test. Include installed skills, commands, agents, hooks, MCP servers, permissions, model/router config, and source commit or package lock.
+1. Setup Snapshot: capture installed skills, commands, agents, hooks, MCP servers, permissions, router settings, versions, and source refs.
+2. Static Lint: validate frontmatter, names, paths, hook schemas, MCP refs, permissions, tool declarations, forbidden patterns, and broken links.
+3. Loadout Inventory: measure context footprint, active and dormant artifacts, duplicates, token cost, and stale components.
+4. Skill Unit Tests: run one skill at a time with fixtures and deterministic assertions.
+5. Activation Evals: generate positive and negative prompts for every component and score routing behavior.
+6. Transcript Process Checks: enforce required event order and prohibited shortcuts.
+7. E2E Task Bench: run complete repo tasks requiring multiple components and evidence capture.
+8. Multi-Agent Safety: evaluate delegation, ownership, isolation, conflict handling, and parent-context preservation.
+9. Scorecard + Reports: emit JSON and Markdown reports, optional CI formats, stored artifacts, diffs, transcripts, and weighted scores.
 
-### 2. Static Lint
-Validate files before behavior tests. Check frontmatter, names, paths, hook schemas, MCP refs, permissions, tool declarations, forbidden patterns, and broken links.
+## Evidence Boundary
 
-### 3. Loadout Inventory
-Measure context footprint, active/dormant artifacts, duplicates, loaded token tax, active token cost, and stale components.
+Validated evidence currently covers the offline scoring architecture only. It does not prove live runtime execution, sandboxed real skills, provider calls, browser automation, or transcript capture from a real coding-agent runtime.
 
-### 4. Skill Unit Tests
-Run one skill at a time in fresh sandboxes with fixtures and deterministic assertions on files, commands, JSON, stdout/stderr, response content, latency, and token use.
+Safe claim:
 
-### 5. Activation Evals
-Generate positive and negative prompts for every skill/agent/command/hook/MCP component. Score recall, precision, wrong-component activation, and ask-clarify behavior.
+- The Buildprint defines and proves a deterministic offline evaluation pipeline and scoring model.
 
-### 6. Transcript Process Checks
-Check event order and forbidden shortcuts. Examples: skill loaded before writing, failing test before implementation, approval before destructive action, review before finish.
+Unsafe until separately validated:
 
-### 7. E2E Task Bench
-Run complete repo tasks requiring multiple skills: plan → implement → test → review → finish. Score artifacts, tests, safety, recovery, and evidence.
+- complete production evaluation OS;
+- live behavior coverage for any specific coding-agent vendor;
+- real skill sandbox execution;
+- real transcript capture;
+- provider/runtime/browser adapter behavior;
+- exact coverage of referenced external tools.
 
-### 8. Multi-Agent Safety
-Evaluate delegation briefs, subagent JSON outputs, file ownership, worktree isolation, merge conflicts, stale state, and parent-context loss.
+## Required Validation
 
-### 9. Scorecard + Reports
-Produce machine-readable and human reports: JSON, Markdown, HTML/JUnit if implemented, stored transcripts, artifacts, diffs, and a weighted score.
-
-## Non-goals
-
-- Do not claim deterministic evaluation of model intelligence.
-- Do not treat one happy-path chat transcript as proof.
-- Do not require one specific agent vendor.
-- Do not auto-install untrusted tools without explicit approval.
-- Do not publish credentials, transcripts containing secrets, or private repo content.
-
-## Implementation rule
-
-Default proof mode must be offline and deterministic. Live agent/provider runs are optional adapters behind explicit configuration.
-
-
----
-
-## Research and implementation notes: implementation rails
-
-# PLAN — Implementation rails
-
-## Phase 0 — Scope and policy
-- Define target agent platforms.
-- Define allowed live adapters and offline mode.
-- Define safety policy for external actions, credentials, browser use, and destructive commands.
-
-## Phase 1 — Snapshot
-- Discover setup artifacts.
-- Normalize to `SetupSnapshot`.
-- Record source versions and install target.
-- Redact secrets.
-
-## Phase 2 — Static lint
-- Validate `SKILL.md` frontmatter and body.
-- Validate agent/command/hook/MCP references.
-- Validate permission boundaries.
-- Block behavior tests on critical errors.
-
-## Phase 3 — Loadout inventory
-- Compute loaded token/context footprint.
-- Detect duplicates, dormant artifacts, and unused high-cost components.
-- Emit inventory report.
-
-## Phase 4 — Skill unit suites
-- Add `*.skill-test.yml` or equivalent cases.
-- Run sandboxed tests.
-- Assert file, command, JSON, output, duration, and token contracts.
-
-## Phase 5 — Activation suites
-- Generate positive and negative prompts per component.
-- Run with base setup and optionally with router enabled.
-- Score recall, precision, ambiguity handling, and wrong-route rate.
-
-## Phase 6 — Transcript invariants
-- Define required event order.
-- Parse transcripts/events.
-- Fail forbidden shortcuts and missing process steps.
-
-## Phase 7 — E2E benchmark
-- Run representative repo tasks.
-- Score final artifacts, tests, process evidence, safety, and recovery.
-
-## Phase 8 — Multi-agent safety
-- Test delegation briefs, output schemas, file ownership, worktree/session coordination, and merge recovery.
-
-## Phase 9 — Reports
-- Aggregate scorecard.
-- Store redacted evidence.
-- Emit CI-friendly JSON/Markdown/JUnit/HTML reports.
-
-
----
-
-## Research and implementation notes: overview
-
-# Complete Agent Skills Evaluation OS Buildprint
-
-A stack-adaptable Buildprint for evaluating a complete coding-agent skills setup - not just one `SKILL.md` file.
-
-The blueprint combines static config linting, install snapshot/parity, loadout/token inventory, skill-level sandbox tests, component activation tests, transcript/order checks, end-to-end task benchmarks, multi-agent safety cases, and CI scorecards.
-
-## Why this exists
-
-A skills setup can look good while failing in practice:
-
-- the files are invalid or silently ignored;
-- the installed setup is not the setup you think you are testing;
-- the right skill exists but does not activate;
-- the agent produces plausible output while skipping the required process;
-- subagents collide on files or lose parent context;
-- the loadout taxes every turn with unused context.
-
-This Buildprint evaluates the whole system from install to behavior.
-
-## Default proof
-
-The included proof is an offline JavaScript implementation of the evaluation pipeline and scoring model. It uses fixture objects only and makes no network or agent calls. It validates the scoring architecture, not a complete production evaluation OS with live adapters, sandboxed agent execution, or transcript capture from a real runtime.
+Run the included proof:
 
 ```bash
 cd proof
 npm test
 ```
 
-## Research basis
+Required result:
 
-Research artifacts:
+- all offline pipeline/scoring tests pass;
+- validation report states the offline scope boundary;
+- any live adapter or sandbox limitation remains outside passed claims.
 
-- `/root/.openclaw/workspace/research/newer-superpowers-like-2026-05-17/`
-- `/root/.openclaw/workspace/research/complete-agent-skills-eval-stack-2026-05-17/`
+## Copyable Agent Prompt
 
-Primary source pressure came from `balyakin/skill-eval-runner`, `sjnims/cc-plugin-eval`, `obra/superpowers`, `agent-sh/agnix`, `David-CKS/claude-skill-router`, `robester0403/Local-Loadout-Smithery`, `Powerjackie/delegate-kit`, `wan-huiyan/agent-traffic-control`, `slash9494/ai-config-sync-manager`, `TakumaAida/agents-deploy`, `motiful/skill-forge`, and `agent-sh/agentsys`.
+```txt
+Use the Complete Agent Skills Evaluation OS Buildprint.
 
+Read BUILDPRINT.md first, then follow the Required Read Order.
 
----
+Implement or extend only the selected evaluation slice. Preserve the architecture:
+- setup snapshot,
+- static lint,
+- loadout inventory,
+- skill unit tests,
+- activation evals,
+- transcript process checks,
+- E2E task bench,
+- multi-agent safety,
+- scorecard and reports.
 
-## Research and implementation notes: tool comparison
-
-# TOOL_COMPARISON
-
-| Tool/repo | Best role in this Buildprint | Use carefully because |
-| --- | --- | --- |
-| `balyakin/skill-eval-runner` | Core per-skill sandbox runner | Does not prove activation/routing by itself |
-| `sjnims/cc-plugin-eval` | Component trigger/activation evals | Claude-plugin-oriented |
-| `obra/superpowers` | Transcript/process philosophy and workflow examples | Methodology-specific, not generic scoring |
-| `agent-sh/agnix` | Static config and agent-file linting | Rule set may need target tuning |
-| `robester0403/Local-Loadout-Smithery` | Loadout/cost/dormancy inventory | Claude/Cursor loadout focus |
-| `David-CKS/claude-skill-router` | Router intervention to A/B test activation | Router success is not same as skill quality |
-| `slash9494/ai-config-sync-manager` | Claude/Codex config sync | Sync parity must be tested after conversion |
-| `TakumaAida/agents-deploy` | One-source `.agents/` deployment | Young project; validate generated targets |
-| `Powerjackie/delegate-kit` | Subagent delegation contracts | v0.1 rough edges; good conceptual module |
-| `wan-huiyan/agent-traffic-control` | Parallel-session/worktree safety | Claude-session-specific details |
-| `motiful/skill-forge` | Skill publish readiness/security checks | Complements lint, not runtime behavior proof |
-| `agent-sh/agentsys` | Cross-agent runtime/orchestration reference | Larger platform scope than evaluation OS |
+Default to offline deterministic proof mode unless live adapters are explicitly configured. Do not claim live runtime behavior, provider execution, sandboxed real skills, browser automation, or production coverage without stored evidence from those adapters.
+```

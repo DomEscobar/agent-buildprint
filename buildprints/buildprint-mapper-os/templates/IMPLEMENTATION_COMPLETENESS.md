@@ -1,6 +1,6 @@
 # Implementation Completeness Contract
 
-Purpose: prevent lazy MVP output. The selected scope may be small, but every included capability must be real, wired, and testable.
+Purpose: prevent proof-only product claims. The selected scope may be small, but every included capability must be real, wired, and testable.
 
 ## Production-grade posture
 

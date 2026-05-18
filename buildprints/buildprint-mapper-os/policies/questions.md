@@ -49,7 +49,7 @@ After soft discovery, create `questions.md` with:
 | 1 | Which candidate/system scope should be extracted? | Sets output boundary | Candidate 1 / highest-confidence product scope | |
 | 2 | Preserve source stack or keep portable? | Controls implementation constraints | Keep portable | |
 | 3 | Target stack, if any? | Needed only for cross-stack rebuild | Not set yet | |
-| 4 | Production-grade selected scope? | Prevents lazy MVP output | Smaller complete scope; included capabilities must be real | |
+| 4 | Production-grade selected scope? | Prevents proof-only product claims | Smaller complete scope; included capabilities must be real | |
 | 5 | Fidelity/proof target? | Controls validation depth | Contract + runtime proof for selected product/app scope; architecture proof for libraries | |
 | 6 | Capabilities to exclude rather than fake? | Prevents fake providers/routes/exports/settings | Cut hard capabilities from scope unless they can be real | |
 

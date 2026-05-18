@@ -8,7 +8,7 @@
 
 Targets: `workflow-proof`, `contract-parity`, `runtime-parity`, `ui-workbench-parity`, `provider-parity`, `export-media-parity`, `full-clone-parity`.
 
-Parity is not the same as implementation completeness. A Buildprint may exclude exact source parity, but every included capability must still be implemented seriously. Do not use “not full parity” as permission to ship fake MVP surfaces.
+Parity is not the same as implementation completeness. A Buildprint may exclude exact source parity, but every included capability must still be implemented seriously. Do not use "not full parity" as permission to ship proof-only product surfaces.
 
 ## Safe claims
 

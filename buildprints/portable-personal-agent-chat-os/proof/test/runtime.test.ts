@@ -29,7 +29,7 @@ test('denies shell tool by default and keeps runtime alive', async () => {
   assert.ok(result.events.some((e) => e.type === 'turn.completed'));
 });
 
-test('maps and executes fake MCP tool through same tool policy', async () => {
+test('maps and executes deterministic MCP tool through same tool policy', async () => {
   const runtime = new AgentRuntime();
   const result = await runtime.turn('use mcp please');
   assert.ok(result.events.some((e) => e.type === 'mcp.tool_mapped' && e.tool === 'mcp.echo'));

@@ -1,9 +1,9 @@
-# Buildprint
+# Portable Novel-to-Storyboard Pipeline Buildprint
 
 ## Agent Operating Contract
 
 - This file is the canonical start file and authority spine for this Buildprint.
-- If another file conflicts with this file, this file wins unless Dom or a later reviewed Buildprint revision explicitly changes it.
+- If another file conflicts with this file, this file wins unless a later reviewed Buildprint revision explicitly changes it.
 - Build the binding implementation slice first. Treat deeper docs as detail rails, not permission to expand scope.
 - Default implementation and CI must use deterministic mock/no-network providers.
 - Live providers, final stitched-video export, Electron parity, and exact Toonflow UI/canvas parity are excluded unless a later approved phase adds evidence and gates.
@@ -134,4 +134,18 @@ INFERRED: The clean-room rebuild may use any stack as long as contracts and life
 
 ## Required Validation
 
-Use fixture chapters and mock providers. Validate state transitions, schema contracts, generated package contents, and failure handling. Live providers are optional adapter tests only.
+Minimum validation evidence:
+
+- unit/contract test command passes;
+- production build command passes;
+- real browser happy path clicks rendered UI controls and parses the exported manifest from rendered UI;
+- runtime negative paths show visible failures/retries without corrupting durable state;
+- exported PortablePreviewManifest sample includes chapters, events, scripts, assets, storyboard rows, tracks, media records, task log, and limitations/non-parity text;
+- secret scan and no-network default gate pass;
+- implementation records build report, runtime/browser report, screenshots, test/build summary, manifest sample, and explicit remaining gaps.
+
+Live providers are optional adapter tests only and are excluded from default acceptance unless a later reviewed Buildprint revision adds evidence and gates.
+
+## Copyable Agent Prompt
+
+Use the Portable Novel-to-Storyboard Pipeline Buildprint. Read `BUILDPRINT.md` first, then follow its Required Read Order, Phase Gates, and Acceptance Gates. Build the binding clean-room portable webapp proof with deterministic mock/no-network providers by default. Produce a PortablePreviewManifest/preview package only. Do not claim Toonflow clone, provider parity, exact workbench parity, or final stitched-video export parity unless a later reviewed Buildprint revision adds evidence and gates.

@@ -15,17 +15,13 @@
 
 ---
 
-## Consolidated notes from `VALIDATION_REPORT.md`
-
-# Validation Report
-
-## Status
+## Validation status
 
 Current checked-in validation is limited to the local proof command below. Historical local static manifest and public live bootstrap claims are not treated as reproducible evidence for this checkout.
 
-## Research validation
+## Research evidence boundary
 
-Deepresearch artifact validated successfully:
+The source research used while authoring this Buildprint reported:
 
 - 18 sources fetched
 - 16 evidence-backed claims

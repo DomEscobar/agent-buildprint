@@ -4,7 +4,7 @@
 
 - Run import/static lint checks for Python and TypeScript where dependencies are available.
 - Validate all FastAPI request models and response shapes against documented contracts.
-- Run citation sanity checks for Mapper OS artifacts after generation.
+- Run citation sanity checks for Buildprint artifacts after generation.
 
 ## Unit QA
 
@@ -28,7 +28,7 @@
 ## Acceptance Criteria
 
 - Generated vertical MP4 is playable and reports 1080x1920.
-- Prototype/mock proof: job status reaches completed or failed with inspectable in-process logs.
+- Local proof mode: job status reaches completed or failed with inspectable in-process logs.
 - Production claim: job status and logs survive restart through durable storage, with provider request IDs and resumable retry evidence.
 - Social handoff payload matches selected platforms and schedule.
 - Gallery pages render with valid HTML and JSON-LD.

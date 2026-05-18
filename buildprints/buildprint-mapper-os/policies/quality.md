@@ -6,7 +6,7 @@ Mapper OS optimizes for precision over coverage. A generated Buildprint should b
 
 A publishable Mapper OS output must include:
 
-- production-grade selected-scope posture: smaller scope is allowed, fake MVP implementation is not,
+- production-grade selected-scope posture: smaller scope is allowed, proof-only implementation is not product behavior,
 - evidence-backed claims with `OBSERVED(path:line)` citations,
 - explicit `INFERRED` claims where behavior is synthesized,
 - `QUESTION` items for product decisions and ambiguous rules,

@@ -8,209 +8,157 @@ status: publishable-draft
 agentFile: true
 ---
 
-# BUILDPRINT: OpenClaw AI Influencer OS
+# Buildprint: OpenClaw AI Influencer OS
 
+## Agent Operating Contract
 
-## 0A. Attention anchors for coding agents
+Build an OpenClaw-based AI Influencer OS with a configurable fictional persona, a default preset, persistent relationship memory, separate persona life state, Wavespeed image generation, grounded social drafting, manager audit, and secured local browser/noVNC publishing handoff.
 
-Keep these tokens active while planning and coding:
+`BUILDPRINT.md` is the canonical authority. `SPEC.md`, `CONTRACTS.md`, `DEFAULT_PRESET.md`, `PLAN.md`, `plans/*.md`, `TEST_MATRIX.md`, `VALIDATION_TEMPLATE.md`, policies, and acceptance checks support this contract but do not replace it.
+
+The generated app package must be named `openclaw-ai-influencer-os`. The runtime shape is Dockerized OpenClaw, not a generic chatbot, generic social scheduler, LangGraph replacement, SaaS dashboard-first app, or non-OpenClaw runtime.
+
+Required constants:
 
 ```txt
 TARGET_SHAPE = OpenClaw container + persona extension + skills + life modules + Wavespeed image skill + secured local browser/noVNC publishing handoff
 RUNTIME = OpenClaw
 IMAGE_PROVIDER = Wavespeed only for production
-REFERENCE_ARCHITECTURE = OpenClaw Influencer OS default preset
 DEFAULT_OUTPUT = Dockerized bot, not SaaS app
-TEST_MODE = no external API calls, tests set mock mode themselves; .env.example must not enable test mode
-PUBLISHING_DEFAULT = mock/manual approval, never auto-publish by default
+TEST_MODE = no external API calls; tests set mock mode themselves
+PUBLISHING_DEFAULT = mock/manual approval; never auto-publish by default
 ALIGNMENT = ask closed config questions only, then build
 ```
 
-When instructions conflict, preserve `TARGET_SHAPE`.
+## Binding Implementation Slice
 
-If you notice yourself building a generic Node/Express/Next/SaaS/chatbot template, stop and return to `TARGET_SHAPE`.
+The included implementation slice is:
 
----
+- OpenClaw config, extension, skills, Docker entrypoint, and runnable runtime command. A structured `openclaw_runtime_missing` result is an honest blocked validation status, not accepted implementation evidence.
+- SOUL/USER/canon persona context with configurable persona name and default preset values.
+- LLM JSON analyzer adapter for production intent analysis through an OpenRouter-compatible endpoint; tests may inject a mock analyzer.
+- Runtime context builder that separates private relationship memory from persona self-state.
+- JSON-file storage for user memory, self-state, calendar, journal, social drafts, media jobs, and posted history.
+- Life modules for life tick, journal writing, memory reflection, social planning, social autonomy, publisher, and manager audit.
+- Wavespeed image skill with a concrete real provider client and mock test path.
+- Public/private media policy gates with structured block reasons.
+- Grounded social drafts with `groundedIn` references.
+- Mock/manual-gated publisher plus authenticated local-only Chromium/noVNC handoff.
+- Tests and static checks proving the above without external API calls.
 
-## 0B. Definition of working
+## Non-Goals / Unsafe Claims
 
-The build is working only when all are true:
+Do not claim or implement as included behavior:
 
-| Gate | Must be true |
+- a generic chatbot or scheduler in place of the OpenClaw persona extension;
+- a production image provider other than Wavespeed;
+- real external API calls during tests;
+- keyword/regex-only production intent analysis;
+- merged user memory and persona self-state;
+- public/private media handled by the same gate;
+- auto-publishing by default;
+- passwordless, unauthenticated, or publicly bound noVNC/VNC;
+- empty command wrappers counted as working commands;
+- package identity `agb`, `xy`, `agent-buildprint`, or any Buildprint CLI package name;
+- secret values committed to files;
+- tests marked passing when required files or phases are blocked.
+
+If a required production key is missing, the relevant production path must return a structured blocked status or use an explicitly labeled mock test path. It must not report false production success.
+
+## Required Read Order
+
+1. `BUILDPRINT.md`
+2. `DEFAULT_PRESET.md`
+3. `questions.md`
+4. `SPEC.md`
+5. `CONTRACTS.md`
+6. `PLAN.md`
+7. `plans/*.md` in numeric order
+8. `policies/media.md`
+9. `policies/safety.md`
+10. `TEST_MATRIX.md`
+11. `checks/acceptance.md`
+12. `VALIDATION_TEMPLATE.md`
+
+## Phase Gates
+
+0. Alignment: use the default persona preset if the user says `Use default persona preset`; otherwise ask exactly `questions.md`, summarize choices, and wait for confirmation.
+1. Package and file tree: create the required app files, `.env.example`, and package scripts with package name `openclaw-ai-influencer-os`.
+2. OpenClaw runtime: add config, Docker structure, entrypoint, skills, and a runnable runtime command. If the local OpenClaw runtime is unavailable, record `openclaw_runtime_missing` as blocked and do not mark acceptance passed.
+3. Persona foundation: create persona files, canon, boundaries, manager docs, and validation record from confirmed choices.
+4. Storage: seed JSON stores and helpers with user memory separate from persona self-state.
+5. Persona extension: implement entrypoint, analyzer adapter, runtime context, storage, policy, and media flow.
+6. Life modules: implement life tick, journal writer, memory reflection, social planner, social autonomy, publisher, and manager audit.
+7. Wavespeed image skill: implement concrete Wavespeed request/poll adapter and mock test mode.
+8. Social planner and media queue: enforce `groundedIn`, QA notes, draft status, and media job linkage.
+9. Publisher handoff: implement mock publisher, approval gate, secured browser/noVNC service shape, and operator commands.
+10. Tests: implement unit and static checks; `npm test` must run without external APIs.
+11. Validation: fill `VALIDATION.md` with choices, commands, test results, missing keys, deviations, and blockers.
+
+## Acceptance Gates
+
+The build is accepted only when all are true:
+
+| Gate | Required evidence |
 |---|---|
-| OpenClaw shape | config, extension, skills, Docker entrypoint exist and call the OpenClaw CLI/runtime |
+| OpenClaw shape | config, extension, skills, Docker entrypoint, and runnable OpenClaw CLI/runtime path exist; missing runtime is recorded as blocked, not accepted |
 | Persona runtime | SOUL/USER/canon feed runtime context |
-| Analyzer | production intent analysis goes through a mockable LLM JSON adapter, not keyword-only regex |
-| Memory split | user relationship memory separate from persona self-state |
+| Analyzer | production intent analysis calls a mockable LLM JSON adapter when no mock analyzer is injected |
+| Memory split | user relationship memory and persona self-state are stored separately |
 | Images | Wavespeed real adapter path exists; tests use mock mode |
-| Media safety | public/private media have different gates |
-| Social | drafts require `groundedIn`; publisher is mock/manual by default |
-| Browser handoff | runnable Chromium/noVNC service or compose profile exists, binds local-only by default, requires operator auth, and handoff is documented |
-| Manager | audit reports stale, unsafe, ungrounded, blocked items |
-| Tests | `npm test` passes without external APIs and `npm run test:static` includes syntax + alignment checks |
-| Env contract | `.env.example` contains exact required names and does not enable test/mock mode by default |
-| Package identity | generated app package is `openclaw-ai-influencer-os`, not the Buildprint CLI package `agb` |
-| Validation | `VALIDATION.md` records choices, keys, deviations, blockers |
+| Media safety | public and private media have separate policy gates |
+| Social | drafts include `groundedIn`; publisher is mock/manual by default |
+| Browser handoff | Chromium/noVNC service or compose profile is runnable, local-only by default, auth-required, and documented |
+| Manager | audit reports stale, unsafe, ungrounded, blocked, and publishing-risk items |
+| Tests | `npm test` passes without external APIs and `npm run test:static` includes syntax and alignment checks |
+| Env contract | `.env.example` has exact required names and does not enable test/mock mode by default |
+| Package identity | generated app package is `openclaw-ai-influencer-os` |
+| Validation | `VALIDATION.md` records choices, keys, deviations, blockers, commands, and test result |
 
----
+## Purpose
 
-## 0C. Common drift map
+This Buildprint defines a product-grade architecture contract for a fictional AI influencer operating system. It is designed to produce a controlled OpenClaw agent with persistent persona continuity, media generation controls, social drafting, publishing handoff, and auditability.
 
-| If you drift toward... | Correct back to... |
-|---|---|
-| generic chatbot | OpenClaw persona extension + runtime context + memory/life state |
-| keyword-only bot | mockable LLM JSON analyzer adapter with tests proving production is not regex-only |
-| SaaS dashboard | Dockerized OpenClaw bot first; dashboard is minor status UI only |
-| image abstraction | Wavespeed production adapter path with mock fallback |
-| pure mock demo | real file/module shape + behavior tests; mock only external APIs |
-| social scheduler | default persona preset life/social planner with manager QA and grounded drafts |
-| auto-poster | mock/manual-gated publisher + secured browser/noVNC handoff |
-| broad product discovery | closed configuration interview only |
-
----
-
-
-## 0D. Buildprint package map
-
-Use the files as separate alignment rails:
+## Architecture
 
 ```txt
-BUILDPRINT.md          architecture truth
-SPEC.md                behavior truth
-PLAN.md                execution index
-plans/*.md             feature-by-feature task rails
-CONTRACTS.md           interface/data truth
-DEFAULT_PRESET.md      configurable default values, no fixed persona name
-TEST_MATRIX.md         risk → test truth
-VALIDATION_TEMPLATE.md completion report shape
+Telegram / chat channel
+  -> OpenClaw Gateway + Agent Runtime
+    -> influencer-persona extension
+      -> LLM JSON analyzer adapter
+      -> runtime context builder
+      -> policy and media gates
+      -> storage adapter
+    -> skills
+      -> influencer-image: Wavespeed real mode / mock test mode
+      -> influencer-post: secured local browser/noVNC handoff / mock publisher
+      -> influencer-social: drafts, outbox, history
+      -> influencer-journal
+      -> influencer-calendar
+      -> influencer-recall
+    -> life modules
+      -> life tick
+      -> journal writer
+      -> memory reflection
+      -> social planner
+      -> social autonomy
+      -> manager audit
+    -> JSON storage
 ```
 
-Do not collapse these into one vague implementation plan.
-
----
-
-## 0. Contract for the coding agent
-
-Build an **OpenClaw AI Influencer OS with a configurable persona and a default preset**.
-
-This Buildprint is not a brainstorming prompt. Treat it as an execution contract.
-
-You may configure names, voice, channels, content lanes, and approval settings from the user answers. You may **not** change the architecture unless the user explicitly asks to abandon this Buildprint.
-
-Hard no:
+Required storage layout:
 
 ```txt
-NO generic chatbot
-NO generic social scheduler
-NO LangGraph replacement
-NO SaaS dashboard-first rewrite
-NO non-OpenClaw runtime
-NO image provider swap away from Wavespeed
-NO real external API calls in tests
-NO keyword-only production analyzer
-NO auto-publishing by default
+storage/users/<id>.json
+storage/influencer-self/state.json
+storage/calendar/events.json
+storage/social/drafts.json
+storage/social/media-jobs.json
+storage/social/posted-history.json
+storage/browser/profile/.gitkeep
 ```
 
----
-
-## 1. First action: configuration interview
-
-Before implementation:
-
-```txt
-if user said "Use default persona preset":
-  use section 2 and start building
-else:
-  ask exactly questions.md
-  summarize answers using the required summary template
-  wait for confirmation
-```
-
-The questions configure the fixed system. They do not invite product redesign.
-
-If the user refuses Wavespeed, stop and explain:
-
-```txt
-This Buildprint requires Wavespeed for production image generation. I can continue with mock mode, but a non-Wavespeed production provider is outside this Buildprint.
-```
-
-Record final choices in `VALIDATION.md`.
-
----
-
-## 2. Default persona preset
-
-Use these values unless changed by confirmed user answers.
-
-Important: the default preset does **not** include a fixed persona name. If the user does not provide a name, generate a fresh fictional persona name and short identity. Do not reuse or reference any existing persona name.
-
-```yaml
-runtime: OpenClaw
-primary_chat: Telegram
-persona_name: generated fresh fictional name unless user provides one
-persona_style: dry, direct, understated, lightly teasing
-language: mixed German/English, German-leaning casual chat
-content_lane: lifestyle + gaming + gym + streetwear + coffee
-memory: per-user relationship memory
-life: simulated self-state + calendar + journal + continuity arcs
-image_provider: Wavespeed
-model_provider: OpenRouter
-model_default: openrouter/deepseek/deepseek-v4-flash
-publishing_handoff: secured local Chromium/noVNC
-publishing_default: mock/manual approval only
-auto_publish_default: false
-autonomy_default: disabled until tests pass
-manager_layer: health audit + QA + safe local repairs only
-storage: JSON files first
-```
-
----
-
-## 3. Fixed architecture
-
-Implement this exact architecture:
-
-```txt
-Dockerized OpenClaw runtime
-  |-- workspace persona files
-  |   |-- SOUL.md
-  |   `-- USER.md
-  |-- influencer-persona extension/plugin
-  |   |-- LLM JSON analyzer adapter (production path must call configured LLM/OpenRouter-compatible endpoint)
-  |   |-- runtime context builder
-  |   |-- policy gate
-  |   |-- media flow
-  |   `-- storage adapter
-  |-- skills
-  |   |-- influencer-image  -> Wavespeed real mode / mock test mode
-  |   |-- influencer-post   -> secured browser/noVNC publish handoff
-  |   |-- influencer-social -> drafts/outbox/history
-  |   |-- influencer-journal
-  |   |-- influencer-calendar
-  |   `-- influencer-recall
-  |-- life modules
-  |   |-- life tick
-  |   |-- journal writer
-  |   |-- memory reflection
-  |   |-- social planner
-  |   |-- social autonomy
-  |   `-- manager audit
-  `-- storage
-      |-- users/<id>.json
-      |-- influencer-self/state.json
-      |-- calendar/events.json
-      |-- social/drafts.json
-      |-- social/media-jobs.json
-      `-- social/posted-history.json
-```
-
-If the user asks for an MVP, keep all boxes but simplify internals. Do not remove boxes.
-
----
-
-## 4. Required file tree
-
-Create these files. Do not replace this tree with a different framework layout.
+Required generated file tree:
 
 ```txt
 AGENTS.md
@@ -274,13 +222,7 @@ VALIDATION.md
 package.json
 ```
 
-Minimum behavior is required. Empty stubs do not pass unless `VALIDATION.md` marks the phase blocked.
-
----
-
-## 5. Environment contract
-
-Create `.env.example` exactly with these names. Never commit real secrets.
+Required `.env.example` names:
 
 ```txt
 TELEGRAM_BOT_TOKEN=
@@ -306,41 +248,12 @@ INFLUENCER_MANAGER_AUDIT_LOOP=true
 
 Rules:
 
-- Use exactly these env var names. Do not rename `WAVESPEED_API_URL` to `WAVESPEED_BASE_URL`; do not collapse model envs into one generic model var.
+- Use exactly these env var names.
 - `.env.example` must not set `TEST_MODE=true`, `INFLUENCER_TEST_MODE=mock`, or any other test/mock flag by default.
 - Tests must set their own mock/test env inside `tests/runner.js` or the individual test process.
 - `WAVESPEED_API_KEY` gates real image generation.
 - No production key is required for tests.
-- Tests must use mock mode.
 - Missing keys must appear in `VALIDATION.md`.
-
----
-
-## 6. Runtime behavior contracts
-
-### 6.1 OpenClaw runtime
-
-Must include:
-
-- OpenClaw config that loads the extension and skills;
-- Docker compose service for the bot/runtime;
-- entrypoint that prepares workspace/persona files;
-- documented startup command;
-- concrete `OPENCLAW_RUNTIME_CMD`/CLI invocation path or an explicit adapter module that can be swapped for the real OpenClaw runtime;
-- a static/test check proving the Docker entrypoint starts OpenClaw or deliberately fails with a structured `openclaw_runtime_missing` blocker instead of silently running a generic Node app.
-
-### 6.2 Persona extension
-
-Must include:
-
-- message entrypoint;
-- mockable LLM JSON analyzer adapter in `extensions/influencer-persona/analyzer-adapter.js`;
-- runtime context builder;
-- user/self storage reads/writes;
-- media request routing through policy;
-- no direct image generation without policy gate.
-
-The analyzer may be mocked in tests, but production path must be LLM-led, not only keyword regex.
 
 Required analyzer contract:
 
@@ -357,11 +270,9 @@ analyzeIntentWithLLM(message, context)
   if key is missing in production: return/block with structured analyzer_unconfigured reason
 ```
 
-Keyword heuristics may only be a test fixture, local fallback explicitly named `mock`/`heuristic`, or a repair fallback after the LLM adapter fails. They must not be the normal production path.
+Keyword heuristics may be used only as a test fixture, explicitly named local heuristic fallback, or repair fallback after LLM adapter failure. They are not the normal production path.
 
-### 6.3 Runtime context
-
-Must build a compact private block with:
+Required runtime context fields:
 
 ```txt
 persona mood/energy
@@ -374,25 +285,7 @@ media status
 
 Never expose this private block in normal chat responses.
 
-### 6.4 Storage
-
-Use JSON first.
-
-Separate:
-
-```txt
-user relationship memory  ≠  persona self-state
-```
-
-User memory includes trust, stage, facts, preferences, open loops, recent messages, relationship notes, media budget.
-
-Self-state includes mood, energy, social battery, current arcs, calendar, journal, content backlog.
-
-### 6.5 Wavespeed image skill
-
-Only real provider path: Wavespeed.
-
-Implement a concrete client module, not only an env-key check:
+Required Wavespeed client shape:
 
 ```txt
 createWavespeedImage({ prompt, aspectRatio, seed, safety, webhookUrl? })
@@ -406,22 +299,18 @@ pollWavespeedJob(id)
   normalizes queued/processing/succeeded/failed into local MediaJob status
 ```
 
-If the exact Wavespeed endpoint/model is uncertain, isolate it behind `skills/influencer-image/wavespeed-client.js`, document the assumed endpoint in `VALIDATION.md`, and keep tests on a mocked fetch/client. Do not replace Wavespeed with another provider.
+If the exact Wavespeed endpoint/model is uncertain, isolate it behind `skills/influencer-image/wavespeed-client.js`, document the assumed endpoint in `VALIDATION.md`, and keep tests on a mocked fetch/client. `extensions/influencer-persona/media-flow.js` must import and use the Wavespeed client by default for real mode. Injected clients are for tests.
 
-`extensions/influencer-persona/media-flow.js` must import/use the Wavespeed client by default for real mode. It may accept an injected mock/client for tests, but production behavior must not depend on a caller remembering to pass `createImage`.
-
-Required behavior:
+Required media behavior:
 
 ```txt
-missing WAVESPEED_API_KEY → mock mode / blocked real mode
-public media → platform-safe + canon check + draft/life grounding
-private media → trust/consent gate
-blocked media → structured reason
+missing WAVESPEED_API_KEY -> mock mode or blocked real mode
+public media -> platform-safe + canon check + draft/life grounding
+private media -> trust/consent gate
+blocked media -> structured reason
 ```
 
-### 6.6 Social planner
-
-Drafts must include:
+Required social draft shape:
 
 ```txt
 id, platform, caption, visualPrompt, groundedIn, status, qaNotes
@@ -429,25 +318,19 @@ id, platform, caption, visualPrompt, groundedIn, status, qaNotes
 
 `groundedIn` must reference self-state, calendar, journal, manual input, or approved trend brief.
 
-### 6.7 Publisher
-
-Default publisher is mock/manual-gated.
-
-Real publishing is secured browser/noVNC handoff only until explicitly enabled.
-
-The repo must include a runnable browser handoff surface with authentication. Passwordless VNC/noVNC is forbidden:
+Required browser/noVNC handoff:
 
 ```txt
 docker/novnc.Dockerfile or compose service using a Chromium/noVNC image
-service binds to SOCIAL_VISIBLE_BROWSER_HOST=127.0.0.1 by default, not 0.0.0.0
+service binds to SOCIAL_VISIBLE_BROWSER_HOST=127.0.0.1 by default
 service exposes SOCIAL_VISIBLE_BROWSER_PORT (default 7900) only on the local/operator interface
-service requires SOCIAL_VISIBLE_BROWSER_PASSWORD or an equivalent secret-backed auth mechanism before starting
+service requires SOCIAL_VISIBLE_BROWSER_PASSWORD or equivalent secret-backed auth before starting
 compose/Docker must not contain a default, empty, or hard-coded VNC/noVNC password
 storage/browser/profile is mounted for persistent operator login
 publisher returns browser_handoff_required until manual approval/session/auth checks pass
 ```
 
-Must document commands equivalent to:
+Document commands equivalent to:
 
 ```bash
 influencer-post browser --login-url
@@ -457,48 +340,7 @@ influencer-post publish --draft-id <id> --dry-run
 influencer-post handoff --draft-id <id>
 ```
 
-### 6.8 Manager audit
-
-Must report:
-
-- stale drafts;
-- stuck media jobs;
-- unsafe media;
-- ungrounded claims;
-- canon drift;
-- missing auth/login blockers;
-- publishing failures.
-
----
-
-## 7. Implementation sequence
-
-Follow this order only:
-
-```txt
-0 configuration interview / default persona preset
-1 package.json + file tree + .env.example
-2 OpenClaw config + Docker skeleton
-3 persona files + canon + manager docs
-4 storage helpers + seed JSON
-5 persona extension + runtime context
-6 life modules
-7 Wavespeed image skill + mock mode
-8 social planner + media queue + QA
-9 mock publisher + secured browser/noVNC handoff docs
-10 tests
-11 VALIDATION.md
-```
-
-Keep `npm test` runnable by phase 10. If a phase is blocked, write the reason in `VALIDATION.md` and continue only where safe.
-
----
-
-## 8. Commands required
-
-`package.json` must identify the generated app, not the Buildprint CLI. Use `"name": "openclaw-ai-influencer-os"`; do not use `"agb"`, `"agent-buildprint"`, `"xy"`, or any CLI/package-registry name for this scaffold.
-
-It must include these scripts and preserve the syntax-check chain. You may append `&& node tests/static-check.js` to `test:static`, but do not replace syntax checks with only a custom static checker.
+Required `package.json` scripts:
 
 ```json
 {
@@ -511,17 +353,17 @@ It must include these scripts and preserve the syntax-check chain. You may appen
 }
 ```
 
----
+## Evidence Boundary
 
-## 9. Tests required
+This Buildprint specifies required structure and behavior for a generated implementation. Passing tests prove the local implementation honors the contract without external APIs. Production provider claims require configured keys, provider-side validation, and `VALIDATION.md` evidence.
 
-`npm test` must run without external APIs.
+## Required Validation
 
-Tests must prove:
+`npm test` must run without external APIs and prove:
 
 1. runtime context separates user memory and self-state;
 2. private runtime context is not leaked;
-3. missing `WAVESPEED_API_KEY` uses mock mode / blocks real mode;
+3. missing `WAVESPEED_API_KEY` uses mock mode or blocks real mode;
 4. low-trust private/sensitive media request is blocked;
 5. ungrounded public draft is blocked;
 6. grounded public draft can pass QA;
@@ -534,13 +376,9 @@ Tests must prove:
 13. `.env.example` has exact required env var names and no default test/mock mode;
 14. `npm run test:static` preserves required `node --check` syntax checks plus alignment checks;
 15. `media-flow.js` imports/uses the Wavespeed client by default for real mode;
-16. `package.json.name` is `openclaw-ai-influencer-os` and not `agb`/`xy`/`agent-buildprint`.
+16. `package.json.name` is `openclaw-ai-influencer-os`.
 
----
-
-## 10. `VALIDATION.md` format
-
-Write exactly:
+`VALIDATION.md` must contain exactly:
 
 ```md
 # Validation
@@ -560,80 +398,14 @@ Write exactly:
 ## Blockers / next steps
 ```
 
-List any missing required file as a deviation.
-
----
-
-## 11. Failure conditions
-
-Fail the implementation if it:
-
-- skips the configuration interview or default-preset confirmation;
-- is not OpenClaw-shaped;
-- omits Wavespeed from production image generation;
-- uses real APIs in tests;
-- merges user memory and self-state;
-- lacks public/private media policy separation;
-- auto-publishes by default;
-- lacks manager audit;
-- lacks secured browser/noVNC handoff docs or runnable authenticated noVNC/Chromium service shape;
-- implements production analyzer as keyword/regex only;
-- only checks `WAVESPEED_API_KEY` without a real Wavespeed client adapter shape;
-- leaves `.env.example` in test/mock mode by default;
-- renames required env vars without documenting/confirming the change;
-- replaces syntax checks with only a custom static checker;
-- requires callers to inject the real Wavespeed image function for production media flow;
-- names the generated app package `agb`, `xy`, or `agent-buildprint`;
-- lacks runnable tests;
-- silently changes architecture.
-
----
-
-## 12. If uncertain
-
-Ask one targeted question about the uncertain contract item. Then continue.
-
-Do not ask broad strategy questions. Do not invent a different product.
-
-
----
-
-## Consolidated notes from `architecture.md`
-
-# OpenClaw/default-preset Architecture Diagram
+## Copyable Agent Prompt
 
 ```txt
-Telegram / chat channel
-  ↓
-OpenClaw Gateway + Agent Runtime
-  ↓
-influencer-persona plugin
-  ├─ LLM JSON analyzer
-  ├─ runtime context builder
-  ├─ policy/media gates
-  └─ Telegram/media delivery
-  ↓
-storage
-  ├─ users/<id>.json
-  ├─ influencer-self/state.json
-  ├─ calendar/events.json
-  ├─ social/drafts.json
-  └─ social/media-jobs.json
-  ↓
-life modules
-  ├─ life-tick
-  ├─ journal-writer
-  ├─ reflect-memory
-  ├─ social-planner
-  ├─ social-autonomy
-  ├─ social-publisher
-  └─ manager-audit
-  ↓
-skills
-  ├─ influencer-image → Wavespeed / mock
-  ├─ influencer-post → secured local browser/noVNC / mock
-  ├─ influencer-social
-  ├─ influencer-calendar
-  ├─ influencer-journal
-  └─ influencer-recall
+Build the OpenClaw AI Influencer OS exactly from this Buildprint.
+
+Start with alignment: if the user says "Use default persona preset", use DEFAULT_PRESET.md; otherwise ask exactly questions.md and wait for confirmation.
+
+Create a Dockerized OpenClaw app named openclaw-ai-influencer-os with persona files, influencer-persona extension, JSON storage, Wavespeed image skill, grounded social planner, mock/manual-gated publisher, secured local browser/noVNC handoff, manager audit, tests, and VALIDATION.md.
+
+Do not replace OpenClaw with a generic chatbot or dashboard. Do not use a production image provider other than Wavespeed. Do not call external APIs in tests. Do not auto-publish by default. Do not expose passwordless/public noVNC. Every included route, command, service, and capability must work end-to-end or return a structured blocked status recorded in validation.
 ```

@@ -5,7 +5,7 @@
 ```ts
 type ProviderConfig = {
   id: string;
-  kind: 'fake' | 'openai-compatible' | 'anthropic' | 'bedrock' | 'local';
+  kind: 'test' | 'openai-compatible' | 'anthropic' | 'bedrock' | 'local';
   model: string;
   contextWindowTokens: number;
   maxOutputTokens: number;

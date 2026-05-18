@@ -1,8 +1,8 @@
-# Phase 01 — OpenClaw Skeleton
+# Phase 01 — OpenClaw Runtime Shape
 
 ## Goal
 
-Create the runnable OpenClaw-shaped project skeleton.
+Create the runnable OpenClaw-shaped project structure.
 
 ## Files
 
@@ -40,9 +40,9 @@ Create the runnable OpenClaw-shaped project skeleton.
 - file tree exists;
 - `package.json.name` is `openclaw-ai-influencer-os`;
 - `npm run test:static` can be added later without changing structure;
-- missing keys are placeholders only;
+- missing keys are blank secret fields only;
 - env names match `BUILDPRINT.md` exactly;
 - `.env.example` does not default to test/mock mode;
 - entrypoint/config exposes the OpenClaw runtime command or structured blocker;
-- command wrappers are not empty placeholders: they either call implemented modules or fail with a documented blocked status;
+- command wrappers are not empty shells: they either call implemented modules or fail with a documented blocked status;
 - noVNC/Chromium service shape exists for browser handoff, binds local-only by default, and refuses to start without non-empty secret-backed auth.

@@ -84,7 +84,7 @@ In-memory saver methods:
 
 ## Stream Mode Boundary
 
-Core proof must cover `values`, `updates`, `checkpoints`, and `tasks` with documented local payload shapes. `debug` may be implemented as a composition of checkpoint/task events. `custom` may be local-only. `messages` is OUT_OF_SCOPE for provider/LLM token streaming unless a local mocked message source is explicitly implemented and labeled.
+Core proof must cover `values`, `updates`, `checkpoints`, and `tasks` with documented local payload shapes. `debug` may be implemented as a composition of checkpoint/task events. `custom` may be local-only. `messages` is OUT_OF_SCOPE for provider/LLM token streaming unless a local deterministic message source is explicitly implemented and labeled.
 
 ## Serializer Safety
 

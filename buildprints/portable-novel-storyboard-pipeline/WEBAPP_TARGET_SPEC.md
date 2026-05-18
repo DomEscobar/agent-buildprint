@@ -85,27 +85,21 @@ Preview:
 - No final stitched video renderer.
 
 
----
+## Target Stack Contract
 
-## Consolidated notes from `TARGET_STACK_ADAPTER.md`
-
-# Target Stack Adapter
-
-No target stack is required.
-
-Recommended clean-room proof stack:
+The implementation may choose its stack, but the default clean-room proof should use:
 
 - TypeScript service modules.
-- In-memory repositories for tests.
-- Optional SQLite adapter after tests pass.
-- Mock text/image/video providers.
-- Optional simple REST API for QA.
+- Durable local repositories for product state, or clearly labeled test-only repositories for isolated unit tests.
+- Optional SQLite adapter once service contracts pass.
+- Deterministic mock/no-network text, image, and video providers for default tests.
+- Browser-facing webapp/API surfaces required by the Phase 4 workbench gate.
 
-Adapter interfaces to implement:
+Required adapter interfaces:
 
 - `TextProvider`
 - `ImageProvider`
 - `VideoProvider`
 - `AssetStore`
 - `ExportWriter`
-- `Clock/IdGenerator` for deterministic tests
+- `Clock` / `IdGenerator` for deterministic tests

@@ -68,11 +68,7 @@ Adapters depend inward on provider interfaces. Workflow services should not depe
 This selected package is self-contained for coding-agent handoff. Use this file plus `TRACEABILITY_MATRIX.md` for source evidence; do not depend on parent-directory generated artifacts.
 
 
----
-
-## Consolidated notes from `DATA_LIFECYCLE.md`
-
-# Data Lifecycle
+## Data Lifecycle
 
 1. Project created with model/style settings.
 2. Chapters imported into chapter store.
@@ -87,11 +83,7 @@ This selected package is self-contained for coding-agent handoff. Use this file 
 Retention/deletion: partially outside selected scope. Toonflow has deletion routes, but this Buildprint requires explicit retention policy before production use.
 
 
----
-
-## Consolidated notes from `MODULES.md`
-
-# Modules
+## Modules
 
 | Module | Responsibilities | Evidence | Confidence |
 |---|---|---|---|

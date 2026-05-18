@@ -13,4 +13,4 @@
 
 ## UI expectations
 
-Show current turn usage, session aggregate, model context window usage, and last compaction marker. These do not need to be exact for every provider in mock mode, but the normalization boundary must exist.
+Show current turn usage, session aggregate, model context window usage, and last compaction marker. Deterministic proof values may be synthetic, but the normalization boundary must exist.

@@ -32,4 +32,4 @@ Prove the build followed the Buildprint.
 
 - tests pass or failures are honestly documented;
 - validation lists commands, keys, deviations, blockers;
-- static checks fail if package identity, env contract, syntax checks, analyzer, Wavespeed, OpenClaw runtime, noVNC auth/local-only binding, or media-flow wiring drifts.
+- static checks fail if package identity, env contract, syntax checks, analyzer, Wavespeed, OpenClaw runtime, noVNC auth/local-only binding, or media-flow wiring regresses.

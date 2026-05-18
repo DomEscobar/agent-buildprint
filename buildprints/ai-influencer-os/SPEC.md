@@ -74,7 +74,7 @@ Then classification goes through a mockable LLM JSON analyzer adapter and valida
 
 Given the production analyzer is implemented only with keyword or regex matching
 When validation tests inspect the implementation
-Then validation fails with analyzer drift.
+Then validation fails with an analyzer contract violation.
 
 ### R7 — Social drafts
 
@@ -118,7 +118,7 @@ Then `name` is `openclaw-ai-influencer-os`, not `agb`, `xy`, or `agent-buildprin
 
 Given drafts/media/jobs/storage exist
 When manager audit runs
-Then it reports stale drafts, stuck media jobs, unsafe media, canon drift, ungrounded claims, and publishing blockers.
+Then it reports stale drafts, stuck media jobs, unsafe media, canon violations, ungrounded claims, and publishing blockers.
 
 ## Out of scope for first implementation
 
