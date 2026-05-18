@@ -401,7 +401,7 @@ This Buildprint specifies required structure and behavior for a generated implem
 ## Copyable Agent Prompt
 
 ```txt
-Build the OpenClaw AI Influencer OS exactly from this Buildprint.
+Build the OpenClaw AI Influencer OS exactly from `BUILDPRINT.md`. Treat `BUILDPRINT.md` as the canonical authority before every other file.
 
 Start with alignment: if the user says "Use default persona preset", use DEFAULT_PRESET.md; otherwise ask exactly questions.md and wait for confirmation.
 

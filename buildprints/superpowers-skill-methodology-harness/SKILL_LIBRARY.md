@@ -6,7 +6,7 @@
 |---|---|---|
 | `using-superpowers` | Bootstrap discipline and skill lookup | Check skills before action |
 | `brainstorming` | Turn rough ideas into approved design/spec | No implementation before design approval |
-| `writing-plans` | Convert approved design into executable small tasks | No vague/TODO tasks; exact files and checks |
+| `writing-plans` | Convert approved design into executable small tasks | No vague or unfinished tasks; exact files and checks |
 | `using-git-worktrees` | Isolate work on a branch/worktree | Baseline setup/tests before implementation |
 | `test-driven-development` | Red/green/refactor behavior | No production code without failing test first |
 | `systematic-debugging` | Root cause before fixes | No fix before evidence gathering |

@@ -31,7 +31,7 @@ Results:
 
 ## Eval coverage
 
-- Clean-session acceptance prompt `Let's make a react todo list` loads bootstrap, performs skill lookup, activates brainstorming, and blocks implementation before design approval.
+- Clean-session acceptance prompt `Let's make a react task tracker` loads bootstrap, performs skill lookup, activates brainstorming, and blocks implementation before design approval.
 - Bootstrap is idempotent across turns.
 - Approved design can transition into an exact implementation plan.
 - TDD gate blocks production changes before a failing test event.
