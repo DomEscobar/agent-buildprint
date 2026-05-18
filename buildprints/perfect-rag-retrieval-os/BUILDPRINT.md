@@ -32,6 +32,10 @@ Documents → Normalize → Chunk → Contextualize → Dense + lexical/sparse i
 - Tests must not require real model, vector database, or provider credentials.
 - Live embeddings, vector stores, rerankers, and LLM providers are adapters, not hard dependencies.
 
+## Default proof limits
+
+The bundled TypeScript proof is a small offline fixture, not a complete production RAG service. It uses static chunks, deterministic lexical/dense-like scoring, contextualized text on selected fixture chunks, no ingestion persistence, no provider adapters, no HTTP/API layer, and a minimum eval report. Production adaptations must implement durable source/index updates, target-stack routes/jobs, provider integrations where selected, full trace fields, and corpus-specific eval gates.
+
 ## Optional advanced modules
 
 - HyDE/query rewriting/multi-query expansion for recall.

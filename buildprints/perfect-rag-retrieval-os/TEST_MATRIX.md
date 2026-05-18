@@ -8,7 +8,7 @@
 | Hallucinated answer | unsupported query returns insufficient-evidence/refusal |
 | Citation laundering | answer citations must reference selected chunks |
 | Tenant/private data leak | private chunk cannot appear for unauthorized user |
-| Chunk context loss | contextualized chunk branch is tested on ambiguous chunk |
+| Chunk context loss | default proof includes one contextualized chunk retrieval case; production adaptations should add corpus-specific ambiguous chunk evals |
 | Eval-free drift | `npm test` or equivalent runs retrieval and answer eval harness |
 | Live provider dependence | default tests pass without network/API credentials |
 
@@ -21,7 +21,7 @@
 
 ## Status
 
-Initial local package/proof validation passed. Local static manifest bootstrap passed. Public live manifest and bootstrap passed after publish.
+Current checked-in validation is limited to the local proof command below. Historical local static manifest and public live bootstrap claims are not treated as reproducible evidence for this checkout.
 
 ## Research validation
 
@@ -32,7 +32,7 @@ Deepresearch artifact validated successfully:
 - report written
 - artifact manager validation passed
 
-Artifact path: `/root/.openclaw/workspace/research/perfect-rag-benchmark-2026-05-17`
+The original artifact path was local to the authoring environment and is not a portable validation source for this checkout.
 
 ## Local proof target
 
@@ -46,13 +46,14 @@ npm test
 Validated coverage:
 
 - lexical, dense-like, hybrid, and reranked retrieval comparison
+- contextualized chunk text used by a retrieval case
 - cited grounded answer
 - unsupported-question refusal
 - private/tenant filtering
-- JSON eval report generation
+- compact eval report generation with recall@5, MRR, top chunk id, and answer
 
-Local result: `npm test` passed 6/6 proof tests.
+Local result for this checkout: `npm test` passes the TypeScript build and one Node TAP test file containing seven proof cases.
 
-Local static bootstrap result: `node /root/blueprint/bin/agb.js start http://127.0.0.1:4199/buildprints/perfect-rag-retrieval-os/package.json .` downloaded 17 snapshot files; running `npm test` from `.buildprint/snapshots/proof` passed 6/6 tests.
+Remaining proof gaps: no durable ingestion/index persistence, no live provider adapters, no HTTP/API layer, no nDCG-like score, no latency/cost placeholders, no token-budget accounting, and no permission-drop trace counts. These are production harness requirements unless added to the proof.
 
-Public live result: `https://agent-buildprint.com/buildprints/perfect-rag-retrieval-os/package.json` returned 17 manifest files; all raw URLs returned 200; `node /root/blueprint/bin/agb.js start https://agent-buildprint.com/buildprints/perfect-rag-retrieval-os/package.json .` downloaded 17 snapshot files; running `npm test` from `.buildprint/snapshots/proof` passed 6/6 tests.
+Historical bootstrap/public publish checks should be rerun after publication before making live distribution claims.

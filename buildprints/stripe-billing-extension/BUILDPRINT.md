@@ -23,6 +23,10 @@ Use this when adding paid plans to a SaaS/product app.
 - Server-side API route capability.
 - Database or storage for subscription/customer state.
 
+## Proof boundary
+
+The bundled TypeScript proof is an in-memory service proof. It has service functions instead of concrete HTTP routes/actions, a mock-only signature verifier, and a billing UI stub. A production adaptation is not complete without durable storage, real Stripe SDK webhook verification against the raw request body, authenticated concrete routes/actions, configured Stripe endpoint secrets, and entitlement checks wired into protected server paths.
+
 ## Implementation plan
 
 1. Define billing data model:
@@ -62,4 +66,4 @@ Use this when adding paid plans to a SaaS/product app.
 
 ## Copyable agent prompt
 
-Build a Stripe Billing Extension from this Buildprint. Implement a local TypeScript SaaS billing module with checkout creation, customer portal, verified webhook handling, subscription state storage, entitlement guard, billing UI stub, and mocked lifecycle tests. Use environment variable names only; do not include secret values. Never trust frontend state for paid access.
+Build a Stripe Billing Extension from this Buildprint. Implement a local TypeScript SaaS billing module with checkout creation, customer portal, verified webhook handling, subscription state storage, entitlement guard, billing UI stub, and mocked lifecycle tests. Use environment variable names only; do not include secret values. Never trust frontend state for paid access. Treat the included proof as service-level only; production work must add durable storage, real Stripe webhook verification, concrete authenticated routes/actions, endpoint configuration, and protected-path entitlement wiring.

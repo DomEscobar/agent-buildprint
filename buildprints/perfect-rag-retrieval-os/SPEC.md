@@ -24,21 +24,27 @@ Implement a portable RAG feature/system that retrieves relevant, permission-safe
 
 ## Non-goals for default proof
 
+- No durable ingestion or index persistence.
 - No live vector database.
 - No real embedding API.
 - No real reranker API.
 - No real LLM provider call.
+- No HTTP/API route layer.
+- No full production trace pipeline; the proof emits only a compact retrieval eval report.
 - No claim of universal benchmark SOTA.
 
 ## Acceptance behavior
 
-A generated implementation passes when fixture evals show:
+The default proof passes when fixture evals show:
 
 - hybrid retrieval returns expected chunks where lexical-only or dense-only can miss targeted cases
 - reranking improves hard-case ordering or preserves correct top contexts
 - cited answers quote/support claims from retrieved context
 - unsupported questions refuse
 - private/tenant-mismatched chunks are not retrieved into the answer path
+- contextualized chunk text is exercised by at least one retrieval test
+
+A production adaptation is not complete until it also implements the required ingestion/update path, selected provider adapters, trace fields, latency/cost placeholders, token-budget accounting, and target-corpus eval gates.
 
 
 ---

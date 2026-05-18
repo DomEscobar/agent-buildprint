@@ -16,7 +16,7 @@
 A clean Codex dry-run generated an offline TypeScript proof and passed:
 
 - `npm run build`
-- `npm test` → 6/6 tests passing
+- `npm test` → one Node TAP test file passing; the file contains the billing lifecycle cases listed below
 
 
 ---

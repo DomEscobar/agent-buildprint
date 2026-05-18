@@ -32,6 +32,12 @@ test('tenant and private permissions block unauthorized retrieval', () => {
   assert.equal(retrieve('Project Falcon July', { tenantId: 'acme', userId: 'owner' }, 'hybrid')[0].chunk.id, 'c-private-roadmap');
 });
 
+test('contextualized chunk text resolves otherwise ambiguous policy query', () => {
+  const ranked = retrieve('SaaS subscriptions policy', user, 'lexical');
+  assert.equal(ranked[0].chunk.id, 'c-refund');
+  assert.match(ranked[0].reason, /term overlap/);
+});
+
 test('eval harness emits machine-readable retrieval metrics', () => {
   const report = evaluate([{ id: 'webhook', query: 'verify raw body before state mutation', user, expectedChunkIds: ['c-webhook'], expectedAnswerContains: ['verify'], forbiddenClaims: [] }]);
   assert.equal(report[0].recallAt5, 1);

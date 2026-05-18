@@ -6,6 +6,8 @@ The bundled TypeScript proof is a verified reference implementation, not the onl
 
 No real Stripe SDK, Stripe keys, or network APIs are used in the proof.
 
+Proof limits: the bundled TypeScript proof is an in-memory service-level proof. It includes a mock-only signature verifier and a billing UI stub, but no durable storage, real Stripe webhook verification, concrete framework routes/actions, endpoint configuration, or entitlement wiring into protected product paths. Production adaptations must add those pieces before shipping.
+
 ## Environment Variable Names
 
 - `STRIPE_SECRET_KEY`

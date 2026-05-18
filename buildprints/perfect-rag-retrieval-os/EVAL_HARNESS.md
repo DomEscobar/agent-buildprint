@@ -1,5 +1,9 @@
 # Eval Harness
 
+## Default proof coverage
+
+The bundled proof harness covers a minimum reproducible subset: recall@5, MRR, top chunk id, grounded answer/refusal behavior, permission filtering, reranking, and one contextualized chunk retrieval case. The metrics below are the production harness contract unless explicitly emitted by the default proof.
+
 ## Retrieval metrics
 
 - recall@k: did expected chunks appear in top-k?
