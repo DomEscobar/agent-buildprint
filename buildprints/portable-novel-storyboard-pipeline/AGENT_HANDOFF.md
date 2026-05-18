@@ -1,6 +1,6 @@
 # Agent Handoff
 
-Use this file first if you are a coding agent rebuilding the Toonflow portable creative pipeline from this Buildprint.
+Use this file only after `BUILDPRINT.md`. `BUILDPRINT.md` is the canonical authority spine and owns the required read order; this handoff is a lower-authority build-order aid for the portable creative pipeline.
 
 ## Mission
 
@@ -10,16 +10,17 @@ Build a clean-room, deterministic service proof that turns fixture novel chapter
 
 Do **not** rebuild Toonflow's Electron app, full canvas UI, live provider integrations, or final video stitching.
 
-## Read Order
+## Position in Read Order
 
-1. `AGENT_HANDOFF.md` — what to build and what to ignore.
-2. `CONTRACTS.md` — schemas, states, adapters.
-3. `LLM_FLOW.md` — ScriptAgent/ProductionAgent flow and prompt invariants.
-4. `SYSTEM_MAP.md` — module boundaries and relationships.
-5. `TEST_MATRIX.md` + `HEAD_TO_FOOT_QA.md` — validation gates.
-6. `TRACEABILITY_MATRIX.md` — source evidence if needed.
+`BUILDPRINT.md` owns the required read order. After following that canonical order, use this handoff as a compact build-order reminder:
 
-Avoid spending first-pass attention on optional docs until tests and contracts are clear.
+- `CONTRACTS.md` — schemas, states, adapters.
+- `LLM_FLOW.md` — ScriptAgent/ProductionAgent flow and prompt invariants.
+- `SYSTEM_MAP.md` — module boundaries and relationships.
+- `TEST_MATRIX.md` + `HEAD_TO_FOOT_QA.md` — validation gates.
+- `TRACEABILITY_MATRIX.md` — source evidence if needed.
+
+If this file conflicts with `BUILDPRINT.md`, `BUILDPRINT.md` wins.
 
 ## Build Order
 

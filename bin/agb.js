@@ -1024,7 +1024,25 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   fs.writeFileSync(path.join(stateDir, 'progress.md'), `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 — Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
-  fs.writeFileSync(path.join(stateDir, 'next-agent.md'), `# Next Agent Instructions\n\nStart here.\n\n1. Read \`.buildprint/source.json\`.\n2. Read \`.buildprint/state.json\`.\n3. Read \`.buildprint/snapshots/BUILDPRINT.md\`.\n4. Read \`.buildprint/snapshots/PLAN.md\` if present.\n5. Continue current phase: \`00-alignment\`.\n\nRules:\n\n- Snapshot files were downloaded exactly from the manifest. Do not rewrite them manually.\n- Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.\n- If blocked, update \`.buildprint/blockers.md\`.\n`)
+  fs.writeFileSync(path.join(stateDir, 'next-agent.md'), `# Next Agent Instructions
+
+Start here.
+
+1. Read \`.buildprint/source.json\`.
+2. Read \`.buildprint/state.json\`.
+3. Read \`.buildprint/snapshots/BUILDPRINT.md\`.
+4. Follow \`BUILDPRINT.md\`'s Required Read Order, Phase Gates, and Acceptance Gates.
+5. Continue current phase: \`00-alignment\`.
+
+Rules:
+
+- \`BUILDPRINT.md\` is the canonical start file and owns the required read order.
+- Structured control files such as \`buildprint.json\`, \`phases.yaml\`, \`acceptance.yaml\`, and \`claims.yaml\` are machine-readable mirrors only; do not treat them as competing instructions.
+- Snapshot files were downloaded exactly from the manifest. Do not rewrite them manually.
+- Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
+- If blocked, update \`.buildprint/blockers.md\`.
+`)
+
 
   console.log(`✓ Created ${stateDir}`)
   console.log(`✓ Downloaded ${downloaded.length} snapshot files`)
