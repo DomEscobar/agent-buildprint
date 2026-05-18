@@ -1,0 +1,111 @@
+schema: agent-buildprint/phases.v1
+canonical_start: BUILDPRINT.md
+phases:
+  - id: 00-alignment
+    title: Alignment
+    inputs:
+      - BUILDPRINT.md
+      - claims.yaml
+      - PARITY_CLAIMS.md
+    must_produce:
+      - written implementation target, stack, persistence choice, and provider mode
+      - copied safe/unsafe claim boundary in implementation docs or limitations UI
+    must_pass:
+      - binding slice and non-goals acknowledged in implementation report
+    forbidden:
+      - expanding scope before the binding implementation slice is working
+      - claiming final video, provider, Electron, or exact UI parity
+
+  - id: 01-domain-persistence
+    title: Domain and Persistence
+    inputs:
+      - SPEC.md
+      - CONTRACTS.md
+      - PREVIEW_COMPOSITION_SPEC.md
+    must_produce:
+      - project/chapter/event/script/asset/storyboard/media/track/manifest models
+      - repository layer for chosen runtime
+      - deterministic ID and clock services
+    must_pass:
+      - tests for chapter order, event states, asset de-dupe, track grouping, deterministic manifest
+    forbidden:
+      - claiming durability if state is temporary or memory-only
+      - persisting provider secrets in domain records or export manifests
+
+  - id: 02-agent-xml-pipeline
+    title: Agent and XML Pipeline
+    inputs:
+      - LLM_FLOW.md
+      - AGENT_PROMPT_PACK.md
+      - XML_OUTPUT_CONTRACT.md
+    must_produce:
+      - deterministic text provider
+      - ScriptAgent stages: skeleton, adaptation, script
+      - ProductionAgent stages: director plan, storyboard table, storyboard rows
+      - parser/validator for structured output
+    must_pass:
+      - valid output persists expected artifacts
+      - malformed/partial output fails with clear error and no corrupt partial persistence
+    forbidden:
+      - treating raw LLM text as trusted state without validation
+      - silently repairing output without recording validation/repair behavior
+
+  - id: 03-async-providers
+    title: Async Jobs and Providers
+    inputs:
+      - ASYNC_JOB_MODEL.md
+      - PROVIDER_ADAPTERS.md
+      - TEST_MATRIX.md
+    must_produce:
+      - job lifecycle: pending, running, success, failure, cancel, retry
+      - mock image/video adapters with deterministic media refs
+      - no-network default test gate
+    must_pass:
+      - cancellation and retry tests
+      - provider failure normalization tests
+      - no-network default test run
+    forbidden:
+      - live provider calls unless explicitly env-enabled
+      - duplicate owner media on retry
+
+  - id: 04-webapp-workbench
+    title: Webapp Workbench
+    inputs:
+      - WEBAPP_TARGET_SPEC.md
+      - UI_CANVAS_MAP.md
+      - BROWSER_QA_SCENARIOS.md
+      - HEAD_TO_FOOT_QA.md
+    must_produce:
+      - project dashboard
+      - ScriptAgent workspace
+      - ProductionAgent workspace
+      - asset/storyboard/track/task panels
+      - preview timeline and manifest export
+    must_pass:
+      - real-browser happy path clicks rendered controls
+      - manifest parsed from rendered UI
+      - desktop and mobile screenshots
+    forbidden:
+      - no-op controls counted as implemented
+      - hidden limitations/non-claims
+
+  - id: 05-hardening-claims
+    title: Hardening and Claims
+    inputs:
+      - claims.yaml
+      - PARITY_CLAIMS.md
+      - THREAT_MODEL.md
+      - OBSERVABILITY.md
+    must_produce:
+      - BUILD_REPORT.md
+      - RUNTIME_LIVE_TEST_REPORT.md
+      - screenshot evidence
+      - exported manifest sample
+      - explicit remaining gaps
+    must_pass:
+      - safe/unsafe claim wording check
+      - secrets scan
+      - runtime negative paths or documented gaps
+    forbidden:
+      - publishing unverified parity upgrades
+      - hiding known gaps from completion report

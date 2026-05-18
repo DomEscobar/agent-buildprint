@@ -2,7 +2,7 @@
 
 Construction plans for coding agents.
 
-Agent Buildprint turns product ideas or existing repositories into AI-readable architecture contracts, prompts, policies, tests, and checks that coding agents can follow without forcing a framework runtime.
+Agent Buildprint turns product ideas or existing repositories into AI-readable build contracts, prompts, policies, tests, and checks that coding agents can follow without forcing a specific framework runtime.
 
 
 ## Positioning
@@ -12,19 +12,26 @@ Agent Buildprint is a registry/marketplace for building plans that coding agents
 ## Current MVP
 
 - `agb check` validates Buildprint folders and generated code imports.
-- `agb init langgraph` creates a LangGraph-style Vanilla TypeScript agent contract.
 - `agb map` maps an existing repo into `.project.buildprint/` with deterministic facts, a Buildprint package, confidence report, risks, questions, tiny phase plans, and a continuation prompt.
 - `agb start <package.json URL>` bootstraps `.buildprint/` in a new implementation repo by downloading exact Buildprint snapshots and writing continuation state.
+
+## Install
+
+```bash
+npm install -g agent-buildprint
+agb --help
+```
+
+You can also run from a checkout with `node ./bin/agb.js ...`.
 
 ## Commands
 
 ```bash
-node ./bin/agb.js check ./langgraph
-node ./bin/agb.js check ./langgraph --code ./langgraph/examples
-node ./bin/agb.js init langgraph ./my-agent-contract
-node ./bin/agb.js map ./my-project
-node ./bin/agb.js map ./my-project --out ./my-project.buildprint
-node ./bin/agb.js start http://152.53.118.78:43117/buildprints/ai-influencer-os/package.json
+agb check ./my-buildprint
+agb check ./my-buildprint --code ./generated-code
+agb map ./my-project
+agb map ./my-project --out ./my-project.buildprint
+agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json
 ```
 
 ## Mapper output
@@ -61,7 +68,7 @@ The minimal valid Buildprint is a `BUILDPRINT.md` with a comprehensive plan, acc
 ## Start a Buildprint implementation
 
 ```bash
-node ./bin/agb.js start <buildprint-package-json-url-or-file>
+agb start <buildprint-package-json-url-or-file> [target-folder]
 ```
 
 This creates `.buildprint/`, downloads exact snapshot files from the package manifest, and writes `source.json`, `state.json`, `progress.md`, `decisions.md`, `blockers.md`, and `next-agent.md`. Agents should read `.buildprint/next-agent.md` before coding and update `.buildprint/` before stopping.

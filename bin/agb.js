@@ -6,23 +6,34 @@ import { fileURLToPath } from 'node:url'
 const cwd = process.cwd()
 const args = process.argv.slice(2)
 
+function isHelp(value) {
+  return value === '--help' || value === '-h'
+}
+
+function optionValue(flag) {
+  const index = args.indexOf(flag)
+  if (index < 0) return null
+  const value = args[index + 1]
+  if (!value || value.startsWith('--')) throw new Error(`missing value for ${flag}`)
+  return value
+}
+
 function usage(exitCode = 0) {
   console.log(`Agent Buildprint
 
 Usage:
   agb check <blueprint-folder> [--code <generated-code-folder>]
-  agb init langgraph <target-folder>
   agb map <repo-folder> [--out <output-folder>] [--scope <path>] [--candidate <number>]
-  agb start <buildprint-package-json-url-or-file>
+  agb start <buildprint-package-json-url-or-file> [target-folder]
 
 Examples:
-  agb check ./langgraph
-  agb check ./langgraph --code ./my-agent
+  agb check ./my-buildprint
+  agb check ./my-buildprint --code ./my-agent
   agb map ./my-project
   agb map ./my-project --out ./my-project.buildprint
   agb map ./my-project --candidate 1 --out ./selected.buildprint
   agb map ./my-project --scope apps/web --out ./web.buildprint
-  agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json
+  agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json ./my-build
 `)
   process.exit(exitCode)
 }
@@ -960,11 +971,13 @@ function writeJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
 }
 
-async function startBuildprint(manifestRef) {
+async function startBuildprint(manifestRef, targetFolder = cwd) {
   const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
 
-  const stateDir = path.join(cwd, '.buildprint')
+  const targetRoot = path.resolve(cwd, targetFolder)
+  fs.mkdirSync(targetRoot, { recursive: true })
+  const stateDir = path.join(targetRoot, '.buildprint')
   const snapshotDir = path.join(stateDir, 'snapshots')
   fs.mkdirSync(snapshotDir, { recursive: true })
 
@@ -1019,15 +1032,17 @@ async function startBuildprint(manifestRef) {
   console.log('\nNext: read .buildprint/next-agent.md')
 }
 
-if (args.length === 0 || args[0] === '--help' || args[0] === '-h') usage(0)
+if (args.length === 0 || isHelp(args[0])) usage(0)
 
 
 
 if (args[0] === 'start') {
+  if (isHelp(args[1])) usage(0)
   const manifest = args[1]
+  const target = args[2] ?? cwd
   if (!manifest) usage(1)
   try {
-    await startBuildprint(manifest)
+    await startBuildprint(manifest, target)
     process.exit(0)
   } catch (error) {
     console.error(`Start failed: ${error.message}`)
@@ -1036,15 +1051,13 @@ if (args[0] === 'start') {
 }
 
 if (args[0] === 'map') {
+  if (isHelp(args[1])) usage(0)
   const repo = args[1]
   if (!repo) usage(1)
-  const outIndex = args.indexOf('--out')
-  const out = outIndex >= 0 ? args[outIndex + 1] : null
-  const scopeIndex = args.indexOf('--scope')
-  const scope = scopeIndex >= 0 ? args[scopeIndex + 1] : null
-  const candidateIndex = args.indexOf('--candidate')
-  const candidate = candidateIndex >= 0 ? args[candidateIndex + 1] : null
   try {
+    const out = optionValue('--out')
+    const scope = optionValue('--scope')
+    const candidate = optionValue('--candidate')
     const result = writeMappedBuildprint(repo, out, { scope, candidate })
     console.log(`Created mapped Buildprint: ${result.out}`)
     console.log(`Files scanned: ${result.facts.totalFilesScanned}`)
@@ -1061,22 +1074,16 @@ if (args[0] === 'map') {
 }
 
 if (args[0] === 'check') {
+  if (isHelp(args[1])) usage(0)
   const folder = args[1]
   if (!folder) usage(1)
-  const codeIndex = args.indexOf('--code')
-  const code = codeIndex >= 0 ? args[codeIndex + 1] : null
-  const ok = printResults(checkBlueprint(folder, { code }))
-  process.exit(ok ? 0 : 1)
+  try {
+    const code = optionValue('--code')
+    const ok = printResults(checkBlueprint(folder, { code }))
+    process.exit(ok ? 0 : 1)
+  } catch (error) {
+    console.error(`Check failed: ${error.message}`)
+    process.exit(1)
+  }
 }
-
-if (args[0] === 'init' && args[1] === 'langgraph') {
-  const target = args[2]
-  if (!target) usage(1)
-  const here = path.dirname(fileURLToPath(import.meta.url))
-  const template = path.resolve(here, '../templates/langgraph-agent-contract')
-  copyDir(template, path.resolve(cwd, target))
-  console.log(`Created LangGraph-style agent contract at ${target}`)
-  process.exit(0)
-}
-
 usage(1)

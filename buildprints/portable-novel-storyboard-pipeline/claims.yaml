@@ -1,0 +1,36 @@
+schema: agent-buildprint/claims.v1
+canonical_start: BUILDPRINT.md
+safe_claims:
+  - clean-room portable webapp implementation guided by observed novel-to-storyboard workflow evidence
+  - workflow-shape proof for chapter import, event extraction, script stages, storyboard rows, mock media tasks, and preview manifest export
+  - deterministic mock/no-network provider proof by default
+  - browser runtime proof with rendered UI interactions when acceptance gates pass
+  - explicit non-parity boundaries for UI, provider, Electron, and final video stitching
+unsafe_claims:
+  - full Toonflow clone
+  - drop-in replacement
+  - exact Toonflow UI parity
+  - exact infinite canvas parity
+  - Electron desktop parity
+  - full route/API parity
+  - live provider parity
+  - model output quality parity
+  - final stitched-video export parity
+  - audio binding/export parity
+  - memory/RAG parity
+  - editable vendor VM parity
+required_wording:
+  - "clean-room portable webapp implementation"
+  - "mock/no-network providers by default"
+  - "preview manifest export"
+  - "does not claim original UI, provider, Electron, or final video stitching parity"
+forbidden_wording:
+  - "clone"
+  - "full reproduction"
+  - "drop-in replacement"
+  - "same as Toonflow"
+  - "exports final video like Toonflow"
+claim_upgrade_rules:
+  - A claim can only move from unsafe to safe after implementation evidence, tests, and runtime proof are added.
+  - Public README/site copy must not imply unsafe claims through screenshots, wording, badges, or examples.
+  - If implementation scope is reduced, remove capabilities rather than replacing them with fake routes, placeholder controls, or no-op success states.

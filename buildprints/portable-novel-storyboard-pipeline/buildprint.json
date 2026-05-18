@@ -1,0 +1,49 @@
+{
+  "schema": "agent-buildprint/v1",
+  "slug": "portable-novel-storyboard-pipeline",
+  "title": "Portable Novel-to-Storyboard Pipeline",
+  "canonicalStart": "BUILDPRINT.md",
+  "tier": "pro",
+  "authority": [
+    "BUILDPRINT.md",
+    "buildprint.json",
+    "phases.yaml",
+    "acceptance.yaml",
+    "claims.yaml",
+    "SPEC.md",
+    "CONTRACTS.md",
+    "TEST_MATRIX.md",
+    "HEAD_TO_FOOT_QA.md"
+  ],
+  "bindingSlice": [
+    "import 3 ordered chapter fixtures",
+    "extract 3 successful event records with persisted state",
+    "generate skeleton, adaptation strategy, and at least one script with deterministic providers",
+    "extract assets from scripts",
+    "generate director plan, storyboard table, and storyboard rows",
+    "create mock image/video media task records through adapters",
+    "render browser preview/timeline with visible limitations",
+    "export PortablePreviewManifest",
+    "pass tests, build, and browser happy-path QA"
+  ],
+  "defaultProviderMode": "mock-no-network",
+  "files": [
+    { "path": "BUILDPRINT.md", "role": "canonical-control", "required": true },
+    { "path": "phases.yaml", "role": "phase-gates", "required": true },
+    { "path": "acceptance.yaml", "role": "acceptance-gates", "required": true },
+    { "path": "claims.yaml", "role": "claim-contract", "required": true },
+    { "path": "SPEC.md", "role": "behavior-contract", "required": true },
+    { "path": "CONTRACTS.md", "role": "data-interface-contracts", "required": true },
+    { "path": "WEBAPP_TARGET_SPEC.md", "role": "runtime-target", "required": true },
+    { "path": "HEAD_TO_FOOT_QA.md", "role": "runtime-qa-gate", "required": true },
+    { "path": "PARITY_CLAIMS.md", "role": "human-readable-claims", "required": true },
+    { "path": "TRACEABILITY_MATRIX.md", "role": "evidence-map", "required": true }
+  ],
+  "forbiddenDefaults": [
+    "live provider calls in default CI",
+    "placeholder routes counted as implemented",
+    "final stitched-video parity claim",
+    "drop-in replacement claim",
+    "exact Toonflow UI/canvas parity claim"
+  ]
+}

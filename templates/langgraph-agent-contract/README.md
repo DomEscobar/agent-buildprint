@@ -40,7 +40,7 @@ langgraph/
 
 ## Usage
 
-From `/root/blueprint`:
+From a checkout or installed template folder:
 
 ```bash
 node ./bin/agb.js check ./langgraph
@@ -57,9 +57,9 @@ agb check ./langgraph --code ./generated-agent
 ## Prompt for an AI coding agent
 
 ```txt
-Read /root/blueprint/langgraph/blueprint.yaml first.
+Read `blueprint.yaml` first.
 Generate Vanilla TypeScript that satisfies the blueprint, schemas, policies, and tests.
 Do not import LangGraph or any graph-agent runtime.
 Keep the graph runner local, small, and explicit.
-Run `node /root/blueprint/bin/agb.js check /root/blueprint/langgraph` before claiming done.
+Run `agb check .` before claiming done.
 ```

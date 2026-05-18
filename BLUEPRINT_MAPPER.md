@@ -29,14 +29,17 @@ existing repo
 ```txt
 .project.buildprint/
   facts.json                 # deterministic scan facts, no LLM guesses
-  BUILDPRINT.md              # architecture / agent contract
+  BUILDPRINT.md              # canonical start + authority spine
   SPEC.md                    # observed/inferred/unknown behavior contract
   PLAN.md                    # phase index
   plans/                     # tiny task plans for complex projects
   CONTRACTS.md               # route/env/interface contracts
   TEST_MATRIX.md             # risk → checks
   VALIDATION_TEMPLATE.md     # honest completion report
-  buildprint.yaml            # machine-readable summary, optional legacy-compatible
+  buildprint.json            # optional machine-readable authority/file-role mirror
+  phases.yaml                # optional structured phase gates for agent-grade packages
+  acceptance.yaml            # optional structured done gates for agent-grade packages
+  claims.yaml                # optional safe/unsafe public claim contract
   discovered-map.md
   confidence-report.md
   risks.md
@@ -46,7 +49,9 @@ existing repo
   prompts/continue-building.md
 ```
 
-## Core rule
+## Core rules
+
+`BUILDPRINT.md` is the canonical start file. It must not be a loose summary only; it should state authority, binding implementation slice, non-goals, read order, phase gates, and acceptance gates before deeper explanation.
 
 Every mapped item must be one of:
 
@@ -107,6 +112,17 @@ Ask only high-leverage questions:
 - “Who can delete records?”
 - “Is Stripe subscription state the source of truth?”
 - “Which flows are legacy and should not be copied?”
+
+## AI-native alignment checks
+
+For agent-grade mapped packages, generate or recommend structured gates when the package has many files, high-risk capabilities, public claims, or multi-phase work:
+
+- `buildprint.json` mirrors file roles and authority order.
+- `phases.yaml` lists phase inputs, outputs, required checks, and forbidden shortcuts.
+- `acceptance.yaml` lists commands, runtime/browser checks, artifacts, and proof evidence.
+- `claims.yaml` separates safe claims, unsafe claims, required wording, and forbidden wording.
+
+These files are optional mirrors, not replacements for `BUILDPRINT.md`.
 
 ## Anti-goals
 
