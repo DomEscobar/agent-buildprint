@@ -19,7 +19,7 @@ Implement a portable RAG feature/system that retrieves relevant, permission-safe
 9. Rerank the top candidates with a stronger scorer or late-interaction adapter.
 10. Generate answers with citations to chunk/source ids.
 11. Refuse or return insufficient-evidence when the selected context does not support the answer.
-12. Produce trace logs containing retrieval channels, scores, selected contexts, latency/cost placeholders, and refusal reason.
+12. Produce trace logs containing retrieval channels, scores, selected contexts, latency/cost fields, and refusal reason.
 13. Run eval cases covering retrieval recall, MRR/nDCG, faithfulness, answer correctness, refusal, and permission filtering.
 
 ## Non-goals for default proof
@@ -44,7 +44,7 @@ The default proof passes when fixture evals show:
 - private/tenant-mismatched chunks are not retrieved into the answer path
 - contextualized chunk text is exercised by at least one retrieval test
 
-A production adaptation is not complete until it also implements the required ingestion/update path, selected provider adapters, trace fields, latency/cost placeholders, token-budget accounting, and target-corpus eval gates.
+A production adaptation is not complete until it also implements the required ingestion/update path, selected provider adapters, trace fields, latency/cost fields, token-budget accounting, and target-corpus eval gates.
 
 
 ---

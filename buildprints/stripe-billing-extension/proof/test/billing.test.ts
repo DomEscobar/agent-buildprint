@@ -147,7 +147,7 @@ describe("local SaaS billing proof", () => {
     assert.equal(await hasServerEntitlement(store, "user_1", "premium"), false);
   });
 
-  it("renders a billing UI stub from stored server state", async () => {
+  it("renders a minimal billing UI proof component from stored server state", async () => {
     const store = new InMemoryBillingStore();
     await applyBillingEvent(store, checkoutCompleted("active"));
 

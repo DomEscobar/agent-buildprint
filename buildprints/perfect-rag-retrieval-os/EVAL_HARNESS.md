@@ -24,7 +24,7 @@ The bundled proof harness covers a minimum reproducible subset: recall@5, MRR, t
 - latency by stage
 - candidate count by stage
 - token budget used
-- provider cost placeholders
+- provider cost fields labeled as measured, estimated, or unavailable
 - permission filter drops
 
 ## Required fixture cases

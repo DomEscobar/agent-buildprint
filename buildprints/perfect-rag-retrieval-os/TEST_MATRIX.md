@@ -54,6 +54,6 @@ Validated coverage:
 
 Local result for this checkout: `npm test` passes the TypeScript build and one Node TAP test file containing seven proof cases.
 
-Remaining proof gaps: no durable ingestion/index persistence, no live provider adapters, no HTTP/API layer, no nDCG-like score, no latency/cost placeholders, no token-budget accounting, and no permission-drop trace counts. These are production harness requirements unless added to the proof.
+Remaining proof gaps: no durable ingestion/index persistence, no live provider adapters, no HTTP/API layer, no nDCG-like score, no labeled latency/cost fields, no token-budget accounting, and no permission-drop trace counts. These are production harness requirements unless added to the proof.
 
 Historical bootstrap/public publish checks should be rerun after publication before making live distribution claims.

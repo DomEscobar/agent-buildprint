@@ -10,7 +10,7 @@
 ## Phase 1 — Contracts and storage
 
 - Implement core types from `CONTRACTS.md`.
-- Implement in-memory stores first, then optional SQLite/Postgres adapters.
+- Implement durable local stores first, or explicitly label any temporary in-memory store as test-only and not production durability. SQLite/Postgres adapters are preferred for persisted chat/memory/checkpoints.
 - Add trace/event log and token usage model.
 
 ## Phase 2 — Provider router and streaming loop
@@ -22,9 +22,9 @@
 ## Phase 3 — Tools, skills, MCP
 
 - Implement tool registry and policy checks.
-- Add fake filesystem/search/todo tools.
+- Add deterministic fixture filesystem/search/todo tools for tests; do not count them as production external-tool integrations.
 - Implement skill discovery/matching.
-- Implement MCP adapter using fake MCP tool fixtures.
+- Implement MCP adapter contract with deterministic test fixtures; production MCP/tool integrations must be separately wired and gated.
 
 ## Phase 4 — Memory and subagents
 
