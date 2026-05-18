@@ -16,7 +16,7 @@ agentFile: true
 Keep these tokens active while planning and coding:
 
 ```txt
-TARGET_SHAPE = OpenClaw container + persona extension + skills + life modules + Wavespeed image skill + browser/noVNC publishing handoff
+TARGET_SHAPE = OpenClaw container + persona extension + skills + life modules + Wavespeed image skill + secured local browser/noVNC publishing handoff
 RUNTIME = OpenClaw
 IMAGE_PROVIDER = Wavespeed only for production
 REFERENCE_ARCHITECTURE = OpenClaw Influencer OS default preset
@@ -45,7 +45,7 @@ The build is working only when all are true:
 | Images | Wavespeed real adapter path exists; tests use mock mode |
 | Media safety | public/private media have different gates |
 | Social | drafts require `groundedIn`; publisher is mock/manual by default |
-| Browser handoff | runnable Chromium/noVNC service or compose profile exists and handoff is documented |
+| Browser handoff | runnable Chromium/noVNC service or compose profile exists, binds local-only by default, requires operator auth, and handoff is documented |
 | Manager | audit reports stale, unsafe, ungrounded, blocked items |
 | Tests | `npm test` passes without external APIs and `npm run test:static` includes syntax + alignment checks |
 | Env contract | `.env.example` contains exact required names and does not enable test/mock mode by default |
@@ -64,7 +64,7 @@ The build is working only when all are true:
 | image abstraction | Wavespeed production adapter path with mock fallback |
 | pure mock demo | real file/module shape + behavior tests; mock only external APIs |
 | social scheduler | default persona preset life/social planner with manager QA and grounded drafts |
-| auto-poster | mock/manual-gated publisher + browser/noVNC handoff |
+| auto-poster | mock/manual-gated publisher + secured browser/noVNC handoff |
 | broad product discovery | closed configuration interview only |
 
 ---
@@ -156,7 +156,7 @@ life: simulated self-state + calendar + journal + continuity arcs
 image_provider: Wavespeed
 model_provider: OpenRouter
 model_default: openrouter/deepseek/deepseek-v4-flash
-publishing_handoff: visible Chromium/noVNC
+publishing_handoff: secured local Chromium/noVNC
 publishing_default: mock/manual approval only
 auto_publish_default: false
 autonomy_default: disabled until tests pass
@@ -183,7 +183,7 @@ Dockerized OpenClaw runtime
   |   `-- storage adapter
   |-- skills
   |   |-- influencer-image  -> Wavespeed real mode / mock test mode
-  |   |-- influencer-post   -> browser/noVNC publish handoff
+  |   |-- influencer-post   -> secured browser/noVNC publish handoff
   |   |-- influencer-social -> drafts/outbox/history
   |   |-- influencer-journal
   |   |-- influencer-calendar
@@ -294,7 +294,10 @@ OPENCLAW_LIFE_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_SOCIAL_PLANNER_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_REPAIR_MODEL=openrouter/deepseek/deepseek-v4-flash
 OPENCLAW_RUNTIME_CMD=openclaw run --config config/openclaw.json
+SOCIAL_VISIBLE_BROWSER_HOST=127.0.0.1
 SOCIAL_VISIBLE_BROWSER_PORT=7900
+# Required when browser/noVNC handoff is enabled. No default password; set a secret locally.
+SOCIAL_VISIBLE_BROWSER_PASSWORD=
 INFLUENCER_DASHBOARD_PORT=8626
 AUTO_PUBLISH_SOCIAL=false
 INFLUENCER_AUTONOMY_LOOP=false
@@ -430,15 +433,18 @@ id, platform, caption, visualPrompt, groundedIn, status, qaNotes
 
 Default publisher is mock/manual-gated.
 
-Real publishing is browser/noVNC handoff only until explicitly enabled.
+Real publishing is secured browser/noVNC handoff only until explicitly enabled.
 
-The repo must include a runnable browser handoff surface:
+The repo must include a runnable browser handoff surface with authentication. Passwordless VNC/noVNC is forbidden:
 
 ```txt
 docker/novnc.Dockerfile or compose service using a Chromium/noVNC image
-compose service exposes SOCIAL_VISIBLE_BROWSER_PORT (default 7900)
+service binds to SOCIAL_VISIBLE_BROWSER_HOST=127.0.0.1 by default, not 0.0.0.0
+service exposes SOCIAL_VISIBLE_BROWSER_PORT (default 7900) only on the local/operator interface
+service requires SOCIAL_VISIBLE_BROWSER_PASSWORD or an equivalent secret-backed auth mechanism before starting
+compose/Docker must not contain a default, empty, or hard-coded VNC/noVNC password
 storage/browser/profile is mounted for persistent operator login
-publisher returns browser_handoff_required until manual approval/session checks pass
+publisher returns browser_handoff_required until manual approval/session/auth checks pass
 ```
 
 Must document commands equivalent to:
@@ -479,7 +485,7 @@ Follow this order only:
 6 life modules
 7 Wavespeed image skill + mock mode
 8 social planner + media queue + QA
-9 mock publisher + browser/noVNC handoff docs
+9 mock publisher + secured browser/noVNC handoff docs
 10 tests
 11 VALIDATION.md
 ```
@@ -524,7 +530,7 @@ Tests must prove:
 9. production analyzer path is not keyword-only and references/calls the LLM adapter;
 10. Wavespeed client module builds a real provider request shape and tests mock the client/fetch;
 11. Docker/compose includes OpenClaw runtime command or structured missing-runtime blocker;
-12. browser/noVNC compose service or Dockerfile exists and profile storage is mounted;
+12. browser/noVNC compose service or Dockerfile exists, binds local-only by default, requires a non-empty secret-backed password/auth value, and profile storage is mounted;
 13. `.env.example` has exact required env var names and no default test/mock mode;
 14. `npm run test:static` preserves required `node --check` syntax checks plus alignment checks;
 15. `media-flow.js` imports/uses the Wavespeed client by default for real mode;
@@ -570,7 +576,7 @@ Fail the implementation if it:
 - lacks public/private media policy separation;
 - auto-publishes by default;
 - lacks manager audit;
-- lacks browser/noVNC handoff docs or runnable noVNC/Chromium service shape;
+- lacks secured browser/noVNC handoff docs or runnable authenticated noVNC/Chromium service shape;
 - implements production analyzer as keyword/regex only;
 - only checks `WAVESPEED_API_KEY` without a real Wavespeed client adapter shape;
 - leaves `.env.example` in test/mock mode by default;
@@ -625,7 +631,7 @@ life modules
   ↓
 skills
   ├─ influencer-image → Wavespeed / mock
-  ├─ influencer-post → visible browser/noVNC / mock
+  ├─ influencer-post → secured local browser/noVNC / mock
   ├─ influencer-social
   ├─ influencer-calendar
   ├─ influencer-journal

@@ -18,9 +18,9 @@ content_lane:
 public_style: platform-safe realistic lifestyle content
 private_media: trust/consent gated or blocked by default
 chat_channel: Telegram first
-public_platforms: mock/manual first; prepare browser handoff for Instagram/TikTok if requested
+public_platforms: mock/manual first; prepare secured local browser handoff for Instagram/TikTok if requested
 image_provider: Wavespeed
-publishing: mock/manual approval by default
+publishing: mock/manual approval by default; browser handoff requires local-only binding and non-empty auth secret
 autonomy: disabled until tests pass
 ```
 

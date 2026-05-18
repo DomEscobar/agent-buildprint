@@ -13,11 +13,11 @@
 - `extensions/influencer-persona/` exists with entrypoint, context, policy, media flow, and storage modules.
 - Skills exist for image, post, social, journal, calendar, recall.
 - Docker deployment exists.
-- Browser/noVNC handoff is documented.
+- Browser/noVNC handoff is documented as local-only/authenticated; passwordless VNC/noVNC is forbidden.
 
 ## Provider checks
 
-- `.env.example` includes the exact env names from `BUILDPRINT.md`, including `OPENROUTER_API_KEY`, `WAVESPEED_API_KEY`, `WAVESPEED_API_URL`, and `INFLUENCER_IMAGE_GENERATION_TIMEOUT_MS`.
+- `.env.example` includes the exact env names from `BUILDPRINT.md`, including `OPENROUTER_API_KEY`, `WAVESPEED_API_KEY`, `WAVESPEED_API_URL`, `INFLUENCER_IMAGE_GENERATION_TIMEOUT_MS`, `SOCIAL_VISIBLE_BROWSER_HOST`, `SOCIAL_VISIBLE_BROWSER_PORT`, and `SOCIAL_VISIBLE_BROWSER_PASSWORD`.
 - Wavespeed is the only production image provider path.
 - Missing Wavespeed key triggers mock mode or blocked real mode.
 - OpenRouter/OpenClaw model vars are documented.

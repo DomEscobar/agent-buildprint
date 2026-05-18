@@ -24,7 +24,7 @@ Create the runnable OpenClaw-shaped project skeleton.
 4. Create Docker/runtime structure.
 5. Create OpenClaw config that loads extension and skills.
 6. Make the entrypoint call `OPENCLAW_RUNTIME_CMD` or emit a structured `openclaw_runtime_missing` blocker; do not silently run a generic Node app as if it were OpenClaw.
-7. Add Chromium/noVNC service shape or Dockerfile and persistent `storage/browser/profile` mount for browser publishing handoff.
+7. Add Chromium/noVNC service shape or Dockerfile for browser publishing handoff with persistent `storage/browser/profile`, default bind host `127.0.0.1`, and mandatory secret-backed VNC/noVNC auth. Passwordless/no-auth handoff is forbidden.
 
 ## Do not
 
@@ -45,4 +45,4 @@ Create the runnable OpenClaw-shaped project skeleton.
 - `.env.example` does not default to test/mock mode;
 - entrypoint/config exposes the OpenClaw runtime command or structured blocker;
 - command wrappers are not empty placeholders: they either call implemented modules or fail with a documented blocked status;
-- noVNC/Chromium service shape exists for browser handoff.
+- noVNC/Chromium service shape exists for browser handoff, binds local-only by default, and refuses to start without non-empty secret-backed auth.

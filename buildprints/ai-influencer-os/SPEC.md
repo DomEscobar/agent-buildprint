@@ -94,17 +94,17 @@ Then publishing is refused.
 
 Given real publishing is requested
 When default env flags are unchanged
-Then the system uses browser/noVNC handoff docs and does not auto-publish.
+Then the system uses secured browser/noVNC handoff docs and does not auto-publish.
 
 Given the container stack is generated
 When compose files are inspected
-Then a Chromium/noVNC service or Dockerfile exists, exposes `SOCIAL_VISIBLE_BROWSER_PORT`, and mounts `storage/browser/profile` for persistent operator login.
+Then a Chromium/noVNC service or Dockerfile exists, binds to `SOCIAL_VISIBLE_BROWSER_HOST=127.0.0.1` by default, exposes `SOCIAL_VISIBLE_BROWSER_PORT` only on the local/operator interface, requires non-empty `SOCIAL_VISIBLE_BROWSER_PASSWORD` or equivalent secret-backed auth before starting, refuses empty/default/hard-coded VNC passwords, and mounts `storage/browser/profile` for persistent operator login.
 
 ### R10 — Env and static validation contract
 
 Given `.env.example` is generated
 When static validation runs
-Then exact required env names from `BUILDPRINT.md` are present and no test/mock mode is enabled by default.
+Then exact required env names from `BUILDPRINT.md` are present, no test/mock mode is enabled by default, and browser handoff auth is required without a default password.
 
 Given `package.json` is generated
 When static validation runs
