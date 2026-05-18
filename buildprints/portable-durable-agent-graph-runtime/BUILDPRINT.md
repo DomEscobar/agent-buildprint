@@ -2,7 +2,7 @@
 
 ## Intent
 
-Build a small, dependency-light runtime for durable agent workflows. The runtime lets users define a typed state, register nodes that return partial state updates, connect nodes with directed and conditional edges, compile the graph, invoke it, stream execution events, checkpoint state by thread, interrupt for human input, and resume.
+Build a small, dependency-light runtime for checkpointed agent workflows. The runtime lets users define a typed state, register nodes that return partial state updates, connect nodes with directed and conditional edges, compile the graph, invoke it, stream execution events, checkpoint state by thread, interrupt for human input, and resume. Durability is limited to the selected clean-room checkpoint proof unless a production restart-safe storage adapter is separately implemented and tested.
 
 ## Evidence Anchors
 

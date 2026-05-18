@@ -18,6 +18,12 @@
 ## Non-Functional Requirements
 
 - Background job status must be pollable. Evidence: `app.py:2219-2230`, `dashboard/src/components/SaaShortsTab.jsx:136-171`.
+- Production claims require durable job storage, durable job logs, provider request IDs, and restart recovery tests. In-memory job maps are acceptable only for prototype/mock proof.
+- Hosted deployments must handle provider keys server-side through environment or secret storage; browser localStorage key handling is not production-grade.
+- URL scraping/downloading requires an explicit URL allow/deny and egress policy.
+- Uploaded/generated actor use requires explicit likeness consent and moderation gates before publish.
+- Gallery output must be private by default and require an explicit publish action before public pages or public object URLs are exposed.
+- Live provider output, quotas, response schemas, and platform handoff must pass sandbox validation before claiming production readiness.
 - Concurrency should respect backend semaphore. Evidence: `app.py:35-42`, `app.py:2149-2213`.
 - Output files live under `output/` and are served through `/videos`. Evidence: `app.py:22-27`, `app.py:181-187`.
 - Docker Compose should run backend, frontend, and renderer with shared output. Evidence: `docker-compose.yml:1-40`.
@@ -27,4 +33,4 @@
 - No direct TikTok/Instagram/YouTube API parity.
 - No guarantee of provider model availability or output quality.
 - No guarantee of S3/public gallery behavior without configured buckets.
-
+- No publish-ready or production restart-safe claim without the required durability, security, consent, privacy, egress, and provider validation gates.

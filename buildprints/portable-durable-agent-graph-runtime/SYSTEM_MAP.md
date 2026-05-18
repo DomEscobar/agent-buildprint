@@ -42,7 +42,7 @@ This is a clean-room Buildprint for a small, portable runtime inspired by observ
 7. Streaming layer
    - OBSERVED(libs/langgraph/langgraph/types.py:120-134): stream modes are values, updates, custom, messages, checkpoints, tasks, debug.
    - OBSERVED(libs/langgraph/langgraph/pregel/main.py:2644-2695): stream yields step outputs shaped by stream mode.
-   - INFERRED: Buildprint should include event records for values, updates, checkpoints, tasks, debug, and custom; messages may be a placeholder event type without LLM integration.
+   - INFERRED: Buildprint should include event records for values, updates, checkpoints, tasks, debug, and custom; provider/LLM `messages` streaming is non-core and may appear only in mocked demos labeled outside core runtime parity.
 
 ## Primary Data Flow
 

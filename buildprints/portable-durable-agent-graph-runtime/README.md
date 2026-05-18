@@ -2,7 +2,9 @@
 
 Buildprint: Portable Durable Agent Graph Runtime.
 
-This submission specifies a clean-room implementation target, not a LangGraph clone. The source trace in `../SOURCE_TRACE.md` provides evidence for the architectural ideas. Implementation must use original code and tests written from this specification.
+This submission specifies a clean-room implementation target, not a LangGraph clone. The source trace in `SOURCE_TRACE.md` provides evidence for the architectural ideas. Implementation must use original code and tests written from this specification.
+
+`Durable` here means selected checkpoint and pending-write semantics suitable for local proof and debugging. Production restart-safe storage is not claimed unless a durable storage adapter is implemented and tested.
 
 Core deliverables:
 - Typed state schema and reducer metadata.
