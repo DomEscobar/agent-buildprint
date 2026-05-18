@@ -77,15 +77,15 @@ Stop before implementing final stitched video export or full infinite canvas unl
 
 ---
 
-## Consolidated notes from `PLAN.md`
+## Legacy Plan Notes
 
-# Plan
+These notes are lower authority than `BUILDPRINT.md`. Use them only as sequencing hints after following the canonical Required Read Order and Phase Gates.
 
-1. Define portable schemas for Project, Chapter, EventSummary, ScriptPlan, Script, Asset, StoryboardRow, MediaTask, VideoTrack, ExportPackage.
-2. Implement in-memory or SQLite repository interfaces and fixture loader.
-3. Implement mock text provider for event extraction and agent outputs.
-4. Implement workflow services for import, event extraction, script planning, asset extraction, storyboard creation, media generation requests, and export package creation.
-5. Add adapter interfaces for live text/image/video providers but keep proof default mocked.
-6. Add API or CLI façade around the services.
-7. Add tests covering happy path, invalid input, provider failure, retry, cancellation, and export package snapshot.
-8. Optional: add a minimal browser UI only after service contracts pass.
+1. Define portable schemas for Project, Chapter, EventSummary, ScriptPlan, Script, Asset, StoryboardRow, MediaTask, VideoTrack, and PortablePreviewManifest.
+2. Implement durable local repository interfaces and fixture loader. If temporary storage is used, label it honestly and do not claim production durability.
+3. Implement deterministic mock/no-network providers for event extraction and agent outputs.
+4. Implement workflow services for import, event extraction, script planning, asset extraction, storyboard creation, media generation requests, and PortablePreviewManifest export.
+5. Add adapter interfaces for optional live text/image/video providers, env-gated and excluded from default CI.
+6. Add webapp/API façades around the services as required by `WEBAPP_TARGET_SPEC.md` and Phase 4.
+7. Add tests covering happy path, invalid input, provider failure, retry, cancellation, no-network default, and manifest snapshot.
+8. Build the browser workbench and preview/timeline for Phase 4; it is required for done, not optional.
