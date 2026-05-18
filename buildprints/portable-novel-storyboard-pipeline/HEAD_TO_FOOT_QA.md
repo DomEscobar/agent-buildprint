@@ -175,30 +175,9 @@ Every build should produce:
 - exported/parsed manifest sample
 - explicit remaining gaps
 
-## Current v2 Build Evidence
+## Runtime Evidence Boundary
 
-The first v2 webapp build produced these runtime evidence artifacts:
-
-- App path: `/root/.openclaw/workspace/research/toonflow-webapp-v2-build-2026-05-16/`
-- Runtime script: `scripts/runtime-live-test.mjs`
-- Runtime report: `RUNTIME_LIVE_TEST_REPORT.md`
-- Screenshot: `docs/screenshot-v2-runtime-live.png`
-
-Runtime manifest checks from that build:
-
-```json
-{
-  "version": "toonflow-blueprint-v2",
-  "chapters": 3,
-  "events": 3,
-  "scripts": 1,
-  "assets": 4,
-  "storyboardRows": 2,
-  "tracks": 1,
-  "media": 3,
-  "jobs": 13
-}
-```
+This Buildprint does not include tracked runtime proof artifacts. Treat it as a specification and QA gate until an implementation records its own build report, runtime report, screenshot, command summary, and exported manifest sample inside the implementation repository.
 
 ## Non-Parity Boundary
 
@@ -215,9 +194,7 @@ It still does not prove:
 
 ---
 
-## Consolidated notes from `QA_PLAN.md`
-
-# QA Plan
+## Consolidated QA Checklist
 
 ## Fixture QA
 

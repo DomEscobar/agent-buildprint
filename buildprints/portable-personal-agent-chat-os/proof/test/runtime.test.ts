@@ -46,3 +46,11 @@ test('compacts memory under context pressure while retaining recent messages', a
   assert.match(runtime.memory.todayEpisode, /episode-/);
   assert.equal(runtime.memory.checkpoint, undefined);
 });
+
+test('keeps checkpoint inspectable after failed turn', async () => {
+  const runtime = new AgentRuntime();
+  const result = await runtime.turn('fail turn after checkpoint');
+  assert.ok(result.events.some((e) => e.type === 'turn.failed'));
+  assert.ok(result.memory.checkpoint);
+  assert.match(result.memory.checkpoint!.at(-1)!.content, /fail turn after checkpoint/);
+});

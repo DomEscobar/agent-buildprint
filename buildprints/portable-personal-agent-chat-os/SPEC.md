@@ -66,7 +66,7 @@
 ### 6. Subagents/team
 
 - Spawn/delegate only through a `TeamTask` contract.
-- Emit events for `created`, `started`, `message`, `completed`, `failed`.
+- Emit `team.task` events with status `created`, `started`, `message`, `completed`, or `failed`.
 - Store team task results in history only after summarization or explicit inclusion.
 
 ### 7. WebUI/API

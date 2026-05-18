@@ -9,16 +9,17 @@ export type RuntimeEvent =
   | { type: 'tool.allowed' | 'tool.denied'; tool: string; reason?: string }
   | { type: 'tool.result'; tool: string; output: unknown }
   | { type: 'mcp.tool_mapped'; serverId: string; tool: string }
-  | { type: 'team.task'; taskId: string; status: 'created' | 'started' | 'completed' | 'failed' }
+  | { type: 'team.task'; taskId: string; status: 'created' | 'started' | 'message' | 'completed' | 'failed'; text?: string }
   | { type: 'memory.compacted'; episodeId: string; retainedMessages: number }
   | { type: 'telemetry.usage'; input: number; output: number; total: number }
-  | { type: 'turn.completed'; sessionId: string; finalText: string };
+  | { type: 'turn.completed'; sessionId: string; finalText: string }
+  | { type: 'turn.failed'; sessionId: string; error: string };
 
 export type Message = { role: Role; content: string; at: string };
 export type ProviderConfig = { id: string; model: string; contextWindowTokens: number; supportsStreaming: boolean; supportsTools: boolean };
 export type ToolSpec = { name: string; risk: Risk; description: string; handler: (input: unknown) => Promise<unknown> };
 export type SkillSpec = { name: string; triggers: string[]; instructions: string; enabled: boolean };
-export type TeamTask = { id: string; role: string; input: string; status: 'created' | 'started' | 'completed' | 'failed'; result?: string; events: RuntimeEvent[] };
+export type TeamTask = { id: string; role: string; input: string; status: 'created' | 'started' | 'message' | 'completed' | 'failed'; result?: string; events: RuntimeEvent[] };
 
 export class MemoryStore {
   longTerm = 'User prefers concise, evidence-backed answers.';
@@ -110,6 +111,7 @@ export class TeamBus {
     const events: RuntimeEvent[] = [
       { type: 'team.task', taskId: task.id, status: 'created' },
       { type: 'team.task', taskId: task.id, status: 'started' },
+      { type: 'team.task', taskId: task.id, status: 'message', text: `${role} running` },
       { type: 'team.task', taskId: task.id, status: 'completed' },
     ];
     task.status = 'completed'; task.result = `${role} checked: ${input}`; task.events = events;
@@ -145,6 +147,10 @@ export class AgentRuntime {
     this.events.push({ type: 'turn.started', sessionId, messageId: `msg-${this.memory.history.length + 1}` });
     this.memory.append('user', message);
     this.memory.writeCheckpoint();
+    if (message.toLowerCase().includes('fail turn')) {
+      this.events.push({ type: 'turn.failed', sessionId, error: 'deterministic failure requested' });
+      return { finalText: '', events: this.events, memory: this.memory, telemetry: this.telemetry };
+    }
     const skill = this.skills.select(message);
     if (skill) this.events.push({ type: 'skill.selected', skill: skill.name });
     const context = `${this.memory.longTerm}\n${this.memory.todayEpisode}\n${skill?.instructions ?? ''}\n${message}`;

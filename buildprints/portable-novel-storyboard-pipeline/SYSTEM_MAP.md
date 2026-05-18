@@ -65,7 +65,7 @@ Adapters depend inward on provider interfaces. Workflow services should not depe
 
 ## Evidence Pointer
 
-Detailed evidence-backed discovery map lives one level up at `../SYSTEM_MAP.md` in this generated output directory. The selected package must remain usable even if only `project.buildprint/` is handed to a coding agent.
+This selected package is self-contained for coding-agent handoff. Use this file plus `TRACEABILITY_MATRIX.md` for source evidence; do not depend on parent-directory generated artifacts.
 
 
 ---

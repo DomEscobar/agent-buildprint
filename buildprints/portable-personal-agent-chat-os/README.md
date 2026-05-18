@@ -39,7 +39,6 @@ This package is a mapped-project Buildprint, not a source copy. It captures port
 14. `HEAD_TO_FOOT_QA.md`
 15. `PARITY_CLAIMS.md`
 16. `TRACEABILITY_MATRIX.md`
-17. `questions.md`
 
 ## Validation status
 

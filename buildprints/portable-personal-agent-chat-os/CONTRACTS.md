@@ -26,7 +26,7 @@ type RuntimeEvent =
   | { type: 'tool.result'; tool: string; output: unknown }
   | { type: 'skill.selected'; skill: string }
   | { type: 'mcp.tool_mapped'; serverId: string; tool: string }
-  | { type: 'team.task'; taskId: string; status: 'created' | 'started' | 'completed' | 'failed' }
+  | { type: 'team.task'; taskId: string; status: 'created' | 'started' | 'message' | 'completed' | 'failed'; text?: string }
   | { type: 'memory.compacted'; episodeId: string; retainedMessages: number }
   | { type: 'telemetry.usage'; input: number; output: number; total: number }
   | { type: 'turn.completed'; sessionId: string; finalText: string }
@@ -78,7 +78,7 @@ type TeamTask = {
   id: string;
   role: string;
   input: string;
-  status: 'created' | 'started' | 'completed' | 'failed';
+  status: 'created' | 'started' | 'message' | 'completed' | 'failed';
   result?: string;
   events: RuntimeEvent[];
 };

@@ -18,6 +18,8 @@ A team bus records events:
 - completed
 - failed
 
+Represent these as `team.task` runtime events with the same status values. `message` events may include a short status text.
+
 ## Guardrails
 
 - Delegation must have a bounded task description.

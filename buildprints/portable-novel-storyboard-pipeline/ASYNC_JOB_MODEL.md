@@ -66,7 +66,7 @@ Evidence: `src/socket/routes/scriptAgent.ts:48-89`, `src/socket/routes/productio
 
 ## Persistence Rule
 
-All async transitions are durable:
+All async transitions must be durable in production adapters:
 
 1. Create `queued`.
 2. Mark `running` before provider/agent call.
@@ -74,4 +74,4 @@ All async transitions are durable:
 4. Mutate artifact state transactionally.
 5. Mark `success` or `failure`.
 
-For web-only proof, an in-memory store is acceptable only if tests can snapshot the same job lifecycle.
+For web-only proof, an in-memory store is acceptable only if tests snapshot the same job lifecycle. That proves lifecycle semantics, not restart-safe durability.

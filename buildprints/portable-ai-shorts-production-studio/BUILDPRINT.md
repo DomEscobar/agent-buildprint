@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Generate publish-ready vertical UGC-style marketing videos from a product URL or manual description using a modular AI/provider pipeline.
+Specify a portable, provider-adapter-backed workflow for generating vertical UGC-style marketing video drafts from a product URL or manual description. Do not claim publish-ready production output until durable job storage/logs, server-side key handling, consent gates, URL egress policy, gallery privacy, and provider validation gates are implemented and tested.
 
 ## Core Flow
 
@@ -15,8 +15,8 @@ Generate publish-ready vertical UGC-style marketing videos from a product URL or
 7. Generate b-roll assets.
 8. Generate subtitles from actual audio.
 9. Compose final vertical video with FFmpeg and optional Remotion post-processing.
-10. Store result, expose local video URL, optionally upload to public gallery.
-11. Publish/schedule through Upload-Post handoff.
+10. Store result, expose local video URL, and keep gallery publishing private-by-default until explicit publish consent is captured.
+11. Publish/schedule through Upload-Post handoff only after provider and platform validation gates pass.
 
 ## Evidence
 
@@ -42,6 +42,6 @@ Selected buildprint: `Portable AI Shorts Production Studio`
 
 This submission packages an evidence-backed buildprint for OpenShorts at commit `fe87af6dd599b854e6eab2de0ca247ebafe13885`.
 
-Core claim: OpenShorts implements a self-hostable AI shorts production workflow from product URL/manual input through research, script generation, avatar/voice/video asset generation, composition, gallery/SEO output, and social publishing handoff.
+Core claim: OpenShorts maps a self-hostable AI shorts workflow from product URL/manual input through research, script generation, avatar/voice/video asset generation, composition, gallery/SEO output, and social publishing handoff. In this Buildprint, that remains an adapter-backed blueprint/prototype until the production gates above are proven.
 
 Scope guardrail: Gemini, ElevenLabs, fal.ai/Flux/Hailuo/Kling/VEED, Upload-Post, S3, YouTube/TikTok/Instagram, scraping, and yt-dlp are adapter surfaces unless separately validated with credentials and provider-side tests.

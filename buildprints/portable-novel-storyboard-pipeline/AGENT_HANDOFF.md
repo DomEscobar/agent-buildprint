@@ -16,7 +16,7 @@ Do **not** rebuild Toonflow's Electron app, full canvas UI, live provider integr
 2. `CONTRACTS.md` — schemas, states, adapters.
 3. `LLM_FLOW.md` — ScriptAgent/ProductionAgent flow and prompt invariants.
 4. `SYSTEM_MAP.md` — module boundaries and relationships.
-5. `TEST_MATRIX.md` + `QA_PLAN.md` — validation gates.
+5. `TEST_MATRIX.md` + `HEAD_TO_FOOT_QA.md` — validation gates.
 6. `TRACEABILITY_MATRIX.md` — source evidence if needed.
 
 Avoid spending first-pass attention on optional docs until tests and contracts are clear.
