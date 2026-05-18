@@ -4,7 +4,7 @@
 
 1. A user creates/selects a project and imports ordered novel chapters.
 2. The system marks chapters as event-pending and asynchronously extracts per-chapter events.
-3. The user can ask ScriptAgent to produce story skeleton, adaptation strategy, and one or more scripts.
+3. The user can ask ScriptAgent to produce story outline, adaptation strategy, and one or more scripts.
 4. The system can extract role/scene/prop assets from scripts.
 5. ProductionAgent can produce a director plan, storyboard table, and storyboard panel rows.
 6. Asset/storyboard/video generation can be requested through adapters; Phase 1 proof uses mocks.

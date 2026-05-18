@@ -11,5 +11,5 @@
 | Memory loss | checkpoint + compaction retention test |
 | Hidden subagent behavior | team task events test |
 | Token telemetry missing | normalized usage and compaction threshold test |
-| UI smoke missed | browser/runtime happy path if UI exists |
+| UI/API smoke missed | browser/runtime or local HTTP API happy path for the minimal WebUI/API surface |
 | Unsupported source compatibility claim | `BUILDPRINT.md` and `PARITY_CLAIMS.md` reviewed before publish |

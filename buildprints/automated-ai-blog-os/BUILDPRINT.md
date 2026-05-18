@@ -66,7 +66,7 @@ The minimum included behavior is the content-operations pipeline, not a generic 
 
 1. Configuration: if the user says `Use default blog preset`, apply `DEFAULT_PRESET.md`; otherwise ask exactly `questions.md`, summarize answers with its template, and wait for confirmation.
 2. Alignment: record content lane, audience, source types, publisher mode, approval policy, excluded capabilities, fixture policy, and blockers in `VALIDATION.md`.
-3. Content skeleton: create the required config, source, memory, post, visual/component, storage, script, test, and fixture surfaces with implemented behavior or explicit blocked status.
+3. Content structure: create the required config, source, memory, post, visual/component, storage, script, test, and fixture surfaces with implemented behavior or explicit blocked status.
 4. Source scanner: capture `SourceRecord` files and mark inaccessible sources as `failed` or `skipped` without inventing content.
 5. Idea scoring: generate `IdeaRecord` candidates from captured source IDs and explicit rubric fields.
 6. Drafting and visuals: write `DraftRecord` and Markdown/MDX output with source maps, claim maps, original angle, visual plan, internal links, and checklist state.

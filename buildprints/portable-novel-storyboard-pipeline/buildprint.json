@@ -7,7 +7,7 @@
   "bindingSlice": [
     "import 3 ordered chapter fixtures",
     "extract 3 successful event records with persisted state",
-    "generate skeleton, adaptation strategy, and at least one script with deterministic providers",
+    "generate outline, adaptation strategy, and at least one script with deterministic providers",
     "extract assets from scripts",
     "generate director plan, storyboard table, and storyboard rows",
     "create mock image/video media task records through adapters",

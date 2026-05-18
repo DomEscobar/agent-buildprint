@@ -1,8 +1,8 @@
 # Toonflow Portable Creative Pipeline Buildprint
 
-This v2 Buildprint describes a clean-room, portable webapp rebuild target for Toonflow's creative AI pipeline:
+This Buildprint describes a clean-room, portable webapp rebuild target for Toonflow's creative AI pipeline:
 
-novel import -> chapter event extraction -> ScriptAgent skeleton/adaptation/script -> ProductionAgent storyboard table/panel -> asset/image/video adapters -> portable preview manifest.
+novel import -> chapter event extraction -> ScriptAgent outline/adaptation/script -> ProductionAgent storyboard table/panel -> asset/image/video adapters -> portable preview manifest.
 
 It intentionally does not claim full Toonflow parity, desktop/Electron parity, provider parity, live video generation parity, or final stitched-video parity.
 

@@ -4,7 +4,7 @@ Read `BUILDPRINT.md` first. Then execute phase files in order.
 
 ```txt
 plans/00-alignment.md
-plans/01-content-skeleton.md
+plans/01-content-structure.md
 plans/02-source-scanner.md
 plans/03-idea-scoring.md
 plans/04-drafting-visuals.md

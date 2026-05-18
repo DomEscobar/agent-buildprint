@@ -2,7 +2,7 @@
 
 Purpose: prove the generated webapp works as a real runtime product flow, not only as isolated unit tests.
 
-This QA plan is the required acceptance gate for any webapp built from this Buildprint v2.
+This QA plan is the required acceptance gate for any webapp built from this Buildprint.
 
 ## QA Levels
 
@@ -66,7 +66,7 @@ Pass condition:
 
 ### Level 3 — Real Browser Runtime Happy Path
 
-This is the most important non-Jacky test.
+This is the most important product-flow test.
 
 Required flow in a real browser, preferably automated with Playwright/CDP:
 
@@ -75,7 +75,7 @@ Required flow in a real browser, preferably automated with Playwright/CDP:
 3. Extract events.
 4. Verify 3 chapter events render as success.
 5. Open ScriptAgent workspace.
-6. Run story skeleton.
+6. Run story outline.
 7. Run adaptation strategy.
 8. Write scripts.
 9. Verify scripts render.
@@ -90,7 +90,7 @@ Required flow in a real browser, preferably automated with Playwright/CDP:
 18. Verify timeline/track/clip UI renders.
 19. Export/read manifest from rendered UI.
 20. Assert manifest contains at least:
-    - version `toonflow-blueprint-v2`,
+    - version `portable-preview-1`,
     - 3 chapters,
     - 3 events,
     - >=1 script,
@@ -201,7 +201,7 @@ It still does not prove:
 - Import 3 chapter fixtures; assert chapter indexes 1..3 and event pending.
 - Run mock event extractor; assert each chapter transitions success and event text is stored.
 - Force one provider error; assert failed state and error reason persist.
-- Run ScriptAgent mock; assert skeleton, adaptation strategy, and scripts are persisted.
+- Run ScriptAgent mock; assert outline, adaptation strategy, and scripts are persisted.
 - Extract assets from two scripts; assert duplicate asset names are de-duped and script links exist.
 - Build storyboard table and panel; assert row count, durations, track grouping, and asset links.
 - Generate mock asset/storyboard images; assert media refs and task state.

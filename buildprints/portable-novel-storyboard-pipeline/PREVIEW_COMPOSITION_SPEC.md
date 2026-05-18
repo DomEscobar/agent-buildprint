@@ -8,7 +8,7 @@ Render a browser preview from portable state. This is a substitute for final sti
 
 ```ts
 type PreviewManifest = {
-  version: "toonflow-blueprint-v2";
+  version: "portable-preview-1";
   generatedAt: string;
   project: ProjectSummary;
   chapters: Chapter[];
@@ -79,4 +79,4 @@ Unsafe export claim:
 - Transition/render parity.
 - Original workbench export behavior.
 
-Evidence: source docs mention returning to workbench for stitching/export in `docs/README.en.md:145-146`, but no buildprint evidence proves compositor internals. Keep v2 to manifest/preview.
+Evidence: source docs mention returning to workbench for stitching/export in `docs/README.en.md:145-146`, but no buildprint evidence proves compositor internals. Keep the selected package to manifest/preview output.

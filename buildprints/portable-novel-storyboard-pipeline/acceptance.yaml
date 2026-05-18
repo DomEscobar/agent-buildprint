@@ -28,7 +28,7 @@ acceptance:
         - mock media failure records failed state and retry can succeed
         - storyboard mode switching changes prompt/image/track behavior
   required_manifest_counts:
-    version: toonflow-blueprint-v2
+    version: portable-preview-1
     chapters_min: 3
     events_min: 3
     scripts_min: 1

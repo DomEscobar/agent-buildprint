@@ -6,7 +6,7 @@
 | Import empty chapter list | unit | explicit validation error |
 | Event extractor success | unit | state ready and event text |
 | Event extractor failure | unit | state failed and error reason |
-| ScriptAgent skeleton/adaptation/script mock | integration | workspace and scripts persisted |
+| ScriptAgent outline/adaptation/script fixture | integration | workspace and scripts persisted |
 | Asset extraction duplicate names | unit | no duplicate assets, links preserved |
 | Storyboard panel parse | unit | rows match table count/duration |
 | shouldGenerateImage false | unit | row retained, image not generated |

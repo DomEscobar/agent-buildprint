@@ -33,7 +33,7 @@ Evidence: `data/skills/script_execution_skeleton.md:14-24`, `data/skills/script_
 
 Adaptation Strategy:
 
-- Inputs: project config, chapter events, story skeleton.
+- Inputs: project config, chapter events, story outline.
 - Tools: `get_novel_events`, `get_planData`.
 - Output XML: `<adaptationStrategy>...</adaptationStrategy>`.
 - Must state 3-5 principles, deletion/compression decisions, worldview presentation strategy.
@@ -43,7 +43,7 @@ Evidence: `data/skills/script_execution_adaptation.md:14-21`, `data/skills/scrip
 
 Script Writing:
 
-- Inputs: project config, events, original chapter text, skeleton, adaptation strategy, previous scripts.
+- Inputs: project config, events, original chapter text, outline, adaptation strategy, previous scripts.
 - Tools: `get_novel_events`, `get_novel_text`, `get_planData`, `get_script_content`.
 - Output XML: repeated `<scriptItem name="Episode Name">...</scriptItem>`.
 - One episode per dispatch unless explicitly batched within the 5-episode guardrail.

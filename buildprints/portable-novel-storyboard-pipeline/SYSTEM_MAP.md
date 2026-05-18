@@ -4,7 +4,7 @@ Self-contained compact map for the selected Toonflow portable creative pipeline 
 
 ## Scope
 
-Selected scope: novel/story import -> chapter event extraction -> ScriptAgent skeleton/adaptation/scripts -> asset extraction -> ProductionAgent director plan/storyboard table/storyboard rows -> mockable image/video tasks -> portable preview manifest.
+Selected scope: novel/story import -> chapter event extraction -> ScriptAgent outline/adaptation/scripts -> asset extraction -> ProductionAgent director plan/storyboard table/storyboard rows -> mockable image/video tasks -> portable preview manifest.
 
 Non-goals: Electron shell, full infinite canvas, live provider parity, final stitched video parity, payment/business/admin flows.
 
@@ -20,7 +20,7 @@ Non-goals: Electron shell, full infinite canvas, live provider parity, final sti
    - Portable proof should expose pending/running/success/failure state mapping.
 
 3. **ScriptAgent Service**
-   - Staged LLM workflow: project initialization -> story skeleton -> adaptation strategy -> script writing.
+   - Staged LLM workflow: project initialization -> story outline -> adaptation strategy -> script writing.
    - Decision layer dispatches execution/supervision subagents; workspace reads happen through tools.
    - Stores `storySkeleton`, `adaptationStrategy`, and script records.
 

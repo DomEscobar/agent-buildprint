@@ -16,7 +16,7 @@ Build exactly this first:
 1. Create/select one project and import 3 ordered chapter fixtures.
 2. Persist chapters with stable ordering and event states: pending, success, failure, and error reason.
 3. Run deterministic event extraction so all 3 chapters render successful event records.
-4. Run ScriptAgent stages with deterministic provider output: story skeleton, adaptation strategy, and at least one episode script.
+4. Run ScriptAgent stages with deterministic provider output: story outline, adaptation strategy, and at least one episode script.
 5. Extract reusable role/scene/prop assets from generated scripts.
 6. Run ProductionAgent stages: director plan, storyboard table, and storyboard panel rows.
 7. Validate storyboard/XML output and reject malformed output without corrupting prior state.
@@ -120,7 +120,7 @@ Build a portable creative AI pipeline that transforms imported novel chapters in
 
 - Import module stores ordered chapter fixtures.
 - Event extraction module converts each chapter to an event summary with pending/success/failure state.
-- ScriptAgent module orchestrates story skeleton, adaptation strategy, and episode scripts using tool calls into event/text/workspace state.
+- ScriptAgent module orchestrates story outline, adaptation strategy, and episode scripts using tool calls into event/text/workspace state.
 - Asset module extracts reusable role/scene/prop assets from scripts.
 - ProductionAgent module creates director plan, storyboard table, storyboard panel rows, and optional generated storyboard images.
 - Adapter module defines text/image/video provider contracts with mock and live implementations.
