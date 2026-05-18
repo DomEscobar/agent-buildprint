@@ -72,7 +72,7 @@ Default proof mode must be offline and deterministic. Live agent/provider runs a
 
 ---
 
-## Consolidated notes from `PLAN.md`
+## Research and implementation notes: implementation rails
 
 # PLAN — Implementation rails
 
@@ -128,7 +128,7 @@ Default proof mode must be offline and deterministic. Live agent/provider runs a
 
 ---
 
-## Consolidated notes from `README.md`
+## Research and implementation notes: overview
 
 # Complete Agent Skills Evaluation OS Buildprint
 
@@ -151,7 +151,7 @@ This Buildprint evaluates the whole system from install to behavior.
 
 ## Default proof
 
-The included proof is an offline JavaScript implementation of the evaluation pipeline and scoring model. It uses fixture objects only and makes no network or agent calls.
+The included proof is an offline JavaScript implementation of the evaluation pipeline and scoring model. It uses fixture objects only and makes no network or agent calls. It validates the scoring architecture, not a complete production evaluation OS with live adapters, sandboxed agent execution, or transcript capture from a real runtime.
 
 ```bash
 cd proof
@@ -170,7 +170,7 @@ Primary source pressure came from `balyakin/skill-eval-runner`, `sjnims/cc-plugi
 
 ---
 
-## Consolidated notes from `TOOL_COMPARISON.md`
+## Research and implementation notes: tool comparison
 
 # TOOL_COMPARISON
 
