@@ -1,18 +1,19 @@
-# Phase alignment: Align configuration, default preset, publish mode, and validation file
+# Phase 00 — Alignment
 
 ## Goal
 
-Align configuration, default preset, publish mode, and validation file.
+Lock the content strategy, source boundary, publish mode, and validation record before files are generated.
 
 ## Required actions
 
-- Preserve the target architecture from BUILDPRINT.md.
-- Implement the smallest production-shaped version of this phase.
-- Add or update tests/static checks for the risks this phase touches.
-- Record blockers or deviations in VALIDATION.md.
+1. If the user says "Use default blog preset", apply `DEFAULT_PRESET.md`; otherwise ask exactly `questions.md` and wait for confirmation.
+2. Record selected niche, audience, source types, publisher mode, approval policy, and excluded capabilities in `VALIDATION.md`.
+3. Preserve `TARGET_SHAPE`: scanner, scorer, memory, drafter, visuals, validators, approval queue, publisher/scheduler, and manager audit.
+4. Confirm tests use fixtures/mocks only; no source scan, LLM, deploy, or publishing credential is required for tests.
+5. Mark any unavailable source access or publisher integration as blocked/excluded, not silently represented.
 
 ## Done when
 
-- Files for this phase exist.
-- Tests or static checks cover the phase behavior.
-- No publishing can occur from this phase unless approval and validation gates pass.
+- `VALIDATION.md` exists with configuration, publish mode, fixture policy, and known blockers.
+- Default state is draft/manual approval unless the user explicitly chose schedule/auto.
+- No implementation file suggests publishing can bypass approval, claim validation, SEO validation, or build checks.

@@ -14,12 +14,12 @@ Create the runnable OpenClaw-shaped project skeleton.
 - `docker/docker-compose.yml`
 - `docker/entrypoint.sh`
 - `docker/novnc.Dockerfile`
-- skill folders with `SKILL.md` and executable placeholders
+- skill folders with `SKILL.md` and executable command wrappers
 
 ## Steps
 
 1. Create `package.json` for the generated app with `name: "openclaw-ai-influencer-os"`; do not use the Buildprint CLI name `agb`.
-2. Create scripts required by `BUILDPRINT.md`.
+2. Create scripts required by `BUILDPRINT.md`; each command wrapper must dispatch to a real module or emit a structured blocked status such as `openclaw_runtime_missing`.
 3. Add all env names from the environment contract exactly; do not enable test/mock flags in `.env.example` by default.
 4. Create Docker/runtime structure.
 5. Create OpenClaw config that loads extension and skills.
@@ -44,4 +44,5 @@ Create the runnable OpenClaw-shaped project skeleton.
 - env names match `BUILDPRINT.md` exactly;
 - `.env.example` does not default to test/mock mode;
 - entrypoint/config exposes the OpenClaw runtime command or structured blocker;
+- command wrappers are not empty placeholders: they either call implemented modules or fail with a documented blocked status;
 - noVNC/Chromium service shape exists for browser handoff.

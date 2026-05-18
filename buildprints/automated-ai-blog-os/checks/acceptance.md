@@ -8,10 +8,4 @@
 - Publisher refuses unapproved drafts by default.
 - Manager audit reports stale/weak/blocked items.
 - Tests pass without network/publishing credentials.
-
-
----
-
-## Consolidated notes from `qa.md`
-
-Review an Automated AI Blog OS implementation against BUILDPRINT.md, SPEC.md, CONTRACTS.md, TEST_MATRIX.md, and VALIDATION_TEMPLATE.md. Focus on source grounding, anti-slop protections, SEO/feed/build validation, approval-gated publishing, and test isolation.
+- `VALIDATION.md` records command names, pass/fail results, fixture evidence, deviations, blockers, and any substituted non-npm build/test commands.

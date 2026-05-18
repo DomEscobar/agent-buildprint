@@ -1,6 +1,6 @@
 # Mapper OS Questions
 
-The mapper should not ask a long questionnaire before discovery. Use safe defaults, run soft discovery, then ask contextual questions.
+The mapper should not ask a long questionnaire before discovery. Use safe defaults, run soft discovery, then ask contextual questions. After discovery, ask only 3-5 required decisions; rows 6-7 below are appendix decisions used only when needed to unblock implementation.
 
 ## Minimal preflight
 

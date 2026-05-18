@@ -1,18 +1,19 @@
-# Phase approval-publishing: Implement approval queue and gated manual/scheduled/auto publisher modes
+# Phase 06 — Approval And Publishing
 
 ## Goal
 
-Implement approval queue and gated manual/scheduled/auto publisher modes.
+Implement the approval queue and publisher state machine with fail-closed defaults.
 
 ## Required actions
 
-- Preserve the target architecture from BUILDPRINT.md.
-- Implement the smallest production-shaped version of this phase.
-- Add or update tests/static checks for the risks this phase touches.
-- Record blockers or deviations in VALIDATION.md.
+1. Store `ApprovalRecord` files with `pending`, `approved`, `rejected`, or `changes_requested` status.
+2. Keep default draft status as `draft` or `needs_review`; unapproved drafts must be refused.
+3. Publishing requires approved status, passing claim validation, passing SEO/build/feed checks, and an allowed publisher mode.
+4. In `manual` mode, write a prepared `PublishReport` without deploying.
+5. In `schedule` or `auto` mode, require explicit config and the same gates; otherwise write `status: "refused"` with a reason.
 
 ## Done when
 
-- Files for this phase exist.
-- Tests or static checks cover the phase behavior.
-- No publishing can occur from this phase unless approval and validation gates pass.
+- Tests cover unapproved refusal, rejected approval, passing manual preparation, and schedule/auto refusal when config or checks are missing.
+- Publish reports include `draftId`, `mode`, `status`, `reason`, `publishedUrl`, and timestamp.
+- No default config path can publish or schedule raw drafts.

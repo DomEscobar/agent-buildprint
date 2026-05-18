@@ -1,6 +1,6 @@
 # Phase 03 — Candidate Buildprints
 
-Create 3–7 candidate Buildprints for large repos.
+Create 2-5 candidate Buildprints, matching `PLAN.md` and `prompts/discover.md`.
 
 Each candidate must include:
 
