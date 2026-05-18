@@ -8,6 +8,8 @@
 
 Targets: `workflow-proof`, `contract-parity`, `runtime-parity`, `ui-workbench-parity`, `provider-parity`, `export-media-parity`, `full-clone-parity`.
 
+Parity is not the same as implementation completeness. A Buildprint may exclude exact source parity, but every included capability must still be implemented seriously. Do not use “not full parity” as permission to ship fake MVP surfaces.
+
 ## Safe claims
 
 Use only claims supported by the selected target and validation evidence.
@@ -28,7 +30,7 @@ List claims that must not be made unless a later pass upgrades scope and validat
 
 Use:
 
-> "This is a clean-room implementation guided by observed workflow evidence. It proves the selected scope and fidelity target only. It does not claim excluded parity layers."
+> "This is a clean-room implementation guided by observed workflow evidence. It proves the selected scope and fidelity target only. It does not claim excluded parity layers. Within the selected scope, included capabilities must be real, wired, persistent where relevant, and QA-tested; excluded capabilities are not replaced by fake mocks/placeholders."
 
 Do not use unless explicitly validated:
 

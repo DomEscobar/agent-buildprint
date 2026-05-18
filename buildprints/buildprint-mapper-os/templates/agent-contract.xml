@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildprint-agent-contract version="1">
+  <mission>Build the selected production-grade scope. Scope may be limited, but included capabilities must be real, wired, persistent where relevant, and QA-tested.</mission>
+
+  <read-order>
+    <file priority="1">AGENT_EXECUTION_BRIEF.md</file>
+    <file priority="2">agent-contract.xml</file>
+    <file priority="3">CURRENT_STATE.md</file>
+    <file priority="4">BUILDPRINT.md</file>
+    <file priority="5">SPEC.md</file>
+    <file priority="6">CONTRACTS.md</file>
+    <file priority="7">IMPLEMENTATION_COMPLETENESS.md</file>
+    <file priority="8">TEST_MATRIX.md</file>
+    <file priority="9">HEAD_TO_FOOT_QA.md</file>
+  </read-order>
+
+  <must>
+    <rule>Implement included capabilities end-to-end.</rule>
+    <rule>Exclude or block capabilities that cannot be implemented for real.</rule>
+    <rule>Persist product data through a durable adapter when persistence is claimed.</rule>
+    <rule>Run tests, build, runtime QA, persistence/restart QA when relevant, and no-fake implementation scan before claiming done.</rule>
+    <rule>Update CURRENT_STATE.md after every phase.</rule>
+    <rule>Report concrete evidence: commands, outputs, URLs, screenshots, artifacts, blockers.</rule>
+  </must>
+
+  <must-not>
+    <rule>Do not count mocks or fixtures as product implementation.</rule>
+    <rule>Do not create placeholder routes, route-shaped links, no-op controls, fake success states, or coming-soon surfaces inside included scope.</rule>
+    <rule>Do not count skeleton adapters as implemented providers, exports, queues, auth, billing, email, webhook, upload, or external APIs.</rule>
+    <rule>Do not use in-memory-only storage for product data if persistence is claimed.</rule>
+    <rule>Do not invent validation results or claim done without evidence.</rule>
+    <rule>Do not expand scope without recording the decision and required QA.</rule>
+  </must-not>
+
+  <stop-if>
+    <condition>Required provider credentials are missing for an included live provider.</condition>
+    <condition>An included capability would need to be mocked or stubbed to continue.</condition>
+    <condition>A required route/control cannot be made real.</condition>
+    <condition>Persistence is claimed but no durable implementation path is available.</condition>
+    <condition>Tests, build, or runtime QA cannot run and no honest blocker is recorded.</condition>
+    <condition>The Buildprint contains conflicting requirements.</condition>
+  </stop-if>
+
+  <phase-gates>
+    <phase id="0" name="Load contract"><exit>Read order complete and active constraints known.</exit></phase>
+    <phase id="1" name="Scaffold"><exit>Included routes/modules exist with no placeholders.</exit></phase>
+    <phase id="2" name="Contracts"><exit>Schemas, APIs, data, providers, jobs, and side effects are wired or excluded.</exit></phase>
+    <phase id="3" name="Behavior"><exit>Included capabilities perform real state changes or real external behavior.</exit></phase>
+    <phase id="4" name="Hardening"><exit>Error/empty/loading/retry/cancel/idempotency behavior covered where relevant.</exit></phase>
+    <phase id="5" name="Verification"><exit>Build/tests/runtime QA/no-fake scan pass or blockers documented.</exit></phase>
+    <phase id="6" name="Report"><exit>Implementation report written with evidence and gaps.</exit></phase>
+  </phase-gates>
+
+  <done-criteria>
+    <criterion>Build passes or blocker is explicit.</criterion>
+    <criterion>Tests pass or blocker is explicit.</criterion>
+    <criterion>Runtime QA evidence exists for product/app/feature scope.</criterion>
+    <criterion>Persistence/restart proof exists when product state exists.</criterion>
+    <criterion>No-fake implementation scan passes.</criterion>
+    <criterion>CURRENT_STATE.md is updated.</criterion>
+    <criterion>Final report lists commands, artifacts, completed included capabilities, excluded capabilities, and remaining gaps.</criterion>
+  </done-criteria>
+</buildprint-agent-contract>

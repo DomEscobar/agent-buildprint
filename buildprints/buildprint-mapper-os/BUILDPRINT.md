@@ -6,6 +6,8 @@ Buildprint Mapper OS turns an existing software project into a scoped, reviewabl
 
 It is a coding-agent process, not a scanner. The agent reads source files, cites evidence, separates observed facts from inference, asks only blocking decisions, and validates the result through reversal.
 
+Mapper OS must not generate lazy MVP apps. Its default posture is: **scope may be limited, but implemented scope must be complete**. If a feature, route, provider, persistence path, job, export, setting, or UI control is included, it must be real, wired, error-handled, persistent where relevant, and QA-testable. If that is too large, cut the capability from scope instead of faking it.
+
 ## Core idea
 
 Small project:
@@ -35,6 +37,7 @@ repo
 - Do not create a 100-page project summary and call it a Buildprint.
 - Do not mark validation as passed unless commands/tests actually ran.
 - Do not require a CLI to use this Buildprint.
+- Do not count mock services, skeleton adapters, no-op controls, route-shaped links, in-memory-only product stores, fake auth/billing/export/queues, placeholders, or `coming soon` surfaces as implemented product behavior.
 
 ## Inputs
 
@@ -51,11 +54,17 @@ repo
 
 ## Single Buildprint extraction outputs
 
+- `buildprint-submission/AGENT_EXECUTION_BRIEF.md`.
+- `buildprint-submission/agent-contract.xml`.
+- `buildprint-submission/CURRENT_STATE.md`.
+- `buildprint-submission/manifest.json`.
 - `buildprint-submission/BUILDPRINT.md`.
 - `buildprint-submission/SPEC.md`.
 - `buildprint-submission/PLAN.md`.
 - `buildprint-submission/CONTRACTS.md`.
 - `buildprint-submission/TEST_MATRIX.md`.
+- `buildprint-submission/IMPLEMENTATION_COMPLETENESS.md`.
+- `buildprint-submission/AGENT_PROMPTING_STANDARD.md` when useful or referenced.
 - `buildprint-submission/VALIDATION_TEMPLATE.md`.
 - `buildprint-submission/questions.md`.
 - `buildprint-submission/README.md`.
@@ -91,11 +100,13 @@ A Buildprint is not validated just because it reads well. Validation requires a 
 
 1. hide or ignore the original repo,
 2. give the implementing agent only the extracted Buildprint package,
-3. build the smallest implementation skeleton or MVP that satisfies the contracts,
+3. build the smallest production-grade implementation that satisfies the selected scope,
 4. set up the generated app/feature on the user's machine,
 5. run tests/build/checks,
-6. run user-facing QA with Playwright CLI (`@playwright/cli`, https://github.com/microsoft/playwright-cli) when there is any browser UI,
-7. write `REVERSAL_REPORT.md` and `QA_REPORT.md` with pass/fail, evidence, screenshots/snapshots where useful, and fidelity gaps.
+6. run persistence/restart checks when product state exists,
+7. run no-fake implementation scans for placeholders, no-op controls, skeleton adapters, route-shaped links, and mock-as-product paths,
+8. run user-facing QA with Playwright CLI (`@playwright/cli`, https://github.com/microsoft/playwright-cli) when there is any browser UI,
+9. write `REVERSAL_REPORT.md` and `QA_REPORT.md` with pass/fail, evidence, screenshots/snapshots where useful, and fidelity gaps.
 
 Use honest grades:
 

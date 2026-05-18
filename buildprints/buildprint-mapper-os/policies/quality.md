@@ -6,6 +6,7 @@ Mapper OS optimizes for precision over coverage. A generated Buildprint should b
 
 A publishable Mapper OS output must include:
 
+- production-grade selected-scope posture: smaller scope is allowed, fake MVP implementation is not,
 - evidence-backed claims with `OBSERVED(path:line)` citations,
 - explicit `INFERRED` claims where behavior is synthesized,
 - `QUESTION` items for product decisions and ambiguous rules,
@@ -16,6 +17,7 @@ A publishable Mapper OS output must include:
 - side effects and rollback/idempotency rules,
 - permission/security boundaries,
 - test and QA gates,
+- no-fake implementation gates for product/app/feature scopes,
 - known gaps and confidence levels.
 
 ## Edge-case inventory
@@ -60,6 +62,18 @@ Use confidence per module/claim:
 
 Low/unknown items must not become hard Buildprint requirements unless the user confirms them.
 
+## No-fake implementation bar
+
+For product/app/feature Buildprints:
+
+- Scope cuts must remove capabilities, not fake them.
+- Mocks are allowed only as test/demo fixtures, never as claimed product behavior.
+- Included routes must be real pages/handlers, not shaped links.
+- Included controls must perform real state changes or real validated side effects.
+- Included persistence must survive restart/reload through a durable adapter when product data is claimed.
+- Included providers/exports/queues/auth/billing/uploads/admin surfaces must be real or explicitly excluded.
+- Placeholder, `TODO`, `coming soon`, skeleton adapter, no-op, fake success, and in-memory-only product paths block production-grade claims.
+
 ## Product proof bar
 
 For product/feature Buildprints, validation is incomplete until:
@@ -68,6 +82,8 @@ For product/feature Buildprints, validation is incomplete until:
 2. it runs on the user's machine,
 3. unit/build checks pass or blockers are explicit,
 4. browser UI is tested with Playwright CLI when applicable,
-5. QA defects are fed back into the Buildprint as gaps or acceptance criteria.
+5. persistence/restart behavior is tested when product state exists,
+6. no-fake implementation scan passes for included capabilities,
+7. QA defects are fed back into the Buildprint as gaps or acceptance criteria.
 
 A rough one-shot-looking demo is not enough. The proof must show the Buildprint improved systematic iteration: architecture, modules, evidence, QA, and gap closure.

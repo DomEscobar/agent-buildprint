@@ -8,7 +8,7 @@ Use this for famous-product or product-inspired Buildprints so the proof is impr
 |---|---|---|
 |  | OBSERVED(path:line) |  |
 
-## Included in this Buildprint / MVP
+## Included in this Buildprint / production-grade selected scope
 
 | Capability | Required? | Acceptance check | Confidence |
 |---|---|---|---|
@@ -20,11 +20,13 @@ Use this for famous-product or product-inspired Buildprints so the proof is impr
 |---|---|---|
 |  |  |  |
 
-## Mocked or simplified systems
+## Test/demo fixtures or simplified systems
 
-| System | Mock/simplification | Real production requirement |
-|---|---|---|
-|  |  |  |
+Mocks/simplifications may support tests or demos, but must not be counted as included product implementation.
+
+| System | Fixture/simplification | Production path boundary | Real production requirement |
+|---|---|---|---|
+|  |  |  |  |
 
 ## Non-parity statement
 

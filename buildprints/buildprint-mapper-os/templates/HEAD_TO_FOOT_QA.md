@@ -9,6 +9,8 @@ Purpose: prove the selected fidelity target with layered evidence, not just unit
 - Product/app surface:
 - Runtime proof required? yes/no
 - Browser UI exists? yes/no
+- Production-grade selected scope? yes/no
+- Mock/fixture boundary documented? yes/no
 
 ## Level 0 — Static safety
 
@@ -16,7 +18,8 @@ Purpose: prove the selected fidelity target with layered evidence, not just unit
 - [ ] No secrets/API keys/tokens copied.
 - [ ] Environment variable names only; no values.
 - [ ] Safe/unsafe claims are present.
-- [ ] Default provider mode is mock/no-network unless selected otherwise.
+- [ ] No mock/fixture path is counted as product implementation.
+- [ ] Included capabilities are either real or explicitly excluded.
 
 Evidence/result:
 
@@ -73,7 +76,19 @@ Assertions:
 
 Evidence/result:
 
-## Level 4 — Runtime negative paths
+## Level 4 — Persistence/restart and no-fake implementation
+
+Required for product/app/feature scopes.
+
+- [ ] Product data written through real app/API survives process restart, reload, or durable adapter re-open.
+- [ ] Primary routes/links resolve to real pages/handlers.
+- [ ] Primary controls perform real state changes or real errors.
+- [ ] No placeholder/coming-soon/TODO/no-op/skeleton adapter appears inside included scope.
+- [ ] Mocks/fixtures are isolated to test/demo paths and not selected in production mode.
+
+Evidence/result:
+
+## Level 5 — Runtime negative paths
 
 Test the highest-risk failures in the real runtime, not only unit tests.
 
@@ -85,7 +100,7 @@ Test the highest-risk failures in the real runtime, not only unit tests.
 
 Evidence/result:
 
-## Level 5 — Responsive/UX smoke
+## Level 6 — Responsive/UX smoke
 
 Required for browser UI scopes.
 
@@ -97,14 +112,15 @@ Required for browser UI scopes.
 
 Evidence/result:
 
-## Level 6 — Optional live provider/export gate
+## Level 7 — Optional live provider/export gate
 
 Only if selected by user.
 
 - [ ] explicit env gate enabled
 - [ ] credentials not persisted
 - [ ] one live smoke succeeds or fails with normalized error
-- [ ] default mock/no-network tests still pass without credentials
+- [ ] fixture/no-network tests still pass without credentials
+- [ ] live provider/export is either real and tested or excluded from product scope
 
 Evidence/result:
 

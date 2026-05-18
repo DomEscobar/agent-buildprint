@@ -21,13 +21,13 @@ repo
 → soft discovery / safe census
 → evidence-backed system map
 → 2-5 candidate Buildprints
-→ one human scope + fidelity/depth decision
-→ selected Buildprint extraction with explicit parity boundaries
-→ scope-derived QA plan + head-to-foot QA + traceability matrix
+→ one human scope + production-grade posture + fidelity/depth decision
+→ selected Buildprint extraction with explicit parity boundaries and no-fake implementation contract
+→ scope-derived QA plan + implementation completeness contract + head-to-foot QA + traceability matrix
 → conditional precision artifacts
 → compact clean-room reversal validation
 → runnable product/feature proof on the user machine when applicable
-→ runtime/browser QA for browser UI when applicable
+→ runtime/browser QA, persistence/restart QA, and no-fake scan when applicable
 → final package + separated Buildprint/harness/product-QA gap report
 ```
 
@@ -39,15 +39,15 @@ repo
 - Do not ask a long questionnaire. Ask almost nothing before soft discovery; after discovery ask max 5 required decisions and at most one blocking question in chat at a time.
 - Keep most unknowns in `questions.md` appendix unless they block the selected scope.
 - Do not claim behavioral parity until reversal validation has run.
-- Keep reversal validation compact: prove reconstructability with mocked services and focused tests, not a full clone.
+- Keep reversal validation compact but not fake: prove reconstructability with real implementation for the selected scope; mocks may be used only as test/demo fixtures and must not count as product behavior.
 - Separate real Buildprint gaps from scratch-harness/tooling bugs in validation reports.
-- For product or feature Buildprints, the final proof should set up the generated app/thing locally and run user-facing QA, not stop at unit tests.
-- Do not assume full parity. Capture the user-selected depth: workflow, contract, runtime, UI/workbench, provider, export/media, or full clone.
+- For product or feature Buildprints, the final proof should set up the generated app/thing locally and run user-facing QA, persistence/restart QA where state exists, route/control checks where UI exists, and a no-fake implementation scan; do not stop at unit tests.
+- Do not assume full parity, but do assume production-grade implementation for included scope. Capture the user-selected depth: workflow, contract, runtime, UI/workbench, provider, export/media, or full clone.
 - Generate safe/unsafe parity claims for product-inspired or clone-like scopes, and make QA match the selected depth.
 - Use Playwright CLI (`@playwright/cli`) for browser QA when the generated proof has a UI.
 
 ## Decision gate
 
-If the project is large and no scope is provided, stop after candidate discovery and ask which candidate and fidelity/depth target to extract.
+If the project is large and no scope is provided, stop after candidate discovery and ask which candidate, production-grade selected scope, and fidelity/depth target to extract. Make the safe default “smaller complete product scope”, not “broad MVP/proof”.
 
 If the user asks for a full system map instead of one candidate, follow `plans/06-system-extraction.md`.

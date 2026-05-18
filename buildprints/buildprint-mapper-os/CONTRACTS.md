@@ -17,7 +17,10 @@ OUT_OF_SCOPE: intentionally excluded from selected Buildprint.
   "scope": "billing routes, webhook handler, entitlement checks",
   "includedPaths": ["src/api/billing", "src/lib/stripe.ts"],
   "excludedPaths": ["src/admin", "src/marketing"],
-  "recommendedFidelityTarget": "workflow-proof|contract-parity|mocked-runtime-proof|runtime-parity|ui-workbench-parity|provider-parity|feed-source-parity|export-media-parity|full-clone-parity",
+  "productionGradeScope": "smallest selected scope that should be implemented fully",
+  "capabilitiesToExcludeRatherThanFake": ["capabilities that are out of scope unless implemented for real"],
+  "mockFixtureBoundary": "mocks only in test/demo paths; production path avoids them",
+  "recommendedFidelityTarget": "workflow-proof|contract-parity|runtime-parity|ui-workbench-parity|provider-parity|feed-source-parity|export-media-parity|full-clone-parity",
   "optionalDeeperTargets": ["runtime-parity"],
   "explicitlyExcludedTargets": ["provider-parity", "feed-source-parity", "export-media-parity"],
   "safeClaims": ["..."],
@@ -43,6 +46,8 @@ OUT_OF_SCOPE: intentionally excluded from selected Buildprint.
 - known gaps,
 - human review questions,
 - estimated package tier,
+- production-grade selected scope,
+- implementation completeness/no-fake status,
 - selected fidelity target,
 - safe/unsafe parity claims,
 - runtime/browser QA status when applicable.
@@ -86,6 +91,18 @@ For every selected candidate or system module, record:
 If a field has no evidence, write `QUESTION` or `unknown`; never silently omit risky edges.
 
 ## Precision artifact contracts
+
+### Agent-first execution artifacts
+
+Every extracted Buildprint must include:
+
+- `AGENT_EXECUTION_BRIEF.md` — first-read operational brief for coding agents.
+- `agent-contract.xml` — strict XML instruction envelope with mission, read order, MUST/MUST NOT, STOP, phase gates, and done criteria.
+- `CURRENT_STATE.md` — rolling anti-context-rot handoff updated after every phase.
+- `manifest.json` — machine-checkable required files, gates, and done criteria.
+
+These artifacts must agree with the selected scope and no-fake implementation contract. If they conflict with other Buildprint files, implementation must stop and report the conflict.
+
 
 ### `PARITY_CLAIMS.md`
 

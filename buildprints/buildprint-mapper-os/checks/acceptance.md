@@ -2,6 +2,12 @@
 
 - [ ] Scope is explicit.
 - [ ] Fidelity/parity depth is explicit.
+- [ ] Production-grade selected-scope posture is explicit.
+- [ ] `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, and `manifest.json` exist.
+- [ ] `agent-contract.xml` parses as XML.
+- [ ] `manifest.json` parses as JSON and required files exist.
+- [ ] `IMPLEMENTATION_COMPLETENESS.md` exists for product/app/feature scopes.
+- [ ] No-fake implementation scan passed or blockers are explicit.
 - [ ] Safe and unsafe parity claims are documented when applicable.
 - [ ] Large repo generated candidates before extraction, unless full-system mode was chosen.
 - [ ] Buildprint files exist for the selected tier.
@@ -10,5 +16,8 @@
 - [ ] Quality gates are concrete.
 - [ ] Head-to-foot QA exists for runnable product/app/feature scopes.
 - [ ] Runtime/browser QA evidence is recorded when UI/runtime proof applies.
+- [ ] Persistence/restart QA is recorded when product state exists.
+- [ ] Mocks/fixtures are not counted as product implementation.
+- [ ] `CURRENT_STATE.md` has current phase, constraints, next action, blockers, and evidence status.
 - [ ] Human review questions are present.
 - [ ] Submission checklist exists.

@@ -8,8 +8,14 @@
 - Must separate observed facts from inferred claims and human questions.
 - Must identify candidate Buildprints before extracting a huge repo into final package files.
 - Must pause for human scope selection after soft discovery unless a clear scope was provided.
-- Must treat mapping depth / parity target as a first-class user decision, not an implicit default.
-- Must make claims match the selected depth: workflow, contract, mocked runtime proof, runtime parity, UI/workbench, provider, feed/source, export/media, or full parity.
+- Must treat production-grade selected scope as the default output posture: smaller scope is acceptable, fake MVP implementation is not.
+- Must treat mapping depth / parity target as a first-class user decision, but secondary to implementation completeness.
+- Must make claims match the selected depth: workflow, contract, runtime parity, UI/workbench, provider, feed/source, export/media, or full parity.
+- Must include `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, and `manifest.json` for every extracted Buildprint.
+- Must include `IMPLEMENTATION_COMPLETENESS.md` for every product/app/feature/system output that could be implemented.
+- Must require coding-agent read order, phase gates, stop conditions, and current-state updates to prevent context rot.
+- Must require every included route, UI control, provider, job, export, persistence path, setting, auth/billing/upload/admin surface, and API to have real data flow, validation, error states, and QA evidence.
+- Must cut scope honestly when full implementation is too large; excluded capabilities must be removed from claimed product scope, not replaced by mocks/placeholders.
 - Must use minimal preflight and dynamic contextual questions; no long upfront questionnaire.
 - Must support both single-module Buildprints and hierarchical System Buildprints.
 - Must include quality gates and acceptance checks for any extracted Buildprint.
@@ -35,8 +41,22 @@
 - Must not use generic QA checklists as a substitute for scope-derived QA journeys.
 - Must not ask product/business questions before discovering that the relevant subsystem exists.
 - Must not silently escalate to full parity. Full parity requires explicit user selection and evidence for UI, provider, data, runtime, and export behavior.
+- Must not generate lazy MVP apps, fake product surfaces, route-shaped links, no-op controls, placeholder settings, fake success states, in-memory-only product persistence, skeleton adapters counted as implemented, or mock services counted as product behavior.
+- Must not use mocked providers, fixtures, or no-network demos as evidence that an included production provider/export/service is implemented. Mocks are allowed only as test/demo fixtures with a documented boundary.
 
 ## Modes
+
+### Production-grade selected scope
+
+Mapper OS defaults to production-grade implementation for the selected scope. This does **not** mean full clone parity. It means: once a capability is included, it must be complete enough to ship or be honestly blocked.
+
+Rules:
+
+- Scope may be limited, but implemented scope must be complete.
+- Prefer a smaller complete Buildprint over a broad fake MVP.
+- If a provider/export/job/route/auth flow/persistence layer cannot be implemented fully, exclude it and list what is required to add it later.
+- Test fixtures and mocks may be generated, but they must not be the production path or be counted as feature completion.
+- Product proof must include no-fake implementation checks, persistence/restart checks when data exists, and route/control checks when UI exists.
 
 ### Fidelity / parity depth
 
@@ -44,15 +64,14 @@ Every candidate and extracted Buildprint must declare one selected depth and any
 
 1. `workflow-proof` — reproduce the core user/product workflow with mocks and fixtures.
 2. `contract-parity` — preserve data models, states, APIs, adapters, validation, and edge behavior.
-3. `mocked-runtime-proof` — generated proof runs locally with mocked providers/fixtures and proves workflow contracts without claiming live runtime parity.
-4. `runtime-parity` — generated product runs locally with build/test/runtime QA, persistence, async jobs, and real user journeys.
-5. `ui-workbench-parity` — map screens, panels, routes, UX flows, workbench/canvas behavior, and visual QA evidence.
-6. `provider-parity` — validate real external providers, credentials, latency/failure behavior, cost/safety boundaries, and media handling.
-7. `feed-source-parity` — validate real feed/API source availability, redirects/proxies, schema drift, stale/deleted records, representative live payloads, and source freshness behavior.
-8. `export-media-parity` — validate final export/render/media behavior such as files, audio/video sync, stitching, feeds, or downloadable artifacts.
-9. `full-clone-parity` — all relevant depths above. This is never the default.
+3. `runtime-parity` — generated product runs locally with build/test/runtime QA, persistence, async jobs, and real user journeys.
+4. `ui-workbench-parity` — map screens, panels, routes, UX flows, workbench/canvas behavior, and visual QA evidence.
+5. `provider-parity` — validate real external providers, credentials, latency/failure behavior, cost/safety boundaries, and media handling.
+6. `feed-source-parity` — validate real feed/API source availability, redirects/proxies, schema drift, stale/deleted records, representative live payloads, and source freshness behavior.
+7. `export-media-parity` — validate final export/render/media behavior such as files, audio/video sync, stitching, feeds, or downloadable artifacts.
+8. `full-clone-parity` — all relevant depths above. This is never the default.
 
-Default if the user does not decide: `workflow-proof` plus `contract-parity`, with `mocked-runtime-proof` only when cheap/applicable. Ask before adding runtime parity, UI/provider/feed-source/export/full parity.
+Default if the user does not decide: choose the smallest production-grade selected scope that can be implemented fully, usually `contract-parity` plus local `runtime-parity` for that scope when it is an app/feature. Do not default to mock-only workflow proof for product Buildprints. Ask before adding UI/provider/feed-source/export/full parity beyond the selected complete scope.
 
 Candidates must include:
 
@@ -61,7 +80,10 @@ Candidates must include:
 - explicitly excluded depths,
 - explicitly excluded source/provider/hosted parity categories when relevant,
 - evidence required to upgrade depth,
-- safe claims at the selected depth.
+- safe claims at the selected depth,
+- production-grade completeness posture,
+- mock/fixture boundary,
+- capabilities that should be excluded rather than faked.
 
 ### Discovery mode
 
@@ -98,6 +120,7 @@ A generated package is publishable only if:
 - edge cases/failure modes are inventoried,
 - state/lifecycle behavior is explicit where relevant,
 - validation status is honest,
+- implementation completeness/no-fake status is recorded when applicable,
 - product/browser QA status is recorded when applicable,
 - critical requirements trace to source evidence and checks,
 - review checklist is present.

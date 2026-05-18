@@ -7,14 +7,15 @@ No CLI is required for the mapping logic. `agb start` is only a snapshot bootstr
 1. create a safe repo census,
 2. map the system with evidence,
 3. propose scoped Buildprint candidates,
-4. ask for one small scope + fidelity/depth decision,
-5. extract the selected Buildprint with explicit parity boundaries,
-6. derive QA from mapped product behavior,
-7. link evidence to requirements and checks,
-8. run clean-room reversal validation,
-9. set up product/feature proof when applicable,
-10. run runtime/browser QA when applicable,
-11. report gaps honestly.
+4. ask for one selected scope, production-grade posture, and fidelity/depth decision,
+5. extract the selected Buildprint with a no-fake implementation contract,
+6. cut scope honestly instead of replacing hard parts with mocks/placeholders,
+7. derive QA from mapped product behavior,
+8. link evidence to requirements and checks,
+9. run clean-room reversal validation,
+10. set up product/feature proof when applicable,
+11. run runtime/browser QA and no-fake scans when applicable,
+12. report gaps honestly.
 
 Use it when:
 
@@ -39,6 +40,12 @@ Read the mapper package files first:
 - TEST_MATRIX.md
 - templates/PARITY_CLAIMS.md
 - templates/HEAD_TO_FOOT_QA.md
+- templates/IMPLEMENTATION_COMPLETENESS.md
+- templates/AGENT_EXECUTION_BRIEF.md
+- templates/agent-contract.xml
+- templates/CURRENT_STATE.md
+- templates/manifest.json
+- templates/AGENT_PROMPTING_STANDARD.md
 - prompts/discover.md
 - policies/quality.md
 - policies/questions.md
@@ -50,10 +57,14 @@ Then map this repo without modifying source code.
 Start with discovery only:
 1. create SYSTEM_MAP.md
 2. create BUILDPRINT_CANDIDATES.md
-3. create questions.md with at most 3-5 required decisions, including selected candidate and fidelity/depth target
+3. create questions.md with at most 3-5 required decisions, including selected candidate, production-grade selected scope, and fidelity/depth target
 
 After scope/depth selection, final packages must include scope-derived QA, parity boundaries, and traceability:
 - QA_PLAN.md
+- AGENT_EXECUTION_BRIEF.md and agent-contract.xml for coding-agent execution
+- CURRENT_STATE.md for anti-context-rot handoff
+- manifest.json for package/gate validation
+- IMPLEMENTATION_COMPLETENESS.md for every product/app/feature scope
 - HEAD_TO_FOOT_QA.md for runnable product/app/feature scopes
 - PARITY_CLAIMS.md for product-inspired/rebuild/parity scopes
 - TRACEABILITY_MATRIX.md
@@ -61,6 +72,10 @@ After scope/depth selection, final packages must include scope-derived QA, parit
 - THREAT_MODEL.md / DATA_LIFECYCLE.md / OBSERVABILITY.md when relevant
 
 Rules:
+- production-grade selected scope is the default; do not generate lazy MVP/proof apps
+- scope cuts must remove capabilities, not fake them with mocks/placeholders
+- mocks are allowed only as explicitly named test/demo fixtures, never counted as product implementation
+- every included route, service, provider, persistence path, job, setting, export, and UI control must be real, wired, error-handled, and QA-testable
 - ask almost nothing before soft discovery; use safe defaults
 - cite repo file paths for important claims
 - label every claim OBSERVED, INFERRED, or QUESTION

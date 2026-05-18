@@ -49,8 +49,9 @@ After soft discovery, create `questions.md` with:
 | 1 | Which candidate/system scope should be extracted? | Sets output boundary | Candidate 1 / highest-confidence product scope | |
 | 2 | Preserve source stack or keep portable? | Controls implementation constraints | Keep portable | |
 | 3 | Target stack, if any? | Needed only for cross-stack rebuild | Not set yet | |
-| 4 | Proof target? | Controls validation depth | Runnable MVP proof for products, architecture proof for libraries | |
-| 5 | MVP vs out-of-scope capabilities? | Prevents vague whole-product clone | Use capability baseline safe defaults | |
+| 4 | Production-grade selected scope? | Prevents lazy MVP output | Smaller complete scope; included capabilities must be real | |
+| 5 | Fidelity/proof target? | Controls validation depth | Contract + runtime proof for selected product/app scope; architecture proof for libraries | |
+| 6 | Capabilities to exclude rather than fake? | Prevents fake providers/routes/exports/settings | Cut hard capabilities from scope unless they can be real | |
 
 ## Contextual questions — ask only if touched
 - ...
@@ -83,8 +84,8 @@ Ask only when the subsystem was actually observed or selected:
 When a question is not blocking, use a safe default and mark it `INFERRED`:
 
 - portability: preserve behavior, adapt implementation,
-- proof target: architecture proof unless product UI is selected, then runnable MVP proof,
-- side effects: mock external writes,
+- proof target: architecture proof for libraries; production-grade runtime proof for selected product/app scope,
+- side effects: no external writes during mapping; in generated products, external capabilities are either real and explicitly selected or excluded, not mocked as product behavior,
 - security: deny by default,
 - data: preserve ownership and deletion semantics if observed,
 - famous products: non-parity boundary unless explicit parity suite exists.

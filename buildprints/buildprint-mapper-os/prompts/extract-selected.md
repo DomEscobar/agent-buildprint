@@ -23,6 +23,10 @@ Create:
 
 ```txt
 buildprint-submission/
+  AGENT_EXECUTION_BRIEF.md
+  agent-contract.xml
+  CURRENT_STATE.md
+  manifest.json
   README.md
   BUILDPRINT.md
   SPEC.md
@@ -31,6 +35,8 @@ buildprint-submission/
   TEST_MATRIX.md
   VALIDATION_TEMPLATE.md
   QA_PLAN.md
+  AGENT_PROMPTING_STANDARD.md # optional copy or reference when useful
+  IMPLEMENTATION_COMPLETENESS.md # required for product/app/feature scopes
   HEAD_TO_FOOT_QA.md        # required for runnable product/app/feature scopes
   PARITY_CLAIMS.md          # required for product-inspired/rebuild/parity scopes
   TRACEABILITY_MATRIX.md
@@ -45,6 +51,8 @@ buildprint-submission/
   QUALITY_SCORECARD.md        # required before product-proof/publish-ready claims
   RUNTIME_LIVE_TEST_PLAN.md    # optional; use when browser/product runtime QA needs a separate harness plan
 ```
+
+Before implementation/reversal, coding agents must read `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, and `CURRENT_STATE.md` first. `CURRENT_STATE.md` must be updated after every phase.
 
 After reversal validation, also create:
 
@@ -61,7 +69,8 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - Separate `OBSERVED`, `INFERRED`, and `QUESTION`.
 - Preserve exact contracts only when you have evidence.
 - Do not claim exact behavior when only architecture is known.
-- Do not upgrade a mocked runtime proof into `runtime-parity`; label it `mocked-runtime-proof` or `workflow-proof` evidence unless live runtime conditions were tested.
+- Do not upgrade a mocked or fixture-only path into product implementation. Mocks are test/demo fixtures only and must have a documented boundary.
+- Extract the smallest scope that can be implemented production-grade; if a capability cannot be real, exclude it instead of faking it.
 - Extract edge cases, failure modes, lifecycle/state transitions, and invariants before writing implementation phases.
 - If an edge matters but evidence is missing, mark it `QUESTION` and include a safe default only as `INFERRED`.
 
@@ -70,11 +79,12 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 `BUILDPRINT.md`:
 - purpose,
 - architecture,
-- selected scope,
+- selected production-grade scope,
 - boundaries,
 - non-goals,
 - required validation,
-- selected fidelity target and explicitly excluded parity depths.
+- selected fidelity target and explicitly excluded parity depths,
+- explicit statement that included features must be real, not mocked/placeholders.
 
 `SPEC.md`:
 - user-visible behavior,
@@ -99,6 +109,8 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - existing tests observed,
 - missing tests,
 - reversal checks,
+- no-fake implementation checks,
+- persistence/restart checks where product state exists,
 - Playwright CLI QA journeys when UI exists.
 
 `QA_PLAN.md`:
@@ -107,8 +119,26 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - choose check type and concrete command/assertion where possible,
 - include Playwright CLI or equivalent browser-runtime journeys only for browser-relevant flows.
 
+`AGENT_EXECUTION_BRIEF.md`:
+- compact mission, read order, hard constraints, phase gates, stop conditions, and final report format.
+
+`agent-contract.xml`:
+- strict XML instruction envelope with mission, read order, MUST/MUST NOT rules, stop-if conditions, phase gates, and done criteria.
+
+`CURRENT_STATE.md`:
+- rolling anti-context-rot state: mission, current phase, completed work, active constraints, next action, blockers, evidence.
+
+`manifest.json`:
+- required files, conditional files, read order, required gates, no-fake implementation rules, and done criteria.
+
+`IMPLEMENTATION_COMPLETENESS.md`:
+- inventory every included route, screen, API, job, provider, export, import, setting, auth surface, billing flow, upload, and destructive action,
+- prove each included capability is real or mark it blocked/excluded,
+- document mock/fixture boundaries,
+- require no-placeholder/no-op/no-fake scans.
+
 `HEAD_TO_FOOT_QA.md`:
-- define static safety, unit/contract, build, runtime happy path, runtime negative paths, responsive/UX, and optional live-provider gates,
+- define static safety, unit/contract, build, runtime happy path, runtime negative paths, responsive/UX, persistence/restart, no-fake implementation, and optional live-provider gates,
 - require real browser/runtime validation for UI proofs,
 - require screenshot(s), parsed manifest/artifact sample, command summaries, and remaining gaps.
 
@@ -145,21 +175,22 @@ For reversal:
 1. Create a separate scratch folder.
 2. Give the implementing agent only `buildprint-submission/`.
 3. Do not let it read the original repo after reversal starts.
-4. Build the smallest skeleton that satisfies the Buildprint.
-5. Run tests/build/checks.
+4. Build the smallest production-grade implementation that satisfies the selected scope. Do not satisfy included product features with mocks, no-op controls, placeholder routes, skeleton adapters, or in-memory persistence when durability is claimed.
+5. Run tests/build/checks, including no-fake implementation checks.
 6. If the Buildprint describes a product/app/feature, set up the generated result on the user's machine and record the command and URL.
 7. If the result has browser UI, run real runtime/browser QA. Prefer Playwright CLI (`@playwright/cli`) or an equivalent CDP/browser harness that clicks actual rendered controls, parses rendered state/artifacts, and captures screenshots.
 8. Write `REVERSAL_REPORT.md` and, when product/browser QA applies, `QA_REPORT.md`.
 
 ### Reversal timebox and size
 
-Keep reversal compact. The goal is architecture reconstruction, not cloning the original product. Default budget depends on selected fidelity target. For `workflow-proof`/`contract-parity` keep it compact:
+Keep reversal compact. The goal is architecture reconstruction, not cloning the original product. Default budget depends on selected fidelity target. For selected production scope, keep it compact by cutting scope, not by faking implementation:
 
-- 1-3 core modules,
-- 5-10 focused tests,
-- mocked external services,
-- no UI polish unless UI/workbench parity is selected,
-- no live provider/database/network calls unless the Buildprint explicitly requires them.
+- 1-3 core modules if needed,
+- 5-10 focused tests minimum for compact proofs,
+- mocks only in test/demo fixture paths,
+- real durable storage if persistence is claimed,
+- real routes/controls for included UI,
+- real provider/database/network calls only when explicitly included; otherwise exclude those capabilities from product scope.
 
 If the skeleton is growing beyond this, stop and report the highest-risk missing contract instead of continuing to build.
 
