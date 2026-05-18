@@ -37,7 +37,15 @@ Plugin / install surface
 
 ## Status
 
-Public Buildprint status: `dry-run-needed`. The package is mapped and build-verified, but still needs a clean-room runnable reversal proof before it should be called validated.
+Public Buildprint status: `validated: scoped compact proof`. The package has a runnable clean-room proof with transcript evals. Production runtime implementation remains incomplete and must be validated separately.
+
+| Area | Current proof | Production implementation boundary |
+| --- | --- | --- |
+| Runtime adapter | Neutral Node.js harness only | Add and validate at least one real Claude/Codex/OpenCode/Gemini/Cursor/Copilot adapter |
+| Generated docs | Records required spec/plan paths in transcript data | Write and persist project docs on the filesystem |
+| Worktrees | Models isolation requirements in workflow contracts | Create and manage real isolated branches/worktrees |
+| Subagents | Simulates task packets and review ordering | Integrate with a real subagent/task API |
+| Transcript evals | Covered by included proof evals | Keep as acceptance evidence for each production adapter |
 
 
 ---
@@ -64,7 +72,6 @@ This is a **methodology harness Buildprint**, not a package-manager dashboard an
 8. `SUBAGENT_ORCHESTRATION.md`
 9. `TEST_MATRIX.md`
 10. `VALIDATION_REPORT.md`
-11. `questions.md`
 
 ## Core claim
 
