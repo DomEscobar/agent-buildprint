@@ -1028,11 +1028,10 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
 Start here.
 
-1. Read \`.buildprint/source.json\`.
-2. Read \`.buildprint/state.json\`.
-3. Read \`.buildprint/snapshots/BUILDPRINT.md\`.
-4. Follow \`BUILDPRINT.md\`'s Required Read Order, Phase Gates, and Acceptance Gates.
-5. Continue current phase: \`00-alignment\`.
+1. Read \`.buildprint/snapshots/BUILDPRINT.md\` first.
+2. Read \`.buildprint/source.json\` and \`.buildprint/state.json\` for local bootstrap/state context.
+3. Follow \`BUILDPRINT.md\`'s Required Read Order, Phase Gates, and Acceptance Gates.
+4. Continue current phase: \`00-alignment\`.
 
 Rules:
 
