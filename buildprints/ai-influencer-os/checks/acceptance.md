@@ -17,7 +17,7 @@
 
 ## Provider checks
 
-- `.env.example` includes `WAVESPEED_API_KEY`.
+- `.env.example` includes the exact env names from `BUILDPRINT.md`, including `OPENROUTER_API_KEY`, `WAVESPEED_API_KEY`, `WAVESPEED_API_URL`, and `INFLUENCER_IMAGE_GENERATION_TIMEOUT_MS`.
 - Wavespeed is the only production image provider path.
 - Missing Wavespeed key triggers mock mode or blocked real mode.
 - OpenRouter/OpenClaw model vars are documented.

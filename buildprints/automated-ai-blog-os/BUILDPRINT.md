@@ -121,7 +121,7 @@ Record final choices in `VALIDATION.md`.
 
 ## 3. Fixed architecture
 
-Implement this architecture. Simplify internals for MVP, but keep every box represented.
+Implement this architecture with the smallest real behavior that satisfies the contracts. Every represented box must have working behavior and tests, or be marked blocked/excluded in `VALIDATION.md`; route-shaped or service-shaped placeholders do not count.
 
 ```txt
 Automated AI Blog OS

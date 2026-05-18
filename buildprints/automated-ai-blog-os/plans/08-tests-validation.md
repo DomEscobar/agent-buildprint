@@ -1,18 +1,19 @@
-# Phase tests-validation: Wire tests/build/static checks and complete VALIDATION.md
+# Phase 08 — Tests And Validation
 
 ## Goal
 
-Wire tests/build/static checks and complete VALIDATION.md.
+Wire the command gates and complete evidence for the full content pipeline.
 
 ## Required actions
 
-- Preserve the target architecture from BUILDPRINT.md.
-- Implement the smallest production-shaped version of this phase.
-- Add or update tests/static checks for the risks this phase touches.
-- Record blockers or deviations in VALIDATION.md.
+1. Implement the risks in `TEST_MATRIX.md`: pipeline module presence, source grounding, source-map integrity, content memory, approval gates, auto-publish defaults, SEO/build/feed checks, manager audit, and validation evidence.
+2. Use fixtures/mocks for all external source, LLM, network, deployment, and publishing behavior.
+3. Run `npm test` and `npm run build`; if the target is not npm-based, run equivalent commands and record the substitution.
+4. Add static checks for required contracts: `SourceRecord`, `IdeaRecord`, `DraftRecord`, `ApprovalRecord`, `SeoReport`, and `PublishReport`.
+5. Complete `VALIDATION.md` with configuration, files/modules built, commands and results, fixture evidence, deviations, blockers, and remaining risks.
 
 ## Done when
 
-- Files for this phase exist.
-- Tests or static checks cover the phase behavior.
-- No publishing can occur from this phase unless approval and validation gates pass.
+- Test evidence maps each `TEST_MATRIX.md` risk to a passing test/check or an explicit blocker.
+- Build/feed/SEO checks are represented by actual command output or recorded blockers.
+- `VALIDATION.md` is complete enough for a reviewer to reproduce what was run and why publishing is or is not allowed.
