@@ -22,7 +22,7 @@
 ## Phase 3 — Tools, skills, MCP
 
 - Implement tool registry and policy checks.
-- Add deterministic fixture filesystem/search/todo tools for tests; do not count them as production external-tool integrations.
+- Add deterministic fixture filesystem/search/task-list tools for tests; do not count them as production external-tool integrations.
 - Implement skill discovery/matching.
 - Implement MCP adapter contract with deterministic test fixtures; production MCP/tool integrations must be separately wired and gated.
 

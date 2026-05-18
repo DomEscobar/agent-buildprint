@@ -34,7 +34,7 @@ ALIGNMENT = ask closed config questions only, then build
 
 The included implementation slice is:
 
-- OpenClaw config, extension, skills, Docker entrypoint, and runnable runtime command. A structured `openclaw_runtime_missing` result is an honest blocked validation status, not accepted implementation evidence.
+- OpenClaw config, extension, skills, Docker entrypoint, and runnable runtime command. A structured `openclaw_runtime_missing` result is an honest validation failure and cannot satisfy implementation evidence.
 - SOUL/USER/canon persona context with configurable persona name and default preset values.
 - LLM JSON analyzer adapter for production intent analysis through an OpenRouter-compatible endpoint; tests may inject a mock analyzer.
 - Runtime context builder that separates private relationship memory from persona self-state.
@@ -101,7 +101,7 @@ The build is accepted only when all are true:
 
 | Gate | Required evidence |
 |---|---|
-| OpenClaw shape | config, extension, skills, Docker entrypoint, and runnable OpenClaw CLI/runtime path exist; missing runtime is recorded as blocked, not accepted |
+| OpenClaw shape | config, extension, skills, Docker entrypoint, and runnable OpenClaw CLI/runtime path exist; missing runtime is recorded as a validation failure |
 | Persona runtime | SOUL/USER/canon feed runtime context |
 | Analyzer | production intent analysis calls a mockable LLM JSON adapter when no mock analyzer is injected |
 | Memory split | user relationship memory and persona self-state are stored separately |

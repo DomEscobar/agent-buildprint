@@ -20,7 +20,7 @@ Mapped source: `obra/superpowers` at commit `f2cbfbefebbfef77321e4c9abc9e949826b
 | OpenCode plugin injects bootstrap content and registers skills path. | `.opencode/plugins/superpowers.js:55-133` |
 | Plugin metadata exposes skills to Codex and declares planning/TDD/debugging/workflow capabilities. | `.codex-plugin/plugin.json:1-47` |
 | Claude plugin metadata describes core skills library and MIT license. | `.claude-plugin/plugin.json:1-19` |
-| Harness support acceptance requires clean session prompt “Let's make a react todo list” to auto-trigger brainstorming before code. | `AGENTS.md:67-86` |
+| Harness support acceptance requires clean session prompt “Let's make a react task tracker” to auto-trigger brainstorming before code. | `AGENTS.md:67-86` |
 | Skill changes require eval evidence and adversarial pressure testing. | `AGENTS.md:88-99` |
 | Integration tests verify skill invocation, subagent dispatch, TodoWrite, implementation files, passing tests, commits, and no extra features. | `docs/testing.md:40-64`, `:73-98` |
 | There are dedicated skill-triggering and explicit-skill-request test runners. | `tests/skill-triggering/run-all.sh:10-60`, `tests/explicit-skill-requests/run-all.sh:17-70` |

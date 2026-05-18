@@ -127,7 +127,7 @@ Observed architecture signals:
 - `agent/runner.py`: streaming model/tool loop, checkpoints, token tracking, and compaction trigger.
 - `agent/webui.py`: WebSocket/HTTP boundary, bootstrap state, memory/tokens/model/config routes.
 - `agent/providers/*`: provider base, registry, OpenAI-compatible, Anthropic, and Bedrock implementations.
-- `agent/tools/*`: tool schema, registry, dispatch, filesystem, shell, web/search/todo/skills tools.
+- `agent/tools/*`: tool schema, registry, dispatch, filesystem, shell, web/search/task-list/skills tools.
 - `agent/mcp/*`: MCP config, client, connection, and adapter layer.
 - `agent/memory.py` and `agent/compactor.py`: long-term memory, history, daily episodes, checkpoint, and compaction.
 - `agent/subagents/*` and `agent/team/*`: subagent specs, team bus/events/store/tools.

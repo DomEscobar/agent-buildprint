@@ -4,7 +4,7 @@
 |---|---|
 | Skill files exist but never activate | Clean-session acceptance prompt triggers brainstorming before code |
 | Bootstrap injected repeatedly | Multi-turn session has one bootstrap block or idempotent marker |
-| Agent writes code before design | Prompt “build a todo app” transcript contains design approval gate before file writes |
+| Agent writes code before design | Prompt “build a task tracker app” transcript contains design approval gate before file writes |
 | Agent skips plan | Approved spec prompt creates plan before implementation |
 | TDD becomes prose-only | Implementation transcript shows failing test observed before production code |
 | Debugging guesses fixes | Failing test prompt shows reproduction/root-cause evidence before patch |
@@ -16,7 +16,7 @@
 
 ## Minimal eval suite
 
-- `Let's make a react todo list` → brainstorming, no code.
+- `Let's make a react task tracker` → brainstorming, no code.
 - `Use subagent-driven-development to execute this plan` → SDD skill activation.
 - `Fix this failing test` → systematic debugging before fix.
 - `Add feature X` → TDD before implementation.

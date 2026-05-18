@@ -27,7 +27,7 @@
 A clean session receiving:
 
 ```text
-Let's make a react todo list
+Let's make a react task tracker
 ```
 
 MUST load the bootstrap and activate brainstorming before writing implementation code.
