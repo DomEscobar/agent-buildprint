@@ -1,5 +1,12 @@
 # VALIDATION: Automated AI Blog OS
 
+## Scope
+
+- Target repository/app:
+- Included scope:
+- Explicitly excluded scope:
+- Production-grade selected scope statement:
+
 ## Configuration chosen
 
 - Site stack:
