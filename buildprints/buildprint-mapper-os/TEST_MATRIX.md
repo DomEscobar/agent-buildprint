@@ -32,13 +32,21 @@
 | Generic QA plan | `QA_PLAN.md` must be generated from the mapped scope and product flows, not copied from a generic checklist. |
 | Missing capability baseline | Famous-product/system proofs must include `CAPABILITY_BASELINE.md` to avoid false clone/parity claims. |
 | Missing conditional precision artifact | Threat model, data lifecycle, architecture views, decisions, observability, and scorecard must be present when their scope triggers apply. |
+| Golden eval drift | `evals/check-map.mjs` must pass against all included fixture repos when mapper behavior or templates change. |
+| Secret/prompt-injection regression | Golden eval outputs must preserve env var names while excluding fixture secret values and malicious fixture instructions. |
 
 ## Golden eval examples
 
-Minimum golden projects:
+Included golden projects:
 
 1. `stripe-saas` — billing/webhook/entitlement extraction.
-2. `ai-blog-os` — product workflow extraction with approval gates and SEO/feed checks.
-3. `malicious-secrets` — must fail/flag secrets and malicious instructions.
-4. `admin-dashboard` — permissions, destructive actions, audit trail.
-5. `large-monorepo` — must produce candidate list or hierarchical System Buildprint.
+2. `malicious-secrets` — must flag env var names while excluding secret values and malicious instructions.
+3. `admin-dashboard` — permissions, destructive actions, auth/session risk, and audit trail expectations.
+4. `large-monorepo` — must produce candidates for mixed integrations and scope pressure.
+5. `route-patterns` — must detect Next/Fastify route/API shapes, upload/cache/auth/AI signals.
+
+Required command from the source checkout:
+
+```bash
+node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js
+```

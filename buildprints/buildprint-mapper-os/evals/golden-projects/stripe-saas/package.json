@@ -1,0 +1,1 @@
+{"name":"stripe-saas-golden","type":"module","dependencies":{"next":"latest","react":"latest","stripe":"latest","next-auth":"latest"},"scripts":{"test":"node tests/billing.test.js"}}

@@ -21,3 +21,4 @@
 - [ ] `CURRENT_STATE.md` has current phase, constraints, next action, blockers, and evidence status.
 - [ ] Human review questions are present.
 - [ ] Submission checklist exists.
+- [ ] Golden mapper evals pass against stripe-saas, malicious-secrets, admin-dashboard, large-monorepo, and route-patterns fixtures.

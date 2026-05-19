@@ -15,6 +15,7 @@ No CLI is required for the mapping logic. `agb start` is only a snapshot bootstr
 9. run clean-room reversal validation,
 10. set up product/feature proof when applicable,
 11. run runtime/browser QA and no-fake scans when applicable,
+12. run the golden mapper eval harness when changing mapper behavior or package templates,
 12. report gaps honestly.
 
 Use it when:

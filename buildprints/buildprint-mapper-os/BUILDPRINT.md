@@ -21,7 +21,8 @@ Included:
 - single-module or hierarchical Buildprint extraction;
 - execution artifacts for coding agents;
 - scope-derived QA, traceability, and implementation-completeness checks;
-- clean-room reversal validation and final gap reporting.
+- clean-room reversal validation and final gap reporting;
+- golden fixture eval harness for mapper quality regression checks.
 
 Excluded:
 
@@ -126,6 +127,22 @@ Every important claim must be one of:
 
 If a claim cannot be grounded, it cannot be presented as fact. Optional prior inventories are hints only and never replace direct source evidence.
 
+## Golden Eval Harness
+
+This package includes `evals/` with fixture repositories and `evals/check-map.mjs`. The harness runs the real `agb map` command against golden projects and asserts that mapper output detects expected integrations, risks, env var names, API surfaces, and candidate types without leaking secrets or obeying malicious fixture instructions.
+
+Required source checkout command:
+
+```bash
+node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js
+```
+
+Required bootstrapped snapshot command when validating a package:
+
+```bash
+AGB_CLI=/absolute/path/to/agent-buildprint/bin/agb.js node .buildprint/snapshots/evals/check-map.mjs
+```
+
 ## Required Validation
 
 Validation requires a clean-room reversal attempt:
@@ -138,7 +155,8 @@ Validation requires a clean-room reversal attempt:
 6. run persistence/restart checks when product state exists;
 7. scan for placeholder, no-op, skeleton-adapter, route-shaped, temporary-store, and fixture-as-product paths;
 8. run Playwright CLI QA when there is browser UI;
-9. write `REVERSAL_REPORT.md` and `QA_REPORT.md` with pass/fail status, commands, evidence, and fidelity gaps.
+9. run the golden eval harness for mapper regression confidence when changing mapper behavior;
+10. write `REVERSAL_REPORT.md` and `QA_REPORT.md` with pass/fail status, commands, evidence, and fidelity gaps.
 
 Honest validation statuses:
 

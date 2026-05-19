@@ -27,7 +27,7 @@ repo
 → conditional precision artifacts
 → compact clean-room reversal validation
 → runnable product/feature proof on the user machine when applicable
-→ runtime/browser QA, persistence/restart QA, and no-fake scan when applicable
+→ runtime/browser QA, persistence/restart QA, no-fake scan when applicable, and mapper golden eval regression checks
 → final package + separated Buildprint/harness/product-QA gap report
 ```
 
@@ -42,6 +42,7 @@ repo
 - Keep reversal validation compact but not fake: prove reconstructability with real implementation for the selected scope; mocks may be used only as test/demo fixtures and must not count as product behavior.
 - Separate real Buildprint gaps from scratch-harness/tooling bugs in validation reports.
 - For product or feature Buildprints, the final proof should set up the generated app/thing locally and run user-facing QA, persistence/restart QA where state exists, route/control checks where UI exists, and a no-fake implementation scan; do not stop at unit tests.
+- For mapper/template behavior changes, run `node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js` and record fixture-level pass/fail evidence.
 - Do not assume full parity, but do assume production-grade implementation for included scope. Capture the user-selected depth: workflow, contract, runtime, UI/workbench, provider, export/media, or full-system equivalence.
 - Generate safe/unsafe parity claims for product-inspired or clone-like scopes, and make QA match the selected depth.
 - Use Playwright CLI (`@playwright/cli`) for browser QA when the generated proof has a UI.

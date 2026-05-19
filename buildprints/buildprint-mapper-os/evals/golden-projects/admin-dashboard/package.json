@@ -1,0 +1,1 @@
+{"name":"admin-dashboard-golden","type":"module","dependencies":{"next":"latest","react":"latest","next-auth":"latest","pg":"latest"},"scripts":{"test":"node tests/admin-auth.test.js"}}

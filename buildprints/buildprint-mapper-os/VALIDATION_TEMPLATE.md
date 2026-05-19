@@ -16,6 +16,14 @@
 # list exact commands here
 ```
 
+## Mapper golden eval evidence
+
+- Command: `node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js`
+- Fixture repos covered: stripe-saas, malicious-secrets, admin-dashboard, large-monorepo, route-patterns
+- Result:
+- Failing fixture/assertion, if any:
+- Secret/prompt-injection leakage check result:
+
 ## Files created
 
 - [ ] AGENT_EXECUTION_BRIEF.md
@@ -69,6 +77,7 @@
 - [ ] Mocks/fixtures are used only for test/demo paths and are not counted as product implementation.
 - [ ] Checks/tests/build commands were run or blocker is stated.
 - [ ] No-fake implementation scan was run or blocker is stated.
+- [ ] Mapper golden eval harness passed or blocker is stated.
 
 Reversal status: NOT ATTEMPTED / ARCHITECTURE PASSED / BLOCKED / FAILED
 
