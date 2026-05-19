@@ -39,6 +39,9 @@
   },
   "files": [
     "bin/",
+    "buildprints/",
+    "langgraph/",
+    "templates/",
     "README.md",
     "FORMATS.md",
     "BLUEPRINT_MAPPER.md",
