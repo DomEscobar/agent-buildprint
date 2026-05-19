@@ -9,6 +9,46 @@ QUESTION: needs human confirmation.
 OUT_OF_SCOPE: intentionally excluded from selected Buildprint.
 ```
 
+
+## Size classification record
+
+```json
+{
+  "sizeClass": "small|medium|large|monorepo-system",
+  "evidence": ["OBSERVED(path:line): ..."],
+  "topology": ["app", "worker", "package", "service", "shared library"],
+  "routeApiCount": 0,
+  "riskDomains": ["auth", "billing", "admin", "AI/tool calls"],
+  "recommendedMode": "single-buildprint|discovery-plus-candidates|selected-slice|hierarchical-system",
+  "latestSafeStartingPhase": "repo-census|candidate-selection|selected-slice-extraction|system-synthesis",
+  "whyNotOneGiantBuildprint": "..."
+}
+```
+
+## Decomposition strategy record
+
+```json
+{
+  "domains": [
+    {
+      "name": "billing",
+      "responsibilities": ["checkout", "webhook", "entitlements"],
+      "includedPaths": ["..."],
+      "dependsOn": ["auth", "database"],
+      "sharedContracts": ["user id", "subscription state"],
+      "candidateOrder": 1,
+      "phaseCountRecommendation": 4,
+      "testStrategy": ["unit", "API", "webhook signature", "persistence/restart"],
+      "canBeImplementedIndependently": true,
+      "blockers": []
+    }
+  ],
+  "crossSliceRisks": ["shared auth/session assumptions"],
+  "systemSynthesisLater": ["global navigation", "observability", "cross-module permissions"],
+  "doNotFake": ["provider calls", "destructive admin actions"]
+}
+```
+
 ## Candidate Buildprint record
 
 ```json
@@ -28,7 +68,12 @@ OUT_OF_SCOPE: intentionally excluded from selected Buildprint.
   "estimatedTier": "strong",
   "observedSignals": ["Stripe dependency", "webhook route"],
   "risks": ["webhook signature", "subscription state drift"],
-  "questions": ["Which plans/prices are supported?"]
+  "questions": ["Which plans/prices are supported?"],
+  "sizeClassFit": "small|medium|large-slice|system-module",
+  "implementationPhases": ["phase names sized to candidate complexity"],
+  "validationStrategy": ["commands/checks/browser/API/persistence proof required"],
+  "dependenciesBeforeExtraction": ["auth/session contract"],
+  "safeStartingPhase": "selected-slice-extraction|blocked-pending-scope"
 }
 ```
 

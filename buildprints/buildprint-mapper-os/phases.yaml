@@ -24,13 +24,16 @@ phases:
       - census avoids final architecture claims
 
   - id: 02-system-map
-    title: System Map
+    title: System Map and Size Classification
     inputs: [plans/02-system-map.md, SPEC.md, CONTRACTS.md]
     must_produce:
       - evidence-backed system zones and flows
       - risk zones and unknowns
+      - small/medium/large/monorepo-system classification
+      - decomposition strategy when medium/large/system
     must_pass:
       - important claims have evidence labels
+      - output mode is justified before extraction
 
   - id: 03-candidate-buildprints
     title: Candidate Buildprints
@@ -38,8 +41,10 @@ phases:
     must_produce:
       - 2-5 candidates or justified single/system path
       - included/excluded paths, risks, QA strategy, no-fake boundaries
+      - implementation phases and validation strategy per candidate
     must_pass:
       - unrelated scopes are not merged
+      - large/system repos do not proceed to implementation without selected scope
 
   - id: 04-scope-decision
     title: Scope Decision

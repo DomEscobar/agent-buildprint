@@ -14,7 +14,8 @@ This plan is designed for a coding agent. The agent reads repo files, reasons ab
 1. `plans/00-safety-boundaries.md` — secrets, source safety, write boundaries.
 2. `plans/01-repo-census.md` — safe repo inventory; no architecture claims yet.
 3. `plans/02-system-map.md` — architecture zones and subsystem boundaries with evidence.
-4. `plans/03-candidate-buildprints.md` — possible reusable Buildprints.
+4. Size/decomposition gate — classify small/medium/large/monorepo and decide whether extraction is safe.
+5. `plans/03-candidate-buildprints.md` — possible reusable Buildprints with implementation/test strategy.
 5. `plans/04-scope-decision.md` — progressive human selection gate for candidate + fidelity/depth target.
 6. `plans/05-single-extraction.md` — one bounded Buildprint package.
 7. `plans/06-system-extraction.md` — hierarchical project/system package when requested.
@@ -27,6 +28,8 @@ repo
 → minimal preflight only if needed
 → soft discovery / safe census
 → evidence-backed system map
+→ size/topology classification
+→ decomposition strategy for medium/large/high-pressure/system repos
 → 2-5 candidate Buildprints
 → one human scope + production-grade posture + fidelity/depth decision
 → selected Buildprint extraction with explicit parity boundaries and no-fake implementation contract
@@ -43,6 +46,7 @@ repo
 - Do not modify source code.
 - Do not copy `.env` values, tokens, private keys, customer data, or production secrets.
 - Do not flatten the entire repo into one vague document.
+- For large repos, stop at discovery/decomposition unless `--scope`, `--candidate`, or an explicit system architecture request exists.
 - Do not ask a long questionnaire. Ask almost nothing before soft discovery; after discovery ask max 5 required decisions and at most one blocking question in chat at a time.
 - Keep most unknowns in `questions.md` appendix unless they block the selected scope.
 - Do not claim behavioral parity until reversal validation has run.
@@ -56,6 +60,6 @@ repo
 
 ## Decision gate
 
-If the project is large and no scope is provided, stop after candidate discovery and ask which candidate, production-grade selected scope, and fidelity/depth target to extract. Make the safe default "smaller complete product scope", not broad proof-only coverage.
+If the project is large and no scope is provided, stop after system map + decomposition + candidate discovery and ask which candidate, production-grade selected scope, and fidelity/depth target to extract. Make the safe default "smaller complete product scope", not broad proof-only coverage.
 
 If the user asks for a full system map instead of one candidate, follow `plans/06-system-extraction.md`.

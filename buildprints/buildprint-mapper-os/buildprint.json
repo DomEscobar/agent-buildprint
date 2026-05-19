@@ -9,43 +9,173 @@
     "evidence-backed system map",
     "2-5 candidate Buildprints or justified single/system path",
     "closed human scope decision before selected extraction",
+    "size-aware decomposition strategy",
     "selected Buildprint package with agent execution rails",
     "scope-derived QA, traceability, and no-fake implementation gates",
     "clean-room reversal and mapper golden eval evidence",
     "final chat handover with outcome, evidence, gaps, and next direction"
   ],
   "files": [
-    { "path": "BUILDPRINT.md", "role": "canonical-control", "required": true },
-    { "path": "buildprint.json", "role": "machine-control", "required": true },
-    { "path": "phases.yaml", "role": "phase-gates", "required": true },
-    { "path": "acceptance.yaml", "role": "acceptance-gates", "required": true },
-    { "path": "claims.yaml", "role": "claim-contract", "required": true },
-    { "path": "README.md", "role": "overview", "required": true },
-    { "path": "PLAN.md", "role": "phase-index", "required": true },
-    { "path": "questions.md", "role": "closed-question-policy", "required": true },
-    { "path": "SPEC.md", "role": "behavior-contract", "required": true },
-    { "path": "CONTRACTS.md", "role": "data-interface-contracts", "required": true },
-    { "path": "TEST_MATRIX.md", "role": "test-contract", "required": true },
-    { "path": "VALIDATION_TEMPLATE.md", "role": "validation-report-template", "required": true },
-    { "path": "checks/acceptance.md", "role": "acceptance-checklist", "required": true },
-    { "path": "plans/00-safety-boundaries.md", "role": "phase-plan", "required": true },
-    { "path": "plans/01-repo-census.md", "role": "phase-plan", "required": true },
-    { "path": "plans/02-system-map.md", "role": "phase-plan", "required": true },
-    { "path": "plans/03-candidate-buildprints.md", "role": "phase-plan", "required": true },
-    { "path": "plans/04-scope-decision.md", "role": "phase-plan", "required": true },
-    { "path": "plans/05-single-extraction.md", "role": "phase-plan", "required": true },
-    { "path": "plans/06-system-extraction.md", "role": "phase-plan", "required": true },
-    { "path": "plans/07-validation-submission.md", "role": "phase-plan", "required": true },
-    { "path": "policies/safety.md", "role": "safety-policy", "required": true },
-    { "path": "policies/quality.md", "role": "quality-policy", "required": true },
-    { "path": "policies/questions.md", "role": "question-policy", "required": true },
-    { "path": "prompts/discover.md", "role": "discovery-prompt", "required": true },
-    { "path": "prompts/extract-selected.md", "role": "selected-extraction-prompt", "required": true },
-    { "path": "templates/AGENT_EXECUTION_BRIEF.md", "role": "agent-output-template", "required": true },
-    { "path": "templates/agent-contract.xml", "role": "agent-output-template", "required": true },
-    { "path": "templates/CURRENT_STATE.md", "role": "agent-output-template", "required": true },
-    { "path": "templates/manifest.json", "role": "agent-output-template", "required": true },
-    { "path": "AGENT_HANDOFF.md", "role": "late-stage-handoff", "required": false }
+    {
+      "path": "BUILDPRINT.md",
+      "role": "canonical-control",
+      "required": true
+    },
+    {
+      "path": "buildprint.json",
+      "role": "machine-control",
+      "required": true
+    },
+    {
+      "path": "phases.yaml",
+      "role": "phase-gates",
+      "required": true
+    },
+    {
+      "path": "acceptance.yaml",
+      "role": "acceptance-gates",
+      "required": true
+    },
+    {
+      "path": "claims.yaml",
+      "role": "claim-contract",
+      "required": true
+    },
+    {
+      "path": "README.md",
+      "role": "overview",
+      "required": true
+    },
+    {
+      "path": "PLAN.md",
+      "role": "phase-index",
+      "required": true
+    },
+    {
+      "path": "questions.md",
+      "role": "closed-question-policy",
+      "required": true
+    },
+    {
+      "path": "SPEC.md",
+      "role": "behavior-contract",
+      "required": true
+    },
+    {
+      "path": "CONTRACTS.md",
+      "role": "data-interface-contracts",
+      "required": true
+    },
+    {
+      "path": "TEST_MATRIX.md",
+      "role": "test-contract",
+      "required": true
+    },
+    {
+      "path": "VALIDATION_TEMPLATE.md",
+      "role": "validation-report-template",
+      "required": true
+    },
+    {
+      "path": "checks/acceptance.md",
+      "role": "acceptance-checklist",
+      "required": true
+    },
+    {
+      "path": "plans/00-safety-boundaries.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/01-repo-census.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/02-system-map.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/03-candidate-buildprints.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/04-scope-decision.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/05-single-extraction.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/06-system-extraction.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/07-validation-submission.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "policies/safety.md",
+      "role": "safety-policy",
+      "required": true
+    },
+    {
+      "path": "policies/quality.md",
+      "role": "quality-policy",
+      "required": true
+    },
+    {
+      "path": "policies/questions.md",
+      "role": "question-policy",
+      "required": true
+    },
+    {
+      "path": "prompts/discover.md",
+      "role": "discovery-prompt",
+      "required": true
+    },
+    {
+      "path": "prompts/extract-selected.md",
+      "role": "selected-extraction-prompt",
+      "required": true
+    },
+    {
+      "path": "DECOMPOSITION_STRATEGY.md",
+      "role": "generated-output-contract",
+      "required": false
+    },
+    {
+      "path": "templates/AGENT_EXECUTION_BRIEF.md",
+      "role": "agent-output-template",
+      "required": true
+    },
+    {
+      "path": "templates/agent-contract.xml",
+      "role": "agent-output-template",
+      "required": true
+    },
+    {
+      "path": "templates/CURRENT_STATE.md",
+      "role": "agent-output-template",
+      "required": true
+    },
+    {
+      "path": "templates/manifest.json",
+      "role": "agent-output-template",
+      "required": true
+    },
+    {
+      "path": "AGENT_HANDOFF.md",
+      "role": "late-stage-handoff",
+      "required": false
+    }
   ],
   "forbiddenDefaults": [
     "long pre-discovery questionnaire",
@@ -55,10 +185,16 @@
     "selected extraction without scope decision",
     "mocks or fixtures counted as product implementation",
     "validation or parity claims without evidence",
-    "final response without chat handover"
+    "final response without chat handover",
+    "single giant implementation Buildprint for large repos without selected scope"
   ],
   "authoritySpine": "BUILDPRINT.md",
-  "mirrorFiles": ["buildprint.json", "phases.yaml", "acceptance.yaml", "claims.yaml"],
+  "mirrorFiles": [
+    "buildprint.json",
+    "phases.yaml",
+    "acceptance.yaml",
+    "claims.yaml"
+  ],
   "requiredDetailFiles": [
     "PLAN.md",
     "questions.md",
@@ -71,6 +207,7 @@
     "templates/agent-contract.xml",
     "templates/CURRENT_STATE.md",
     "templates/manifest.json",
-    "checks/acceptance.md"
+    "checks/acceptance.md",
+    "DECOMPOSITION_STRATEGY.md"
   ]
 }

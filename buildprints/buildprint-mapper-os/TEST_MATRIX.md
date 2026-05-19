@@ -4,6 +4,10 @@
 | --- | --- |
 | Secret leakage | Search generated files for known fake secrets, `.env` values, keys, tokens, cookies. |
 | Whole-repo sludge | Large repos must produce candidates first or a hierarchical system map. |
+| Missing size classification | Output must state small/medium/large/monorepo-system and justify selected mode from evidence. |
+| Missing decomposition | Medium/large/system repos must include `DECOMPOSITION_STRATEGY.md` or equivalent manifest/review-packet section. |
+| Giant implementation plan | Large repo output must not claim one broad implementation plan is safe without selected scope/candidate. |
+| Untestable candidate | Each candidate must include implementation phases and a concrete feature-slice validation strategy. |
 | Hallucinated validation | `SUBMISSION_CHECKLIST.md` must distinguish commands run from commands not run. |
 | Ungrounded claims | Important claims must be tagged OBSERVED/INFERRED/QUESTION. |
 | Missing scope | Generated package must define included/excluded paths or explicitly state full-system mode. |
@@ -44,6 +48,8 @@ Included golden projects:
 3. `admin-dashboard` — permissions, destructive actions, auth/session risk, and audit trail expectations.
 4. `large-monorepo` — must produce candidates for mixed integrations and scope pressure.
 5. `route-patterns` — must detect Next/Fastify route/API shapes, upload/cache/auth/AI signals.
+
+Large/mixed fixtures must also prove the mapper reports scope pressure and safe candidate-selection as the latest starting point before implementation.
 
 Required command from the source checkout:
 

@@ -6,7 +6,9 @@
 - Must avoid copying secret values, credentials, private keys, tokens, cookies, customer data, or private production URLs.
 - Must record environment variable names only, never values.
 - Must separate observed facts from inferred claims and human questions.
+- Must classify project size/shape before choosing output mode.
 - Must identify candidate Buildprints before extracting a huge repo into final package files.
+- Must require decomposition before implementation extraction for large repos and monorepos unless the user supplied a bounded scope/candidate.
 - Must pause for human scope selection after soft discovery unless a clear scope was provided.
 - Must treat production-grade selected scope as the default output posture: smaller scope is acceptable, proof-only implementation is not product behavior.
 - Must treat mapping depth / parity target as a first-class user decision, but secondary to implementation completeness.
@@ -18,6 +20,7 @@
 - Must cut scope honestly when full implementation is too large; excluded capabilities must be removed from claimed product scope, not replaced by mocks/placeholders.
 - Must use minimal preflight and dynamic contextual questions; no long upfront questionnaire.
 - Must support both single-module Buildprints and hierarchical System Buildprints.
+- Must generate a decomposition strategy for medium/large/high-pressure repos that names domains, dependencies, candidate order, phase depth, and validation strategy.
 - Must include quality gates and acceptance checks for any extracted Buildprint.
 - Must include edge-case inventory for selected product/module scopes.
 - Must document state machines, lifecycles, invariants, and failure modes for non-trivial workflows.
@@ -35,6 +38,7 @@
 - Must not modify application source code.
 - Must not invent tests, dry-run results, traffic numbers, users, revenue, security reviews, or validation status.
 - Must not turn unrelated subsystems into one vague Buildprint.
+- Must not produce one giant implementation plan for a large repo when feature-slice extraction is the safe path.
 - Must not treat generated summaries as source-of-truth if they conflict with repository facts.
 - Must not publish or submit automatically.
 - Must not collapse edge cases into generic phrases like “handle errors”; concrete errors and recovery behavior must be listed or marked unknown.
@@ -85,6 +89,29 @@ Candidates must include:
 - mock/fixture boundary,
 - capabilities that should be excluded rather than faked.
 
+
+### Size-aware mapping
+
+Mapper OS must choose output mode from observed size/shape, not from optimism.
+
+- `small`: one coherent Buildprint is allowed when the repo has one dominant app/service and a bounded surface.
+- `medium`: produce candidates and a decomposition strategy; one selected Buildprint may be extracted if its feature slice is independently testable.
+- `large`: discovery output plus decomposition is mandatory until a candidate/scope is selected.
+- `monorepo/system`: module/domain boundaries are mandatory; implementation extraction must target one selected module/feature first unless a System Buildprint is explicitly requested.
+
+Large/system mappings must treat implementation as staged:
+
+1. repo census;
+2. topology/system map;
+3. domain decomposition;
+4. candidate Buildprints;
+5. selected feature-slice extraction;
+6. feature implementation/reversal proof;
+7. cross-slice validation;
+8. later system synthesis.
+
+A full-system Buildprint is allowed, but it is architecture/control-plane guidance unless module-level proofs exist. It must not imply that every product feature has been implemented or validated.
+
 ### Discovery mode
 
 Used when the repo is large or no scope is provided.
@@ -93,6 +120,7 @@ Output:
 
 - `SYSTEM_MAP.md`
 - `BUILDPRINT_CANDIDATES.md`
+- `DECOMPOSITION_STRATEGY.md` when the repo is medium/large/high-pressure/system
 - `questions.md`
 
 Then ask the user which candidate or full-system path to extract.

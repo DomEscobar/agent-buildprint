@@ -14,6 +14,7 @@ Create these files at the repo root or in the user-requested output folder:
 
 - `SYSTEM_MAP.md`
 - `BUILDPRINT_CANDIDATES.md`
+- `DECOMPOSITION_STRATEGY.md` when the repo is medium/large/high-pressure/system
 - `questions.md`
 
 ## Process
@@ -29,9 +30,11 @@ Create these files at the repo root or in the user-requested output folder:
    - tests/checks,
    - deploy/runtime files.
 3. Inspect the files that carry architectural evidence. Do not rely on filenames alone.
-4. Write `SYSTEM_MAP.md` with evidence-backed zones.
-5. Write `BUILDPRINT_CANDIDATES.md` with 2-5 scoped candidates.
-6. Write `questions.md` as a progressive decision gate.
+4. Classify repo size/shape as `small`, `medium`, `large`, or `monorepo-system`.
+5. Write `SYSTEM_MAP.md` with evidence-backed zones and the selected output-mode rationale.
+6. Write `DECOMPOSITION_STRATEGY.md` for medium/large/high-pressure/system repos.
+7. Write `BUILDPRINT_CANDIDATES.md` with 2-5 scoped candidates.
+8. Write `questions.md` as a progressive decision gate.
 
 ## Claim discipline
 
@@ -57,6 +60,26 @@ Do not copy secrets or `.env` values. Environment variable names are allowed; va
 - Risk zones.
 - Unknowns with confidence.
 
+## Size classification must include
+
+- size class: `small`, `medium`, `large`, or `monorepo-system`;
+- evidence for the classification;
+- selected output mode and why;
+- whether implementation extraction is safe now;
+- latest safe starting phase;
+- why a one-giant-Buildprint path is safe or unsafe.
+
+## `DECOMPOSITION_STRATEGY.md` must include for medium/large/high-pressure/system repos
+
+- domains/features/modules;
+- dependency boundaries;
+- candidate order;
+- shared contracts and cross-slice risks;
+- per-slice implementation phase depth;
+- feature-slice validation/test strategy;
+- what should wait for later system synthesis;
+- capabilities that must be excluded rather than faked.
+
 ## `BUILDPRINT_CANDIDATES.md` must include 2-5 candidates
 
 For each candidate:
@@ -78,9 +101,13 @@ For each candidate:
 - optional deeper parity targets,
 - explicitly excluded parity targets,
 - evidence needed to upgrade depth,
-- what decision is needed before extraction.
+- what decision is needed before extraction;
+- implementation phases sized to the candidate;
+- concrete test/QA strategy for feature implementation;
+- dependencies that must be confirmed before extraction;
+- latest safe starting phase.
 
-Do not merge unrelated scopes just to make one big Buildprint.
+Do not merge unrelated scopes just to make one big Buildprint. For large/system repos, do not recommend implementation until a candidate/scope is selected; the default next action is candidate selection or system-architecture-only mapping.
 
 ## `questions.md` must not flood the user
 

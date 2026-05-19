@@ -11,11 +11,12 @@ Read:
 - `SYSTEM_MAP.md`
 - `BUILDPRINT_CANDIDATES.md`
 - `questions.md` / human decision answers
+- `DECOMPOSITION_STRATEGY.md` when present
 - relevant source files for the selected candidate
 - `policies/quality.md` from Mapper OS
 - relevant templates under `templates/` from Mapper OS
 
-If the selected candidate is unclear, stop and ask one question.
+If the selected candidate is unclear, stop and ask one question. If the source is large/system-shaped and no candidate or scope is selected, do not extract an implementation Buildprint; return to decomposition/scope decision.
 
 ## Required outputs
 
@@ -64,6 +65,7 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 ## Extraction rules
 
 - Stay inside the selected scope unless a dependency is required to understand the contract.
+- For large/system repos, extract one feature slice at a time unless the user explicitly selected architecture-only System Buildprint mode.
 - If you cross the boundary, document why.
 - If you discover source defects or suspicious mismatches, document them as observed risks unless the selected task explicitly includes source repair.
 - Separate `OBSERVED`, `INFERRED`, and `QUESTION`.
@@ -72,6 +74,7 @@ buildprint-submission/QA_REPORT.md        # required for runnable product/featur
 - Do not upgrade a mocked or fixture-only path into product implementation. Mocks are test/demo fixtures only and must have a documented boundary.
 - Extract the smallest scope that can be implemented production-grade; if a capability cannot be real, exclude it instead of faking it.
 - Extract edge cases, failure modes, lifecycle/state transitions, and invariants before writing implementation phases.
+- Size phases to the feature: larger candidates need multiple evidence/testable phases rather than one broad implementation step.
 - If an edge matters but evidence is missing, mark it `QUESTION` and include a safe default only as `INFERRED`.
 
 ## Buildprint package expectations
