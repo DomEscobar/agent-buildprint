@@ -918,7 +918,7 @@ function buildMapReviewPrompt(facts, mapperOsAlignment) {
     'You are the AI reviewer for a mapped Buildprint generated from an existing repository.',
     'Use REVIEW_PACKET.json as an evidence map, not as a verdict.',
     `Use ${mapperOsAlignment.title} from ${mapperOsAlignment.source} as the canonical mapper alignment. Alignment checksum: ${mapperOsAlignment.checksum}.`,
-    'Read AGENT_EXECUTION_BRIEF.md, BUILDPRINT.md, SYSTEM_MAP.md, BUILDPRINT_CANDIDATES.md, SPEC.md, CONTRACTS.md, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, questions.md, and the mapped source files that matter for the selected scope.',
+    'Read AGENT_EXECUTION_BRIEF.md, BUILDPRINT.md, FEATURE_INVENTORY.md, PRODUCT_CAPABILITY_MAP.md, IMPLEMENTATION_DECOMPOSITION.md, PHASE_PLAN.md, LOOP_GATES.md, PARITY_ACCEPTANCE.md, SYSTEM_MAP.md, BUILDPRINT_CANDIDATES.md, SPEC.md, CONTRACTS.md, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, questions.md, and the mapped source files that matter for the selected scope.',
     'Assess whether a coding agent can continue from this mapped package without scope drift, fake completion, secret leakage, or weak handover.',
     'Separate OBSERVED, INFERRED, QUESTION, and OUT_OF_SCOPE claims. Never promote scanner evidence to behavioral proof without source-file evidence.',
     facts.needsScopeSelection
@@ -971,6 +971,7 @@ function buildMapReviewPacket(facts, confidence, questions, decisions, mapperOsA
       subprojects: facts.subprojects,
       codeSignals: facts.codeSignals,
       candidates: facts.candidateBuildprints,
+      featureInventory: featureInventory(facts),
       selectedCandidate: facts.selectedCandidate ?? null,
       confidence,
       sizeClassification: classifyMappedRepo(facts),
@@ -1080,6 +1081,112 @@ function candidateValidationStrategy(candidate, facts) {
   return unique(checks).slice(0, 8)
 }
 
+
+function featureInventory(facts) {
+  const features = []
+  const add = (title, kind, evidence = [], requiredBehavior = [], acceptance = [], risks = []) => {
+    const ev = unique(evidence).slice(0, 30)
+    if (!ev.length && kind !== 'system') return
+    features.push({ title, kind, evidence: ev, requiredBehavior, acceptance, risks: unique(risks) })
+  }
+  const routeName = (file) => file
+    .replace(/^.*?src\/pages\//, '')
+    .replace(/^.*?pages\//, '')
+    .replace(/^.*?src\/app\//, '')
+    .replace(/^.*?app\//, '')
+    .replace(/\/page\.(tsx|ts|jsx|js)$/, '')
+    .replace(/\.(astro|tsx|ts|jsx|js|mdx)$/, '')
+    .replace(/index$/, 'home')
+  const routeGroups = new Map()
+  for (const route of facts.routes) {
+    const raw = routeName(route)
+    const key = raw.split('/')[0] || 'home'
+    if (!routeGroups.has(key)) routeGroups.set(key, [])
+    routeGroups.get(key).push(route)
+  }
+  for (const [key, files] of routeGroups) add(
+    `${titleize(key)} surface`,
+    'user-facing',
+    files,
+    ['Recreate the user-visible route/screen behavior, navigation entry points, loading/error/empty states, and permission boundaries.'],
+    ['Route or equivalent UI surface is reachable.', 'Primary happy path and denial/error states are validated.'],
+    /admin/i.test(key) ? ['admin surfaces'] : []
+  )
+  const apiGroups = new Map()
+  for (const api of facts.apis) {
+    const key = api.replace(/^.*?api\//, '').replace(/\/route\.(ts|js)$/, '').split('/')[0] || 'api'
+    if (!apiGroups.has(key)) apiGroups.set(key, [])
+    apiGroups.get(key).push(api)
+  }
+  for (const [key, files] of apiGroups) add(
+    `${titleize(key)} API/workflow`,
+    'system',
+    files,
+    ['Recreate request/response behavior, validation, auth, side effects, idempotency/retry expectations, and observable failures.'],
+    ['Contract tests cover accepted/rejected requests.', 'Side effects are real or explicitly out of scope.'],
+    /admin/i.test(key) ? ['admin surfaces'] : []
+  )
+  for (const candidate of facts.candidateBuildprints) add(
+    candidate.title.replace(/ Buildprint$/, ''),
+    'capability',
+    candidate.includedPaths,
+    [`Preserve the product capability: ${candidate.scope}`],
+    candidateValidationStrategy(candidate, facts),
+    candidate.risks
+  )
+  if (facts.db.length) add('Data persistence and lifecycle', 'system', facts.db, ['Recreate durable data model, migrations/import/export expectations, retention, backup/recovery, and restart behavior.'], ['Write/read/restart proof exists.', 'Migration or schema contract is documented.'], ['data lifecycle'])
+  if (facts.tests.length) add('Existing acceptance/test suite behavior', 'validation', facts.tests.slice(0, 30), ['Use existing tests/e2e specs as behavior evidence, not implementation constraints.'], ['Mapped acceptance tests cover product-critical flows.'], [])
+  if (facts.deploy.length) add('Deployment and operational workflow', 'system', facts.deploy, ['Recreate build, release, update, observability, and rollback expectations when product-relevant.'], ['Build/release path is documented and smoke-tested or blocked.'], ['ops/release'])
+  return features
+}
+
+function titleize(value) {
+  return String(value || 'feature').replace(/[-_]+/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
+}
+
+function featureInventoryMd(facts) {
+  const features = featureInventory(facts)
+  return [
+    '# FEATURE_INVENTORY', '',
+    'This is the product-scope inventory. Files are evidence; features are the rebuild contract. Reimplementation may use different tech if it preserves required behavior and acceptance.', '',
+    '## Inventory rules', '',
+    '- Start from full-repo evidence before selecting implementation scopes.',
+    '- Preserve user-visible behavior, system side effects, data semantics, permission boundaries, and integration contracts.',
+    '- Mark implementation details as replaceable unless they are part of product behavior or compatibility.',
+    '- Do not claim full parity from this file alone; each feature needs source-file confirmation and validation evidence.', '',
+    '## Features', '',
+    features.length ? features.map((f, i) => [
+      `### ${i + 1}. ${f.title}`, '', `- Kind: ${f.kind}`, '- Evidence:',
+      f.evidence.length ? f.evidence.map((x) => `  - ${x}`).join('\n') : '  - QUESTION: evidence needs source review',
+      '- Required behavior:', f.requiredBehavior.length ? f.requiredBehavior.map((x) => `  - ${x}`).join('\n') : '  - QUESTION: behavior needs source review',
+      '- Acceptance signals:', f.acceptance.length ? f.acceptance.map((x) => `  - ${x}`).join('\n') : '  - focused behavior validation required',
+      '- Risks:', f.risks.length ? f.risks.map((x) => `  - ${x}`).join('\n') : '  - none detected', ''
+    ].join('\n')).join('\n') : '- QUESTION: no product features inferred; inspect docs/routes/tests manually.', ''
+  ].join('\n')
+}
+
+function productCapabilityMapMd(facts) {
+  const features = featureInventory(facts)
+  const buckets = [['User-facing surfaces', features.filter((f) => f.kind === 'user-facing')], ['Product capabilities', features.filter((f) => f.kind === 'capability')], ['System/background capabilities', features.filter((f) => f.kind === 'system')], ['Validation/acceptance evidence', features.filter((f) => f.kind === 'validation')]]
+  return ['# PRODUCT_CAPABILITY_MAP', '', 'This map groups product features into rebuild domains. It is capability-first: folder paths are evidence, not scope definitions.', '', ...buckets.flatMap(([title, items]) => [`## ${title}`, '', items.length ? items.map((f) => `- ${f.title} — evidence: ${f.evidence.slice(0, 5).map((x) => `\`${x}\``).join(', ')}${f.evidence.length > 5 ? ', …' : ''}`).join('\n') : '- none detected', '']), '## Reimplementation freedom', '', '- Frameworks, libraries, directory layout, and storage engines may change if behavior, contracts, privacy, durability, and acceptance still pass.', '- Keep compatibility only where users, external integrations, data import/export, or release/update channels depend on it.', ''].join('\n')
+}
+
+function implementationDecompositionMd(facts) {
+  const features = featureInventory(facts)
+  const phaseSeeds = [['00-product-contract', 'Freeze feature inventory, acceptance language, non-goals, and parity tiers.', features.slice(0, 8).map((f) => f.title)], ['01-foundation-shell', 'Create app/runtime shell, navigation, config, auth/session placeholders only where backed by product need.', features.filter((f) => /surface|auth|session|account|setting/i.test(f.title)).map((f) => f.title)], ['02-core-data-and-state', 'Implement durable data/state model, migrations, lifecycle, restart behavior, and import/export boundaries.', features.filter((f) => /data|memory|persistence|state|database/i.test(f.title)).map((f) => f.title)], ['03-primary-product-flows', 'Implement primary user-facing workflows end-to-end with real persistence and errors.', features.filter((f) => f.kind === 'user-facing').map((f) => f.title)], ['04-integrations-and-agents', 'Implement AI/tool/provider/integration flows with contract tests, retries, grounding, and external-write approval semantics.', features.filter((f) => /AI|Agent|Workflow|API|Integration|Composio|webhook/i.test(f.title)).map((f) => f.title)], ['05-native-and-operational-surfaces', 'Implement desktop/native/update/deploy/observability capabilities where product-relevant.', features.filter((f) => /desktop|native|tauri|deploy|operational|update/i.test(f.title)).map((f) => f.title)], ['06-full-parity-qa', 'Run feature parity, no-fake scan, security/privacy review, and final handover evidence.', features.map((f) => f.title).slice(0, 20)]]
+  return ['# IMPLEMENTATION_DECOMPOSITION', '', 'This is the bridge from full feature scope to a clean rebuild plan. It decomposes by product capability, not by folder.', '', '## Phased rebuild plan', '', phaseSeeds.map(([id, goal, featureNames], i) => [`### Phase ${i}: ${id}`, '', `- Goal: ${goal}`, '- Features touched:', featureNames.length ? unique(featureNames).slice(0, 12).map((x) => `  - ${x}`).join('\n') : '  - QUESTION: confirm feature ownership for this phase', '- Loop:', '  1. Implement the smallest complete behavior slice.', '  2. Run objective checks and compare to `FEATURE_INVENTORY.md`.', '  3. Fix gaps without widening scope.', '  4. Repeat until pass or explicit blocker.', '- Exit criteria:', '  - Behavior works with real data/state where claimed.', '  - Tests or runtime proof are captured.', '  - No fake/mocked completion is hidden.', ''].join('\n')).join('\n'), ''].join('\n')
+}
+
+function loopGatesMd(facts) {
+  const gates = [['feature-contract-loop', 'For each feature in FEATURE_INVENTORY.md, implement/check/fix until required behavior has proof or a blocker is written.'], ['data-durability-loop', 'For every persisted claim, prove write/read/restart or mark persistence out of scope.'], ['integration-contract-loop', 'For every external/AI/tool/API integration, prove request/response/error/retry behavior with safe tests or mark blocked.'], ['no-fake-loop', 'Scan for placeholders, no-ops, mock-only paths, route shells, in-memory persistence, and unbacked TODO claims before handover.']]
+  return ['# LOOP_GATES', '', 'Loop gates are mandatory repeat-until-safe checks. Each loop stops only at `pass_or_blocker`.', '', gates.map(([id, check]) => [`## ${id}`, '', '- Repeat until: pass_or_blocker', `- Check: ${check}`, '- Smallest fix rule: fix only the failing feature/contract; do not widen product scope inside the loop.', '- Evidence required: command output, test result, screenshot/runtime proof, or explicit blocker with source-file citation.', '- Claims allowed after pass: the checked behavior for the checked feature only.', '- Claims still forbidden: full product parity, production readiness, or unrelated feature completion.', ''].join('\n')).join('\n'), ''].join('\n')
+}
+
+function parityAcceptanceMd(facts) {
+  const features = featureInventory(facts)
+  return ['# PARITY_ACCEPTANCE', '', 'Parity means product behavior is preserved, not that the old files or tech stack are copied.', '', '## Parity tiers', '', '- MVP parity: core happy paths work with real state and clear exclusions.', '- Functional parity: all listed feature contracts pass acceptance checks.', '- Operational parity: security, privacy, observability, release/update, recovery, and handover evidence are complete.', '', '## Feature acceptance checklist', '', features.length ? features.map((f) => `- [ ] ${f.title}: ${f.acceptance[0] || 'behavior proof captured'}`).join('\n') : '- [ ] Feature inventory confirmed manually.', '', '## Universal acceptance', '', '- [ ] No secret values copied into the Buildprint or implementation.', '- [ ] No fake implementations hidden behind UI/API shells.', '- [ ] User-visible errors, empty states, and denied states are handled.', '- [ ] Data durability claims have restart proof.', '- [ ] External writes require explicit policy/approval semantics.', '- [ ] Final handover lists evidence, blockers, and remaining non-goals.', ''].join('\n')
+}
+
 function decompositionStrategyMd(facts, classification) {
   const candidates = facts.candidateBuildprints.length ? facts.candidateBuildprints : []
   return [
@@ -1161,6 +1268,12 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     'facts.json',
     'discovered-map.md',
     'SYSTEM_MAP.md',
+    'FEATURE_INVENTORY.md',
+    'PRODUCT_CAPABILITY_MAP.md',
+    'IMPLEMENTATION_DECOMPOSITION.md',
+    'PHASE_PLAN.md',
+    'LOOP_GATES.md',
+    'PARITY_ACCEPTANCE.md',
     'BUILDPRINT_CANDIDATES.md',
     'DECOMPOSITION_STRATEGY.md',
     'questions.md',
@@ -1177,6 +1290,12 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     'manifest.json',
     'README.md',
     'BUILDPRINT.md',
+    'FEATURE_INVENTORY.md',
+    'PRODUCT_CAPABILITY_MAP.md',
+    'IMPLEMENTATION_DECOMPOSITION.md',
+    'PHASE_PLAN.md',
+    'LOOP_GATES.md',
+    'PARITY_ACCEPTANCE.md',
     'SPEC.md',
     'PLAN.md',
     'CONTRACTS.md',
@@ -1231,6 +1350,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     '- Deterministic facts: `facts.json`',
     '- Human map: `discovered-map.md`',
+    '- Feature inventory: `FEATURE_INVENTORY.md`',
+    '- Product capability map: `PRODUCT_CAPABILITY_MAP.md`',
+    '- Implementation decomposition: `IMPLEMENTATION_DECOMPOSITION.md`, `PHASE_PLAN.md`, `LOOP_GATES.md`, `PARITY_ACCEPTANCE.md`',
     '- Behavior spec: `SPEC.md`',
     '- Execution plan: `PLAN.md` and `plans/*.md`',
     '- Agent execution rails: `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, `manifest.json`',
@@ -1576,6 +1698,12 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'agent-contract.xml',
       'CURRENT_STATE.md',
       'BUILDPRINT.md',
+      'FEATURE_INVENTORY.md',
+      'PRODUCT_CAPABILITY_MAP.md',
+      'IMPLEMENTATION_DECOMPOSITION.md',
+      'PHASE_PLAN.md',
+      'LOOP_GATES.md',
+      'PARITY_ACCEPTANCE.md',
       'SPEC.md',
       'CONTRACTS.md',
       'IMPLEMENTATION_COMPLETENESS.md',
@@ -1588,6 +1716,12 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     ] : [
       'BUILDPRINT.md',
       'SYSTEM_MAP.md',
+      'FEATURE_INVENTORY.md',
+      'PRODUCT_CAPABILITY_MAP.md',
+      'IMPLEMENTATION_DECOMPOSITION.md',
+      'PHASE_PLAN.md',
+      'LOOP_GATES.md',
+      'PARITY_ACCEPTANCE.md',
       'DECOMPOSITION_STRATEGY.md',
       'BUILDPRINT_CANDIDATES.md',
       'questions.md',
@@ -1878,6 +2012,12 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   fs.writeFileSync(path.join(out, 'REVIEW_PROTOCOL.md'), formatMapReviewProtocol(reviewPacket))
   fs.writeFileSync(path.join(out, 'REVIEW_PACKET.json'), JSON.stringify(reviewPacket, null, 2) + '\n')
   fs.writeFileSync(path.join(out, 'MAPPER_OS_ALIGNMENT.md'), formatMapperOsAlignment(mapperOsAlignment))
+  fs.writeFileSync(path.join(out, 'FEATURE_INVENTORY.md'), featureInventoryMd(facts))
+  fs.writeFileSync(path.join(out, 'PRODUCT_CAPABILITY_MAP.md'), productCapabilityMapMd(facts))
+  fs.writeFileSync(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md'), implementationDecompositionMd(facts))
+  fs.writeFileSync(path.join(out, 'PHASE_PLAN.md'), implementationDecompositionMd(facts))
+  fs.writeFileSync(path.join(out, 'LOOP_GATES.md'), loopGatesMd(facts))
+  fs.writeFileSync(path.join(out, 'PARITY_ACCEPTANCE.md'), parityAcceptanceMd(facts))
   fs.writeFileSync(path.join(out, 'DECOMPOSITION_STRATEGY.md'), decompositionStrategyMd(facts, sizeClassification))
   if (isProductLike) fs.writeFileSync(path.join(out, 'PARITY_CLAIMS.md'), parityClaimsMd)
   if (needsThreatModel) fs.writeFileSync(path.join(out, 'THREAT_MODEL.md'), threatModelMd)

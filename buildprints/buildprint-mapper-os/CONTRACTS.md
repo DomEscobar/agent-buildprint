@@ -211,3 +211,8 @@ Create these when relevant to the selected scope:
 - `PARITY_CLAIMS.md` — required for product-inspired/rebuild/parity scopes.
 - `HEAD_TO_FOOT_QA.md` — required for runnable product/app/feature scopes.
 - `RUNTIME_LIVE_TEST_PLAN.md` — optional separate plan when runtime/browser harness details are substantial.
+
+
+## Feature-scope overhaul
+
+Mapper OS is capability-first. See `FEATURE_SCOPE_CONTRACT.md`: features are the rebuild contract; files are evidence; implementation decomposition must produce `FEATURE_INVENTORY.md`, `PRODUCT_CAPABILITY_MAP.md`, `IMPLEMENTATION_DECOMPOSITION.md`, `PHASE_PLAN.md`, `LOOP_GATES.md`, and `PARITY_ACCEPTANCE.md`.

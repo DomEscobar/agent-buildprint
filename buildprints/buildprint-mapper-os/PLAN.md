@@ -63,3 +63,8 @@ repo
 If the project is large and no scope is provided, stop after system map + decomposition + candidate discovery and ask which candidate, production-grade selected scope, and fidelity/depth target to extract. Make the safe default "smaller complete product scope", not broad proof-only coverage.
 
 If the user asks for a full system map instead of one candidate, follow `plans/06-system-extraction.md`.
+
+
+## Feature-scope overhaul
+
+Mapper OS is capability-first. See `FEATURE_SCOPE_CONTRACT.md`: features are the rebuild contract; files are evidence; implementation decomposition must produce `FEATURE_INVENTORY.md`, `PRODUCT_CAPABILITY_MAP.md`, `IMPLEMENTATION_DECOMPOSITION.md`, `PHASE_PLAN.md`, `LOOP_GATES.md`, and `PARITY_ACCEPTANCE.md`.

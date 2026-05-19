@@ -250,3 +250,8 @@ After I choose a candidate or system path, extract the selected Buildprint packa
 
 Never copy secrets or .env values. Ask at most one blocking question at a time. Do not claim validation, runtime behavior, or behavioral equivalence without recorded evidence.
 ```
+
+
+## Feature-scope overhaul
+
+Mapper OS is capability-first. See `FEATURE_SCOPE_CONTRACT.md`: features are the rebuild contract; files are evidence; implementation decomposition must produce `FEATURE_INVENTORY.md`, `PRODUCT_CAPABILITY_MAP.md`, `IMPLEMENTATION_DECOMPOSITION.md`, `PHASE_PLAN.md`, `LOOP_GATES.md`, and `PARITY_ACCEPTANCE.md`.

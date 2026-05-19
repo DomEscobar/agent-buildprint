@@ -47,6 +47,12 @@ for (const name of names) {
   assert(fs.existsSync(path.join(out, 'TEST_MATRIX.md')), `${name}: TEST_MATRIX.md exists`);
   assert(fs.existsSync(path.join(out, 'VALIDATION_TEMPLATE.md')), `${name}: VALIDATION_TEMPLATE.md exists`);
   assert(fs.existsSync(path.join(out, 'SYSTEM_MAP.md')), `${name}: SYSTEM_MAP.md exists`);
+  assert(fs.existsSync(path.join(out, 'FEATURE_INVENTORY.md')), `${name}: FEATURE_INVENTORY.md exists`);
+  assert(fs.existsSync(path.join(out, 'PRODUCT_CAPABILITY_MAP.md')), `${name}: PRODUCT_CAPABILITY_MAP.md exists`);
+  assert(fs.existsSync(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md')), `${name}: IMPLEMENTATION_DECOMPOSITION.md exists`);
+  assert(fs.existsSync(path.join(out, 'PHASE_PLAN.md')), `${name}: PHASE_PLAN.md exists`);
+  assert(fs.existsSync(path.join(out, 'LOOP_GATES.md')), `${name}: LOOP_GATES.md exists`);
+  assert(fs.existsSync(path.join(out, 'PARITY_ACCEPTANCE.md')), `${name}: PARITY_ACCEPTANCE.md exists`);
   assert(fs.existsSync(path.join(out, 'BUILDPRINT_CANDIDATES.md')), `${name}: BUILDPRINT_CANDIDATES.md exists`);
   assert(fs.existsSync(path.join(out, 'MAPPER_OS_ALIGNMENT.md')), `${name}: MAPPER_OS_ALIGNMENT.md exists`);
   assert(fs.existsSync(path.join(out, 'DECOMPOSITION_STRATEGY.md')), `${name}: DECOMPOSITION_STRATEGY.md exists`);
@@ -59,6 +65,9 @@ for (const name of names) {
   assert(!manifest.requiredFiles.includes('AGENT_EXECUTION_BRIEF.md'), `${name}: discovery manifest does not require implementation rails`);
   assert(read(path.join(out, 'MAPPER_OS_ALIGNMENT.md')).includes('Buildprint Mapper OS'), `${name}: alignment file names Mapper OS`);
   assert(read(path.join(out, 'DECOMPOSITION_STRATEGY.md')).includes('Latest safe starting phase'), `${name}: decomposition records safe starting phase`);
+  assert(Array.isArray(reviewPacket.evidence?.featureInventory), `${name}: review packet carries feature inventory`);
+  assert(read(path.join(out, 'FEATURE_INVENTORY.md')).includes('Files are evidence; features are the rebuild contract'), `${name}: feature inventory is capability-first`);
+  assert(read(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md')).toLowerCase().includes('repeat until pass or explicit blocker'), `${name}: implementation decomposition includes loop contract`);
   const firstPathBackedIndex = facts.candidateBuildprints.findIndex((c) => c.includedPaths?.length > 0);
   const firstSignalOnlyIndex = facts.candidateBuildprints.findIndex((c) => !c.includedPaths?.length);
   assert(firstPathBackedIndex < 0 || firstSignalOnlyIndex < 0 || firstPathBackedIndex < firstSignalOnlyIndex, `${name}: path-backed candidates sort before signal-only candidates`);
