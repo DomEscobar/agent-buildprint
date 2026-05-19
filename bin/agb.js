@@ -972,6 +972,7 @@ function buildMapReviewPacket(facts, confidence, questions, decisions, mapperOsA
       codeSignals: facts.codeSignals,
       candidates: facts.candidateBuildprints,
       featureInventory: featureInventory(facts),
+      evidenceCoverage: featureEvidenceCoverage(facts),
       selectedCandidate: facts.selectedCandidate ?? null,
       confidence,
       sizeClassification: classifyMappedRepo(facts),
@@ -1144,6 +1145,119 @@ function titleize(value) {
   return String(value || 'feature').replace(/[-_]+/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
 }
 
+
+function evidenceTypeForPath(file) {
+  if (/(__tests__|tests?|specs?|e2e|\.test\.|\.spec\.)/i.test(file)) return 'test/e2e evidence'
+  if (/(README|docs\/|\.md$|gitbooks\/)/i.test(file)) return 'docs/readme evidence'
+  if (/(page|route)\.(tsx|ts|jsx|js)$|src\/pages\/|pages\/|components?\//i.test(file)) return 'ui/route/component evidence'
+  if (/(api\/|rpc|controller|handler|server|route\.(ts|js)$)/i.test(file)) return 'api/rpc evidence'
+  if (/(schema|model|migration|prisma|database|store|state|entity|repository)/i.test(file)) return 'data/state evidence'
+  if (/(config|nav|menu|sidebar|routes|manifest|tauri\.conf|package\.json)/i.test(file)) return 'config/navigation evidence'
+  if (/(worker|job|cron|queue|agent|tool|integration|provider|webhook)/i.test(file)) return 'background/integration evidence'
+  return 'source evidence'
+}
+
+function featureEvidenceCoverage(facts) {
+  return featureInventory(facts).map((feature) => {
+    const evidenceTypes = unique(feature.evidence.map(evidenceTypeForPath))
+    const strongEnoughForDiscovery = feature.evidence.length > 0
+    const enoughForQualification = evidenceTypes.length >= 2
+    const missingEvidence = []
+    if (!evidenceTypes.some((x) => /ui|api|background|integration/.test(x))) missingEvidence.push('entrypoint/trigger evidence')
+    if (!evidenceTypes.some((x) => /data|state|test|docs/.test(x))) missingEvidence.push('behavior/state/acceptance evidence')
+    if (!evidenceTypes.some((x) => /test|docs/.test(x))) missingEvidence.push('independent acceptance evidence')
+    return {
+      feature: feature.title,
+      kind: feature.kind,
+      evidenceCount: feature.evidence.length,
+      evidenceTypes,
+      strongEnoughForDiscovery,
+      enoughForQualification,
+      missingEvidence,
+      qualificationStatus: enoughForQualification ? 'candidate_for_review' : 'unqualified_hypothesis'
+    }
+  })
+}
+
+function featureHypothesesMd(facts) {
+  const features = featureInventory(facts)
+  const coverage = new Map(featureEvidenceCoverage(facts).map((x) => [x.feature, x]))
+  return [
+    '# FEATURE_HYPOTHESES',
+    '',
+    'These are discovery hypotheses, not qualified Buildprint requirements. A feature becomes qualified only after source validation confirms behavior, state, permissions, side effects, and acceptance evidence.',
+    '',
+    ...features.map((f, i) => {
+      const c = coverage.get(f.title)
+      return [
+        `## ${i + 1}. ${f.title}`,
+        '',
+        `- Hypothesis status: ${c?.qualificationStatus ?? 'unqualified_hypothesis'}`,
+        `- Evidence types: ${c?.evidenceTypes?.join(', ') || 'none'}`,
+        `- Missing evidence: ${c?.missingEvidence?.join(', ') || 'none detected'}`,
+        '- Must validate:',
+        '  - user/system trigger',
+        '  - state changes and persistence expectations',
+        '  - permissions/privacy constraints',
+        '  - external side effects and reversal behavior',
+        '  - acceptance checks or runtime proof',
+        ''
+      ].join('\n')
+    }).join('\n')
+  ].join('\n')
+}
+
+function evidenceCoverageMd(facts) {
+  const rows = featureEvidenceCoverage(facts)
+  return [
+    '# EVIDENCE_COVERAGE',
+    '',
+    'Discovery quality gate: every feature hypothesis needs evidence before it can become a qualified implementation requirement. Static mapping alone does not qualify behavior.',
+    '',
+    '## Coverage table',
+    '',
+    ...rows.map((r) => [
+      `### ${r.feature}`,
+      '',
+      `- Status: ${r.qualificationStatus}`,
+      `- Evidence count: ${r.evidenceCount}`,
+      `- Evidence types: ${r.evidenceTypes.join(', ') || 'none'}`,
+      `- Missing evidence: ${r.missingEvidence.join(', ') || 'none detected'}`,
+      `- Discovery usable: ${r.strongEnoughForDiscovery ? 'yes' : 'no'}`,
+      `- Qualified-plan usable: ${r.enoughForQualification ? 'only after source review' : 'no'}`,
+      ''
+    ].join('\n')).join('\n'),
+    '## Gate rule',
+    '',
+    '- If any selected feature is `unqualified_hypothesis`, the mapper must not call the output a qualified implementation plan.',
+    '- Qualification requires source-file review and/or runtime/test evidence beyond scanner detection.',
+    ''
+  ].join('\n')
+}
+
+function sourceValidationQueueMd(facts) {
+  const rows = featureEvidenceCoverage(facts)
+  return [
+    '# SOURCE_VALIDATION_QUEUE',
+    '',
+    'Use this queue before upgrading an unqualified map into a qualified Buildprint.',
+    '',
+    ...rows.filter((r) => !r.enoughForQualification).map((r, i) => [
+      `## ${i + 1}. ${r.feature}`,
+      '',
+      `- Current status: ${r.qualificationStatus}`,
+      `- Missing: ${r.missingEvidence.join(', ') || 'source validation'}`,
+      '- Validation tasks:',
+      '  1. Read the referenced source files, not only `facts.json`.',
+      '  2. Identify trigger, behavior, state, permissions, side effects, and errors.',
+      '  3. Find or create acceptance evidence: tests, e2e flow, runtime proof, or explicit blocker.',
+      '  4. Mark product behavior vs replaceable implementation detail.',
+      ''
+    ].join('\n')).join('\n') || '- No weak hypotheses detected by the static coverage heuristic; still perform source review before qualification.',
+    ''
+  ].join('\n')
+}
+
 function featureInventoryMd(facts) {
   const features = featureInventory(facts)
   return [
@@ -1269,6 +1383,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     'discovered-map.md',
     'SYSTEM_MAP.md',
     'FEATURE_INVENTORY.md',
+    'FEATURE_HYPOTHESES.md',
+    'EVIDENCE_COVERAGE.md',
+    'SOURCE_VALIDATION_QUEUE.md',
     'PRODUCT_CAPABILITY_MAP.md',
     'IMPLEMENTATION_DECOMPOSITION.md',
     'PHASE_PLAN.md',
@@ -1291,6 +1408,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     'README.md',
     'BUILDPRINT.md',
     'FEATURE_INVENTORY.md',
+    'FEATURE_HYPOTHESES.md',
+    'EVIDENCE_COVERAGE.md',
+    'SOURCE_VALIDATION_QUEUE.md',
     'PRODUCT_CAPABILITY_MAP.md',
     'IMPLEMENTATION_DECOMPOSITION.md',
     'PHASE_PLAN.md',
@@ -1318,7 +1438,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     `title: ${facts.packageName} Project Buildprint`,
     `slug: ${facts.packageName}-mapped`,
     'category: Mapped Existing Project',
-    'status: draft-needs-review',
+    facts.selectedCandidate ? 'status: draft-needs-review' : 'status: unqualified-map',
     `packageTier: ${packageTier}`,
     '---',
     '',
@@ -1329,11 +1449,13 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '## Output mode',
     '',
     `- Mode: ${outputMode}`,
+    `- Qualification status: ${facts.selectedCandidate ? 'unqualified-selected-extraction; requires review before implementation claims' : 'UNQUALIFIED_MAP; discovery evidence only'}`,
     `- Size class: ${sizeClassification.sizeClass}`,
     `- Scope pressure: ${sizeClassification.scopePressure}`,
     `- Latest safe starting phase: ${sizeClassification.latestSafeStartingPhase}`,
     `- Selected scope: ${selectedScope}`,
     '- If this is still a discovery scaffold, do not claim it is a final extracted Buildprint.',
+    '- A mapped package becomes qualified only after source validation confirms feature behavior, state, permissions, side effects, and acceptance evidence.',
     '',
     '## Target shape',
     '',
@@ -1699,6 +1821,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'CURRENT_STATE.md',
       'BUILDPRINT.md',
       'FEATURE_INVENTORY.md',
+      'FEATURE_HYPOTHESES.md',
+      'EVIDENCE_COVERAGE.md',
+      'SOURCE_VALIDATION_QUEUE.md',
       'PRODUCT_CAPABILITY_MAP.md',
       'IMPLEMENTATION_DECOMPOSITION.md',
       'PHASE_PLAN.md',
@@ -1717,6 +1842,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'BUILDPRINT.md',
       'SYSTEM_MAP.md',
       'FEATURE_INVENTORY.md',
+      'FEATURE_HYPOTHESES.md',
+      'EVIDENCE_COVERAGE.md',
+      'SOURCE_VALIDATION_QUEUE.md',
       'PRODUCT_CAPABILITY_MAP.md',
       'IMPLEMENTATION_DECOMPOSITION.md',
       'PHASE_PLAN.md',
@@ -1729,6 +1857,8 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'REVIEW_PACKET.json',
       'MAPPER_OS_ALIGNMENT.md'
     ],
+    qualificationStatus: facts.selectedCandidate ? 'unqualified-selected-extraction' : 'UNQUALIFIED_MAP',
+    qualificationGate: 'Source validation required before this package can be called a qualified implementation plan.',
     requiredFiles: requiredGeneratedFiles,
     conditionalFiles: {
       'PARITY_CLAIMS.md': 'generated when product/app/API/provider parity claims might be implied',
@@ -2013,6 +2143,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   fs.writeFileSync(path.join(out, 'REVIEW_PACKET.json'), JSON.stringify(reviewPacket, null, 2) + '\n')
   fs.writeFileSync(path.join(out, 'MAPPER_OS_ALIGNMENT.md'), formatMapperOsAlignment(mapperOsAlignment))
   fs.writeFileSync(path.join(out, 'FEATURE_INVENTORY.md'), featureInventoryMd(facts))
+  fs.writeFileSync(path.join(out, 'FEATURE_HYPOTHESES.md'), featureHypothesesMd(facts))
+  fs.writeFileSync(path.join(out, 'EVIDENCE_COVERAGE.md'), evidenceCoverageMd(facts))
+  fs.writeFileSync(path.join(out, 'SOURCE_VALIDATION_QUEUE.md'), sourceValidationQueueMd(facts))
   fs.writeFileSync(path.join(out, 'PRODUCT_CAPABILITY_MAP.md'), productCapabilityMapMd(facts))
   fs.writeFileSync(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md'), implementationDecompositionMd(facts))
   fs.writeFileSync(path.join(out, 'PHASE_PLAN.md'), implementationDecompositionMd(facts))

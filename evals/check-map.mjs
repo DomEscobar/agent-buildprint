@@ -35,6 +35,9 @@ for (const name of names) {
   assert(fs.existsSync(path.join(out, 'TEST_MATRIX.md')), `${name}: TEST_MATRIX.md exists`);
   assert(fs.existsSync(path.join(out, 'SYSTEM_MAP.md')), `${name}: SYSTEM_MAP.md exists`);
   assert(fs.existsSync(path.join(out, 'FEATURE_INVENTORY.md')), `${name}: FEATURE_INVENTORY.md exists`);
+  assert(fs.existsSync(path.join(out, 'FEATURE_HYPOTHESES.md')), `${name}: FEATURE_HYPOTHESES.md exists`);
+  assert(fs.existsSync(path.join(out, 'EVIDENCE_COVERAGE.md')), `${name}: EVIDENCE_COVERAGE.md exists`);
+  assert(fs.existsSync(path.join(out, 'SOURCE_VALIDATION_QUEUE.md')), `${name}: SOURCE_VALIDATION_QUEUE.md exists`);
   assert(fs.existsSync(path.join(out, 'PRODUCT_CAPABILITY_MAP.md')), `${name}: PRODUCT_CAPABILITY_MAP.md exists`);
   assert(fs.existsSync(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md')), `${name}: IMPLEMENTATION_DECOMPOSITION.md exists`);
   assert(fs.existsSync(path.join(out, 'PHASE_PLAN.md')), `${name}: PHASE_PLAN.md exists`);
@@ -52,6 +55,7 @@ for (const name of names) {
   assert(manifest.mapperOs?.slug === 'buildprint-mapper-os', `${name}: manifest records Mapper OS alignment`);
   assert(manifest.sizeClassification?.sizeClass, `${name}: manifest records size classification`);
   assert(manifest.sizeClassification?.scopePressure, `${name}: manifest records scope pressure separately from size`);
+  assert(manifest.qualificationStatus === 'UNQUALIFIED_MAP', `${name}: discovery manifest is explicitly unqualified`);
   assert(!manifest.requiredFiles.includes('AGENT_EXECUTION_BRIEF.md'), `${name}: discovery manifest does not require implementation rails`);
   assert((expected.apiIncludes ?? []).every((needle) => facts.apis.includes(needle)), `${name}: expected API files detected`);
   const firstPathBackedIndex = facts.candidateBuildprints.findIndex((c) => c.includedPaths?.length > 0);
@@ -62,7 +66,9 @@ for (const name of names) {
   assert(reviewPacket.reviewPrompt.includes('Loop Gates'), `${name}: review packet asks reviewers to assess Loop Gates`);
   assert(reviewPacket.schemas?.['loop-gate.schema.json']?.properties?.repeatUntil?.enum?.includes('pass_or_blocker'), `${name}: review packet loop gates are pass_or_blocker`);
   assert(Array.isArray(reviewPacket.evidence?.featureInventory), `${name}: review packet carries feature inventory`);
+  assert(Array.isArray(reviewPacket.evidence?.evidenceCoverage), `${name}: review packet carries evidence coverage`);
   assert(read(path.join(out, 'FEATURE_INVENTORY.md')).includes('Files are evidence; features are the rebuild contract'), `${name}: feature inventory is capability-first`);
+  assert(read(path.join(out, 'EVIDENCE_COVERAGE.md')).includes('Static mapping alone does not qualify behavior'), `${name}: evidence coverage blocks premature qualification`);
   assert(read(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md')).toLowerCase().includes('repeat until pass or explicit blocker'), `${name}: implementation decomposition includes loop contract`);
   assert(Array.isArray(facts.candidateBuildprints) && facts.candidateBuildprints.length > 0, `${name}: candidate Buildprints generated`);
   assert(containsAll(facts.integrations, expected.integrations ?? []), `${name}: expected integrations detected`);

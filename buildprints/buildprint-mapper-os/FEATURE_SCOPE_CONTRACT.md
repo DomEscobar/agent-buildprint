@@ -62,3 +62,15 @@ A scoped extraction is valid only if it can say:
 - which feature dependencies are referenced but out of scope
 - which acceptance checks prove the selected feature behavior
 - which parity claims remain forbidden
+
+## First-phase discovery qualification
+
+The first mapping phase must remain an `UNQUALIFIED_MAP`. It may identify feature hypotheses, but it must not call them a qualified implementation plan.
+
+Required first-phase discovery files:
+
+- `FEATURE_HYPOTHESES.md` — candidate product capabilities with explicit missing validation.
+- `EVIDENCE_COVERAGE.md` — per-feature evidence types and qualification status.
+- `SOURCE_VALIDATION_QUEUE.md` — source-review tasks required before qualification.
+
+Discovery may proceed when a feature has at least one source evidence path. Qualification requires stronger behavior evidence, normally at least two evidence classes such as UI/API, state/model, tests/e2e, docs, config/navigation, or integration/background proof.

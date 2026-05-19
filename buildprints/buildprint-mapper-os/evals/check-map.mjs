@@ -48,6 +48,9 @@ for (const name of names) {
   assert(fs.existsSync(path.join(out, 'VALIDATION_TEMPLATE.md')), `${name}: VALIDATION_TEMPLATE.md exists`);
   assert(fs.existsSync(path.join(out, 'SYSTEM_MAP.md')), `${name}: SYSTEM_MAP.md exists`);
   assert(fs.existsSync(path.join(out, 'FEATURE_INVENTORY.md')), `${name}: FEATURE_INVENTORY.md exists`);
+  assert(fs.existsSync(path.join(out, 'FEATURE_HYPOTHESES.md')), `${name}: FEATURE_HYPOTHESES.md exists`);
+  assert(fs.existsSync(path.join(out, 'EVIDENCE_COVERAGE.md')), `${name}: EVIDENCE_COVERAGE.md exists`);
+  assert(fs.existsSync(path.join(out, 'SOURCE_VALIDATION_QUEUE.md')), `${name}: SOURCE_VALIDATION_QUEUE.md exists`);
   assert(fs.existsSync(path.join(out, 'PRODUCT_CAPABILITY_MAP.md')), `${name}: PRODUCT_CAPABILITY_MAP.md exists`);
   assert(fs.existsSync(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md')), `${name}: IMPLEMENTATION_DECOMPOSITION.md exists`);
   assert(fs.existsSync(path.join(out, 'PHASE_PLAN.md')), `${name}: PHASE_PLAN.md exists`);
@@ -62,11 +65,14 @@ for (const name of names) {
   assert(manifest.mapperOs?.slug === 'buildprint-mapper-os', `${name}: manifest records Mapper OS alignment`);
   assert(manifest.sizeClassification?.sizeClass, `${name}: manifest records size classification`);
   assert(manifest.sizeClassification?.scopePressure, `${name}: manifest records scope pressure separately from size`);
+  assert(manifest.qualificationStatus === 'UNQUALIFIED_MAP', `${name}: discovery manifest is explicitly unqualified`);
   assert(!manifest.requiredFiles.includes('AGENT_EXECUTION_BRIEF.md'), `${name}: discovery manifest does not require implementation rails`);
   assert(read(path.join(out, 'MAPPER_OS_ALIGNMENT.md')).includes('Buildprint Mapper OS'), `${name}: alignment file names Mapper OS`);
   assert(read(path.join(out, 'DECOMPOSITION_STRATEGY.md')).includes('Latest safe starting phase'), `${name}: decomposition records safe starting phase`);
   assert(Array.isArray(reviewPacket.evidence?.featureInventory), `${name}: review packet carries feature inventory`);
+  assert(Array.isArray(reviewPacket.evidence?.evidenceCoverage), `${name}: review packet carries evidence coverage`);
   assert(read(path.join(out, 'FEATURE_INVENTORY.md')).includes('Files are evidence; features are the rebuild contract'), `${name}: feature inventory is capability-first`);
+  assert(read(path.join(out, 'EVIDENCE_COVERAGE.md')).includes('Static mapping alone does not qualify behavior'), `${name}: evidence coverage blocks premature qualification`);
   assert(read(path.join(out, 'IMPLEMENTATION_DECOMPOSITION.md')).toLowerCase().includes('repeat until pass or explicit blocker'), `${name}: implementation decomposition includes loop contract`);
   const firstPathBackedIndex = facts.candidateBuildprints.findIndex((c) => c.includedPaths?.length > 0);
   const firstSignalOnlyIndex = facts.candidateBuildprints.findIndex((c) => !c.includedPaths?.length);
