@@ -17,5 +17,8 @@
 | Audit gaps | Every privileged mutation emits redacted audit event |
 | Migration corruption | Backfill, orphan, rollback, unique constraint tests |
 | Billing/admin confusion | Billing/API-key routes require separate permissions |
+| Adapter theatre | Conformance adapter calls the real target app DB/API/service authorization path, not hard-coded responses |
+| Target-app drift | `conformance/` black-box tests pass against the target app for tenant isolation, invite lifecycle, role safety, billing boundary, and audit redaction |
+| Missing conformance wiring | `AUTH_RBAC_CONFORMANCE_ADAPTER` is documented and runnable in the target repo/CI |
 
-Completion is blocked if any team-scoped route lacks direct server/API authorization coverage.
+Completion is blocked if any team-scoped route lacks direct server/API authorization coverage. Completion is also blocked if the target-app conformance suite is not wired to the real authorization path or if its failures are not recorded as explicit blockers.

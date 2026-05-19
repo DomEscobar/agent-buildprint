@@ -14,7 +14,7 @@ agentFile: true
 
 Add or harden a multi-user SaaS authorization layer around an existing application without replacing the existing auth provider unless the human explicitly asks. The target system supports users, teams/orgs/workspaces, memberships, roles, permissions, invites, server-side guards, audit logs, tenant isolation, and safe migration/backfill from existing solo-user data.
 
-`BUILDPRINT.md` is the authority spine. `SPEC.md`, `CONTRACTS.md`, `RBAC_MATRIX.md`, `UI_FLOWS.md`, `API_ROUTES.md`, `MIGRATION_GUIDE.md`, `SECURITY_POLICY.md`, `TEST_MATRIX.md`, phase files, and the proof harness support this contract but do not override it.
+`BUILDPRINT.md` is the authority spine. `SPEC.md`, `CONTRACTS.md`, `RBAC_MATRIX.md`, `UI_FLOWS.md`, `API_ROUTES.md`, `MIGRATION_GUIDE.md`, `SECURITY_POLICY.md`, `TEST_MATRIX.md`, phase files, the proof harness, and the conformance kit support this contract but do not override it.
 
 Required constants:
 
@@ -43,6 +43,7 @@ The accepted first implementation must include:
 10. UI flows that reflect permissions but do not enforce security by themselves.
 11. Migration/backfill and rollback/recovery instructions.
 12. Validation chapter covering permission, tenant isolation, invite, role, API, UI, audit, migration, and threat regression tests.
+13. A target-app conformance adapter wired to the real DB/API/service authorization path, with the conformance suite passing or blockers recorded.
 
 ## Non-Goals / Unsafe Claims
 
@@ -75,7 +76,8 @@ Do not claim or implement as included behavior:
 12. `plans/*.md` in numeric order
 13. `TEST_MATRIX.md`
 14. `VALIDATION_TEMPLATE.md`
-15. `proof/` if a local proof harness is requested
+15. `proof/` for the isolated reference proof
+16. `conformance/` for target-app black-box validation
 
 ## Phase Gate Summary
 
@@ -93,4 +95,4 @@ Do not claim or implement as included behavior:
 
 ## Completion Rule
 
-This Buildprint is not complete if any team-scoped route lacks a direct server/API authorization test, if Phase 00 artifacts are missing, or if tenant ownership is not explicit for every included data entity.
+This Buildprint is not complete if any team-scoped route lacks a direct server/API authorization test, if Phase 00 artifacts are missing, if tenant ownership is not explicit for every included data entity, or if the target-app conformance suite is not wired to the real authorization path. The isolated `proof/` harness is reference evidence only; target-app completion requires `conformance/` to pass or to list concrete blockers in `VALIDATION_TEMPLATE.md`.

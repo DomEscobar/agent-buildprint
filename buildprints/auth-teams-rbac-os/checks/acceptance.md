@@ -10,3 +10,5 @@
 - Audit log records privileged mutations with redacted metadata.
 - Migration/backfill/rollback/recovery plan exists.
 - Phase 09 validation covers every route and threat.
+- `conformance/` adapter is wired to the target app's real DB/API/service authorization path.
+- Conformance suite passes against the target app, or every failing/missing adapter capability is recorded as a blocker.
