@@ -1,5 +1,7 @@
 # Perfect RAG / Retrieval OS Buildprint
 
+Start with `BUILDPRINT.md`. It is the canonical authority spine for this package and owns the binding scope, read order, phase gates, and acceptance gates.
+
 A stack-adaptable Buildprint for production-grade RAG: ingestion, chunking, permissions, hybrid retrieval, fusion, reranking, grounded answer generation, refusal behavior, and regression eval gates.
 
 This is not "vector DB + prompt". The blueprint encodes the benchmark-backed pattern: **hybrid first-stage retrieval + reranking/late interaction + citation-grounded generation + repeatable evals**.

@@ -1,5 +1,12 @@
 # Validation
 
+## Scope
+
+- Target repository/app:
+- Included scope:
+- Explicitly excluded scope:
+- Production-grade selected scope statement:
+
 ## Alignment choices
 
 - Persona name/identity source:

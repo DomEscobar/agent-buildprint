@@ -1,5 +1,7 @@
 # Stripe Billing Extension
 
+Start with `BUILDPRINT.md`. It is the canonical authority spine for this package and owns the binding scope, read order, phase gates, and acceptance gates.
+
 Portable Buildprint for adding SaaS billing with Stripe Checkout, customer portal, verified webhooks, server-side subscription state, entitlement checks, and billing settings.
 
 The bundled TypeScript proof is a verified reference implementation, not the only target stack. Use `TARGET_STACK_ADAPTERS.md` to adapt the same billing contract to Python, Rails, Go, PHP/Laravel, or another backend.
