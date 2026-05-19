@@ -1,0 +1,37 @@
+name: Dispatch website Buildprint sync
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'buildprints/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/**'
+      - 'bin/**'
+      - '.github/workflows/dispatch-website-sync.yml'
+  workflow_dispatch: {}
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    env:
+      HAS_WEBSITE_REPO_TOKEN: ${{ secrets.WEBSITE_REPO_TOKEN != '' }}
+    steps:
+      - name: Dispatch agent-buildprint-website sync
+        if: env.HAS_WEBSITE_REPO_TOKEN == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.WEBSITE_REPO_TOKEN }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          gh api repos/DomEscobar/agent-buildprint-website/dispatches \
+            --method POST \
+            -f event_type=buildprints-updated \
+            -F client_payload[source_repo]=DomEscobar/agent-buildprint \
+            -F client_payload[source_sha]="$SOURCE_SHA"
+
+      - name: Explain missing dispatch token
+        if: env.HAS_WEBSITE_REPO_TOKEN != 'true'
+        run: |
+          echo "WEBSITE_REPO_TOKEN is not configured, so immediate cross-repo dispatch is skipped."
+          echo "The website repo also has a scheduled fallback sync every 30 minutes."
