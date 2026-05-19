@@ -1,6 +1,6 @@
 {
   "name": "agent-buildprint",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "bin": {
     "agb": "./bin/agb.js"
@@ -43,8 +43,6 @@
   "files": [
     "bin/",
     "src/",
-    "docs/",
-    "prompts/",
     "buildprints/",
     "langgraph/",
     "templates/",

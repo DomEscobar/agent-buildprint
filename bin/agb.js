@@ -2,10 +2,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { analyzeBuildprint } from '../src/analyze/index.js'
-import { formatAnalyzeText } from '../src/analyze/format-text.js'
-import { formatAnalyzeJson } from '../src/analyze/format-json.js'
-import { formatAgentBrief } from '../src/analyze/format-agent-brief.js'
+import { buildAnalyzePacket } from '../src/analyze/build-packet.js'
+import { formatPacketMarkdown } from '../src/analyze/format-markdown.js'
+import { formatPacketJson } from '../src/analyze/format-json.js'
+import { formatPacketYaml } from '../src/analyze/format-yaml.js'
 
 const cwd = process.cwd()
 const args = process.argv.slice(2)
@@ -26,7 +26,7 @@ function usage(exitCode = 0) {
   console.log(`Agent Buildprint
 
 Usage:
-  agb analyze <buildprint-folder> [--phase <id>] [--json] [--scan] [--strict]
+  agb analyze <buildprint-folder> [--phase <id>] [--json] [--yaml]
   agb check <blueprint-folder> [--code <generated-code-folder>]
   agb map <repo-folder> [--out <output-folder>] [--scope <path>] [--candidate <number>]
   agb start <buildprint-package-json-url-or-file> [target-folder]
@@ -34,7 +34,7 @@ Usage:
 Examples:
   agb analyze ./buildprints/buildprint-mapper-os
   agb analyze ./buildprints/portable-novel-storyboard-pipeline --phase 04-workbench-ui
-  agb analyze ./buildprints/buildprint-mapper-os --scan
+  agb analyze ./buildprints/buildprint-mapper-os --json
   agb check ./my-buildprint
   agb check ./my-buildprint --code ./my-agent
   agb map ./my-project
@@ -1494,12 +1494,13 @@ if (args[0] === 'analyze') {
   if (!folder) usage(1)
   try {
     const phase = optionValue('--phase')
+    if (args.includes('--strict')) throw new Error('unsupported option for analyze: --strict; agb analyze now emits review packets instead of pass/fail verdicts')
+    if (args.includes('--scan')) throw new Error('unsupported option for analyze: --scan; use default Markdown, --json, or --yaml packet output')
     const json = args.includes('--json')
-    const scan = args.includes('--scan')
-    const strict = args.includes('--strict')
-    const report = analyzeBuildprint(folder, { phase })
-    process.stdout.write(json ? formatAnalyzeJson(report) : scan ? formatAnalyzeText(report) : formatAgentBrief(report))
-    process.exit(strict && !report.strictPass ? 1 : 0)
+    const yaml = args.includes('--yaml')
+    const packet = buildAnalyzePacket(folder, { phase })
+    process.stdout.write(json ? formatPacketJson(packet) : yaml ? formatPacketYaml(packet) : formatPacketMarkdown(packet))
+    process.exit(0)
   } catch (error) {
     console.error(`Analyze failed: ${error.message}`)
     process.exit(1)

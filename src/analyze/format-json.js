@@ -1,4 +1,3 @@
-export function formatAnalyzeJson(report) {
-  return `${JSON.stringify(report, null, 2)}\n`;
+export function formatPacketJson(packet) {
+  return `${JSON.stringify(packet, null, 2)}\n`;
 }
-
