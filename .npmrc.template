@@ -1,0 +1,9 @@
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+# Usage:
+# 1. Set the environment variable `NPM_TOKEN` locally or in CI.
+#    PowerShell example: $env:NPM_TOKEN="<your_token>"
+# 2. Copy this file to `.npmrc` in the project root (do not commit `.npmrc`):
+#    PowerShell: copy .npmrc.template .npmrc
+# 3. Run: npm publish --access public
+
+# NOTE: Do NOT paste tokens into chat. Keep tokens secret and stored in environment variables or CI secrets.

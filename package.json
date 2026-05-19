@@ -14,7 +14,7 @@
   },
   "dependencies": {},
   "description": "CLI for bootstrapping, checking, and mapping Agent Buildprints for coding agents.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DomEscobar/agent-buildprint.git"
