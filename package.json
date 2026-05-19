@@ -1,6 +1,6 @@
 {
   "name": "agent-buildprint",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "bin": {
     "agb": "./bin/agb.js"
@@ -10,6 +10,7 @@
     "check": "rm -rf /tmp/agb-check-smoke && node -e \"const fs=require('fs'); fs.mkdirSync('/tmp/agb-check-smoke/code',{recursive:true}); fs.writeFileSync('/tmp/agb-check-smoke/blueprint.yaml', \\\"purpose: test\\\\nruntime:\\\\n  forbidden_dependencies:\\\\n    - forbidden-runtime\\\\nstate:\\\\n  required_fields:\\\\n    - done\\\\nnodes:\\\\n  act:\\\\n    input:\\\\n      reads:\\\\n        - messages\\\\n    output:\\\\n      writes:\\\\n        - done\\\\n    side_effects: []\\\\nedges:\\\\n  - from: start\\\\n    to: act\\\\n  - from: act\\\\n    to: end\\\\nacceptance_criteria:\\\\n  - passes check\\\\n\\\"); fs.writeFileSync('/tmp/agb-check-smoke/code/index.js','export const ok = true;\\\\n')\" && node ./bin/agb.js check /tmp/agb-check-smoke --code /tmp/agb-check-smoke/code",
     "test": "npm run check:spine && npm run check && rm -rf /tmp/agb-map-smoke /tmp/agb-start-smoke && node ./bin/agb.js map . --out /tmp/agb-map-smoke && test -f /tmp/agb-map-smoke/BUILDPRINT.md && test -f /tmp/agb-map-smoke/SPEC.md && test -f /tmp/agb-map-smoke/PLAN.md && test -f /tmp/agb-map-smoke/CONTRACTS.md && test -f /tmp/agb-map-smoke/TEST_MATRIX.md && test -f /tmp/agb-map-smoke/VALIDATION_TEMPLATE.md && test -f /tmp/agb-map-smoke/plans/00-review-facts.md && node ./bin/agb.js start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json /tmp/agb-start-smoke && test -s /tmp/agb-start-smoke/.buildprint/snapshots/BUILDPRINT.md && test -s /tmp/agb-start-smoke/.buildprint/snapshots/plans/04-wavespeed-image.md && npm run eval:mapper-os",
     "eval:map": "node evals/check-map.mjs",
+    "eval:analyze": "node scripts/check-analyze.mjs",
     "eval:mapper-os": "node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js",
     "pack:smoke": "npm pack --dry-run && rm -rf /tmp/agb-pack-smoke && mkdir /tmp/agb-pack-smoke && npm pack --pack-destination /tmp/agb-pack-smoke >/tmp/agb-pack-smoke/pack.out && cd /tmp/agb-pack-smoke && npm init -y >/dev/null && npm install ./agent-buildprint-*.tgz >/dev/null && ./node_modules/.bin/agb --help >/dev/null"
   },
@@ -41,6 +42,9 @@
   },
   "files": [
     "bin/",
+    "src/",
+    "docs/",
+    "prompts/",
     "buildprints/",
     "langgraph/",
     "templates/",

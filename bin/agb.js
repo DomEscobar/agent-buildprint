@@ -2,6 +2,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { analyzeBuildprint } from '../src/analyze/index.js'
+import { formatAnalyzeText } from '../src/analyze/format-text.js'
+import { formatAnalyzeJson } from '../src/analyze/format-json.js'
+import { formatAgentBrief } from '../src/analyze/format-agent-brief.js'
 
 const cwd = process.cwd()
 const args = process.argv.slice(2)
@@ -22,11 +26,15 @@ function usage(exitCode = 0) {
   console.log(`Agent Buildprint
 
 Usage:
+  agb analyze <buildprint-folder> [--phase <id>] [--json] [--scan] [--strict]
   agb check <blueprint-folder> [--code <generated-code-folder>]
   agb map <repo-folder> [--out <output-folder>] [--scope <path>] [--candidate <number>]
   agb start <buildprint-package-json-url-or-file> [target-folder]
 
 Examples:
+  agb analyze ./buildprints/buildprint-mapper-os
+  agb analyze ./buildprints/portable-novel-storyboard-pipeline --phase 04-workbench-ui
+  agb analyze ./buildprints/buildprint-mapper-os --scan
   agb check ./my-buildprint
   agb check ./my-buildprint --code ./my-agent
   agb map ./my-project
@@ -1479,6 +1487,24 @@ Rules:
 
 if (args.length === 0 || isHelp(args[0])) usage(0)
 
+
+if (args[0] === 'analyze') {
+  if (isHelp(args[1])) usage(0)
+  const folder = args[1]
+  if (!folder) usage(1)
+  try {
+    const phase = optionValue('--phase')
+    const json = args.includes('--json')
+    const scan = args.includes('--scan')
+    const strict = args.includes('--strict')
+    const report = analyzeBuildprint(folder, { phase })
+    process.stdout.write(json ? formatAnalyzeJson(report) : scan ? formatAnalyzeText(report) : formatAgentBrief(report))
+    process.exit(strict && !report.strictPass ? 1 : 0)
+  } catch (error) {
+    console.error(`Analyze failed: ${error.message}`)
+    process.exit(1)
+  }
+}
 
 
 if (args[0] === 'start') {
