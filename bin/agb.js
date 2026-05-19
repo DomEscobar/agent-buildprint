@@ -623,9 +623,20 @@ function writeMappedBuildprint(repoArg, outArg, options = {}) {
     facts.sourceRoot = baseRepo
     facts.scope = options.scope
   }
-  const selectedCandidate = options.candidate ? facts.candidateBuildprints[Number(options.candidate) - 1] : null
-  if (options.candidate && !selectedCandidate) throw new Error(`candidate ${options.candidate} not found; available candidates: ${facts.candidateBuildprints.length}`)
-  if (selectedCandidate && !selectedCandidate.includedPaths.length) throw new Error(`candidate ${options.candidate} is signal-only and has no evidence-backed paths; choose a path-backed candidate or use --scope`)
+  const numberedCandidate = options.candidate ? facts.candidateBuildprints[Number(options.candidate) - 1] : null
+  if (options.candidate && !numberedCandidate) throw new Error(`candidate ${options.candidate} not found; available candidates: ${facts.candidateBuildprints.length}`)
+  if (numberedCandidate && !numberedCandidate.includedPaths.length) throw new Error(`candidate ${options.candidate} is signal-only and has no evidence-backed paths; choose a path-backed candidate or use --scope`)
+  const scopedCandidate = options.scope ? candidate(
+    'Explicit Scope Buildprint',
+    `Explicit path scope: ${options.scope}`,
+    [options.scope],
+    'User selected a concrete repository path; map this bounded slice as the implementation scope.',
+    facts.risky,
+    ['Confirm whether dependencies outside this scoped path may be referenced but not implemented.'],
+    facts.totalFilesScanned > 120 ? 'strong' : 'agent-grade',
+    'explicit-scope'
+  ) : null
+  const selectedCandidate = numberedCandidate ?? scopedCandidate
   if (selectedCandidate) facts.selectedCandidate = selectedCandidate
   const confidence = confidenceFor(facts)
   const questions = []

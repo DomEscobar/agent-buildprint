@@ -73,6 +73,16 @@ for (const name of names) {
     assert(selectedManifest.requiredFiles.includes('AGENT_EXECUTION_BRIEF.md'), `${name}: --candidate restores implementation rails`);
     assert(selectedPacket.package.selectedScope, `${name}: --candidate records selected scope in review packet`);
     assert(read(path.join(selectedOut, 'SELECTED_CANDIDATE.md')).includes(selectedFacts.selectedCandidate.includedPaths[0]), `${name}: --candidate writes selected evidence paths`);
+
+    const scopedOut = fs.mkdtempSync(path.join(os.tmpdir(), `agb-eval-${name}-scoped-`));
+    execFileSync('node', [path.join(root, 'bin', 'agb.js'), 'map', project, '--scope', 'apps/web', '--out', scopedOut], { stdio: 'pipe' });
+    const scopedFacts = JSON.parse(read(path.join(scopedOut, 'facts.json')));
+    const scopedManifest = JSON.parse(read(path.join(scopedOut, 'manifest.json')));
+    const scopedPacket = JSON.parse(read(path.join(scopedOut, 'REVIEW_PACKET.json')));
+    assert(scopedFacts.selectedCandidate?.kind === 'explicit-scope', `${name}: --scope creates explicit selected scope`);
+    assert(scopedManifest.mode === 'selected Buildprint extraction', `${name}: --scope switches to selected extraction mode`);
+    assert(scopedManifest.requiredFiles.includes('AGENT_EXECUTION_BRIEF.md'), `${name}: --scope restores implementation rails`);
+    assert(scopedPacket.package.selectedScope?.includes('apps/web'), `${name}: --scope records selected scope in review packet`);
   }
 }
 
