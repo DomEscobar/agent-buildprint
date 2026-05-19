@@ -16,11 +16,15 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     steps:
-      - name: Dispatch agent-buildprint-website sync
+      - name: Dispatch agent-buildprint-website sync when token is configured
         env:
           GH_TOKEN: ${{ secrets.WEBSITE_REPO_TOKEN }}
           SOURCE_SHA: ${{ github.sha }}
         run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "No source-side WEBSITE_REPO_TOKEN configured; website self-sync schedule will pick this up automatically."
+            exit 0
+          fi
           gh api repos/DomEscobar/agent-buildprint-website/dispatches \
             --method POST \
             -f event_type=buildprints-updated \
