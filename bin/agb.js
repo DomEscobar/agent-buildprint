@@ -235,6 +235,16 @@ function readJsonMaybe(file) {
   try { return JSON.parse(readText(file)) } catch { return null }
 }
 
+function toPosixPath(value) {
+  return String(value).replaceAll(path.sep, '/').replaceAll('\\', '/')
+}
+
+function posixDirname(value) {
+  const normalized = toPosixPath(value)
+  const index = normalized.lastIndexOf('/')
+  return index < 0 ? '.' : normalized.slice(0, index)
+}
+
 function yamlList(items, indent = 2) {
   if (!items.length) return `${' '.repeat(indent)}[]`
   return items.map((item) => `${' '.repeat(indent)}- ${String(item).replaceAll('\n', ' ')}`).join('\n')
@@ -242,7 +252,7 @@ function yamlList(items, indent = 2) {
 
 function detectProjectFacts(repo) {
   const files = walkProject(repo)
-  const relFiles = files.map((f) => path.relative(repo, f))
+  const relFiles = files.map((f) => toPosixPath(path.relative(repo, f)))
   const packageJson = exists(path.join(repo, 'package.json')) ? readJsonMaybe(path.join(repo, 'package.json')) : null
   const packageJsonFiles = relFiles.filter((f) => /(^|\/)package\.json$/.test(f)).slice(0, 200)
   const depSet = new Set()
@@ -343,10 +353,10 @@ function detectProjectFacts(repo) {
 function detectCodeEndpoints(files, repo) {
   const endpoints = []
   const methodPattern = /\b(?:app|router|server|fastify)\.(get|post|put|patch|delete|options|head|all)\s*\(\s*['"`]([^'"`]+)['"`]/gi
-  for (const file of files.filter((f) => /\.[cm]?[tj]sx?$/.test(f) && !/(^|\/)(__tests__|tests?|specs?)\/|\.(test|spec)\.[cm]?[tj]sx?$/.test(path.relative(repo, f))).slice(0, 1200)) {
+  for (const file of files.filter((f) => /\.[cm]?[tj]sx?$/.test(f) && !/(^|\/)(__tests__|tests?|specs?)\/|\.(test|spec)\.[cm]?[tj]sx?$/.test(toPosixPath(path.relative(repo, f)))).slice(0, 1200)) {
     let text = ''
     try { text = readText(file) } catch { continue }
-    const rel = path.relative(repo, file)
+    const rel = toPosixPath(path.relative(repo, file))
     for (const m of text.matchAll(methodPattern)) endpoints.push(`${rel} ${m[1].toUpperCase()} ${m[2]}`)
   }
   return unique(endpoints).slice(0, 120)
@@ -355,10 +365,10 @@ function detectCodeEndpoints(files, repo) {
 function detectSubprojects(repo, relFiles) {
   const markers = relFiles.filter((f) => /(^|\/)(package.json|pyproject.toml|requirements.txt|go.mod|pom.xml|Gemfile|Cargo.toml|composer.json|server.csproj)$/.test(f))
   return markers.map((marker) => {
-    const dir = path.dirname(marker) === '.' ? '.' : path.dirname(marker)
-    let kind = path.basename(marker)
+    const dir = posixDirname(marker)
+    let kind = marker.split('/').pop()
     let name = dir
-    if (path.basename(marker) === 'package.json') {
+    if (kind === 'package.json') {
       const json = readJsonMaybe(path.join(repo, marker))
       if (json?.name) name = json.name
     }
@@ -378,7 +388,7 @@ function collectCodeSignals(files, repo) {
     uiContracts: [],
   }
   const add = (key, file, signal) => {
-    const entry = `${path.relative(repo, file)} — ${signal}`
+    const entry = `${toPosixPath(path.relative(repo, file))} — ${signal}`
     if (!signals[key].includes(entry)) signals[key].push(entry)
   }
   for (const file of files.filter((f) => /\.[cm]?[tj]sx?$|\.astro$|\.mdx?$/.test(f)).slice(0, 1600)) {
@@ -669,6 +679,32 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   fs.mkdirSync(path.join(out, 'plans'), { recursive: true })
   const packageTier = facts.risky.length >= 2 || facts.apis.length + facts.routes.length > 12 || facts.integrations.length >= 2 ? 'agent-grade' : facts.apis.length || facts.routes.length || facts.integrations.length ? 'strong' : 'simple'
   const observedAnchor = 'This package maps an existing repository. Preserve observed behavior unless the user confirms a change. Separate observed facts, inferred behavior, and unknowns.'
+  const outputMode = facts.selectedCandidate ? 'selected Buildprint extraction' : 'discovery scaffold'
+  const selectedScope = facts.selectedCandidate ? `${facts.selectedCandidate.title}: ${facts.selectedCandidate.scope}` : 'not selected yet; choose one candidate before extraction'
+  const isProductLike = facts.routes.length > 0 || facts.apis.length > 0 || facts.integrations.length > 0
+  const needsThreatModel = facts.apis.length > 0 || facts.risky.some((x) => /auth|payments|admin|upload|external|AI/i.test(x))
+  const needsDataLifecycle = facts.db.length > 0 || facts.integrations.some((x) => ['database', 'cache', 'storage'].includes(x))
+  const needsObservability = facts.apis.length > 0 || facts.deploy.length > 0 || isProductLike
+  const needsArchitectureViews = facts.subprojects.length > 1 || facts.needsScopeSelection
+  const requiredGeneratedFiles = [
+    'AGENT_EXECUTION_BRIEF.md',
+    'agent-contract.xml',
+    'CURRENT_STATE.md',
+    'manifest.json',
+    'README.md',
+    'BUILDPRINT.md',
+    'SPEC.md',
+    'PLAN.md',
+    'CONTRACTS.md',
+    'TEST_MATRIX.md',
+    'VALIDATION_TEMPLATE.md',
+    'QA_PLAN.md',
+    'IMPLEMENTATION_COMPLETENESS.md',
+    'HEAD_TO_FOOT_QA.md',
+    'TRACEABILITY_MATRIX.md',
+    'questions.md',
+    'SUBMISSION_CHECKLIST.md'
+  ]
   const buildprintMd = [
     '---',
     `title: ${facts.packageName} Project Buildprint`,
@@ -682,9 +718,15 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     observedAnchor,
     '',
+    '## Output mode',
+    '',
+    `- Mode: ${outputMode}`,
+    `- Selected scope: ${selectedScope}`,
+    '- If this is still a discovery scaffold, do not claim it is a final extracted Buildprint.',
+    '',
     '## Target shape',
     '',
-    'Keep the current stack and architecture unless the user explicitly asks for a migration.',
+    'Keep the current stack and architecture unless the user explicitly asks for a migration. Smaller complete scope is better than broad fake coverage.',
     '',
     '## Observed facts',
     '',
@@ -699,8 +741,10 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '- Human map: `discovered-map.md`',
     '- Behavior spec: `SPEC.md`',
     '- Execution plan: `PLAN.md` and `plans/*.md`',
+    '- Agent execution rails: `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, `manifest.json`',
     '- Interface/data contracts: `CONTRACTS.md`',
     '- Risk-to-test map: `TEST_MATRIX.md`',
+    '- QA and no-fake gates: `QA_PLAN.md`, `HEAD_TO_FOOT_QA.md`, `IMPLEMENTATION_COMPLETENESS.md`',
     '- Confidence report: `confidence-report.md`',
     '- Review questions: `questions.md`',
     '',
@@ -906,12 +950,380 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   ].filter(Boolean).join('\n')
 
   const phaseFiles = {
-    '00-review-facts.md': '# Phase 00 — Review Facts\n\nRead `facts.json`, `discovered-map.md`, and `confidence-report.md`.\n\nExit: observed facts understood; no code changed.\n',
-    '01-confirm-unknowns.md': '# Phase 01 — Confirm Unknowns\n\nAsk the questions in `questions.md` before changing low-confidence areas.\n\nExit: answers captured or blockers recorded in `VALIDATION.md`.\n',
-    '02-safe-change-plan.md': '# Phase 02 — Safe Change Plan\n\nPlan the smallest safe change. Identify affected routes, APIs, data models, integrations, and tests.\n\nExit: change scope and required tests are clear.\n',
-    '03-implementation.md': '# Phase 03 — Implementation\n\nImplement only the confirmed change. Preserve observed stack and behavior unless explicitly changed.\n\nExit: code updated and Buildprint artifacts updated if architecture changed.\n',
-    '04-tests-validation.md': '# Phase 04 — Tests and Validation\n\nRun relevant test/build/lint commands. Fill `VALIDATION.md` from `VALIDATION_TEMPLATE.md`.\n\nExit: results and remaining blockers are documented.\n',
+    '00-review-facts.md': '# Phase 00 - Review Facts\n\n## Goal\nUnderstand observed facts before planning or implementation.\n\n## Keep in context\n- `AGENT_EXECUTION_BRIEF.md`\n- `CURRENT_STATE.md`\n- `facts.json`\n- `discovered-map.md`\n- `confidence-report.md`\n\n## Steps\n- Read the observed routes, APIs, integrations, data files, tests, and risk areas.\n- Mark anything not directly evidenced as `INFERRED` or `QUESTION`.\n- Confirm this package is discovery scaffold or selected extraction.\n\n## Do not\n- Modify source files.\n- Treat filenames alone as behavior proof.\n- Claim validation or parity from census data.\n\n## Exit criteria\n- Observed facts are understood.\n- Current mode and selected scope are recorded.\n\n## Validation evidence\n- `CURRENT_STATE.md` notes phase completion and blockers.\n',
+    '01-confirm-unknowns.md': '# Phase 01 - Confirm Unknowns\n\n## Goal\nResolve only the decisions that block selected-scope extraction.\n\n## Keep in context\n- `questions.md`\n- `policies/questions.md` if available\n- `BUILDPRINT_CANDIDATES.md`\n- `SYSTEM_MAP.md`\n\n## Steps\n- Ask at most one blocking question at a time.\n- Use safe defaults only for non-blocking unknowns.\n- Keep appendix questions out of chat unless the selected scope touches them.\n\n## Do not\n- Run a broad questionnaire.\n- Ask questions the repo already answers.\n- Invent answers for auth, money, data, external writes, providers, or parity.\n\n## Exit criteria\n- Selected candidate/scope is confirmed or blocker is recorded.\n- Production-grade selected-scope posture is confirmed.\n\n## Validation evidence\n- `questions.md` and `CURRENT_STATE.md` show decisions or blockers.\n',
+    '02-safe-change-plan.md': '# Phase 02 - Safe Change Plan\n\n## Goal\nPlan the smallest production-grade selected scope.\n\n## Keep in context\n- `BUILDPRINT.md`\n- `SPEC.md`\n- `CONTRACTS.md`\n- `IMPLEMENTATION_COMPLETENESS.md`\n- `TRACEABILITY_MATRIX.md`\n\n## Steps\n- Identify included routes, APIs, data, providers, jobs, exports, and UI surfaces.\n- Exclude capabilities that cannot be real.\n- Map each important requirement to evidence and a validation check.\n\n## Do not\n- Merge unrelated scopes.\n- Keep hard features as placeholders.\n- Count mocks, fixtures, or in-memory-only stores as product behavior.\n\n## Exit criteria\n- Change/extraction scope is explicit.\n- Required tests, QA, persistence, and no-fake checks are known.\n\n## Validation evidence\n- `TRACEABILITY_MATRIX.md` and `IMPLEMENTATION_COMPLETENESS.md` are updated.\n',
+    '03-implementation.md': '# Phase 03 - Implementation\n\n## Goal\nImplement or extract only the confirmed selected scope.\n\n## Keep in context\n- `AGENT_EXECUTION_BRIEF.md`\n- `agent-contract.xml`\n- `CURRENT_STATE.md`\n- `PLAN.md`\n- `CONTRACTS.md`\n\n## Steps\n- Follow the selected scope exactly.\n- Preserve observed stack and behavior unless explicitly changed.\n- Update Buildprint artifacts when architecture changes.\n\n## Do not\n- Modify unrelated source areas.\n- Add route-shaped links, no-op controls, fake success states, or skeleton adapters.\n- Expand scope without recording the decision and QA impact.\n\n## Exit criteria\n- Included capabilities are real or explicitly excluded/blocked.\n- `CURRENT_STATE.md` records completed work and next action.\n\n## Validation evidence\n- Changed/generated files and blockers are listed in `SUBMISSION_CHECKLIST.md`.\n',
+    '04-tests-validation.md': '# Phase 04 - Tests and Validation\n\n## Goal\nProve the selected scope honestly.\n\n## Keep in context\n- `TEST_MATRIX.md`\n- `QA_PLAN.md`\n- `HEAD_TO_FOOT_QA.md`\n- `VALIDATION_TEMPLATE.md`\n- `SUBMISSION_CHECKLIST.md`\n\n## Steps\n- Run available tests/build/checks or record blockers.\n- Run runtime/browser QA for product UI when applicable.\n- Run persistence/restart QA when state exists.\n- Run no-fake implementation scan.\n- Finish with a chat handover.\n\n## Do not\n- Claim pass status for checks that did not run.\n- Hide known gaps.\n- Count test/demo fixtures as product implementation.\n\n## Exit criteria\n- Validation evidence, gaps, and next direction are recorded.\n- Final chat handover includes outcome, selected scope, evidence, files, commands, gaps, and next direction.\n\n## Validation evidence\n- `VALIDATION_TEMPLATE.md` is filled or an explicit blocker explains why not.\n',
   }
+
+  const agentExecutionBriefMd = [
+    '# Agent Execution Brief',
+    '',
+    'Purpose: first-read file for coding agents using this mapped Buildprint.',
+    '',
+    '## Mission',
+    '',
+    `Build or validate the selected production-grade scope for ${facts.packageName}.`,
+    `Current mode: ${outputMode}.`,
+    `Selected scope: ${selectedScope}.`,
+    '',
+    '## Read order',
+    '',
+    '1. `AGENT_EXECUTION_BRIEF.md`',
+    '2. `agent-contract.xml`',
+    '3. `CURRENT_STATE.md`',
+    '4. `BUILDPRINT.md`',
+    '5. `SPEC.md`',
+    '6. `CONTRACTS.md`',
+    '7. `IMPLEMENTATION_COMPLETENESS.md`',
+    '8. `TEST_MATRIX.md` and `HEAD_TO_FOOT_QA.md`',
+    '',
+    '## Hard constraints',
+    '',
+    '- Included capabilities must be real, wired, persistent where relevant, and QA-tested.',
+    '- Cut or block capabilities that cannot be real.',
+    '- Mocks and fixtures may exist only in named test/demo paths.',
+    '- Do not copy secret values; env var names only.',
+    '- Update `CURRENT_STATE.md` after each phase.',
+    '- Final chat handover must state outcome, selected scope, evidence, files, commands, gaps, and next direction.',
+    '',
+    '## Stop conditions',
+    '',
+    '- Required credentials are missing for an explicitly included live provider.',
+    '- A selected capability would need to be mocked or placeholdered to continue.',
+    '- Persistence is claimed but no durable adapter can be used.',
+    '- Runtime/test/browser QA cannot run and no honest blocker is recorded.',
+    ''
+  ].join('\n')
+
+  const agentContractXml = `<?xml version="1.0" encoding="UTF-8"?>
+<buildprint-agent-contract version="1">
+  <mission>Build the selected production-grade scope. Scope may be limited, but included capabilities must be real, wired, persistent where relevant, and QA-tested.</mission>
+  <mode>${outputMode}</mode>
+  <selected-scope>${selectedScope.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</selected-scope>
+  <read-order>
+    <file priority="1">AGENT_EXECUTION_BRIEF.md</file>
+    <file priority="2">agent-contract.xml</file>
+    <file priority="3">CURRENT_STATE.md</file>
+    <file priority="4">BUILDPRINT.md</file>
+    <file priority="5">SPEC.md</file>
+    <file priority="6">CONTRACTS.md</file>
+    <file priority="7">IMPLEMENTATION_COMPLETENESS.md</file>
+    <file priority="8">TEST_MATRIX.md</file>
+    <file priority="9">HEAD_TO_FOOT_QA.md</file>
+  </read-order>
+  <must>
+    <rule>Separate OBSERVED, INFERRED, QUESTION, and OUT_OF_SCOPE claims.</rule>
+    <rule>Implement included capabilities end-to-end or exclude/block them.</rule>
+    <rule>Run tests, build, runtime QA, persistence/restart QA when relevant, and no-fake scan before claiming done.</rule>
+    <rule>Provide final chat handover with outcome, selected scope, evidence, files, commands, gaps, and next direction.</rule>
+  </must>
+  <must-not>
+    <rule>Do not count mocks, fixtures, skeleton adapters, placeholder routes, no-op controls, fake success states, or in-memory-only claimed persistence as product implementation.</rule>
+    <rule>Do not invent validation results.</rule>
+    <rule>Do not copy secret values.</rule>
+  </must-not>
+</buildprint-agent-contract>
+`
+
+  const currentStateMd = [
+    '# Current State',
+    '',
+    'Purpose: anti-context-rot handoff file. Update after every phase and before stopping.',
+    '',
+    '## Mission',
+    '',
+    `Map or implement the selected production-grade scope for ${facts.packageName}.`,
+    '',
+    '## Current phase',
+    '',
+    'Phase 00 - Review Facts.',
+    '',
+    '## Mode and scope',
+    '',
+    `- Mode: ${outputMode}`,
+    `- Selected scope: ${selectedScope}`,
+    '',
+    '## Active constraints',
+    '',
+    '- Discover first, ask later.',
+    '- Smaller complete scope beats broad fake scope.',
+    '- Evidence labels are required.',
+    '- Included capabilities must be real or excluded.',
+    '- Final chat handover is required.',
+    '',
+    '## Evidence so far',
+    '',
+    '- Commands run: `agb map` generated this package.',
+    '- Tests: not run.',
+    '- Build: not run.',
+    '- Runtime QA: not run.',
+    '- No-fake scan: not run.',
+    '',
+    '## Latest safe next step',
+    '',
+    facts.selectedCandidate ? '- Continue `plans/00-review-facts.md`, then validate selected-scope extraction.' : '- Choose one candidate from `BUILDPRINT_CANDIDATES.md` before final extraction.',
+    ''
+  ].join('\n')
+
+  const manifestJson = {
+    schemaVersion: 'buildprint-agent-manifest.v1',
+    purpose: 'Machine-checkable manifest for an agent-first mapped Buildprint.',
+    mode: outputMode,
+    selectedScope,
+    readOrder: [
+      'AGENT_EXECUTION_BRIEF.md',
+      'agent-contract.xml',
+      'CURRENT_STATE.md',
+      'BUILDPRINT.md',
+      'SPEC.md',
+      'CONTRACTS.md',
+      'IMPLEMENTATION_COMPLETENESS.md',
+      'TEST_MATRIX.md',
+      'HEAD_TO_FOOT_QA.md'
+    ],
+    requiredFiles: requiredGeneratedFiles,
+    conditionalFiles: {
+      'PARITY_CLAIMS.md': 'generated when product/app/API/provider parity claims might be implied',
+      'THREAT_MODEL.md': 'generated when auth, payments, admin, API, upload, AI/tool calls, or external writes are detected',
+      'DATA_LIFECYCLE.md': 'generated when persistent data, cache, database, or storage surfaces are detected',
+      'OBSERVABILITY.md': 'generated when deployable product/service/runtime surfaces are detected',
+      'ARCHITECTURE_VIEWS.md': 'generated when the repo appears multi-scope or hierarchical',
+      'QUALITY_SCORECARD.md': 'generated for product-like scopes before publish-ready claims'
+    },
+    requiredGates: [
+      'scope-explicit',
+      'production-grade-selected-scope-explicit',
+      'observed-inferred-question-labels',
+      'secrets-scan',
+      'traceability-matrix-complete',
+      'no-fake-implementation-scan',
+      'tests-build-runtime-qa-run-or-blocked',
+      'final-chat-handover'
+    ],
+    mustNotCountAsProductImplementation: [
+      'mock providers',
+      'fixtures',
+      'skeleton adapters',
+      'placeholder routes',
+      'route-shaped links',
+      'no-op controls',
+      'fake success states',
+      'in-memory-only stores when persistence is claimed'
+    ]
+  }
+
+  const qaPlanMd = [
+    '# QA Plan',
+    '',
+    'QA must derive from observed routes, APIs, integrations, state, and risks.',
+    '',
+    '## Required checks',
+    '',
+    '- Static secret scan of generated artifacts.',
+    '- Unit/build/lint commands from the mapped repo when available.',
+    '- Contract checks for selected APIs/routes.',
+    '- Runtime/browser QA for product UI when applicable.',
+    '- Persistence/restart QA when product state exists.',
+    '- No-fake scan for placeholders, no-op controls, route-shaped links, skeleton adapters, and mock-as-product paths.',
+    '',
+    '## Observed surfaces',
+    '',
+    `- UI routes: ${facts.routes.length}`,
+    `- API routes/endpoints: ${facts.apis.length}`,
+    `- Integrations: ${facts.integrations.join(', ') || 'none detected'}`,
+    `- Risk areas: ${facts.risky.join(', ') || 'none detected'}`,
+    ''
+  ].join('\n')
+
+  const implementationCompletenessMd = [
+    '# Implementation Completeness',
+    '',
+    'Inventory every included capability. Mark each as real, excluded, or blocked.',
+    '',
+    '## Included surfaces to review',
+    '',
+    '### UI routes',
+    facts.routes.length ? facts.routes.map((x) => `- [ ] ${x} - real behavior / excluded / blocked`).join('\n') : '- none detected',
+    '',
+    '### API routes/endpoints',
+    facts.apis.length ? facts.apis.map((x) => `- [ ] ${x} - real handler contract / excluded / blocked`).join('\n') : '- none detected',
+    '',
+    '### Data and integrations',
+    facts.db.length ? facts.db.map((x) => `- [ ] ${x} - durable behavior reviewed`).join('\n') : '- no data/model files detected',
+    facts.integrations.length ? facts.integrations.map((x) => `- [ ] ${x} - real provider or explicitly excluded`).join('\n') : '- no integrations detected',
+    '',
+    '## No-fake blockers',
+    '',
+    '- Placeholder routes block completion.',
+    '- No-op controls block completion.',
+    '- Skeleton adapters block provider/export claims.',
+    '- Mocks/fixtures are allowed only in test/demo paths.',
+    '- In-memory-only stores block persistence claims.',
+    ''
+  ].join('\n')
+
+  const headToFootQaMd = [
+    '# Head-to-Foot QA',
+    '',
+    '- [ ] Static safety: no secret values copied; env names only.',
+    '- [ ] Contract checks: selected APIs/routes have schemas, error behavior, and side effects documented.',
+    '- [ ] Build/tests: exact commands run or blockers recorded.',
+    '- [ ] Runtime happy path: product/app/feature can be exercised locally when applicable.',
+    '- [ ] Runtime negative paths: invalid input, auth denial, provider failure, and empty states covered where relevant.',
+    '- [ ] Persistence/restart: write, reload/restart, and read when state exists.',
+    '- [ ] Browser QA: Playwright CLI or equivalent click-through when UI exists.',
+    '- [ ] No-fake scan: no placeholders, no-op controls, skeleton adapters, fake success states, or mock-as-product behavior.',
+    '- [ ] Final chat handover: outcome, selected scope, evidence, files, commands, gaps, next direction.',
+    ''
+  ].join('\n')
+
+  const traceabilityMatrixMd = [
+    '# Traceability Matrix',
+    '',
+    '| Requirement | Source evidence | Confidence | Reversal check | QA check | Status |',
+    '|---|---|---|---|---|---|',
+    ...facts.routes.slice(0, 20).map((x) => `| Preserve UI route \`${x}\` | OBSERVED route | high | route exists/rendered | browser/runtime QA | pending |`),
+    ...facts.apis.slice(0, 20).map((x) => `| Preserve API contract \`${x}\` | OBSERVED API | medium | handler/schema test | contract/runtime QA | pending |`),
+    ...facts.integrations.map((x) => `| Preserve ${x} boundary | INFERRED dependency | medium | adapter/exclusion proof | integration/no-network QA | pending |`),
+    '',
+    'Unverified requirements must stay `QUESTION` until confirmed.',
+    ''
+  ].join('\n')
+
+  const submissionChecklistMd = [
+    '# Submission Checklist',
+    '',
+    '- [ ] Scope explicit.',
+    '- [ ] Selected mode recorded: discovery scaffold or selected extraction.',
+    '- [ ] Production-grade selected-scope posture explicit.',
+    '- [ ] Evidence labels used: OBSERVED / INFERRED / QUESTION / OUT_OF_SCOPE.',
+    '- [ ] Required files exist.',
+    '- [ ] `agent-contract.xml` parses.',
+    '- [ ] `manifest.json` parses and required files exist.',
+    '- [ ] Secrets check completed.',
+    '- [ ] No-fake implementation scan completed or blocked.',
+    '- [ ] Runtime/browser QA recorded when UI/runtime proof applies.',
+    '- [ ] Persistence/restart QA recorded when state exists.',
+    '- [ ] Golden mapper evals run when mapper behavior changes.',
+    '- [ ] Final chat handover includes outcome, selected scope, evidence, files, commands, known gaps, and next direction.',
+    ''
+  ].join('\n')
+
+  const readmeMd = [
+    `# ${facts.packageName} Mapped Buildprint`,
+    '',
+    `Mode: ${outputMode}`,
+    '',
+    'Start with `AGENT_EXECUTION_BRIEF.md`, then follow `agent-contract.xml`, `CURRENT_STATE.md`, and `BUILDPRINT.md`.',
+    '',
+    'This package is safe-by-default: no source app mutation, no secret copying, and no external writes unless explicitly selected and validated.',
+    ''
+  ].join('\n')
+
+  const parityClaimsMd = [
+    '# Parity Claims',
+    '',
+    '## Safe wording',
+    '',
+    '- Mapped Buildprint scaffold based on observed repository evidence.',
+    '- Selected-scope implementation guide after human confirmation.',
+    '',
+    '## Unsafe wording',
+    '',
+    '- Do not claim full clone, drop-in replacement, exact behavior parity, provider parity, or production readiness without reversal/runtime evidence.',
+    '',
+    '## Upgrade evidence required',
+    '',
+    '- Selected scope confirmed.',
+    '- Reversal validation passed.',
+    '- Runtime/browser QA passed where applicable.',
+    '- Known gaps listed honestly.',
+    ''
+  ].join('\n')
+
+  const threatModelMd = [
+    '# Threat Model',
+    '',
+    'Generated because sensitive surfaces were detected or may be implied.',
+    '',
+    '## Surfaces',
+    '',
+    mdList(facts.risky),
+    '',
+    '## Required review',
+    '',
+    '- Auth/session ownership.',
+    '- External writes and destructive actions.',
+    '- Secret handling.',
+    '- Provider/API abuse and rate limits.',
+    '- Admin or payment behavior if selected.',
+    ''
+  ].join('\n')
+
+  const dataLifecycleMd = [
+    '# Data Lifecycle',
+    '',
+    'Generated because persistent data/cache/storage surfaces were detected or may be implied.',
+    '',
+    '## Observed data/model files',
+    '',
+    mdList(facts.db),
+    '',
+    '## Required review',
+    '',
+    '- Source of truth.',
+    '- Ownership and deletion.',
+    '- Import/export compatibility.',
+    '- Persistence/restart behavior.',
+    '- Backup/recovery expectations.',
+    ''
+  ].join('\n')
+
+  const observabilityMd = [
+    '# Observability',
+    '',
+    'Generated because deployable/runtime surfaces were detected or may be implied.',
+    '',
+    '## Required signals',
+    '',
+    '- Request/job errors.',
+    '- Provider failures and retries.',
+    '- Auth/admin/security-sensitive events.',
+    '- Persistence failures.',
+    '- Build/test/runtime QA evidence.',
+    ''
+  ].join('\n')
+
+  const architectureViewsMd = [
+    '# Architecture Views',
+    '',
+    'Generated because this repo appears multi-scope or hierarchical.',
+    '',
+    '## Subprojects',
+    '',
+    facts.subprojects.length ? facts.subprojects.map((x) => `- ${x.path} (${x.kind}, ${x.name})`).join('\n') : '- none detected',
+    '',
+    '## Required use',
+    '',
+    '- Split unrelated scopes before extraction.',
+    '- Prefer one smaller complete Buildprint over broad fake coverage.',
+    ''
+  ].join('\n')
+
+  const qualityScorecardMd = [
+    '# Quality Scorecard',
+    '',
+    '- [ ] Evidence-backed claims.',
+    '- [ ] Selected scope is smaller and complete.',
+    '- [ ] Included capabilities are real or excluded.',
+    '- [ ] Edge cases and failure modes are represented.',
+    '- [ ] QA is derived from mapped flows.',
+    '- [ ] No-fake implementation scan passes.',
+    '- [ ] Final chat handover is complete.',
+    ''
+  ].join('\n')
 
   fs.writeFileSync(path.join(out, 'BUILDPRINT.md'), buildprintMd)
   fs.writeFileSync(path.join(out, 'SPEC.md'), specMd)
@@ -920,6 +1332,22 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   fs.writeFileSync(path.join(out, 'TEST_MATRIX.md'), testMatrixMd)
   fs.writeFileSync(path.join(out, 'VALIDATION_TEMPLATE.md'), validationTemplateMd)
   fs.writeFileSync(path.join(out, 'questions.md'), questionsMd)
+  fs.writeFileSync(path.join(out, 'AGENT_EXECUTION_BRIEF.md'), agentExecutionBriefMd)
+  fs.writeFileSync(path.join(out, 'agent-contract.xml'), agentContractXml)
+  fs.writeFileSync(path.join(out, 'CURRENT_STATE.md'), currentStateMd)
+  fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify(manifestJson, null, 2) + '\n')
+  fs.writeFileSync(path.join(out, 'README.md'), readmeMd)
+  fs.writeFileSync(path.join(out, 'QA_PLAN.md'), qaPlanMd)
+  fs.writeFileSync(path.join(out, 'IMPLEMENTATION_COMPLETENESS.md'), implementationCompletenessMd)
+  fs.writeFileSync(path.join(out, 'HEAD_TO_FOOT_QA.md'), headToFootQaMd)
+  fs.writeFileSync(path.join(out, 'TRACEABILITY_MATRIX.md'), traceabilityMatrixMd)
+  fs.writeFileSync(path.join(out, 'SUBMISSION_CHECKLIST.md'), submissionChecklistMd)
+  if (isProductLike) fs.writeFileSync(path.join(out, 'PARITY_CLAIMS.md'), parityClaimsMd)
+  if (needsThreatModel) fs.writeFileSync(path.join(out, 'THREAT_MODEL.md'), threatModelMd)
+  if (needsDataLifecycle) fs.writeFileSync(path.join(out, 'DATA_LIFECYCLE.md'), dataLifecycleMd)
+  if (needsObservability) fs.writeFileSync(path.join(out, 'OBSERVABILITY.md'), observabilityMd)
+  if (needsArchitectureViews) fs.writeFileSync(path.join(out, 'ARCHITECTURE_VIEWS.md'), architectureViewsMd)
+  if (isProductLike) fs.writeFileSync(path.join(out, 'QUALITY_SCORECARD.md'), qualityScorecardMd)
   for (const [file, content] of Object.entries(phaseFiles)) fs.writeFileSync(path.join(out, 'plans', file), content)
 }
 

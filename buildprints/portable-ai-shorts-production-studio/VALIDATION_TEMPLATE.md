@@ -1,36 +1,79 @@
-# Portable AI Shorts Production Studio Validation Report
+# Validation
 
-## Scope
+## Alignment choices
 
-- Target repository/app:
-- Buildprint package:
-- Included scope:
-- Explicitly excluded scope:
-- Production-grade selected scope statement:
+- Stack:
+- Persistence:
+- Provider mode:
+- Sample product fixture:
+- Studio visual style:
+- Publishing handoff target:
+- Defaults used / changed:
+
+## What was built
+
+- Studio UI:
+- API/service layer:
+- Provider adapters:
+- Job runtime:
+- Media pipeline:
+- Gallery:
+- Publish handoff:
+- Reports/artifacts:
 
 ## Commands run
 
 ```txt
-# list exact commands here
+# exact commands here
 ```
 
-## Evidence
+## Test/build result
 
-- Files/routes/components/services implemented or mapped:
-- Tests/checks/builds passed:
-- Browser/API/manual proof, if applicable:
-- Proof/conformance/eval harness result, if applicable:
+- Unit/contract:
+- Production build:
+- Media probe:
+- No-network gate:
+- Secret scan:
+- Claim wording check:
+
+## Browser evidence
+
+- Browser tool/manual method:
+- Happy path result:
+- Negative paths result:
+- Desktop screenshot:
+- Mobile screenshot:
+- Rendered UI evidence parsed/clicked:
+
+## MP4 probe
+
+- File path / URL:
+- ffprobe command:
+- Width:
+- Height:
+- Duration:
+- Nonblank/caption/b-roll evidence:
+
+## Provider mode
+
+- Default provider mode:
+- Live providers used: yes/no
+- If yes, provider/account/date/request IDs/sanitized responses/cost:
 
 ## Acceptance checklist
 
 - [ ] `BUILDPRINT.md` binding scope and non-goals preserved.
-- [ ] `SPEC.md` requirements implemented or explicitly blocked.
+- [ ] Full browser webapp proof implemented; not API-only/gallery-only.
+- [ ] `SPEC.md` behavior requirements implemented or explicitly blocked.
 - [ ] `CONTRACTS.md` interfaces/data boundaries honored.
-- [ ] `TEST_MATRIX.md` checks run or blockers recorded.
+- [ ] Provider adapters are mock/no-network by default.
+- [ ] Job lifecycle and media pipeline gates pass.
+- [ ] Browser happy path and required negative paths pass or blockers are recorded.
+- [ ] Safe/unsafe claims are visible in docs/UI.
 - [ ] No placeholders, no-op controls, skeleton adapters, fake success states, or mock-as-product behavior in included scope.
 - [ ] Known gaps are listed honestly.
 
-## Blockers / gaps
+## Gaps / blockers
 
 - 
 

@@ -1,9 +1,21 @@
 # Acceptance Checks
 
 - [ ] `BUILDPRINT.md` was read first and treated as the authority spine.
-- [ ] Included scope is implemented or mapped end-to-end; excluded scope is explicit.
-- [ ] `SPEC.md` behavior requirements are satisfied or blockers are listed.
-- [ ] `CONTRACTS.md` interfaces, data boundaries, and integration assumptions are honored.
-- [ ] `TEST_MATRIX.md` checks passed or every skipped check has a concrete blocker.
-- [ ] `VALIDATION_TEMPLATE.md` is filled with exact commands, evidence, gaps, and final status.
-- [ ] No placeholder, no-op, skeleton, route-shaped, or mock-as-product implementation is claimed as complete.
+- [ ] `buildprint.json`, `phases.yaml`, `acceptance.yaml`, and `claims.yaml` were read as machine-readable mirrors.
+- [ ] Alignment used `DEFAULT_PRESET.md` or exactly `questions.md`.
+- [ ] Full browser webapp proof exists; API-only proof is not accepted.
+- [ ] Primary UI is a usable AI shorts production studio, not a generic dashboard, raw JSON view, route list, report, or gallery-only page.
+- [ ] Rendered source input, script selection, actor/voice/video configuration, generation progress, review/player, gallery, and publish handoff controls work.
+- [ ] Browser happy path clicked rendered controls and recorded completed desktop/mobile screenshots.
+- [ ] Required negative paths were run or concrete blockers recorded.
+- [ ] Manual-description analysis works without URL.
+- [ ] URL analysis uses scrape/research/analyze/script adapter seams.
+- [ ] Provider adapters are isolated and deterministic mock/no-network by default.
+- [ ] Missing live keys produce structured blocked states, not fake success.
+- [ ] Job lifecycle includes pending/running/success/failure/cancel/retry, logs, provider records, output manifest, and result/error.
+- [ ] Playable MP4 fixture exists, is nonblank, includes captions/b-roll timing evidence, and probes as 1080x1920.
+- [ ] Gallery API/pages show only explicitly consented metadata.
+- [ ] Publish handoff requires consent and records platforms, title/description, schedule, and timezone.
+- [ ] `VALIDATION_TEMPLATE.md` was filled with commands, evidence, screenshots, MP4 probe, provider mode, gaps, and final status.
+- [ ] No placeholder, no-op, skeleton, route-shaped, gallery-only, or mock-as-product implementation is claimed as complete.
+- [ ] No forbidden claims from `claims.yaml` or `PARITY_CLAIMS.md` appear in completion wording.

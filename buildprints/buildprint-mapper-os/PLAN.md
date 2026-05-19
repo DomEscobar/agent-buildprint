@@ -2,6 +2,13 @@
 
 This plan is designed for a coding agent. The agent reads repo files, reasons about architecture, and writes the mapping artifacts. No CLI is required.
 
+## Attention contract
+
+- Discover first, ask later.
+- Use `plans/*.md` as phase-local cards to avoid context rot.
+- Generate agent execution rails for selected extraction, not only summary docs.
+- Finish with a chat handover: outcome, selected scope, evidence, files, commands/evals, gaps, next direction.
+
 ## Phase index
 
 1. `plans/00-safety-boundaries.md` — secrets, source safety, write boundaries.

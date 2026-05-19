@@ -38,6 +38,46 @@
       "required": true
     },
     {
+      "path": "questions.md",
+      "role": "closed-alignment-interview",
+      "required": true
+    },
+    {
+      "path": "PLAN.md",
+      "role": "phase-index",
+      "required": true
+    },
+    {
+      "path": "plans/00-alignment.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/01-domain-persistence.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/02-agent-xml-pipeline.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/03-async-providers.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/04-workbench-ui.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
+      "path": "plans/05-qa-handover.md",
+      "role": "phase-plan",
+      "required": true
+    },
+    {
       "path": "PRODUCT_QUALITY_BAR.md",
       "role": "product-quality-authority",
       "required": true
@@ -91,6 +131,16 @@
       "path": "TRACEABILITY_MATRIX.md",
       "role": "evidence-map",
       "required": true
+    },
+    {
+      "path": "VALIDATION_TEMPLATE.md",
+      "role": "validation-report-template",
+      "required": true
+    },
+    {
+      "path": "checks/acceptance.md",
+      "role": "acceptance-checklist",
+      "required": true
     }
   ],
   "forbiddenDefaults": [
@@ -100,6 +150,9 @@
     "manifest textarea as primary preview UI",
     "empty-state screenshot accepted as UX proof",
     "generic dashboard counted as creative workbench",
+    "broad product strategy questions during alignment",
+    "skipping numbered phase plans",
+    "final response without chat handover",
     "final stitched-video parity claim",
     "drop-in replacement claim",
     "exact Toonflow UI/canvas parity claim"
@@ -114,12 +167,22 @@
   "requiredDetailFiles": [
     "SPEC.md",
     "CONTRACTS.md",
+    "questions.md",
+    "PLAN.md",
+    "plans/00-alignment.md",
+    "plans/01-domain-persistence.md",
+    "plans/02-agent-xml-pipeline.md",
+    "plans/03-async-providers.md",
+    "plans/04-workbench-ui.md",
+    "plans/05-qa-handover.md",
     "PRODUCT_QUALITY_BAR.md",
     "LLM_AGENT_EXECUTION_GUIDE.md",
     "WORKBENCH_UX_SPEC.md",
     "DESIGN_SYSTEM_SPEC.md",
     "VISUAL_FIXTURE_PACK.md",
     "TEST_MATRIX.md",
-    "HEAD_TO_FOOT_QA.md"
+    "HEAD_TO_FOOT_QA.md",
+    "VALIDATION_TEMPLATE.md",
+    "checks/acceptance.md"
   ]
 }

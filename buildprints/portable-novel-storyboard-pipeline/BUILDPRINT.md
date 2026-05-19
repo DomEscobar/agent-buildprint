@@ -12,11 +12,24 @@
 ## LLM Attention Contract
 
 - Creative workbench first; debug evidence secondary.
+- If the user says `Use default storyboard preset`, use `questions.md` defaults and continue. Otherwise ask exactly `questions.md` before implementation.
 - Keep `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md`, and `WORKBENCH_UX_SPEC.md` in active context before UI work.
+- Execute `plans/*.md` in numeric order. Each phase file is a context-window guardrail, not a competing authority.
 - Do not let QA/reporting artifacts dominate the user-facing app.
 - If context is compacted, reread `BUILDPRINT.md`, `PRODUCT_QUALITY_BAR.md`, and `LLM_AGENT_EXECUTION_GUIDE.md` before continuing.
 - Before final reporting, reread `PARITY_CLAIMS.md`, `HEAD_TO_FOOT_QA.md`, and `PRODUCT_QUALITY_BAR.md`.
 - Final response must include a chat handover: what was built, evidence, known gaps, and recommended next direction or "no next step needed".
+
+## Target Shape Constants
+
+```txt
+TARGET_SHAPE = Creative storyboard workbench + deterministic mock pipeline + PortablePreviewManifest
+DEFAULT_PROVIDER_MODE = mock/no-network
+PRIMARY_UI = storyboard thumbnails + timeline lanes + selected-shot inspector
+DEBUG_UI = secondary drawer for task log/raw refs/manifest
+EXPORT_SCOPE = preview manifest only
+FINAL_RESPONSE = chat handover with outcome/evidence/gaps/next direction
+```
 
 ## Binding Implementation Slice
 
@@ -50,14 +63,15 @@ Use the safe wording and forbidden wording in `PARITY_CLAIMS.md` / `claims.yaml`
 
 1. `BUILDPRINT.md` — authority spine, binding slice, phase gates, acceptance gates.
 2. `buildprint.json`, `phases.yaml`, `acceptance.yaml`, `claims.yaml` — machine-readable mirrors for agents/tools.
-3. `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md` — product quality and context-rot guardrails.
-4. `SPEC.md` — user-visible behavior, must/must-not rules, edge cases.
-5. `CONTRACTS.md`, `WEBAPP_TARGET_SPEC.md`, `WORKBENCH_UX_SPEC.md`, `DESIGN_SYSTEM_SPEC.md`, `VISUAL_FIXTURE_PACK.md`, `SYSTEM_MAP.md` — schemas, routes/pages, UX, modules, and data flow.
-6. `LLM_FLOW.md`, `AGENT_PROMPT_PACK.md`, `XML_OUTPUT_CONTRACT.md` — agent stages and output parsing contract.
-7. `ASYNC_JOB_MODEL.md`, `PROVIDER_ADAPTERS.md`, `PREVIEW_COMPOSITION_SPEC.md` — jobs, adapters, and export package.
-8. `TEST_MATRIX.md`, `HEAD_TO_FOOT_QA.md`, `BROWSER_QA_SCENARIOS.md` — required validation gates.
-9. `PARITY_CLAIMS.md`, `TRACEABILITY_MATRIX.md`, `THREAT_MODEL.md`, `OBSERVABILITY.md`, `PORTABILITY.md` — claim boundary, evidence, safety, operations, portability.
-10. `IMPLEMENTATION_ROADMAP.md` and `AGENT_HANDOFF.md` — supporting build order and handoff notes; lower authority than this file.
+3. `questions.md`, `PLAN.md`, `plans/*.md` in numeric order — closed alignment and phase-local execution rails.
+4. `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md` — product quality and context-rot guardrails.
+5. `SPEC.md` — user-visible behavior, must/must-not rules, edge cases.
+6. `CONTRACTS.md`, `WEBAPP_TARGET_SPEC.md`, `WORKBENCH_UX_SPEC.md`, `DESIGN_SYSTEM_SPEC.md`, `VISUAL_FIXTURE_PACK.md`, `SYSTEM_MAP.md` — schemas, routes/pages, UX, modules, and data flow.
+7. `LLM_FLOW.md`, `AGENT_PROMPT_PACK.md`, `XML_OUTPUT_CONTRACT.md` — agent stages and output parsing contract.
+8. `ASYNC_JOB_MODEL.md`, `PROVIDER_ADAPTERS.md`, `PREVIEW_COMPOSITION_SPEC.md` — jobs, adapters, and export package.
+9. `TEST_MATRIX.md`, `HEAD_TO_FOOT_QA.md`, `BROWSER_QA_SCENARIOS.md`, `VALIDATION_TEMPLATE.md`, `checks/acceptance.md` — required validation gates.
+10. `PARITY_CLAIMS.md`, `TRACEABILITY_MATRIX.md`, `THREAT_MODEL.md`, `OBSERVABILITY.md`, `PORTABILITY.md` — claim boundary, evidence, safety, operations, portability.
+11. `IMPLEMENTATION_ROADMAP.md` and `AGENT_HANDOFF.md` — supporting build order and handoff notes; lower authority than this file.
 
 ## Phase Gates
 
@@ -66,6 +80,7 @@ Use the safe wording and forbidden wording in `PARITY_CLAIMS.md` / `claims.yaml`
 Exit only when:
 
 - The implementation target, stack, persistence choice, and mock-provider default are written down.
+- The default storyboard preset is accepted or `questions.md` is answered and confirmed.
 - Safe/unsafe claims are copied into project docs or visible limitations UI.
 - Product-quality target is written down: creative workbench, debug evidence secondary, local fixture visuals for primary preview.
 - The agent confirms the binding slice and non-goals above.

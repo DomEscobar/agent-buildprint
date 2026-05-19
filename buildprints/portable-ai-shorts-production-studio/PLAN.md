@@ -1,30 +1,43 @@
 # Implementation Plan
 
-## Phase 1: Stabilize Contracts
+Follow `BUILDPRINT.md` and `phases.yaml`. This file is a compact build-order aid.
 
-- Define canonical JSON schemas for analysis request/response, script object, generate request/response, job status, gallery metadata, and publish request.
-- Add provider adapter interfaces around Gemini, ElevenLabs, fal.ai, Upload-Post, and S3.
-- Add test doubles for each adapter.
+## Phase 0: Alignment
 
-## Phase 2: Harden Runtime
+- If user says `Use default studio preset`, use `DEFAULT_PRESET.md`.
+- Otherwise ask exactly `questions.md`, summarize choices, and wait for confirmation.
+- Record stack, persistence, provider mode, sample product, visual style, handoff target, and claim boundary.
 
-- Replace in-memory job maps with durable job storage.
-- Persist job logs, provider request IDs, and output asset manifest.
-- Add resumable retries around provider calls and FFmpeg composition.
-- Move API key storage out of client localStorage for hosted deployments.
+## Phase 1: Contracts and Adapters
 
-## Phase 3: Validate Media Pipeline
+- Define canonical schemas from `CONTRACTS.md`.
+- Add deterministic mock/no-network provider adapters from `PROVIDER_ADAPTERS.md`.
+- Add tests for manual/URL analysis, script shape, actor/voice config, publish payload, consent gates, and invalid inputs.
 
-- Add sample fixtures for manual description mode.
-- Add dry-run mode that skips paid providers and uses local fixtures.
-- Test FFmpeg subtitle escaping, b-roll insertion timing, and final output dimensions.
-- Test Remotion render proxy and output URL conversion.
+## Phase 2: Runtime and Jobs
 
-## Phase 4: Publish and Gallery
+- Implement job lifecycle from `ASYNC_JOB_MODEL.md`: pending/running/success/failure/cancel/retry.
+- Persist logs, provider request records, output manifest, result/error.
+- Add restart or explicit local-persistence limitation evidence.
 
-- Validate Upload-Post handoff with a sandbox account.
-- Validate S3 gallery metadata, public URLs, and SEO pages.
-- Add moderation/consent controls for uploaded actor photos and generated actor use.
+## Phase 3: Media Pipeline
+
+- Implement fixture media path from `MEDIA_PIPELINE_SPEC.md`.
+- Produce a playable 1080x1920 MP4 with captions and b-roll timing/visual changes.
+- Test subtitle escaping, ffprobe dimensions, nonblank output, and output URL conversion.
+
+## Phase 4: Browser Studio
+
+- Build the studio UI from `WEBAPP_TARGET_SPEC.md` and `WORKBENCH_UX_SPEC.md`.
+- Ensure source input, scripts, configuration, generation progress, review/player, gallery, and publish handoff all work from rendered controls.
+- Keep logs/raw refs/manifest in secondary debug surfaces.
+
+## Phase 5: Validation and Claims
+
+- Run unit/contract/media/browser tests and production build.
+- Capture completed desktop/mobile screenshots.
+- Fill validation report from `VALIDATION_TEMPLATE.md`.
+- Run claim wording and secret checks.
 
 ## Source Anchors
 

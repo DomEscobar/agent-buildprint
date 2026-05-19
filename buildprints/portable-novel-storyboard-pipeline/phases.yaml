@@ -5,23 +5,30 @@ phases:
     title: Alignment
     inputs:
       - BUILDPRINT.md
+      - questions.md
+      - PLAN.md
+      - plans/00-alignment.md
       - PRODUCT_QUALITY_BAR.md
       - LLM_AGENT_EXECUTION_GUIDE.md
       - claims.yaml
       - PARITY_CLAIMS.md
     must_produce:
       - written implementation target, stack, persistence choice, and provider mode
+      - default storyboard preset accepted or closed alignment questions answered and confirmed
       - copied safe/unsafe claim boundary in implementation docs or limitations UI
       - product-quality target recorded as creative workbench first and debug evidence secondary
     must_pass:
       - binding slice and non-goals acknowledged in implementation report
+      - alignment summary recorded in validation report
     forbidden:
       - expanding scope before the binding implementation slice is working
       - claiming final video, provider, Electron, or exact UI parity
+      - asking broad product strategy questions
 
   - id: 01-domain-persistence
     title: Domain and Persistence
     inputs:
+      - plans/01-domain-persistence.md
       - SPEC.md
       - CONTRACTS.md
       - PREVIEW_COMPOSITION_SPEC.md
@@ -38,6 +45,7 @@ phases:
   - id: 02-agent-xml-pipeline
     title: Agent and XML Pipeline
     inputs:
+      - plans/02-agent-xml-pipeline.md
       - LLM_FLOW.md
       - AGENT_PROMPT_PACK.md
       - XML_OUTPUT_CONTRACT.md
@@ -56,6 +64,7 @@ phases:
   - id: 03-async-providers
     title: Async Jobs and Providers
     inputs:
+      - plans/03-async-providers.md
       - ASYNC_JOB_MODEL.md
       - PROVIDER_ADAPTERS.md
       - TEST_MATRIX.md
@@ -74,6 +83,7 @@ phases:
   - id: 04-webapp-workbench
     title: Webapp Workbench
     inputs:
+      - plans/04-workbench-ui.md
       - WEBAPP_TARGET_SPEC.md
       - UI_CANVAS_MAP.md
       - PRODUCT_QUALITY_BAR.md
@@ -105,6 +115,7 @@ phases:
   - id: 05-hardening-claims
     title: Hardening and Claims
     inputs:
+      - plans/05-qa-handover.md
       - PRODUCT_QUALITY_BAR.md
       - claims.yaml
       - PARITY_CLAIMS.md
@@ -124,6 +135,7 @@ phases:
       - runtime negative paths or documented gaps
       - completed screenshots show storyboard/timeline/inspector workbench state
       - chat handover states outcome, evidence, gaps, and next direction
+      - validation template and acceptance checklist completed
     forbidden:
       - publishing unverified parity upgrades
       - hiding known gaps from completion report

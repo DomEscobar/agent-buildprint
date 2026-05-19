@@ -1,5 +1,9 @@
 # Mapper OS Questions
 
+## Attention anchor
+
+Discover first, ask later. Ask before discovery only if safety, source-read permission, or output-write boundary is unclear. After soft discovery, ask only closed decisions that materially change selected scope, proof depth, or no-fake implementation boundaries.
+
 The mapper should not ask a long questionnaire before discovery. Use safe defaults, run soft discovery, then ask contextual questions. After discovery, ask only 3-5 required decisions; rows 6-7 below are appendix decisions used only when needed to unblock implementation.
 
 ## Minimal preflight
@@ -27,3 +31,7 @@ Ask only if unclear or unsafe:
 ## Appendix — ask only if touched
 
 Add subsystem-specific questions only after that subsystem is observed or selected.
+
+## Final handover requirement
+
+The final chat handover must include outcome, selected scope, evidence inspected, files generated, commands/evals run, known gaps, and recommended next direction.

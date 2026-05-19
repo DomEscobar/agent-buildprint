@@ -2,6 +2,11 @@ schema: agent-buildprint/acceptance.v1
 canonical_start: BUILDPRINT.md
 acceptance:
   default_provider_mode: mock-no-network
+  alignment:
+    default_phrase: Use default storyboard preset
+    questions_file: questions.md
+    require_confirmation_unless_default: true
+    forbid_broad_product_strategy_questions: true
   required_commands:
     - name: unit_and_contract_tests
       command: npm test
@@ -57,6 +62,8 @@ acceptance:
     - visual fixture asset inventory
     - product-quality QA notes
     - chat handover summary
+    - filled validation report from VALIDATION_TEMPLATE.md
+    - completed checks/acceptance.md
     - test/build command summary
     - exported manifest sample
     - explicit remaining gaps
@@ -69,6 +76,7 @@ acceptance:
     - no empty-state screenshot accepted as UX proof
     - limitations visible but not dominant in primary workbench
     - final chat handover includes outcome, evidence, gaps, and recommended next direction
+    - numbered phase plans followed or blockers recorded
   optional_live_provider_gate:
     required: false
     env:

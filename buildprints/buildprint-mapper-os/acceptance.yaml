@@ -1,0 +1,40 @@
+schema: agent-buildprint/acceptance.v1
+canonical_start: BUILDPRINT.md
+acceptance:
+  safety:
+    source_mutation: forbidden
+    secret_values: never_copy
+    env_var_names: allowed
+  required_outputs:
+    discovery:
+      - SYSTEM_MAP.md
+      - BUILDPRINT_CANDIDATES.md
+      - questions.md
+    selected_extraction:
+      - AGENT_EXECUTION_BRIEF.md
+      - agent-contract.xml
+      - CURRENT_STATE.md
+      - manifest.json
+      - BUILDPRINT.md
+      - SPEC.md
+      - PLAN.md
+      - CONTRACTS.md
+      - TEST_MATRIX.md
+      - QA_PLAN.md
+      - IMPLEMENTATION_COMPLETENESS.md
+      - HEAD_TO_FOOT_QA.md
+      - TRACEABILITY_MATRIX.md
+      - VALIDATION_TEMPLATE.md
+      - SUBMISSION_CHECKLIST.md
+  required_commands:
+    - name: mapper_golden_eval
+      command: node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js
+      required_when: mapper behavior changes
+  static_gates:
+    - discover first and ask later
+    - no broad pre-discovery questionnaire
+    - observed/inferred/question/out-of-scope labels used
+    - selected scope explicit before final extraction
+    - generated output includes agent execution rails
+    - no mocks or fixtures counted as product implementation
+    - final chat handover includes outcome, selected scope, evidence, files, commands/evals, gaps, and next direction

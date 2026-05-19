@@ -1,0 +1,47 @@
+schema: agent-buildprint/claims.v1
+safe_claims:
+  - clean-room portable AI shorts studio webapp proof
+  - workflow-shape proof with deterministic mock/no-network providers
+  - contract-parity proof for documented local API/service shapes
+  - local fixture media composition proof when ffprobe evidence is recorded
+  - consent-gated gallery and social handoff payload proof
+adapter_claims_only:
+  - Gemini research/analysis/script generation
+  - ElevenLabs voice generation and voice list
+  - fal.ai/Flux/Hailuo/Kling/VEED media generation
+  - Upload-Post social handoff
+  - S3 gallery/storage behavior
+  - scraping and yt-dlp URL ingestion
+forbidden_claims:
+  - OpenShorts clone
+  - drop-in replacement
+  - provider/API parity implementation
+  - rendering-quality parity proof
+  - social-platform publishing parity proof
+  - direct official TikTok API publishing
+  - direct official Instagram API publishing
+  - direct official YouTube API publishing
+  - production-ready hosted SaaS
+  - public gallery safety without privacy gates
+  - live provider success without sandbox evidence
+claim_upgrades_require:
+  live_provider_path:
+    - approved credentials scope
+    - sandbox account or target
+    - request IDs
+    - sanitized responses
+    - cost/date evidence
+    - mock/no-network tests still passing
+  production_readiness:
+    - server-side key handling
+    - URL egress policy
+    - durable job storage
+    - durable logs
+    - restart recovery tests
+    - artifact access control
+    - consent and moderation records
+  social_platform_handoff:
+    - Upload-Post sandbox validation
+    - selected platform payload evidence
+    - manual approval gate evidence
+    - schedule/timezone evidence

@@ -1,0 +1,19 @@
+schema: agent-buildprint/claims.v1
+safe_claims:
+  - "Maps an existing repository into scoped, evidence-backed Buildprint candidates."
+  - "Produces agent-first execution rails for selected Buildprint extraction."
+  - "Uses safe defaults: no source mutation, no secret value copying, no invented validation."
+  - "Requires clean-room reversal and QA evidence before stronger implementation claims."
+unsafe_claims:
+  - "Automatically proves full behavioral parity."
+  - "Turns any repository into a production-ready app without human scope decisions."
+  - "Copies source app secrets or private production data."
+  - "Counts mocks, fixtures, placeholders, or no-op controls as product implementation."
+  - "Claims validation passed without commands or evidence."
+upgrade_evidence:
+  - selected scope and fidelity target confirmed
+  - generated manifest required files exist
+  - mapper golden evals pass when mapper behavior changes
+  - clean-room reversal attempted
+  - runtime/browser/persistence QA run when applicable
+  - final chat handover records evidence, gaps, and next direction

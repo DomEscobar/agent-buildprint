@@ -1,5 +1,14 @@
 # Buildprint Mapper OS
 
+## LLM Attention Contract
+
+- Discover first, ask later. Ask before discovery only when safety or read/export boundaries are unclear.
+- Smaller complete scope beats broad fake scope.
+- Every important claim needs an `OBSERVED`, `INFERRED`, `QUESTION`, or `OUT_OF_SCOPE` label.
+- Generated mapper outputs must include agent execution rails: `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, `manifest.json`, QA/no-fake files, traceability, and submission checklist.
+- Do not treat `agb map` discovery output as final selected extraction unless a candidate/scope is confirmed.
+- Final response must include a chat handover: outcome, selected scope, evidence inspected, files generated, commands/evals run, known gaps, and recommended next direction.
+
 ## Agent Operating Contract
 
 Buildprint Mapper OS is a coding-agent process for turning an existing software project into a scoped, evidence-backed Agent Buildprint package.
@@ -45,17 +54,15 @@ Excluded:
 ## Required Read Order
 
 1. `BUILDPRINT.md`
-2. `README.md`
-3. `PLAN.md`
-4. `SPEC.md`
-5. `CONTRACTS.md`
-6. `TEST_MATRIX.md`
-7. `policies/safety.md`
-8. `policies/quality.md`
-9. `policies/questions.md`
-10. `prompts/discover.md`
-11. `prompts/extract-selected.md`
-12. Required templates under `templates/` for the selected output mode
+2. `buildprint.json`, `phases.yaml`, `acceptance.yaml`, `claims.yaml` as machine-readable mirrors.
+3. `README.md`
+4. `PLAN.md`
+5. `questions.md`, `policies/questions.md`
+6. `policies/safety.md`, `policies/quality.md`
+7. `plans/*.md` in numeric order for phase-local execution.
+8. `SPEC.md`, `CONTRACTS.md`, `TEST_MATRIX.md`, `VALIDATION_TEMPLATE.md`
+9. `prompts/discover.md`, `prompts/extract-selected.md`
+10. Required templates under `templates/` for the selected output mode
 
 ## Phase Gates
 
@@ -83,7 +90,8 @@ A generated Buildprint package is publishable only when:
 - product/browser QA status is recorded when a runnable proof exists;
 - safe and unsafe claims are listed;
 - commands run and commands not run are both recorded;
-- final validation status is honest.
+- final validation status is honest;
+- final chat handover states outcome, selected scope, evidence, generated files, commands/evals, known gaps, and next direction.
 
 ## Purpose
 

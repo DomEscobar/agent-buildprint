@@ -1,0 +1,81 @@
+schema: agent-buildprint/acceptance.v1
+canonical_start: BUILDPRINT.md
+acceptance:
+  default_provider_mode: mock-no-network
+  default_target: full-webapp-proof
+  required_commands:
+    - name: unit_contract_tests
+      command: npm test or equivalent
+      evidence: pass/fail counts and command output summary
+    - name: production_build
+      command: npm run build or equivalent
+      evidence: build summary and generated artifact note
+    - name: media_probe
+      command: ffprobe generated fixture MP4
+      evidence: width=1080 height=1920 and playable file path
+    - name: no_network_gate
+      command: implementation-specific no-network/default mock check
+      evidence: no live provider calls during default tests
+  required_runtime:
+    browser_happy_path:
+      required: true
+      source: HEAD_TO_FOOT_QA.md
+      must_click_rendered_controls: true
+      must_parse_evidence_from_rendered_ui: true
+      screenshots_required:
+        - completed-state desktop studio
+        - completed-state mobile studio
+      must_render:
+        - product URL/manual input
+        - generated product analysis
+        - at least two script cards
+        - voice and actor controls
+        - narration edit control
+        - generation progress/status logs
+        - playable 1080x1920 result player
+        - gallery consent control
+        - publish handoff consent control
+        - limitations/non-claims visible but secondary
+      forbidden_primary_surfaces:
+        - raw JSON or manifest textarea
+        - route list
+        - task log
+        - generic admin dashboard
+        - gallery-only page
+        - empty-state screenshot
+    negative_paths:
+      required: true
+      source: BROWSER_QA_SCENARIOS.md
+      scenarios:
+        - missing provider key blocks live mode and mock mode remains explicit
+        - invalid product URL shows failure without crashing workflow
+        - malformed script/provider output is rejected without corrupting prior state
+        - provider failure records failed state and retry can recover
+        - generation cancel prevents success artifact creation
+        - gallery page remains empty/private without explicit consent
+        - publish handoff refuses missing consent
+  required_artifacts:
+    - VALIDATION.md or validation report
+    - build/test command summary
+    - browser runtime report
+    - completed desktop screenshot
+    - completed mobile screenshot
+    - MP4 probe output
+    - provider mode evidence
+    - exported/output manifest sample
+    - explicit remaining gaps
+  static_gates:
+    - no provider secret values in artifacts
+    - no live network calls in default tests
+    - safe/unsafe claims visible in docs or UI
+    - no placeholder/no-op controls counted as implemented
+    - no API-only proof accepted
+    - no gallery-only HTML accepted
+    - no fake provider success accepted
+  optional_live_provider_gate:
+    required: false
+    rules:
+      - credentials must be approved before use
+      - provider request IDs and sanitized responses must be recorded
+      - costs and sandbox account/date must be recorded
+      - mock/no-network tests must still pass without credentials

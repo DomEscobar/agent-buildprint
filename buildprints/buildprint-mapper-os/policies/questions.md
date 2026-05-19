@@ -2,6 +2,10 @@
 
 UX rule: ask as little as possible before understanding the repo. The mapper should feel agentic, not like an onboarding form.
 
+## Attention anchor
+
+Discover first, ask later. Before discovery, ask only if safety or read/export boundaries are unclear. After discovery, ask one blocking decision at a time and keep non-blocking unknowns in `questions.md`.
+
 ## Principle
 
 Discover softly first. Ask sharp questions later.
@@ -98,4 +102,5 @@ Avoid:
 - asking about every possible subsystem,
 - generic “what should this do?” questions when source evidence exists,
 - asking multiple blocking questions in one chat turn,
-- using questions to avoid making reasonable safe assumptions.
+- using questions to avoid making reasonable safe assumptions,
+- ending without a chat handover that states outcome, selected scope, evidence, generated files, commands/evals, known gaps, and recommended next direction.

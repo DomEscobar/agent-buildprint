@@ -1,33 +1,33 @@
-# Phase 02 — System map
+# Phase 02 - System Map
 
-Group facts into architecture zones:
+## Goal
 
-- UI/frontend,
-- backend/API,
-- auth/identity,
-- billing/payments,
-- admin/internal tools,
-- AI/agent workflows,
-- data layer,
-- jobs/workers,
-- integrations,
-- observability/deploy.
+Turn census facts into an evidence-backed architecture map.
 
-Mark confidence per zone and list evidence paths.
+## Keep in context
 
+- `SPEC.md`
+- `CONTRACTS.md`
+- `policies/quality.md`
 
-## Precision requirements
+## Steps
 
-For each architecture zone, include:
+- Map architecture zones, data flows, state/lifecycle behavior, integrations, side effects, auth/security boundaries, and tests.
+- Capture edge cases and failure modes where observed.
+- Add confidence labels for each major claim.
+- Keep product/business intent questions separate from observed implementation facts.
 
-- responsibilities,
-- entrypoints,
-- owned state/data,
-- incoming/outgoing dependencies,
-- side effects,
-- invariants,
-- edge cases/failure modes,
-- tests/checks observed,
-- confidence.
+## Do not
 
-For product flows, write the flow as a lifecycle/state machine, not a prose summary. Include cancellation, retry, invalid input, permission denial, persistence failure, and offline/provider-failure edges when relevant.
+- Present guesses as facts.
+- Treat legacy or experimental code as desired architecture without review.
+- Hide low-confidence areas.
+
+## Exit criteria
+
+- `SYSTEM_MAP.md` has zones, flows, risks, unknowns, and evidence labels.
+- Claims that need human review are marked `QUESTION`.
+
+## Validation evidence
+
+- Traceability from critical claims to source evidence or explicit questions.

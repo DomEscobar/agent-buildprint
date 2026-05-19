@@ -6,14 +6,18 @@
 
 ## Phase routing
 
-- Use `IMPLEMENTATION_ROADMAP.md` as the detailed roadmap after `BUILDPRINT.md`.
+- Resolve `questions.md` first: use `Use default storyboard preset` or ask the closed questions and wait for confirmation.
+- Execute `plans/*.md` in numeric order. These phase files keep each coding pass small enough for LLM context windows.
+- Use `IMPLEMENTATION_ROADMAP.md` only as a lower-authority sequencing aid after phase files.
 - `phases.yaml` is a machine-readable mirror; `BUILDPRINT.md` remains authoritative.
 
 ## Completion order
 
 1. Read `BUILDPRINT.md` first and confirm the binding scope/non-goals.
-2. Read `SPEC.md` and `CONTRACTS.md` before implementation.
-3. Execute the package-specific phase gates.
-4. Run the checks in `TEST_MATRIX.md`.
-5. Complete `VALIDATION_TEMPLATE.md` with commands, evidence, gaps, and blockers.
-6. Pass `checks/acceptance.md` before claiming completion.
+2. Resolve `questions.md` or record default storyboard preset.
+3. Execute `plans/00-alignment.md` through `plans/05-qa-handover.md`.
+4. Read only the phase-relevant detail docs listed in each plan file.
+5. Run the checks in `TEST_MATRIX.md`.
+6. Complete `VALIDATION_TEMPLATE.md` with commands, evidence, gaps, blockers, screenshots, manifest sample, and chat handover summary.
+7. Pass `checks/acceptance.md` before claiming completion.
+8. Finish with the final chat handover.

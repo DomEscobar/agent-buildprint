@@ -3,7 +3,9 @@
 - [ ] Scope is explicit.
 - [ ] Fidelity/parity depth is explicit.
 - [ ] Production-grade selected-scope posture is explicit.
+- [ ] Mapper output is labeled discovery scaffold unless a candidate/scope was selected.
 - [ ] `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, and `manifest.json` exist.
+- [ ] `QA_PLAN.md`, `IMPLEMENTATION_COMPLETENESS.md`, `HEAD_TO_FOOT_QA.md`, `TRACEABILITY_MATRIX.md`, and `SUBMISSION_CHECKLIST.md` exist for selected product/app/feature scopes.
 - [ ] `agent-contract.xml` parses as XML.
 - [ ] `manifest.json` parses as JSON and required files exist.
 - [ ] `IMPLEMENTATION_COMPLETENESS.md` exists for product/app/feature scopes.
@@ -22,3 +24,4 @@
 - [ ] Human review questions are present.
 - [ ] Submission checklist exists.
 - [ ] Golden mapper evals pass against stripe-saas, malicious-secrets, admin-dashboard, large-monorepo, and route-patterns fixtures.
+- [ ] Final chat handover states outcome, selected scope, evidence inspected, files generated, commands/evals run, known gaps, and recommended next direction.

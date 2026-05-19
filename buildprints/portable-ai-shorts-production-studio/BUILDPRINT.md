@@ -2,90 +2,176 @@
 
 ## Agent Operating Contract
 
-Build a portable AI Shorts production studio that creates vertical UGC-style marketing video drafts from a product URL or a manual product description.
+This file is the canonical authority spine for the Buildprint. Supporting files add contracts, UX rules, validation gates, source evidence, and machine-readable mirrors; they do not override this file.
 
-`BUILDPRINT.md` is the canonical authority. Supporting files provide contracts, source evidence, QA, threat modeling, and traceability; they do not override this file.
+Build a stack-flexible, product-grade webapp proof for an AI shorts production studio. The studio creates vertical UGC-style marketing video drafts from either a product URL or a manual product/business description.
 
-The implementation must be honest about provider and deployment boundaries. Generated videos are drafts until durability, key handling, consent, privacy, egress, and provider validation gates are satisfied.
+Default acceptance is a full webapp proof, not an API-only harness. Agents must deliver a usable browser studio with deterministic mock/no-network providers by default, a pollable generation workflow, a playable 1080x1920 MP4 fixture output, gated gallery/publish surfaces, validation reports, screenshots, and explicit claim boundaries.
+
+Generated videos are draft artifacts until durability, key handling, consent, privacy, egress, provider validation, and platform handoff gates are satisfied.
+
+## Required Constants
+
+```txt
+TARGET_SHAPE = full browser AI shorts production studio proof
+DEFAULT_PROVIDER_MODE = deterministic mock/no-network
+DEFAULT_ACCEPTANCE = real browser webapp + local playable 1080x1920 MP4 fixture + validation evidence
+STACK_POLICY = stack-flexible; behavior and evidence are mandatory
+PRIMARY_UI = studio workflow first; debug/JSON/reporting secondary
+LIVE_PROVIDER_POLICY = optional, env-gated, never default acceptance
+PUBLISHING_DEFAULT = handoff/mock/manual approval; never auto-publish by default
+ALIGNMENT = ask questions.md only unless user says "Use default studio preset"
+```
+
+## LLM Attention Contract
+
+- Keep "usable AI shorts production studio" in active context. Do not drift into a backend-only compliance proof.
+- The first useful screen must be the production workflow, not a report, raw manifest, route list, or debug dashboard.
+- Debug evidence, raw provider refs, logs, and manifests are required but secondary.
+- If context is compacted, reread `BUILDPRINT.md`, `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md`, `WEBAPP_TARGET_SPEC.md`, and `claims.yaml` before continuing.
+- Before final reporting, reread `HEAD_TO_FOOT_QA.md`, `BROWSER_QA_SCENARIOS.md`, `VALIDATION_TEMPLATE.md`, and `PARITY_CLAIMS.md`.
+- Every included route, button, job state, adapter, and visible workflow must work end-to-end or be visibly disabled/blocked with an honest reason.
 
 ## Binding Implementation Slice
 
-The binding slice covers:
+Build exactly this first:
 
-1. Product URL or manual product/business description input.
-2. Product-page scraping and optional Gemini web research.
-3. Structured product analysis and viral script generation.
-4. User selection of voice, actor image, video mode, and narration edits.
-5. Actor image generation or reuse, voiceover generation, and talking-head/lipsync generation through provider adapters.
-6. B-roll generation, audio-derived subtitles, FFmpeg composition, and optional Remotion post-processing.
-7. Local video result storage and status polling.
-8. Gallery metadata/page generation only behind explicit privacy and publication gates.
-9. Upload-Post handoff only after provider, consent, and platform validation gates pass.
-
-Provider surfaces are adapters unless validated with credentials, sandbox evidence, and recorded request/response results: Gemini, ElevenLabs, fal.ai/Flux/Hailuo/Kling/VEED, Upload-Post, S3, scraping, and yt-dlp.
+1. Alignment choices: use `DEFAULT_PRESET.md` when the user says `Use default studio preset`; otherwise ask exactly `questions.md` and record the answers.
+2. Webapp shell: a browser-accessible studio with source input, analysis/scripts, configuration, generation progress, review/player, gallery, and publish handoff surfaces.
+3. Product input: accept product URL or manual description. Manual-description mode must work without URL input.
+4. URL path: execute scrape, optional web research, analysis, and script generation through adapter seams with deterministic mock fixtures by default.
+5. Script workflow: produce structured product analysis and at least two selectable UGC script drafts; scripts must contain five timed segments and b-roll requirements.
+6. Configuration workflow: user can select/edit script, voice, actor source/image, narration text, video mode, and consent/gating controls.
+7. Provider adapters: Gemini/research, ElevenLabs/voice, fal.ai/Flux/Hailuo/Kling/VEED media, Upload-Post, S3, scraping, and yt-dlp are isolated behind adapter contracts. Tests use deterministic mocks and make no live network calls.
+8. Job lifecycle: generation returns a pollable `job_id`; status exposes pending/running/success/failure/cancel/retry, ordered logs, provider request records, output manifest, and error reasons.
+9. Media pipeline: deterministic fixture pipeline creates a playable local vertical MP4 that probes as 1080x1920, includes nonblank visual content, subtitles/caption layer, b-roll timing markers, and escaped provider text.
+10. Gallery: metadata/API and `/gallery` + `/video/{video_id}` pages render only after explicit publication/gallery consent. Gallery is private by default.
+11. Publish handoff: Upload-Post/social payload construction is available only after explicit consent and validation gates; default behavior is mock/manual handoff, not platform publishing.
+12. Browser QA: real browser happy path clicks rendered controls, observes completed state, parses output evidence from rendered UI, and captures desktop/mobile screenshots.
+13. Reports: implementation records validation, build/test summary, browser/runtime report, screenshot paths, MP4 probe evidence, provider mode, limitations, and remaining gaps.
 
 ## Non-Goals / Unsafe Claims
 
-Do not claim:
+Do not build or claim as included behavior:
 
-- publish-ready production behavior without durable job storage, durable job logs, provider request IDs, restart recovery tests, server-side key handling, URL egress policy, consent controls, gallery privacy controls, and provider validation evidence;
-- direct official TikTok, Instagram, or YouTube API publishing;
-- provider availability, moderation compliance, output quality, response schema stability, or cost stability;
-- public gallery safety without private-by-default storage and explicit publish consent;
-- multi-tenant hosted SaaS security while provider keys remain browser-managed;
-- commercial product equivalence.
+- OpenShorts clone, drop-in replacement, commercial equivalence, or exact UI/API/provider parity.
+- API-only proof, route-shaped mocks, gallery-only HTML, empty dashboard, raw JSON/manifest-first UI, or debug report as the primary product.
+- Fake provider success, placeholder/no-op controls, in-memory-only durability claimed as restart-safe, or mock behavior claimed as live provider behavior.
+- Publish-ready production behavior without durable storage, durable logs, provider request IDs, restart recovery tests, server-side key handling, URL egress policy, consent controls, gallery privacy controls, and provider validation evidence.
+- Direct official TikTok, Instagram, or YouTube API publishing.
+- Provider availability, moderation compliance, output quality, response schema stability, or cost stability.
+- Public gallery safety without private-by-default storage, access controls, and explicit publish consent.
+- Multi-tenant hosted SaaS security while provider keys remain browser-managed.
 
-Temporary in-process job maps are allowed only for local proof runs and must not be described as restart-safe storage.
+Temporary in-process state is allowed only for clearly labeled local proof mode and must not be described as restart-safe durability.
 
 ## Required Read Order
 
 1. `BUILDPRINT.md`
-2. `SPEC.md`
-3. `CONTRACTS.md`
-4. `SYSTEM_MAP.md`
-5. `THREAT_MODEL.md`
-6. `TEST_MATRIX.md`
-7. `QA_PLAN.md`
-8. `TRACEABILITY_MATRIX.md`
-9. `SOURCE_TRACE.md`
+2. `buildprint.json`, `phases.yaml`, `acceptance.yaml`, `claims.yaml`
+3. `DEFAULT_PRESET.md`, `questions.md`
+4. `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md`
+5. `SPEC.md`
+6. `CONTRACTS.md`, `PROVIDER_ADAPTERS.md`, `ASYNC_JOB_MODEL.md`, `MEDIA_PIPELINE_SPEC.md`
+7. `WEBAPP_TARGET_SPEC.md`, `WORKBENCH_UX_SPEC.md`
+8. `SYSTEM_MAP.md`, `THREAT_MODEL.md`
+9. `TEST_MATRIX.md`, `QA_PLAN.md`, `HEAD_TO_FOOT_QA.md`, `BROWSER_QA_SCENARIOS.md`
+10. `TRACEABILITY_MATRIX.md`, `SOURCE_TRACE.md`, `PARITY_CLAIMS.md`
+11. `PLAN.md`, `checks/acceptance.md`, `VALIDATION_TEMPLATE.md`
 
 ## Phase Gates
 
-1. Contract stabilization: request/response schemas for analysis, scripts, generation, job status, gallery metadata, and publish handoff are defined.
-2. Provider adapter boundaries: Gemini, ElevenLabs, fal.ai, Upload-Post, and S3 calls are isolated behind explicit adapter contracts with test doubles.
-3. Runtime durability: jobs, logs, provider request IDs, output manifests, and retry state survive backend restart before any production claim.
-4. Media validation: FFmpeg subtitle escaping, b-roll timing, vertical dimensions, Remotion proxy behavior, and output URL conversion are tested with fixtures.
-5. Privacy and consent: uploaded actor photos, generated likenesses, gallery exposure, URL scraping/downloading, and publish handoff require explicit controls.
-6. External validation: paid/provider/platform behavior is tested only with approved credentials, sandbox targets, and recorded evidence.
+### Phase 0 - Alignment
+
+Exit only when:
+
+- Stack, persistence mode, provider mode, sample product, visual style, and publish handoff target are recorded.
+- Safe/unsafe claims are copied into docs or visible limitations UI.
+- The agent confirms full webapp proof is the target and API-only proof cannot pass.
+
+### Phase 1 - Contracts and Domain
+
+Exit only when:
+
+- Canonical schemas exist for analysis, scripts, actor options/upload, voices, generation request, job status/logs, output manifest, gallery metadata, publish handoff, and provider request records.
+- Tests validate happy/invalid request shapes and non-claim wording.
+- Provider interfaces and deterministic mock adapters are defined before orchestration depends on them.
+
+### Phase 2 - Runtime and Jobs
+
+Exit only when:
+
+- Job lifecycle supports pending, running, success, failure, cancel, retry, idempotent retry owner behavior, ordered logs, error reasons, output manifest, and provider request records.
+- Chosen local persistence survives app restart or is explicitly labeled temporary proof storage.
+- No-network default is enforced in tests.
+
+### Phase 3 - Media Pipeline
+
+Exit only when:
+
+- Fixture audio/subtitles/b-roll/composition path creates playable 1080x1920 MP4.
+- Tests prove subtitle escaping, b-roll timing, nonblank output, output URL conversion, and ffprobe dimensions.
+- Optional Remotion service, if implemented, validates schema and output path behavior.
+
+### Phase 4 - Webapp Studio
+
+Exit only when:
+
+- Browser studio implements source input, analysis/scripts, configuration, generation progress, review/player, gallery, and publish handoff workflows.
+- Primary UI satisfies `PRODUCT_QUALITY_BAR.md`: it reads as a production studio, not a debug dashboard.
+- No included button/control is a no-op unless visibly disabled with an honest reason.
+- Real browser happy path and negative path scenarios pass or blockers are recorded.
+
+### Phase 5 - Validation and Claims
+
+Exit only when:
+
+- Unit/integration/media/browser tests and production build pass.
+- Completed-state desktop and mobile screenshots show a populated studio workflow, video player, status/log affordance, and limitations/non-claims.
+- `VALIDATION.md` or equivalent report records commands, evidence, screenshot paths, MP4 probe, provider mode, gaps, and final status.
+- Claim wording check confirms safe claims only.
 
 ## Acceptance Gates
 
-- Manual-description analysis returns structured product analysis and scripts without requiring URL input.
-- URL analysis executes scrape, optional web research, analysis, and script generation through adapter seams.
-- Video generation returns a pollable `job_id`, status logs, and a final result containing playable vertical MP4 metadata.
-- The composed MP4 is playable and reports 1080x1920 for acceptance fixtures.
-- Status and logs survive restart before production readiness is claimed.
-- Social handoff payload matches selected platforms, title/description, schedule, and timezone.
-- Gallery pages render valid HTML and metadata only after explicit publication consent.
-- Provider sandbox results are recorded before claiming a live provider path works.
+The build is accepted only when all are true:
+
+| Gate | Required evidence |
+|---|---|
+| Full webapp proof | Browser-accessible studio with rendered controls for source input, scripts, config, generation, review, gallery, and handoff |
+| Manual analysis | Manual description returns structured analysis and scripts without URL |
+| URL analysis | URL path uses scrape/research/analyze/script adapters with deterministic fixtures by default |
+| Script schema | At least two selectable scripts; each has five timed segments and b-roll requirements |
+| Provider seams | Gemini, ElevenLabs, fal.ai/media, Upload-Post, S3, scraping/yt-dlp surfaces are isolated adapters with mocks |
+| Job lifecycle | Pollable job status includes state, logs, provider records, output manifest, result/error, cancel, and retry semantics |
+| Media fixture | Playable MP4 exists, probes as 1080x1920, is nonblank, includes subtitles/caption layer and b-roll timing evidence |
+| Gallery privacy | Gallery API/pages render only consented metadata; private-by-default behavior is tested |
+| Publish handoff | Payload matches selected platforms, title/description, schedule, timezone, and consent; no default auto-publish |
+| Browser QA | Real browser happy path clicks rendered controls and captures completed desktop/mobile screenshots |
+| Negative paths | Missing keys, provider failure, invalid URL, invalid script/provider output, gallery without consent, and publish without consent show visible failure states |
+| Build/tests | Unit/contract/media/browser checks and production build pass or concrete blockers are recorded |
+| Claims | Safe/non-claim wording visible in UI/docs; forbidden wording absent from completion claims |
+| Validation | Final report records commands, evidence, screenshots, MP4 probe, provider mode, gaps, and status |
 
 ## Purpose
 
-This Buildprint turns the OpenShorts AI Shorts workflow into a clean, portable architecture contract. It preserves the useful route, UI, provider, composition, and deployment evidence while requiring production claims to be backed by working durability, safety, and validation gates.
+This Buildprint turns the observed AI Shorts workflow into a clean, portable architecture contract for coding agents. It preserves useful route, UI, provider, composition, gallery, and deployment evidence while forcing a real studio-shaped proof and preventing tiny fake apps or unsafe parity claims.
 
 ## Architecture
 
 ```txt
-React dashboard
-  -> FastAPI AI Shorts routes
-    -> product scrape / Gemini research adapter
+Browser production studio
+  -> app API/service layer
+    -> product scrape / web research adapter
     -> product analysis + script adapter
-    -> actor image / voice / video provider adapters
-    -> subtitle + FFmpeg composition
-    -> optional Remotion render service
-    -> local output + gallery metadata
-    -> Upload-Post handoff adapter
+    -> actor image / voice / talking-head / b-roll provider adapters
+    -> async job runtime + durable-enough local state
+    -> fixture audio/subtitle/b-roll composition
+    -> optional Remotion post-processing adapter
+    -> local output + private-by-default gallery metadata
+    -> consent-gated Upload-Post/social handoff adapter
 ```
+
+Source evidence recommends React dashboard, FastAPI routes, FFmpeg, and optional Remotion, but implementations may choose another stack if all contracts, UX surfaces, and evidence gates are satisfied.
 
 Primary evidence anchors:
 
@@ -102,20 +188,31 @@ Primary evidence anchors:
 
 ## Evidence Boundary
 
-Source citations prove code shape and observed control flow. They do not prove live provider success, hosted deployment security, public bucket safety, platform publishing success, moderation outcomes, or restart-safe job durability. Those claims require the acceptance evidence above.
+Source citations prove code shape and observed control flow. They do not prove live provider success, hosted deployment security, public bucket safety, platform publishing success, moderation outcomes, output quality, or restart-safe production durability. Those claims require the validation gates above plus provider/platform evidence.
 
 ## Required Validation
 
-Run the targeted checks documented in `QA_PLAN.md` and `TEST_MATRIX.md`. At minimum, validate request/response contracts, provider test doubles, FFmpeg composition with safe fixtures, status polling, private-by-default gallery behavior, and Upload-Post payload construction. Record external-provider tests separately with credentials, account, date, request IDs, and sanitized responses.
+At minimum, run and record:
+
+- unit/contract tests;
+- production build;
+- no-network/default mock-provider gate;
+- media fixture tests with ffprobe 1080x1920 evidence;
+- real browser happy path with desktop/mobile screenshots;
+- browser negative paths from `BROWSER_QA_SCENARIOS.md`;
+- secret scan and claim wording check;
+- validation report from `VALIDATION_TEMPLATE.md`.
+
+Live provider tests are optional. If run, record approved credentials scope, sandbox target, date, provider request IDs, sanitized responses, costs, and remaining limitations. Live evidence does not remove the mock/no-network default requirement.
 
 ## Copyable Agent Prompt
 
 ```txt
-Implement the Portable AI Shorts Production Studio exactly as this Buildprint contract.
+Use the Portable AI Shorts Production Studio Buildprint. Read BUILDPRINT.md first, then follow the Required Read Order, Phase Gates, and Acceptance Gates.
 
-Use BUILDPRINT.md as the authority. Preserve the FastAPI + React + provider-adapter + FFmpeg/Remotion architecture. Build only claims that can pass the acceptance gates.
+If the user says "Use default studio preset", use DEFAULT_PRESET.md. Otherwise ask exactly questions.md, summarize choices, and wait for confirmation.
 
-Do not describe in-process job maps as durable storage. Do not expose gallery output publicly without explicit publish consent. Do not treat Gemini, ElevenLabs, fal.ai/Flux/Hailuo/Kling/VEED, Upload-Post, S3, scraping, or yt-dlp behavior as production-ready until sandbox/provider validation is recorded.
+Build a stack-flexible full webapp proof by default: browser studio UI, deterministic mock/no-network provider adapters, pollable jobs, fixture media pipeline, playable 1080x1920 MP4 output, consent-gated gallery, consent-gated social handoff, tests, production build, browser QA screenshots, and validation report.
 
-Required result: a pollable AI Shorts workflow from product URL/manual input through scripts, assets, composition, local video result, gated gallery, and gated social handoff, with tests and validation evidence for every included production claim.
+Do not ship an API-only proof, route-shaped mocks, gallery-only HTML, empty dashboard, raw JSON/manifest-first UI, fake provider success, OpenShorts clone claim, drop-in replacement claim, provider/API parity claim, rendering-quality parity claim, or social-platform publishing parity claim.
 ```

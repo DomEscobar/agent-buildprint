@@ -1,0 +1,79 @@
+schema: agent-buildprint/phases.v1
+canonical_start: BUILDPRINT.md
+phases:
+  - id: 00-safety-boundaries
+    title: Safety and Boundaries
+    inputs: [BUILDPRINT.md, policies/safety.md, plans/00-safety-boundaries.md]
+    must_produce:
+      - read/export boundary recorded
+      - source mutation forbidden
+      - secret handling rule recorded
+    must_pass:
+      - no source app files modified
+      - no secret values copied
+    forbidden:
+      - broad pre-discovery questionnaire
+
+  - id: 01-repo-census
+    title: Repo Census
+    inputs: [plans/01-repo-census.md, policies/quality.md]
+    must_produce:
+      - stack, routes, APIs, data, tests, integrations, deploy, risk inventory
+      - OBSERVED/INFERRED/QUESTION labels
+    must_pass:
+      - census avoids final architecture claims
+
+  - id: 02-system-map
+    title: System Map
+    inputs: [plans/02-system-map.md, SPEC.md, CONTRACTS.md]
+    must_produce:
+      - evidence-backed system zones and flows
+      - risk zones and unknowns
+    must_pass:
+      - important claims have evidence labels
+
+  - id: 03-candidate-buildprints
+    title: Candidate Buildprints
+    inputs: [plans/03-candidate-buildprints.md, prompts/discover.md]
+    must_produce:
+      - 2-5 candidates or justified single/system path
+      - included/excluded paths, risks, QA strategy, no-fake boundaries
+    must_pass:
+      - unrelated scopes are not merged
+
+  - id: 04-scope-decision
+    title: Scope Decision
+    inputs: [plans/04-scope-decision.md, questions.md, policies/questions.md]
+    must_produce:
+      - selected candidate/system path or blocker
+      - production-grade selected-scope posture
+      - fidelity/proof depth
+    must_pass:
+      - max one blocking chat question at a time
+
+  - id: 05-single-extraction
+    title: Single Extraction
+    inputs: [plans/05-single-extraction.md, prompts/extract-selected.md, templates/manifest.json]
+    must_produce:
+      - selected Buildprint package with agent execution rails
+      - QA, traceability, no-fake, and submission artifacts
+    must_pass:
+      - generated manifest required files exist
+
+  - id: 06-system-extraction
+    title: System Extraction
+    inputs: [plans/06-system-extraction.md]
+    must_produce:
+      - hierarchical project package only when requested
+    must_pass:
+      - module boundaries remain explicit
+
+  - id: 07-validation-submission
+    title: Validation and Submission
+    inputs: [plans/07-validation-submission.md, TEST_MATRIX.md, VALIDATION_TEMPLATE.md, checks/acceptance.md]
+    must_produce:
+      - reversal/product QA evidence or blockers
+      - mapper golden eval evidence when mapper behavior changes
+      - final chat handover
+    must_pass:
+      - no invented validation status

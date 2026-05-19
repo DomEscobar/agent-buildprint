@@ -133,3 +133,13 @@ Status: PASS / BLOCKED / NEEDS HUMAN REVIEW
 Known blockers:
 
 - 
+
+## Final chat handover
+
+- Outcome:
+- Selected scope:
+- Evidence inspected:
+- Files generated:
+- Commands/evals run:
+- Known gaps:
+- Recommended next direction:

@@ -1,5 +1,22 @@
 # System Map
 
+## Selected Portable Target
+
+The Buildprint target is a stack-flexible full webapp proof:
+
+```txt
+Browser studio UI
+  -> API/service layer
+    -> analysis/script adapters
+    -> actor/voice/media adapters
+    -> async job runtime
+    -> fixture media composer
+    -> consent-gated gallery
+    -> consent-gated publish handoff
+```
+
+The source evidence below describes one observed React/FastAPI/FFmpeg/Remotion implementation. A clean-room implementation may use another stack only if it preserves the user-visible studio workflows, contracts, media proof, browser QA, and claim boundaries from `BUILDPRINT.md`.
+
 ## User-Facing Surfaces
 
 - React dashboard: manages API keys, job state, tabs, session recovery, and local storage. Evidence: `dashboard/src/App.jsx:136-170`, `dashboard/src/App.jsx:187-231`, `dashboard/src/App.jsx:239-258`.

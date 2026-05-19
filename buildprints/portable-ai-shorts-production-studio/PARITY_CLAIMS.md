@@ -1,11 +1,15 @@
 # Capability Claims
 
-## Supported Claims
+Use this file and `claims.yaml` whenever describing an implementation result.
 
-- The repo contains an end-to-end AI Shorts pipeline from URL/manual description through script generation, actor/voice configuration, video generation, composition, gallery, and social handoff. Evidence: `app.py:1670-1717`, `app.py:2060-2216`, `saasshorts.py:1290-1474`, `app.py:1823-1893`.
-- The repo contains a long-form clip generator path with file/URL ingest, rights acknowledgement, subprocess execution, and job status polling. Evidence: `app.py:316-417`.
-- The repo contains a Remotion render service that can layer effects, subtitles, and hooks over video. Evidence: `app.py:615-639`, `render-service/src/server.ts:57-121`, `remotion/src/compositions/ShortVideo.tsx:13-31`.
-- The repo contains public gallery and individual video page HTML generation with SEO metadata. Evidence: `app.py:1896-2046`.
+## Safe Claims
+
+- Clean-room portable AI shorts studio webapp proof.
+- Workflow-shape proof from product URL/manual description to scripts, configuration, generation status, local MP4 result, gallery consent, and publish handoff.
+- Contract-parity proof for documented local request/response shapes when tests pass.
+- Mocked-provider proof when deterministic adapters are used.
+- Local fixture media proof when a playable 1080x1920 MP4 and ffprobe evidence are recorded.
+- Consent-gated gallery and mock/manual social handoff payload proof.
 
 ## Adapter Claims Only
 
@@ -16,9 +20,24 @@
 - S3 gallery/backup behavior is an adapter claim. Evidence: `s3_uploader.py:16-41`, `s3_uploader.py:87-191`, `s3_uploader.py:193-300`.
 - yt-dlp URL download is an adapter claim. Evidence: `main.py:15`, `app.py:1238-1243`.
 
-## Not Claimed
+## Forbidden Wording
 
-- Direct official platform API publishing to TikTok, Instagram, or YouTube.
-- Provider-level availability, moderation, policy compliance, quality, or cost.
-- Multi-tenant secure SaaS production readiness.
-- Commercial product equivalence.
+Do not call an implementation:
+
+- OpenShorts clone;
+- drop-in replacement;
+- provider/API parity implementation;
+- rendering-quality parity proof;
+- social-platform publishing parity proof;
+- direct official TikTok/Instagram/YouTube publishing implementation;
+- production-ready hosted SaaS;
+- public-gallery-safe without privacy/access-control evidence;
+- live-provider-ready without sandbox evidence.
+
+## Required Safe Summary
+
+Use wording like:
+
+```txt
+This is a clean-room portable AI shorts studio webapp proof. It demonstrates workflow shape, local contracts, deterministic mocked provider adapters, fixture media composition, consent-gated gallery metadata, and mock/manual publish handoff. It does not claim OpenShorts clone status, provider/API parity, rendering-quality parity, live provider success, or social-platform publishing parity.
+```
