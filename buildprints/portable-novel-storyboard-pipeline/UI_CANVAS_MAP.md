@@ -28,9 +28,9 @@
 Use a dense, workbench-oriented layout:
 
 - Left sidebar: project navigation, chapter/script list.
-- Center: active stage workspace or track timeline.
-- Right inspector: selected entity details and validation errors.
-- Bottom or collapsible drawer: task log and manifest.
+- Center: active stage workspace, storyboard board, or track timeline with local thumbnails.
+- Right inspector: selected entity details, frame preview, prompt, asset refs, media state, and validation errors.
+- Bottom or collapsible drawer: task log, raw provider refs, validation history, and manifest.
 
 INFERRED: This layout preserves the workbench idea without pretending to match Toonflow's original canvas UI.
 
@@ -41,7 +41,17 @@ The webapp may implement drag/reorder in later phases, but v2 acceptance only re
 - Stable grouped track lanes.
 - Selectable storyboard rows.
 - Asset references visible on rows.
-- Mock media state visible per row/track.
+- Mock media state visible per row/track through compact tiles/badges and local fixture previews.
 - No overlap or unreadable text at desktop/mobile widths.
+
+## Product-Grade Boundary
+
+Do not treat these as acceptable workbench evidence:
+
+- raw media URI tables;
+- manifest textarea dominating preview;
+- task log as main product surface;
+- empty initial dashboard screenshot;
+- generic SaaS dashboard layout.
 
 Do not implement freeform infinite pan/zoom unless a later task explicitly asks for it.

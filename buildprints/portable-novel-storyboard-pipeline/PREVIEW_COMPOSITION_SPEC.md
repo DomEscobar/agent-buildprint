@@ -28,6 +28,14 @@ type PreviewManifest = {
 };
 ```
 
+Preview-facing records may include deterministic local refs:
+
+```ts
+type MediaRecord = { uri: string; previewUri?: string };
+type Asset = { previewUri?: string };
+type StoryboardPanelRow = { thumbnailUri?: string };
+```
+
 ## Track Composition
 
 ```ts
@@ -57,12 +65,17 @@ Evidence: track grouping and duration update in `src/routes/production/storyboar
 Preview UI:
 
 - Timeline lanes from `tracks`.
-- Clip cells from storyboard rows.
+- Clip cells from storyboard rows with sequence, duration, media state, and local thumbnail/fixture.
+- Selected-shot inspector with frame, videoDesc, prompt, linked assets, duration, track, and media/task state.
+- Compact media tiles for image/video records; raw `mock://...` or provider refs hidden behind details/debug.
+- Debug drawer for task log, validation issues, and raw manifest JSON.
 - Selected preview panel shows best available media:
   - selected video if success,
   - storyboard image if success,
-  - asset refs/placeholders if no media.
+  - deterministic local fixture/placeholder if no media.
 - Details panel shows videoDesc, prompt, assets, duration, state.
+
+The preview must not lead with a manifest textarea, raw media URI table, or task log.
 
 ## Export Boundary
 

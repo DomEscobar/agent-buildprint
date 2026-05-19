@@ -19,4 +19,9 @@
 | No-network default test run | static/integration | mock providers only; global fetch/network not used |
 | Export package snapshot | integration | manifest includes scripts/assets/storyboards/tracks/media/task log |
 | Secrets scan | static | no provider values in package |
+| Visual fixture mapping | unit/integration | mock media/assets/storyboard rows resolve local previewUri/thumbnailUri |
+| Primary preview composition | browser | timeline, frame thumbnails, selected-shot inspector, and compact media tiles render |
+| Debug drawer boundary | browser | raw refs, task log, validation history, and manifest JSON are secondary |
+| Completed screenshot QA | browser/static | desktop/mobile screenshots show completed preview state, not empty dashboard |
+| Anti-debug UI gate | browser/static | no raw URI table, manifest textarea, or task log dominates primary UI |
 

@@ -23,6 +23,16 @@ Routes:
 - `/projects/:projectId/preview` manifest preview/export.
 - `/settings/providers` mock/live adapter configuration, disabled network in tests.
 
+## Product Quality Anchor
+
+Before implementing browser UI, reread:
+
+- `PRODUCT_QUALITY_BAR.md`
+- `WORKBENCH_UX_SPEC.md`
+- `DESIGN_SYSTEM_SPEC.md`
+
+The default UI must be a creative production workbench. Do not ship a generic panel dashboard, manifest-first preview, raw URI table, or empty-state screenshot as acceptance evidence.
+
 ## Pages And Components
 
 Project Dashboard:
@@ -52,8 +62,11 @@ ProductionAgent Workspace:
 Preview:
 
 - PreviewTimeline: tracks as lanes, storyboard rows as clips.
-- PreviewCanvas: selected row image/video placeholder, videoDesc, prompt, asset refs.
-- ManifestExport: JSON download/copy, deterministic snapshot hash.
+- PreviewCanvas: selected row local thumbnail/fixture or mock media placeholder, videoDesc, prompt, asset refs.
+- SelectedShotInspector: frame, sequence, duration, track, assets, prompt, media/task state, validation.
+- MediaTiles: compact image/video records with badges and local preview refs; raw refs hidden in details.
+- DebugDrawer: task log, validation history, raw manifest JSON after explicit reveal/export.
+- ManifestExport: JSON download/copy, deterministic snapshot hash; visually secondary to the timeline/preview.
 
 ## Data Flow
 
@@ -66,7 +79,8 @@ Preview:
 7. Asset extraction -> upsert assets by project/name -> script-asset links.
 8. Production plan/table/panel -> XML parse -> FlowData and storyboard rows.
 9. Media jobs -> mock image/video records and task log.
-10. Preview export -> manifest assembled from persisted state.
+10. Mock media refs -> deterministic local `previewUri`/`thumbnailUri` for primary UI.
+11. Preview export -> manifest assembled from persisted state.
 
 ## Source Evidence
 
@@ -103,3 +117,10 @@ Required adapter interfaces:
 - `AssetStore`
 - `ExportWriter`
 - `Clock` / `IdGenerator` for deterministic tests
+
+## Anti-Patterns
+
+- Raw `mock://...` refs as primary media display.
+- Task log or manifest textarea as the first preview viewport.
+- Empty mobile dashboard screenshot as responsive evidence.
+- Generic admin dashboard/card soup counted as workbench quality.

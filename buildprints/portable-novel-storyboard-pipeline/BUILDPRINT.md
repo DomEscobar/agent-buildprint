@@ -9,6 +9,15 @@
 - Live providers, final stitched-video export, Electron parity, and exact Toonflow UI/canvas parity are excluded unless a later approved phase adds evidence and gates.
 - Every included route/control/service must work end-to-end. If a capability is not implemented, exclude it clearly rather than shipping a placeholder or fake success state.
 
+## LLM Attention Contract
+
+- Creative workbench first; debug evidence secondary.
+- Keep `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md`, and `WORKBENCH_UX_SPEC.md` in active context before UI work.
+- Do not let QA/reporting artifacts dominate the user-facing app.
+- If context is compacted, reread `BUILDPRINT.md`, `PRODUCT_QUALITY_BAR.md`, and `LLM_AGENT_EXECUTION_GUIDE.md` before continuing.
+- Before final reporting, reread `PARITY_CLAIMS.md`, `HEAD_TO_FOOT_QA.md`, and `PRODUCT_QUALITY_BAR.md`.
+- Final response must include a chat handover: what was built, evidence, known gaps, and recommended next direction or "no next step needed".
+
 ## Binding Implementation Slice
 
 Build exactly this first:
@@ -21,7 +30,7 @@ Build exactly this first:
 6. Run ProductionAgent stages: director plan, storyboard table, and storyboard panel rows.
 7. Validate storyboard/XML output and reject malformed output without corrupting prior state.
 8. Create mock image and mock video media/task records through adapter interfaces; no live network calls by default.
-9. Render a browser preview/timeline showing scripts, storyboard rows, tracks/clips/media refs, task log, and visible limitations/non-claims.
+9. Render a product-grade browser workbench/preview showing scripts, storyboard frames/thumbnails, selected-shot inspector, tracks/clips/media state, debug drawer, and visible limitations/non-claims.
 10. Export a PortablePreviewManifest containing chapters, events, scripts, assets, storyboard rows, tracks, media records, task log, and limitations.
 11. Pass unit/contract tests, production build, and real browser happy-path QA from `HEAD_TO_FOOT_QA.md`.
 
@@ -41,13 +50,14 @@ Use the safe wording and forbidden wording in `PARITY_CLAIMS.md` / `claims.yaml`
 
 1. `BUILDPRINT.md` — authority spine, binding slice, phase gates, acceptance gates.
 2. `buildprint.json`, `phases.yaml`, `acceptance.yaml`, `claims.yaml` — machine-readable mirrors for agents/tools.
-3. `SPEC.md` — user-visible behavior, must/must-not rules, edge cases.
-4. `CONTRACTS.md`, `WEBAPP_TARGET_SPEC.md`, `SYSTEM_MAP.md` — schemas, routes/pages, modules, and data flow.
-5. `LLM_FLOW.md`, `AGENT_PROMPT_PACK.md`, `XML_OUTPUT_CONTRACT.md` — agent stages and output parsing contract.
-6. `ASYNC_JOB_MODEL.md`, `PROVIDER_ADAPTERS.md`, `PREVIEW_COMPOSITION_SPEC.md` — jobs, adapters, and export package.
-7. `TEST_MATRIX.md`, `HEAD_TO_FOOT_QA.md`, `BROWSER_QA_SCENARIOS.md` — required validation gates.
-8. `PARITY_CLAIMS.md`, `TRACEABILITY_MATRIX.md`, `THREAT_MODEL.md`, `OBSERVABILITY.md`, `PORTABILITY.md` — claim boundary, evidence, safety, operations, portability.
-9. `IMPLEMENTATION_ROADMAP.md` and `AGENT_HANDOFF.md` — supporting build order and handoff notes; lower authority than this file.
+3. `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md` — product quality and context-rot guardrails.
+4. `SPEC.md` — user-visible behavior, must/must-not rules, edge cases.
+5. `CONTRACTS.md`, `WEBAPP_TARGET_SPEC.md`, `WORKBENCH_UX_SPEC.md`, `DESIGN_SYSTEM_SPEC.md`, `VISUAL_FIXTURE_PACK.md`, `SYSTEM_MAP.md` — schemas, routes/pages, UX, modules, and data flow.
+6. `LLM_FLOW.md`, `AGENT_PROMPT_PACK.md`, `XML_OUTPUT_CONTRACT.md` — agent stages and output parsing contract.
+7. `ASYNC_JOB_MODEL.md`, `PROVIDER_ADAPTERS.md`, `PREVIEW_COMPOSITION_SPEC.md` — jobs, adapters, and export package.
+8. `TEST_MATRIX.md`, `HEAD_TO_FOOT_QA.md`, `BROWSER_QA_SCENARIOS.md` — required validation gates.
+9. `PARITY_CLAIMS.md`, `TRACEABILITY_MATRIX.md`, `THREAT_MODEL.md`, `OBSERVABILITY.md`, `PORTABILITY.md` — claim boundary, evidence, safety, operations, portability.
+10. `IMPLEMENTATION_ROADMAP.md` and `AGENT_HANDOFF.md` — supporting build order and handoff notes; lower authority than this file.
 
 ## Phase Gates
 
@@ -57,6 +67,7 @@ Exit only when:
 
 - The implementation target, stack, persistence choice, and mock-provider default are written down.
 - Safe/unsafe claims are copied into project docs or visible limitations UI.
+- Product-quality target is written down: creative workbench, debug evidence secondary, local fixture visuals for primary preview.
 - The agent confirms the binding slice and non-goals above.
 
 ### Phase 1 — Domain and Persistence
@@ -89,8 +100,9 @@ Exit only when:
 Exit only when:
 
 - Project dashboard, ScriptAgent workspace, ProductionAgent workspace, asset/storyboard/task panels, preview timeline, and manifest export are usable in a real browser.
+- Browser UI satisfies `PRODUCT_QUALITY_BAR.md`: storyboard frames/thumbnails, timeline lanes, selected-shot inspector, compact media state, and debug drawer.
 - No included button/control is a no-op unless visibly disabled with an honest explanation.
-- The browser happy path in `HEAD_TO_FOOT_QA.md` passes with screenshots and exported manifest evidence.
+- The browser happy path in `HEAD_TO_FOOT_QA.md` passes with completed-state desktop/mobile screenshots and exported manifest evidence.
 
 ### Phase 5 — Hardening and Claims
 
@@ -98,6 +110,7 @@ Exit only when:
 
 - Negative browser paths from `BROWSER_QA_SCENARIOS.md` are implemented or explicitly recorded as gaps.
 - Safe/non-claim wording is visible in docs or UI.
+- Visual QA rejects raw URI tables, manifest-first preview, empty mobile screenshots, and generic dashboard/card-soup layouts.
 - Build/test/runtime reports and remaining gaps are recorded in the implementation repository.
 
 ## Acceptance Gates
@@ -108,9 +121,11 @@ Minimum done evidence:
 - `npm run build` or equivalent production build passes.
 - Real browser happy path clicks rendered UI controls and parses the manifest from rendered UI, not only service functions.
 - Runtime negative paths show visible failures/retries without corrupting durable state.
+- Completed-state desktop and mobile screenshots show storyboard frames/thumbnails, timeline lanes, selected-shot inspector, compact media/task state, and export affordance.
 - Exported manifest includes at least: version, 3 chapters, 3 events, >=1 script, >=4 assets, >=1 storyboard row, >=1 track, >=1 media record, task log entries, and limitations/non-parity text.
 - Secret scan / no-network default gate passes.
 - Implementation records `BUILD_REPORT.md`, `RUNTIME_LIVE_TEST_REPORT.md`, screenshot(s), test/build summary, exported manifest sample, and explicit remaining gaps.
+- Final chat handover summarizes the run and gives a clear next-direction recommendation without requiring the user to open report files.
 
 ## Purpose
 

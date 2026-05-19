@@ -11,7 +11,7 @@
     "extract assets from scripts",
     "generate director plan, storyboard table, and storyboard rows",
     "create mock image/video media task records through adapters",
-    "render browser preview/timeline with visible limitations",
+    "render product-grade browser workbench/preview with local thumbnails, selected-shot inspector, debug drawer, and visible limitations",
     "export PortablePreviewManifest",
     "pass tests, build, and browser happy-path QA"
   ],
@@ -38,6 +38,16 @@
       "required": true
     },
     {
+      "path": "PRODUCT_QUALITY_BAR.md",
+      "role": "product-quality-authority",
+      "required": true
+    },
+    {
+      "path": "LLM_AGENT_EXECUTION_GUIDE.md",
+      "role": "llm-execution-context-rot-guard",
+      "required": true
+    },
+    {
       "path": "SPEC.md",
       "role": "behavior-contract",
       "required": true
@@ -50,6 +60,21 @@
     {
       "path": "WEBAPP_TARGET_SPEC.md",
       "role": "runtime-target",
+      "required": true
+    },
+    {
+      "path": "WORKBENCH_UX_SPEC.md",
+      "role": "creative-workbench-ux-contract",
+      "required": true
+    },
+    {
+      "path": "DESIGN_SYSTEM_SPEC.md",
+      "role": "visual-design-contract",
+      "required": true
+    },
+    {
+      "path": "VISUAL_FIXTURE_PACK.md",
+      "role": "mock-visual-fixture-contract",
       "required": true
     },
     {
@@ -71,6 +96,10 @@
   "forbiddenDefaults": [
     "live provider calls in default CI",
     "placeholder routes counted as implemented",
+    "raw provider refs as primary media UI",
+    "manifest textarea as primary preview UI",
+    "empty-state screenshot accepted as UX proof",
+    "generic dashboard counted as creative workbench",
     "final stitched-video parity claim",
     "drop-in replacement claim",
     "exact Toonflow UI/canvas parity claim"
@@ -85,6 +114,11 @@
   "requiredDetailFiles": [
     "SPEC.md",
     "CONTRACTS.md",
+    "PRODUCT_QUALITY_BAR.md",
+    "LLM_AGENT_EXECUTION_GUIDE.md",
+    "WORKBENCH_UX_SPEC.md",
+    "DESIGN_SYSTEM_SPEC.md",
+    "VISUAL_FIXTURE_PACK.md",
     "TEST_MATRIX.md",
     "HEAD_TO_FOOT_QA.md"
   ]

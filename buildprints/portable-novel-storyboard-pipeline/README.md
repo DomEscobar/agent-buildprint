@@ -12,4 +12,10 @@ It intentionally does not claim full Toonflow parity, desktop/Electron parity, p
 
 After reading `BUILDPRINT.md`, follow its `Required Read Order`. This README is only a package overview and must not be treated as a competing read-order source.
 
-Start implementation only after the contracts and LLM flow are clear. This package is spec-first; any runtime proof must be recorded in tracked implementation reports, not as untracked absolute paths.
+Start implementation only after the contracts, LLM flow, and product-quality rails are clear. Before UI work, reread `PRODUCT_QUALITY_BAR.md`, `LLM_AGENT_EXECUTION_GUIDE.md`, and `WORKBENCH_UX_SPEC.md`.
+
+This package is spec-first; any runtime proof must be recorded in tracked implementation reports, not as untracked absolute paths.
+
+## Product Quality Anchor
+
+Future generated apps must read as creative storyboard workbenches. Debug evidence, task logs, raw refs, and manifest JSON are required for QA, but they must be secondary to storyboard frames, timeline lanes, selected-shot inspector, compact media tiles, and completed-state screenshots.

@@ -40,8 +40,17 @@
 8. Preview export
    - Open preview.
    - Assert timeline lanes and selected clip details render.
+   - Assert local thumbnails/placeholders render in the primary preview.
+   - Select a clip and assert selected-shot inspector updates.
+   - Open debug drawer and assert task log/raw refs are available but secondary.
    - Export manifest.
    - Assert deterministic hash for fixed clock/ids.
+
+9. Product-quality smoke
+   - Assert no raw `mock://` URI table is the primary media surface.
+   - Assert manifest JSON is behind export/details and does not dominate the initial preview.
+   - Assert completed desktop and mobile screenshots show storyboard/timeline/inspector state.
+   - Assert labels such as image/video/success do not split across narrow cells.
 
 ## Manual QA
 
@@ -50,6 +59,7 @@
 - Verify task log is understandable after failures and retries.
 - Verify provider settings default to mock and live mode is visibly gated.
 - Verify non-parity limitations are visible in preview/export area.
+- Verify the result reads as a creative workbench, not a generic admin dashboard.
 
 ## No-Network Gate
 
@@ -57,6 +67,7 @@ In automated tests:
 
 - Replace `fetch`, `XMLHttpRequest`, and provider SDK entry points with throwing stubs.
 - Test passes only if default workflow uses mocks.
+- Local visual fixtures must still render under no-network conditions.
 
 ## Source-Implied Workflow
 

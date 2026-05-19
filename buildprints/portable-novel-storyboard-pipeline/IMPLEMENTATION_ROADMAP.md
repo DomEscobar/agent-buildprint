@@ -49,12 +49,17 @@ Build:
 - ScriptAgent workspace.
 - ProductionAgent workspace.
 - Asset/storyboard/track/task panels.
+- Creative workbench layout from `WORKBENCH_UX_SPEC.md`.
+- Local thumbnails/visual placeholders from `VISUAL_FIXTURE_PACK.md`.
+- Selected-shot inspector and compact media tiles.
+- Secondary debug drawer for task log, raw refs, validation, and manifest JSON.
 - Preview timeline and manifest export.
 
 Acceptance:
 
 - Playwright happy path covers import -> events -> script -> production -> mock media -> preview.
-- Responsive smoke test at desktop and mobile widths.
+- Responsive smoke test at desktop and mobile widths with completed-state screenshots.
+- Product-quality smoke rejects raw URI tables, manifest-first preview, empty mobile screenshot, and generic dashboard layout.
 
 ## Phase 5 - Hardening
 
@@ -64,11 +69,13 @@ Build:
 - Snapshot fixtures.
 - Provider settings guardrails.
 - Documentation surfaces for parity boundaries.
+- Product-quality QA notes and visual fixture inventory.
 
 Acceptance:
 
 - `PARITY_CLAIMS.md` safe claims are displayed/used in docs.
 - QA scenarios in `BROWSER_QA_SCENARIOS.md` pass or have documented gaps.
+- `PRODUCT_QUALITY_BAR.md` is satisfied in browser screenshots and report evidence.
 
 ## Stop Condition
 

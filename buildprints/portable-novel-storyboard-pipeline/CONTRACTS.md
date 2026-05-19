@@ -86,6 +86,15 @@ interface VideoProvider {
 
 Side effects: provider calls create task records and later update media state.
 
+Primary UI must not render raw provider refs as the main preview. Mock providers should also resolve deterministic local preview refs from `VISUAL_FIXTURE_PACK.md`.
+
+```ts
+type MediaRecord = {
+  uri: string;         // raw provider/mock ref, debug/details only
+  previewUri?: string; // deterministic local fixture ref for primary UI
+};
+```
+
 ## StoryboardPanelRow
 
 ```ts
@@ -97,10 +106,19 @@ type StoryboardPanelRow = {
   duration: number;
   associateAssetsIds: Array<string | number>;
   shouldGenerateImage: boolean;
+  thumbnailUri?: string;
 };
 ```
 
 Observed route validates `shouldGenerateImage` as `z.number()`, while the skill emits XML values `true`/`false`. Portable contract should use boolean and map to storage/API representation at adapter boundaries.
+
+Assets may expose a local preview fixture for primary UI:
+
+```ts
+type Asset = {
+  previewUri?: string;
+};
+```
 
 ## PortablePreviewManifest
 

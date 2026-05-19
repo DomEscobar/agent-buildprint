@@ -16,8 +16,19 @@ acceptance:
       must_click_rendered_controls: true
       must_parse_manifest_from_rendered_ui: true
       screenshots_required:
-        - desktop
-        - mobile
+        - completed-state desktop
+        - completed-state mobile
+      visual_quality_required: true
+      must_render:
+        - local storyboard thumbnails or deterministic visual placeholders
+        - selected-shot inspector
+        - compact media tiles or badges
+        - secondary debug drawer for task log/raw refs/manifest
+      forbidden_primary_surfaces:
+        - raw media URI table
+        - manifest textarea
+        - task log
+        - generic admin dashboard/card soup
     negative_paths:
       required: true
       source: BROWSER_QA_SCENARIOS.md
@@ -42,6 +53,10 @@ acceptance:
     - BUILD_REPORT.md
     - RUNTIME_LIVE_TEST_REPORT.md
     - browser screenshot(s)
+    - completed-state desktop/mobile screenshot(s)
+    - visual fixture asset inventory
+    - product-quality QA notes
+    - chat handover summary
     - test/build command summary
     - exported manifest sample
     - explicit remaining gaps
@@ -50,6 +65,10 @@ acceptance:
     - no live network calls in default tests
     - safe/unsafe claims visible in docs or UI
     - no placeholder/no-op controls counted as implemented
+    - no raw provider refs as primary media UI
+    - no empty-state screenshot accepted as UX proof
+    - limitations visible but not dominant in primary workbench
+    - final chat handover includes outcome, evidence, gaps, and recommended next direction
   optional_live_provider_gate:
     required: false
     env:

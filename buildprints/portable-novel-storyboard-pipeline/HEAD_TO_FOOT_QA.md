@@ -15,6 +15,7 @@ Required checks:
 - No secrets/API keys appear in artifacts.
 - Safe/unsafe claims from `PARITY_CLAIMS.md` are visible in app/docs.
 - Default provider mode is mock/no-network.
+- Product-quality anchor from `PRODUCT_QUALITY_BAR.md` is visible in app/docs or implementation report.
 
 Evidence to record:
 
@@ -87,9 +88,11 @@ Required flow in a real browser, preferably automated with Playwright/CDP:
 15. Generate mock storyboard images.
 16. Generate mock track videos.
 17. Open Preview timeline.
-18. Verify timeline/track/clip UI renders.
-19. Export/read manifest from rendered UI.
-20. Assert manifest contains at least:
+18. Verify timeline/track/clip UI renders with local thumbnails or deterministic visual placeholders.
+19. Select a storyboard clip and verify selected-shot inspector renders frame, description, prompt, assets, duration, track, and media state.
+20. Open debug drawer/details and verify task log/raw refs/manifest area are secondary.
+21. Export/read manifest from rendered UI.
+22. Assert manifest contains at least:
     - version `portable-preview-1`,
     - 3 chapters,
     - 3 events,
@@ -113,7 +116,9 @@ Pass condition:
 - browser automation clicks actual rendered controls,
 - manifest is parsed from rendered UI,
 - all counts and limitation text pass,
-- screenshot captured.
+- completed-state desktop screenshot captured,
+- completed-state mobile screenshot captured,
+- primary preview does not lead with raw URI tables, task log, or manifest textarea.
 
 ### Level 4 — Runtime Negative Paths
 
@@ -127,6 +132,7 @@ Required real-browser scenarios:
   - pure text: empty prompt, no image generation,
   - image-assisted: prompt required, tracks <= 15s,
   - first-frame: one row per track.
+- Debug drawer keeps raw refs/task log available without dominating the primary workbench.
 
 Pass condition:
 
@@ -143,6 +149,10 @@ Required checks:
 - no overlapping critical controls,
 - limitations visible near preview/export,
 - provider settings clearly show mock default/live gated.
+- desktop screenshot shows completed storyboard frames/thumbnails, timeline lanes, selected-shot inspector, compact media state, and export affordance.
+- mobile screenshot shows completed preview or storyboard state, not an empty dashboard.
+- raw `mock://...` refs do not wrap in the primary UI.
+- short labels such as `image`, `video`, `success`, and `track-1` do not split across lines.
 
 ### Level 6 — Optional Live Provider Gate
 
@@ -171,9 +181,23 @@ Every build should produce:
 - `BUILD_REPORT.md`
 - `RUNTIME_LIVE_TEST_REPORT.md`
 - browser screenshot(s)
+- completed-state desktop/mobile screenshot(s)
 - test/build command logs or summary
 - exported/parsed manifest sample
 - explicit remaining gaps
+- chat handover summary with outcome, evidence, changes, gaps, and recommended next direction.
+
+## Chat Handover QA
+
+The final assistant response must stand on its own:
+
+- summarize what was built or upgraded;
+- list validation evidence and any command failures;
+- mention screenshots/manifest/report artifacts by path or name;
+- state known gaps honestly;
+- recommend the next direction, or explicitly say no next step is needed.
+
+Do not force the user to open generated files just to know whether the run succeeded.
 
 ## Runtime Evidence Boundary
 
@@ -207,12 +231,14 @@ It still does not prove:
 - Generate mock asset/storyboard images; assert media refs and task state.
 - Generate mock video prompt and video; assert track prompt, video state, and selected video.
 - Export package; snapshot JSON/zip manifest.
+- Visual fixture QA: local thumbnails render for assets/storyboard rows and raw mock refs are hidden in debug/details.
 
 ## Manual QA
 
 - Verify no live provider calls occur in default proof.
 - Verify export package has enough information for another stack to render a preview.
 - Verify missing/invalid token behavior if API facade includes auth.
+- Verify the app does not look like a generic dashboard or debug harness.
 
 ## Not Claimed
 
