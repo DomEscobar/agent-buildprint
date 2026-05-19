@@ -17,8 +17,12 @@ const markdown = formatPacketMarkdown(mapper);
 assert.ok(markdown.includes('Buildprint AI Review Packet'), 'Markdown output should name the packet');
 assert.ok(markdown.includes('Reviewer Prompt'), 'Markdown output should include reviewer prompt');
 assert.ok(markdown.includes('finding.schema.json'), 'Markdown output should include finding schema');
+assert.ok(markdown.includes('loop-gate.schema.json'), 'Markdown output should include loop gate schema');
 assert.ok(markdown.includes('phase-plan.schema.json'), 'Markdown output should include phase plan schema');
 assert.ok(markdown.includes('Max-quality readiness phase plan'), 'Markdown output should require a max-quality readiness phase plan');
+assert.ok(markdown.includes('Loop Gates'), 'Markdown output should ask reviewers to assess Loop Gates');
+assert.ok(markdown.includes('pass_or_blocker'), 'Markdown output should require pass_or_blocker loop stops');
+assert.ok(markdown.includes('Recommended Loop Gates:'), 'Markdown handover should include recommended loop gates');
 assert.ok(markdown.includes('Files likely to change'), 'Markdown handover should require files likely to change');
 assert.ok(markdown.includes('Acceptance gates added/updated'), 'Markdown handover should require acceptance gate changes');
 assert.ok(markdown.includes('Proof command/screenshot/API evidence required'), 'Markdown handover should require concrete proof evidence');
@@ -40,13 +44,20 @@ assert.ok(json.authorityRefs, 'JSON output should include authorityRefs');
 assert.ok(json.machineMirror, 'JSON output should include machineMirror');
 assert.ok(json.reviewPrompt, 'JSON output should include reviewPrompt');
 assert.ok(json.schemas, 'JSON output should include schemas');
+assert.ok(json.schemas['loop-gate.schema.json'], 'JSON output should include loop gate schema');
+assert.deepEqual(json.schemas['loop-gate.schema.json'].properties.repeatUntil.enum, ['pass_or_blocker'], 'Loop gate schema should only allow pass_or_blocker repeat');
+assert.ok(json.schemas['loop-gate.schema.json'].properties.checkType.enum.includes('browser'), 'Loop gate schema should include browser check type');
 assert.ok(json.schemas['phase-plan.schema.json'], 'JSON output should include phase plan schema');
+assert.ok(json.schemas['phase-plan.schema.json'].properties.phases.items.properties.loopGates, 'Phase plan schema should support optional loopGates');
+assert.equal(json.schemas['phase-plan.schema.json'].properties.phases.items.required.includes('loopGates'), false, 'Phase plan schema should not require loopGates for every phase');
 assert.ok(json.schemas['phase-plan.schema.json'].properties.phases.items.required.includes('filesLikelyToChange'), 'Phase plan schema should require files likely to change');
 assert.ok(json.schemas['phase-plan.schema.json'].properties.phases.items.required.includes('acceptanceGatesAddedOrUpdated'), 'Phase plan schema should require acceptance gates');
 assert.ok(json.schemas['phase-plan.schema.json'].properties.phases.items.required.includes('proofEvidenceRequired'), 'Phase plan schema should require proof evidence');
 assert.ok(json.schemas['phase-plan.schema.json'].properties.phases.items.required.includes('claimsAllowedAfterPhase'), 'Phase plan schema should require allowed claims');
 assert.ok(json.schemas['phase-plan.schema.json'].properties.phases.items.required.includes('claimsStillForbidden'), 'Phase plan schema should require forbidden claims');
 assert.ok(json.reviewPrompt.includes('max-quality readiness phase plan'), 'JSON review prompt should require a phase plan');
+assert.ok(json.reviewPrompt.includes('Loop Gates'), 'JSON review prompt should ask reviewers to assess Loop Gates');
+assert.ok(json.reviewPrompt.includes('pass_or_blocker'), 'JSON review prompt should include pass_or_blocker');
 assert.ok(!forbiddenVerdictLanguage(jsonOut), 'JSON output must not contain scanner verdict language');
 
 const yamlOut = execFileSync(node, [agb, 'analyze', mapperPath, '--yaml'], { encoding: 'utf8' });
@@ -66,7 +77,7 @@ assert.ok(phase.authorityRefs.readOrderRefs.length > 0, 'Phase packet should pre
 console.log('Analyze packet eval passed');
 
 function forbiddenVerdictLanguage(text) {
-  return /\b(EXCELLENT|STRONG|NEEDS WORK|confidence|strict pass|scanner result)\b/i.test(text);
+  return /\b(EXCELLENT|STRONG|NEEDS WORK|confidence|strict pass|scanner result|missing loop gate|failed loop gate)\b/i.test(text);
 }
 
 function assertUnsupported(flag) {

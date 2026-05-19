@@ -49,6 +49,12 @@ export function formatPacketMarkdown(packet) {
   lines.push(JSON.stringify(packet.schemas['finding.schema.json'], null, 2));
   lines.push('```');
   lines.push('');
+  lines.push('## loop-gate.schema.json');
+  lines.push('');
+  lines.push('```json');
+  lines.push(JSON.stringify(packet.schemas['loop-gate.schema.json'], null, 2));
+  lines.push('```');
+  lines.push('');
   lines.push('## phase-plan.schema.json');
   lines.push('');
   lines.push('```json');
@@ -75,6 +81,7 @@ export function formatPacketMarkdown(packet) {
   lines.push('- Confirmed findings with file evidence.');
   lines.push('- Rejected suspicions with file evidence.');
   lines.push('- Missing rails, schemas, prompts, or acceptance gates.');
+  lines.push('- Recommended Loop Gates, or a brief reason why objective looping would add no value.');
   lines.push('- Max-quality readiness phase plan with goals, files likely to change, changes, acceptance gates, proof evidence, claim boundaries, validation evidence, exit criteria, dependencies, and latest safe starting phase.');
   return `${lines.join('\n')}\n`;
 }

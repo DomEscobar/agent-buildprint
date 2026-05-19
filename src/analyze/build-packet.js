@@ -25,11 +25,13 @@ export function buildAnalyzePacket(folder, options = {}) {
       'Confirm every finding with file evidence.',
       'Do not collapse the review into one small next step.',
       'Produce a phased max-quality readiness plan with files, gates, evidence, claims, and exit criteria.',
+      'Recommend Loop Gates only when they have objective checks, pass_or_blocker stop conditions, and evidence-backed blockers.',
       'Return the final answer as a chat handover.'
     ],
     reviewPrompt: buildReviewPrompt(options),
     schemas: {
       'finding.schema.json': findingSchema(),
+      'loop-gate.schema.json': loopGateSchema(),
       'phase-plan.schema.json': phasePlanSchema(),
       'review-rubric.yaml': reviewRubric(),
       'final-handover.md': finalHandoverTemplate()
@@ -50,6 +52,9 @@ function buildReviewPrompt(options) {
     'Return product-quality verdict, implementation-risk verdict, coding-agent execution risk, confirmed findings, rejected suspicions, and missing rails/schemas/prompts.',
     'Then produce a max-quality readiness phase plan. Do not stop at one recommended next action.',
     'Each phase must name its goal, files likely to change, required Buildprint/package changes, acceptance gates added or updated, proof evidence required, claim boundary changes, exit criteria, and dependencies.',
+    'Assess whether any phase should include Loop Gates. Recommend a Loop Gate only when it has an objective check, smallest-fix rule, useful evidence, pass_or_blocker stop conditions, forbidden scope expansion, and claim boundaries.',
+    'Do not recommend vague loops such as "until beautiful", "until production-grade", or "until no issues remain". If no Loop Gates are recommended, briefly say why.',
+    'Treat blockers inside Loop Gates as evidence-backed outcomes, not vague stopping points.',
     'Include the latest safe starting phase, but only after the full phase plan.',
     'Use file evidence for every important claim.'
   ].join('\n');
@@ -67,6 +72,40 @@ function findingSchema() {
       issue: { type: 'string' },
       whyItMatters: { type: 'string' },
       recommendedFix: { type: 'string' }
+    }
+  };
+}
+
+function loopGateSchema() {
+  return {
+    type: 'object',
+    required: [
+      'id',
+      'phaseId',
+      'checkType',
+      'repeatUntil',
+      'check',
+      'fixRule',
+      'evidenceRequired',
+      'stopConditions',
+      'forbiddenDuringLoop',
+      'claimsAllowedAfterPass',
+      'claimsStillForbidden'
+    ],
+    properties: {
+      id: { type: 'string' },
+      phaseId: { type: 'string' },
+      checkType: {
+        enum: ['alignment', 'test', 'build', 'browser', 'artifact', 'claim', 'reversal', 'security']
+      },
+      repeatUntil: { enum: ['pass_or_blocker'] },
+      check: { type: 'string' },
+      fixRule: { type: 'string' },
+      evidenceRequired: { type: 'array', items: { type: 'string' } },
+      stopConditions: { type: 'array', items: { type: 'string' } },
+      forbiddenDuringLoop: { type: 'array', items: { type: 'string' } },
+      claimsAllowedAfterPass: { type: 'array', items: { type: 'string' } },
+      claimsStillForbidden: { type: 'array', items: { type: 'string' } }
     }
   };
 }
@@ -114,7 +153,12 @@ function phasePlanSchema() {
             claimsStillForbidden: { type: 'array', items: { type: 'string' } },
             exitCriteria: { type: 'array', items: { type: 'string' } },
             dependencies: { type: 'array', items: { type: 'string' } },
-            risksAddressed: { type: 'array', items: { type: 'string' } }
+            risksAddressed: { type: 'array', items: { type: 'string' } },
+            loopGates: {
+              type: 'array',
+              description: 'Optional bounded loops recommended by the AI reviewer when objective checks and evidence make them useful. Leave empty and explain why when no Loop Gates are useful.',
+              items: loopGateSchema()
+            }
           }
         }
       }
@@ -147,6 +191,8 @@ function reviewRubric() {
       'each phase names proof evidence required, including command, screenshot, or API evidence when relevant',
       'each phase states which claims become allowed and which claims remain forbidden',
       'each phase has validation evidence and exit criteria',
+      'Loop Gates are recommended only where objective checks, pass_or_blocker stop conditions, and evidence-backed blockers make them useful',
+      'if no Loop Gates are recommended, the reviewer states why they would add no value',
       'phase order separates urgent blockers from product-quality hardening',
       'latest safe starting phase is named after the full plan'
     ],
@@ -155,7 +201,8 @@ function reviewRubric() {
       'do not claim a gap without file evidence',
       'do not end with only a small recommended next step',
       'do not ignore broad surface area or fakeable subsystems',
-      'do not accept placeholders or route-shaped behavior as product quality'
+      'do not accept placeholders or route-shaped behavior as product quality',
+      'do not recommend vague loops such as until beautiful, until production-grade, or until no issues remain'
     ]
   };
 }
@@ -171,6 +218,20 @@ function finalHandoverTemplate() {
     'Rejected suspicions:',
     'Missing rails/schemas/prompts:',
     'Critical/high risks:',
+    'Recommended Loop Gates:',
+    '- If recommended:',
+    '  id:',
+    '  phaseId:',
+    '  checkType:',
+    '  repeatUntil: pass_or_blocker',
+    '  check:',
+    '  fixRule:',
+    '  evidenceRequired:',
+    '  stopConditions:',
+    '  forbiddenDuringLoop:',
+    '  claimsAllowedAfterPass:',
+    '  claimsStillForbidden:',
+    '- If none recommended: explain why objective looping would add no value.',
     'Max-quality readiness phase plan:',
     '- Phase 0 - Stabilize evidence and scope:',
     '  Goal:',
