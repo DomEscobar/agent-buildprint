@@ -63,6 +63,7 @@ CAPABILITIES.md
 CONTRACTS.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md
+PRE_IMPLEMENTATION_QUESTIONS.md
 IMPLEMENTATION_PLAN.md
 CURRENT_STATE.md
 manifest.json
@@ -76,6 +77,7 @@ CAPABILITY_INDEX.md
 CONTRACTS.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md
+PRE_IMPLEMENTATION_QUESTIONS.md
 IMPLEMENTATION_PLAN.md
 CURRENT_STATE.md
 manifest.json
@@ -102,6 +104,7 @@ Every selected package must tell the next coding agent:
 - what capability to implement next;
 - what behavior is stable;
 - what implementation choices are free;
+- which pre-implementation questions must be asked or safely defaulted before coding;
 - what first slice to build;
 - what verification gate to run immediately;
 - what evidence is missing;

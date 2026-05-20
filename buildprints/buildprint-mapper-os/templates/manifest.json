@@ -11,6 +11,12 @@
   "qualificationStatus": "SELECTED_UNQUALIFIED",
   "productionPosture": "selected scope only",
   "mockPolicy": "mocks allowed only as test/demo fixtures",
+  "preImplementationQuestionGate": {
+    "required": true,
+    "file": "PRE_IMPLEMENTATION_QUESTIONS.md",
+    "maxQuestions": 5,
+    "fallback": "record safest production-grade selected-scope defaults in CURRENT_STATE.md; do not silently downgrade quality"
+  },
   "noFakeScanStatus": "not run",
   "completenessScore": {
     "rubric": "",

@@ -19,6 +19,7 @@ Read:
 
 - Discover first.
 - Ask only blocking questions.
+- Selected output must include a pre-implementation question gate so downstream agents ask or safely default the few decisions that change quality/security.
 - Treat scanner output as hints only.
 - Keep output discovery-only until scope is selected.
 - Prefer smaller complete selected scope over broad partial scope.
@@ -34,6 +35,7 @@ CAPABILITY_INDEX.md
 CONTRACTS.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md
+PRE_IMPLEMENTATION_QUESTIONS.md
 IMPLEMENTATION_PLAN.md
 CURRENT_STATE.md
 manifest.json

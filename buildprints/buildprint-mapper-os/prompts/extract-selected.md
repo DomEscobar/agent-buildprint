@@ -20,6 +20,7 @@ selected-buildprint/
   CONTRACTS.md
   VERIFICATION.md
   EXECUTION_PROTOCOL.md
+  PRE_IMPLEMENTATION_QUESTIONS.md
   IMPLEMENTATION_PLAN.md
   CURRENT_STATE.md
   manifest.json
@@ -39,6 +40,8 @@ For genuinely small scopes, a flat package may use `CAPABILITIES.md` instead of 
 - Classify every capability as `INCLUDED`, `OUT_OF_SCOPE`, `BLOCKED`, or `TEST_ONLY_MOCK`.
 - Include stable-vs-free boundaries for every capability.
 - Include first implementation slice and first verification gate for every included capability.
+- Generate `PRE_IMPLEMENTATION_QUESTIONS.md` with at most five blocking questions that materially affect quality, security, scope, provider behavior, persistence, or qualification status.
+- `HANDOFF.md` and `EXECUTION_PROTOCOL.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, or record safest production-grade defaults in `CURRENT_STATE.md`.
 - Keep unresolved questions out of files that claim implementation readiness.
 - Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
 

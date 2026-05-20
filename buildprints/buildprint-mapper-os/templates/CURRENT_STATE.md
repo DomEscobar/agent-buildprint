@@ -6,6 +6,17 @@
 - Next pack:
 - Qualification label:
 
+## Pre-Implementation Alignment
+
+- Quality bar:
+- Deployment posture:
+- Selected scope confirmed:
+- Sensitive capabilities policy:
+- Provider/runtime proof:
+- Persistence/infra default:
+- Safe defaults applied:
+- Remaining blockers:
+
 ## Last Evidence Update
 
 - Commands run:
