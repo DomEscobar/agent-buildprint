@@ -1296,6 +1296,79 @@ function loopGatesMd(facts) {
   return ['# LOOP_GATES', '', 'Loop gates are mandatory repeat-until-safe checks. Each loop stops only at `pass_or_blocker`.', '', gates.map(([id, check]) => [`## ${id}`, '', '- Repeat until: pass_or_blocker', `- Check: ${check}`, '- Smallest fix rule: fix only the failing feature/contract; do not widen product scope inside the loop.', '- Evidence required: command output, test result, screenshot/runtime proof, or explicit blocker with source-file citation.', '- Claims allowed after pass: the checked behavior for the checked feature only.', '- Claims still forbidden: full product parity, production readiness, or unrelated feature completion.', ''].join('\n')).join('\n'), ''].join('\n')
 }
 
+
+
+function architectureSystemModelMd(facts) {
+  return ['# SYSTEM_MODEL', '', 'System model inferred from repository evidence. Validate runtime boundaries before qualification.', '', '## Subprojects', '', facts.subprojects.length ? facts.subprojects.map((x) => `- ${x.path} (${x.kind}, ${x.name})`).join('\n') : '- none detected', '', '## Routes / UI surfaces', '', facts.routes.length ? facts.routes.slice(0, 80).map((x) => `- ${x}`).join('\n') : '- none detected', '', '## APIs / RPC / endpoints', '', facts.apis.length ? facts.apis.slice(0, 80).map((x) => `- ${x}`).join('\n') : '- none detected', '', '## Data files', '', facts.db.length ? facts.db.slice(0, 80).map((x) => `- ${x}`).join('\n') : '- none detected', ''].join('\n')
+}
+
+function moduleInventory(facts) {
+  const features = featureInventory(facts)
+  const defs = [
+    ['identity-access', 'Identity & Access', /auth|session|account|invite|permission|admin|user/i],
+    ['agent-runtime', 'Agent Runtime & Chat', /AI|Agent|chat|LLM|prompt|tool|workflow|stream/i],
+    ['memory-data', 'Memory, Data & State', /memory|data|state|database|persistence|model|schema/i],
+    ['integrations', 'Integrations & External Effects', /integration|webhook|provider|composio|calendar|email|notification|stripe|billing|payment/i],
+    ['desktop-shell', 'App Shell & Native Runtime', /desktop|tauri|native|shell|surface|route|page|window|settings/i],
+    ['ops-quality', 'Operations, Release & Quality', /deploy|operational|test|acceptance|observability|update|release/i]
+  ]
+  const modules = defs.map(([id, title, re]) => ({
+    id, title,
+    features: features.filter((f) => re.test(f.title + ' ' + f.requiredBehavior.join(' ') + ' ' + f.evidence.join(' ')))
+  })).filter((m) => m.features.length)
+  const assigned = new Set(modules.flatMap((m) => m.features.map((f) => f.title)))
+  const unassigned = features.filter((f) => !assigned.has(f.title))
+  if (unassigned.length) modules.push({ id: 'product-misc', title: 'Unclassified Product Capabilities', features: unassigned })
+  return modules
+}
+
+function slugify(value) {
+  return String(value || 'item').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'item'
+}
+
+function moduleAbstractionMd(facts) {
+  const modules = moduleInventory(facts)
+  return ['# MODULE_ABSTRACTION', '', 'Modules are product/domain abstractions compiled from feature evidence. They are not folders. They define rebuild boundaries and coupling rules.', '', ...modules.map((m) => [`## ${m.title}`, '', `- Module id: ${m.id}`, '- Responsibilities:', ...m.features.slice(0, 10).map((f) => `  - ${f.title}`), '- Owned state:', '  - QUESTION: confirm during source validation unless data/model evidence exists.', '- Inputs/outputs:', '  - Inputs: user actions, API/RPC calls, events, provider callbacks relevant to listed features.', '  - Outputs: UI state, persisted state, side effects, emitted events, or external writes relevant to listed features.', '- Forbidden coupling:', '  - Do not reach across modules except through explicit contracts/events/RPC boundaries.', '  - Do not make implementation folders the module boundary unless product behavior proves it.', ''].join('\n')).join('\n')].join('\n')
+}
+
+function moduleContractsMd(facts) {
+  return ['# MODULE_CONTRACTS', '', 'Contracts are qualification targets. Every module must define inputs, outputs, state, side effects, permissions, failures, and acceptance evidence before the package can become qualified.', '', ...moduleInventory(facts).map((m) => [`## ${m.title}`, '', '- Inputs: QUESTION — validate source triggers and inbound calls.', '- Outputs: QUESTION — validate returned data, UI updates, emitted events, and side effects.', '- Owned state: QUESTION — validate durable state and lifecycle.', '- Permissions/privacy: QUESTION — validate authorization, consent, data exposure, and destructive/reversal rules.', '- Failure modes: QUESTION — validate empty/error/retry/offline behavior.', '- Acceptance evidence:', ...m.features.slice(0, 8).map((f) => `  - ${f.title}: ${f.acceptance[0] || 'behavior proof required'}`), ''].join('\n')).join('\n')].join('\n')
+}
+
+function dependencyGraphMd(facts) {
+  const modules = moduleInventory(facts)
+  return ['# DEPENDENCY_GRAPH', '', 'This is an inferred dependency graph. Treat every edge as a hypothesis until source validation confirms calls/events/state ownership.', '', '## Suggested build order', '', ...modules.map((m, i) => `${i + 1}. ${m.title}`).join('\n').split('\n'), '', '## Dependency rules', '', '- Foundation modules may expose contracts to product modules.', '- Product modules must not depend on UI folder layout.', '- Integrations must be isolated behind provider/tool contracts.', '- Persistence must be accessed through module-owned state boundaries.', '- Cross-module shortcuts require an ADR or explicit contract.', ''].join('\n')
+}
+
+function reimplementationBoundariesMd(facts) {
+  return ['# REIMPLEMENTATION_BOUNDARIES', '', 'The goal is behavior-preserving reimplementation, not file-preserving cloning.', '', '## Must preserve', '', '- User-visible feature behavior validated from source evidence.', '- Data semantics, durability, import/export, retention, and restart behavior where claimed.', '- API/RPC/integration contracts that users or external systems depend on.', '- Security, privacy, authorization, consent, and destructive/reversal semantics.', '- Error, empty, loading, offline, retry, and failure states where product-relevant.', '', '## Replaceable', '', '- Frameworks, package layout, component internals, CSS/theming implementation, DB engine, queue engine, provider SDK, and directory names when product contracts still pass.', '', '## Requires explicit decision', '', '- Dropping features.', '- Changing external API formats.', '- Changing data portability or storage guarantees.', '- Weakening privacy/security behavior.', '- Replacing provider behavior that users observe.', ''].join('\n')
+}
+
+function verticalSliceMd(feature) {
+  return ['# ' + feature.title, '', `Kind: ${feature.kind}`, '', '## Evidence', '', feature.evidence.length ? feature.evidence.map((x) => `- ${x}`).join('\n') : '- QUESTION: source evidence required', '', '## Behavior contract to validate', '', ...feature.requiredBehavior.map((x) => `- ${x}`), '', '## Implementation slice', '', '- Build the smallest end-to-end path that proves this feature works with real state/side effects where claimed.', '- Keep dependencies behind module contracts.', '- Do not widen scope to adjacent features unless a dependency is explicit.', '', '## Acceptance', '', ...(feature.acceptance.length ? feature.acceptance : ['behavior proof required']).map((x) => `- ${x}`), '', '## Loop gate', '', '- Repeat until: pass_or_blocker', '- Evidence required: test/runtime proof or blocker with source citation.', ''].join('\n')
+}
+
+function phaseDefinitionMd(id, title, goal, features) {
+  return ['# ' + title, '', `Phase id: ${id}`, '', '## Goal', '', goal, '', '## Features/modules touched', '', features.length ? features.slice(0, 12).map((x) => `- ${x}`).join('\n') : '- QUESTION: confirm ownership during qualification', '', '## Tasks', '', '- Confirm feature contracts and exclusions.', '- Implement smallest complete behavior slice.', '- Add or update tests/proofs.', '- Run no-fake and claim-boundary checks.', '', '## Loop', '', '1. Implement smallest safe change.', '2. Run objective checks.', '3. Compare result to feature/module contract.', '4. Fix only the failing contract.', '5. Repeat until pass_or_blocker.', '', '## Exit criteria', '', '- Required behavior has evidence.', '- Blockers are explicit with missing input/evidence.', '- No unrelated parity claims are made.', ''].join('\n')
+}
+
+function implementationPhases(facts) {
+  const features = featureInventory(facts)
+  return [
+    ['00-product-contract', 'Product Contract', 'Freeze validated feature scope, parity tier, non-goals, and source-validation blockers.', features.slice(0, 10).map((f) => f.title)],
+    ['01-architecture-foundation', 'Architecture Foundation', 'Define modules, contracts, dependency direction, data ownership, and replaceability boundaries.', moduleInventory(facts).map((m) => m.title)],
+    ['02-core-state-and-data', 'Core State and Data', 'Implement durable state/data semantics required by validated features.', features.filter((f) => /data|state|memory|persistence|model/i.test(f.title)).map((f) => f.title)],
+    ['03-primary-user-flows', 'Primary User Flows', 'Implement validated user-facing workflows end-to-end.', features.filter((f) => f.kind === 'user-facing').map((f) => f.title)],
+    ['04-integrations-and-effects', 'Integrations and Effects', 'Implement external, AI/tool, provider, webhook, and side-effect contracts.', features.filter((f) => /AI|Agent|Workflow|API|Integration|webhook|provider|billing|stripe/i.test(f.title)).map((f) => f.title)],
+    ['05-ops-security-quality', 'Ops, Security and Quality', 'Implement release/update, observability, security/privacy, no-fake, and parity QA gates.', features.map((f) => f.title).slice(0, 12)],
+    ['06-final-parity-handover', 'Final Parity Handover', 'Prove accepted parity tier, document blockers, and prepare final agent handover.', features.map((f) => f.title).slice(0, 20)]
+  ]
+}
+
+function modularImplementationIndexMd(facts) {
+  return ['# Implementation', '', 'This folder is modular. `PHASE_PLAN.md` is an index only; phase details, vertical slices, loops, and task checklists live in subfolders.', '', '## Read order', '', '1. `PHASE_PLAN.md`', '2. `phases/*.md`', '3. `slices/*.md` for selected feature work', '4. `loops/*.md` during implementation/validation', '5. `tasks/*.md` for concrete execution', ''].join('\n')
+}
+
 function parityAcceptanceMd(facts) {
   const features = featureInventory(facts)
   return ['# PARITY_ACCEPTANCE', '', 'Parity means product behavior is preserved, not that the old files or tech stack are copied.', '', '## Parity tiers', '', '- MVP parity: core happy paths work with real state and clear exclusions.', '- Functional parity: all listed feature contracts pass acceptance checks.', '- Operational parity: security, privacy, observability, release/update, recovery, and handover evidence are complete.', '', '## Feature acceptance checklist', '', features.length ? features.map((f) => `- [ ] ${f.title}: ${f.acceptance[0] || 'behavior proof captured'}`).join('\n') : '- [ ] Feature inventory confirmed manually.', '', '## Universal acceptance', '', '- [ ] No secret values copied into the Buildprint or implementation.', '- [ ] No fake implementations hidden behind UI/API shells.', '- [ ] User-visible errors, empty states, and denied states are handled.', '- [ ] Data durability claims have restart proof.', '- [ ] External writes require explicit policy/approval semantics.', '- [ ] Final handover lists evidence, blockers, and remaining non-goals.', ''].join('\n')
@@ -1449,7 +1522,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '## Output mode',
     '',
     `- Mode: ${outputMode}`,
-    `- Qualification status: ${facts.selectedCandidate ? 'unqualified-selected-extraction; requires review before implementation claims' : 'UNQUALIFIED_MAP; discovery evidence only'}`,
+    `- Qualification status: QUALIFICATION_REVIEW_REQUIRED; mapped evidence only until source/runtime proof is recorded`,
     `- Size class: ${sizeClassification.sizeClass}`,
     `- Scope pressure: ${sizeClassification.scopePressure}`,
     `- Latest safe starting phase: ${sizeClassification.latestSafeStartingPhase}`,
@@ -1810,6 +1883,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     ''
   ].join('\n')
 
+  const qualificationRecords = featureQualificationRecords(facts)
+  const qualificationSummaryInfo = qualificationSummary(qualificationRecords)
+
   const manifestJson = {
     schemaVersion: 'buildprint-agent-manifest.v1',
     purpose: 'Machine-checkable manifest for an agent-first mapped Buildprint.',
@@ -1857,8 +1933,20 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'REVIEW_PACKET.json',
       'MAPPER_OS_ALIGNMENT.md'
     ],
-    qualificationStatus: facts.selectedCandidate ? 'unqualified-selected-extraction' : 'UNQUALIFIED_MAP',
-    qualificationGate: 'Source validation required before this package can be called a qualified implementation plan.',
+    qualificationStatus: 'QUALIFICATION_REVIEW_REQUIRED',
+    qualificationGate: 'Source validation and runtime/test evidence are required before this package can be called a qualified Buildprint.',
+    qualification: {
+      command: 'agb map',
+      promoted: false,
+      summary: qualificationSummaryInfo,
+      rules: [
+        'agb map generates mapped Buildprint evidence and an explicit promotion gate.',
+        'agb analyze reviews existing Buildprints or mapped packages analytically.',
+        'No separate top-level qualify command is required for the core product flow.',
+        'Side effects, auth, privacy, and external behavior require runtime/test proof before final promotion.',
+        'Blocked unknowns must remain explicit and must not enter parity claims.'
+      ]
+    },
     requiredFiles: requiredGeneratedFiles,
     conditionalFiles: {
       'PARITY_CLAIMS.md': 'generated when product/app/API/provider parity claims might be implied',
@@ -2158,6 +2246,70 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   if (needsObservability) fs.writeFileSync(path.join(out, 'OBSERVABILITY.md'), observabilityMd)
   if (needsArchitectureViews) fs.writeFileSync(path.join(out, 'ARCHITECTURE_VIEWS.md'), architectureViewsMd)
   if (isProductLike) fs.writeFileSync(path.join(out, 'QUALITY_SCORECARD.md'), qualityScorecardMd)
+
+  const writeOut = (relative, content) => {
+    const target = path.join(out, relative)
+    fs.mkdirSync(path.dirname(target), { recursive: true })
+    fs.writeFileSync(target, content)
+  }
+
+  // Qualified-package modular structure. These files are generated during discovery as
+  // unqualified drafts; later qualification/finalization should promote or correct them.
+  writeOut('product/README.md', '# Product\n\nProduct intent, feature scope, user flows, parity target, and open questions.\n')
+  writeOut('product/PRODUCT_SCOPE.md', qualifiedProductScopeMd(qualificationRecords))
+  writeOut('product/FEATURE_CATALOG.md', featureInventoryMd(facts))
+  writeOut('product/FEATURE_HYPOTHESES.md', featureHypothesesMd(facts))
+  writeOut('product/USER_FLOWS.md', '# USER_FLOWS\n\nDerived from route/page/API evidence. Validate triggers and journeys before qualification.\n\n' + facts.routes.map((x) => `- QUESTION flow for route: ${x}`).join('\n') + '\n')
+  writeOut('product/PARITY_TARGET.md', parityAcceptanceMd(facts))
+  writeOut('product/OPEN_QUESTIONS.md', questionsMd)
+
+  writeOut('architecture/README.md', '# Architecture\n\nCapability-first module abstraction, contracts, dependencies, and reimplementation boundaries.\n')
+  writeOut('architecture/SYSTEM_MODEL.md', architectureSystemModelMd(facts))
+  writeOut('architecture/MODULES.md', moduleAbstractionMd(facts))
+  writeOut('architecture/MODULE_CONTRACTS.md', moduleContractsMd(facts))
+  writeOut('architecture/DEPENDENCY_GRAPH.md', dependencyGraphMd(facts))
+  writeOut('architecture/DATA_MODEL.md', dataLifecycleMd)
+  writeOut('architecture/INTEGRATION_BOUNDARIES.md', '# INTEGRATION_BOUNDARIES\n\n' + (facts.integrations.length ? facts.integrations.map((x) => `- ${x}: validate provider contracts, retries, auth, side effects, and failure modes.`).join('\n') : '- none detected') + '\n')
+  writeOut('architecture/REIMPLEMENTATION_BOUNDARIES.md', reimplementationBoundariesMd(facts))
+  for (const m of moduleInventory(facts)) writeOut(`architecture/modules/${m.id}.md`, moduleAbstractionMd({ ...facts, candidateBuildprints: facts.candidateBuildprints.filter((c) => m.features.some((f) => f.evidence.some((e) => c.includedPaths.includes(e)))) }))
+
+  writeOut('implementation/README.md', modularImplementationIndexMd(facts))
+  writeOut('implementation/PHASE_PLAN.md', implementationDecompositionMd(facts))
+  for (const [id, title, goal, featureNames] of implementationPhases(facts)) {
+    writeOut(`implementation/phases/${id}.md`, phaseDefinitionMd(id, title, goal, featureNames))
+    writeOut(`implementation/tasks/${id}.tasks.md`, phaseDefinitionMd(id, `${title} Tasks`, goal, featureNames))
+  }
+  for (const feature of featureInventory(facts).slice(0, 24)) writeOut(`implementation/slices/${slugify(feature.title)}.md`, verticalSliceMd(feature))
+  writeOut('implementation/loops/feature-contract-loop.md', loopGatesMd(facts))
+  writeOut('implementation/loops/persistence-loop.md', loopGatesMd(facts))
+  writeOut('implementation/loops/integration-contract-loop.md', loopGatesMd(facts))
+  writeOut('implementation/loops/no-fake-loop.md', loopGatesMd(facts))
+  writeOut('implementation/loops/security-loop.md', loopGatesMd(facts))
+
+  writeOut('quality/README.md', '# Quality\n\nAcceptance, test, no-fake, security/privacy, observability, and parity checks.\n')
+  writeOut('quality/ACCEPTANCE_MATRIX.md', parityAcceptanceMd(facts))
+  writeOut('quality/TEST_STRATEGY.md', testMatrixMd)
+  writeOut('quality/NO_FAKE_CHECKS.md', implementationCompletenessMd)
+  writeOut('quality/SECURITY_PRIVACY_REVIEW.md', needsThreatModel ? threatModelMd : '# SECURITY_PRIVACY_REVIEW\n\nNo high-risk security surface detected by static mapper; still validate before qualification.\n')
+  writeOut('quality/OBSERVABILITY.md', observabilityMd)
+  writeOut('quality/PROMOTION_GATE.md', ['# PROMOTION_GATE', '', `Promotion status: ${manifestJson.qualificationStatus}`, '', '- `agb map` is allowed to generate evidence-backed draft packages only.', '- `agb analyze` is the analytic review surface for existing mapped packages.', '- Final `QUALIFIED_BUILDPRINT` requires readable source evidence plus runtime/test proof where required.', '- If any record is `blocked_unknown`, implementation phases may use it only as an open question or excluded scope.', ''].join('\n'))
+
+  writeOut('evidence/README.md', '# Evidence\n\nSource evidence, coverage, validation logs, and review packet.\n')
+  writeOut('evidence/SOURCE_EVIDENCE.md', '# SOURCE_EVIDENCE\n\n- Facts: `../facts.json` or root `facts.json`\n- Files scanned: ' + facts.totalFilesScanned + '\n- Routes: ' + facts.routes.length + '\n- APIs: ' + facts.apis.length + '\n- Tests: ' + facts.tests.length + '\n')
+  writeOut('evidence/EVIDENCE_COVERAGE.md', evidenceCoverageMd(facts))
+  writeOut('evidence/SOURCE_VALIDATION.md', sourceValidationMd(qualificationRecords))
+  writeOut('evidence/qualification-records.json', JSON.stringify({ summary: qualificationSummaryInfo, records: qualificationRecords }, null, 2) + '\n')
+  writeOut('evidence/SOURCE_VALIDATION_QUEUE.md', sourceValidationQueueMd(facts))
+  writeOut('evidence/VALIDATION_LOG.md', validationTemplateMd)
+  writeOut('evidence/REVIEW_PROTOCOL.md', formatMapReviewProtocol(reviewPacket))
+  writeOut('evidence/REVIEW_PACKET.json', JSON.stringify(reviewPacket, null, 2) + '\n')
+
+  writeOut('agent/README.md', '# Agent\n\nAgent execution rails and handover files.\n')
+  writeOut('agent/AGENT_EXECUTION_BRIEF.md', agentExecutionBriefMd)
+  writeOut('agent/agent-contract.xml', agentContractXml)
+  writeOut('agent/CURRENT_STATE.md', currentStateMd)
+  writeOut('agent/SUBMISSION_CHECKLIST.md', submissionChecklistMd)
+
   for (const [file, content] of Object.entries(phaseFiles)) fs.writeFileSync(path.join(out, 'plans', file), content)
 }
 
@@ -2207,6 +2359,66 @@ async function fetchTextExact(url) {
 
 function writeJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
+}
+
+
+function readJsonFile(file) {
+  return JSON.parse(readText(file))
+}
+
+function copyDirectorySafe(from, to) {
+  if (!exists(from)) throw new Error(`input folder does not exist: ${from}`)
+  if (exists(to)) throw new Error(`output folder already exists: ${to}`)
+  fs.mkdirSync(path.dirname(to), { recursive: true })
+  fs.cpSync(from, to, { recursive: true, errorOnExist: true })
+}
+
+function featureQualificationRecords(facts) {
+  return featureInventory(facts).map((feature) => {
+    const evidence = feature.evidence.filter(Boolean)
+    const readableEvidence = evidence.filter((relative) => {
+      const file = path.join(facts.root || '', relative)
+      return exists(file)
+    })
+    const hasSource = readableEvidence.length > 0
+    const missing = []
+    if (!hasSource) missing.push('source evidence file')
+    if (!feature.requiredBehavior?.length) missing.push('required behavior')
+    if (!feature.acceptance?.length) missing.push('acceptance proof')
+    const needsRuntimeProof = /external|provider|stripe|billing|payment|email|notification|AI|Agent|tool|webhook|auth|permission/i.test(feature.title + ' ' + feature.requiredBehavior.join(' '))
+    if (needsRuntimeProof) missing.push('runtime/test proof for side effects, auth, privacy, or external behavior')
+    return {
+      title: feature.title,
+      kind: feature.kind,
+      status: missing.length ? 'blocked_unknown' : 'validated_feature',
+      previousStatus: 'unqualified_hypothesis',
+      evidence,
+      readableEvidence,
+      confirmed: {
+        trigger: hasSource ? 'source evidence exists; human/agent must confirm exact runtime trigger' : 'unknown',
+        behavior: feature.requiredBehavior,
+        stateChanges: hasSource ? 'requires source review; not inferred as qualified from filenames' : 'unknown',
+        permissions: needsRuntimeProof ? 'requires explicit auth/privacy review' : 'not detected by static mapper',
+        externalSideEffects: needsRuntimeProof ? 'requires runtime/test evidence before promotion' : 'not detected by static mapper',
+        errorEmptyStates: 'requires source/test review before promotion',
+        acceptanceProof: feature.acceptance
+      },
+      blockers: missing
+    }
+  })
+}
+
+function qualificationSummary(records) {
+  const counts = records.reduce((acc, r) => ({ ...acc, [r.status]: (acc[r.status] || 0) + 1 }), {})
+  return { total: records.length, ...counts }
+}
+
+function sourceValidationMd(records) {
+  return ['# SOURCE_VALIDATION', '', 'Qualification reads map evidence and refuses to promote unresolved hypotheses. Static evidence can validate file existence and source-review targets, but runtime behavior still needs proof.', '', ...records.map((r) => [`## ${r.title}`, '', `- Status: ${r.status}`, `- Previous status: ${r.previousStatus}`, '- Evidence:', ...(r.evidence.length ? r.evidence.map((x) => `  - ${x}${r.readableEvidence.includes(x) ? ' (readable)' : ' (missing)'}`) : ['  - none']), '- Confirmed / required:', `  - Trigger: ${r.confirmed.trigger}`, `  - State changes: ${r.confirmed.stateChanges}`, `  - Permissions: ${r.confirmed.permissions}`, `  - External side effects: ${r.confirmed.externalSideEffects}`, `  - Error/empty states: ${r.confirmed.errorEmptyStates}`, '- Blockers:', ...(r.blockers.length ? r.blockers.map((x) => `  - ${x}`) : ['  - none']), ''].join('\n')).join('\n')].join('\n')
+}
+
+function qualifiedProductScopeMd(records) {
+  return ['# PRODUCT_SCOPE', '', 'This product scope is derived from qualification records. Preserve validated behavior; do not claim parity for blocked unknowns.', '', '## Must preserve', '', ...(records.filter((r) => r.status === 'validated_feature').map((r) => `- ${r.title}`) || []), '', '## Unknown / blocked', '', ...(records.filter((r) => r.status !== 'validated_feature').map((r) => `- ${r.title}: ${r.blockers.join('; ')}`) || ['- none']), '', '## Can replace', '', '- Internal framework/library choices unless product behavior, data semantics, privacy, or integration contracts depend on them.', '- File/folder layout unless it is part of a public package/API contract.', '', '## Explicitly excluded', '', '- Features without source evidence.', '- Full production parity for blocked unknowns.', '- Runtime/security/privacy guarantees without tests or source proof.', ''].join('\n')
 }
 
 async function startBuildprint(manifestRef, targetFolder = cwd) {
@@ -2308,6 +2520,7 @@ if (args[0] === 'analyze') {
     process.exit(1)
   }
 }
+
 
 
 if (args[0] === 'start') {

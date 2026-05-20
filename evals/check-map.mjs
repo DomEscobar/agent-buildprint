@@ -43,6 +43,15 @@ for (const name of names) {
   assert(fs.existsSync(path.join(out, 'PHASE_PLAN.md')), `${name}: PHASE_PLAN.md exists`);
   assert(fs.existsSync(path.join(out, 'LOOP_GATES.md')), `${name}: LOOP_GATES.md exists`);
   assert(fs.existsSync(path.join(out, 'PARITY_ACCEPTANCE.md')), `${name}: PARITY_ACCEPTANCE.md exists`);
+  assert(fs.existsSync(path.join(out, 'product', 'FEATURE_CATALOG.md')), `${name}: modular product feature catalog exists`);
+  assert(fs.existsSync(path.join(out, 'architecture', 'MODULES.md')), `${name}: modular architecture modules exists`);
+  assert(fs.existsSync(path.join(out, 'architecture', 'MODULE_CONTRACTS.md')), `${name}: modular module contracts exists`);
+  assert(fs.existsSync(path.join(out, 'implementation', 'PHASE_PLAN.md')), `${name}: modular implementation phase index exists`);
+  assert(fs.existsSync(path.join(out, 'implementation', 'phases', '00-product-contract.md')), `${name}: implementation phase files exist`);
+  assert(fs.existsSync(path.join(out, 'implementation', 'loops', 'feature-contract-loop.md')), `${name}: implementation loop files exist`);
+  assert(fs.existsSync(path.join(out, 'quality', 'ACCEPTANCE_MATRIX.md')), `${name}: quality acceptance matrix exists`);
+  assert(fs.existsSync(path.join(out, 'evidence', 'EVIDENCE_COVERAGE.md')), `${name}: modular evidence coverage exists`);
+  assert(fs.existsSync(path.join(out, 'agent', 'AGENT_EXECUTION_BRIEF.md')), `${name}: modular agent brief exists`);
   assert(fs.existsSync(path.join(out, 'BUILDPRINT_CANDIDATES.md')), `${name}: BUILDPRINT_CANDIDATES.md exists`);
   assert(fs.existsSync(path.join(out, 'REVIEW_PROTOCOL.md')), `${name}: REVIEW_PROTOCOL.md exists`);
   assert(fs.existsSync(path.join(out, 'REVIEW_PACKET.json')), `${name}: REVIEW_PACKET.json exists`);
@@ -55,7 +64,11 @@ for (const name of names) {
   assert(manifest.mapperOs?.slug === 'buildprint-mapper-os', `${name}: manifest records Mapper OS alignment`);
   assert(manifest.sizeClassification?.sizeClass, `${name}: manifest records size classification`);
   assert(manifest.sizeClassification?.scopePressure, `${name}: manifest records scope pressure separately from size`);
-  assert(manifest.qualificationStatus === 'UNQUALIFIED_MAP', `${name}: discovery manifest is explicitly unqualified`);
+  assert(manifest.qualificationStatus === 'QUALIFICATION_REVIEW_REQUIRED', `${name}: discovery manifest requires qualification review`);
+  assert(manifest.qualification?.command === 'agb map', `${name}: map owns qualification status in manifest`);
+  assert(fs.existsSync(path.join(out, 'evidence', 'SOURCE_VALIDATION.md')), `${name}: map writes source validation evidence`);
+  assert(fs.existsSync(path.join(out, 'evidence', 'qualification-records.json')), `${name}: map writes feature qualification records`);
+  assert(fs.existsSync(path.join(out, 'quality', 'PROMOTION_GATE.md')), `${name}: map writes promotion gate`);
   assert(!manifest.requiredFiles.includes('AGENT_EXECUTION_BRIEF.md'), `${name}: discovery manifest does not require implementation rails`);
   assert((expected.apiIncludes ?? []).every((needle) => facts.apis.includes(needle)), `${name}: expected API files detected`);
   const firstPathBackedIndex = facts.candidateBuildprints.findIndex((c) => c.includedPaths?.length > 0);
@@ -88,6 +101,13 @@ for (const name of names) {
     assert(selectedManifest.requiredFiles.includes('AGENT_EXECUTION_BRIEF.md'), `${name}: --candidate restores implementation rails`);
     assert(selectedPacket.package.selectedScope, `${name}: --candidate records selected scope in review packet`);
     assert(read(path.join(selectedOut, 'SELECTED_CANDIDATE.md')).includes(selectedFacts.selectedCandidate.includedPaths[0]), `${name}: --candidate writes selected evidence paths`);
+
+    const qualificationRecords = JSON.parse(read(path.join(selectedOut, 'evidence', 'qualification-records.json')));
+    assert(selectedManifest.qualificationStatus === 'QUALIFICATION_REVIEW_REQUIRED', `${name}: selected map writes qualification status`);
+    assert(selectedManifest.qualification?.command === 'agb map', `${name}: selected map owns qualification status in manifest`);
+    assert(Array.isArray(qualificationRecords.records), `${name}: selected map writes feature qualification records`);
+    assert(fs.existsSync(path.join(selectedOut, 'evidence', 'SOURCE_VALIDATION.md')), `${name}: selected map writes source validation evidence`);
+    assert(fs.existsSync(path.join(selectedOut, 'quality', 'PROMOTION_GATE.md')), `${name}: selected map writes promotion gate`);
 
     const scopedOut = fs.mkdtempSync(path.join(os.tmpdir(), `agb-eval-${name}-scoped-`));
     execFileSync('node', [path.join(root, 'bin', 'agb.js'), 'map', project, '--scope', 'apps/web', '--out', scopedOut], { stdio: 'pipe' });
