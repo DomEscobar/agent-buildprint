@@ -1,24 +1,17 @@
-# Observability and Operations
+# OBSERVABILITY
 
-## Signals
+Required for deployable services, sensitive operations, async workflows, provider paths, and selected packages that claim operational behavior.
 
-| Flow/module | Logs | Metrics | Traces | Audit events | Alerts |
-|---|---|---|---|---|---|
-|  |  |  |  |  |  |
+## Required Signals
 
-## Health and readiness
+- Logs:
+- Metrics:
+- Traces:
+- Audit events:
+- Alert conditions:
 
-- health checks:
-- dependency readiness:
-- background job monitoring:
-- queue/dead-letter handling:
+## Verification
 
-## Runbook
-
-| Scenario | Detection | Operator action | Recovery validation |
+| Signal | Trigger | Expected evidence | Status |
 |---|---|---|---|
-|  |  |  |  |
-
-## Operational unknowns
-
-- 
+|  |  |  | missing |

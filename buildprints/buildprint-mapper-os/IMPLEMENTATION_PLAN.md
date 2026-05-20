@@ -1,53 +1,30 @@
 # Mapper OS Implementation Plan
 
-This plan turns `agb map` into a gated pipeline from evidence-backed discovery to a modular, review-required Buildprint package. Analytic review belongs to `agb analyze`; qualification/promotion status is emitted as part of the mapped package rather than a separate core CLI verb.
+This file describes how to maintain Mapper OS itself.
 
-## Phase 1 — Unqualified discovery packet
+## Current Direction
 
-Status: implemented.
+- Mapper OS is an agent-run Buildprint workflow.
+- `agb map` is not the mapper entrypoint.
+- The Mapper OS package must teach source discovery, capability extraction, selected-buildprint packaging, downstream execution planning, and qualification.
 
-- Emit `QUALIFICATION_REVIEW_REQUIRED`, never a qualified implementation claim from static mapping alone.
-- Extract feature hypotheses from routes, APIs/RPC, docs, tests, config, package/runtime markers, integrations, and code signals.
-- Emit evidence coverage and a source validation queue.
-- Gate: discovery output must tell agents what is unknown and what must be read before qualification.
+## Maintenance Milestones
 
-## Phase 2 — Product scope review gate
+1. Keep `mapper-os-requirement.md` and this package aligned.
+2. Keep selected-output templates aligned to the required package shape.
+3. Keep policies focused on evidence, no-fake behavior, minimal questions, and source independence.
+4. Keep fixture review under `evals/golden-projects/` as manual or agent-run regression input.
+5. Keep `agb analyze`, `agb check`, and `agb start` working; do not reintroduce `agb map`.
 
-- Record each feature hypothesis against source files and optional runtime/test evidence.
-- Promote feature states: `unqualified_hypothesis`, `validated_feature`, `blocked_unknown`, `out_of_scope`.
-- Emit product scope files under `product/`.
-- Gate: no feature enters the final plan without trigger, behavior, state/side effects, permissions/privacy, and acceptance evidence or a blocker.
+## Decision Log
 
-## Phase 3 — Modularity abstraction
+- Mapper logic belongs in the Mapper OS Buildprint and agent session, not in a deterministic CLI scanner.
+- Source-independent readiness is qualified by evidence and verification, not by file generation.
+- Legacy matrix files are not default selected-output artifacts; their concepts live in `CAPABILITY_INDEX.md`, capability packs, `IMPLEMENTATION_PLAN.md`, and `VERIFICATION.md`.
 
-- Compile validated features into modules/domains.
-- Emit module responsibilities, owned state, inputs/outputs, events/RPC/contracts, dependencies, failure modes, and forbidden coupling under `architecture/`.
-- Gate: phases may reference modules only after module ownership and dependency direction are explicit.
+## Risk Register
 
-## Phase 4 — Modular implementation plan
-
-- Emit `implementation/PHASE_PLAN.md` as an index, not a giant single plan.
-- Emit one file per phase under `implementation/phases/`.
-- Emit vertical slices under `implementation/slices/`.
-- Emit reusable objective loops under `implementation/loops/`.
-- Emit concrete task checklists under `implementation/tasks/`.
-- Gate: each phase has goal, included features/modules, tasks, validation, loop gates, and exit criteria.
-
-## Phase 5 — Quality and parity gates
-
-- Emit quality artifacts under `quality/`.
-- Acceptance is feature-level and module-level.
-- No-fake, persistence, integration, security/privacy, observability, and handover checks are mandatory.
-- Gate: claims may advance only when evidence exists or a blocker is recorded.
-
-## Phase 6 — Evidence and review packet
-
-- Emit evidence artifacts under `evidence/`.
-- Review packet must include feature inventory, evidence coverage, module abstraction, implementation phases, and loop gates.
-- Gate: reviewer must be able to reject weak mappings before implementation starts.
-
-## Phase 7 — Final promotion boundary
-
-- `agb map` emits the promotion gate and missing-evidence records, but does not claim final qualification from static evidence alone.
-- Only after external source/runtime/test validation may a package status become `QUALIFIED_BUILDPRINT`.
-- Until then, mapped packages remain `QUALIFICATION_REVIEW_REQUIRED`.
+- Risk: legacy docs or templates reintroduce `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `TEST_MATRIX.md`, `TRACEABILITY_MATRIX.md`, or `IMPLEMENTATION_COMPLETENESS.md` as defaults.
+- Risk: fixture review becomes informal and misses no-fake regressions.
+- Risk: agents over-read source and preserve internals instead of behavior.
+- Risk: selected packages look complete while remaining `SELECTED_UNQUALIFIED`.

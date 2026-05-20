@@ -1,52 +1,18 @@
-# Current State
+# CURRENT_STATE
 
-Purpose: anti-context-rot handoff file. Update after every phase, before long pauses, and before delegating to another agent.
+- Active capability:
+- Completed capability packs:
+- Blocked capability packs:
+- Next pack:
+- Qualification label:
 
-## Mission
+## Last Evidence Update
 
-Build the selected production-grade scope.
+- Commands run:
+- Evidence artifacts:
+- Blockers:
+- Skipped checks:
 
-## Current phase
+## Next Action
 
-Phase 0 — not started.
-
-## Completed
-
-- None yet.
-
-## Active constraints
-
-- Scope may be limited, but included capabilities must be complete.
-- No mocks/fixtures as product implementation; fixtures may exist only in named test/demo paths.
-- No placeholder routes, no-op controls, fake success states, or skeleton adapters inside included scope.
-- Product data must be durable if persistence is claimed.
-- Tests/build/runtime QA/no-fake scan required before done; persistence/restart proof required when state is claimed.
-
-## Included capabilities
-
-- TBD
-
-## Excluded capabilities
-
-- TBD
-
-## Next action
-
-Read `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, then confirm selected scope and phase gate.
-
-## Blockers
-
-- None recorded.
-
-## Evidence so far
-
-- Commands run: none.
-- Tests: not run.
-- Build: not run.
-- Runtime QA: not run.
-- Persistence/restart proof: not run.
-- No-fake scan: not run.
-
-## Last updated
-
-- Agent/date: TBD
+-

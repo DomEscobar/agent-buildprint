@@ -1,37 +1,18 @@
-# Phase 07 - Validation and Submission
+# Phase 07 - Verification And Handoff
 
 ## Goal
 
-Prove the mapped package honestly and finish with a useful handover.
-
-## Keep in context
-
-- `TEST_MATRIX.md`
-- `VALIDATION_TEMPLATE.md`
-- `checks/acceptance.md`
-- `policies/quality.md`
+Prove what can be proven and block what cannot be proven.
 
 ## Steps
 
-- Run a compact clean-room reversal when possible.
-- Run safe checks, tests, build, browser/runtime QA, persistence/restart QA, and no-fake scan when applicable.
-- Run mapper golden evals when mapper behavior changed: `node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js`.
-- Separate Buildprint gaps, scratch harness issues, product proof defects, and intentional omissions.
-- Finish with chat handover.
+- Run applicable static, build, unit/contract, runtime, browser/API, persistence/restart, no-fake, security/privacy, and clean-room reversal checks.
+- Record commands run, commands not run, evidence, blockers, timestamps, environment, and artifacts.
+- Run fixture review using `evals/golden-projects/` when Mapper OS behavior or templates change.
+- Keep label `SELECTED_UNQUALIFIED` unless source-independent qualification proof is complete.
 
-## Do not
+## Exit Criteria
 
-- Fake pass status.
-- Count mocks/stubs/fixtures as product implementation.
-- Hide known gaps.
-- Claim full parity without explicit evidence.
-
-## Exit criteria
-
-- Validation report records exact commands or blockers.
-- Acceptance checklist is complete or blocked.
-- Final chat handover includes outcome, selected scope, evidence inspected, files generated, commands/evals run, known gaps, and recommended next direction.
-
-## Validation evidence
-
-- `REVERSAL_REPORT.md`, `QA_REPORT.md`, `VALIDATION_TEMPLATE.md`, and chat handover where applicable.
+- Qualification label is honest.
+- Missing gate results are blockers.
+- Final handoff names active capability, completed packs, blocked packs, next pack, and residual risks.

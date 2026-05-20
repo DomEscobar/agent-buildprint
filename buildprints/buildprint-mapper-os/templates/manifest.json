@@ -1,76 +1,28 @@
 {
-  "schemaVersion": "buildprint-agent-manifest.v1",
-  "purpose": "Machine-checkable manifest for agent-first Buildprints.",
-  "readOrder": [
-    "AGENT_EXECUTION_BRIEF.md",
-    "agent-contract.xml",
-    "CURRENT_STATE.md",
-    "BUILDPRINT.md",
-    "SPEC.md",
-    "CONTRACTS.md",
-    "IMPLEMENTATION_COMPLETENESS.md",
-    "TEST_MATRIX.md",
-    "HEAD_TO_FOOT_QA.md"
-  ],
-  "requiredFiles": [
-    "AGENT_EXECUTION_BRIEF.md",
-    "agent-contract.xml",
-    "CURRENT_STATE.md",
-    "BUILDPRINT.md",
-    "SPEC.md",
-    "PLAN.md",
-    "CONTRACTS.md",
-    "TEST_MATRIX.md",
-    "IMPLEMENTATION_COMPLETENESS.md",
-    "QA_PLAN.md",
-    "HEAD_TO_FOOT_QA.md",
-    "TRACEABILITY_MATRIX.md",
-    "VALIDATION_TEMPLATE.md",
-    "questions.md",
-    "SUBMISSION_CHECKLIST.md"
-  ],
-  "conditionalFiles": {
-    "PARITY_CLAIMS.md": "required for product-inspired, rebuild, compatibility, agentic, webapp, or user-facing scopes",
-    "CAPABILITY_BASELINE.md": "required for famous/product-inspired systems",
-    "THREAT_MODEL.md": "required for auth, payments, admin, API, upload, sensitive data, destructive actions, multi-user or external side-effect scopes",
-    "DATA_LIFECYCLE.md": "required when persistent, synced, imported, exported, or user-owned data exists",
-    "OBSERVABILITY.md": "required for deployable services/products",
-    "QUALITY_SCORECARD.md": "required before product-proof or publish-ready claims",
-    "RUNTIME_LIVE_TEST_PLAN.md": "required when product runtime/browser QA needs a separate harness plan"
+  "schemaVersion": "mapper-os/selected-buildprint.v1",
+  "source": {
+    "input": "",
+    "checkoutPath": "",
+    "commit": ""
   },
-  "requiredGates": [
-    "scope-explicit",
-    "production-grade-selected-scope-explicit",
-    "no-fake-implementation-scan",
-    "secrets-scan",
-    "traceability-matrix-complete",
-    "tests-run-or-blocked",
-    "build-run-or-blocked",
-    "runtime-qa-for-product-scope",
-    "persistence-restart-qa-when-state-exists",
-    "agent-current-state-updated",
-    "final-evidence-report"
-  ],
-  "mustNotCountAsProductImplementation": [
-    "mock providers",
-    "fixtures",
-    "skeleton adapters",
-    "placeholder routes",
-    "route-shaped links",
-    "no-op controls",
-    "fake success states",
-    "coming soon surfaces",
-    "TODO implementations",
-    "in-memory-only stores when persistence is claimed"
-  ],
-  "doneCriteria": [
-    "Included capabilities are real or excluded.",
-    "Build passes or blocker is explicit.",
-    "Tests pass or blocker is explicit.",
-    "Runtime QA evidence exists for product/app/feature scope.",
-    "Persistence/restart proof exists when product state exists.",
-    "No-fake implementation scan passes.",
-    "CURRENT_STATE.md is updated.",
-    "Final report includes commands, artifacts, completed included capabilities, excluded capabilities, and remaining gaps."
-  ]
+  "generatedAt": "",
+  "outputMode": "selected-extraction",
+  "discoveryStatus": "DISCOVERY_REVIEW_REQUIRED",
+  "qualificationStatus": "SELECTED_UNQUALIFIED",
+  "productionPosture": "selected scope only",
+  "mockPolicy": "mocks allowed only as test/demo fixtures",
+  "noFakeScanStatus": "not run",
+  "completenessScore": {
+    "rubric": "",
+    "numerator": 0,
+    "denominator": 0,
+    "threshold": "",
+    "blockerOverrides": []
+  },
+  "capabilityCounts": {
+    "included": 0,
+    "excluded": 0,
+    "blocked": 0,
+    "testOnlyMock": 0
+  }
 }

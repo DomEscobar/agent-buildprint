@@ -1,84 +1,76 @@
-schema: agent-buildprint/phases.v1
+schema: agent-buildprint/phases.v2
 canonical_start: BUILDPRINT.md
 phases:
   - id: 00-safety-boundaries
     title: Safety and Boundaries
     inputs: [BUILDPRINT.md, policies/safety.md, plans/00-safety-boundaries.md]
     must_produce:
-      - read/export boundary recorded
-      - source mutation forbidden
-      - secret handling rule recorded
+      - source read boundary
+      - output write boundary
+      - secret handling rule
     must_pass:
-      - no source app files modified
-      - no secret values copied
-    forbidden:
-      - broad pre-discovery questionnaire
+      - source project is not modified
+      - no secret values are copied
 
   - id: 01-repo-census
-    title: Repo Census
+    title: Safe Census
     inputs: [plans/01-repo-census.md, policies/quality.md]
     must_produce:
-      - stack, routes, APIs, data, tests, integrations, deploy, risk inventory
-      - OBSERVED/INFERRED/QUESTION labels
+      - file tree and manifest hints
+      - dependency/framework/script/deploy/test/env-name hints
+      - CENSUS_HINT or PENDING_AGENT_DISCOVERY states only
     must_pass:
-      - census avoids final architecture claims
+      - no product behavior, absence, parity, provider, or persistence claims
 
-  - id: 02-system-map
-    title: System Map and Size Classification
-    inputs: [plans/02-system-map.md, SPEC.md, CONTRACTS.md]
+  - id: 02-capability-discovery
+    title: Capability Discovery
+    inputs: [plans/02-system-map.md, CONTRACTS.md]
     must_produce:
-      - evidence-backed system zones and flows
-      - risk zones and unknowns
-      - small/medium/large/monorepo-system classification
-      - decomposition strategy when medium/large/system
+      - capability inventory
+      - promoted claim register
+      - source evidence paths and lines or sections
     must_pass:
-      - important claims have evidence labels
-      - output mode is justified before extraction
+      - every OBSERVED claim has evidence
+      - unresolved behavior remains QUESTION or BLOCKED
 
-  - id: 03-candidate-buildprints
-    title: Candidate Buildprints
-    inputs: [plans/03-candidate-buildprints.md, prompts/discover.md]
+  - id: 03-candidate-selection
+    title: Candidate Selection
+    inputs: [plans/03-candidate-buildprints.md, plans/04-scope-decision.md, questions.md]
     must_produce:
-      - 2-5 candidates or justified single/system path
-      - included/excluded paths, risks, QA strategy, no-fake boundaries
-      - implementation phases and validation strategy per candidate
+      - selected candidate, explicit scope, full-suite target, or discovery-only blocker
+      - included/excluded/blocked capability classification
     must_pass:
-      - unrelated scopes are not merged
-      - large/system repos do not proceed to implementation without selected scope
+      - no placeholder replacement for scope cuts
 
-  - id: 04-scope-decision
-    title: Scope Decision
-    inputs: [plans/04-scope-decision.md, questions.md, policies/questions.md]
+  - id: 04-source-distillation
+    title: Source Distillation
+    inputs: [prompts/extract-selected.md, templates/]
     must_produce:
-      - selected candidate/system path or blocker
-      - production-grade selected-scope posture
-      - fidelity/proof depth
+      - source-independent selected-buildprint package
+      - capability contracts
+      - stable-vs-free boundaries
     must_pass:
-      - max one blocking chat question at a time
+      - selected output stays under selected-buildprint/
+      - medium/large/full-suite output is hierarchical
 
-  - id: 05-single-extraction
-    title: Single Extraction
-    inputs: [plans/05-single-extraction.md, prompts/extract-selected.md, templates/manifest.json]
+  - id: 05-execution-planning
+    title: Downstream Execution Planning
+    inputs: [EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md]
     must_produce:
-      - selected Buildprint package with agent execution rails
-      - QA, traceability, no-fake, and submission artifacts
+      - first slice per included capability
+      - first verification gate per included capability
+      - repair-loop and stop/escalation rules
     must_pass:
-      - generated manifest required files exist
+      - implementing agent does not need to infer critical order or gates
 
-  - id: 06-system-extraction
-    title: System Extraction
-    inputs: [plans/06-system-extraction.md]
+  - id: 06-qualification
+    title: Qualification
+    inputs: [VERIFICATION.md, plans/07-validation-submission.md]
     must_produce:
-      - hierarchical project package only when requested
+      - gate results or blockers
+      - no-fake scan result
+      - hardening evidence when required
+      - reversal or QA evidence when required
     must_pass:
-      - module boundaries remain explicit
-
-  - id: 07-validation-submission
-    title: Validation and Submission
-    inputs: [plans/07-validation-submission.md, TEST_MATRIX.md, VALIDATION_TEMPLATE.md, checks/acceptance.md]
-    must_produce:
-      - reversal/product QA evidence or blockers
-      - mapper golden eval evidence when mapper behavior changes
-      - final chat handover
-    must_pass:
-      - no invented validation status
+      - qualification label is honest
+      - public wording is not misleading

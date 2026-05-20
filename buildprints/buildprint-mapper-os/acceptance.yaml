@@ -1,40 +1,51 @@
-schema: agent-buildprint/acceptance.v1
+schema: agent-buildprint/acceptance.v2
 canonical_start: BUILDPRINT.md
 acceptance:
   safety:
     source_mutation: forbidden
     secret_values: never_copy
     env_var_names: allowed
-  required_outputs:
-    discovery:
-      - SYSTEM_MAP.md
-      - BUILDPRINT_CANDIDATES.md
-      - questions.md
-    selected_extraction:
-      - AGENT_EXECUTION_BRIEF.md
-      - agent-contract.xml
+  default_output:
+    must_create_only:
+      - discovery
+      - evidence
+      - quality
+    must_not_create:
+      - root implementation scaffold
+      - selected-buildprint without scope decision
+  selected_output:
+    required_root:
+      - BUILDPRINT.md
+      - CAPABILITY_INDEX.md
+      - CONTRACTS.md
+      - VERIFICATION.md
+      - EXECUTION_PROTOCOL.md
+      - IMPLEMENTATION_PLAN.md
       - CURRENT_STATE.md
       - manifest.json
-      - BUILDPRINT.md
-      - SPEC.md
-      - PLAN.md
-      - CONTRACTS.md
+      - capabilities/
+    required_capability_pack:
+      - CAPABILITY.md
+      - VERIFICATION.md
+      - IMPLEMENTATION.md
+    forbidden_default_files:
+      - AGENT_EXECUTION_BRIEF.md
+      - agent-contract.xml
       - TEST_MATRIX.md
-      - QA_PLAN.md
-      - IMPLEMENTATION_COMPLETENESS.md
-      - HEAD_TO_FOOT_QA.md
       - TRACEABILITY_MATRIX.md
-      - VALIDATION_TEMPLATE.md
-      - SUBMISSION_CHECKLIST.md
-  required_commands:
-    - name: mapper_golden_eval
-      command: node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js
-      required_when: mapper behavior changes
+      - IMPLEMENTATION_COMPLETENESS.md
+      - PHASE_PLAN.md
+      - LOOP_GATES.md
   static_gates:
     - discover first and ask later
     - no broad pre-discovery questionnaire
-    - observed/inferred/question/out-of-scope labels used
-    - selected scope explicit before final extraction
-    - generated output includes agent execution rails
+    - census hints are not product facts
+    - every OBSERVED claim cites source evidence
+    - selected scope explicit before selected extraction
+    - capability status classification complete
     - no mocks or fixtures counted as product implementation
-    - final chat handover includes outcome, selected scope, evidence, files, commands/evals, gaps, and next direction
+    - qualification label is DISCOVERY_ONLY, SELECTED_UNQUALIFIED, or QUALIFIED_SOURCE_INDEPENDENT
+  required_reviews:
+    - name: mapper_fixture_review
+      command: manual or agent-based review of buildprints/buildprint-mapper-os/evals/golden-projects/
+      required_when: mapper behavior, templates, or policies change

@@ -2,32 +2,17 @@
 
 ## Goal
 
-Propose reusable, bounded Buildprint candidates without merging unrelated scopes.
-
-## Keep in context
-
-- `prompts/discover.md`
-- `policies/quality.md`
-- `SYSTEM_MAP.md`
+Propose implementable selected scopes from promoted capability evidence.
 
 ## Steps
 
-- Produce 2-5 candidates, or a justified single/system path.
-- For each candidate include title, outcome, included/excluded paths, reusable value, risks, open questions, estimated tier, fidelity target, and validation checks.
-- Identify capabilities to exclude rather than fake.
-- Recommend the smallest production-grade selected scope.
+- Group capabilities by product behavior and dependencies.
+- Prefer the smallest fully implementable production-complete scope.
+- Mark incomplete or risky capabilities `BLOCKED` or `OUT_OF_SCOPE`.
+- For full-suite intent, preserve every blocker and require hierarchical output.
 
-## Do not
+## Exit Criteria
 
-- Create one vague whole-repo Buildprint when smaller scopes exist.
-- Count mocks, fixtures, temporary stores, or no-op controls as product behavior.
-- Skip QA strategy or parity boundaries.
-
-## Exit criteria
-
-- Candidate list is decision-ready.
-- The next human question is which candidate/system path to extract.
-
-## Validation evidence
-
-- `BUILDPRINT_CANDIDATES.md` includes scope, evidence, risks, and validation strategy per candidate.
+- Candidate list has included, excluded, blocked, and test-only capability classifications.
+- Each candidate has verification strategy and no-fake boundary.
+- User decision is needed only if multiple viable scopes or risky inclusions remain.

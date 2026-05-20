@@ -13,8 +13,8 @@ Agent Buildprint is a registry/marketplace for building plans that coding agents
 
 - `agb analyze` prints a local Buildprint AI review packet for Agents; it gathers evidence and schemas but does not judge quality itself.
 - `agb check` validates Buildprint folders and generated code imports.
-- `agb map` maps an existing repo into `.project.buildprint/` with deterministic facts, a Buildprint package, confidence report, risks, questions, tiny phase plans, and a continuation prompt.
 - `agb start <package.json URL>` bootstraps `.buildprint/` in a new implementation repo by downloading exact Buildprint snapshots and writing continuation state.
+- Repository mapping is handled by an agent session using `buildprints/buildprint-mapper-os/`, not by a deterministic CLI command.
 
 ## Install
 
@@ -33,35 +33,16 @@ agb analyze ./buildprints/portable-novel-storyboard-pipeline --phase 04-workbenc
 agb analyze ./buildprints/buildprint-mapper-os --json
 agb check ./my-buildprint
 agb check ./my-buildprint --code ./generated-code
-agb map ./my-project
-agb map ./my-project --out ./my-project.buildprint
 agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json
 ```
 
-## Mapper output
+## Mapping Existing Repositories
 
-```txt
-.project.buildprint/
-  facts.json
-  BUILDPRINT.md
-  SPEC.md
-  PLAN.md
-  plans/*.md
-  CONTRACTS.md
-  TEST_MATRIX.md
-  VALIDATION_TEMPLATE.md
-  buildprint.yaml
-  discovered-map.md
-  confidence-report.md
-  questions.md
-  risks.md
-  prompts/continue-building.md
-  tests/architecture.yaml
-```
+Use `buildprints/buildprint-mapper-os/` as the governing Buildprint in an agent session. The mapper is an evidence-driven source-reading workflow, not a scanner command. The agent must read source, promote claims with evidence, select or block scope, and produce a source-independent Buildprint package.
 
 ## Principle
 
-Deterministic facts first. Inference second. Unknowns become questions, not fake certainty. Mapper-generated packages must separate observed facts, inferred behavior, and unknowns.
+Evidence first. Inference second. Unknowns become questions, not fake certainty. Mapper-generated packages must separate observed facts, inferred behavior, and unknowns.
 
 ## Format philosophy
 

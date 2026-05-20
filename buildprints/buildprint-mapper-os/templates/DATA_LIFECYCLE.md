@@ -1,35 +1,23 @@
-# Data Lifecycle
+# DATA_LIFECYCLE
 
-Required for data-heavy products or modules.
+Required when selected scope persists, imports, exports, syncs, or handles sensitive data.
 
-## Data entities
+## Data Contract
 
-| Entity | Source evidence | Owner | Created by | Updated by | Deleted by |
-|---|---|---|---|---|---|
-|  | OBSERVED(path:line) |  |  |  |  |
+- Data collected:
+- Validation:
+- Storage:
+- Retention:
+- Deletion:
+- Backup/restore:
+- Export:
+- Sensitive fields:
 
-## Lifecycle states
+## Verification
 
-| Entity | State | Trigger | Next states | Invariants |
-|---|---|---|---|---|
-|  |  |  |  |  |
-
-## Retention, deletion, export
-
-- retention rules:
-- soft delete / hard delete:
-- user export:
-- privacy/compliance notes:
-
-## Migration / backfill / compatibility
-
-- schema migrations:
-- import compatibility:
-- malformed data behavior:
-- conflict/offline behavior:
-
-## Data QA checks
-
-| Risk | Check | Status |
-|---|---|---|
-|  |  | pending |
+| Check | Expected result | Status | Evidence |
+|---|---|---|---|
+| write/read/restart |  | missing |  |
+| migration behavior |  | missing |  |
+| failure path |  | missing |  |
+| deletion/export |  | missing |  |

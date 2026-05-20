@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import fs from 'node:fs'
 import path from 'node:path'
+import os from 'node:os'
 import { fileURLToPath } from 'node:url'
 import crypto from 'node:crypto'
+import { execFileSync } from 'node:child_process'
 import { buildAnalyzePacket } from '../src/analyze/build-packet.js'
 import { formatPacketMarkdown } from '../src/analyze/format-markdown.js'
 import { formatPacketJson } from '../src/analyze/format-json.js'
@@ -31,7 +33,6 @@ function usage(exitCode = 0) {
 Usage:
   agb analyze <buildprint-folder> [--phase <id>] [--json] [--yaml]
   agb check <blueprint-folder> [--code <generated-code-folder>]
-  agb map <repo-folder> [--out <output-folder>] [--scope <path>] [--candidate <number>]
   agb start <buildprint-package-json-url-or-file> [target-folder]
 
 Examples:
@@ -40,11 +41,11 @@ Examples:
   agb analyze ./buildprints/buildprint-mapper-os --json
   agb check ./my-buildprint
   agb check ./my-buildprint --code ./my-agent
-  agb map ./my-project
-  agb map ./my-project --out ./my-project.buildprint
-  agb map ./my-project --candidate 1 --out ./selected.buildprint
-  agb map ./my-project --scope apps/web --out ./web.buildprint
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json ./my-build
+
+Mapper note:
+  The old agb map CLI has been removed. To map a source project, run an agent
+  session with buildprints/buildprint-mapper-os/ as the governing Buildprint.
 `)
   process.exit(exitCode)
 }
@@ -56,6 +57,54 @@ function readText(file) {
 
 function exists(p) {
   return fs.existsSync(p)
+}
+
+function isGitRepoUrl(value) {
+  return /^(https?:\/\/|git@|ssh:\/\/|file:\/\/)/i.test(value)
+}
+
+function repoNameFromUrl(value) {
+  return path.basename(String(value).replace(/[?#].*$/, '').replace(/\/$/, '').replace(/\.git$/, '')) || 'source-repo'
+}
+
+function tempCloneFolderFor(url) {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+  const safeName = repoNameFromUrl(url).replace(/[^a-z0-9._-]+/gi, '-').slice(0, 80) || 'source-repo'
+  return path.join(os.tmpdir(), `agb-map-${safeName}-${stamp}`)
+}
+
+function gitValue(repo, args) {
+  try {
+    return execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
+  } catch {
+    return null
+  }
+}
+
+function prepareMapSource(repoArg) {
+  if (!isGitRepoUrl(repoArg)) {
+    const localPath = path.resolve(cwd, repoArg)
+    return {
+      input: repoArg,
+      kind: 'local',
+      localPath,
+      url: null,
+      clonePath: null,
+      commit: gitValue(localPath, ['rev-parse', 'HEAD'])
+    }
+  }
+
+  const clonePath = tempCloneFolderFor(repoArg)
+  fs.mkdirSync(path.dirname(clonePath), { recursive: true })
+  execFileSync('git', ['clone', '--depth', '1', repoArg, clonePath], { stdio: 'pipe' })
+  return {
+    input: repoArg,
+    kind: 'git-url',
+    localPath: clonePath,
+    url: repoArg,
+    clonePath,
+    commit: gitValue(clonePath, ['rev-parse', 'HEAD'])
+  }
 }
 
 function walk(dir) {
@@ -543,7 +592,7 @@ function suggestBuildprintCandidates(facts) {
 
   if (facts.subprojects.length > 1) {
     for (const sp of facts.subprojects.slice(0, 8)) {
-      if (sp.path !== '.') c.push(candidate(`${sp.name} Subproject Buildprint`, `Subproject at ${sp.path}`, [sp.path], 'This subproject has its own package/runtime marker and can be mapped independently.', ['cross-project coupling'], ['Is this subproject intended as a standalone reusable blueprint?'], 'basic'))
+      if (sp.path !== '.') c.push(candidate(`${sp.name} Runtime Slice Discovery`, `Runtime/package marker at ${sp.path}`, [sp.path], 'This runtime/package marker may indicate a reusable slice, but source review must confirm whether it is product-complete.', ['cross-project coupling'], ['Is this runtime intended as a standalone reusable blueprint?'], 'basic'))
     }
   }
   if (facts.integrations.includes('stripe') || hasPath(/stripe|billing|checkout|subscription|webhook/i)) {
@@ -586,11 +635,18 @@ function suggestBuildprintCandidates(facts) {
   const signalOnly = c.filter((x) => x.evidenceStatus !== 'path-backed' && x.kind !== 'folder-fallback')
   const folderFallbacks = c.filter((x) => x.kind === 'folder-fallback')
   const byTier = (a, b) => (tierRank[a.estimatedTier] ?? 9) - (tierRank[b.estimatedTier] ?? 9)
-  return [
+  const ranked = [
     ...pathBacked.sort(byTier),
     ...(pathBacked.length < 2 ? folderFallbacks.sort(byTier) : []),
     ...signalOnly.sort(byTier)
-  ].slice(0, 10)
+  ]
+  const seenTitles = new Set()
+  return ranked.filter((item) => {
+    const key = item.title.toLowerCase()
+    if (seenTitles.has(key)) return false
+    seenTitles.add(key)
+    return true
+  }).slice(0, 10)
 }
 
 function confidenceFor(facts) {
@@ -607,18 +663,28 @@ function confidenceFor(facts) {
 }
 
 function writeMappedBuildprint(repoArg, outArg, options = {}) {
-  const baseRepo = path.resolve(cwd, repoArg)
+  if (options.fullSuite && (options.scope || options.candidate)) {
+    throw new Error('--full-suite cannot be combined with --scope or --candidate; it is already an explicit whole-repo selection')
+  }
+  const source = prepareMapSource(repoArg)
+  const baseRepo = source.localPath
   if (!exists(baseRepo) || !fs.statSync(baseRepo).isDirectory()) throw new Error(`repo folder missing: ${baseRepo}`)
   const repo = options.scope ? path.resolve(baseRepo, options.scope) : baseRepo
   if (!repo.startsWith(baseRepo)) throw new Error(`scope must stay inside repo: ${options.scope}`)
   if (!exists(repo) || !fs.statSync(repo).isDirectory()) throw new Error(`scope folder missing: ${repo}`)
-  const out = path.resolve(cwd, outArg ?? path.join(baseRepo, '.project.buildprint'))
+  const out = path.resolve(cwd, outArg ?? (source.kind === 'git-url' ? `${repoNameFromUrl(repoArg)}.mapped-buildprint` : path.join(baseRepo, '.project.buildprint')))
   fs.mkdirSync(out, { recursive: true })
-  fs.mkdirSync(path.join(out, 'prompts'), { recursive: true })
-  fs.mkdirSync(path.join(out, 'tests'), { recursive: true })
-  fs.mkdirSync(path.join(out, 'policies'), { recursive: true })
 
   const facts = detectProjectFacts(repo)
+  facts.source = {
+    input: source.input,
+    kind: source.kind,
+    url: source.url,
+    localPath: source.localPath,
+    clonePath: source.clonePath,
+    commit: source.commit
+  }
+  facts.sourceRoot = baseRepo
   if (options.scope) {
     facts.sourceRoot = baseRepo
     facts.scope = options.scope
@@ -636,8 +702,23 @@ function writeMappedBuildprint(repoArg, outArg, options = {}) {
     facts.totalFilesScanned > 120 ? 'strong' : 'agent-grade',
     'explicit-scope'
   ) : null
-  const selectedCandidate = numberedCandidate ?? scopedCandidate
+  const fullSuiteCandidate = options.fullSuite ? candidate(
+    'Full Suite Buildprint',
+    'Full source repository feature suite',
+    ['.'],
+    'User explicitly selected the whole repository feature suite. Keep every reviewed capability in scope, but keep qualification blockers visible until runtime proof exists.',
+    unique([...facts.risky, 'broad full-suite scope', 'provider/runtime proof required', 'security and deployment review required']),
+    [
+      'Which runtime checks prove provider, browser, report/log streaming, persistence, and deployment parity?',
+      'Which known source defects or contract mismatches must be preserved as documented behavior vs fixed in the rebuild?',
+      'Which external services need fakes, fixtures, or live credentials during qualification?'
+    ],
+    'system',
+    'full-suite'
+  ) : null
+  const selectedCandidate = numberedCandidate ?? scopedCandidate ?? fullSuiteCandidate
   if (selectedCandidate) facts.selectedCandidate = selectedCandidate
+  if (options.fullSuite) facts.fullSuite = true
   const confidence = confidenceFor(facts)
   const questions = []
   if (confidence.permission_model === 'low') questions.push('What is the intended permission model? Which roles may create, update, delete, or invite?')
@@ -647,11 +728,13 @@ function writeMappedBuildprint(repoArg, outArg, options = {}) {
   for (const q of fidelityQuestionsFor(facts)) questions.push(q)
   questions.push('Which observed modules are legacy and should not be copied as desired architecture?')
 
-  const discovered = `# Discovered Project Map\n\nProject: ${facts.packageName}\nRoot: ${facts.root}\nFiles scanned: ${facts.totalFilesScanned}\nPackage manager: ${facts.packageManager}\n\n## Frameworks / major capabilities\n${facts.frameworks.length ? facts.frameworks.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Scripts\n${facts.scripts.length ? facts.scripts.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## UI routes/pages\n${facts.routes.length ? facts.routes.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## API routes/endpoints\n${facts.apis.length ? facts.apis.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Data/model files\n${facts.db.length ? facts.db.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Tests\n${facts.tests.length ? facts.tests.slice(0, 80).map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Deploy / ops files\n${facts.deploy.length ? facts.deploy.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Integrations inferred from dependencies\n${facts.integrations.length ? facts.integrations.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Environment variables referenced by name only\n${facts.envNames.length ? facts.envNames.map((x) => `- ${x}`).join('\n') : '- none detected'}\n`;
+  const sourceLines = [`- Input: ${facts.source.input}`, `- Kind: ${facts.source.kind}`, `- Local checkout: ${facts.source.localPath}`, `- Commit: ${facts.source.commit || 'unavailable'}`]
+  if (facts.source.url) sourceLines.splice(2, 0, `- URL: ${facts.source.url}`)
+  const discovered = `# Discovery Census\n\nProject: ${facts.packageName}\nRoot: ${facts.root}\nFiles scanned: ${facts.totalFilesScanned}\nPackage manager: ${facts.packageManager}\nDiscovery status: DISCOVERY_REVIEW_REQUIRED\n\n## Source checkout\n${sourceLines.join('\n')}\n\nThis file is a safe census, not a product map. Every item below is a \`CENSUS_HINT\` until an agent reads source and promotes it in \`CLAIM_REGISTER.md\` with evidence.\n\n## Framework / capability hints\n${censusHintList(facts.frameworks)}\n\n## Script hints\n${censusHintList(facts.scripts)}\n\n## UI route/page hints\n${censusHintList(facts.routes)}\n\n## API route/endpoint hints\n${censusHintList(facts.apis)}\n\n## Data/model file hints\n${censusHintList(facts.db)}\n\n## Test hints\n${censusHintList(facts.tests.slice(0, 80))}\n\n## Deploy / ops hints\n${censusHintList(facts.deploy)}\n\n## Integration hints from manifests and filenames\n${censusHintList(facts.integrations)}\n\n## Environment variable names only\n${censusHintList(facts.envNames)}\n`;
 
-  const systemMap = `# SYSTEM_MAP\n\n## Project\n\n- Name: ${facts.packageName}\n- Root: ${facts.root}\n- Files scanned: ${facts.totalFilesScanned}\n- Package manager: ${facts.packageManager}\n- Scope selection required: ${facts.needsScopeSelection ? 'yes' : 'no'}\n\n## Architecture zones\n\n### Frontend / UI\n${facts.routes.length ? facts.routes.slice(0, 60).map((x) => `- OBSERVED route: ${x}`).join('\n') : '- QUESTION: no UI routes detected'}\n\n### API / backend\n${facts.apis.length ? facts.apis.slice(0, 60).map((x) => `- OBSERVED API: ${x}`).join('\n') : '- QUESTION: no API routes detected'}\n\n### Data model\n${facts.db.length ? facts.db.slice(0, 60).map((x) => `- OBSERVED data/model file: ${x}`).join('\n') : '- QUESTION: no data model files detected'}\n\n### Integrations\n${facts.integrations.length ? facts.integrations.map((x) => `- INFERRED integration: ${x}`).join('\n') : '- none detected'}\n\n### Subprojects / examples\n${facts.subprojects.length ? facts.subprojects.map((x) => `- OBSERVED ${x.kind}: ${x.path} (${x.name})`).join('\n') : '- none detected'}\n\n## Risk zones\n${facts.risky.length ? facts.risky.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n${fidelityProfileMd(facts)}\n## Human review needed\n\n- Confirm which candidate Buildprint should be extracted.\n- Confirm which observed modules are legacy vs desired architecture.\n- Confirm auth, billing, external-write, data lifecycle, and reversal-fidelity rules.\n`;
+  const systemMap = `# SYSTEM_MAP\n\n## Project\n\n- Name: ${facts.packageName}\n- Root: ${facts.root}\n- Files scanned for census: ${facts.totalFilesScanned}\n- Package manager: ${facts.packageManager}\n- Scope selection required: ${facts.needsScopeSelection ? 'yes' : 'no'}\n- Discovery status: DISCOVERY_REVIEW_REQUIRED\n\n## Authority boundary\n\nThis is not a completed architecture map. It is an agent-guided workbench. Architecture zones below are reading lanes seeded by census hints. They become product facts only after source review promotes claims to \`OBSERVED(path:line)\`.\n\n## Architecture reading lanes\n\n### Frontend / UI\n${pendingDiscoveryList(facts.routes.slice(0, 60), 'inspect route/page hint ')}\n\n### API / backend\n${pendingDiscoveryList(facts.apis.slice(0, 60), 'inspect API/handler hint ')}\n\n### Data model\n${pendingDiscoveryList(facts.db.slice(0, 60), 'inspect data/model hint ')}\n\n### Integrations\n${pendingDiscoveryList(facts.integrations, 'inspect integration hint ')}\n\n### Subprojects / examples\n${facts.subprojects.length ? facts.subprojects.map((x) => `- CENSUS_HINT: inspect ${x.kind} ${x.path} (${x.name})`).join('\n') : '- PENDING_AGENT_DISCOVERY: inspect manifests and entrypoints before making topology claims'}\n\n## Risk hints\n${censusHintList(facts.risky)}\n\n${fidelityProfileMd(facts)}\n## Human or agent review needed\n\n- Read \`SOURCE_READING_PLAN.md\` and \`DISCOVERY_QUEUE.md\` before selecting a candidate.\n- Promote claims in \`CLAIM_REGISTER.md\` only with source evidence.\n- Confirm which modules are product behavior vs legacy/test/demo implementation.\n- Confirm auth, billing, external-write, data lifecycle, and reversal-fidelity rules.\n`;
 
-  const candidatesMd = `# BUILDPRINT_CANDIDATES\n\n${facts.needsScopeSelection ? '> Scope selection required before final extraction. This repo appears large, mixed, or multi-scope.\n\n' : ''}${facts.candidateBuildprints.length ? facts.candidateBuildprints.map((c, i) => `## ${i + 1}. ${c.title}\n\n- Scope: ${c.scope}\n- Estimated tier: ${c.estimatedTier}\n- Why reusable: ${c.whyReusable}\n- Included paths:\n${c.includedPaths.length ? c.includedPaths.map((x) => `  - ${x}`).join('\n') : '  - QUESTION: no paths selected'}\n- Excluded paths:\n${c.excludedPaths.length ? c.excludedPaths.map((x) => `  - ${x}`).join('\n') : '  - none yet'}\n- Risks:\n${c.risks.length ? c.risks.map((x) => `  - ${x}`).join('\n') : '  - none detected'}\n- Questions:\n${c.questions.length ? c.questions.map((x) => `  - ${x}`).join('\n') : '  - none'}\n`).join('\n') : 'No strong candidates detected. Use SYSTEM_MAP.md and questions.md for human scoping.\n'}\n`;
+  const candidatesMd = `# BUILDPRINT_CANDIDATES\n\nThese are candidate discovery tasks, not approved implementation scopes. Static census may suggest useful slices, but a candidate is selectable only after source review records evidence in \`CLAIM_REGISTER.md\`.\n\n${facts.needsScopeSelection ? '> Scope selection is required before final extraction. This repo appears large, mixed, or multi-scope.\n\n' : ''}${facts.candidateBuildprints.length ? facts.candidateBuildprints.map((c, i) => `## ${i + 1}. ${c.title}\n\n- Claim state: PENDING_AGENT_DISCOVERY\n- Census scope hint: ${c.scope}\n- Estimated tier hint: ${c.estimatedTier}\n- Why it may be reusable: ${c.whyReusable}\n- Paths to read before selection:\n${c.includedPaths.length ? c.includedPaths.map((x) => `  - CENSUS_HINT: ${x}`).join('\n') : '  - PENDING_AGENT_DISCOVERY: no paths selected by census'}\n- Exclusion questions:\n${c.excludedPaths.length ? c.excludedPaths.map((x) => `  - ${x}`).join('\n') : '  - PENDING_AGENT_DISCOVERY: exclusions require source review'}\n- Risk hints:\n${c.risks.length ? c.risks.map((x) => `  - CENSUS_HINT: ${x}`).join('\n') : '  - PENDING_AGENT_DISCOVERY: read source before risk claims'}\n- Questions:\n${c.questions.length ? c.questions.map((x) => `  - ${x}`).join('\n') : '  - Promote/reject this candidate with source evidence before extraction.'}\n`).join('\n') : 'No candidate has been agent-promoted yet. Use SYSTEM_MAP.md, SOURCE_READING_PLAN.md, and DISCOVERY_QUEUE.md for source review.\n'}\n`;
 
   const selectedCandidateMd = selectedCandidate ? `# SELECTED_CANDIDATE
 
@@ -665,13 +748,13 @@ function writeMappedBuildprint(repoArg, outArg, options = {}) {
 ${selectedCandidate.includedPaths.length ? selectedCandidate.includedPaths.map((x) => `- ${x}`).join('\n') : '- QUESTION: no paths selected'}
 
 ## Excluded paths
-${selectedCandidate.excludedPaths.length ? selectedCandidate.excludedPaths.map((x) => `- ${x}`).join('\n') : '- none yet'}
+${selectedCandidate.excludedPaths.length ? selectedCandidate.excludedPaths.map((x) => `- ${x}`).join('\n') : '- PENDING_AGENT_DISCOVERY: no exclusions recorded yet'}
 
 ## Risks
-${selectedCandidate.risks.length ? selectedCandidate.risks.map((x) => `- ${x}`).join('\n') : '- none detected'}
+${selectedCandidate.risks.length ? selectedCandidate.risks.map((x) => `- ${x}`).join('\n') : '- PENDING_AGENT_DISCOVERY: read selected source before making risk claims'}
 
 ## Questions before implementation
-${selectedCandidate.questions.length ? selectedCandidate.questions.map((x) => `- ${x}`).join('\n') : '- none'}
+${selectedCandidate.questions.length ? selectedCandidate.questions.map((x) => `- ${x}`).join('\n') : '- PENDING_AGENT_DISCOVERY: selected source review may add questions'}
 
 ${fidelityProfileMd(facts)}
 ## Agent instruction
@@ -683,32 +766,478 @@ Use this selected candidate as the extraction scope. Treat listed paths as the s
 
   const risksMd = `# Risk Report\n\nDetected risk areas:\n\n${facts.risky.length ? facts.risky.map((x) => `- ${x}`).join('\n') : '- none detected'}\n\n## Default guardrails\n\n- Do not copy secret values into the Buildprint.\n- Do not perform external writes without an explicit approval rule.\n- Treat business rules and permissions as low confidence until a human confirms them.\n- Do not treat legacy code as desired architecture without review.\n`;
 
-  const buildprintYaml = `name: ${facts.packageName}-mapped-buildprint\nkind: agent-buildprint/mapped-existing-project\nversion: 0.1.0\nsource_repo: ${facts.root}\ngenerated_by: agb map\n\npurpose: >\n  Architecture contract draft generated from an existing repository. Use this to orient coding agents,\n  identify low-confidence areas, and create checks before future changes.\n\ndiscovered:\n  package_manager: ${facts.packageManager}\n  frameworks:\n${yamlList(facts.frameworks)}\n  integrations:\n${yamlList(facts.integrations)}\n  risk_areas:\n${yamlList(facts.risky)}\n  ui_routes:\n${yamlList(facts.routes.slice(0, 60))}\n  api_routes:\n${yamlList(facts.apis.slice(0, 60))}\n  data_files:\n${yamlList(facts.db.slice(0, 60))}\n  env_names_only:\n${yamlList(facts.envNames)}\n\nconfidence:\n${Object.entries(confidence).map(([k,v]) => `  ${k}: ${v}`).join('\n')}\n\npolicies:\n  secret_values: never_copy\n  low_confidence_business_rules: ask_human\n  external_writes: require_explicit_policy\n  destructive_actions: require_human_approval\n\nquestions:\n${yamlList(questions)}\n\nartifacts:\n  discovered_map: ./discovered-map.md\n  confidence_report: ./confidence-report.md\n  risks: ./risks.md\n  continuation_prompt: ./prompts/continue-building.md\n  architecture_checks: ./tests/architecture.yaml\n`;
+  const buildprintYaml = `name: ${facts.packageName}-mapped-buildprint\nkind: agent-buildprint/mapped-existing-project\nversion: 0.1.0\nsource_repo: ${facts.source.url || facts.root}\nsource_checkout: ${facts.source.localPath}\nsource_commit: ${facts.source.commit || 'unavailable'}\ngenerated_by: agb map\n\npurpose: >\n  Architecture contract draft generated from an existing repository. Use this to orient coding agents,\n  identify low-confidence areas, and create checks before future changes.\n\ndiscovered:\n  package_manager: ${facts.packageManager}\n  frameworks:\n${yamlList(facts.frameworks)}\n  integrations:\n${yamlList(facts.integrations)}\n  risk_areas:\n${yamlList(facts.risky)}\n  ui_routes:\n${yamlList(facts.routes.slice(0, 60))}\n  api_routes:\n${yamlList(facts.apis.slice(0, 60))}\n  data_files:\n${yamlList(facts.db.slice(0, 60))}\n  env_names_only:\n${yamlList(facts.envNames)}\n\nconfidence:\n${Object.entries(confidence).map(([k,v]) => `  ${k}: ${v}`).join('\n')}\n\npolicies:\n  secret_values: never_copy\n  low_confidence_business_rules: ask_human\n  external_writes: require_explicit_policy\n  destructive_actions: require_human_approval\n\nquestions:\n${yamlList(questions)}\n\nartifacts:\n  discovered_map: ./discovered-map.md\n  confidence_report: ./confidence-report.md\n  risks: ./risks.md\n  continuation_prompt: ./prompts/continue-building.md\n  architecture_checks: ./tests/architecture.yaml\n`;
 
   const prompt = `# Continue Building Prompt\n\nYou are working in this existing repository. Before changing code, read:\n\n1. .project.buildprint/discovered-map.md\n2. .project.buildprint/confidence-report.md\n3. .project.buildprint/risks.md\n4. .project.buildprint/buildprint.yaml\n\nRules:\n- Treat high-confidence facts as observed repo structure.\n- Treat low-confidence items as questions, not facts.\n- Do not modify low-confidence business rules or permission logic without asking.\n- Do not copy or expose secret values.\n- Preserve the existing stack unless explicitly asked to migrate.\n- Add or update checks when changing architecture, auth, billing, external writes, or data models.\n`;
 
   const checks = `name: mapped-project-architecture-checks\nchecks:\n  - id: no-secret-values-in-buildprint\n    rule: Buildprint artifacts must contain env var names only, never secret values.\n  - id: low-confidence-requires-question\n    rule: Low-confidence business rules, permissions, and billing lifecycle require human confirmation before implementation changes.\n  - id: external-writes-need-policy\n    rule: Email, SMS, payment, publishing, delete, and production mutation flows require explicit policy and approval semantics.\n  - id: update-buildprint-on-architecture-change\n    rule: When routes, APIs, data model, auth, or integrations change, update .project.buildprint.\n`;
 
-  fs.writeFileSync(path.join(out, 'facts.json'), JSON.stringify(facts, null, 2) + '\n')
-  fs.writeFileSync(path.join(out, 'buildprint.yaml'), buildprintYaml)
-  fs.writeFileSync(path.join(out, 'discovered-map.md'), discovered)
-  fs.writeFileSync(path.join(out, 'SYSTEM_MAP.md'), systemMap)
-  fs.writeFileSync(path.join(out, 'BUILDPRINT_CANDIDATES.md'), candidatesMd)
+  writeDiscoveryPackage(out, facts, confidence, questions, {
+    buildprintYaml,
+    discovered,
+    systemMap,
+    candidatesMd,
+    confidenceMd,
+    risksMd
+  })
   if (selectedCandidate) {
-    fs.writeFileSync(path.join(out, 'SELECTED_CANDIDATE.md'), selectedCandidateMd)
-    fs.writeFileSync(path.join(out, 'selected-candidate.json'), JSON.stringify(selectedCandidate, null, 2) + '\n')
+    const selectedOut = path.join(out, 'selected-buildprint')
+    fs.mkdirSync(selectedOut, { recursive: true })
+    writeMappedPackageExtras(selectedOut, facts, confidence, questions)
+    fs.writeFileSync(path.join(selectedOut, 'facts.json'), JSON.stringify(facts, null, 2) + '\n')
+    fs.writeFileSync(path.join(selectedOut, 'SYSTEM_MAP.md'), systemMap)
+    fs.writeFileSync(path.join(selectedOut, 'BUILDPRINT_CANDIDATES.md'), candidatesMd)
+    fs.writeFileSync(path.join(selectedOut, 'SOURCE_READING_PLAN.md'), sourceReadingPlanMd(facts))
+    fs.writeFileSync(path.join(selectedOut, 'DISCOVERY_QUEUE.md'), discoveryQueueMd(facts))
+    fs.writeFileSync(path.join(selectedOut, 'CLAIM_REGISTER.md'), claimRegisterMd(facts))
+    fs.writeFileSync(path.join(selectedOut, 'EVIDENCE_LEDGER.json'), JSON.stringify(evidenceLedger(facts), null, 2) + '\n')
+    fs.writeFileSync(path.join(selectedOut, 'census.json'), JSON.stringify(evidenceLedger(facts).census, null, 2) + '\n')
+    fs.writeFileSync(path.join(selectedOut, 'discovered-map.md'), discovered)
+    fs.writeFileSync(path.join(selectedOut, 'confidence-report.md'), confidenceMd)
+    fs.writeFileSync(path.join(selectedOut, 'risks.md'), risksMd)
+    fs.mkdirSync(path.join(selectedOut, 'policies'), { recursive: true })
+    fs.writeFileSync(path.join(selectedOut, 'policies', 'questions.md'), `# policy questions\n\n${questions.map((q) => `- ${q}`).join('\n')}\n`)
+    fs.writeFileSync(path.join(selectedOut, 'evidence', 'facts.json'), JSON.stringify(facts, null, 2) + '\n')
+    fs.writeFileSync(path.join(selectedOut, 'evidence', 'questions.md'), `# questions\n\n${questions.map((q) => `- ${q}`).join('\n')}\n`)
+    fs.writeFileSync(path.join(selectedOut, 'SELECTED_CANDIDATE.md'), selectedCandidateMd)
+    fs.writeFileSync(path.join(selectedOut, 'selected-candidate.json'), JSON.stringify(selectedCandidate, null, 2) + '\n')
   }
-  fs.writeFileSync(path.join(out, 'confidence-report.md'), confidenceMd)
-  fs.writeFileSync(path.join(out, 'risks.md'), risksMd)
-  fs.writeFileSync(path.join(out, 'prompts', 'continue-building.md'), prompt)
-  fs.writeFileSync(path.join(out, 'tests', 'architecture.yaml'), checks)
-  writeMappedPackageExtras(out, facts, confidence, questions)
+  sanitizeGeneratedMapOutput(out)
 
-  return { out, facts, confidence, questions }
+  return { out, facts, confidence, questions, source }
 }
 
 function mdList(items, empty = '- none detected') {
   return items.length ? items.map((x) => `- ${x}`).join('\n') : empty
+}
+
+function writeDiscoveryPackage(out, facts, confidence, questions, docs) {
+  const discoveryDir = path.join(out, 'discovery')
+  const evidenceDir = path.join(out, 'evidence')
+  const qualityDir = path.join(out, 'quality')
+  fs.mkdirSync(discoveryDir, { recursive: true })
+  fs.mkdirSync(evidenceDir, { recursive: true })
+  fs.mkdirSync(qualityDir, { recursive: true })
+
+  const mapperOsAlignment = loadMapperOsAlignment()
+  const sizeClassification = classifyMappedRepo(facts)
+  const qualificationRecords = featureQualificationRecords(facts)
+  const mode = facts.selectedCandidate ? 'discovery plus selected Buildprint extraction' : 'lean discovery'
+  const selectedScope = facts.selectedCandidate ? `${facts.selectedCandidate.title}: ${facts.selectedCandidate.scope}` : null
+  const requiredFiles = [
+    'README.md',
+    'manifest.json',
+    'buildprint.yaml',
+    'CURRENT_STATE.md',
+    'MAPPER_OS_ALIGNMENT.md',
+    'facts.json',
+    'discovery/AGENT_EXECUTION_BRIEF.md',
+    'discovery/SOURCE_READING_PLAN.md',
+    'discovery/DISCOVERY_QUEUE.md',
+    'discovery/SYSTEM_MAP.md',
+    'discovery/BUILDPRINT_CANDIDATES.md',
+    'discovery/FEATURE_INVENTORY.md',
+    'discovery/PRODUCT_CAPABILITY_MAP.md',
+    'discovery/CLAIM_REGISTER.md',
+    'discovery/census.json',
+    'evidence/EVIDENCE_LEDGER.json',
+    'evidence/EVIDENCE_COVERAGE.md',
+    'evidence/SOURCE_VALIDATION_QUEUE.md',
+    'evidence/qualification-records.json',
+    'quality/PROMOTION_GATE.md'
+  ]
+  if (facts.selectedCandidate) requiredFiles.push('selected-buildprint/BUILDPRINT.md')
+
+  const manifest = {
+    schema: 'agent-buildprint/map-manifest.v1',
+    mode,
+    selectedScope,
+    qualificationStatus: 'QUALIFICATION_REVIEW_REQUIRED',
+    discoveryStatus: 'DISCOVERY_REVIEW_REQUIRED',
+    source: facts.source,
+    mapperOs: {
+      slug: 'buildprint-mapper-os',
+      source: 'buildprints/buildprint-mapper-os',
+      checksum: mapperOsAlignment.checksum
+    },
+    sizeClassification,
+    claimStates: CLAIM_STATES,
+    requiredFiles,
+    outputBoundary: {
+      discoveryOnlyByDefault: true,
+      implementationScaffold: facts.selectedCandidate ? 'selected-buildprint/' : 'not generated; pass --candidate, --scope, or --full-suite',
+      forbiddenDefaultDirectories: ['implementation/', 'plans/', 'product/']
+    },
+    qualification: {
+      command: 'agb map',
+      status: 'QUALIFICATION_REVIEW_REQUIRED',
+      gate: 'Source validation and runtime/test evidence are required before qualification.'
+    }
+  }
+  const currentState = [
+    '# CURRENT_STATE',
+    '',
+    `- Mode: ${mode}`,
+    '- Qualification status: QUALIFICATION_REVIEW_REQUIRED',
+    '- Discovery status: DISCOVERY_REVIEW_REQUIRED',
+    `- Source input: ${facts.source?.input ?? facts.root}`,
+    facts.source?.url ? `- Source URL: ${facts.source.url}` : null,
+    `- Source checkout: ${facts.source?.localPath ?? facts.root}`,
+    `- Source commit: ${facts.source?.commit ?? 'unavailable'}`,
+    '',
+    '## Read first',
+    '',
+    '- `discovery/AGENT_EXECUTION_BRIEF.md`',
+    '- `discovery/SOURCE_READING_PLAN.md`',
+    '- `discovery/DISCOVERY_QUEUE.md`',
+    '- `discovery/CLAIM_REGISTER.md`',
+    '- `evidence/EVIDENCE_LEDGER.json`',
+    '- `quality/PROMOTION_GATE.md`',
+    facts.selectedCandidate ? '- `selected-buildprint/BUILDPRINT.md`' : '- No selected implementation Buildprint was generated.',
+    '',
+    '## Boundary',
+    '',
+    'This package is a discovery workspace. Implementation scaffold is generated only under `selected-buildprint/` when `--candidate` or `--scope` is passed.',
+    ''
+  ].filter((line) => line !== null).join('\n')
+  const readme = [
+    `# ${facts.packageName} mapped discovery`,
+    '',
+    'This package was generated by `agb map` as a Mapper OS discovery workspace.',
+    '',
+    '## Start here',
+    '',
+    '1. `CURRENT_STATE.md`',
+    '2. `discovery/AGENT_EXECUTION_BRIEF.md`',
+    '3. `discovery/SOURCE_READING_PLAN.md`',
+    '4. `discovery/DISCOVERY_QUEUE.md`',
+    '5. `discovery/CLAIM_REGISTER.md`',
+    '6. `quality/PROMOTION_GATE.md`',
+    '',
+    '## Output boundary',
+    '',
+    '- Default map output is discovery-only.',
+    '- `implementation/`, `plans/`, and `product/` are not emitted by default.',
+    '- Selected implementation scaffold appears only in `selected-buildprint/`.',
+    '- Mapping never grants qualification by itself.',
+    ''
+  ].join('\n')
+  const promotionGate = [
+    '# PROMOTION_GATE',
+    '',
+    'Promotion status: QUALIFICATION_REVIEW_REQUIRED',
+    '',
+    '- Default `agb map` output is a discovery workspace only.',
+    '- Scanner/census hints are not product facts.',
+    '- Implementation scaffold requires explicit `--candidate` or `--scope` and is isolated under `selected-buildprint/`.',
+    '- Final qualification requires source validation plus runtime/test evidence where required.',
+    ''
+  ].join('\n')
+
+  fs.writeFileSync(path.join(out, 'README.md'), readme)
+  fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n')
+  fs.writeFileSync(path.join(out, 'buildprint.yaml'), docs.buildprintYaml)
+  fs.writeFileSync(path.join(out, 'CURRENT_STATE.md'), currentState)
+  fs.writeFileSync(path.join(out, 'MAPPER_OS_ALIGNMENT.md'), [
+    '# MAPPER_OS_ALIGNMENT',
+    '',
+    'Mapper OS source: buildprints/buildprint-mapper-os',
+    `Alignment checksum: ${mapperOsAlignment.checksum}`,
+    '',
+    '## Output boundary',
+    '',
+    '- `agb map` bootstraps discovery; it does not complete discovery or implementation.',
+    '- Default output keeps discovery files under `discovery/` and evidence files under `evidence/`.',
+    '- Implementation scaffold is generated only under `selected-buildprint/` when a candidate or scope is selected.',
+    '- Scanner/census hints are never product facts.',
+    ''
+  ].join('\n'))
+  fs.writeFileSync(path.join(out, 'facts.json'), JSON.stringify(facts, null, 2) + '\n')
+  fs.writeFileSync(path.join(discoveryDir, 'AGENT_EXECUTION_BRIEF.md'), agentExecutionBriefMdForMap(facts).replace('`CLAIM_REGISTER.md`/`EVIDENCE_LEDGER.json`', '`CLAIM_REGISTER.md` and `evidence/EVIDENCE_LEDGER.json`'))
+  fs.writeFileSync(path.join(discoveryDir, 'SOURCE_READING_PLAN.md'), sourceReadingPlanMd(facts))
+  fs.writeFileSync(path.join(discoveryDir, 'DISCOVERY_QUEUE.md'), discoveryQueueMd(facts))
+  fs.writeFileSync(path.join(discoveryDir, 'SYSTEM_MAP.md'), docs.systemMap)
+  fs.writeFileSync(path.join(discoveryDir, 'BUILDPRINT_CANDIDATES.md'), docs.candidatesMd)
+  fs.writeFileSync(path.join(discoveryDir, 'FEATURE_INVENTORY.md'), featureInventoryMd(facts))
+  fs.writeFileSync(path.join(discoveryDir, 'PRODUCT_CAPABILITY_MAP.md'), productCapabilityMapMd(facts))
+  fs.writeFileSync(path.join(discoveryDir, 'CLAIM_REGISTER.md'), claimRegisterMd(facts))
+  fs.writeFileSync(path.join(discoveryDir, 'census.json'), JSON.stringify(evidenceLedger(facts).census, null, 2) + '\n')
+  fs.writeFileSync(path.join(discoveryDir, 'discovered-map.md'), docs.discovered)
+  fs.writeFileSync(path.join(discoveryDir, 'confidence-report.md'), docs.confidenceMd)
+  fs.writeFileSync(path.join(discoveryDir, 'risks.md'), docs.risksMd)
+  fs.writeFileSync(path.join(evidenceDir, 'EVIDENCE_LEDGER.json'), JSON.stringify(evidenceLedger(facts), null, 2) + '\n')
+  fs.writeFileSync(path.join(evidenceDir, 'EVIDENCE_COVERAGE.md'), evidenceCoverageMd(facts))
+  fs.writeFileSync(path.join(evidenceDir, 'SOURCE_VALIDATION_QUEUE.md'), sourceValidationQueueMd(facts))
+  fs.writeFileSync(path.join(evidenceDir, 'qualification-records.json'), JSON.stringify({ summary: qualificationSummary(qualificationRecords), records: qualificationRecords }, null, 2) + '\n')
+  fs.writeFileSync(path.join(qualityDir, 'PROMOTION_GATE.md'), promotionGate)
+}
+
+const CLAIM_STATES = [
+  'CENSUS_HINT',
+  'PENDING_AGENT_DISCOVERY',
+  'OBSERVED',
+  'INFERRED',
+  'QUESTION',
+  'BLOCKED',
+  'OUT_OF_SCOPE'
+]
+
+function censusHintList(items, empty = '- PENDING_AGENT_DISCOVERY: no census hints; an agent must inspect source before making a claim') {
+  return items?.length ? items.map((x) => `- CENSUS_HINT: ${x}`).join('\n') : empty
+}
+
+function pendingDiscoveryList(items, prefix, empty = '- PENDING_AGENT_DISCOVERY: source-reading required before this can become a product fact') {
+  return items?.length ? items.map((x) => `- PENDING_AGENT_DISCOVERY: ${prefix}${x}`).join('\n') : empty
+}
+
+function discoveryQueueItems(facts) {
+  const items = []
+  const add = (id, title, hints, tasks, forbiddenClaims = []) => {
+    items.push({ id, title, hints: unique(hints || []).slice(0, 40), tasks, forbiddenClaims })
+  }
+  add(
+    'entrypoints-runtime',
+    'Entrypoints and runtime topology',
+    [...facts.subprojects.map((x) => `${x.path} (${x.kind}, ${x.name})`), ...facts.scripts.map((x) => `script ${x}`), ...facts.deploy],
+    [
+      'Read manifests and runtime entrypoints that start the app/service.',
+      'Promote only the entrypoints whose behavior was read in source.',
+      'Record whether each runtime is app, API, worker, CLI, deploy-only, fixture, or docs-only.'
+    ],
+    ['Do not claim a runtime boundary from package names alone.']
+  )
+  add(
+    'frontend-workbench-routes',
+    'Frontend workbench, pages, and navigation',
+    facts.routes,
+    [
+      'Read router/page/component entrypoints and navigation state.',
+      'Trace user actions to API calls, local state, uploads, streaming, or reports.',
+      'Capture empty/loading/error/permission states only when source evidence exists.'
+    ],
+    ['Do not write "no UI routes detected"; absence of a census hint is not evidence of absence.']
+  )
+  add(
+    'backend-api-workflows',
+    'Backend APIs, workflows, jobs, and orchestration',
+    facts.apis,
+    [
+      'Read server handlers, controllers, workers, and orchestration modules.',
+      'Trace request schemas, response shapes, validation, side effects, retries, and errors.',
+      'Separate public contracts from internal implementation details.'
+    ],
+    ['Do not promote route-shaped files into API parity claims without handler review.']
+  )
+  add(
+    'state-persistence-artifacts',
+    'State, persistence, uploads, and generated artifacts',
+    facts.db,
+    [
+      'Read schema/model/store/upload/artifact files.',
+      'Identify source of truth, ownership, lifecycle, restart behavior, import/export, and retention.',
+      'Record which paths are durable product state vs cache/temp/test artifacts.'
+    ],
+    ['Do not claim persistence durability from filenames or dependency names.']
+  )
+  add(
+    'providers-security-env',
+    'Providers, integrations, security, and env names',
+    [...facts.integrations, ...facts.envNames.map((x) => `env ${x}`), ...facts.risky],
+    [
+      'Read provider adapters, env loading, auth/session, network, and security-sensitive boundaries.',
+      'Record env names only; never copy values.',
+      'Identify fakes/mocks/fixtures as test-only unless product code proves otherwise.'
+    ],
+    ['Do not claim a provider is implemented, absent, or production-ready from dependency hints alone.']
+  )
+  add(
+    'tests-acceptance-runtime-proof',
+    'Tests, acceptance, and runtime proof',
+    facts.tests,
+    [
+      'Read tests to determine what behavior is actually asserted.',
+      'Map existing assertions to feature claims and missing proof.',
+      'Record commands that must run before qualification.'
+    ],
+    ['Do not treat test file presence as passing evidence.']
+  )
+  return items
+}
+
+function sourceReadingPlanMd(facts) {
+  return [
+    '# SOURCE_READING_PLAN',
+    '',
+    '`agb map` created a safe census only. An agent must read source before promoting product claims.',
+    '',
+    '## Claim lifecycle',
+    '',
+    ...CLAIM_STATES.map((x) => `- ${x}`),
+    '',
+    '## Read order',
+    '',
+    ...discoveryQueueItems(facts).map((item, i) => [
+      `### ${i + 1}. ${item.title}`,
+      '',
+      '- Census hints:',
+      item.hints.length ? item.hints.map((x) => `  - ${x}`).join('\n') : '  - PENDING_AGENT_DISCOVERY: no automated hints',
+      '- Agent tasks:',
+      ...item.tasks.map((x) => `  - ${x}`),
+      '- Forbidden until evidence exists:',
+      ...(item.forbiddenClaims.length ? item.forbiddenClaims.map((x) => `  - ${x}`) : ['  - No final parity, route/API, provider, persistence, or runtime claims.']),
+      ''
+    ].join('\n')),
+    '## Promotion rule',
+    '',
+    '- A claim may become `OBSERVED(path:line)` only after the agent reads the cited source.',
+    '- Census hints can guide reading, but they are not product facts.',
+    ''
+  ].join('\n')
+}
+
+function discoveryQueueMd(facts) {
+  return [
+    '# DISCOVERY_QUEUE',
+    '',
+    'Use this queue to turn census hints into source-reviewed Buildprint claims.',
+    '',
+    ...discoveryQueueItems(facts).map((item) => [
+      `## ${item.id}`,
+      '',
+      `- Status: PENDING_AGENT_DISCOVERY`,
+      '- Hints:',
+      item.hints.length ? item.hints.map((x) => `  - CENSUS_HINT: ${x}`).join('\n') : '  - PENDING_AGENT_DISCOVERY: no census hints',
+      '- Required source-reading tasks:',
+      ...item.tasks.map((x) => `  - ${x}`),
+      '- Claims still forbidden:',
+      ...(item.forbiddenClaims.length ? item.forbiddenClaims.map((x) => `  - ${x}`) : ['  - Qualified behavior or parity claims.']),
+      ''
+    ].join('\n')),
+    ''
+  ].join('\n')
+}
+
+function claimRegisterMd(facts) {
+  const rows = [
+    ['project-name', 'CENSUS_HINT', facts.packageName, 'facts.json'],
+    ['package-manager', 'CENSUS_HINT', facts.packageManager, 'facts.json'],
+    ['framework-hints', 'CENSUS_HINT', facts.frameworks.join(', ') || 'pending agent discovery', 'facts.json'],
+    ['integration-hints', 'CENSUS_HINT', facts.integrations.join(', ') || 'pending agent discovery', 'facts.json'],
+    ['env-name-hints', 'CENSUS_HINT', facts.envNames.join(', ') || 'pending agent discovery', 'facts.json'],
+    ['product-architecture', 'PENDING_AGENT_DISCOVERY', 'agent must read source before writing architecture facts', 'SOURCE_READING_PLAN.md'],
+    ['feature-candidates', 'PENDING_AGENT_DISCOVERY', 'agent must promote/reject candidates with source evidence', 'DISCOVERY_QUEUE.md'],
+    ['runtime-qualification', 'BLOCKED', 'requires source review plus runtime/test evidence', 'quality/PROMOTION_GATE.md']
+  ]
+  return [
+    '# CLAIM_REGISTER',
+    '',
+    'Scanner output is not authoritative. Claims start as census hints or pending discovery until promoted with source evidence.',
+    '',
+    '| Claim | State | Value | Evidence |',
+    '|---|---|---|---|',
+    ...rows.map(([claim, state, value, evidence]) => `| ${claim} | ${state} | ${String(value).replace(/\|/g, '/')} | ${evidence} |`),
+    '',
+    '## Promotion requirements',
+    '',
+    '- `OBSERVED` claims require source path and line/section citation.',
+    '- `INFERRED` claims must name the observed inputs and the uncertainty.',
+    '- Negative claims require direct source evidence, never absence of a scanner hint.',
+    ''
+  ].join('\n')
+}
+
+function evidenceLedger(facts) {
+  return {
+    schema: 'agent-buildprint/evidence-ledger.v1',
+    generatedBy: 'agb map',
+    status: 'DISCOVERY_REVIEW_REQUIRED',
+    rule: 'Census hints are reading guidance, not product facts.',
+    claimStates: CLAIM_STATES,
+    census: {
+      root: facts.root,
+      source: facts.source ?? null,
+      packageName: facts.packageName,
+      totalFilesScanned: facts.totalFilesScanned,
+      packageManager: facts.packageManager,
+      frameworks: facts.frameworks,
+      scripts: facts.scripts,
+      subprojects: facts.subprojects,
+      routes: facts.routes,
+      apis: facts.apis,
+      dataFiles: facts.db,
+      tests: facts.tests,
+      deploy: facts.deploy,
+      integrations: facts.integrations,
+      envNamesOnly: facts.envNames,
+      riskHints: facts.risky
+    },
+    discoveryQueue: discoveryQueueItems(facts).map((item) => ({
+      id: item.id,
+      title: item.title,
+      status: 'PENDING_AGENT_DISCOVERY',
+      hintCount: item.hints.length,
+      tasks: item.tasks,
+      forbiddenClaims: item.forbiddenClaims
+    }))
+  }
+}
+
+function agentExecutionBriefMdForMap(facts) {
+  return [
+    '# AGENT_EXECUTION_BRIEF',
+    '',
+    'This package is a guided discovery workbench. Do not implement from it as if it were qualified.',
+    '',
+    '## First action',
+    '',
+    'Read `SOURCE_READING_PLAN.md`, then work through `DISCOVERY_QUEUE.md` and update `CLAIM_REGISTER.md`/`EVIDENCE_LEDGER.json` as claims are promoted.',
+    '',
+    '## Hard rules',
+    '',
+    '- Census hints are not product facts.',
+    '- Do not use absence of a scanner hint as evidence that a feature, route, provider, or state path is absent.',
+    '- Promote claims only after source reading with path and line/section evidence.',
+    '- Keep `QUALIFICATION_REVIEW_REQUIRED` until source/runtime proof exists.',
+    '- Env names are allowed; secret values are never allowed.',
+    '',
+    '## Current package',
+    '',
+    `- Source input: ${facts.source?.input ?? facts.root}`,
+    facts.source?.url ? `- Source URL: ${facts.source.url}` : null,
+    `- Source checkout: ${facts.source?.localPath ?? facts.root}`,
+    `- Source commit: ${facts.source?.commit ?? 'unavailable'}`,
+    `- Source root: ${facts.root}`,
+    `- Files scanned for census: ${facts.totalFilesScanned}`,
+    `- Discovery status: DISCOVERY_REVIEW_REQUIRED`,
+    ''
+  ].filter((line) => line !== null).join('\n')
+}
+
+function sanitizeGeneratedMapOutput(out) {
+  const replacements = [
+    ['none detected', 'pending agent discovery'],
+    ['no UI routes detected', 'UI routes not agent-discovered yet'],
+    ['no API routes detected', 'API routes not agent-discovered yet'],
+    ['no data model files detected', 'data model not agent-discovered yet'],
+    ['No strong candidates detected', 'No candidate has been agent-promoted yet'],
+    ['OBSERVED route:', 'CENSUS_HINT route-like path:'],
+    ['OBSERVED API:', 'CENSUS_HINT API-like path:'],
+    ['OBSERVED data/model file:', 'CENSUS_HINT data/model path:'],
+    ['INFERRED integration:', 'CENSUS_HINT integration:'],
+    ['OBSERVED ', 'CENSUS_HINT '],
+    ['â€”', '-'],
+    ['â€¦', '...'],
+    ['âœ“', '[ok]'],
+    ['âœ—', '[fail]']
+  ]
+  for (const rel of fs.readdirSync(out, { recursive: true })) {
+    const file = path.join(out, rel)
+    if (!fs.statSync(file).isFile()) continue
+    if (!/\.(md|json|yaml|yml|xml|txt)$/.test(file)) continue
+    let text = fs.readFileSync(file, 'utf8')
+    for (const [from, to] of replacements) text = text.split(from).join(to)
+    fs.writeFileSync(file, text)
+  }
 }
 
 function signalList(signals, key, empty = '- QUESTION: no markers detected; preserve behavior only after source review or human confirmation') {
@@ -939,6 +1468,7 @@ function buildMapReviewPacket(facts, confidence, questions, decisions, mapperOsA
     schema: 'agent-buildprint/map-review-packet.v1',
     package: {
       sourceRoot: facts.sourceRoot ?? facts.root,
+      source: facts.source ?? null,
       scope: facts.scope ?? null,
       packageName: facts.packageName,
       filesScanned: facts.totalFilesScanned,
@@ -1306,7 +1836,7 @@ function moduleInventory(facts) {
   const features = featureInventory(facts)
   const defs = [
     ['identity-access', 'Identity & Access', /auth|session|account|invite|permission|admin|user/i],
-    ['agent-runtime', 'Agent Runtime & Chat', /AI|Agent|chat|LLM|prompt|tool|workflow|stream/i],
+    ['agent-workflows', 'Agent, Workflow and Provider Runtime', /AI|Agent|chat|LLM|prompt|tool|workflow|stream/i],
     ['memory-data', 'Memory, Data & State', /memory|data|state|database|persistence|model|schema/i],
     ['integrations', 'Integrations & External Effects', /integration|webhook|provider|composio|calendar|email|notification|stripe|billing|payment/i],
     ['desktop-shell', 'App Shell & Native Runtime', /desktop|tauri|native|shell|surface|route|page|window|settings/i],
@@ -1318,7 +1848,7 @@ function moduleInventory(facts) {
   })).filter((m) => m.features.length)
   const assigned = new Set(modules.flatMap((m) => m.features.map((f) => f.title)))
   const unassigned = features.filter((f) => !assigned.has(f.title))
-  if (unassigned.length) modules.push({ id: 'product-misc', title: 'Unclassified Product Capabilities', features: unassigned })
+  if (unassigned.length) modules.push({ id: 'pending-discovery', title: 'Pending Discovery Capabilities', features: unassigned })
   return modules
 }
 
@@ -1387,7 +1917,7 @@ function decompositionStrategyMd(facts, classification) {
     `- Recommended mode: ${classification.recommendedMode}`,
     `- Latest safe starting phase: ${classification.latestSafeStartingPhase}`,
     '- Evidence:',
-    ...classification.evidence.map((x) => `  - OBSERVED: ${x}`),
+    ...classification.evidence.map((x) => `  - CENSUS_HINT: ${x}`),
     `- Why not one giant Buildprint: ${classification.whyNotOneGiantBuildprint}`,
     '',
     '## Topology / domains',
@@ -1439,7 +1969,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   fs.mkdirSync(path.join(out, 'plans'), { recursive: true })
   const packageTier = facts.risky.length >= 2 || facts.apis.length + facts.routes.length > 12 || facts.integrations.length >= 2 ? 'agent-grade' : facts.apis.length || facts.routes.length || facts.integrations.length ? 'strong' : 'simple'
   const observedAnchor = 'This package maps an existing repository. Preserve observed behavior unless the user confirms a change. Separate observed facts, inferred behavior, and unknowns.'
-  const outputMode = facts.selectedCandidate ? 'selected Buildprint extraction' : 'discovery scaffold'
+  const outputMode = facts.selectedCandidate ? 'selected Buildprint extraction' : 'guided discovery workbench'
   const selectedScope = facts.selectedCandidate ? `${facts.selectedCandidate.title}: ${facts.selectedCandidate.scope}` : 'not selected yet; choose one candidate before extraction'
   const isProductLike = facts.routes.length > 0 || facts.apis.length > 0 || facts.integrations.length > 0
   const needsThreatModel = facts.apis.length > 0 || facts.risky.some((x) => /auth|payments|admin|upload|external|AI/i.test(x))
@@ -1452,7 +1982,13 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     'manifest.json',
     'README.md',
     'BUILDPRINT.md',
+    'AGENT_EXECUTION_BRIEF.md',
     'facts.json',
+    'census.json',
+    'EVIDENCE_LEDGER.json',
+    'SOURCE_READING_PLAN.md',
+    'DISCOVERY_QUEUE.md',
+    'CLAIM_REGISTER.md',
     'discovered-map.md',
     'SYSTEM_MAP.md',
     'FEATURE_INVENTORY.md',
@@ -1523,11 +2059,13 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     `- Mode: ${outputMode}`,
     `- Qualification status: QUALIFICATION_REVIEW_REQUIRED; mapped evidence only until source/runtime proof is recorded`,
+    '- Discovery status: DISCOVERY_REVIEW_REQUIRED; census hints are not product facts.',
     `- Size class: ${sizeClassification.sizeClass}`,
     `- Scope pressure: ${sizeClassification.scopePressure}`,
     `- Latest safe starting phase: ${sizeClassification.latestSafeStartingPhase}`,
     `- Selected scope: ${selectedScope}`,
-    '- If this is still a discovery scaffold, do not claim it is a final extracted Buildprint.',
+    '- If this is still a guided discovery workbench, do not claim it is a final extracted Buildprint.',
+    '- The scanner is not authoritative. It can produce census hints, but only source-reading can promote product claims.',
     '- A mapped package becomes qualified only after source validation confirms feature behavior, state, permissions, side effects, and acceptance evidence.',
     '',
     '## Target shape',
@@ -1562,7 +2100,8 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     '## Rules for coding agents',
     '',
-    '- Treat observed facts as current repo state.',
+    '- Treat census hints as reading guidance, not current product facts.',
+    '- Treat observed facts as current repo state only when they cite source evidence.',
     '- Treat inferred behavior as draft until confirmed.',
     '- Treat unknowns as questions, not permission to invent.',
     '- Do not copy secret values; env var names only.',
@@ -1890,6 +2429,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     schemaVersion: 'buildprint-agent-manifest.v1',
     purpose: 'Machine-checkable manifest for an agent-first mapped Buildprint.',
     mode: outputMode,
+    source: facts.source ?? null,
     selectedScope,
     readOrder: facts.selectedCandidate ? [
       'AGENT_EXECUTION_BRIEF.md',
@@ -1934,13 +2474,16 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'MAPPER_OS_ALIGNMENT.md'
     ],
     qualificationStatus: 'QUALIFICATION_REVIEW_REQUIRED',
+    discoveryStatus: 'DISCOVERY_REVIEW_REQUIRED',
+    claimStates: CLAIM_STATES,
     qualificationGate: 'Source validation and runtime/test evidence are required before this package can be called a qualified Buildprint.',
     qualification: {
       command: 'agb map',
       promoted: false,
       summary: qualificationSummaryInfo,
       rules: [
-        'agb map generates mapped Buildprint evidence and an explicit promotion gate.',
+        'agb map bootstraps a guided discovery workbench and explicit promotion gate.',
+        'Scanner census hints are not product facts and cannot qualify routes, APIs, providers, persistence, or parity.',
         'agb analyze reviews existing Buildprints or mapped packages analytically.',
         'No separate top-level qualify command is required for the core product flow.',
         'Side effects, auth, privacy, and external behavior require runtime/test proof before final promotion.',
@@ -1969,6 +2512,8 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'size-classification-explicit',
       'decomposition-strategy-complete',
       'candidate-selection-required',
+      'agent-source-reading-required',
+      'scanner-non-authority',
       'observed-inferred-question-labels',
       'secrets-scan',
       'no-implementation-claims',
@@ -2538,26 +3083,9 @@ if (args[0] === 'start') {
 }
 
 if (args[0] === 'map') {
-  if (isHelp(args[1])) usage(0)
-  const repo = args[1]
-  if (!repo) usage(1)
-  try {
-    const out = optionValue('--out')
-    const scope = optionValue('--scope')
-    const candidate = optionValue('--candidate')
-    const result = writeMappedBuildprint(repo, out, { scope, candidate })
-    console.log(`Created mapped Buildprint: ${result.out}`)
-    console.log(`Files scanned: ${result.facts.totalFilesScanned}`)
-    console.log(`Frameworks: ${result.facts.frameworks.join(', ') || 'none detected'}`)
-    console.log(`Risk areas: ${result.facts.risky.join(', ') || 'none detected'}`)
-    console.log(`Review questions: ${result.questions.length}`)
-    if (result.facts.scope) console.log(`Scope: ${result.facts.scope}`)
-    if (result.facts.selectedCandidate) console.log(`Selected candidate: ${result.facts.selectedCandidate.title}`)
-    process.exit(0)
-  } catch (error) {
-    console.error(`Map failed: ${error.message}`)
-    process.exit(1)
-  }
+  console.error('agb map has been removed.')
+  console.error('Use an agent session with buildprints/buildprint-mapper-os/ to map a source project into a Buildprint.')
+  process.exit(1)
 }
 
 if (args[0] === 'check') {

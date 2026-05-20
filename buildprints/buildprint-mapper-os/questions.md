@@ -1,37 +1,37 @@
 # Mapper OS Questions
 
-## Attention anchor
+Ask after discovery, not before, unless source access or safety boundaries are unclear.
 
-Discover first, ask later. Ask before discovery only if safety, source-read permission, or output-write boundary is unclear. After soft discovery, ask only closed decisions that materially change selected scope, proof depth, or no-fake implementation boundaries.
+## Rules
 
-The mapper should not ask a long questionnaire before discovery. Use safe defaults, run soft discovery, then ask contextual questions. After discovery, ask only 3-5 required decisions; rows 6-7 below are appendix decisions used only when needed to unblock implementation.
+- Ask at most one blocking question at a time.
+- Do not ask broad product strategy questions.
+- Do not ask questions answerable from source.
+- Use defaults only for non-sensitive, non-blocking decisions.
+- Stop instead of guessing for auth, billing, uploads, user data, external providers, webhooks, destructive actions, or qualification claims.
 
-## Minimal preflight
+## Allowed Blocking Questions
 
-Ask only if unclear or unsafe:
+1. Which candidate, explicit scope, or full-suite target should be selected?
+2. Should a risky capability be included, blocked, or out of scope?
+3. Are provider credentials or sandbox access available for qualification?
+4. Should a known source defect be preserved or fixed when it affects observable behavior?
+5. Is the package intended to remain discovery-only or move to selected extraction?
 
-| # | Decision | Safe default | Human answer |
-|---|---|---|---|
-| 1 | Read/export boundary | Read source/docs/tests/config names; export generated Buildprint files only; never copy secrets or `.env` values | |
-| 2 | Mapping goal | Discover candidates first, then ask which to extract | |
-| 3 | Portability preference | Keep product behavior portable; source stack is reference | |
+## Confirmation Summary
 
-## Decisions after soft discovery
+After answers, summarize:
 
-| # | Decision | Why it matters | Safe default | Human answer |
-|---|---|---|---|---|
-| 1 | Which candidate/system scope should be extracted? | Sets output boundary | Highest-confidence product scope | |
-| 2 | Preserve source stack or keep portable? | Controls implementation constraints | Keep portable | |
-| 3 | Target stack, if any? | Needed only for cross-stack rebuild | Not set yet | |
-| 4 | Production-grade selected scope? | Prevents proof-only product claims | Smaller complete scope; included capabilities must be real | |
-| 5 | Fidelity / parity target? | Controls validation depth and safe claims | contract-parity + runtime-parity for included product/app features | |
-| 6 | Provider/export/full-parity posture? | Prevents accidental expensive or false parity claims | Exclude provider/export unless real implementation is selected; mocks only as test fixtures | |
-| 7 | Capabilities to exclude rather than fake? | Keeps scope honest | Cut hard features from scope instead of mocking/placeholding them | |
-
-## Appendix — ask only if touched
-
-Add subsystem-specific questions only after that subsystem is observed or selected.
-
-## Final handover requirement
-
-The final chat handover must include outcome, selected scope, evidence inspected, files generated, commands/evals run, known gaps, and recommended next direction.
+```text
+Mapping alignment summary
+- Source input:
+- Output mode:
+- Selected scope:
+- Included capabilities:
+- Out-of-scope capabilities:
+- Blocked capabilities:
+- Sensitive surfaces:
+- Required hardening artifacts:
+- Qualification label:
+- Next capability:
+```

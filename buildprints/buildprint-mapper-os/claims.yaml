@@ -1,19 +1,24 @@
-schema: agent-buildprint/claims.v1
-safe_claims:
-  - "Maps an existing repository into scoped, evidence-backed Buildprint candidates."
-  - "Produces agent-first execution rails for selected Buildprint extraction."
-  - "Uses safe defaults: no source mutation, no secret value copying, no invented validation."
-  - "Requires clean-room reversal and QA evidence before stronger implementation claims."
-unsafe_claims:
-  - "Automatically proves full behavioral parity."
-  - "Turns any repository into a production-ready app without human scope decisions."
-  - "Copies source app secrets or private production data."
-  - "Counts mocks, fixtures, placeholders, or no-op controls as product implementation."
-  - "Claims validation passed without commands or evidence."
-upgrade_evidence:
-  - selected scope and fidelity target confirmed
-  - generated manifest required files exist
-  - mapper golden evals pass when mapper behavior changes
-  - clean-room reversal attempted
-  - runtime/browser/persistence QA run when applicable
-  - final chat handover records evidence, gaps, and next direction
+schema: mapper-os/claims.v2
+claim_states:
+  - CENSUS_HINT
+  - PENDING_AGENT_DISCOVERY
+  - OBSERVED
+  - INFERRED
+  - QUESTION
+  - BLOCKED
+  - OUT_OF_SCOPE
+capability_statuses:
+  - INCLUDED
+  - OUT_OF_SCOPE
+  - BLOCKED
+  - TEST_ONLY_MOCK
+qualification_labels:
+  - DISCOVERY_ONLY
+  - SELECTED_UNQUALIFIED
+  - QUALIFIED_SOURCE_INDEPENDENT
+rules:
+  observed_requires_source_evidence: true
+  absence_requires_positive_search_evidence: true
+  scanner_output_product_authority: false
+  source_required_after_qualification: false
+  mocks_count_as_production_behavior: false

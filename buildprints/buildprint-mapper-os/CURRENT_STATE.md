@@ -2,128 +2,34 @@
 
 Last updated: 2026-05-20 Europe/Berlin
 
-## Product direction
+## Product Direction
 
-Mapper OS should keep the public CLI surface simple:
+Mapper OS is an agent-run workflow for mapping source projects into source-independent Buildprints. It is not an `agb map` CLI command.
 
-```bash
-agb map ./repo --out ./mapped-buildprint
-agb analyze ./mapped-buildprint
-```
+## Active Work
 
-- `agb map` generates an evidence-backed mapped Buildprint package from a source repo.
-- `agb analyze` is the analytic/review surface for existing Buildprints or mapped packages.
-- A separate top-level `agb qualify` command is not part of the core product flow.
-- Qualification/promotion status belongs inside the mapped output, not as a third main verb.
+- Align package docs and templates with `mapper-os-requirement.md`.
+- Remove legacy selected-output defaults.
+- Preserve `agb analyze`, `agb check`, and `agb start`.
 
-## What `agb map` currently does
+## Completed
 
-`agb map` systematically scans a project for:
+- Public CLI no longer advertises or executes `agb map`.
+- Mapper requirement now states Mapper OS is an agent-run Buildprint workflow.
+- Mapper eval harness is removed; fixture review is manual or agent-run.
 
-- repository/package structure
-- frameworks and package manager
-- routes/pages
-- API endpoints/RPC/handlers
-- data/model/schema files
-- tests/build/deploy signals
-- integrations and env var names only
-- risky areas such as auth, payments, AI/tool calls, external writes, uploads, admin surfaces
-- project size/scope pressure for large repos and monorepos
+## Next Work
 
-It then emits a mapped Buildprint package with discovery, decomposition, implementation, quality, evidence, and agent-facing rails.
+1. Keep templates aligned with the selected package shape.
+2. Review fixture projects with Mapper OS and record quality regressions.
+3. Tighten docs that still imply matrix-first, parity-first, or scaffold-first output.
 
-## Key generated artifacts
+## Blockers
 
-Important root artifacts include:
+- None known for the package overhaul.
 
-- `SYSTEM_MAP.md`
-- `BUILDPRINT_CANDIDATES.md`
-- `FEATURE_INVENTORY.md`
-- `FEATURE_HYPOTHESES.md`
-- `EVIDENCE_COVERAGE.md`
-- `SOURCE_VALIDATION_QUEUE.md`
-- `PRODUCT_CAPABILITY_MAP.md`
-- `IMPLEMENTATION_DECOMPOSITION.md`
-- `PHASE_PLAN.md`
-- `LOOP_GATES.md`
-- `PARITY_ACCEPTANCE.md`
-- `REVIEW_PROTOCOL.md`
-- `REVIEW_PACKET.json`
-- `MAPPER_OS_ALIGNMENT.md`
-- `DECOMPOSITION_STRATEGY.md`
-- `manifest.json`
+## Do Not Reintroduce
 
-Important modular folders include:
-
-- `product/`
-- `architecture/`
-- `implementation/phases/`
-- `implementation/slices/`
-- `implementation/loops/`
-- `implementation/tasks/`
-- `quality/`
-- `evidence/`
-- `agent/`
-
-## Qualification/promotion model
-
-Static mapping alone must not claim final qualification.
-
-`agb map` now writes qualification artifacts directly:
-
-- `manifest.qualificationStatus = "QUALIFICATION_REVIEW_REQUIRED"`
-- `manifest.qualification.command = "agb map"`
-- `evidence/SOURCE_VALIDATION.md`
-- `evidence/qualification-records.json`
-- `quality/PROMOTION_GATE.md`
-
-The intended meaning is:
-
-- mapped packages are AI-usable and evidence-backed
-- claims are marked as observed, inferred, question, blocked, or out-of-scope
-- feature hypotheses need source/runtime/test evidence before final promotion
-- final `QUALIFIED_BUILDPRINT` status requires validation outside static mapping
-
-## Current validation state
-
-The latest Mapper qualification-surface change was validated with:
-
-- `node --check bin/agb.js`
-- `node --check evals/check-map.mjs`
-- `node --check buildprints/buildprint-mapper-os/evals/check-map.mjs`
-- `npm run eval:map`
-- `npm run eval:analyze`
-- `npm test`
-- `git diff --check`
-
-Latest relevant commit before this file:
-
-- `b9b1aec Fold mapper qualification into map output`
-
-## Known next work
-
-Recommended next step is not more architecture. Run a brutal validation loop against real/adversarial projects:
-
-1. Small app
-2. SaaS app with auth/payments/providers
-3. Large monorepo/system repo
-4. Deceptive fixture with mocks/stubs/dead code/fake providers
-
-For each generated package, check:
-
-- correct size/scope behavior
-- no fake parity claims
-- risk detection quality
-- useful feature clustering
-- useful implementation phases
-- clear runtime/test proof handoff
-- whether another agent can actually follow the package without inventing facts
-
-## Boundaries for future agents
-
-- Do not reintroduce `agb qualify` as a core public verb without a strong product reason.
-- Keep `agb map` as generation plus evidence/promotion gate emission.
-- Keep `agb analyze` as review/analytics.
-- Do not claim “perfect” or “qualified” from static repo scanning alone.
-- Preserve the no-secret rule: env names only, never secret values.
-- Prefer smaller complete selected scopes over broad fake Buildprints.
+- `agb map` as a public mapper entrypoint.
+- Root implementation scaffold in discovery mode.
+- Legacy default selected files such as `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `TEST_MATRIX.md`, `TRACEABILITY_MATRIX.md`, or `IMPLEMENTATION_COMPLETENESS.md`.

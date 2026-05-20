@@ -1,6 +1,6 @@
 # Buildprint Mapper OS Golden Evals
 
-These evals make the Mapper OS non-illustrative. They run the real `agb map` command against fixture repositories and assert that the generated artifacts contain the required signals while avoiding secret leakage and malicious prompt contamination.
+These fixtures make the Mapper OS non-illustrative. They are reviewed by an agent or human against generated mapping artifacts to confirm the required signals while avoiding secret leakage and malicious prompt contamination.
 
 ## Fixtures
 
@@ -12,17 +12,11 @@ These evals make the Mapper OS non-illustrative. They run the real `agb map` com
 
 ## Run from source checkout
 
-```bash
-node buildprints/buildprint-mapper-os/evals/check-map.mjs --agb ./bin/agb.js
-```
+There is no `agb map` harness. Use these projects as regression inputs for an agent-run Mapper OS session and record fixture-level pass/fail evidence in the validation report.
 
 ## Run from a bootstrapped snapshot
 
-Pass a checked-out or installed `agb` CLI path explicitly:
-
-```bash
-AGB_CLI=/absolute/path/to/agent-buildprint/bin/agb.js node .buildprint/snapshots/evals/check-map.mjs
-```
+Do not reintroduce a deterministic mapper CLI to satisfy these fixtures. The point is to test the Mapper OS workflow and generated Buildprint quality, not scanner output.
 
 ## Passing bar
 
