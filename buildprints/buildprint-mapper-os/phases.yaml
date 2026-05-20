@@ -38,9 +38,10 @@ phases:
     inputs: [plans/03-candidate-buildprints.md, plans/04-scope-decision.md, questions.md]
     must_produce:
       - selected candidate, explicit scope, full-suite target, or discovery-only blocker
-      - included/excluded/blocked capability classification
+      - capability readiness classification across the requested/selected surface
     must_pass:
-      - no placeholder replacement for scope cuts
+      - no silent scope shrinkage
+      - no placeholder replacement for explicit scope cuts
 
   - id: 04-source-distillation
     title: Source Distillation
@@ -57,11 +58,12 @@ phases:
     title: Downstream Execution Planning
     inputs: [EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md]
     must_produce:
-      - first slice per included capability
+      - first slice per included capability without hiding later capability work
       - first verification gate per included capability
+      - implementation-team signals for downstream harness selection
       - repair-loop and stop/escalation rules
     must_pass:
-      - implementing agent does not need to infer critical order or gates
+      - implementing agent does not need to infer critical order, builder passes, or gates
 
   - id: 06-qualification
     title: Qualification

@@ -2,16 +2,32 @@
 
 ## Current State
 
+- Requested scope:
+- Selected target / first slice:
 - Active capability:
 - Completed packs:
 - Blocked packs:
 - Next pack:
 
+## Implementation Team / Harness Plan
+
+Choose the implementation team from Buildprint signals before coding. Record the selected roles/passes and why.
+
+- Product/UX design pass:
+- Frontend implementation pass:
+- Backend/runtime architecture pass:
+- Provider/integration pass:
+- Security/privacy review pass:
+- Browser/API QA pass:
+- Coverage/final Buildprint-readiness review:
+
 ## Milestones
 
-| Order | Capability | First slice | First verification gate | Status |
-|---:|---|---|---|---|
-| 1 |  |  |  | pending |
+Milestones are implementation order, not scope definition. Do not remove or hide capabilities because they are not first-slice work.
+
+| Order | Capability | Readiness state | First slice | First verification gate | Required builder/review passes | Status |
+|---:|---|---|---|---|---|---|
+| 1 |  |  |  |  |  | pending |
 
 ## Decision Log
 

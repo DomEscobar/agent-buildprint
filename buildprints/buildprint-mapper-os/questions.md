@@ -10,7 +10,7 @@ Ask after discovery, not before, unless source access or safety boundaries are u
 - Do not ask questions answerable from source.
 - Use defaults only for non-sensitive, non-blocking decisions.
 - Stop instead of guessing for auth, billing, uploads, user data, external providers, webhooks, destructive actions, or qualification claims.
-- If a downstream implementation agent cannot get answers, it must record the safest production-grade selected-scope defaults instead of silently downgrading quality.
+- If a downstream implementation agent cannot get answers, it must record the safest max-quality selected-scope defaults instead of silently downgrading quality or shrinking scope.
 
 ## Allowed Blocking Questions
 
@@ -24,11 +24,13 @@ Ask after discovery, not before, unless source access or safety boundaries are u
 
 Every selected Buildprint must carry a pre-implementation gate covering only unresolved decisions that affect output quality:
 
-1. Target quality bar: prototype, production-shaped, or production-grade selected scope?
+1. Scope / capability boundary if ambiguous: candidate, explicit scope, or full-suite target?
 2. Deployment posture: trusted-local, private authenticated, or public webapp?
 3. Sensitive capability policy: include, block, or safe-seam risky capabilities?
-4. Runtime/provider proof: are sandbox credentials or provider test access available?
-5. Persistence/infra default: local files, SQLite, Postgres, existing stack, or other?
+4. Runtime/provider proof: are sandbox credentials, provider test access, or runtime/browser environments available?
+5. Persistence/infra default: source-observed stack, existing stack, SQLite, Postgres, durable queue/object store, local files only when justified, or other?
+
+Quality is not a question: Mapper OS always targets max-quality for the requested scope. Missing proof becomes a blocker/readiness state, not a lower quality tier.
 
 ## Confirmation Summary
 
@@ -38,9 +40,10 @@ After answers, summarize:
 Mapping alignment summary
 - Source input:
 - Output mode:
-- Selected scope:
-- Included capabilities:
-- Out-of-scope capabilities:
+- Requested scope:
+- Selected target / first slice:
+- Capability readiness summary:
+- Explicitly user-excluded capabilities:
 - Blocked capabilities:
 - Sensitive surfaces:
 - Required hardening artifacts:

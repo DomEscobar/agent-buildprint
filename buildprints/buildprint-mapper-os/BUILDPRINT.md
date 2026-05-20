@@ -2,7 +2,7 @@
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command and not a source-code clone plan.
 
-The mapper agent reads source, promotes only evidence-backed claims, selects the smallest fully implementable scope unless full-suite is explicitly requested, distills source behavior into contracts, creates downstream-agent execution plans, and records qualification blockers honestly.
+The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant capability surface, classifies readiness honestly, distills source behavior into contracts, emits implementation-team signals for the downstream harness, and records qualification blockers honestly.
 
 ## Authority
 
@@ -30,9 +30,9 @@ The mapper agent reads source, promotes only evidence-backed claims, selects the
 1. Source acquisition: use a local folder or clone/check out a Git URL into a temporary read-only source checkout.
 2. Safe census: collect file tree, manifests, dependency hints, framework hints, env var names, scripts, deploy hints, and test hints as `CENSUS_HINT` only.
 3. Capability discovery: read source surfaces to discover product capabilities and promote claims to `OBSERVED`, `INFERRED`, `QUESTION`, `BLOCKED`, or `OUT_OF_SCOPE`.
-4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection.
+4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection; never shrink selected scope without explicit user decision.
 5. Source distillation: convert source facts into source-independent behavior contracts and verification oracles.
-6. Execution planning: give the downstream coding agent first slices, verification gates, repair loops, review rules, and handoff requirements.
+6. Execution planning: give the downstream coding agent capability readiness, first slices, verification gates, implementation-team signals, repair loops, review rules, and handoff requirements.
 7. Qualification: keep output unqualified until required evidence, runtime/test proof, no-fake checks, hardening artifacts, and reversal evidence exist.
 
 ## Output Modes

@@ -10,11 +10,13 @@
 - `BLOCKED`: cannot be promoted with current evidence.
 - `OUT_OF_SCOPE`: intentionally excluded.
 
-## Capability Statuses
+## Capability Readiness States
 
-- `INCLUDED`: selected for implementation and must have real behavior, contracts, verification, and no-fake gates.
-- `OUT_OF_SCOPE`: removed from selected scope; must not be represented by placeholders.
-- `BLOCKED`: cannot be included until missing evidence or hardening is supplied.
+- `INCLUDED_READY`: selected/requested and has enough behavior contract plus verification oracle for implementation.
+- `INCLUDED_NEEDS_PROOF`: selected/requested but runtime, provider, test, browser, persistence, or reversal proof is missing.
+- `INCLUDED_BLOCKED`: selected/requested but cannot be implemented safely until a blocker is resolved.
+- `INCLUDED_RISKY_REQUIRES_HARDENING`: selected/requested and security/privacy/destructive/provider/deployment risk requires hardening artifacts and review before qualification.
+- `OUT_OF_SCOPE_BY_USER_ONLY`: excluded only by explicit user decision or explicit selected-target boundary; lack of proof alone is not enough.
 - `TEST_ONLY_MOCK`: allowed only under test/demo fixture boundaries.
 
 ## Qualification Labels
@@ -36,7 +38,7 @@
 - mock policy;
 - no-fake scan status;
 - completeness score with rubric, denominator, threshold, blocker overrides, and per-capability contribution;
-- included/excluded/blocked/test-only capability counts.
+- capability readiness counts.
 
 ## Traceability Contract
 

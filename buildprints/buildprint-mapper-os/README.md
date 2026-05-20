@@ -22,8 +22,9 @@ Read:
 - Selected output must include a pre-implementation question gate so downstream agents ask or safely default the few decisions that change quality/security.
 - Treat scanner output as hints only.
 - Keep output discovery-only until scope is selected.
-- Prefer smaller complete selected scope over broad partial scope.
+- Preserve requested scope; sequence implementation into slices, but do not hide broad/blocked/unproven capabilities.
 - Produce capability packs for medium, large, and full-suite selected outputs.
+- Emit implementation signals so the downstream harness can choose an appropriate builder team/passes without Mapper OS prescribing architecture.
 
 ## Selected Output
 

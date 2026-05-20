@@ -9,13 +9,13 @@
   "outputMode": "selected-extraction",
   "discoveryStatus": "DISCOVERY_REVIEW_REQUIRED",
   "qualificationStatus": "SELECTED_UNQUALIFIED",
-  "productionPosture": "selected scope only",
+  "productionPosture": "requested scope preserved; implementation order may be sliced",
   "mockPolicy": "mocks allowed only as test/demo fixtures",
   "preImplementationQuestionGate": {
     "required": true,
     "file": "PRE_IMPLEMENTATION_QUESTIONS.md",
     "maxQuestions": 5,
-    "fallback": "record safest production-grade selected-scope defaults in CURRENT_STATE.md; do not silently downgrade quality"
+    "fallback": "record safest max-quality selected-scope defaults in CURRENT_STATE.md; do not silently shrink scope or downgrade quality"
   },
   "noFakeScanStatus": "not run",
   "completenessScore": {
@@ -26,9 +26,24 @@
     "blockerOverrides": []
   },
   "capabilityCounts": {
-    "included": 0,
-    "excluded": 0,
-    "blocked": 0,
+    "includedReady": 0,
+    "includedNeedsProof": 0,
+    "includedBlocked": 0,
+    "includedRiskyRequiresHardening": 0,
+    "outOfScopeByUserOnly": 0,
     "testOnlyMock": 0
+  },
+  "scopePolicy": "preserve requested scope; reduction requires explicit user decision",
+  "implementationSignals": {
+    "hasUserFacingUI": false,
+    "hasUploads": false,
+    "hasExternalProviders": false,
+    "hasLongRunningJobs": false,
+    "hasGraphPersistence": false,
+    "hasSimulationRuntime": false,
+    "hasReportsOrExports": false,
+    "hasAuthAdminOrDestructiveControls": false,
+    "hasDeploymentSurface": false,
+    "recommendedBuilderPasses": []
   }
 }

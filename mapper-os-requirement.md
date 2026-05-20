@@ -18,7 +18,7 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
 
 - Mapper OS must be usable by a coding agent session against local source folders and Git URLs.
 - Git URL inputs must be cloned or otherwise checked out into a temporary source checkout before discovery when the agent has access.
-- Every mapped package must record source URL or local input, source checkout path, source commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, completeness score, and included/excluded capability counts.
+- Every mapped package must record source URL or local input, source checkout path, source commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, completeness score, and capability readiness counts.
 - Static scanning may guide discovery but must not become product authority.
 - A qualified Buildprint must contain enough feature behavior, boundary contracts, acceptance gates, traceability, and proof instructions to rebuild the selected scope without reopening the original source.
 - Mapper OS must optimize for reconstructable product behavior, not for preserving source internals.
@@ -63,14 +63,17 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
 
 - The default Mapper OS agent run must stay lean discovery.
 - Candidate, scope, and full-suite selection are agent workflow decisions, not a required CLI surface.
-- Once extraction mode is selected, scope selection must prefer the smallest fully implementable production-complete capability set over broader partial scope.
-- If a capability lacks a real production path, it must be marked `OUT_OF_SCOPE` or `BLOCKED`, not placeholder-included.
-- Scope cuts remove capabilities and must not be replaced with mocks, placeholders, route-shaped links, no-op controls, skeleton adapters, or in-memory substitutes.
+- Mapper OS must preserve the user-requested product scope. It must not shrink scope to make a selected package look more complete, safer, or easier to implement.
+- If no implementation target is selected, remain lean discovery. If a candidate, explicit scope, or full-suite target is selected, represent the full capability surface relevant to that target and classify every capability by readiness.
+- Implementation order may be sliced into small vertical milestones, but slicing is not scope reduction. A first slice must never hide later capabilities, blockers, proof gaps, or risky surfaces.
+- Scope reduction requires an explicit user decision. User-excluded capabilities must be recorded as `OUT_OF_SCOPE_BY_USER_ONLY`, not silently omitted.
+- If a capability lacks a proven production path, it must remain represented as `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, or `INCLUDED_RISKY_REQUIRES_HARDENING`, not placeholder-included and not erased.
+- Scope cuts remove capabilities only when explicitly user-approved and must not be replaced with mocks, placeholders, route-shaped links, no-op controls, skeleton adapters, or in-memory substitutes.
 - Selected implementation output must stay under `selected-buildprint/`.
 - No implementation scaffold may appear at the package root.
 - `--full-suite` is valid when the user intentionally wants the complete feature suite. It still must preserve qualification blockers and must not claim source-independent completeness until source distillation and proof are complete.
 - If selected scope contains auth, uploads, external providers/webhooks, billing, admin actions, or user-data operations, conditional hardening artifacts are mandatory: threat model, data lifecycle, observability, limits/abuse controls, and secret-handling contract.
-- If any required hardening artifact is missing, affected capabilities must remain `BLOCKED` or `OUT_OF_SCOPE` and the package cannot be promoted to qualified.
+- If any required hardening artifact is missing, affected capabilities must remain `INCLUDED_BLOCKED` or `INCLUDED_RISKY_REQUIRES_HARDENING` unless the user explicitly excludes them; the package cannot be promoted to qualified.
 
 ### Stage 5: Source Distillation
 
@@ -98,7 +101,8 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
 
 ### Stage 5.5: Capability Pack Completeness
 
-- Every extraction output (`--candidate`, `--scope`, `--full-suite`) must classify each capability as `INCLUDED`, `OUT_OF_SCOPE`, `BLOCKED`, or `TEST_ONLY_MOCK`.
+- Every extraction output (`--candidate`, `--scope`, `--full-suite`) must classify each capability with one of these readiness states: `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `TEST_ONLY_MOCK`, or `OUT_OF_SCOPE_BY_USER_ONLY`.
+- `OUT_OF_SCOPE_BY_USER_ONLY` requires an explicit user decision or selected target boundary; lack of proof alone is not an out-of-scope reason.
 - Completeness is recorded in `CAPABILITY_INDEX.md`, each capability pack, and `VERIFICATION.md`.
 - `IMPLEMENTATION_COMPLETENESS.md` is optional legacy or expanded reporting, not the default final package shape.
 - Each included capability pack must include capability status, source evidence, required contracts, no-fake rules, verification gates, blockers, and qualification state.
@@ -112,7 +116,8 @@ Execution planning must be concrete, milestone-based, and verification-driven. I
 
 Distill at minimum:
 
-- task intake summary: selected scope, in-scope capabilities, out-of-scope capabilities, assumptions, risks, and success criteria;
+- task intake summary: requested scope, selected target boundary, full capability surface, readiness states, user-excluded capabilities, assumptions, risks, and success criteria;
+- implementation signals that help the downstream harness choose an implementation team, such as user-facing UI, uploads, external providers, long-running jobs, graph persistence, simulation/runtime execution, reporting, auth/admin paths, destructive controls, deployment surface, and required review specialties;
 - implementation order by capability, including dependencies and blocked prerequisites;
 - per-capability agent brief with goal, stable behavior, implementation freedom, first implementation step, first verification gate, no-fake checks, and stop conditions;
 - milestone plan with small vertical slices, not broad layer-first architecture;
@@ -127,15 +132,16 @@ Distill at minimum:
 The downstream-agent execution flow must follow this default loop unless a capability pack declares a narrower safe loop:
 
 ```text
-1. Intake: confirm selected capability, scope, risks, and success criteria.
-2. Context load: read only the Buildprint spine and relevant capability pack.
-3. Baseline: run declared preflight checks or record why they cannot run.
-4. Implement slice: build the smallest behaviorally complete vertical slice.
-5. Verify slice: run the declared targeted checks and fix failures.
-6. Expand checks: add applicable integration, runtime, browser, persistence, security, and no-fake gates.
-7. Fresh review: use an independent review pass for high-risk or broad changes.
-8. Repair loop: convert failures into focused next actions until gates pass or blockers are recorded.
-9. Handoff: update current state, decisions, risks, commands, evidence, and next capability.
+1. Intake: confirm requested scope, selected target boundary, capability readiness map, risks, and success criteria.
+2. Implementation-team selection: choose the builder roles/passes needed from the Buildprint signals before coding. A user-facing product requires design/frontend review; uploads/providers/user data require security/runtime review; broad capability surfaces require architecture and coverage review. A lone generalist pass is acceptable only for tiny non-UI reference implementations.
+3. Context load: read only the Buildprint spine and relevant capability pack.
+4. Baseline: run declared preflight checks or record why they cannot run.
+5. Implement slice: build the next behaviorally complete vertical slice without erasing later capabilities from the plan.
+6. Verify slice: run the declared targeted checks and fix failures.
+7. Expand checks: add applicable integration, runtime, browser, persistence, security, and no-fake gates.
+8. Fresh review: use an independent review pass for high-risk, UI/product, architecture, data, provider, or broad changes.
+9. Repair loop: convert failures into focused next actions until gates pass or blockers are recorded.
+10. Handoff: update current state, decisions, risks, commands, evidence, capability readiness, implementation-team notes, and next capability.
 ```
 
 Implementation plans must stay source-independent. They may reference Buildprint files, contracts, fixtures, schemas, and acceptance gates, but must not require reopening the original source checkout.
@@ -185,7 +191,7 @@ Implementation plans must stay source-independent. They may reference Buildprint
 - Traceability is mandatory before qualification and lives per capability: capability requirement -> source evidence -> Buildprint contract -> implementation check -> QA or reversal check.
 - The Buildprint must not require preservation of internal source structure unless the requirement explains why that structure is externally observable or qualification-relevant.
 - Capability completeness status and production completeness score must be present for extraction outputs.
-- Included and excluded capabilities must be listed separately; no included capability may be placeholder-backed.
+- Capability readiness states must be listed separately; no included capability may be placeholder-backed, and no capability may be excluded merely because it is hard to prove or implement.
 - Every included capability must have a production contract and at least one runtime or QA gate proving real side effects.
 - Qualification requires zero unresolved no-fake critical findings and a production completeness score that passes the declared threshold.
 - Production completeness score must have a declared rubric, denominator, threshold, blocker overrides, and per-capability contribution. Scores must never override hard blockers such as missing evidence, unresolved critical no-fake findings, unresolved high/critical security risks, missing required hardening artifacts, or secret leakage.

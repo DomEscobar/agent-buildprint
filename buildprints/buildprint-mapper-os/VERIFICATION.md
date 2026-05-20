@@ -8,7 +8,7 @@
 | Claim promotion | every mapping run | every `OBSERVED` claim cites source path and line or section |
 | Scanner non-authority | every mapping run | census hints do not assert product behavior, absence, parity, provider completeness, or candidate readiness |
 | Scope boundary | selected extraction | selected output is under `selected-buildprint/` and root remains discovery/evidence/quality |
-| Capability completeness | selected extraction | every capability is `INCLUDED`, `OUT_OF_SCOPE`, `BLOCKED`, or `TEST_ONLY_MOCK` |
+| Capability completeness | selected extraction | every capability has readiness state: `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `TEST_ONLY_MOCK` |
 | Capability packs | medium/large/full-suite | `CAPABILITY_INDEX.md` and per-capability `CAPABILITY.md`, `VERIFICATION.md`, and `IMPLEMENTATION.md` exist |
 | Execution planning | selected extraction | each included capability has first slice, first gate, repair loop, and stop condition |
 | No-fake | selected extraction | no included capability is placeholder-backed, mock-backed, no-op, skeleton, or in-memory-only where persistence is claimed |
@@ -23,7 +23,7 @@ Use `evals/golden-projects/` as regression input for manual or agent-run review.
 - selected output mode;
 - promoted claims;
 - rejected scanner claims;
-- selected/excluded/blocked capabilities;
+- capability readiness map, including user-excluded and blocked capabilities;
 - no-fake findings;
 - qualification label;
 - evidence gaps.

@@ -4,12 +4,13 @@
 
 - Accept local source folders and Git URLs as source inputs for an agent-run mapping session.
 - Treat source checkouts as read-only.
-- Record source input, checkout path, commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, completeness score, and included/excluded capability counts.
+- Record source input, checkout path, commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, completeness score, and capability readiness counts.
 - Keep census facts as `CENSUS_HINT` or `PENDING_AGENT_DISCOVERY` until source evidence promotes them.
 - Require every `OBSERVED` claim to cite source path and line or section evidence.
 - Treat absence as a claim requiring positive search evidence.
-- Select the smallest fully implementable production-complete capability set unless the user explicitly chooses full-suite.
-- Classify every extracted capability as `INCLUDED`, `OUT_OF_SCOPE`, `BLOCKED`, or `TEST_ONLY_MOCK`.
+- Preserve the user-requested scope. If no target is selected, remain discovery-only; if a target is selected, classify the full relevant capability surface and sequence implementation without dropping capabilities. Scope reduction requires explicit user confirmation.
+- Classify every extracted capability as `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `TEST_ONLY_MOCK`.
+- Emit implementation signals that help a downstream harness choose its implementation team/passes without turning the Buildprint into an architecture prescription.
 - Emit selected implementation output only under `selected-buildprint/`.
 - Use capability packs for medium, large, and full-suite selected outputs.
 - Include downstream-agent execution planning in every source-independent selected package.
@@ -22,7 +23,7 @@
 - Must not treat static scanning as product authority.
 - Must not create root implementation scaffold in discovery mode.
 - Must not use broad architecture prose as a substitute for capability contracts.
-- Must not include placeholder-backed or mock-backed capabilities in production scope.
+- Must not include placeholder-backed or mock-backed capabilities in production scope, and must not hide unproven capabilities by shrinking scope without user confirmation.
 - Must not claim source-independent readiness while implementation order, verification gates, or stop conditions are missing.
 - Must not require downstream implementers to reopen the original source after qualification.
 
@@ -36,7 +37,8 @@ Each selected capability must answer:
 - failure, loading, empty, and blocked states;
 - provider, persistence, runtime, operational, or security boundaries;
 - stable behavior vs free implementation choices;
-- first implementation slice;
+- first implementation slice without hiding later capability work;
+- implementation-team signals/passes required by product shape;
 - first verification gate;
 - stop or escalation condition.
 

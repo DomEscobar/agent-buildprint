@@ -37,11 +37,14 @@ For genuinely small scopes, a flat package may use `CAPABILITIES.md` instead of 
 
 - Convert source facts into source-independent behavior contracts.
 - Do not preserve source internals unless externally observable or qualification-relevant.
-- Classify every capability as `INCLUDED`, `OUT_OF_SCOPE`, `BLOCKED`, or `TEST_ONLY_MOCK`.
+- Preserve the selected/requested capability surface. Do not convert “hard to prove,” “risky,” “external,” “destructive,” “provider-backed,” or “not first slice” into omission.
+- Classify every capability as `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `TEST_ONLY_MOCK`.
+- Use `OUT_OF_SCOPE_BY_USER_ONLY` only for explicit user exclusions or explicit selected-target boundaries; lack of proof is not enough.
 - Include stable-vs-free boundaries for every capability.
-- Include first implementation slice and first verification gate for every included capability.
-- Generate `PRE_IMPLEMENTATION_QUESTIONS.md` with at most five blocking questions that materially affect quality, security, scope, provider behavior, persistence, or qualification status.
-- `HANDOFF.md` and `EXECUTION_PROTOCOL.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, or record safest production-grade defaults in `CURRENT_STATE.md`.
+- Include first implementation slice and first verification gate for every included capability. Implementation slicing is not scope shrinking.
+- Emit implementation signals for the downstream harness: user-facing UI, uploads, external providers, long-running jobs, graph persistence, simulation/runtime execution, reports, auth/admin, destructive controls, deployment surface, and recommended review specialties.
+- Generate `PRE_IMPLEMENTATION_QUESTIONS.md` with at most five blocking questions that materially affect security, scope, provider behavior, persistence, deployment, or qualification status. Do not ask how good the implementation should be; max-quality is mandatory.
+- `HANDOFF.md` and `EXECUTION_PROTOCOL.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, record safest max-quality defaults in `CURRENT_STATE.md`, and choose an implementation team/passes from the Buildprint signals.
 - Keep unresolved questions out of files that claim implementation readiness.
 - Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
 

@@ -1,12 +1,13 @@
 # EXECUTION_PROTOCOL
 
-1. Intake: read `PRE_IMPLEMENTATION_QUESTIONS.md`, confirm selected capability, scope, risks, quality bar, and success criteria.
-2. Question gate: ask only unresolved blocking questions before coding. If the user is unavailable, record safest production-grade selected-scope defaults in `CURRENT_STATE.md`; do not silently downgrade to prototype quality.
-3. Context load: read only the spine and relevant capability pack.
-4. Baseline: run declared preflight checks or record why they cannot run.
-5. Implement slice: build the highest-quality behaviorally complete vertical slice allowed by the selected scope and resolved/defaulted decisions.
-6. Verify slice: run targeted checks and fix failures.
-7. Expand checks: add integration, runtime, browser, persistence, security, and no-fake gates where applicable.
-8. Fresh review: required for high-risk or broad changes.
-9. Repair loop: convert failures into focused next actions until pass or blocker.
-10. Handoff: update state, evidence, blockers, safe defaults, and next capability.
+1. Intake: read `PRE_IMPLEMENTATION_QUESTIONS.md`, confirm requested scope, selected target/first slice, capability readiness map, risks, max-quality mandate, and success criteria.
+2. Question gate: ask only unresolved blocking questions before coding. If the user is unavailable, record safest max-quality selected-scope defaults in `CURRENT_STATE.md`; do not silently shrink scope or downgrade quality.
+3. Implementation-team selection: inspect Buildprint implementation signals and choose the required builder roles/passes before coding. User-facing UI requires product/design/frontend review. Uploads, providers, user data, auth, admin, destructive actions, or deployment surfaces require security/runtime review. Broad or multi-capability surfaces require architecture and coverage review. A lone generalist pass is acceptable only for tiny non-UI reference implementations.
+4. Context load: read only the spine and relevant capability pack, plus capability index/readiness map when present.
+5. Baseline: run declared preflight checks or record why they cannot run.
+6. Implement slice: build the next behaviorally complete vertical slice without erasing later capability work from the plan.
+7. Verify slice: run targeted checks and fix failures.
+8. Expand checks: add integration, runtime, browser, persistence, security, and no-fake gates where applicable.
+9. Fresh review: required for high-risk, UI/product, architecture, data, provider, upload, auth, destructive, deployment, or broad changes.
+10. Repair loop: convert failures into focused next actions until pass or blocker.
+11. Handoff: update state, evidence, blockers, safe defaults, capability readiness, implementation-team notes, and next capability.
