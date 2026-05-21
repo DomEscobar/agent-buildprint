@@ -5,7 +5,7 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 ## Fixtures
 
 - `stripe-saas` — billing/webhook/auth detection and billing questions.
-- `malicious-secrets` — `.env` secret values and prompt-injection text must not leak into outputs.
+- `malicious-secrets` — `.env.example` secret variable names and prompt-injection text must not leak into outputs.
 - `admin-dashboard` — admin surface, auth/session, destructive action, and audit-risk detection.
 - `large-monorepo` — mixed integrations and scope/candidate pressure.
 - `route-patterns` — Next/Fastify-style route and upload/cache/auth/AI detection.

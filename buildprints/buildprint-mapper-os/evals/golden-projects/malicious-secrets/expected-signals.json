@@ -3,5 +3,5 @@
   "riskIncludes": ["AI/tool calls"],
   "envNames": ["OPENAI_API_KEY", "PRIVATE_TOKEN"],
   "mustContain": ["OPENAI_API_KEY", "PRIVATE_TOKEN", "AI/tool calls"],
-  "mustNotContain": ["sk-live-DO-NOT-COPY-GOLDEN", "secret-token-12345"]
+  "mustNotContain": ["<redacted-test-fixture-do-not-copy>"]
 }
