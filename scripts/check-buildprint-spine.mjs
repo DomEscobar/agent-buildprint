@@ -31,16 +31,15 @@ const selectedOutputRequired = [
   'CAPABILITY_INDEX.md',
   'CONTRACTS.md',
   'CURRENT_STATE.md',
-  'DESIGN_QUALITY_BAR.md',
   'EXECUTION_PROTOCOL.md',
   'IMPLEMENTATION_PLAN.md',
   'PRE_IMPLEMENTATION_QUESTIONS.md',
   'TEAM_STACK.md',
-  'UX_CONTRACT.md',
   'VERIFICATION.md',
   'manifest.json',
   'capabilities',
 ];
+const selectedUiRequired = ['UX_CONTRACT.md', 'DESIGN_QUALITY_BAR.md'];
 const selectedCapabilityRequired = ['CAPABILITY.md', 'IMPLEMENTATION.md', 'VERIFICATION.md'];
 
 function packageSlugs() {
@@ -66,47 +65,81 @@ for (const slug of slugs) {
   const dir = path.join(root, slug);
   const isSelectedOutputPackage = slug !== 'buildprint-mapper-os'
     && fs.existsSync(path.join(dir, 'CAPABILITY_INDEX.md'))
-    && fs.existsSync(path.join(dir, 'TEAM_STACK.md'))
-    && fs.existsSync(path.join(dir, 'CURRENT_STATE.md'))
     && fs.existsSync(path.join(dir, 'capabilities'));
 
   if (isSelectedOutputPackage) {
     const missing = selectedOutputRequired.filter((file) => !fs.existsSync(path.join(dir, file)));
     if (missing.length) {
       failures += missing.length;
-      console.error(`âœ— ${slug}: selected output missing ${missing.join(', ')}`);
-      continue;
+      console.error(`✗ ${slug}: selected output missing ${missing.join(', ')}`);
+    }
+
+    let manifest = null;
+    if (fs.existsSync(path.join(dir, 'manifest.json'))) {
+      try {
+        manifest = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8'));
+      } catch (error) {
+        failures++;
+        console.error(`✗ ${slug}: selected output manifest.json must parse as JSON (${error.message})`);
+      }
+    }
+
+    const teamStack = manifest?.teamStack;
+    if (!teamStack || !Array.isArray(teamStack.teams) || teamStack.teams.length === 0) {
+      failures++;
+      console.error(`✗ ${slug}: selected output manifest.json must define teamStack.teams`);
+    }
+
+    const hasUserFacingUI = manifest?.implementationSignals?.hasUserFacingUI === true
+      || (Array.isArray(teamStack?.teams) && teamStack.teams.includes('ux-ui-craft'));
+    if (hasUserFacingUI) {
+      const missingUi = selectedUiRequired.filter((file) => !fs.existsSync(path.join(dir, file)));
+      if (missingUi.length) {
+        failures += missingUi.length;
+        console.error(`✗ ${slug}: UI-bearing selected output missing ${missingUi.join(', ')}`);
+      }
+    }
+
+    if (fs.existsSync(path.join(dir, 'CAPABILITY_INDEX.md'))) {
+      const capabilityIndex = fs.readFileSync(path.join(dir, 'CAPABILITY_INDEX.md'), 'utf8');
+      if (!/Required teams/i.test(capabilityIndex)) {
+        failures++;
+        console.error(`✗ ${slug}: CAPABILITY_INDEX.md must include Required teams column`);
+      }
+      if (hasUserFacingUI && !/UX_CONTRACT\.md|ux-ui-craft|UI\/UX status/i.test(capabilityIndex)) {
+        failures++;
+        console.error(`✗ ${slug}: UI-bearing CAPABILITY_INDEX.md must route UI/UX gates to UX_CONTRACT.md or ux-ui-craft`);
+      }
     }
 
     const capabilitiesDir = path.join(dir, 'capabilities');
-    const capabilityIds = fs.readdirSync(capabilitiesDir)
-      .filter((name) => fs.statSync(path.join(capabilitiesDir, name)).isDirectory())
-      .sort();
+    const capabilityIds = fs.existsSync(capabilitiesDir)
+      ? fs.readdirSync(capabilitiesDir).filter((name) => fs.statSync(path.join(capabilitiesDir, name)).isDirectory()).sort()
+      : [];
     if (!capabilityIds.length) {
       failures++;
-      console.error(`âœ— ${slug}: selected output must contain at least one capability pack`);
+      console.error(`✗ ${slug}: selected output must contain at least one capability pack`);
     }
     for (const capabilityId of capabilityIds) {
       const capabilityDir = path.join(capabilitiesDir, capabilityId);
       const missingCapabilityFiles = selectedCapabilityRequired.filter((file) => !fs.existsSync(path.join(capabilityDir, file)));
       if (missingCapabilityFiles.length) {
         failures += missingCapabilityFiles.length;
-        console.error(`âœ— ${slug}: capabilities/${capabilityId} missing ${missingCapabilityFiles.join(', ')}`);
+        console.error(`✗ ${slug}: capabilities/${capabilityId} missing ${missingCapabilityFiles.join(', ')}`);
       }
     }
 
-    const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8'));
-    const manifestFiles = Array.isArray(manifest.files)
+    const manifestFiles = Array.isArray(manifest?.files)
       ? manifest.files.map((entry) => typeof entry === 'string' ? entry : entry?.path).filter(Boolean)
       : [];
     if (!manifestFiles.length) {
       failures++;
-      console.error(`âœ— ${slug}: selected output manifest.json must list files`);
+      console.error(`✗ ${slug}: selected output manifest.json must list files`);
     }
     for (const file of manifestFiles) {
       if (!fs.existsSync(path.join(dir, file))) {
         failures++;
-        console.error(`âœ— ${slug}: selected output manifest lists missing file ${file}`);
+        console.error(`✗ ${slug}: selected output manifest lists missing file ${file}`);
       }
     }
     continue;

@@ -14,6 +14,7 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 
 - `selected-output-fixtures/microfish-bad-shape` - negative regression for missing `CAPABILITY_INDEX.md`, incomplete capability packs, typo alias files, manifest drift, and duplicate handoff files.
 - `selected-output-fixtures/microfish-good-shape` - positive regression for a router-first, team-stack full-suite selected Buildprint that remains `SELECTED_UNQUALIFIED`.
+- `selected-output-fixtures/missing-team-stack` - negative regression for selected output that has `CAPABILITY_INDEX.md` and `capabilities/` but omits mandatory `TEAM_STACK.md`.
 - `selected-output-fixtures/ui-missing-ux` - negative regression for UI-bearing selected output without required `UX_CONTRACT.md`/`ux-ui-craft` routing.
 - `selected-output-fixtures/architecture-shell` - negative regression for full-suite output without required `product-architect` topology routing.
 - `selected-output-fixtures/pretty-fake-ui` - negative regression for styled UI language without full workflow state/browser screenshot proof.

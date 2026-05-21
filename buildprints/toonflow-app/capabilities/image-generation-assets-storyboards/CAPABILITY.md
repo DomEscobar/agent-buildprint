@@ -36,5 +36,5 @@ Stop or escalate when: Needs sandbox/live image provider proof and browser polli
 
 ## Source Evidence
 
-- OBSERVED source-real/src/routes/assetsGenerate/generateAssets.ts:61-143; source-real/src/utils/ai.ts:246-271; source-real/src/utils/oss.ts:174-209
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/assetsGenerate/generateAssets.ts:61-143; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/ai.ts:246-271; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/oss.ts:174-209
 

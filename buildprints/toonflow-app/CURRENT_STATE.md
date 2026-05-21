@@ -8,6 +8,14 @@
 - Next pack: project-setup-model-selection.
 - Qualification label: `SELECTED_UNQUALIFIED`
 
+
+## Read Next
+
+1. Read `PRE_IMPLEMENTATION_QUESTIONS.md` and resolve or safely default the blocking questions.
+2. Read `TEAM_STACK.md` and execute the selected team gates for the active slice.
+3. Read only `capabilities/auth-api-access/` and the directly linked project setup/persistence files needed for the first vertical slice.
+4. Do not open or read unrelated capability packs upfront; use `CAPABILITY_INDEX.md` to advance one dependency-ready pack at a time after proof is recorded.
+
 ## Scope Preservation
 
 - Discovered/requested capability surface: auth-api-access, project-setup-model-selection, novel-ingestion-event-extraction, script-agent-workspace, script-assets-extraction, asset-library-media-upload, image-generation-assets-storyboards, production-agent-workbench, storyboard-flow-persistence, video-generation-workbench, vendor-provider-system, skills-prompt-management, agent-memory-rag, database-backup-admin, electron-docker-deployment
@@ -44,7 +52,7 @@
 - Reports/exports: script zip export and DB JSON export.
 - Auth/admin/destructive controls: yes.
 - Deployment surface: backend, Electron desktop, Docker backend-only.
-- Recommended builder/review passes: product/UX, frontend, backend/runtime, provider integration, security/privacy, browser/API QA, coverage/reversal.
+- Recommended team packs: product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence.
 
 ## Last Evidence Update
 

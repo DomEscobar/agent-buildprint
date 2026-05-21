@@ -36,5 +36,5 @@ Stop or escalate when: Needs provider fixture/sandbox, zip export verification, 
 
 ## Source Evidence
 
-- OBSERVED source-real/src/routes/script/addScript.ts:8-40; source-real/src/routes/script/exportScript.ts:9-26; source-real/src/routes/script/extractAssets.ts:56-259
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/script/addScript.ts:8-40; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/script/exportScript.ts:9-26; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/script/extractAssets.ts:56-259
 

@@ -36,5 +36,5 @@ Stop or escalate when: Needs upload security review, MIME validation hardening, 
 
 ## Source Evidence
 
-- OBSERVED source-real/src/routes/assets/addAssets.ts:8-31; source-real/src/routes/assets/uploadClip.ts:28-59; source-real/src/utils/oss.ts:16-24,49-58,78-156
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/assets/addAssets.ts:8-31; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/assets/uploadClip.ts:28-59; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/oss.ts:16-24,49-58,78-156
 

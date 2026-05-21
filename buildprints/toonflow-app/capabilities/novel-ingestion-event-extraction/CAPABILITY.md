@@ -36,5 +36,5 @@ Stop or escalate when: Needs provider sandbox, asynchronous state proof, and mal
 
 ## Source Evidence
 
-- OBSERVED source-real/src/routes/novel/addNovel.ts:8-53; source-real/src/routes/novel/event/generateEvents.ts:9-37; source-real/src/routes/novel/getNovel.ts:8-46; source-real/src/lib/initDB.ts:348-353
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/novel/addNovel.ts:8-53; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/novel/event/generateEvents.ts:9-37; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/novel/getNovel.ts:8-46; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/lib/initDB.ts:348-353
 

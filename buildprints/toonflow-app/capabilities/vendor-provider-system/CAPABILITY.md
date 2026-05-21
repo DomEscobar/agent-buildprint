@@ -36,5 +36,5 @@ Stop or escalate when: Needs VM security review, provider sandbox proof, secret 
 
 ## Source Evidence
 
-- OBSERVED source-real/src/routes/setting/vendorConfig/addVendor.ts:9-112; source-real/src/routes/setting/vendorConfig/updateCode.ts:10-98; source-real/src/routes/setting/vendorConfig/modelTest.ts:9-105; source-real/src/utils/vendor.ts:6-41; source-real/src/utils/vm.ts:16-55; source-real/data/vendor/null.ts:315-322
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/setting/vendorConfig/addVendor.ts:9-112; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/setting/vendorConfig/updateCode.ts:10-98; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/setting/vendorConfig/modelTest.ts:9-105; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/vendor.ts:6-41; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/vm.ts:16-55; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:data/vendor/null.ts:315-322
 

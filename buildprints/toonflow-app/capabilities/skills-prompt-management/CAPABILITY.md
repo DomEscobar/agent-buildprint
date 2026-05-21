@@ -36,5 +36,5 @@ Stop or escalate when: Needs edit/readback proof, invalid frontmatter tests, and
 
 ## Source Evidence
 
-- OBSERVED source-real/src/routes/setting/skillManagement/getSkillList.ts:9-17; source-real/src/routes/setting/skillManagement/saveSkillContent.ts:12-33; source-real/src/utils/agent/skillsTools.ts:44-119,180-240; source-real/data/skills inventory: 183 markdown files across art/story/production/script skills
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/setting/skillManagement/getSkillList.ts:9-17; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/setting/skillManagement/saveSkillContent.ts:12-33; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/agent/skillsTools.ts:44-119,180-240; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:data/skills inventory: 183 markdown files across art/story/production/script skills
 

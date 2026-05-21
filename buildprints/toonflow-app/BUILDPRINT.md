@@ -8,13 +8,13 @@ This Buildprint preserves the full relevant Toonflow product surface discovered 
 
 1. `BUILDPRINT.md`
 2. `CAPABILITY_INDEX.md`
-3. `CONTRACTS.md`
-4. `VERIFICATION.md`
+3. `CURRENT_STATE.md`
+4. `TEAM_STACK.md`
 5. `EXECUTION_PROTOCOL.md`
 6. `PRE_IMPLEMENTATION_QUESTIONS.md`
-7. `IMPLEMENTATION_PLAN.md`
-8. `CURRENT_STATE.md`
-9. Active capability pack
+7. active capability pack named by `CURRENT_STATE.md`
+8. `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` when `TEAM_STACK.md` selects `ux-ui-craft`
+9. supporting artifacts only when the active pack or team gate points to them
 
 ## Scope
 

@@ -36,5 +36,5 @@ Stop or escalate when: Needs dependency install, build, backend smoke, Electron 
 
 ## Source Evidence
 
-- OBSERVED source-real/package.json:21-35; source-real/scripts/main.ts:43-74,171-240; source-real/electron-builder.yml:1-66; source-real/Dockerfile:1-22; source-real/src/app.ts:45-67,91-98,136-145
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:package.json:21-35; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:scripts/main.ts:43-74,171-240; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:electron-builder.yml:1-66; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:Dockerfile:1-22; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/app.ts:45-67,91-98,136-145
 

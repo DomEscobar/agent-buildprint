@@ -36,5 +36,5 @@ Stop or escalate when: Needs browser canvas proof, socket stream proof, and skil
 
 ## Source Evidence
 
-- OBSERVED source-real/src/socket/routes/productionAgent.ts:49-99; source-real/src/agents/productionAgent/index.ts:43-95,196-374,377-488; source-real/src/agents/productionAgent/tools.ts:70-210
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/socket/routes/productionAgent.ts:49-99; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/agents/productionAgent/index.ts:43-95,196-374,377-488; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/agents/productionAgent/tools.ts:70-210
 

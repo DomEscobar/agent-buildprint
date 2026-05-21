@@ -98,7 +98,7 @@ capabilities/<capability-id>/
 
 This shape is mandatory. Full-suite output without `CAPABILITY_INDEX.md` and `TEAM_STACK.md`, UI-bearing output without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`, or any included capability pack without sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`, is invalid.
 
-`manifest.json` must match actual package files and must not list typo aliases such as `VERFICATION.md`. A selected package must use one canonical handoff artifact; do not put both `HANDOFF.md` and `HANDOVER.md` in the spine.
+`manifest.json` must match actual package files, include `teamStack.teams` for selected outputs, and must not list typo aliases such as `VERFICATION.md`. A selected package must use one canonical handoff artifact; do not put both `HANDOFF.md` and `HANDOVER.md` in the spine. `CAPABILITY_INDEX.md` must include a `Required teams` column so each capability routes to the relevant team-pack gates.
 
 `TEAM_STACK.md` is mandatory for selected output. It infers internal team packs from product shape; it must not ask the user to choose lazy/simple/quick quality. UI-bearing output selects `ux-ui-craft`, broad output selects `product-architect`, and every selected output selects `test-and-verification`.
 

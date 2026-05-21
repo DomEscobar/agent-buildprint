@@ -36,5 +36,5 @@ Stop or escalate when: Needs sandbox/live video proof, long-running job proof, a
 
 ## Source Evidence
 
-- OBSERVED source-real/src/routes/production/workbench/addTrack.ts:7-27; source-real/src/routes/production/workbench/generateVideo.ts:21-123; source-real/src/routes/production/workbench/checkVideoStateList.ts:8-32; source-real/src/utils/ai.ts:292-323
+- OBSERVED Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/production/workbench/addTrack.ts:7-27; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/production/workbench/generateVideo.ts:21-123; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/production/workbench/checkVideoStateList.ts:8-32; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/ai.ts:292-323
 

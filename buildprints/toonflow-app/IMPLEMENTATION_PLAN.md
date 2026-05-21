@@ -9,15 +9,20 @@
 - Blocked packs: provider/runtime-heavy and destructive admin packs until proof/hardening exists.
 - Next pack: `project-setup-model-selection`.
 
+## Team-Pack Gate
+
+Before coding, read `TEAM_STACK.md`; execute product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, and data-persistence gates for the active slice. Do not downgrade to legacy generic pass names.
+
 ## Implementation Team / Harness Plan
 
-- Product/UX design pass: required for UI-heavy production workbench and settings/admin flows.
-- Frontend implementation pass: required for login, project, novel, script, production canvas, assets, providers, skills, memory, admin.
-- Backend/runtime architecture pass: required for Express/API/socket/job/persistence layers.
-- Provider/integration pass: required for text/image/video/tts adapters and model tests.
-- Security/privacy review pass: required for auth, uploads, programmable providers, destructive admin, local files.
-- Browser/API QA pass: required for all user-facing flows plus API/socket negative tests.
-- Coverage/final Buildprint-readiness review: required before any promotion.
+Use `TEAM_STACK.md` as the implementation team router before coding. Selected team packs:
+
+- product-architect: required for full-suite topology, boundaries, architecture decisions, and first real vertical slice.
+- ux-ui-craft: required for user-facing Electron/browser workflows, production canvas, media/settings/admin UX, visual quality, and screenshot/browser proof.
+- test-and-verification: required for proof ledger closure, negative tests, no-fake scans, and clean-room reversal.
+- integration-runtime: required for text/image/video/TTS providers, sockets, long-running jobs, Electron/Docker runtime, and upload/file runtime.
+- security-boundary: required for auth, uploads, programmable vendor VM, destructive admin, local files, and secret handling.
+- data-persistence: required for SQLite, project/storyboard/media/memory state, backup/import/export, restart/readback/delete proof.
 
 ## Evidence-Producing Role Chain
 
@@ -33,11 +38,11 @@
 
 | Surface | Required topology | Actual topology | Evidence | Status |
 |---|---|---|---|---|
-| Frontend/UI | Feature routes/components for login, projects, novel, script, production canvas, media, settings, admin; browser states for empty/loading/error/success | Source has bundled minified web only; downstream implementation must create inspectable topology | source-real/data/web/index.html:1-8; source-real/scripts/main.ts:198-205 | blocked until implementation/browser proof |
-| Backend/API | Route layer separated from auth/domain/provider/storage/job concerns | Source shows Express routes, utils, agents, providers, DB modules | source-real/src/app.ts; source-real/src/routes/**; source-real/src/utils/** | source observed; downstream proof required |
-| Providers/integrations | Adapter registry, secret-name-only config, retries/errors, sandbox tests | Source has programmable vendor adapters and VM | source-real/src/routes/setting/vendorConfig/addVendor.ts:61-112; source-real/src/utils/vm.ts:16-55 | blocked for security/provider proof |
-| Persistence/state | Durable SQLite, local files, restart/readback/delete/export semantics | Source uses Knex/better-sqlite3 and local data root | source-real/src/utils/db.ts:15-45; source-real/src/utils/oss.ts:16-156 | blocked for runtime proof |
-| Tasks/runtime | Long-running jobs with status/progress/error/cancel where applicable | Source records task states and provider async statuses | source-real/src/utils/ai.ts:142-162; source-real/src/routes/production/workbench/generateVideo.ts:78-123 | blocked for runtime proof |
+| Frontend/UI | Feature routes/components for login, projects, novel, script, production canvas, media, settings, admin; browser states for empty/loading/error/success | Source has bundled minified web only; downstream implementation must create inspectable topology | Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:data/web/index.html:1-8; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:scripts/main.ts:198-205 | blocked until implementation/browser proof |
+| Backend/API | Route layer separated from auth/domain/provider/storage/job concerns | Source shows Express routes, utils, agents, providers, DB modules | Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/app.ts; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/**; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/** | source observed; downstream proof required |
+| Providers/integrations | Adapter registry, secret-name-only config, retries/errors, sandbox tests | Source has programmable vendor adapters and VM | Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/setting/vendorConfig/addVendor.ts:61-112; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/vm.ts:16-55 | blocked for security/provider proof |
+| Persistence/state | Durable SQLite, local files, restart/readback/delete/export semantics | Source uses Knex/better-sqlite3 and local data root | Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/db.ts:15-45; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/oss.ts:16-156 | blocked for runtime proof |
+| Tasks/runtime | Long-running jobs with status/progress/error/cancel where applicable | Source records task states and provider async statuses | Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/utils/ai.ts:142-162; Toonflow-app@122d2aa431d3240fea3eab491e6fbc690bb088cb:src/routes/production/workbench/generateVideo.ts:78-123 | blocked for runtime proof |
 
 ## Milestones
 
@@ -64,3 +69,11 @@
 - Frontend source is not present; downstream UI must be reconstructed from behavior contracts, docs, and runtime proof expectations.
 - Default credential handling requires migration/hardening and must not copy secret values into artifacts.
 
+
+## Architecture Decision Notes
+
+| Decision | Chosen approach | Evidence needed | Status |
+|---|---|---|---|
+| Runtime topology | Frontend workbench + API/socket backend + SQLite/local files + provider adapters + Electron/Docker shell | first real vertical slice and runtime smoke | blocked |
+| Provider boundary | Adapter contracts with sandbox/live proof or explicit blockers | provider traces and negative tests | blocked |
+| Persistence boundary | SQLite/local-file lifecycle with restart/readback/delete/export proof | data lifecycle artifacts | blocked |
