@@ -14,7 +14,7 @@ Mapper OS always targets the strongest Buildprint possible for the requested sco
 - Ask only unresolved blocking questions.
 - Do not ask questions answerable from source evidence.
 - Do not ask broad product strategy questions.
-- If the user is unavailable, choose the safest max-quality selected-scope default and record it in `CURRENT_STATE.md` under `Assumptions / Safe Defaults`.
+- If the user is unavailable, choose concrete safest max-quality selected-scope defaults and record them in `CURRENT_STATE.md` under `Assumptions / Safe Defaults`.
 - Never silently downgrade quality or omit capabilities because an answer is missing.
 - Do not ask "which team should do this" or offer lazy/simple/quick quality choices. Infer required team packs from product shape and record them in `TEAM_STACK.md`.
 - For auth, billing, uploads, user data, external providers, webhooks, destructive actions, deployment posture, or qualification claims: ask, block, or apply the safe default below. Do not guess casually.
@@ -40,6 +40,17 @@ Mapper OS always targets the strongest Buildprint possible for the requested sco
 5. **Persistence / infrastructure default?**
    - Options: source-observed stack, existing project stack, SQLite, Postgres, durable queue/object store, local files only when explicitly justified, or other.
    - Safe default if unavailable: choose the strongest lightweight durable store appropriate for the selected capability and preserve missing infra proof as a blocker.
+
+## Concrete Safe Defaults
+
+When a selected output has no user answers yet, include an explicit defaults section instead of vague "safest defaults" wording. Adapt labels to the product shape, but make the decision executable.
+
+- Provider mode: sandbox/test-double adapters only unless live credentials are supplied; live-provider qualification remains blocked.
+- Persistence: local durable filesystem or SQLite for the first slice unless the target stack clearly provides a stronger existing database; restart/readback proof is required.
+- Destructive actions: local-only confirmation unless auth/admin ownership is already in scope and proven.
+- First vertical slice: the smallest real end-to-end path that moves user/source input through persistence, domain logic, and visible output.
+- Deployment target: local dev only unless the user supplied Docker/hosted deployment requirements.
+- Qualification: keep `SELECTED_UNQUALIFIED` until live providers, runtime, browser, persistence, security, and no-fake gates are proven.
 
 ## Required Confirmation Summary
 
