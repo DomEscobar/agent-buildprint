@@ -1,8 +1,8 @@
 # CAPABILITY_INDEX
 
-| Capability | Status | UI/UX | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Tests | Proof | Depth status | Dependencies | Pack | Verification | Blockers |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|  | INCLUDED_READY / INCLUDED_NEEDS_PROOF / INCLUDED_BLOCKED / INCLUDED_RISKY_REQUIRES_HARDENING / OUT_OF_SCOPE_BY_USER_ONLY / TEST_ONLY_MOCK | missing | missing | missing | missing | missing | missing | missing | missing | missing |  | capabilities/<id>/ | missing |  |
+| Capability | Status | Source evidence | Product obligation | Required topology | UI/UX | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker | Dependencies | Pack | Verification | Blockers |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|  | INCLUDED_READY / INCLUDED_NEEDS_PROOF / INCLUDED_BLOCKED / INCLUDED_RISKY_REQUIRES_HARDENING / OUT_OF_SCOPE_BY_USER_ONLY / TEST_ONLY_MOCK | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing |  | capabilities/<id>/ | missing |  |
 
 ## Completeness
 
@@ -33,3 +33,26 @@ Each included capability must trace:
 ```text
 requirement -> source evidence -> Buildprint contract -> implementation check -> QA or reversal check
 ```
+
+## Evidence Contract Rule
+
+Each included capability must carry a concrete evidence contract, not only an implementation label.
+
+- `Source evidence` must cite observed source files, routes, screens, jobs, docs, configs, or explicitly recorded inference/blocker evidence from discovery.
+- `Product obligation` must state the externally meaningful behavior the clean-room implementation must preserve.
+- `Required topology` must name the layers/files/classes/modules expected for broad scopes: UI, API, service/domain, provider/runtime, persistence/state, task/job, security, or tests as applicable.
+- `Proof command` must be an executable command, API/browser path, or explicit `BLOCKED_WITH_REASON` entry.
+- `Proof artifact` must be a file path, screenshot path, report path, test log, route inventory, or explicit blocker artifact.
+- `Negative test` is required for uploads, auth/admin, destructive actions, provider calls, runtime/job controls, persistence mutations, and security boundaries.
+- `Runtime/browser evidence` is required for frontend, browser, provider, runtime, deployment, and persistence/restart claims; otherwise the capability remains `CONTRACT_SEAM_ONLY` or `BLOCKED_WITH_REASON`.
+- `Promotion blocker` must say what exact missing proof prevents `REAL_IMPLEMENTED` promotion. Do not leave it blank for any non-`REAL_IMPLEMENTED` included capability.
+
+## Role Consumption Rule
+
+The capability index is the handoff spine between roles:
+
+```text
+source mapper fills Source evidence -> product architect fills Product obligation -> implementation planner fills Required topology -> QA fills Proof command/artifact/Negative test -> reviewer decides Depth status and Promotion blocker
+```
+
+If a downstream role cannot consume an upstream field, stop and repair the field instead of guessing.

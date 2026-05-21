@@ -21,6 +21,18 @@ Choose the implementation team from Buildprint signals before coding. Record the
 - Browser/API QA pass:
 - Coverage/final Buildprint-readiness review:
 
+## Evidence-Producing Role Chain
+
+Roles are not free-form thoughts. Each pass must produce an artifact that the next pass consumes. If an artifact is missing or too vague, stop and repair it before coding or promotion.
+
+| Pass | Role | Must produce | Consumed by | Artifact location | Status |
+|---:|---|---|---|---|---|
+| 1 | Source mapper / archaeologist | source evidence ledger for each included capability, with observed files/routes/screens/jobs/configs or explicit inference/blocker notes | product architect | `CAPABILITY_INDEX.md` Source evidence column and `capabilities/*/CAPABILITY.md` | missing |
+| 2 | Product architect | product obligation and quality bar per capability; explicit included/excluded boundaries without silent scope shrink | implementation planner | `CAPABILITY_INDEX.md` Product obligation column and `CURRENT_STATE.md` | missing |
+| 3 | Implementation planner | required topology/layers/files and first vertical slice per capability | builder | `CAPABILITY_INDEX.md` Required topology column and Milestones table | missing |
+| 4 | QA verifier | proof command, proof artifact, negative test, runtime/browser evidence, and blocker rows | skeptical reviewer | `VERIFICATION.md` Capability Proof Ledger and capability `VERIFICATION.md` files | missing |
+| 5 | Skeptical reviewer | promotion/downgrade decision; reject fake completion and record exact promotion blockers | final handoff | `CAPABILITY_INDEX.md` Depth status/Promotion blocker columns and `REVERSAL_REPORT.md` | missing |
+
 ## Architecture Topology Gate
 
 Before implementation begins, define the target product topology. This is a hard gate for medium, large, UI-bearing, provider-backed, or full-suite scopes.
@@ -39,9 +51,9 @@ Fail the implementation review if a medium/large/full-suite product is delivered
 
 Every included capability must be scored before “implemented” can be claimed. `CONTRACT_SEAM_ONLY` may preserve scope, but it is not implementation completion.
 
-| Capability | UI/UX | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Tests | Proof | Depth status |
-|---|---|---|---|---|---|---|---|---|---|
-|  | missing | missing | missing | missing | missing | missing | missing | missing | missing |
+| Capability | Source evidence | Product obligation | Required topology | UI/UX | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|  | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing |
 
 Depth status values: `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, `OUT_OF_SCOPE_BY_USER_ONLY`, `FAKE_OR_PLACEHOLDER_FAIL`.
 
@@ -64,3 +76,7 @@ Milestones are implementation order, not scope definition. Do not remove or hide
 ## Evidence Update Rule
 
 After each milestone, update `CURRENT_STATE.md`, the capability `VERIFICATION.md`, and root `VERIFICATION.md`.
+
+## Proof Ledger Stop Rule
+
+Do not begin final status/handoff while any included capability is missing a Capability Proof Ledger row. Do not claim implementation completion for a capability until its proof command and artifact are present, or it is explicitly downgraded with a promotion blocker.

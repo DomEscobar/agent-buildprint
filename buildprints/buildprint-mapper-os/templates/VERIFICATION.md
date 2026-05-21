@@ -18,10 +18,33 @@ Qualification label: `SELECTED_UNQUALIFIED`
 | security/privacy | yes/no |  |  | missing |  |
 | clean-room reversal | yes/no |  |  | missing |  |
 
+## Capability Proof Ledger
+
+Every included capability must close here before final handoff. Closing means either direct proof exists or the blocker is explicit and the capability is not promoted.
+
+| Capability | Required proof | Command/API/browser path | Artifact path | Negative test | Runtime/browser evidence | Status | Blocker |
+|---|---|---|---|---|---|---|---|
+|  | missing | missing | missing | missing | missing | missing |  |
+
+## Evidence Budget Rule
+
+For each included capability:
+
+- At least one direct proof command/API/browser path is required, unless the row is explicitly `BLOCKED_WITH_REASON`.
+- At least one proof artifact path is required: test log, route/API output, screenshot, browser trace, generated report, restart/readback log, provider transcript, or reviewer report.
+- At least one negative/failure-state test is required when the capability uploads files, mutates state, uses auth/admin/destructive controls, calls providers, starts/stops runtime jobs, writes memory/graphs, exports data, or affects privacy/security.
+- UI/frontend claims require browser automation, screenshot, or trace proof. Static markup or labels alone keep the capability at `CONTRACT_SEAM_ONLY`.
+- Persistence claims require restart/readback/delete/export proof where applicable. File existence alone keeps broad persistence claims at `CONTRACT_SEAM_ONLY`.
+- Provider/runtime claims require sandbox/live provider proof with secrets redacted, or explicit blocker. Deterministic adapters and local fallbacks preserve contracts only.
+- Security/admin/destructive claims require positive and negative authorization/confirmation tests or remain unqualified.
+- Broad/full-suite outputs should have proof coverage proportional to capability count. A small number of tests cannot qualify many independent capabilities unless each capability has separate API/browser/runtime evidence.
+
 ## Qualification Blockers
 
 - Missing gate results block qualification.
 - Missing evidence for included behavior blocks qualification.
+- Missing Capability Proof Ledger rows for included capabilities block qualification.
+- Missing proof command, proof artifact, negative test, runtime/browser evidence, or promotion blocker fields block promotion unless an explicit blocker explains why.
 - Missing architecture topology evidence blocks medium, large, UI-bearing, provider-backed, or full-suite qualification.
 - A route-shaped endpoint, static shell, deterministic adapter, or skeleton provider is `CONTRACT_SEAM_ONLY` unless product behavior is proven.
 - Unresolved high/critical security risks block qualification.

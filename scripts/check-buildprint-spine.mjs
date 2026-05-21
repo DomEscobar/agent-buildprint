@@ -76,10 +76,23 @@ for (const slug of slugs) {
     const mapperRequired = [
       ['acceptance architecture topology gate', acceptance, /architecture topology gate/i],
       ['acceptance capability depth matrix', acceptance, /capability depth matrix/i],
+      ['acceptance proof ledger closure', acceptance, /Capability Proof Ledger|proof-ledger/i],
       ['acceptance fake placeholder rejection', acceptance, /FAKE_OR_PLACEHOLDER_FAIL|static-shell-only|deterministic-adapter-only/i],
       ['template architecture topology gate', fs.readFileSync(path.join(dir, 'templates/VERIFICATION.md'), 'utf8'), /architecture topology/i],
       ['template capability depth matrix', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Depth status|REAL_IMPLEMENTED|CONTRACT_SEAM_ONLY/i],
-      ['selected extraction prompt depth gate', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /per-capability depth matrix/i],
+      ['template capability source evidence', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Source evidence/i],
+      ['template capability product obligation', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Product obligation/i],
+      ['template capability required topology', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Required topology/i],
+      ['template capability proof command', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Proof command/i],
+      ['template capability proof artifact', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Proof artifact/i],
+      ['template capability negative test', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Negative test/i],
+      ['template capability promotion blocker', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Promotion blocker/i],
+      ['template verification proof ledger', fs.readFileSync(path.join(dir, 'templates/VERIFICATION.md'), 'utf8'), /Capability Proof Ledger/i],
+      ['template verification evidence budget', fs.readFileSync(path.join(dir, 'templates/VERIFICATION.md'), 'utf8'), /Evidence Budget Rule/i],
+      ['template implementation role chain', fs.readFileSync(path.join(dir, 'templates/IMPLEMENTATION_PLAN.md'), 'utf8'), /Evidence-Producing Role Chain/i],
+      ['template execution proof ledger closure', fs.readFileSync(path.join(dir, 'templates/EXECUTION_PROTOCOL.md'), 'utf8'), /proof ledger closure|proof-ledger rows/i],
+      ['selected extraction prompt depth gate', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /per-capability evidence\/depth matrix|per-capability depth matrix/i],
+      ['selected extraction prompt proof ledger', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /Capability Proof Ledger/i],
     ];
     for (const [label, text, pattern] of mapperRequired) {
       if (!pattern.test(text)) {
