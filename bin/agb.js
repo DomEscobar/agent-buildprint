@@ -2304,9 +2304,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   const phaseFiles = {
     '00-review-facts.md': '# Phase 00 - Review Facts\n\n## Goal\nUnderstand observed facts before planning or implementation.\n\n## Keep in context\n- `AGENT_EXECUTION_BRIEF.md`\n- `CURRENT_STATE.md`\n- `facts.json`\n- `discovered-map.md`\n- `confidence-report.md`\n\n## Steps\n- Read the observed routes, APIs, integrations, data files, tests, and risk areas.\n- Mark anything not directly evidenced as `INFERRED` or `QUESTION`.\n- Confirm this package is discovery scaffold or selected extraction.\n\n## Do not\n- Modify source files.\n- Treat filenames alone as behavior proof.\n- Claim validation or parity from census data.\n\n## Exit criteria\n- Observed facts are understood.\n- Current mode and selected scope are recorded.\n\n## Validation evidence\n- `CURRENT_STATE.md` notes phase completion and blockers.\n',
     '01-confirm-unknowns.md': '# Phase 01 - Confirm Unknowns\n\n## Goal\nResolve only the decisions that block selected-scope extraction.\n\n## Keep in context\n- `questions.md`\n- `policies/questions.md` if available\n- `BUILDPRINT_CANDIDATES.md`\n- `SYSTEM_MAP.md`\n\n## Steps\n- Ask at most one blocking question at a time.\n- Use safe defaults only for non-blocking unknowns.\n- Keep appendix questions out of chat unless the selected scope touches them.\n\n## Do not\n- Run a broad questionnaire.\n- Ask questions the repo already answers.\n- Invent answers for auth, money, data, external writes, providers, or parity.\n\n## Exit criteria\n- Selected candidate/scope is confirmed or blocker is recorded.\n- Production-grade selected-scope posture is confirmed.\n\n## Validation evidence\n- `questions.md` and `CURRENT_STATE.md` show decisions or blockers.\n',
-    '02-safe-change-plan.md': '# Phase 02 - Safe Change Plan\n\n## Goal\nPlan the smallest production-grade selected scope.\n\n## Keep in context\n- `BUILDPRINT.md`\n- `SPEC.md`\n- `CONTRACTS.md`\n- `IMPLEMENTATION_COMPLETENESS.md`\n- `TRACEABILITY_MATRIX.md`\n\n## Steps\n- Identify included routes, APIs, data, providers, jobs, exports, and UI surfaces.\n- Exclude capabilities that cannot be real.\n- Map each important requirement to evidence and a validation check.\n\n## Do not\n- Merge unrelated scopes.\n- Keep hard features as placeholders.\n- Count mocks, fixtures, or in-memory-only stores as product behavior.\n\n## Exit criteria\n- Change/extraction scope is explicit.\n- Required tests, QA, persistence, and no-fake checks are known.\n\n## Validation evidence\n- `TRACEABILITY_MATRIX.md` and `IMPLEMENTATION_COMPLETENESS.md` are updated.\n',
-    '03-implementation.md': '# Phase 03 - Implementation\n\n## Goal\nImplement or extract only the confirmed selected scope.\n\n## Keep in context\n- `AGENT_EXECUTION_BRIEF.md`\n- `agent-contract.xml`\n- `CURRENT_STATE.md`\n- `PLAN.md`\n- `CONTRACTS.md`\n\n## Steps\n- Follow the selected scope exactly.\n- Preserve observed stack and behavior unless explicitly changed.\n- Update Buildprint artifacts when architecture changes.\n\n## Do not\n- Modify unrelated source areas.\n- Add route-shaped links, no-op controls, fake success states, or skeleton adapters.\n- Expand scope without recording the decision and QA impact.\n\n## Exit criteria\n- Included capabilities are real or explicitly excluded/blocked.\n- `CURRENT_STATE.md` records completed work and next action.\n\n## Validation evidence\n- Changed/generated files and blockers are listed in `SUBMISSION_CHECKLIST.md`.\n',
-    '04-tests-validation.md': '# Phase 04 - Tests and Validation\n\n## Goal\nProve the selected scope honestly.\n\n## Keep in context\n- `TEST_MATRIX.md`\n- `QA_PLAN.md`\n- `HEAD_TO_FOOT_QA.md`\n- `VALIDATION_TEMPLATE.md`\n- `SUBMISSION_CHECKLIST.md`\n\n## Steps\n- Run available tests/build/checks or record blockers.\n- Run runtime/browser QA for product UI when applicable.\n- Run persistence/restart QA when state exists.\n- Run no-fake implementation scan.\n- Finish with a chat handover.\n\n## Do not\n- Claim pass status for checks that did not run.\n- Hide known gaps.\n- Count test/demo fixtures as product implementation.\n\n## Exit criteria\n- Validation evidence, gaps, and next direction are recorded.\n- Final chat handover includes outcome, selected scope, evidence, files, commands, gaps, and next direction.\n\n## Validation evidence\n- `VALIDATION_TEMPLATE.md` is filled or an explicit blocker explains why not.\n',
+    '02-safe-change-plan.md': '# Phase 02 - Safe Change Plan\n\n## Goal\nPlan the smallest production-grade selected scope.\n\n## Keep in context\n- `BUILDPRINT.md`\n- `SPEC.md`\n- `CONTRACTS.md`\n- `IMPLEMENTATION_COMPLETENESS.md`\n- `TRACEABILITY_MATRIX.md`\n\n## Steps\n- Identify included routes, APIs, data, providers, jobs, exports, and UI surfaces.\n- Exclude capabilities that cannot be real.\n- Map each important requirement to evidence and a validation check.\n- Define architecture topology expectations for UI/API/domain/service/provider/storage/task/test layers where the scope is medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy.\n- Define a capability depth matrix: UI/UX, API, domain logic, persistence/state, provider/runtime, failure states, tests, proof, and depth status.\n\n## Do not\n- Merge unrelated scopes.\n- Keep hard features as placeholders.\n- Count mocks, fixtures, or in-memory-only stores as product behavior.\n\n## Exit criteria\n- Change/extraction scope is explicit.\n- Required tests, QA, persistence, and no-fake checks are known.\n\n## Validation evidence\n- `TRACEABILITY_MATRIX.md` and `IMPLEMENTATION_COMPLETENESS.md` are updated.\n',
+    '03-implementation.md': '# Phase 03 - Implementation\n\n## Goal\nImplement or extract only the confirmed selected scope.\n\n## Keep in context\n- `AGENT_EXECUTION_BRIEF.md`\n- `agent-contract.xml`\n- `CURRENT_STATE.md`\n- `PLAN.md`\n- `CONTRACTS.md`\n\n## Steps\n- Follow the selected scope exactly.\n- Preserve observed stack and behavior unless explicitly changed.\n- Update Buildprint artifacts when architecture changes.\n- Keep medium/large/full-suite architecture honest: route layer, domain/service logic, provider adapters, storage, task/runtime, and UI feature structure must be separated unless explicitly justified as tiny scope.\n- Update capability depth status as `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `FAKE_OR_PLACEHOLDER_FAIL`.\n\n## Do not\n- Modify unrelated source areas.\n- Add route-shaped links, no-op controls, fake success states, or skeleton adapters.\n- Count deterministic provider/runtime adapters, static UI labels, or flat single-file shells as product-quality implementation.\n- Expand scope without recording the decision and QA impact.\n\n## Exit criteria\n- Included capabilities are real or explicitly excluded/blocked.\n- `CURRENT_STATE.md` records completed work and next action.\n\n## Validation evidence\n- Changed/generated files and blockers are listed in `SUBMISSION_CHECKLIST.md`.\n',
+    '04-tests-validation.md': '# Phase 04 - Tests and Validation\n\n## Goal\nProve the selected scope honestly.\n\n## Keep in context\n- `TEST_MATRIX.md`\n- `QA_PLAN.md`\n- `HEAD_TO_FOOT_QA.md`\n- `VALIDATION_TEMPLATE.md`\n- `SUBMISSION_CHECKLIST.md`\n\n## Steps\n- Run available tests/build/checks or record blockers.\n- Run runtime/browser QA for product UI when applicable.\n- Run architecture topology review for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes.\n- Run capability depth review; every included capability must be `REAL_IMPLEMENTED` or honestly marked `CONTRACT_SEAM_ONLY`/`BLOCKED_WITH_REASON`.\n- Run persistence/restart QA when state exists.\n- Run no-fake implementation scan.\n- Finish with a chat handover.\n\n## Do not\n- Claim pass status for checks that did not run.\n- Hide known gaps.\n- Count test/demo fixtures as product implementation.\n\n## Exit criteria\n- Validation evidence, gaps, and next direction are recorded.\n- Final chat handover includes outcome, selected scope, evidence, files, commands, gaps, and next direction.\n\n## Validation evidence\n- `VALIDATION_TEMPLATE.md` is filled or an explicit blocker explains why not.\n',
   }
 
   const agentExecutionBriefMd = [
@@ -2335,6 +2335,9 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '## Hard constraints',
     '',
     '- Included capabilities must be real, wired, persistent where relevant, and QA-tested.',
+    '- Preserve quality/depth, not only capability names: endpoint/label/seam presence is not implementation.',
+    '- Medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes require architecture topology evidence.',
+    '- Each included capability needs a depth status: REAL_IMPLEMENTED, CONTRACT_SEAM_ONLY, BLOCKED_WITH_REASON, OUT_OF_SCOPE_BY_USER_ONLY, or FAKE_OR_PLACEHOLDER_FAIL.',
     '- Cut or block capabilities that cannot be real.',
     '- Mocks and fixtures may exist only in named test/demo paths.',
     '- Do not copy secret values; env var names only.',
@@ -2346,6 +2349,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '',
     '- Required credentials are missing for an explicitly included live provider.',
     '- A selected capability would need to be mocked or placeholdered to continue.',
+    '- A medium/large/full-suite implementation is collapsing into a flat static shell or mostly single-file backend without explicit tiny-scope justification.',
     '- Persistence is claimed but no durable adapter can be used.',
     '- Runtime/test/browser QA cannot run and no honest blocker is recorded.',
     ''
@@ -2353,7 +2357,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
 
   const agentContractXml = `<?xml version="1.0" encoding="UTF-8"?>
 <buildprint-agent-contract version="1">
-  <mission>Build the selected production-grade scope. Scope may be limited, but included capabilities must be real, wired, persistent where relevant, and QA-tested.</mission>
+  <mission>Build the selected production-grade scope. Scope may be limited, but included capabilities must be real, wired, persistent where relevant, QA-tested, and depth-classified.</mission>
   <mode>${outputMode}</mode>
   <selected-scope>${selectedScope.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</selected-scope>
   <read-order>
@@ -2371,11 +2375,13 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   <must>
     <rule>Separate OBSERVED, INFERRED, QUESTION, and OUT_OF_SCOPE claims.</rule>
     <rule>Implement included capabilities end-to-end or exclude/block them.</rule>
-    <rule>Run tests, build, runtime QA, persistence/restart QA when relevant, and no-fake scan before claiming done.</rule>
+    <rule>Do not count endpoint/label/seam presence as implementation; mark seam-only work CONTRACT_SEAM_ONLY.</rule>
+    <rule>For medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes, provide architecture topology evidence.</rule>
+    <rule>Run tests, build, runtime QA, browser/UI QA, persistence/restart QA, capability depth review, architecture topology review, and no-fake scan before claiming done.</rule>
     <rule>Provide final chat handover with outcome, selected scope, evidence, files, commands, gaps, and next direction.</rule>
   </must>
   <must-not>
-    <rule>Do not count mocks, fixtures, skeleton adapters, placeholder routes, no-op controls, fake success states, or in-memory-only claimed persistence as product implementation.</rule>
+    <rule>Do not count mocks, fixtures, skeleton adapters, deterministic provider/runtime adapters, static UI labels, placeholder routes, no-op controls, fake success states, flat shells, or in-memory-only claimed persistence as product implementation.</rule>
     <rule>Do not invent validation results.</rule>
     <rule>Do not copy secret values.</rule>
   </must-not>
@@ -2405,7 +2411,8 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '- Discover first, ask later.',
     '- Smaller complete scope beats broad fake scope.',
     '- Evidence labels are required.',
-    '- Included capabilities must be real or excluded.',
+    '- Included capabilities must be real or explicitly depth-marked as seam-only/blocked/excluded.',
+    '- Architecture topology and capability-depth gates are required for broad/product scopes.',
     '- Final chat handover is required.',
     '',
     '## Evidence so far',
@@ -2748,6 +2755,10 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '- [ ] Evidence-backed claims.',
     '- [ ] Selected scope is smaller and complete.',
     '- [ ] Included capabilities are real or excluded.',
+    '- [ ] Capability depth matrix distinguishes REAL_IMPLEMENTED, CONTRACT_SEAM_ONLY, BLOCKED_WITH_REASON, and FAKE_OR_PLACEHOLDER_FAIL.',
+    '- [ ] Architecture topology gate passed or has an explicit blocker/exception.',
+    '- [ ] UI/browser proof exists for user-facing flows or is explicitly blocking qualification.',
+    '- [ ] Provider/runtime proof exists for provider-backed/runtime flows or is explicitly blocking qualification.',
     '- [ ] Edge cases and failure modes are represented.',
     '- [ ] QA is derived from mapped flows.',
     '- [ ] No-fake implementation scan passes.',
@@ -2837,7 +2848,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   writeOut('quality/NO_FAKE_CHECKS.md', implementationCompletenessMd)
   writeOut('quality/SECURITY_PRIVACY_REVIEW.md', needsThreatModel ? threatModelMd : '# SECURITY_PRIVACY_REVIEW\n\nNo high-risk security surface detected by static mapper; still validate before qualification.\n')
   writeOut('quality/OBSERVABILITY.md', observabilityMd)
-  writeOut('quality/PROMOTION_GATE.md', ['# PROMOTION_GATE', '', `Promotion status: ${manifestJson.qualificationStatus}`, '', '- `agb map` is allowed to generate evidence-backed draft packages only.', '- `agb analyze` is the analytic review surface for existing mapped packages.', '- Final `QUALIFIED_BUILDPRINT` requires readable source evidence plus runtime/test proof where required.', '- If any record is `blocked_unknown`, implementation phases may use it only as an open question or excluded scope.', ''].join('\n'))
+  writeOut('quality/PROMOTION_GATE.md', ['# PROMOTION_GATE', '', `Promotion status: ${manifestJson.qualificationStatus}`, '', '- `agb map` is allowed to generate evidence-backed draft packages only.', '- `agb analyze` is the analytic review surface for existing mapped packages.', '- Final `QUALIFIED_BUILDPRINT` requires readable source evidence plus runtime/test proof where required.', '- Scope preservation alone is insufficient; broad/product scopes also require architecture topology evidence and a capability depth matrix.', '- Route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, and flat single-file prototypes are not product implementation unless proven by the applicable gates.', '- If any record is `blocked_unknown`, implementation phases may use it only as an open question or excluded scope.', ''].join('\n'))
 
   writeOut('evidence/README.md', '# Evidence\n\nSource evidence, coverage, validation logs, and review packet.\n')
   writeOut('evidence/SOURCE_EVIDENCE.md', '# SOURCE_EVIDENCE\n\n- Facts: `../facts.json` or root `facts.json`\n- Files scanned: ' + facts.totalFilesScanned + '\n- Routes: ' + facts.routes.length + '\n- APIs: ' + facts.apis.length + '\n- Tests: ' + facts.tests.length + '\n')

@@ -71,6 +71,23 @@ for (const slug of slugs) {
     failures++;
     console.error(`✗ ${slug}: checks/acceptance.md must be a checklist`);
   }
+
+  if (slug === 'buildprint-mapper-os') {
+    const mapperRequired = [
+      ['acceptance architecture topology gate', acceptance, /architecture topology gate/i],
+      ['acceptance capability depth matrix', acceptance, /capability depth matrix/i],
+      ['acceptance fake placeholder rejection', acceptance, /FAKE_OR_PLACEHOLDER_FAIL|static-shell-only|deterministic-adapter-only/i],
+      ['template architecture topology gate', fs.readFileSync(path.join(dir, 'templates/VERIFICATION.md'), 'utf8'), /architecture topology/i],
+      ['template capability depth matrix', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Depth status|REAL_IMPLEMENTED|CONTRACT_SEAM_ONLY/i],
+      ['selected extraction prompt depth gate', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /per-capability depth matrix/i],
+    ];
+    for (const [label, text, pattern] of mapperRequired) {
+      if (!pattern.test(text)) {
+        failures++;
+        console.error(`✗ ${slug}: missing ${label}`);
+      }
+    }
+  }
 }
 
 if (failures) {

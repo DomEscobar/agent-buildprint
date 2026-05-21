@@ -25,6 +25,14 @@
 - `SELECTED_UNQUALIFIED`: selected package exists but source-independent qualification proof is incomplete.
 - `QUALIFIED_SOURCE_INDEPENDENT`: selected package can be implemented without reopening source and has required evidence.
 
+## Capability Depth States
+
+- `REAL_IMPLEMENTED`: selected capability is wired through the applicable UI/API/domain/service/provider/storage/task boundaries, has failure states, and has tests plus proof evidence.
+- `CONTRACT_SEAM_ONLY`: contracts, routes, UI labels, adapters, schemas, or task records exist, but real behavior, provider/runtime execution, persistence, browser proof, or production hardening is missing.
+- `BLOCKED_WITH_REASON`: selected/requested capability remains in scope but cannot be safely implemented or qualified until a named blocker is resolved.
+- `OUT_OF_SCOPE_BY_USER_ONLY`: excluded only by explicit user decision or explicit selected-target boundary.
+- `FAKE_OR_PLACEHOLDER_FAIL`: skeleton adapter, route-shaped endpoint, no-op control, fake success state, static-only UX claim, or mock counted as product behavior. This blocks qualification.
+
 ## Required Selected Manifest Fields
 
 - source URL or local input;
@@ -65,7 +73,10 @@ The following never count as production behavior:
 - route-shaped links without handlers/pages;
 - no-op controls;
 - fake success states;
-- in-memory-only persistence where persistence is claimed.
+- in-memory-only persistence where persistence is claimed;
+- deterministic provider/runtime adapters counted as live/provider-qualified behavior;
+- static UI labels counted as browser/user-flow proof;
+- mostly single-file/flat architecture counted as product architecture for medium, large, UI-bearing, provider-backed, stateful, or full-suite scope without explicit justification.
 
 ## Source-Independence Contract
 

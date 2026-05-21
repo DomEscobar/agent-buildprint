@@ -20,6 +20,20 @@
 - First implementation slice:
 - Later implementation slices:
 
+## Quality / Depth Preservation
+
+- Target architecture topology:
+- Actual architecture topology:
+- Architecture topology gate status:
+- Capability depth matrix status:
+- `REAL_IMPLEMENTED` capabilities:
+- `CONTRACT_SEAM_ONLY` capabilities:
+- `BLOCKED_WITH_REASON` capabilities:
+- `FAKE_OR_PLACEHOLDER_FAIL` capabilities:
+- Browser/UI proof status:
+- Provider/runtime proof status:
+- Notes on any accepted topology exception:
+
 ## Pre-Implementation Alignment
 
 - Quality mandate: max-quality for requested scope; no quality-tier choice offered
