@@ -26,6 +26,22 @@ const packageRequired = {
     'checks/acceptance.md',
   ]
 };
+const selectedOutputRequired = [
+  'BUILDPRINT.md',
+  'CAPABILITY_INDEX.md',
+  'CONTRACTS.md',
+  'CURRENT_STATE.md',
+  'DESIGN_QUALITY_BAR.md',
+  'EXECUTION_PROTOCOL.md',
+  'IMPLEMENTATION_PLAN.md',
+  'PRE_IMPLEMENTATION_QUESTIONS.md',
+  'TEAM_STACK.md',
+  'UX_CONTRACT.md',
+  'VERIFICATION.md',
+  'manifest.json',
+  'capabilities',
+];
+const selectedCapabilityRequired = ['CAPABILITY.md', 'IMPLEMENTATION.md', 'VERIFICATION.md'];
 
 function packageSlugs() {
   try {
@@ -48,6 +64,54 @@ let failures = 0;
 
 for (const slug of slugs) {
   const dir = path.join(root, slug);
+  const isSelectedOutputPackage = slug !== 'buildprint-mapper-os'
+    && fs.existsSync(path.join(dir, 'CAPABILITY_INDEX.md'))
+    && fs.existsSync(path.join(dir, 'TEAM_STACK.md'))
+    && fs.existsSync(path.join(dir, 'CURRENT_STATE.md'))
+    && fs.existsSync(path.join(dir, 'capabilities'));
+
+  if (isSelectedOutputPackage) {
+    const missing = selectedOutputRequired.filter((file) => !fs.existsSync(path.join(dir, file)));
+    if (missing.length) {
+      failures += missing.length;
+      console.error(`âœ— ${slug}: selected output missing ${missing.join(', ')}`);
+      continue;
+    }
+
+    const capabilitiesDir = path.join(dir, 'capabilities');
+    const capabilityIds = fs.readdirSync(capabilitiesDir)
+      .filter((name) => fs.statSync(path.join(capabilitiesDir, name)).isDirectory())
+      .sort();
+    if (!capabilityIds.length) {
+      failures++;
+      console.error(`âœ— ${slug}: selected output must contain at least one capability pack`);
+    }
+    for (const capabilityId of capabilityIds) {
+      const capabilityDir = path.join(capabilitiesDir, capabilityId);
+      const missingCapabilityFiles = selectedCapabilityRequired.filter((file) => !fs.existsSync(path.join(capabilityDir, file)));
+      if (missingCapabilityFiles.length) {
+        failures += missingCapabilityFiles.length;
+        console.error(`âœ— ${slug}: capabilities/${capabilityId} missing ${missingCapabilityFiles.join(', ')}`);
+      }
+    }
+
+    const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8'));
+    const manifestFiles = Array.isArray(manifest.files)
+      ? manifest.files.map((entry) => typeof entry === 'string' ? entry : entry?.path).filter(Boolean)
+      : [];
+    if (!manifestFiles.length) {
+      failures++;
+      console.error(`âœ— ${slug}: selected output manifest.json must list files`);
+    }
+    for (const file of manifestFiles) {
+      if (!fs.existsSync(path.join(dir, file))) {
+        failures++;
+        console.error(`âœ— ${slug}: selected output manifest lists missing file ${file}`);
+      }
+    }
+    continue;
+  }
+
   const requiredForPackage = packageRequired[slug] ?? required;
   const missing = requiredForPackage.filter((file) => !fs.existsSync(path.join(dir, file)));
   if (missing.length) {
