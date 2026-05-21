@@ -11,6 +11,11 @@
   "qualificationStatus": "SELECTED_UNQUALIFIED",
   "productionPosture": "requested scope preserved; implementation order may be sliced",
   "mockPolicy": "mocks allowed only as test/demo fixtures",
+  "teamStack": {
+    "file": "TEAM_STACK.md",
+    "teams": ["test-and-verification"],
+    "routingPolicy": "infer teams from product signals; users choose scope, not quality tier"
+  },
   "preImplementationQuestionGate": {
     "required": true,
     "file": "PRE_IMPLEMENTATION_QUESTIONS.md",
@@ -45,5 +50,18 @@
     "hasAuthAdminOrDestructiveControls": false,
     "hasDeploymentSurface": false,
     "recommendedBuilderPasses": []
-  }
+  },
+  "files": [
+    "BUILDPRINT.md",
+    "CAPABILITY_INDEX.md",
+    "CURRENT_STATE.md",
+    "TEAM_STACK.md",
+    "DESIGN_QUALITY_BAR.md",
+    "EXECUTION_PROTOCOL.md",
+    "PRE_IMPLEMENTATION_QUESTIONS.md",
+    "IMPLEMENTATION_PLAN.md",
+    "VERIFICATION.md",
+    "CONTRACTS.md",
+    "manifest.json"
+  ]
 }

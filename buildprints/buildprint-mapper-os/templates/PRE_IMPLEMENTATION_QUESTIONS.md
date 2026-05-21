@@ -16,6 +16,7 @@ Mapper OS always targets the strongest Buildprint possible for the requested sco
 - Do not ask broad product strategy questions.
 - If the user is unavailable, choose the safest max-quality selected-scope default and record it in `CURRENT_STATE.md` under `Assumptions / Safe Defaults`.
 - Never silently downgrade quality or omit capabilities because an answer is missing.
+- Do not ask "which team should do this" or offer lazy/simple/quick quality choices. Infer required team packs from product shape and record them in `TEAM_STACK.md`.
 - For auth, billing, uploads, user data, external providers, webhooks, destructive actions, deployment posture, or qualification claims: ask, block, or apply the safe default below. Do not guess casually.
 
 ## Minimal Blocking Questions
@@ -58,4 +59,5 @@ Before implementation, write or update `CURRENT_STATE.md` with:
 - Safe defaults applied:
 - Remaining blockers:
 - Implementation-team signals:
+- Required team packs:
 ```

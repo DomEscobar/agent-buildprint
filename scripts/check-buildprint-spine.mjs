@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const root = path.resolve('buildprints');
 const required = [
@@ -26,7 +27,23 @@ const packageRequired = {
   ]
 };
 
-const slugs = fs.readdirSync(root).filter((name) => fs.statSync(path.join(root, name)).isDirectory()).sort();
+function packageSlugs() {
+  try {
+    const output = execFileSync('git', ['ls-files', 'buildprints/*/BUILDPRINT.md'], { encoding: 'utf8' }).trim();
+    if (output) {
+      return [...new Set(output
+        .split(/\r?\n/)
+        .map((file) => file.split('/')[1])
+        .filter(Boolean))]
+        .sort();
+    }
+  } catch {
+    // Fall back to filesystem discovery outside Git checkouts.
+  }
+  return fs.readdirSync(root).filter((name) => fs.statSync(path.join(root, name)).isDirectory()).sort();
+}
+
+const slugs = packageSlugs();
 let failures = 0;
 
 for (const slug of slugs) {
@@ -87,12 +104,20 @@ for (const slug of slugs) {
       ['template capability proof artifact', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Proof artifact/i],
       ['template capability negative test', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Negative test/i],
       ['template capability promotion blocker', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Promotion blocker/i],
+      ['template capability required teams', fs.readFileSync(path.join(dir, 'templates/CAPABILITY_INDEX.md'), 'utf8'), /Required teams/i],
+      ['template team stack', fs.readFileSync(path.join(dir, 'templates/TEAM_STACK.md'), 'utf8'), /product-architect|ux-ui-craft|test-and-verification/i],
+      ['template UX contract', fs.readFileSync(path.join(dir, 'templates/UX_CONTRACT.md'), 'utf8'), /Browser Proof Plan|Visual Anti-Patterns/i],
+      ['template design quality bar', fs.readFileSync(path.join(dir, 'templates/DESIGN_QUALITY_BAR.md'), 'utf8'), /Taste Direction|Required Screenshot Set/i],
+      ['template ux skill capsule', fs.readFileSync(path.join(dir, 'templates/teams/ux-ui-craft.md'), 'utf8'), /Skill Capsule|Taste Variables/i],
+      ['template architect skill capsule', fs.readFileSync(path.join(dir, 'templates/teams/product-architect.md'), 'utf8'), /Skill Capsule|Architecture Blueprint Workflow/i],
       ['template verification proof ledger', fs.readFileSync(path.join(dir, 'templates/VERIFICATION.md'), 'utf8'), /Capability Proof Ledger/i],
       ['template verification evidence budget', fs.readFileSync(path.join(dir, 'templates/VERIFICATION.md'), 'utf8'), /Evidence Budget Rule/i],
       ['template implementation role chain', fs.readFileSync(path.join(dir, 'templates/IMPLEMENTATION_PLAN.md'), 'utf8'), /Evidence-Producing Role Chain/i],
+      ['template implementation team-pack gate', fs.readFileSync(path.join(dir, 'templates/IMPLEMENTATION_PLAN.md'), 'utf8'), /Team-Pack Gate/i],
       ['template execution proof ledger closure', fs.readFileSync(path.join(dir, 'templates/EXECUTION_PROTOCOL.md'), 'utf8'), /proof ledger closure|proof-ledger rows/i],
       ['selected extraction prompt depth gate', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /per-capability evidence\/depth matrix|per-capability depth matrix/i],
       ['selected extraction prompt proof ledger', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /Capability Proof Ledger/i],
+      ['selected extraction prompt team routing', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /TEAM_STACK\.md|Team routing/i],
     ];
     for (const [label, text, pattern] of mapperRequired) {
       if (!pattern.test(text)) {

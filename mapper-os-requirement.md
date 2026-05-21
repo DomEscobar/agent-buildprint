@@ -18,7 +18,7 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
 
 - Mapper OS must be usable by a coding agent session against local source folders and Git URLs.
 - Git URL inputs must be cloned or otherwise checked out into a temporary source checkout before discovery when the agent has access.
-- Every mapped package must record source URL or local input, source checkout path, source commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, completeness score, and capability readiness counts.
+- Every mapped package must record source URL or local input, source checkout path, source commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, team-pack routing, completeness score, and capability readiness counts.
 - Static scanning may guide discovery but must not become product authority.
 - A qualified Buildprint must contain enough feature behavior, boundary contracts, acceptance gates, traceability, and proof instructions to rebuild the selected scope without reopening the original source.
 - Mapper OS must optimize for reconstructable product behavior, not for preserving source internals.
@@ -133,7 +133,7 @@ The downstream-agent execution flow must follow this default loop unless a capab
 
 ```text
 1. Intake: confirm requested scope, selected target boundary, capability readiness map, risks, and success criteria.
-2. Implementation-team selection: choose the builder roles/passes needed from the Buildprint signals before coding. A user-facing product requires design/frontend review; uploads/providers/user data require security/runtime review; broad capability surfaces require architecture and coverage review. A lone generalist pass is acceptable only for tiny non-UI reference implementations.
+2. Team-pack routing: infer the builder quality lenses from Buildprint signals before coding. User-facing UI requires `ux-ui-craft`; broad or full-suite surfaces require `product-architect`; every selected output requires `test-and-verification`; provider/runtime surfaces require `integration-runtime`; sensitive surfaces require `security-boundary`; durable state requires `data-persistence`. Users choose scope/product intent, not quality tiers.
 3. Context load: read only the Buildprint spine and relevant capability pack.
 4. Baseline: run declared preflight checks or record why they cannot run.
 5. Implement slice: build the next behaviorally complete vertical slice without erasing later capabilities from the plan.
@@ -141,7 +141,7 @@ The downstream-agent execution flow must follow this default loop unless a capab
 7. Expand checks: add applicable integration, runtime, browser, persistence, security, and no-fake gates.
 8. Fresh review: use an independent review pass for high-risk, UI/product, architecture, data, provider, or broad changes.
 9. Repair loop: convert failures into focused next actions until gates pass or blockers are recorded.
-10. Handoff: update current state, decisions, risks, commands, evidence, capability readiness, implementation-team notes, and next capability.
+10. Handoff: update current state, decisions, risks, commands, evidence, capability readiness, team-pack gate notes, and next capability.
 ```
 
 Implementation plans must stay source-independent. They may reference Buildprint files, contracts, fixtures, schemas, and acceptance gates, but must not require reopening the original source checkout.
@@ -171,9 +171,10 @@ Implementation plans must stay source-independent. They may reference Buildprint
 
 - Another Codex session or coding agent must be able to implement from the Buildprint alone.
 - The Buildprint must include a root spine, capability packs, and conditional shared files only when selected capability risk requires them.
-- Another agent should start at `BUILDPRINT.md`, then `CAPABILITY_INDEX.md`, then `EXECUTION_PROTOCOL.md`, then the next capability pack named by `CURRENT_STATE.md`.
+- Another agent should start at `BUILDPRINT.md`, then `CAPABILITY_INDEX.md`, then `CURRENT_STATE.md`, then `TEAM_STACK.md`, then `EXECUTION_PROTOCOL.md`, then exactly one active capability pack named by `CURRENT_STATE.md`. If `TEAM_STACK.md` selects `ux-ui-craft`, it should also read `UX_CONTRACT.md` before implementing the active UI slice.
+- The selected package must not require the implementation agent to read every Markdown file or every capability pack before knowing the next action.
 - `CURRENT_STATE.md` must record the active capability, completed capability packs, blocked capability packs, and next pack to implement.
-- `IMPLEMENTATION_PLAN.md` must record milestones, current state, concrete next actions, verification gates, and decision log pointers.
+- `IMPLEMENTATION_PLAN.md` must record milestones, current state, concrete next actions, team-pack gates, verification gates, and decision log pointers.
 - The handoff must clearly state whether the package is discovery-only, selected but unqualified, or qualified for source-independent implementation.
 - The handoff must state the reimplementation freedom explicitly: what the agent may change internally and which external/product behaviors must remain stable.
 - Qualification label must be exactly one of: `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, `QUALIFIED_SOURCE_INDEPENDENT`.
@@ -221,12 +222,14 @@ Implementation plans must stay source-independent. They may reference Buildprint
 - Fail selected output with one giant capability file for medium, large, or full-suite scopes.
 - Fail selected output with generic architecture modules instead of capability packs.
 - Fail capability packs without verification.
-- Fail full-suite output without `CAPABILITY_INDEX.md`.
+- Fail full-suite output without `CAPABILITY_INDEX.md` and `TEAM_STACK.md`.
+- Fail UI-bearing selected output without `UX_CONTRACT.md` and `ux-ui-craft` routing.
 - Golden evals must test discovery quality, source-independent extraction readiness, and false-claim prevention.
 - Golden evals must reject source-code-clone output that preserves internals without explaining product relevance.
 - Golden evals must reject Buildprints that contain contracts but no concrete downstream-agent execution sequence.
 - Golden evals must reject one-pass implementation plans that lack verification after each meaningful slice.
 - Golden evals must reject over-broad context instructions that require the implementing agent to read every generated file before knowing the next action.
+- Golden evals must reject selected/full-suite package shape failures: missing `CAPABILITY_INDEX.md`, missing `TEAM_STACK.md`, missing UI `UX_CONTRACT.md`, incomplete capability packs, manifest drift, typo alias files, missing required team routing, and duplicate canonical handoff files.
 
 ## Product Contract Model
 
@@ -283,10 +286,14 @@ Required flat spine:
 BUILDPRINT.md
 CAPABILITIES.md
 CONTRACTS.md
+TEAM_STACK.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md
+PRE_IMPLEMENTATION_QUESTIONS.md
 IMPLEMENTATION_PLAN.md
 CURRENT_STATE.md
+UX_CONTRACT.md  # required only for user-facing UI/browser/dashboard/graph/report/editor/operator-console scopes
+DESIGN_QUALITY_BAR.md  # required only for user-facing UI/browser/dashboard/graph/report/editor/operator-console scopes
 manifest.json
 ```
 
@@ -300,10 +307,14 @@ Required global spine:
 BUILDPRINT.md
 CAPABILITY_INDEX.md
 CONTRACTS.md
+TEAM_STACK.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md
+PRE_IMPLEMENTATION_QUESTIONS.md
 IMPLEMENTATION_PLAN.md
 CURRENT_STATE.md
+UX_CONTRACT.md  # required only for user-facing UI/browser/dashboard/graph/report/editor/operator-console scopes
+DESIGN_QUALITY_BAR.md  # required only for user-facing UI/browser/dashboard/graph/report/editor/operator-console scopes
 manifest.json
 capabilities/
 ```
@@ -318,7 +329,21 @@ capabilities/<capability-id>/
   CONTRACTS.md  # only when this capability has local boundary contracts
 ```
 
-`CAPABILITY_INDEX.md` is the routing table. It must list every selected, excluded, blocked, and test-only capability with status, dependencies, pack path, verification status, and qualification blockers.
+`CAPABILITY_INDEX.md` is the routing table. It must list every selected, excluded, blocked, and test-only capability with status, required teams, dependencies, pack path, verification status, and qualification blockers.
+It is also the traffic controller for the downstream coding agent. A fresh implementation agent must be able to read `BUILDPRINT.md`, `CAPABILITY_INDEX.md`, `CURRENT_STATE.md`, `TEAM_STACK.md`, `EXECUTION_PROTOCOL.md`, and exactly one active capability pack without inhaling every Markdown file or unrelated pack.
+
+`TEAM_STACK.md` is mandatory for selected output. It records internal team packs selected from product signals, trigger reasons, owned gates, evidence paths, and review order. It must not ask the user to choose lazy/simple/quick quality. It must select:
+
+- `test-and-verification` for every selected output;
+- `product-architect` for medium, large, full-suite, UI-bearing, or broad architecture output;
+- `ux-ui-craft` for user-facing UI, browser workflow, dashboard, graph, report, visual editor, or operator console output;
+- `integration-runtime` for provider, API, upload, job, webhook, runtime, or external side-effect output;
+- `security-boundary` for auth, admin, user data, payment, destructive action, secret, or public deployment output;
+- `data-persistence` for durable state, import, export, reporting, project data, graph/model, or restart/readback output.
+
+`UX_CONTRACT.md` is mandatory when `TEAM_STACK.md` selects `ux-ui-craft`. It must define screens, workflows, empty/loading/error/blocked/success states, component inventory, responsive behavior, accessibility proof, interaction polish, and browser/screenshot proof plan.
+
+`DESIGN_QUALITY_BAR.md` is mandatory when `TEAM_STACK.md` selects `ux-ui-craft`. It must define product category, taste variables, visual hierarchy, forbidden generic patterns, interaction polish, accessibility gates, responsive gates, and the required screenshot set.
 
 Each `capabilities/<id>/CAPABILITY.md` must define behavior, user or system workflow, inputs, outputs, important state, failures, implementation freedom, forbidden substitutions, and source evidence when mapped.
 
@@ -332,9 +357,11 @@ Root `VERIFICATION.md` contains cross-capability checks, build/runtime setup, fu
 
 Root `EXECUTION_PROTOCOL.md` contains the global downstream-agent work loop, context-loading rules, verification ladder, repair-loop rules, fresh-review rules, and handoff requirements.
 
-Root `IMPLEMENTATION_PLAN.md` contains the living milestone plan across capabilities, current implementation order, decision log, risk register, and evidence update rules.
+Root `IMPLEMENTATION_PLAN.md` contains the living milestone plan across capabilities, current implementation order, team-pack gates, decision log, risk register, and evidence update rules.
 
 Separate `TRACEABILITY_MATRIX.md`, `TEST_MATRIX.md`, `DECISION_LOG.md`, `RISK_REGISTER.md`, and acceptance files are not default package files. Their concepts remain required but are embedded in `CAPABILITY_INDEX.md`, capability packs, `IMPLEMENTATION_PLAN.md`, and `VERIFICATION.md` unless the selected scope is large enough that separate files improve agent navigation.
+
+`manifest.json` must match actual selected package files. Missing files, unlisted package files, typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, or `CAPABILTY_INDEX.md`, missing required team-pack files, and duplicate canonical handoff files such as both `HANDOFF.md` and `HANDOVER.md` are selected-output blockers.
 
 Conditional shared files are allowed only when they prevent ambiguity or prove qualification, for example:
 

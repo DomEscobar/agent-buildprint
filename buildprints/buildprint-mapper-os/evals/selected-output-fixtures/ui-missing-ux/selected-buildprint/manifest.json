@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "mapper-os/selected-buildprint.v1",
+  "qualificationStatus": "SELECTED_UNQUALIFIED",
+  "outputMode": "selected-extraction",
+  "implementationSignals": {
+    "hasUserFacingUI": true
+  },
+  "teamStack": {
+    "file": "TEAM_STACK.md",
+    "teams": ["product-architect", "test-and-verification"]
+  },
+  "files": [
+    "BUILDPRINT.md",
+    "CAPABILITY_INDEX.md",
+    "CURRENT_STATE.md",
+    "TEAM_STACK.md",
+    "EXECUTION_PROTOCOL.md",
+    "PRE_IMPLEMENTATION_QUESTIONS.md",
+    "IMPLEMENTATION_PLAN.md",
+    "VERIFICATION.md",
+    "CONTRACTS.md",
+    "capabilities/01-dashboard/CAPABILITY.md",
+    "capabilities/01-dashboard/IMPLEMENTATION.md",
+    "capabilities/01-dashboard/VERIFICATION.md"
+  ]
+}

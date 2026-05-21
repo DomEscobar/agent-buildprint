@@ -11,27 +11,27 @@
 
 ## Implementation Team / Harness Plan
 
-Choose the implementation team from Buildprint signals before coding. Record the selected roles/passes and why.
+Use `TEAM_STACK.md` as the implementation team router before coding. Record the selected team packs and why.
 
-- Product/UX design pass:
-- Frontend implementation pass:
-- Backend/runtime architecture pass:
-- Provider/integration pass:
-- Security/privacy review pass:
-- Browser/API QA pass:
-- Coverage/final Buildprint-readiness review:
+- product-architect:
+- ux-ui-craft:
+- test-and-verification:
+- integration-runtime:
+- security-boundary:
+- data-persistence:
 
 ## Evidence-Producing Role Chain
 
 Roles are not free-form thoughts. Each pass must produce an artifact that the next pass consumes. If an artifact is missing or too vague, stop and repair it before coding or promotion.
 
-| Pass | Role | Must produce | Consumed by | Artifact location | Status |
+| Pass | Team | Must produce | Consumed by | Artifact location | Status |
 |---:|---|---|---|---|---|
-| 1 | Source mapper / archaeologist | source evidence ledger for each included capability, with observed files/routes/screens/jobs/configs or explicit inference/blocker notes | product architect | `CAPABILITY_INDEX.md` Source evidence column and `capabilities/*/CAPABILITY.md` | missing |
-| 2 | Product architect | product obligation and quality bar per capability; explicit included/excluded boundaries without silent scope shrink | implementation planner | `CAPABILITY_INDEX.md` Product obligation column and `CURRENT_STATE.md` | missing |
-| 3 | Implementation planner | required topology/layers/files and first vertical slice per capability | builder | `CAPABILITY_INDEX.md` Required topology column and Milestones table | missing |
-| 4 | QA verifier | proof command, proof artifact, negative test, runtime/browser evidence, and blocker rows | skeptical reviewer | `VERIFICATION.md` Capability Proof Ledger and capability `VERIFICATION.md` files | missing |
-| 5 | Skeptical reviewer | promotion/downgrade decision; reject fake completion and record exact promotion blockers | final handoff | `CAPABILITY_INDEX.md` Depth status/Promotion blocker columns and `REVERSAL_REPORT.md` | missing |
+| 1 | source mapper / archaeologist | source evidence ledger for each included capability, with observed files/routes/screens/jobs/configs or explicit inference/blocker notes | product-architect | `CAPABILITY_INDEX.md` Source evidence column and `capabilities/*/CAPABILITY.md` | missing |
+| 2 | product-architect | product obligation, topology, architecture decision notes, first vertical slice, and included/excluded boundaries without silent scope shrink | implementation planner | `CAPABILITY_INDEX.md` Product obligation/Required topology/Topology status columns and `CURRENT_STATE.md` | missing |
+| 3 | ux-ui-craft when selected | screen inventory, workflow states, taste variables, responsive behavior, visual quality bar, and browser proof plan | builder and QA | `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, and `CAPABILITY_INDEX.md` UI/UX status column | missing / not-applicable |
+| 4 | integration-runtime / security-boundary / data-persistence when selected | owned boundary contracts and proof/blocker requirements | builder and QA | `PROVIDERS.md`, `SECURITY.md`, `DATA_LIFECYCLE.md`, capability packs | missing / not-applicable |
+| 5 | test-and-verification | proof command, proof artifact, negative test, runtime/browser evidence, and blocker rows | skeptical reviewer | `VERIFICATION.md` Capability Proof Ledger and capability `VERIFICATION.md` files | missing |
+| 6 | skeptical reviewer | promotion/downgrade decision; reject fake completion and record exact promotion blockers | final handoff | `CAPABILITY_INDEX.md` Depth status/Promotion blocker columns and `REVERSAL_REPORT.md` | missing |
 
 ## Architecture Topology Gate
 
@@ -47,13 +47,32 @@ Before implementation begins, define the target product topology. This is a hard
 
 Fail the implementation review if a medium/large/full-suite product is delivered as a mostly single-file backend, one static UI file, route-shaped endpoints, or seam-only adapters without a recorded blocker and downgraded qualification.
 
+## Architecture Decision Notes
+
+| Decision | Chosen approach | Alternatives rejected | Tradeoff | Reversal trigger |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+## Team-Pack Gate
+
+Before implementation begins, confirm `TEAM_STACK.md` has selected every required team and that each selected team owns a milestone gate.
+
+| Team | Trigger | Milestone gate | Evidence path | Status |
+|---|---|---|---|---|
+| product-architect | medium/large/full-suite, UI-bearing, or broad surface | topology and first real vertical slice approved | `CAPABILITY_INDEX.md`, this plan | missing |
+| ux-ui-craft | user-facing UI/browser/dashboard/graph/report | UX contract, design quality bar, and browser proof plan approved | `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, root/capability `VERIFICATION.md` | missing / not-applicable |
+| test-and-verification | always | proof ledger rows ready before claims | root/capability `VERIFICATION.md` | missing |
+| integration-runtime | provider/API/upload/job/runtime/webhook | provider/runtime boundary proof or blocker | `PROVIDERS.md`, capability pack | missing / not-applicable |
+| security-boundary | auth/admin/user data/payment/destructive/secrets | threat/permission/abuse proof or blocker | `SECURITY.md`, capability pack | missing / not-applicable |
+| data-persistence | persistence/import/export/reporting/project data | restart/readback/data lifecycle proof or blocker | `DATA_LIFECYCLE.md`, capability pack | missing / not-applicable |
+
 ## Capability Depth Matrix
 
-Every included capability must be scored before “implemented” can be claimed. `CONTRACT_SEAM_ONLY` may preserve scope, but it is not implementation completion.
+Every included capability must be scored before "implemented" can be claimed. `CONTRACT_SEAM_ONLY` may preserve scope, but it is not implementation completion.
 
-| Capability | Source evidence | Product obligation | Required topology | UI/UX | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|  | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing |
+| Capability | Required teams | Source evidence | Product obligation | Required topology | Topology status | UI/UX status | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|  | test-and-verification | missing | missing | missing | missing | missing / not-applicable | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing |
 
 Depth status values: `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, `OUT_OF_SCOPE_BY_USER_ONLY`, `FAKE_OR_PLACEHOLDER_FAIL`.
 
@@ -61,7 +80,7 @@ Depth status values: `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REA
 
 Milestones are implementation order, not scope definition. Do not remove or hide capabilities because they are not first-slice work.
 
-| Order | Capability | Readiness state | First slice | First verification gate | Required builder/review passes | Status |
+| Order | Capability | Readiness state | First real vertical slice | First verification gate | Required teams | Status |
 |---:|---|---|---|---|---|---|
 | 1 |  |  |  |  |  | pending |
 

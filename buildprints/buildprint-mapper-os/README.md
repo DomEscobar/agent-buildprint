@@ -15,6 +15,8 @@ Read:
 5. `EXECUTION_PROTOCOL.md`
 6. `VERIFICATION.md`
 
+For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read `BUILDPRINT.md`, `CAPABILITY_INDEX.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, then only the active capability pack.
+
 ## Default Behavior
 
 - Discover first.
@@ -42,6 +44,8 @@ CURRENT_STATE.md
 manifest.json
 capabilities/
 ```
+
+Every included capability pack must contain `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`. `manifest.json` must match actual files and typo aliases such as `VERFICATION.md` are invalid.
 
 ## Qualification
 

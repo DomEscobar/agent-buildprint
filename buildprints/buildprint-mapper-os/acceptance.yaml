@@ -28,6 +28,12 @@ acceptance:
       - CAPABILITY.md
       - VERIFICATION.md
       - IMPLEMENTATION.md
+    router_first_read_order:
+      - BUILDPRINT.md
+      - CAPABILITY_INDEX.md
+      - CURRENT_STATE.md
+      - EXECUTION_PROTOCOL.md
+      - active capability pack only
     forbidden_default_files:
       - AGENT_EXECUTION_BRIEF.md
       - agent-contract.xml
@@ -36,6 +42,13 @@ acceptance:
       - IMPLEMENTATION_COMPLETENESS.md
       - PHASE_PLAN.md
       - LOOP_GATES.md
+    forbidden_typo_files:
+      - VERFICATION.md
+      - IMPLEMENATION.md
+      - CAPABILTY_INDEX.md
+    forbidden_duplicate_spine_sets:
+      - [HANDOFF.md, HANDOVER.md]
+    manifest_parity: required
   static_gates:
     - discover first and ask later
     - no broad pre-discovery questionnaire
@@ -43,6 +56,9 @@ acceptance:
     - every OBSERVED claim cites source evidence
     - selected scope explicit before selected extraction
     - capability status classification complete
+    - selected output manifest matches actual files
+    - selected output has no typo alias files
+    - selected output has exactly one canonical handoff artifact
     - no mocks or fixtures counted as product implementation
     - qualification label is DISCOVERY_ONLY, SELECTED_UNQUALIFIED, or QUALIFIED_SOURCE_INDEPENDENT
   required_reviews:

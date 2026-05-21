@@ -10,6 +10,13 @@
 | Scope boundary | selected extraction | selected output is under `selected-buildprint/` and root remains discovery/evidence/quality |
 | Capability completeness | selected extraction | every capability has readiness state: `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `TEST_ONLY_MOCK` |
 | Capability packs | medium/large/full-suite | `CAPABILITY_INDEX.md` and per-capability `CAPABILITY.md`, `VERIFICATION.md`, and `IMPLEMENTATION.md` exist |
+| Team-pack router | selected extraction | `TEAM_STACK.md` exists, required teams are inferred from product signals, and lazy/simple/quick quality tiers are forbidden |
+| UX contract | UI-bearing selected extraction | `UX_CONTRACT.md` defines screens, workflows, state inventory, component inventory, responsive behavior, accessibility proof, interaction polish, and browser proof plan |
+| Design quality bar | UI-bearing selected extraction | `DESIGN_QUALITY_BAR.md` defines taste variables, visual hierarchy, forbidden generic patterns, accessibility gates, responsive gates, and required screenshot set |
+| Router-first packet | medium/large/full-suite | fresh agent can start from `BUILDPRINT.md`, `CAPABILITY_INDEX.md`, `CURRENT_STATE.md`, `TEAM_STACK.md`, `EXECUTION_PROTOCOL.md`, and one active capability pack without loading every Markdown file |
+| Manifest parity | selected extraction | `manifest.json` parses and file entries match actual selected package files |
+| Filename typo guard | selected extraction | typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, and `CAPABILTY_INDEX.md` are absent |
+| Handoff singularity | selected extraction | selected package spine does not contain both `HANDOFF.md` and `HANDOVER.md` |
 | Execution planning | selected extraction | each included capability has first slice, first gate, repair loop, and stop condition |
 | No-fake | selected extraction | no included capability is placeholder-backed, mock-backed, no-op, skeleton, or in-memory-only where persistence is claimed |
 | Hardening | sensitive surfaces | threat/data/observability/secret/abuse controls exist and are verified or the capability is blocked |
@@ -27,6 +34,8 @@ Use `evals/golden-projects/` as regression input for manual or agent-run review.
 - no-fake findings;
 - qualification label;
 - evidence gaps.
+
+Use `evals/selected-output-fixtures/` with `scripts/check-mapper-selected-output.mjs` for shape regression. The MicroFish bad-shape fixture must fail; the corrected MicroFish/team-stack fixture must pass while remaining `SELECTED_UNQUALIFIED`. The UI-missing-UX, architecture-shell, pretty-fake-UI, and architecture-diagram-only fixtures must fail.
 
 ## Repository Checks
 

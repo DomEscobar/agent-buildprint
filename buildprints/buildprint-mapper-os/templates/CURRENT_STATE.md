@@ -8,6 +8,19 @@
 - Next pack:
 - Qualification label:
 
+## Read Next
+
+- Active pack:
+- Open now:
+  - `TEAM_STACK.md`
+  - `UX_CONTRACT.md` when `TEAM_STACK.md` selects `ux-ui-craft`
+  - `DESIGN_QUALITY_BAR.md` when `TEAM_STACK.md` selects `ux-ui-craft`
+  - `capabilities/<active-capability>/IMPLEMENTATION.md`
+  - `capabilities/<active-capability>/CAPABILITY.md`
+  - `capabilities/<active-capability>/VERIFICATION.md`
+- Do not open yet:
+  - unrelated capability packs until this file advances the active pack
+
 ## Scope Preservation
 
 - Discovered/requested capability surface:
@@ -22,6 +35,8 @@
 
 ## Quality / Depth Preservation
 
+- Team stack status:
+- Required team packs:
 - Target architecture topology:
 - Actual architecture topology:
 - Architecture topology gate status:
@@ -45,7 +60,7 @@
 - Safe defaults applied:
 - Remaining blockers:
 
-## Implementation Team Signals
+## Team-Pack Signals
 
 - User-facing UI:
 - Uploads:
@@ -56,7 +71,8 @@
 - Reports/exports:
 - Auth/admin/destructive controls:
 - Deployment surface:
-- Recommended builder/review passes:
+- Required team packs:
+- Team-pack gates blocked:
 
 ## Last Evidence Update
 

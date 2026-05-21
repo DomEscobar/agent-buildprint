@@ -2,8 +2,8 @@
 
 1. Intake: read `PRE_IMPLEMENTATION_QUESTIONS.md`, confirm requested scope, selected target/first slice, capability readiness map, risks, max-quality mandate, and success criteria.
 2. Question gate: ask only unresolved blocking questions before coding. If the user is unavailable, record safest max-quality selected-scope defaults in `CURRENT_STATE.md`; do not silently shrink scope or downgrade quality.
-3. Implementation-team selection: inspect Buildprint implementation signals and choose the required builder roles/passes before coding. User-facing UI requires product/design/frontend review. Uploads, providers, user data, auth, admin, destructive actions, or deployment surfaces require security/runtime review. Broad or multi-capability surfaces require architecture and coverage review. A lone generalist pass is acceptable only for tiny non-UI reference implementations.
-4. Context load: read only the spine and relevant capability pack, plus capability index/readiness map when present.
+3. Team-stack gate: read `TEAM_STACK.md` and execute the selected team-pack gates before coding. Team packs are internal quality lenses, not user-selected quality tiers.
+4. Context load: read only `BUILDPRINT.md`, `CAPABILITY_INDEX.md`, `CURRENT_STATE.md`, `TEAM_STACK.md`, `EXECUTION_PROTOCOL.md`, and the active capability pack named by `CURRENT_STATE.md`. If `TEAM_STACK.md` selects `ux-ui-craft`, also read `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`. Do not inhale every Markdown file or unrelated capability pack before coding.
 5. Baseline: run declared preflight checks or record why they cannot run.
 6. Architecture topology gate: for medium, large, UI-bearing, provider-backed, or full-suite scopes, define and verify frontend, backend, domain/service, provider, storage, task/runtime, and test topology before coding. A mostly single-file backend or static shell fails unless the selected scope is tiny and explicitly justified.
 7. Evidence-producing role chain: before coding, ensure the role artifacts exist and are consumable: source evidence, product obligations, required topology, proof ledger plan, and reviewer promotion criteria. If the proof ledger skeleton does not exist, create it before implementation.
@@ -16,4 +16,6 @@
 14. Repair loop: convert failures into focused next actions until pass or blocker.
 15. Handoff: update state, evidence, blockers, safe defaults, capability readiness, capability depth status, implementation-team notes, proof ledger closure state, and next capability.
 
-Completion is blocked if any included capability lacks source evidence, product obligation, required topology, proof command or explicit blocker, proof artifact or explicit blocker, required negative test, required runtime/browser evidence, depth status, or promotion blocker for non-`REAL_IMPLEMENTED` states.
+Completion is blocked if any included capability lacks source evidence, product obligation, required topology, required teams, topology status, UX status when UI-bearing, proof command or explicit blocker, proof artifact or explicit blocker, required negative test, required runtime/browser evidence, depth status, or promotion blocker for non-`REAL_IMPLEMENTED` states.
+
+Completion is also blocked if the selected output package shape is invalid: missing `CAPABILITY_INDEX.md` or `TEAM_STACK.md` for selected output, missing `UX_CONTRACT.md` or `DESIGN_QUALITY_BAR.md` for UI-bearing output, missing sibling `IMPLEMENTATION.md` or `VERIFICATION.md` in any included capability pack, manifest entries that do not match real files, typo aliases such as `VERFICATION.md`, or duplicate canonical handoff files such as both `HANDOFF.md` and `HANDOVER.md` in the package spine.

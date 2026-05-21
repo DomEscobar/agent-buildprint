@@ -2,7 +2,7 @@
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command and not a source-code clone plan.
 
-The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant capability surface, classifies readiness honestly, distills source behavior into contracts, emits implementation-team signals for the downstream harness, and records qualification blockers honestly.
+The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant capability surface, classifies readiness honestly, distills source behavior into contracts, emits a team-pack quality router for the downstream harness, and records qualification blockers honestly.
 
 ## Authority
 
@@ -24,6 +24,8 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 8. `questions.md`
 9. `policies/*.md`
 10. `prompts/*.md` and `templates/`
+
+For generated selected packages, do not make the implementing agent read all Markdown files or all capability packs before it knows the next action. `CAPABILITY_INDEX.md` is the traffic controller, `CURRENT_STATE.md` is the active pointer, and `TEAM_STACK.md` is the quality gate router.
 
 ## Required Flow
 
@@ -61,11 +63,14 @@ Small selected scopes may be flat:
 BUILDPRINT.md
 CAPABILITIES.md
 CONTRACTS.md
+TEAM_STACK.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md
 PRE_IMPLEMENTATION_QUESTIONS.md
 IMPLEMENTATION_PLAN.md
 CURRENT_STATE.md
+UX_CONTRACT.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
+DESIGN_QUALITY_BAR.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
 manifest.json
 ```
 
@@ -75,11 +80,14 @@ Medium, large, and full-suite scopes must be hierarchical:
 BUILDPRINT.md
 CAPABILITY_INDEX.md
 CONTRACTS.md
+TEAM_STACK.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md
 PRE_IMPLEMENTATION_QUESTIONS.md
 IMPLEMENTATION_PLAN.md
 CURRENT_STATE.md
+UX_CONTRACT.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
+DESIGN_QUALITY_BAR.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
 manifest.json
 capabilities/<capability-id>/
   CAPABILITY.md
@@ -87,6 +95,12 @@ capabilities/<capability-id>/
   IMPLEMENTATION.md
   CONTRACTS.md
 ```
+
+This shape is mandatory. Full-suite output without `CAPABILITY_INDEX.md` and `TEAM_STACK.md`, UI-bearing output without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`, or any included capability pack without sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`, is invalid.
+
+`manifest.json` must match actual package files and must not list typo aliases such as `VERFICATION.md`. A selected package must use one canonical handoff artifact; do not put both `HANDOFF.md` and `HANDOVER.md` in the spine.
+
+`TEAM_STACK.md` is mandatory for selected output. It infers internal team packs from product shape; it must not ask the user to choose lazy/simple/quick quality. UI-bearing output selects `ux-ui-craft`, broad output selects `product-architect`, and every selected output selects `test-and-verification`.
 
 ## Non-Negotiables
 
@@ -105,6 +119,7 @@ Every selected package must tell the next coding agent:
 - what behavior is stable;
 - what implementation choices are free;
 - which pre-implementation questions must be asked or safely defaulted before coding;
+- which team-pack gates must run before and during coding;
 - what first slice to build;
 - what verification gate to run immediately;
 - what evidence is missing;

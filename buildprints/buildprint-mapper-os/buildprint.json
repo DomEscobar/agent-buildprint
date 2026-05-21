@@ -38,7 +38,9 @@
     { "path": "templates/IMPLEMENTATION_PLAN.md", "role": "selected-output-template", "required": true },
     { "path": "templates/capabilities/_template/CAPABILITY.md", "role": "capability-pack-template", "required": true },
     { "path": "templates/capabilities/_template/VERIFICATION.md", "role": "capability-pack-template", "required": true },
-    { "path": "templates/capabilities/_template/IMPLEMENTATION.md", "role": "capability-pack-template", "required": true }
+    { "path": "templates/capabilities/_template/IMPLEMENTATION.md", "role": "capability-pack-template", "required": true },
+    { "path": "evals/selected-output-fixtures/microfish-good-shape/selected-buildprint/manifest.json", "role": "positive-selected-output-shape-fixture", "required": true },
+    { "path": "evals/selected-output-fixtures/microfish-bad-shape/selected-buildprint/manifest.json", "role": "negative-selected-output-shape-fixture", "required": true }
   ],
   "forbiddenDefaults": [
     "agb map CLI entrypoint",
@@ -51,6 +53,10 @@
     "one giant capability file for medium/large/full-suite scopes",
     "mocks or fixtures counted as product implementation",
     "validation or parity claims without evidence",
+    "selected-output manifest drift",
+    "typo alias files such as VERFICATION.md, IMPLEMENATION.md, or CAPABILTY_INDEX.md",
+    "duplicate canonical handoff files such as both HANDOFF.md and HANDOVER.md",
+    "downstream agent required to read all markdown files before first action",
     "legacy default selected files: AGENT_EXECUTION_BRIEF.md, agent-contract.xml, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, IMPLEMENTATION_COMPLETENESS.md"
   ],
   "authoritySpine": "BUILDPRINT.md",
@@ -71,5 +77,9 @@
     "prompts/discover.md",
     "prompts/extract-selected.md",
     "checks/acceptance.md"
+  ],
+  "requiredChecks": [
+    "npm run check:mapper-output",
+    "npm run check:mapper-output:bad must fail for the negative fixture"
   ]
 }
