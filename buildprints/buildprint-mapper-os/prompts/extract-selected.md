@@ -49,6 +49,8 @@ Medium, large, and full-suite outputs are invalid unless a fresh coding agent ca
 
 Do not require the implementing agent to read all Markdown files or all capability packs before it knows the next action. `CAPABILITY_INDEX.md` is the traffic controller. `CURRENT_STATE.md` is the active pointer. `TEAM_STACK.md` is the quality gate router. `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` are loaded only when `TEAM_STACK.md` selects `ux-ui-craft`.
 
+Set an explicit execution mode. Default full-suite selected outputs to `continuous-full-suite`: the implementation agent starts with the active pack, proves it, advances `CURRENT_STATE.md`, then continues to the next dependency-ready pack in `CAPABILITY_INDEX.md` without reading unrelated packs upfront. Use `active-capability-handoff` only when the user explicitly requests a constrained validation or handoff run.
+
 ## Extraction Rules
 
 - Convert source facts into source-independent behavior contracts.
@@ -73,8 +75,8 @@ Do not require the implementing agent to read all Markdown files or all capabili
 - Upload, auth/admin, destructive, provider, runtime/job, persistence mutation, export, and security-sensitive capabilities require negative/failure-state tests or explicit blockers.
 - Use depth statuses: `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, `OUT_OF_SCOPE_BY_USER_ONLY`, `FAKE_OR_PLACEHOLDER_FAIL`.
 - Emit implementation signals for the downstream harness: user-facing UI, uploads, external providers, long-running jobs, graph persistence, simulation/runtime execution, reports, auth/admin, destructive controls, deployment surface, and recommended review specialties.
-- Generate `PRE_IMPLEMENTATION_QUESTIONS.md` with at most five blocking questions that materially affect security, scope, provider behavior, persistence, deployment, or qualification status. Do not ask how good the implementation should be and do not ask the user to choose a team; max-quality is mandatory and teams are inferred from Buildprint signals.
-- `HANDOFF.md` and `EXECUTION_PROTOCOL.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, record safest max-quality defaults in `CURRENT_STATE.md`, and execute team-pack gates from `TEAM_STACK.md`.
+- Generate `PRE_IMPLEMENTATION_QUESTIONS.md` with at most five blocking questions that materially affect execution mode, security, scope, provider behavior, persistence, deployment, or qualification status. Do not ask how good the implementation should be and do not ask the user to choose a team; max-quality is mandatory and teams are inferred from Buildprint signals.
+- `HANDOFF.md` and `EXECUTION_PROTOCOL.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, record concrete max-quality defaults and execution mode in `CURRENT_STATE.md`, and execute team-pack gates from `TEAM_STACK.md`.
 - Keep unresolved questions out of files that claim implementation readiness.
 - Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
 - Validate selected output shape before handoff. Fail the package if `CAPABILITY_INDEX.md` or `TEAM_STACK.md` is missing, `UX_CONTRACT.md` or `DESIGN_QUALITY_BAR.md` is missing for UI-bearing output, required team packs are absent, any included capability pack lacks sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, or `VERIFICATION.md`, `manifest.json` lists missing/non-canonical files, typo aliases such as `VERFICATION.md` exist, or both `HANDOFF.md` and `HANDOVER.md` appear as canonical spine files.

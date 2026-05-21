@@ -21,17 +21,19 @@ Mapper OS always targets the strongest Buildprint possible for the requested sco
 
 ## Minimal Blocking Questions
 
-1. **Scope / capability boundary?**
+1. **Execution mode?**
+   - Options: `continuous-full-suite` or `active-capability-handoff`.
+   - Safe default if unavailable: use `continuous-full-suite` for full-suite selected outputs and `active-capability-handoff` only when the user explicitly wants a constrained validation run.
+   - Constraint: both modes are router-first. Never read all capability packs upfront; use `CURRENT_STATE.md` to advance one pack at a time.
+
+2. **Scope / capability boundary?**
    - If the requested scope is ambiguous, which candidate, explicit scope, or full-suite target should be built first?
    - Safe default if unavailable: preserve the discovered/requested scope in the readiness map and choose only the first implementation slice; do not erase later capabilities.
 
-2. **Deployment posture?**
+3. **Deployment posture and sensitive capability policy?**
    - Options: trusted-local only, private authenticated app, public webapp.
-   - Safe default if unavailable: trusted-local only, with an explicit public-deployment blocker and visible operator warning.
-
-3. **Sensitive capability policy?**
    - Should risky capabilities such as auth, payments, providers, uploads, destructive actions, external writes, or user-data operations be included now, blocked, or implemented behind safe seams?
-   - Safe default if unavailable: preserve the capability as included-but-blocked/needs-proof where appropriate; block destructive/external side-effect expansion; implement safe seams and tests for required provider/upload boundaries.
+   - Safe default if unavailable: trusted-local only, with an explicit public-deployment blocker and visible operator warning. Preserve risky capabilities as included-but-blocked/needs-proof where appropriate; block destructive/external side-effect expansion; implement safe seams and tests for required provider/upload boundaries.
 
 4. **Runtime/provider proof availability?**
    - Are sandbox credentials, provider test access, runtime services, or browser/runtime environments available?
@@ -48,6 +50,7 @@ When a selected output has no user answers yet, include an explicit defaults sec
 - Provider mode: sandbox/test-double adapters only unless live credentials are supplied; live-provider qualification remains blocked.
 - Persistence: local durable filesystem or SQLite for the first slice unless the target stack clearly provides a stronger existing database; restart/readback proof is required.
 - Destructive actions: local-only confirmation unless auth/admin ownership is already in scope and proven.
+- Execution mode: `continuous-full-suite` for full-suite selected outputs; continue after each proven capability by advancing `CURRENT_STATE.md`, while loading only one capability pack at a time.
 - First vertical slice: the smallest real end-to-end path that moves user/source input through persistence, domain logic, and visible output.
 - Deployment target: local dev only unless the user supplied Docker/hosted deployment requirements.
 - Qualification: keep `SELECTED_UNQUALIFIED` until live providers, runtime, browser, persistence, security, and no-fake gates are proven.
@@ -60,6 +63,8 @@ Before implementation, write or update `CURRENT_STATE.md` with:
 ## Pre-Implementation Alignment
 
 - Quality mandate: max-quality for requested scope; no quality-tier choice offered
+- Execution mode:
+- Continue after proof:
 - Requested scope:
 - Selected target / first slice:
 - Capability readiness summary:

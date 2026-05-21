@@ -1,6 +1,6 @@
 # CAPABILITY_INDEX
 
-This file is the traffic controller for the downstream coding agent. The agent should use this file plus `CURRENT_STATE.md` to choose exactly one capability pack to load next; it should not read all packs upfront.
+This file is the ordered traffic controller for the downstream coding agent. The agent should use this file plus `CURRENT_STATE.md` to choose exactly one capability pack to load next; it should not read all packs upfront. In `continuous-full-suite` mode, advance through this table dependency order after each capability proof passes.
 
 | Capability | Status | Required teams | Source evidence | Product obligation | Required topology | Topology status | UI/UX status | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker | Dependencies | Pack | Verification | Blockers |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -61,6 +61,10 @@ source mapper fills Source evidence -> product-architect fills Product obligatio
 ```
 
 If a downstream role cannot consume an upstream field, stop and repair the field instead of guessing.
+
+## Execution Order Rule
+
+Use the `Dependencies` and `Pack` columns as the continuation order. In `continuous-full-suite` mode, after the active pack is proven or explicitly blocked, update `CURRENT_STATE.md` and proceed to the next dependency-ready included pack. Do not open unrelated packs before they become active.
 
 ## Team-Pack Rule
 

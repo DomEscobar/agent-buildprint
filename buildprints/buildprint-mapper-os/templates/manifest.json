@@ -7,6 +7,8 @@
   },
   "generatedAt": "",
   "outputMode": "selected-extraction",
+  "executionMode": "continuous-full-suite",
+  "executionModePolicy": "default full-suite selected outputs to continuous-full-suite; continue one capability pack at a time through CURRENT_STATE.md; use active-capability-handoff only when explicitly selected",
   "discoveryStatus": "DISCOVERY_REVIEW_REQUIRED",
   "qualificationStatus": "SELECTED_UNQUALIFIED",
   "productionPosture": "requested scope preserved; implementation order may be sliced",
@@ -20,7 +22,7 @@
     "required": true,
     "file": "PRE_IMPLEMENTATION_QUESTIONS.md",
     "maxQuestions": 5,
-    "fallback": "record safest max-quality selected-scope defaults in CURRENT_STATE.md; do not silently shrink scope or downgrade quality"
+    "fallback": "record concrete safest max-quality selected-scope defaults in CURRENT_STATE.md; default full-suite outputs to continuous-full-suite; do not silently shrink scope or downgrade quality"
   },
   "noFakeScanStatus": "not run",
   "completenessScore": {

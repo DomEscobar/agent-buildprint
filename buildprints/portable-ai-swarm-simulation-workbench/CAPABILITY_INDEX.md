@@ -1,6 +1,6 @@
 # CAPABILITY_INDEX
 
-This is the traffic controller for the downstream coding agent. Use it with `CURRENT_STATE.md` to load exactly one capability pack next.
+This is the ordered traffic controller for the downstream coding agent. Use it with `CURRENT_STATE.md` to load exactly one capability pack next. In `continuous-full-suite` mode, after each active pack is proven or explicitly blocked, update `CURRENT_STATE.md` and continue to the next dependency-ready pack without reading unrelated packs upfront.
 
 | Capability | Status | Required teams | Source evidence | Product obligation | Required topology | Topology status | UI/UX status | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker | Dependencies | Pack | Verification | Blockers |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

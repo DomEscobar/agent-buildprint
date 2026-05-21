@@ -1,6 +1,6 @@
 # EXECUTION_PROTOCOL
 
-1. Intake: read `PRE_IMPLEMENTATION_QUESTIONS.md`, confirm requested scope, selected target/first slice, capability readiness map, risks, max-quality mandate, and success criteria.
+1. Intake: read `PRE_IMPLEMENTATION_QUESTIONS.md`, confirm requested scope, selected target/first slice, execution mode, capability readiness map, risks, max-quality mandate, and success criteria.
 2. Question gate: ask only unresolved blocking questions before coding. If the user is unavailable, record safest max-quality selected-scope defaults in `CURRENT_STATE.md`; do not silently shrink scope or downgrade quality.
 3. Team-stack gate: read `TEAM_STACK.md` and execute the selected team-pack gates before coding. Team packs are internal quality lenses, not user-selected quality tiers.
 4. Context load: read only `BUILDPRINT.md`, `CAPABILITY_INDEX.md`, `CURRENT_STATE.md`, `TEAM_STACK.md`, `EXECUTION_PROTOCOL.md`, and the active capability pack named by `CURRENT_STATE.md`. If `TEAM_STACK.md` selects `ux-ui-craft`, also read `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`. Do not inhale every Markdown file or unrelated capability pack before coding.
@@ -12,9 +12,10 @@
 10. Verify slice: run targeted checks and fix failures.
 11. Expand checks: add integration, runtime, browser, persistence, security, architecture, capability-depth, and no-fake gates where applicable.
 12. Capability proof ledger closure: every included capability must have a `VERIFICATION.md` ledger row with proof command/API/browser path, proof artifact, negative test when applicable, runtime/browser evidence when applicable, status, and blocker. Do not claim final completion until each row is closed as proven or honestly blocked/downgraded.
-13. Fresh review: required for high-risk, UI/product, architecture, data, provider, upload, auth, destructive, deployment, or broad changes. The review must reject fake/placeholder completion, not merely note gaps.
-14. Repair loop: convert failures into focused next actions until pass or blocker.
-15. Handoff: update state, evidence, blockers, safe defaults, capability readiness, capability depth status, implementation-team notes, proof ledger closure state, and next capability.
+13. Execution mode advance: if `CURRENT_STATE.md` says `continuous-full-suite`, update state and ledgers, advance to the next dependency-ready capability in `CAPABILITY_INDEX.md`, load only that next pack, and continue in the same session unless a stop condition applies. If it says `active-capability-handoff`, update state and stop with the next pack named.
+14. Fresh review: required for high-risk, UI/product, architecture, data, provider, upload, auth, destructive, deployment, or broad changes. The review must reject fake/placeholder completion, not merely note gaps.
+15. Repair loop: convert failures into focused next actions until pass or blocker.
+16. Handoff: update state, evidence, blockers, safe defaults, capability readiness, capability depth status, implementation-team notes, proof ledger closure state, execution mode, and next capability.
 
 Completion is blocked if any included capability lacks source evidence, product obligation, required topology, required teams, topology status, UX status when UI-bearing, proof command or explicit blocker, proof artifact or explicit blocker, required negative test, required runtime/browser evidence, depth status, or promotion blocker for non-`REAL_IMPLEMENTED` states.
 

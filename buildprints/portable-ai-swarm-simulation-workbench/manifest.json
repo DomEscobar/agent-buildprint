@@ -2,6 +2,8 @@
   "name": "Portable AI Swarm Simulation Workbench",
   "qualificationStatus": "SELECTED_UNQUALIFIED",
   "outputMode": "full-suite",
+  "executionMode": "continuous-full-suite",
+  "executionModePolicy": "start with CURRENT_STATE.md active capability; after proof, advance through CAPABILITY_INDEX.md one pack at a time; do not read unrelated packs upfront",
   "scopeSize": "large",
   "source": {
     "repo": "https://github.com/666ghj/MiroFish",

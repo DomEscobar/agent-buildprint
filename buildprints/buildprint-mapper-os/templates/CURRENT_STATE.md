@@ -2,6 +2,9 @@
 
 - Requested scope:
 - Selected target / first slice:
+- Execution mode: continuous-full-suite / active-capability-handoff
+- Continue after proof:
+- Stop only on:
 - Active capability:
 - Completed capability packs:
 - Blocked capability packs:
@@ -32,6 +35,14 @@
 - Test-only mocks (`TEST_ONLY_MOCK`):
 - First implementation slice:
 - Later implementation slices:
+
+## Execution Mode
+
+- Default for full-suite selected outputs: `continuous-full-suite`
+- Router discipline: load only the active capability pack named by this file
+- Continuous mode behavior: after proof passes, update verification ledgers, advance `Active capability`, and continue to the next pack in dependency order
+- Handoff mode behavior: after proof passes, update verification ledgers, advance `Next pack`, and stop with a handoff
+- Stop conditions: explicit blocker, missing proof, provider uncertainty, destructive safety issue, secret exposure, user interruption, or context/tooling limit
 
 ## Quality / Depth Preservation
 

@@ -4,13 +4,19 @@
 
 Qualification: `SELECTED_UNQUALIFIED`
 
+Execution mode: `continuous-full-suite`
+
+Continue after proof: yes
+
+Stop only on: explicit blocker, missing proof, provider uncertainty, destructive safety issue, secret exposure, user interruption, or context/tooling limit.
+
 Active capability: `capabilities/01-ingestion-ontology/`
 
 ## Read Next
 
 Read `capabilities/01-ingestion-ontology/CAPABILITY.md`, then `IMPLEMENTATION.md`, then `VERIFICATION.md`.
 
-Do not read unrelated capability packs upfront. Advance to the next pack only after the active capability has proof, a documented blocker, or an explicit scope decision.
+Do not read unrelated capability packs upfront. In `continuous-full-suite` mode, advance to the next pack only after the active capability has proof, a documented blocker, or an explicit scope decision, then continue in the same session unless a stop condition applies.
 
 ## Current Blockers
 
@@ -21,3 +27,5 @@ Do not read unrelated capability packs upfront. Advance to the next pack only af
 ## Next Action
 
 Implement the first real vertical slice: upload fixture -> persisted project -> ontology adapter -> graph adapter -> graph UI proof.
+
+After `capabilities/01-ingestion-ontology/` passes its proof gate, update verification ledgers, set the active capability to `capabilities/02-graph-builder/`, load only that pack, and continue.
