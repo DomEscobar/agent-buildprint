@@ -3,6 +3,20 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- sockets.scriptAgent.*
+- routes.scriptAgent.*
+- agents.scriptAgent.*
+- skills.script.*
+- tables.o_agentWorkData
+- tables.o_script
+- tables.o_setting
+
+## Product obligations
+
+- Preserve authenticated script-agent chat, workspace update events, model/memory context, stop/error behavior, and script planning persistence.
+
 ## Agent Brief
 
 Goal: Authenticated users chat with a script-planning agent that uses project context, chapter text/events, memory, and sub-agents for story skeleton, adaptation strategy, script writing, and supervision.

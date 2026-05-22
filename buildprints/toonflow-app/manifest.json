@@ -5,7 +5,7 @@
     "checkoutPath": "./source-real",
     "commit": "122d2aa431d3240fea3eab491e6fbc690bb088cb"
   },
-  "generatedAt": "2026-05-21T15:42:51.131Z",
+  "generatedAt": "2026-05-22T06:14:59.089101Z",
   "outputMode": "full-suite-extraction",
   "discoveryStatus": "SOURCE_BACKED_DISCOVERY_COMPLETE_WITH_BLOCKERS",
   "qualificationStatus": "SELECTED_UNQUALIFIED",
@@ -166,6 +166,7 @@
   "files": [
     "BUILDPRINT.md",
     "CAPABILITY_INDEX.md",
+    "SOURCE_SURFACE_COVERAGE.md",
     "CONTRACTS.md",
     "CURRENT_STATE.md",
     "DATA_LIFECYCLE.md",

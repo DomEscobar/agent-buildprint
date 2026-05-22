@@ -3,6 +3,19 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.script.*
+- agents.scriptAssetExtraction
+- tables.o_script
+- tables.o_assets
+- tables.o_scriptAssets
+- tables.o_tasks
+
+## Product obligations
+
+- Preserve script CRUD/export plus AI role/scene/prop extraction, asset dedupe, join-table replacement, and extraction state transitions.
+
 ## Agent Brief
 
 Goal: Users create scripts, export selected scripts as text files in a zip, and run AI extraction of roles/scenes/props with deduped script-asset links and extraction state tracking.

@@ -3,6 +3,20 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.agents.*
+- routes.setting.memoryConfig.*
+- utils.agentMemory
+- utils.agentEmbedding
+- models.allMiniLML6v2
+- tables.memories
+- tables.o_setting
+
+## Product obligations
+
+- Preserve memory write/summary/embedding/search/clear flows, isolation-key boundaries, local ONNX dependency, and restart persistence.
+
 ## Agent Brief
 
 Goal: Agents persist short-term messages, summary memories, embeddings, semantic recall, deep retrieval, and memory-management settings per isolation key.

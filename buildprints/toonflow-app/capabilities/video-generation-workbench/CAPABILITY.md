@@ -3,6 +3,20 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.production.workbench.*
+- routes.cornerScape.audioBinding.*
+- providers.video.*
+- tables.o_video
+- tables.o_videoTrack
+- tables.o_assetsRole2Audio
+- tables.o_tasks
+
+## Product obligations
+
+- Preserve tracks, video prompt/reference generation, provider polling, local video URLs, audio binding, and failure/retry/delete states.
+
 ## Agent Brief
 
 Goal: Users create video tracks, generate videos from prompts and storyboard/asset references, poll success/failure, and receive playable local URLs for completed clips.

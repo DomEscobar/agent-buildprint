@@ -68,3 +68,20 @@ Evidence covers manifests, runtime entrypoints, route generation, auth middlewar
 ## Downstream Safety
 
 Safe to hand to a downstream implementation agent for max-quality implementation planning and first-slice coding. Not safe for qualification, parity claims, or production-readiness claims until proof ledger rows close.
+
+
+## Source Surface Coverage Remap
+
+Updated after Mapper OS source-surface coverage patch.
+
+- `SOURCE_SURFACE_COVERAGE.md`: added.
+- `CAPABILITY_INDEX.md`: now includes `Owned source surfaces`.
+- Every capability pack now declares `## Owned source surfaces` and `## Product obligations`.
+- High-signal route/table/socket/provider/runtime/file surfaces are dispositioned as owned, merged, or low-signal ignored with reason.
+- Route/function parity is explicitly rejected; grouped source surfaces are used only as product-obligation traceability.
+
+Validation to run after this remap:
+
+- `node scripts/check-mapper-selected-output.mjs buildprints/toonflow-app`
+- `npm run check:spine`
+- `npm test` if publishing the updated package.

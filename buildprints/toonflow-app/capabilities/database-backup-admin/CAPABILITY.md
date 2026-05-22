@@ -3,6 +3,17 @@
 Status: `INCLUDED_RISKY_REQUIRES_HARDENING`
 Depth status: `BLOCKED_WITH_REASON`
 
+## Owned source surfaces
+
+- routes.setting.dbConfig.*
+- routes.other.deleteAllData
+- db.sqlite.allTables
+- tables.o_*
+
+## Product obligations
+
+- Preserve export/import/clear/reset flows as blocked hardening-sensitive admin operations with confirmation, auth, audit, and isolated proof requirements.
+
 ## Agent Brief
 
 Goal: Authenticated operators can export all non-internal SQLite tables, import backup table data, clear/reinitialize tables, and trigger destructive data reset only behind explicit confirmation and audit controls.

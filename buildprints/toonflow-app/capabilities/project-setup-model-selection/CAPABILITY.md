@@ -3,6 +3,19 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.project.*
+- routes.modelSelect.*
+- routes.general.*
+- tables.o_project
+- tables.o_artStyle
+- tables.o_modelPrompt
+
+## Product obligations
+
+- Preserve project creation/edit/list flows, art/director/visual manuals, model selection, and project metadata persistence.
+
 ## Agent Brief
 
 Goal: Users can create, edit, and list Toonflow projects with title, intro, story type, art style, director manual, aspect ratio, image/video model choices, quality, and generation mode.

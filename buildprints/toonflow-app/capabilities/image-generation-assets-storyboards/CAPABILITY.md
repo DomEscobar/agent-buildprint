@@ -3,6 +3,21 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.assetsGenerate.*
+- routes.production.assets.*
+- routes.production.editImage.*
+- routes.production.storyboard.imageGeneration.*
+- providers.image.*
+- tables.o_image
+- tables.o_imageFlow
+- tables.o_tasks
+
+## Product obligations
+
+- Preserve image-generation tasks for assets/storyboards/edit flows with provider boundaries, polling, file persistence, and failure states.
+
 ## Agent Brief
 
 Goal: Users generate images for roles, scenes, props, and storyboard frames using configured image providers, with generation task records, file persistence, thumbnails, and failure states.

@@ -3,6 +3,20 @@
 Status: `INCLUDED_RISKY_REQUIRES_HARDENING`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.login.login
+- routes.setting.loginConfig.*
+- middleware.auth
+- sockets.scriptAgent.auth
+- sockets.productionAgent.auth
+- tables.o_user
+- tables.o_setting
+
+## Product obligations
+
+- Keep local login, bearer-token middleware, socket namespace auth, and user/settings persistence represented as hardening-sensitive obligations.
+
 ## Agent Brief
 
 Goal: Provide a local account login, issue bearer tokens, protect API and socket namespaces, and expose consistent JSON success/error responses without copying default credential values into implementation artifacts.

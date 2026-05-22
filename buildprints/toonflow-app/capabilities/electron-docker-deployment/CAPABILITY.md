@@ -3,6 +3,19 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- runtime.electronMain
+- runtime.expressServer
+- runtime.dockerImage
+- deployment.electronBuilder
+- fileStores.dataDirectory
+- fileStores.staticWebAssets
+
+## Product obligations
+
+- Preserve backend, Electron, Docker, static web, data-directory initialization/copy, and packaged runtime smoke obligations.
+
 ## Agent Brief
 
 Goal: The app can run as a backend service, Electron desktop app, packaged desktop build, or Docker backend-only runtime with static web assets and copied data resources.

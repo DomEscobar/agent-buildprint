@@ -3,6 +3,18 @@
 Status: `INCLUDED_RISKY_REQUIRES_HARDENING`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.setting.vendorConfig.*
+- providers.vendorAdapters.*
+- runtime.vmSandbox
+- fileStores.data.vendor
+- tables.o_vendorConfig
+
+## Product obligations
+
+- Preserve programmable vendor adapters, VM execution, schema/model tests, persisted provider config, secret redaction, and provider boundary hardening.
+
 ## Agent Brief
 
 Goal: Operators can add/update TypeScript vendor adapters, validate exported vendor/text/image/video functions, persist provider config, test models, and execute adapters inside a constrained VM.

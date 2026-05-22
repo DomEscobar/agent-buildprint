@@ -3,6 +3,20 @@
 Status: `INCLUDED_RISKY_REQUIRES_HARDENING`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.assets.*
+- routes.cornerScape.*
+- routes.common.getBigImage
+- fileStores.data.oss
+- tables.o_assets
+- tables.o_image
+- tables.o_assetsRole2Audio
+
+## Product obligations
+
+- Preserve asset/audio/clip upload and library management, local file containment, preview retrieval, and delete semantics.
+
 ## Agent Brief
 
 Goal: Users manage role/scene/prop/clip/audio assets, upload base64 media, store files under the local data directory, and retrieve safe local URLs or thumbnails.

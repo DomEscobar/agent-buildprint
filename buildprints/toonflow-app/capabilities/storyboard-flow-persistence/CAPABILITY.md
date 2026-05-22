@@ -3,6 +3,20 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.production.getFlowData
+- routes.production.saveFlowData
+- routes.production.storyboard.*
+- tables.o_agentWorkData
+- tables.o_storyboard
+- tables.o_assets2Storyboard
+- tables.o_videoTrack
+
+## Product obligations
+
+- Preserve flow hydration/save, storyboard record/order/link persistence, restart readback, and canvas/browser states.
+
 ## Agent Brief
 
 Goal: Users persist per-episode production flow data, hydrate flow workspaces from scripts/assets/storyboards, order storyboard frames, and create storyboard records linked to tracks.

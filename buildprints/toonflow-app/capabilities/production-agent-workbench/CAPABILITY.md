@@ -3,6 +3,21 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- sockets.productionAgent.*
+- agents.productionAgent.*
+- skills.production.*
+- routes.production.getFlowData
+- routes.production.saveFlowData
+- tables.o_agentWorkData
+- tables.o_assets
+- tables.o_storyboard
+
+## Product obligations
+
+- Preserve production-agent orchestration, skill-conditioned planning, storyboard/asset generation tools, socket streaming, stop/error branches, and workbench state updates.
+
 ## Agent Brief
 
 Goal: Authenticated users use a production agent to derive assets, generate asset images, plan direction, build storyboard tables/panels, generate storyboard images, and run supervision using art/story/production skills.

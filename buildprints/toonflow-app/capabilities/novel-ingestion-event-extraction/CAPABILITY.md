@@ -3,6 +3,18 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.novel.*
+- routes.novel.event.*
+- tables.o_novel
+- tables.o_event
+- tables.o_eventChapter
+
+## Product obligations
+
+- Preserve chapter import/search plus AI event extraction and event-state/error persistence.
+
 ## Agent Brief
 
 Goal: Users import chapter batches, list/search chapter text, and trigger AI chapter-event extraction that updates per-chapter event state and error reason.

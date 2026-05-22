@@ -3,6 +3,21 @@
 Status: `INCLUDED_NEEDS_PROOF`
 Depth status: `CONTRACT_SEAM_ONLY`
 
+## Owned source surfaces
+
+- routes.setting.skillManagement.*
+- routes.setting.promptManage.*
+- routes.setting.modelMap.*
+- skills.dataSkills.*
+- prompts.dataModelPrompt.*
+- tables.o_prompt
+- tables.o_skillList
+- tables.o_skillAttribution
+
+## Product obligations
+
+- Preserve editable skill/prompt/model-map files and tables with path containment, frontmatter parsing, and agent skill activation semantics.
+
 ## Agent Brief
 
 Goal: Operators can list and edit markdown skills/prompts safely inside the data skills directory; agents can parse frontmatter, activate skills, and read declared resources.

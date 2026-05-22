@@ -5,5 +5,7 @@
   "source": "https://github.com/HBAI-Ltd/Toonflow-app",
   "sourceCommit": "122d2aa431d3240fea3eab491e6fbc690bb088cb",
   "canonicalStart": "BUILDPRINT.md",
-  "authoritySpine": "BUILDPRINT.md"
+  "authoritySpine": "BUILDPRINT.md",
+  "sourceSurfaceCoverage": "SOURCE_SURFACE_COVERAGE.md",
+  "mapperPolicy": "source surfaces are evidence, not route/function parity requirements; high-signal surfaces require ownership, merge, blocker, or explicit exclusion"
 }
