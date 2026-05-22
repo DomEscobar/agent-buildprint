@@ -1,0 +1,25 @@
+capability_id: 05-report-interaction
+title: "Report And Deep Interaction"
+status: INCLUDED_NEEDS_PROOF
+depth_status: CONTRACT_SEAM_ONLY
+product_obligation_ids:
+  - OBL-005
+dependencies:
+  - 04-simulation-runtime
+required_teams:
+  - product-architect
+  - ux-ui-craft
+  - integration-runtime
+  - data-persistence
+  - security-boundary
+  - test-and-verification
+autonomy_level: workflow
+proof_contract: 03-capabilities/05-report-interaction/proof-contract.yaml
+stable:
+  - "Generate simulation reports with progress/sections/logs, download completed reports, and support chat with a report agent plus selected simulated-agent interview flows."
+  - Inputs, outputs, failure states, persistence expectations, and proof gates are mandatory.
+free:
+  - Frameworks, database choices, graph provider, queue/worker implementation, and UI component libraries may vary if contracts and proofs pass.
+stop_rules:
+  - Stop if required provider/runtime/persistence/security proof cannot be produced.
+  - Stop if static data, no-op controls, or in-memory-only persistence are the only available implementation path.

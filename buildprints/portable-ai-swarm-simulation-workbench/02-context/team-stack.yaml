@@ -1,0 +1,32 @@
+schema_version: mapper-os/team-stack.v1
+quality_tier: agent-grade
+forbidden_tiers:
+  - lazy
+  - simple
+  - quick
+teams:
+  product-architect:
+    required: true
+    owns: [workflow, capability_dependencies, product_depth]
+  ux-ui-craft:
+    required: true
+    owns: [workbench_ui, graph_visualization, responsive_states, browser_proof]
+  integration-runtime:
+    required: true
+    owns: [api_contracts, async_tasks, providers, simulation_worker, polling]
+  data-persistence:
+    required: true
+    owns: [projects, uploads, simulations, reports, restart_readback, delete_reset]
+  security-boundary:
+    required: true
+    owns: [uploads, secrets, provider_logs, subprocess_controls, destructive_actions]
+  test-and-verification:
+    required: true
+    owns: [unit_tests, integration_tests, browser_tests, no_fake_scan, evidence_ledger]
+fresh_review_triggers:
+  - uploads
+  - external_providers
+  - subprocess_runtime
+  - user_data_operations
+  - destructive_actions
+  - provider_logs

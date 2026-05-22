@@ -1,0 +1,103 @@
+schema_version: mapper-os/executable-packet.v2
+canonical_start: BUILDPRINT.md
+source:
+  input: /root/MiroFish
+  checkout_path: /root/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  source_dependency_policy: evidence_only_do_not_require_for_implementation
+generated_at: "2026-05-22T16:18:44+02:00"
+claim_status: SELECTED_UNQUALIFIED
+target_public_url: https://agent-buildprint.com/buildprints/portable-ai-swarm-simulation-workbench/
+supersedes_conceptually: /root/blueprint/buildprints/portable-ai-swarm-simulation-workbench
+promotion_requires:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+  - security_boundary_review
+  - clean_room_implementation_trace
+  - no_fake_scan_pass
+obligations:
+  - obligation_id: OBL-001
+    title: "Source Ingestion And Ontology"
+    source_surfaces:
+      - SRC-003
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-002
+    title: "Graph Build And Visualization"
+    source_surfaces:
+      - SRC-004
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-003
+    title: "Simulation Setup"
+    source_surfaces:
+      - SRC-005
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-004
+    title: "Simulation Runtime Monitoring"
+    source_surfaces:
+      - SRC-006
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-005
+    title: "Report And Deep Interaction"
+    source_surfaces:
+      - SRC-007
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-006
+    title: "History And Data Lifecycle"
+    source_surfaces:
+      - SRC-008
+    status: INCLUDED_NEEDS_PROOF
+capabilities:
+  - capability_id: 01-ingestion-ontology
+    obligation_ids:
+      - OBL-001
+    packet: 03-capabilities/01-ingestion-ontology
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/01-ingestion-ontology/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: 02-graph-builder
+    obligation_ids:
+      - OBL-002
+    packet: 03-capabilities/02-graph-builder
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/02-graph-builder/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: 03-simulation-setup
+    obligation_ids:
+      - OBL-003
+    packet: 03-capabilities/03-simulation-setup
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/03-simulation-setup/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: 04-simulation-runtime
+    obligation_ids:
+      - OBL-004
+    packet: 03-capabilities/04-simulation-runtime
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/04-simulation-runtime/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: 05-report-interaction
+    obligation_ids:
+      - OBL-005
+    packet: 03-capabilities/05-report-interaction
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/05-report-interaction/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: 06-data-lifecycle
+    obligation_ids:
+      - OBL-006
+    packet: 03-capabilities/06-data-lifecycle
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/06-data-lifecycle/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+context:
+  active_capability: 01-ingestion-ontology
+  context_map: 02-context/context-map.yaml
+  read_order: 02-context/read-order.yaml
+  team_stack: 02-context/team-stack.yaml
+  ux_contract: 02-context/ux-contract.md
+  design_quality_bar: 02-context/design-quality-bar.md
+generated_artifacts:
+  agent_prompt: generated/agent-prompt.md
+publication:
+  file: publication.json

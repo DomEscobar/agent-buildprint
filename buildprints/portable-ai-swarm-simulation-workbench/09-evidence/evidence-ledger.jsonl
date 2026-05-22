@@ -1,0 +1,3 @@
+{"timestamp": "2026-05-22T16:18:44+02:00", "type": "mapping", "status": "PASS", "claim": "Mapper OS instructions and executable-packet template inspected", "evidence": "/root/blueprint/buildprints/buildprint-mapper-os/README.md, SPEC.md, EXECUTION_PROTOCOL.md, VERIFICATION.md"}
+{"timestamp": "2026-05-22T16:18:44+02:00", "type": "source", "status": "PASS", "claim": "MiroFish source inspected without modification", "evidence": "/root/MiroFish commit fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41"}
+{"timestamp": "2026-05-22T16:18:44+02:00", "type": "qualification", "status": "BLOCKED", "claim": "Live provider/runtime/browser/persistence/security proof pending", "evidence": "Mapping run did not execute live LLM, Zep, OASIS, browser, or persistence restart proof"}

@@ -1,0 +1,25 @@
+capability_id: 01-ingestion-ontology
+title: "Source Ingestion And Ontology"
+status: INCLUDED_NEEDS_PROOF
+depth_status: CONTRACT_SEAM_ONLY
+product_obligation_ids:
+  - OBL-001
+dependencies:
+  []
+required_teams:
+  - product-architect
+  - ux-ui-craft
+  - integration-runtime
+  - data-persistence
+  - security-boundary
+  - test-and-verification
+autonomy_level: workflow
+proof_contract: 03-capabilities/01-ingestion-ontology/proof-contract.yaml
+stable:
+  - "Upload PDF/Markdown/text seed material with a natural-language prediction requirement, extract text, persist a project, and generate an ontology suitable for downstream graph and agent simulation."
+  - Inputs, outputs, failure states, persistence expectations, and proof gates are mandatory.
+free:
+  - Frameworks, database choices, graph provider, queue/worker implementation, and UI component libraries may vary if contracts and proofs pass.
+stop_rules:
+  - Stop if required provider/runtime/persistence/security proof cannot be produced.
+  - Stop if static data, no-op controls, or in-memory-only persistence are the only available implementation path.

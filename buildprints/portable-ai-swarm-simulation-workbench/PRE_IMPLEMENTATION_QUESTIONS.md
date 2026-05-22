@@ -1,20 +1,11 @@
 # PRE_IMPLEMENTATION_QUESTIONS
 
-Ask only these blocking product-shape questions before coding if the answer is not already supplied by the target project. For the first active capability, do not stop if the user is unavailable; apply the safe defaults below and proceed.
+Ask these before implementation if the answer is not already supplied by the harness.
 
-1. Which execution mode should be used: `continuous-full-suite` or `active-capability-handoff`?
-2. Which provider mode should be implemented first: sandbox adapters only, or live LLM/Zep/OASIS credentials available for gated smoke tests?
-3. What persistence backend should the clean-room implementation use for projects, simulations, reports, and logs: filesystem, SQLite/Postgres, or existing app database?
-4. Should destructive actions require local-only confirmation, authenticated ownership, or admin permissions?
-5. What deployment target should runtime paths support first: local dev only, Docker Compose, or hosted web app with worker process?
+1. Which persistence backend should qualify the product: local filesystem, SQLite/Postgres, object storage, or another durable store?
+2. Should live provider proof use real LLM, Zep-compatible graph memory, and OASIS/CAMEL runtime credentials, or should the implementation remain deterministic-test-double only?
+3. What upload limits, file retention rules, and deletion-confirmation semantics are required for user documents and generated reports?
+4. Is the first implementation expected to be bilingual like the source, or English-only until the core workflow is proven?
+5. Are simulated social platforms limited to Twitter/Reddit-compatible behavior, or should the implementation expose a platform adapter interface?
 
-## Safe Defaults For Unanswered First-Slice Runs
-
-- Provider mode: sandbox/test-double adapters only. Do not require live LLM, Zep, OASIS, or simulation credentials for the first proof.
-- Persistence: local durable filesystem or SQLite. The first slice must prove restart/readback; in-memory-only state is not enough.
-- Destructive actions: local-only confirmation. Do not add auth/admin scope unless the active capability requires it.
-- Execution mode: `continuous-full-suite`. Start with the active capability, then continue through the full suite one capability pack at a time after each proof gate.
-- First vertical slice: upload-to-graph. Begin with `capabilities/01-ingestion-ontology/`; after it passes, continue to `capabilities/02-graph-builder/` in the same session unless blocked.
-- Deployment target: local dev only.
-
-Do not ask which quality/team should do this. If unanswered, use these defaults, keep all selected teams active, and keep qualification as `SELECTED_UNQUALIFIED` until live providers, runtime, browser, persistence, security, and no-fake gates are proven.
+Safe defaults if unanswered: filesystem persistence for first slice, deterministic provider adapters, 50 MB upload limit, explicit destructive confirmations, English UI, Twitter/Reddit adapter labels without live platform calls.

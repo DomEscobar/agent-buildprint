@@ -1,0 +1,17 @@
+schema_version: mapper-os/quality-rubric.v1
+grades:
+  qualified_source_independent:
+    requires:
+      - all_capabilities_real_or_explicitly_blocked
+      - all_required_proof_artifacts_present
+      - no_high_or_critical_security_findings
+      - no_fake_findings
+  selected_unqualified:
+    current: true
+    reason: provider_runtime_browser_persistence_security_proof_pending
+failure_conditions:
+  - source_repo_required_for_implementation
+  - static_data_presented_as_runtime_behavior
+  - deterministic_adapter_presented_as_live_provider
+  - missing_destructive_action_confirmation
+  - secret_value_in_artifact

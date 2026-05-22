@@ -1,0 +1,23 @@
+schema_version: mapper-os/proof-contract.v1
+capability_id: 03-simulation-setup
+claim_status: SELECTED_UNQUALIFIED
+promotion_requires:
+  - unit_or_integration_tests
+  - negative_tests
+  - browser_or_runtime_trace
+  - persistence_or_readback_evidence
+  - evidence_ledger_entry
+no_fake_checks:
+  - no_static_success_data
+  - no_noop_controls
+  - deterministic_adapters_not_counted_as_live_provider_proof
+  - in_memory_state_not_counted_as_durable_persistence
+required_artifacts:
+  - artifacts/03-simulation-setup-test-results.json
+  - artifacts/03-simulation-setup-proof.md
+  - artifacts/03-simulation-setup-screenshot-or-runtime-trace
+blockers_if_missing:
+  - provider_credentials_for_live_proof
+  - browser_runtime_trace
+  - restart_readback_or_persistence_roundtrip
+  - security_review_for_sensitive_surface

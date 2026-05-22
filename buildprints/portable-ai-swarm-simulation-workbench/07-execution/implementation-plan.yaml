@@ -1,0 +1,41 @@
+schema_version: mapper-os/implementation-plan.v1
+claim_status: SELECTED_UNQUALIFIED
+phases:
+  - phase: 1
+    capability_id: 01-ingestion-ontology
+    title: "Source Ingestion And Ontology"
+    entry_status: INCLUDED_NEEDS_PROOF
+    exit_gate: 03-capabilities/01-ingestion-ontology/proof-contract.yaml
+  - phase: 2
+    capability_id: 02-graph-builder
+    title: "Graph Build And Visualization"
+    entry_status: INCLUDED_NEEDS_PROOF
+    exit_gate: 03-capabilities/02-graph-builder/proof-contract.yaml
+  - phase: 3
+    capability_id: 03-simulation-setup
+    title: "Simulation Setup"
+    entry_status: INCLUDED_NEEDS_PROOF
+    exit_gate: 03-capabilities/03-simulation-setup/proof-contract.yaml
+  - phase: 4
+    capability_id: 04-simulation-runtime
+    title: "Simulation Runtime Monitoring"
+    entry_status: INCLUDED_NEEDS_PROOF
+    exit_gate: 03-capabilities/04-simulation-runtime/proof-contract.yaml
+  - phase: 5
+    capability_id: 05-report-interaction
+    title: "Report And Deep Interaction"
+    entry_status: INCLUDED_NEEDS_PROOF
+    exit_gate: 03-capabilities/05-report-interaction/proof-contract.yaml
+  - phase: 6
+    capability_id: 06-data-lifecycle
+    title: "History And Data Lifecycle"
+    entry_status: INCLUDED_NEEDS_PROOF
+    exit_gate: 03-capabilities/06-data-lifecycle/proof-contract.yaml
+handoff:
+  update_runtime_ledger: .buildprint/evidence/evidence-ledger.jsonl
+  consult_after_each_phase: 03-capabilities/capability-index.yaml
+  stop_on:
+    - unproven_provider_claim
+    - unreviewed_sensitive_surface
+    - no_fake_failure
+    - missing_persistence_roundtrip

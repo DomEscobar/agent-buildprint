@@ -1,0 +1,16 @@
+schema_version: mapper-os/context-map.v1
+start:
+  - BUILDPRINT.md
+  - START_HERE.md
+  - blueprint.yaml
+  - PRE_IMPLEMENTATION_QUESTIONS.md
+  - 02-context/read-order.yaml
+  - 02-context/team-stack.yaml
+active_capability: 01-ingestion-ontology
+post_proof_index: 03-capabilities/capability-index.yaml
+source_independence:
+  original_source_required: false
+  original_source_policy: do_not_open_for_implementation
+ledger:
+  seed: 09-evidence/evidence-ledger.jsonl
+  runtime_target: .buildprint/evidence/evidence-ledger.jsonl

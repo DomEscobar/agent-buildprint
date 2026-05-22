@@ -1,0 +1,14 @@
+schema_version: mapper-os/test-matrix.v1
+required_test_families:
+  - upload_validation
+  - ontology_json_validation
+  - graph_build_task_progress
+  - graph_visualization_browser
+  - simulation_prepare_progress
+  - simulation_runtime_start_stop
+  - report_generation_progress
+  - report_chat_error_recovery
+  - history_restart_readback
+  - delete_reset_negative_tests
+  - secret_redaction_scan
+  - no_fake_scan

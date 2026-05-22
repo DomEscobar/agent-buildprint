@@ -1,0 +1,80 @@
+schema_version: mapper-os/capability-index.v1
+claim_status: SELECTED_UNQUALIFIED
+active_capability: 01-ingestion-ontology
+capabilities:
+  - capability_id: 01-ingestion-ontology
+    title: "Source Ingestion And Ontology"
+    status: INCLUDED_NEEDS_PROOF
+    depth_status: CONTRACT_SEAM_ONLY
+    packet: 03-capabilities/01-ingestion-ontology
+    dependencies:
+      []
+    proof_required:
+      - tests
+      - browser_or_runtime_trace
+      - negative_test
+      - evidence_ledger_entry
+  - capability_id: 02-graph-builder
+    title: "Graph Build And Visualization"
+    status: INCLUDED_NEEDS_PROOF
+    depth_status: CONTRACT_SEAM_ONLY
+    packet: 03-capabilities/02-graph-builder
+    dependencies:
+      - 01-ingestion-ontology
+    proof_required:
+      - tests
+      - browser_or_runtime_trace
+      - negative_test
+      - evidence_ledger_entry
+  - capability_id: 03-simulation-setup
+    title: "Simulation Setup"
+    status: INCLUDED_NEEDS_PROOF
+    depth_status: CONTRACT_SEAM_ONLY
+    packet: 03-capabilities/03-simulation-setup
+    dependencies:
+      - 02-graph-builder
+    proof_required:
+      - tests
+      - browser_or_runtime_trace
+      - negative_test
+      - evidence_ledger_entry
+  - capability_id: 04-simulation-runtime
+    title: "Simulation Runtime Monitoring"
+    status: INCLUDED_NEEDS_PROOF
+    depth_status: CONTRACT_SEAM_ONLY
+    packet: 03-capabilities/04-simulation-runtime
+    dependencies:
+      - 03-simulation-setup
+    proof_required:
+      - tests
+      - browser_or_runtime_trace
+      - negative_test
+      - evidence_ledger_entry
+  - capability_id: 05-report-interaction
+    title: "Report And Deep Interaction"
+    status: INCLUDED_NEEDS_PROOF
+    depth_status: CONTRACT_SEAM_ONLY
+    packet: 03-capabilities/05-report-interaction
+    dependencies:
+      - 04-simulation-runtime
+    proof_required:
+      - tests
+      - browser_or_runtime_trace
+      - negative_test
+      - evidence_ledger_entry
+  - capability_id: 06-data-lifecycle
+    title: "History And Data Lifecycle"
+    status: INCLUDED_NEEDS_PROOF
+    depth_status: CONTRACT_SEAM_ONLY
+    packet: 03-capabilities/06-data-lifecycle
+    dependencies:
+      - 01-ingestion-ontology
+      - 02-graph-builder
+      - 03-simulation-setup
+      - 04-simulation-runtime
+      - 05-report-interaction
+    proof_required:
+      - tests
+      - browser_or_runtime_trace
+      - negative_test
+      - evidence_ledger_entry
