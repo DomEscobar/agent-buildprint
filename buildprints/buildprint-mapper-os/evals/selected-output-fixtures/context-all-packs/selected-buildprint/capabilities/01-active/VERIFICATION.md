@@ -1,3 +1,0 @@
-# VERIFICATION
-
-Run active proof.

@@ -27,8 +27,6 @@ evidence/
   SOURCE_SURFACE_CENSUS.json
 quality/
   PROMOTION_GATE.md
-CURRENT_STATE.md
-manifest.json
 ```
 
 ## Source Surface Census

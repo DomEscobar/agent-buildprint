@@ -1,3 +1,0 @@
-# Contracts
-
-Diagram-only contract.

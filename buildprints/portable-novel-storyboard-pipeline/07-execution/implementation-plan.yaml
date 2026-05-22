@@ -3,30 +3,30 @@ phases:
     capability: project-workspace-auth
     goal: establish local workspace, project persistence, and auth/session boundary
     proof: 03-capabilities/project-workspace-auth/proof-contract.yaml
-    evidence: 09-evidence/evidence-ledger.jsonl
+    evidence: .buildprint/evidence/evidence-ledger.jsonl
   - id: novel-event-ingestion
     capability: novel-event-ingestion
     goal: import ordered chapters and extract deterministic events
     proof: 03-capabilities/novel-event-ingestion/proof-contract.yaml
-    evidence: 09-evidence/evidence-ledger.jsonl
+    evidence: .buildprint/evidence/evidence-ledger.jsonl
   - id: script-agent-assets
     capability: script-agent-assets
     goal: generate outline, strategy, script, and assets
     proof: 03-capabilities/script-agent-assets/proof-contract.yaml
-    evidence: 09-evidence/evidence-ledger.jsonl
+    evidence: .buildprint/evidence/evidence-ledger.jsonl
   - id: production-storyboard-flow
     capability: production-storyboard-flow
     goal: generate and persist director plan, storyboard table, and panel rows
     proof: 03-capabilities/production-storyboard-flow/proof-contract.yaml
-    evidence: 09-evidence/evidence-ledger.jsonl
+    evidence: .buildprint/evidence/evidence-ledger.jsonl
   - id: media-preview-export
     capability: media-preview-export
     goal: create mock media tasks and export PortablePreviewManifest
     proof: 03-capabilities/media-preview-export/proof-contract.yaml
-    evidence: 09-evidence/evidence-ledger.jsonl
+    evidence: .buildprint/evidence/evidence-ledger.jsonl
   - id: safety-runtime-boundary
     capability: safety-runtime-boundary
     goal: close or block provider, upload, secret, destructive, and clean-room gates
     proof: 03-capabilities/safety-runtime-boundary/proof-contract.yaml
-    evidence: 09-evidence/evidence-ledger.jsonl
+    evidence: .buildprint/evidence/evidence-ledger.jsonl
 

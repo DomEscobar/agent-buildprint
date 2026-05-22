@@ -3,6 +3,8 @@ required_proofs:
   - provider_integration_proof
   - persistence_roundtrip
   - browser_runtime_trace
+  - ux_design_gate
+  - screenshot_state_set
 commands:
   suggested:
     - npm test -- novel-event-ingestion
@@ -11,8 +13,9 @@ negative_tests:
   - empty chapter import is rejected
   - malformed provider output records failure without corrupting prior success
   - chapter order survives restart
-evidence_ledger: 09-evidence/evidence-ledger.jsonl
+evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+snapshot_evidence_seed: 09-evidence/evidence-ledger.jsonl
 promotion_blockers:
   - no deterministic provider proof
   - no browser proof for event states
-
+  - no screenshots against 02-context/ux-contract.md and 02-context/design-quality-bar.md

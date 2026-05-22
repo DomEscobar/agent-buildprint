@@ -11,7 +11,8 @@ negative_tests:
   - secret values are redacted from logs and manifest
   - destructive reset cannot run without confirmation
   - upload path traversal is rejected
-evidence_ledger: 09-evidence/evidence-ledger.jsonl
+evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+snapshot_evidence_seed: 09-evidence/evidence-ledger.jsonl
 promotion_blockers:
   - no security review
   - no no-secret/no-network proof

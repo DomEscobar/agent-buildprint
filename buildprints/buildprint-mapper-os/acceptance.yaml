@@ -18,9 +18,13 @@ acceptance:
       required_root:
         - BUILDPRINT.md
         - START_HERE.md
+        - PRE_IMPLEMENTATION_QUESTIONS.md
         - blueprint.yaml
         - 00-intent/source-surface-map.md
         - 02-context/context-map.yaml
+        - 02-context/team-stack.yaml
+        - 02-context/ux-contract.md
+        - 02-context/design-quality-bar.md
         - 02-context/source-evidence-index.yaml
         - 03-capabilities/capability-index.yaml
         - 08-evaluation/acceptance.yaml
@@ -34,30 +38,19 @@ acceptance:
         - proof-contract.yaml
       generated_prompt_policy: generated_from_blueprint_not_authority
       promotion_source: evidence_ledger
-    required_root:
-      - BUILDPRINT.md
-      - CAPABILITY_INDEX.md
-      - CONTEXT_PACKET.json
-      - SOURCE_SURFACE_COVERAGE.md
-      - CONTRACTS.md
-      - VERIFICATION.md
-      - EXECUTION_PROTOCOL.md
-      - IMPLEMENTATION_PLAN.md
-      - CURRENT_STATE.md
-      - manifest.json
-      - capabilities/
-    required_capability_pack:
-      - CAPABILITY.md
-      - VERIFICATION.md
-      - IMPLEMENTATION.md
-    router_first_read_order:
-      - BUILDPRINT.md
-      - CURRENT_STATE.md
-      - EXECUTION_PROTOCOL.md
-      - PRE_IMPLEMENTATION_QUESTIONS.md
-      - TEAM_STACK.md
-      - CONTEXT_PACKET.json
-      - active capability pack only
+    legacy_selected_output_v1:
+      status: forbidden
+      forbidden_root:
+        - CAPABILITY_INDEX.md
+        - CONTEXT_PACKET.json
+        - TEAM_STACK.md
+        - UX_CONTRACT.md
+        - DESIGN_QUALITY_BAR.md
+        - CURRENT_STATE.md
+        - EXECUTION_PROTOCOL.md
+        - IMPLEMENTATION_PLAN.md
+        - manifest.json
+        - capabilities/
     forbidden_default_files:
       - AGENT_EXECUTION_BRIEF.md
       - agent-contract.xml

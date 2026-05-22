@@ -1,3 +1,0 @@
-# Diagram
-
-Architecture diagram only.

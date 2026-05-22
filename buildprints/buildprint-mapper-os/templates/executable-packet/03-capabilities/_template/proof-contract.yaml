@@ -1,13 +1,16 @@
 proof_contract_id: proof-<capability-id>
 required_proofs:
   - <proof-id>
+  - ux_design_gate # required for UI-bearing capabilities
+  - screenshot_state_set # required for UI-bearing capabilities
 negative_tests:
   - <negative-test-or-not-applicable>
-evidence_ledger: 09-evidence/evidence-ledger.jsonl
+evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+snapshot_evidence_seed: 09-evidence/evidence-ledger.jsonl
 promotion_blockers:
   - browser_runtime_trace
+  - no screenshots against 02-context/ux-contract.md and 02-context/design-quality-bar.md
   - provider_integration_proof
   - persistence_roundtrip
   - security_boundary_review
   - clean_room_implementation_trace
-

@@ -25,7 +25,7 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 9. `policies/*.md`
 10. `prompts/*.md` and `templates/`
 
-For generated selected packages, do not make the implementing agent read all Markdown files or all capability packs before it knows the next action. `CURRENT_STATE.md` is the human-readable router, `CONTEXT_PACKET.json` is the machine-readable active-context router, `TEAM_STACK.md` is the quality gate router, and `CAPABILITY_INDEX.md` is consulted only after proof to choose the next dependency-ready pack.
+For generated selected packages, do not make the implementing agent read all Markdown files or all capability packs before it knows the next action. `START_HERE.md` is the human-readable router, `blueprint.yaml` is the machine-readable contract, `02-context/context-map.yaml` is the active-context router, `02-context/team-stack.yaml` is the quality gate router, and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready pack.
 
 ## Required Flow
 
@@ -57,11 +57,12 @@ Promoted only when the selected package is source-independent, capability-comple
 
 ## Selected Package Shape
 
-New selected outputs should use the executable packet shape. `BUILDPRINT.md` stays as a compatibility router; `blueprint.yaml`, `02-context/`, `03-capabilities/`, `08-evaluation/`, and `09-evidence/` are the machine-routable execution contract.
+Selected outputs must use the executable packet shape. `BUILDPRINT.md` stays as a compatibility router; `blueprint.yaml`, `02-context/`, `03-capabilities/`, `08-evaluation/`, and `09-evidence/` are the machine-routable execution contract.
 
 ```text
 BUILDPRINT.md
 START_HERE.md
+PRE_IMPLEMENTATION_QUESTIONS.md
 blueprint.yaml
 00-intent/
   mission.md
@@ -75,6 +76,9 @@ blueprint.yaml
 02-context/
   context-map.yaml
   read-order.yaml
+  team-stack.yaml
+  ux-contract.md
+  design-quality-bar.md
   source-evidence-index.yaml
 03-capabilities/
   capability-index.yaml
@@ -109,60 +113,17 @@ blueprint.yaml
   unresolved-blockers.md
 generated/
   agent-prompt.md
-  current-buildprint-compat/
 ```
 
-`generated/agent-prompt.md` is compiled output and must not be treated as source of truth. `generated/current-buildprint-compat/` may contain old-shape docs for website/CLI compatibility during migration.
+`generated/agent-prompt.md` is compiled output and must not be treated as source of truth.
 
-Qualification is evidence-derived. `claim_status: SELECTED_UNQUALIFIED` can be promoted only when `09-evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable.
+Qualification is evidence-derived. `claim_status: SELECTED_UNQUALIFIED` can be promoted only when runtime `.buildprint/evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable. The packaged `09-evidence/evidence-ledger.jsonl` is an immutable seed/template, not the write target.
 
-Legacy selected outputs remain valid during migration. Small selected scopes may be flat:
+The packet shape above is mandatory. Output without `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI `02-context/ux-contract.md`, UI `02-context/design-quality-bar.md`, `03-capabilities/capability-index.yaml`, per-capability `capability.yaml`, `implementation-workflow.md`, and `proof-contract.yaml`, `08-evaluation/acceptance.yaml`, or `09-evidence/evidence-ledger.jsonl` is invalid.
 
-```text
-BUILDPRINT.md
-CAPABILITIES.md
-CONTRACTS.md
-TEAM_STACK.md
-VERIFICATION.md
-EXECUTION_PROTOCOL.md
-PRE_IMPLEMENTATION_QUESTIONS.md
-IMPLEMENTATION_PLAN.md
-CURRENT_STATE.md
-UX_CONTRACT.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
-DESIGN_QUALITY_BAR.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
-manifest.json
-```
+Legacy selected-output v1 files are forbidden: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, and `capabilities/`.
 
-Medium, large, and full-suite scopes must be hierarchical:
-
-```text
-BUILDPRINT.md
-CAPABILITY_INDEX.md
-CONTEXT_PACKET.json
-CONTRACTS.md
-TEAM_STACK.md
-VERIFICATION.md
-EXECUTION_PROTOCOL.md
-PRE_IMPLEMENTATION_QUESTIONS.md
-IMPLEMENTATION_PLAN.md
-CURRENT_STATE.md
-UX_CONTRACT.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
-DESIGN_QUALITY_BAR.md  # required for user-facing UI/browser/dashboard/graph/report/editor/operator console
-manifest.json
-capabilities/<capability-id>/
-  CAPABILITY.md
-  VERIFICATION.md
-  IMPLEMENTATION.md
-  CONTRACTS.md
-```
-
-For executable packets, the packet shape above is mandatory. Output without `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `03-capabilities/capability-index.yaml`, per-capability `capability.yaml`, `implementation-workflow.md`, and `proof-contract.yaml`, `08-evaluation/acceptance.yaml`, or `09-evidence/evidence-ledger.jsonl` is invalid.
-
-For legacy packets during migration, this shape is mandatory. Full-suite output without `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, and `TEAM_STACK.md`, UI-bearing output without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`, or any included capability pack without sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`, is invalid.
-
-`manifest.json` must match actual package files, include `teamStack.teams` for selected outputs, and must not list typo aliases such as `VERFICATION.md`. A selected package must use one canonical handoff artifact; do not put both `HANDOFF.md` and `HANDOVER.md` in the spine. `CAPABILITY_INDEX.md` must include a `Required teams` column so each capability routes to the relevant team-pack gates.
-
-`TEAM_STACK.md` is mandatory for selected output. It infers internal team packs from product shape; it must not ask the user to choose lazy/simple/quick quality. UI-bearing output selects `ux-ui-craft`, broad output selects `product-architect`, and every selected output selects `test-and-verification`.
+`02-context/team-stack.yaml` is mandatory for selected output. It infers internal team packs from product shape; it must not ask the user to choose lazy/simple/quick quality. UI-bearing output selects `ux-ui-craft`, broad output selects `product-architect`, and every selected output selects `test-and-verification`.
 
 ## Non-Negotiables
 

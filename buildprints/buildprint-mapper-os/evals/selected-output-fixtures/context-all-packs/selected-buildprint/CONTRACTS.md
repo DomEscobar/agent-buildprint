@@ -1,3 +1,0 @@
-# CONTRACTS
-
-Fixture contracts.

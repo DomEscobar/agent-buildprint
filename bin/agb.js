@@ -2980,6 +2980,14 @@ function qualifiedProductScopeMd(records) {
 async function startBuildprint(manifestRef, targetFolder = cwd) {
   const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
+  const manifestFilePaths = manifest.files.map((file) => file.path).filter(Boolean)
+  const hasManifestFile = (filePath) => manifestFilePaths.includes(filePath)
+  const isExecutablePacket = hasManifestFile('START_HERE.md') && hasManifestFile('blueprint.yaml')
+  const manifestReadOrder = Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length
+    ? manifest.instructions.readOrder
+    : (isExecutablePacket
+      ? ['BUILDPRINT.md', 'START_HERE.md', 'blueprint.yaml', '02-context/context-map.yaml', 'PRE_IMPLEMENTATION_QUESTIONS.md', '02-context/team-stack.yaml', '02-context/ux-contract.md', '02-context/design-quality-bar.md'].filter(hasManifestFile)
+      : ['BUILDPRINT.md'])
 
   const targetRoot = path.resolve(cwd, targetFolder)
   fs.mkdirSync(targetRoot, { recursive: true })
@@ -2993,7 +3001,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     const source = resolveManifestUrl(baseUrl, file.siteUrl || file.rawUrl)
     if (!source) throw new Error(`missing source URL for ${file.path}`)
     const text = await fetchTextExact(source)
-    if (!text.trim()) throw new Error(`downloaded empty snapshot for ${file.path}`)
+    if (!text.trim() && !file.path.endsWith('.gitkeep')) throw new Error(`downloaded empty snapshot for ${file.path}`)
     const dest = path.join(snapshotDir, file.path)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
     fs.writeFileSync(dest, text)
@@ -3001,6 +3009,15 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   }
 
   const now = new Date().toISOString()
+  const contextMapPath = path.join(snapshotDir, '02-context', 'context-map.yaml')
+  const contextMapText = fs.existsSync(contextMapPath) ? fs.readFileSync(contextMapPath, 'utf8') : ''
+  const activeCapability = contextMapText.match(/active_capability:\s*([^\s#]+)/)?.[1] || null
+  const evidenceDir = path.join(stateDir, 'evidence')
+  const runtimeEvidencePath = path.join(evidenceDir, 'evidence-ledger.jsonl')
+  const snapshotEvidencePath = path.join(snapshotDir, '09-evidence', 'evidence-ledger.jsonl')
+  fs.mkdirSync(evidenceDir, { recursive: true })
+  fs.writeFileSync(runtimeEvidencePath, fs.existsSync(snapshotEvidencePath) ? fs.readFileSync(snapshotEvidencePath, 'utf8') : '')
+
   writeJson(path.join(stateDir, 'source.json'), {
     slug: manifest.slug,
     title: manifest.title,
@@ -3015,22 +3032,54 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     snapshotMode: 'download_exact',
     startedAt: now,
     downloaded,
+    readOrder: manifestReadOrder,
+    executablePacket: isExecutablePacket,
   })
 
   writeJson(path.join(stateDir, 'state.json'), {
     buildprint: manifest.slug,
-    currentPhase: '00-alignment',
+    currentPhase: isExecutablePacket ? activeCapability || 'active-capability' : '00-alignment',
+    activeCapability,
+    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'continuous-full-suite' : null),
     completedPhases: [],
     blocked: false,
     lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
-    nextAction: 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
+    nextAction: isExecutablePacket
+      ? 'read .buildprint/next-agent.md, then follow the executable packet router for the active capability'
+      : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
+    runtimeEvidenceLedger: '.buildprint/evidence/evidence-ledger.jsonl',
     updatedAt: now,
   })
 
-  fs.writeFileSync(path.join(stateDir, 'progress.md'), `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 — Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
+  fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
+    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Initialized writable runtime evidence ledger at \`.buildprint/evidence/evidence-ledger.jsonl\`.\n\n## Current\n- Active capability: \`${activeCapability || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\` and the executable packet router.\n`
+    : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
-  fs.writeFileSync(path.join(stateDir, 'next-agent.md'), `# Next Agent Instructions
+  fs.writeFileSync(path.join(stateDir, 'next-agent.md'), isExecutablePacket ? `# Next Agent Instructions
+
+Start here.
+
+This is a Mapper OS executable packet. Local runtime state wins over stale snapshot assumptions.
+
+1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
+2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
+3. Read \`.buildprint/snapshots/02-context/context-map.yaml\`.
+4. Execute team gates from \`.buildprint/snapshots/02-context/team-stack.yaml\`; for UI-bearing active capabilities, also apply \`.buildprint/snapshots/02-context/ux-contract.md\` and \`.buildprint/snapshots/02-context/design-quality-bar.md\`.
+5. Load only the active capability packet named by the context map: \`${activeCapability || 'unknown'}\`.
+6. Implement and prove that packet.
+7. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`.
+8. After proof, consult \`.buildprint/snapshots/03-capabilities/capability-index.yaml\`, update local state, and continue one dependency-ready packet at a time.
+
+Rules:
+
+- Do not read every capability packet upfront.
+- Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
+- \`.buildprint/evidence/evidence-ledger.jsonl\` is the writable runtime evidence ledger.
+- Keep claims scoped until runtime evidence rows prove the required gates.
+- Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
+- If blocked, update \`.buildprint/blockers.md\`.
+` : `# Next Agent Instructions
 
 Start here.
 
@@ -3047,8 +3096,6 @@ Rules:
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
 - If blocked, update \`.buildprint/blockers.md\`.
 `)
-
-
   console.log(`✓ Created ${stateDir}`)
   console.log(`✓ Downloaded ${downloaded.length} snapshot files`)
   console.log('✓ Wrote source.json, state.json, progress.md, decisions.md, blockers.md, next-agent.md')

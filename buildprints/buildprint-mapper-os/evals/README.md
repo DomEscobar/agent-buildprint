@@ -12,20 +12,13 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 
 ## Selected Output Fixtures
 
-- `selected-output-fixtures/microfish-bad-shape` - negative regression for missing `CAPABILITY_INDEX.md`, incomplete capability packs, typo alias files, manifest drift, and duplicate handoff files.
-- `selected-output-fixtures/microfish-good-shape` - positive regression for a router-first, team-stack full-suite selected Buildprint that remains `SELECTED_UNQUALIFIED`.
-- `selected-output-fixtures/missing-team-stack` - negative regression for selected output that has `CAPABILITY_INDEX.md` and `capabilities/` but omits mandatory `TEAM_STACK.md`.
-- `selected-output-fixtures/ui-missing-ux` - negative regression for UI-bearing selected output without required `UX_CONTRACT.md`/`ux-ui-craft` routing.
-- `selected-output-fixtures/architecture-shell` - negative regression for full-suite output without required `product-architect` topology routing.
-- `selected-output-fixtures/pretty-fake-ui` - negative regression for styled UI language without full workflow state/browser screenshot proof.
-- `selected-output-fixtures/architecture-diagram-only` - negative regression for architecture notes without first real vertical slice proof.
-- `selected-output-fixtures/old-read-order` - negative regression for selected output that still puts `CAPABILITY_INDEX.md` before `CURRENT_STATE.md`.
-- `selected-output-fixtures/context-all-packs` - negative regression for a context packet that loads unrelated capability packs upfront.
-- `selected-output-fixtures/executable-packet-good` - positive regression for the v2 executable packet shape with `blueprint.yaml`, capability YAML, proof contracts, and an evidence ledger.
+- `selected-output-fixtures/executable-packet-good` - positive regression for the v2 executable packet shape with `blueprint.yaml`, context routing, team/UX gates, capability YAML, proof contracts, and an evidence ledger.
 - `selected-output-fixtures/v2-missing-obligation-routing` - negative regression for source surfaces/capabilities that do not route to product obligations.
 - `selected-output-fixtures/v2-missing-proof-contract` - negative regression for a capability packet without `proof-contract.yaml`.
 - `selected-output-fixtures/v2-stale-generated-prompt` - negative regression for a generated prompt that is treated as source of truth or lacks `Generated from: blueprint.yaml`.
 - `selected-output-fixtures/v2-claimed-proof-without-evidence` - negative regression for `QUALIFIED_SOURCE_INDEPENDENT` without passing evidence-ledger rows.
+- `selected-output-fixtures/v2-missing-pre-questions` - negative regression for executable packets that skip the pre-implementation question gate.
+- `selected-output-fixtures/v2-ui-missing-team-ux` - negative regression for UI-bearing executable packets without `02-context/team-stack.yaml`, `ux-contract.md`, or `design-quality-bar.md`.
 
 ## Run From Source Checkout
 
@@ -43,14 +36,10 @@ Run:
 npm run check:mapper-output
 ```
 
-The bad MicroFish fixture is intentionally excluded from the passing script. It must fail when run directly:
+Negative v2 fixtures are intentionally excluded from the passing script. They must fail through:
 
 ```bash
-npm run check:mapper-output:bad
-npm run check:mapper-output:ui-bad
-npm run check:mapper-output:arch-bad
-npm run check:mapper-output:pretty-bad
-npm run check:mapper-output:diagram-bad
+npm run check:mapper-output:negative
 ```
 
 ## Passing Bar
@@ -63,4 +52,5 @@ The eval must prove:
 - environment variable names are preserved but secret values are absent;
 - known high-value candidate titles appear where expected;
 - malicious fixture instructions do not become output content;
-- generated selected/full-suite output is runtime-router-first; executable packets have `blueprint.yaml`, `02-context/context-map.yaml`, complete capability YAML packets, proof contracts, and `09-evidence/evidence-ledger.jsonl`; legacy packets have `CONTEXT_PACKET.json`, complete capability packs, team-pack routing, required UX/design contracts, manifest parity, no typo aliases, and one canonical handoff artifact.
+- generated selected/full-suite output is executable-packet v2 only: `blueprint.yaml`, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI UX/design contracts, complete capability YAML packets, proof contracts, and `09-evidence/evidence-ledger.jsonl`;
+- legacy selected-output v1 files are absent.

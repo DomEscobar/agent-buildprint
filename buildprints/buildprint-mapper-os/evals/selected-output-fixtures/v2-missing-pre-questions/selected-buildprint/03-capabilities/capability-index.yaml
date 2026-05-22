@@ -1,0 +1,14 @@
+capabilities:
+  - capability_id: ingest-record
+    status: INCLUDED_NEEDS_PROOF
+    obligation_ids:
+      - OBL-INGEST
+    source_surface_ids:
+      - SRC-INGEST-API
+    autonomy_level: workflow
+    required_teams:
+      - test-and-verification
+      - data-persistence
+    proof_contract: 03-capabilities/ingest-record/proof-contract.yaml
+    current_status: SELECTED_UNQUALIFIED
+

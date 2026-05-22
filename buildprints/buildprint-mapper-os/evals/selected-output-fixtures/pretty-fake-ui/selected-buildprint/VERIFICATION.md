@@ -1,3 +1,0 @@
-# Verification
-
-Proof missing intentionally.

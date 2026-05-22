@@ -1,0 +1,6 @@
+{"artifact_id":"blocker-browser-runtime","type":"blocker","capability_id":"ingest-record","status":"blocked","source":"fixture","proves":["browser_runtime_trace"],"notes":"No browser surface in fixture."}
+{"artifact_id":"blocker-provider","type":"blocker","capability_id":"ingest-record","status":"blocked","source":"fixture","proves":["provider_integration_proof"],"notes":"No live provider in fixture."}
+{"artifact_id":"pending-persistence","type":"proof","capability_id":"ingest-record","status":"missing","source":"fixture","proves":["persistence_roundtrip"],"notes":"Must be supplied by implementation."}
+{"artifact_id":"blocker-security","type":"blocker","capability_id":"ingest-record","status":"blocked","source":"fixture","proves":["security_boundary_review"],"notes":"Security review not run."}
+{"artifact_id":"pending-clean-room","type":"proof","capability_id":"ingest-record","status":"missing","source":"fixture","proves":["clean_room_implementation_trace"],"notes":"Clean-room trace not run."}
+

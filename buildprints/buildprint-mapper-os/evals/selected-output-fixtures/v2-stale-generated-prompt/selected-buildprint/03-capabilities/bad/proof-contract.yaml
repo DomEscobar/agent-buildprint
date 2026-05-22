@@ -2,7 +2,8 @@ proof_contract_id: proof-bad
 required_proofs:
   - persistence_roundtrip
 negative_tests: []
-evidence_ledger: 09-evidence/evidence-ledger.jsonl
+evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+snapshot_evidence_seed: 09-evidence/evidence-ledger.jsonl
 promotion_blockers:
   - persistence_roundtrip
 

@@ -50,19 +50,19 @@ phases:
       - source-independent selected-buildprint package
       - capability contracts
       - stable-vs-free boundaries
-      - runtime-router read order with CURRENT_STATE.md and CONTEXT_PACKET.json before active capability loading
+      - executable-packet read order with START_HERE.md, blueprint.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, 02-context/context-map.yaml, and 02-context/team-stack.yaml before active capability loading
     must_pass:
       - selected output stays under selected-buildprint/
       - medium/large/full-suite output is hierarchical
-      - medium/large/full-suite output includes CAPABILITY_INDEX.md
-      - medium/large/full-suite output includes CONTEXT_PACKET.json
-      - every included capability pack has CAPABILITY.md, IMPLEMENTATION.md, and VERIFICATION.md
-      - manifest.json matches actual selected package files
+      - medium/large/full-suite output includes 03-capabilities/capability-index.yaml
+      - medium/large/full-suite output includes 09-evidence/evidence-ledger.jsonl
+      - every included capability packet has capability.yaml, source-evidence.md, product-contract.md, implementation-workflow.md, and proof-contract.yaml
+      - legacy selected-output v1 spine files are absent
       - typo alias files such as VERFICATION.md are absent
 
   - id: 05-execution-planning
     title: Downstream Execution Planning
-    inputs: [EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md]
+    inputs: [prompts/extract-selected.md, templates/executable-packet/]
     must_produce:
       - first slice per included capability without hiding later capability work
       - first verification gate per included capability
@@ -70,7 +70,7 @@ phases:
       - repair-loop and stop/escalation rules
     must_pass:
       - implementing agent does not need to infer critical order, builder passes, or gates
-      - implementing agent can start from CURRENT_STATE.md and CONTEXT_PACKET.json without reading all Markdown files, CAPABILITY_INDEX.md upfront, or unrelated capability packs
+      - implementing agent can start from START_HERE.md and 02-context/context-map.yaml without reading all Markdown files, all capability packets upfront, or unrelated capability packets
 
   - id: 06-qualification
     title: Qualification

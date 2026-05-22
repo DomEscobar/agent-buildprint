@@ -79,7 +79,9 @@ context:
   active_capability: project-workspace-auth
   continue_after_proof: true
   context_map: 02-context/context-map.yaml
+  pre_implementation_questions: PRE_IMPLEMENTATION_QUESTIONS.md
+  team_stack: 02-context/team-stack.yaml
+  ux_contract: 02-context/ux-contract.md
+  design_quality_bar: 02-context/design-quality-bar.md
 generated_artifacts:
   agent_prompt: generated/agent-prompt.md
-  current_buildprint_compat: generated/current-buildprint-compat/
-

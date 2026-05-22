@@ -9,5 +9,5 @@
 | OBL-MEDIA | Mockable image/video media jobs and exportable preview manifest | media-preview-export | INCLUDED_NEEDS_PROOF |
 | OBL-SAFETY | Provider, upload, secret, persistence, and destructive-action safety boundary | safety-runtime-boundary | INCLUDED_RISKY_REQUIRES_HARDENING |
 
-Every obligation must either have passing proof in `09-evidence/evidence-ledger.jsonl` or an explicit blocker in `09-evidence/unresolved-blockers.md`.
+Every obligation must either have passing runtime proof in `.buildprint/evidence/evidence-ledger.jsonl` or an explicit blocker in `.buildprint/blockers.md`; the snapshot `09-evidence/evidence-ledger.jsonl` is only the immutable seed.
 

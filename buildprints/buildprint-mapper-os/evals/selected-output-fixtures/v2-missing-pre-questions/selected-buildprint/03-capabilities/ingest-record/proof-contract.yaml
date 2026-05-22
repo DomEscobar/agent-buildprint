@@ -1,0 +1,13 @@
+proof_contract_id: proof-ingest-record
+required_proofs:
+  - persistence_roundtrip
+  - clean_room_implementation_trace
+negative_tests:
+  - rejects missing required fields
+evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+snapshot_evidence_seed: 09-evidence/evidence-ledger.jsonl
+promotion_blockers:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - security_boundary_review
+

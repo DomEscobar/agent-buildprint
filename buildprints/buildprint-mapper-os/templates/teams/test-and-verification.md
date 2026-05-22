@@ -23,7 +23,7 @@ Claims cannot exceed evidence:
 | Claim Type | Minimum Proof |
 |---|---|
 | UI workflow | browser automation or screenshots for empty/loading/error/blocked/success states |
-| Visual quality | screenshot set reviewed against `DESIGN_QUALITY_BAR.md` |
+| Visual quality | screenshot set reviewed against `02-context/design-quality-bar.md` |
 | API behavior | route/API call with expected response and failure case |
 | Persistence | write, restart/readback, update/delete/export where applicable |
 | Provider/runtime | sandbox/live proof or explicit blocker; test fake only for tests |

@@ -10,6 +10,7 @@ For new selected outputs, emit an agent-executable packet. The root `BUILDPRINT.
 selected-buildprint/
   BUILDPRINT.md
   START_HERE.md
+  PRE_IMPLEMENTATION_QUESTIONS.md
   blueprint.yaml
   00-intent/
     mission.md
@@ -23,6 +24,9 @@ selected-buildprint/
   02-context/
     context-map.yaml
     read-order.yaml
+    team-stack.yaml
+    ux-contract.md
+    design-quality-bar.md
     source-evidence-index.yaml
   03-capabilities/
     capability-index.yaml
@@ -57,10 +61,9 @@ selected-buildprint/
     unresolved-blockers.md
   generated/
     agent-prompt.md
-    current-buildprint-compat/
 ```
 
-`generated/agent-prompt.md` must declare `Generated from: blueprint.yaml` and must state that it is not source of truth. `generated/current-buildprint-compat/` may contain old-shape docs such as `CAPABILITY_INDEX.md`, `CONTRACTS.md`, `VERIFICATION.md`, and `CURRENT_STATE.md` for website or CLI compatibility.
+`generated/agent-prompt.md` must declare `Generated from: blueprint.yaml` and must state that it is not source of truth.
 
 ## Preconditions
 
@@ -69,49 +72,24 @@ selected-buildprint/
 - Source evidence exists for included capabilities or blockers are recorded.
 - Sensitive surfaces have required hardening artifact requirements.
 
-## Legacy Selected Output During Migration
+## Legacy Selected Output Cutoff
 
-The legacy doc-pack shape remains valid during migration. Prefer it only when a downstream tool cannot yet consume the executable packet.
-
-For medium, large, or full-suite scope:
-
-```text
-  selected-buildprint/
-  BUILDPRINT.md
-  CAPABILITY_INDEX.md
-  CONTEXT_PACKET.json
-  SOURCE_SURFACE_COVERAGE.md
-  CONTRACTS.md
-  TEAM_STACK.md
-  VERIFICATION.md
-  EXECUTION_PROTOCOL.md
-  PRE_IMPLEMENTATION_QUESTIONS.md
-  IMPLEMENTATION_PLAN.md
-  CURRENT_STATE.md
-  UX_CONTRACT.md  # required when selected scope has user-facing UI/browser/dashboard/graph/report/editor/operator console
-  DESIGN_QUALITY_BAR.md  # required when selected scope has user-facing UI/browser/dashboard/graph/report/editor/operator console
-  manifest.json
-  capabilities/<capability-id>/
-    CAPABILITY.md
-    VERIFICATION.md
-    IMPLEMENTATION.md
-    CONTRACTS.md  # only when local contracts are needed
-```
-
-For genuinely small scopes, a flat package may use `CAPABILITIES.md` instead of capability packs.
+Do not emit the legacy doc-pack shape. Root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `capabilities/`, and `generated/current-buildprint-compat/` are forbidden in new Mapper OS selected outputs.
 
 ## Router-First Execution Packet Rule
 
 Medium, large, and full-suite outputs are invalid unless a fresh coding agent can start by reading only the router and active context:
 
 1. `BUILDPRINT.md`
-2. `START_HERE.md` and `blueprint.yaml` for executable packets, or `CURRENT_STATE.md` for legacy packets
-3. `02-context/context-map.yaml` for executable packets, or `CONTEXT_PACKET.json` for legacy packets
+2. `START_HERE.md` and `blueprint.yaml`
+3. `02-context/context-map.yaml`
+4. `PRE_IMPLEMENTATION_QUESTIONS.md`
+5. `02-context/team-stack.yaml`
 4. the active capability packet only
 
-Do not require the implementing agent to read all Markdown files or all capability packs before it knows the next action. In executable packets, `02-context/context-map.yaml` is the active-context router and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready pack. In legacy packets, keep the existing `CURRENT_STATE.md` / `CONTEXT_PACKET.json` router rule. UI, provider, data, and security docs are loaded only when the active context requires them.
+Do not require the implementing agent to read all Markdown files or all capability packs before it knows the next action. `02-context/context-map.yaml` is the active-context router, `02-context/team-stack.yaml` is the quality-gate router, and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready pack. UI-bearing executable packets must include `02-context/ux-contract.md` and `02-context/design-quality-bar.md`; active UI capabilities load them before implementation. Provider, data, and security docs are loaded only when the active context requires them.
 
-Set an explicit execution mode. Default full-suite selected outputs to `continuous-full-suite`: the implementation agent starts with the active pack, proves it, advances `CURRENT_STATE.md` and `CONTEXT_PACKET.json`, then consults `CAPABILITY_INDEX.md` to choose the next dependency-ready pack without reading unrelated packs upfront. Use `active-capability-handoff` only when the user explicitly requests a constrained validation or handoff run.
+Set an explicit execution mode. Default full-suite selected outputs to `continuous-full-suite`: the implementation agent starts with the active pack, proves it, updates local `.buildprint/state.json` plus handoff files, then consults `03-capabilities/capability-index.yaml` to choose the next dependency-ready pack without reading unrelated packs upfront. Use `active-capability-handoff` only when the user explicitly requests a constrained validation or handoff run.
 
 ## Extraction Rules
 
@@ -120,12 +98,11 @@ Set an explicit execution mode. Default full-suite selected outputs to `continuo
 - For executable packets, `00-intent/source-surface-map.md` and `02-context/source-evidence-index.yaml` replace loose source-surface coverage prose.
 - For executable packets, `03-capabilities/capability-index.yaml` replaces `CAPABILITY_INDEX.md` as the machine-routable capability index.
 - For executable packets, each capability uses `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, and `proof-contract.yaml`; compatibility Markdown is generated output only.
-- For executable packets, split proof policy from proof result: `08-evaluation/` defines what must be proven and `09-evidence/evidence-ledger.jsonl` records what was actually proven or blocked.
+- For executable packets, split proof policy from proof result: `08-evaluation/` defines what must be proven, packaged `09-evidence/evidence-ledger.jsonl` is the immutable seed, and runtime `.buildprint/evidence/evidence-ledger.jsonl` records what was actually proven or blocked after bootstrap.
 - Derive qualification from evidence ledger rows. Do not promote `claim_status` unless every required promotion proof has passing evidence.
 - Do not preserve source internals unless externally observable or qualification-relevant.
-- Every selected output must include `SOURCE_SURFACE_COVERAGE.md`.
-- `SOURCE_SURFACE_COVERAGE.md` must list every high-signal census surface and its disposition: `OWNED_BY_CAPABILITY`, `MERGED_INTO_CAPABILITY`, `OUT_OF_SCOPE_BY_USER_ONLY`, `BLOCKED_NEEDS_REVIEW`, or `LOW_SIGNAL_IGNORED_WITH_REASON` only when a previously high-signal surface is downgraded with evidence.
-- Capabilities must reference owned source surface IDs in their `CAPABILITY.md`; this is traceability, not route/function parity.
+- `00-intent/source-surface-map.md` must list every high-signal census surface and its disposition: `OWNED_BY_CAPABILITY`, `MERGED_INTO_CAPABILITY`, `OUT_OF_SCOPE_BY_USER_ONLY`, `BLOCKED_NEEDS_REVIEW`, or `LOW_SIGNAL_IGNORED_WITH_REASON` only when a previously high-signal surface is downgraded with evidence.
+- Capabilities must reference owned source surface IDs in their `capability.yaml`; this is traceability, not route/function parity.
 - Do not map routes/functions 1:1 unless that is the real product boundary.
 - Do not satisfy source-surface coverage by dumping every route/function into a table. Each owned surface must connect to a named product obligation, contract, blocker, intentional merge, or explicit out-of-scope decision.
 - If a high-signal surface is not owned by any capability, mark it as `BLOCKED_NEEDS_REVIEW`, `MERGED_INTO_CAPABILITY`, or `OUT_OF_SCOPE_BY_USER_ONLY`; do not omit it.
@@ -135,26 +112,25 @@ Set an explicit execution mode. Default full-suite selected outputs to `continuo
 - Include stable-vs-free boundaries for every capability.
 - Include first implementation slice and first verification gate for every included capability. Implementation slicing is not scope shrinking.
 - Include a per-capability evidence/depth matrix for every medium, large, or full-suite output with columns for required teams, source evidence, product obligation, required topology, topology status, UI/UX status, API, domain logic, persistence/state, provider/runtime, failure states, proof command, proof artifact, negative test, runtime/browser evidence, depth status, and promotion blocker.
-- Copy/emit `TEAM_STACK.md`; do not use old generic pass names. Generate `TEAM_STACK.md` for every selected/full-suite output. It must list selected team packs, trigger signals, blocking gates, required evidence, and review order. Team packs are markdown quality lenses, not autonomous agents and not user-selectable quality tiers. Team packs are original Mapper OS rules; public skill pages may inspire them, but selected output must not vendor or require third-party skill installation.
+- Copy/emit `02-context/team-stack.yaml`; do not use old generic pass names. It must list selected team packs, trigger signals, blocking gates, required evidence, and review order. Team packs are markdown quality lenses, not autonomous agents and not user-selectable quality tiers. Team packs are original Mapper OS rules; public skill pages may inspire them, but selected output must not vendor or require third-party skill installation.
 - Team routing: UI-bearing output selects `ux-ui-craft`, `product-architect`, and `test-and-verification`; medium/large/full-suite output selects `product-architect` and `test-and-verification`; provider/API/upload/job/runtime/webhook/external-side-effect output selects `integration-runtime`; auth/admin/user-data/payment/destructive/secrets/public-deployment output selects `security-boundary`; persistence/import/export/reporting/project-data/graph/model output selects `data-persistence`.
-- UI-bearing output must generate `UX_CONTRACT.md` with screens, workflows, empty/loading/error/blocked/success states, component inventory, responsive behavior, visual quality bar, accessibility proof, interaction polish, and screenshot/browser proof plan.
-- UI-bearing output must generate `DESIGN_QUALITY_BAR.md` with taste variables, product category, density/motion/layout targets, visual hierarchy, forbidden generic patterns, interaction polish, accessibility gates, responsive gates, and required screenshot set.
-- Emit a Capability Proof Ledger in `VERIFICATION.md` for every included capability. For each row include required proof, command/API/browser path, artifact path, negative test, runtime/browser evidence, status, and blocker.
-- Emit `CONTEXT_PACKET.json` for medium, large, and full-suite outputs. `mustRead` may include only `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `TEAM_STACK.md`, and the active capability pack's `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`. Put UI/provider/data/security docs in `readIfNeeded`. Put unrelated capability packs and `CAPABILITY_INDEX.md` in `doNotReadYet` until proof closes.
+- UI-bearing output must generate `02-context/ux-contract.md` with screens, workflows, empty/loading/error/blocked/success states, component inventory, responsive behavior, visual quality bar, accessibility proof, interaction polish, and screenshot/browser proof plan.
+- UI-bearing output must generate `02-context/design-quality-bar.md` with taste variables, product category, density/motion/layout targets, visual hierarchy, forbidden generic patterns, interaction polish, accessibility gates, responsive gates, and required screenshot set.
+- Emit proof requirements in each capability `proof-contract.yaml`; each proof contract must include required proof, command/API/browser path, artifact expectation, negative tests, runtime/browser evidence needs, status blockers, and the runtime evidence ledger path.
 - Use role-chained artifacts, not free-form roleplay: source mapper output must feed product obligations; product obligations must feed required topology; topology must feed implementation planning; QA must feed proof ledger rows; skeptical reviewer must feed depth status and promotion blockers.
 - For every included capability, emit source evidence, product obligation, required topology/layers, first implementation slice, required proof command, required proof artifact, negative test, promotion blocker, and depth status rule. If source proof is inferred or blocked, label it explicitly instead of omitting the field.
 - Include an architecture topology gate for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy outputs. The gate must reject mostly single-file backends, one-file static UI shells, route-shaped endpoints, and seam-only adapters as product-quality implementation unless explicitly justified as tiny scope.
-- Browser/UI products require `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, browser proof, or an explicit blocker. Static text/label presence is not enough.
+- Browser/UI products require UX contract, design quality bar, browser proof, or an explicit blocker. Static text/label presence is not enough.
 - Provider-backed or runtime-heavy products require live/sandbox proof or explicit blocker. Deterministic adapters preserve contract shape only and must be marked `CONTRACT_SEAM_ONLY` until provider/runtime proof exists.
 - Persistence claims require restart/readback/delete/export proof where applicable or must remain `CONTRACT_SEAM_ONLY`.
 - Upload, auth/admin, destructive, provider, runtime/job, persistence mutation, export, and security-sensitive capabilities require negative/failure-state tests or explicit blockers.
 - Use depth statuses: `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, `OUT_OF_SCOPE_BY_USER_ONLY`, `FAKE_OR_PLACEHOLDER_FAIL`.
 - Emit implementation signals for the downstream harness: user-facing UI, uploads, external providers, long-running jobs, graph persistence, simulation/runtime execution, reports, auth/admin, destructive controls, deployment surface, and recommended review specialties.
-- Generate `PRE_IMPLEMENTATION_QUESTIONS.md` with at most five blocking questions that materially affect execution mode, security, scope, provider behavior, persistence, deployment, or qualification status. Do not ask how good the implementation should be and do not ask the user to choose a team; max-quality is mandatory and teams are inferred from Buildprint signals.
-- `HANDOFF.md` and `EXECUTION_PROTOCOL.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, record concrete max-quality defaults and execution mode in `CURRENT_STATE.md`, and execute team-pack gates from `TEAM_STACK.md`.
+- Generate `PRE_IMPLEMENTATION_QUESTIONS.md` with at most five blocking questions that materially affect execution mode, security, scope, provider behavior, persistence, deployment, or qualification status. Do not ask how good the implementation should be and do not ask the user to choose a team; max-quality is mandatory and teams are inferred from Buildprint signals. Executable packets must route through this file before the active capability packet.
+- `START_HERE.md`, `02-context/context-map.yaml`, and `generated/agent-prompt.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, use concrete safe defaults, and execute team-pack gates from `02-context/team-stack.yaml`.
 - Keep unresolved questions out of files that claim implementation readiness.
 - Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
-- Validate selected output shape before handoff. Fail executable packets if `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `03-capabilities/capability-index.yaml`, a capability `proof-contract.yaml`, or `09-evidence/evidence-ledger.jsonl` is missing; fail legacy packets if `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, or `TEAM_STACK.md` is missing, `UX_CONTRACT.md` or `DESIGN_QUALITY_BAR.md` is missing for UI-bearing output, required team packs are absent, any included capability pack lacks sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, or `VERIFICATION.md`, `manifest.json` lists missing/non-canonical files, typo aliases such as `VERFICATION.md` exist, or both `HANDOFF.md` and `HANDOVER.md` appear as canonical spine files.
+- Validate selected output shape before handoff. Fail executable packets if `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI `02-context/ux-contract.md`, UI `02-context/design-quality-bar.md`, `03-capabilities/capability-index.yaml`, a capability `proof-contract.yaml`, or `09-evidence/evidence-ledger.jsonl` is missing. Fail any output that emits legacy selected-output v1 files such as root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `capabilities/`, `generated/current-buildprint-compat/`, typo aliases such as `VERFICATION.md`, or duplicate canonical handoff files.
 
 ## Behavior Loss Review
 

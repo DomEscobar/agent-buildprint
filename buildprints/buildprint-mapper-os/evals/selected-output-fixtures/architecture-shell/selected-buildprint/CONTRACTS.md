@@ -1,3 +1,0 @@
-# Contracts
-
-Static shell contract.

@@ -1,3 +1,0 @@
-# IMPLEMENTATION
-
-Implement active behavior.

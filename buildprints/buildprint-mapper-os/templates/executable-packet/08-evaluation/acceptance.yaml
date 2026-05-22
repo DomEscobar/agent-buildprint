@@ -5,5 +5,5 @@ acceptance:
     - persistence_roundtrip
     - security_boundary_review
     - clean_room_implementation_trace
-  ledger_required: 09-evidence/evidence-ledger.jsonl
-
+  snapshot_ledger_seed: 09-evidence/evidence-ledger.jsonl
+  runtime_ledger_required: .buildprint/evidence/evidence-ledger.jsonl

@@ -23,11 +23,11 @@ For medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime
 
 | View | Required Content | Evidence Location |
 |---|---|---|
-| Context | users, systems, providers, stores, deployment boundary | `IMPLEMENTATION_PLAN.md` |
-| Component | UI/API/service/provider/storage/job/test modules | `CAPABILITY_INDEX.md` |
+| Context | users, systems, providers, stores, deployment boundary | `07-execution/implementation-plan.yaml` |
+| Component | UI/API/service/provider/storage/job/test modules | `03-capabilities/capability-index.yaml` |
 | Data flow | one real vertical slice from input to observable result | capability `IMPLEMENTATION.md` |
 | Cross-cutting | auth, errors, logging, validation, secrets, limits | `SECURITY.md`, `OBSERVABILITY.md`, capability pack |
-| Decision notes | choice, alternatives, tradeoff, consequence | `IMPLEMENTATION_PLAN.md` |
+| Decision notes | choice, alternatives, tradeoff, consequence | `07-execution/implementation-plan.yaml` |
 
 ### Boundary Decision Rules
 

@@ -1,0 +1,16 @@
+active_capability: ingest-record
+must_read:
+  - START_HERE.md
+  - blueprint.yaml
+  - 03-capabilities/ingest-record/capability.yaml
+  - 03-capabilities/ingest-record/product-contract.md
+  - 03-capabilities/ingest-record/implementation-workflow.md
+  - 03-capabilities/ingest-record/proof-contract.yaml
+read_if_needed:
+  - 04-interfaces/api-contracts.yaml
+  - 05-state-runtime/persistence.md
+  - 06-safety/threat-model.md
+do_not_read_yet:
+  - 03-capabilities/* except 03-capabilities/ingest-record/
+  - generated/agent-prompt.md until prompt output is needed
+

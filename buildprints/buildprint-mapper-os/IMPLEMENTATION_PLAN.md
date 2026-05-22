@@ -11,7 +11,7 @@ This file describes how to maintain Mapper OS itself.
 ## Maintenance Milestones
 
 1. Keep `mapper-os-requirement.md` and this package aligned.
-2. Keep selected-output templates aligned to the required package shape.
+2. Keep executable-packet templates aligned to the required package shape.
 3. Keep policies focused on evidence, no-fake behavior, minimal questions, and source independence.
 4. Keep fixture review under `evals/golden-projects/` as manual or agent-run regression input.
 5. Keep `agb analyze`, `agb check`, and `agb start` working; do not reintroduce `agb map`.
@@ -20,7 +20,7 @@ This file describes how to maintain Mapper OS itself.
 
 - Mapper logic belongs in the Mapper OS Buildprint and agent session, not in a deterministic CLI scanner.
 - Source-independent readiness is qualified by evidence and verification, not by file generation.
-- Legacy matrix files are not default selected-output artifacts; their concepts live in `CAPABILITY_INDEX.md`, capability packs, `IMPLEMENTATION_PLAN.md`, and `VERIFICATION.md`.
+- Legacy selected-output v1 files are no longer generated. Their useful concepts now live in executable-packet v2 files: `03-capabilities/capability-index.yaml`, per-capability packets, `07-execution/implementation-plan.yaml`, `08-evaluation/`, and `.buildprint/evidence/evidence-ledger.jsonl`.
 
 ## Risk Register
 

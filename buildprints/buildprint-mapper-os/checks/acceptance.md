@@ -2,30 +2,24 @@
 
 - [ ] Default mapper run creates discovery/evidence/quality output only.
 - [ ] Selected extraction creates `selected-buildprint/`.
-- [ ] New selected extraction emits an executable packet with `START_HERE.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `03-capabilities/capability-index.yaml`, per-capability `capability.yaml`, `implementation-workflow.md`, `proof-contract.yaml`, `08-evaluation/`, and `09-evidence/evidence-ledger.jsonl`.
-- [ ] `BUILDPRINT.md` in executable packets is a compatibility router, not the primary machine contract.
+- [ ] Selected extraction emits executable-packet v2 only.
+- [ ] Executable packets include `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI `02-context/ux-contract.md`, UI `02-context/design-quality-bar.md`, `03-capabilities/capability-index.yaml`, per-capability `capability.yaml`, `implementation-workflow.md`, `proof-contract.yaml`, `08-evaluation/`, and `09-evidence/evidence-ledger.jsonl`.
+- [ ] Root `BUILDPRINT.md` in executable packets is a compatibility router, not the primary machine contract.
 - [ ] `generated/agent-prompt.md` declares `Generated from: blueprint.yaml` and states that it is not source of truth.
-- [ ] `claim_status` promotion is blocked unless `09-evidence/evidence-ledger.jsonl` contains passing evidence rows for every required promotion proof.
-- [ ] Medium, large, and full-suite selected outputs include `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, and `capabilities/`.
-- [ ] UI-bearing selected outputs include `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` with screens, workflows, taste variables, state inventory, component inventory, responsive behavior, visual quality bar, accessibility proof, and browser proof plan.
-- [ ] Every included capability has `CAPABILITY.md`, `VERIFICATION.md`, and `IMPLEMENTATION.md`.
-- [ ] Fresh coding agents can start from `BUILDPRINT.md` -> `CURRENT_STATE.md` -> `EXECUTION_PROTOCOL.md` -> `PRE_IMPLEMENTATION_QUESTIONS.md` -> `TEAM_STACK.md` -> `CONTEXT_PACKET.json` -> one active capability pack without reading every Markdown file.
-- [ ] `CAPABILITY_INDEX.md` is used after proof to select the next dependency-ready pack, not as an upfront context document.
-- [ ] `CONTEXT_PACKET.json` contains narrow `mustRead`, gated `readIfNeeded`, explicit `doNotReadYet`, proof gate, advance target, and stop conditions.
-- [ ] `TEAM_STACK.md` selects required team packs from product signals and forbids lazy/simple/quick quality tiers.
-- [ ] `manifest.json` matches actual selected package files and does not list missing files, typo aliases, or non-canonical spine files.
+- [ ] Executable packet agents read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, or apply concrete safe defaults.
+- [ ] `02-context/context-map.yaml` and `02-context/read-order.yaml` route through team gates before active capability implementation.
+- [ ] UI-bearing packets route through `02-context/ux-contract.md` and `02-context/design-quality-bar.md`; proof contracts require `ux_design_gate`, `screenshot_state_set`, and browser evidence tied to empty/loading/error/blocked/success states.
+- [ ] `03-capabilities/capability-index.yaml` is the dependency/continuation index and is consulted after proof to choose the next dependency-ready packet.
+- [ ] Every included capability has `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, and `proof-contract.yaml`.
+- [ ] Every proof contract writes runtime evidence only to `.buildprint/evidence/evidence-ledger.jsonl` and preserves packaged `09-evidence/evidence-ledger.jsonl` as the immutable seed.
+- [ ] `claim_status` promotion is blocked unless runtime evidence contains passing rows for every required promotion proof.
+- [ ] Legacy selected-output v1 files are absent: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `capabilities/`, and `generated/current-buildprint-compat/`.
 - [ ] Typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, or `CAPABILTY_INDEX.md` are absent.
 - [ ] Canonical handoff is singular; both `HANDOFF.md` and `HANDOVER.md` do not appear as selected package spine files.
 - [ ] Every `OBSERVED` claim cites source path and line or section.
 - [ ] Census hints never assert product behavior, absence, parity, provider completeness, persistence, or readiness.
 - [ ] Included/excluded/blocked/test-only capability statuses are complete.
 - [ ] No included capability is placeholder-backed, mock-backed, no-op, skeleton, deterministic-adapter-only, static-shell-only, or in-memory-only where persistence is claimed.
-- [ ] Medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy selected outputs include an architecture topology gate.
-- [ ] Selected outputs include a capability depth matrix that distinguishes `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, and `FAKE_OR_PLACEHOLDER_FAIL`.
-- [ ] `CAPABILITY_INDEX.md` contains required teams, source evidence, product obligation, required topology, topology status, UI/UX status, proof command, proof artifact, negative test, runtime/browser evidence, and promotion blocker fields.
-- [ ] `VERIFICATION.md` contains a Capability Proof Ledger and Evidence Budget Rule.
-- [ ] `IMPLEMENTATION_PLAN.md` contains an Evidence-Producing Role Chain and Team-Pack Gate where every role produces artifacts consumed by the next role.
-- [ ] `EXECUTION_PROTOCOL.md` blocks completion until proof-ledger rows are closed as proven, blocked, downgraded, or explicitly out of scope.
-- [ ] Downstream execution plan names first slice, first verification gate, architecture/depth gates, repair loop, and stop condition.
+- [ ] Medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy selected outputs include topology and first-slice proof gates in executable-packet files.
 - [ ] Qualification label is one of `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
 - [ ] Public wording avoids validated/production-ready/complete/end-to-end unless qualified evidence exists.

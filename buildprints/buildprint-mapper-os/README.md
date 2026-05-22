@@ -15,7 +15,7 @@ Read:
 5. `EXECUTION_PROTOCOL.md`
 6. `VERIFICATION.md`
 
-For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read `BUILDPRINT.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `TEAM_STACK.md`, `CONTEXT_PACKET.json`, then only the active capability pack. `CAPABILITY_INDEX.md` is consulted after proof to choose the next dependency-ready pack.
+For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read the executable packet router: `BUILDPRINT.md`, `START_HERE.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/team-stack.yaml`, then only the active capability packet. `03-capabilities/capability-index.yaml` is consulted after proof to choose the next dependency-ready pack.
 
 ## Default Behavior
 
@@ -30,15 +30,16 @@ For generated selected packages, downstream implementers should not read all Mar
 
 ## Selected Output
 
-Selected output belongs under `selected-buildprint/`. New Mapper OS output should be an executable packet:
+Selected output belongs under `selected-buildprint/`. Mapper OS output must be an executable packet:
 
 ```text
 BUILDPRINT.md
 START_HERE.md
+PRE_IMPLEMENTATION_QUESTIONS.md
 blueprint.yaml
 00-intent/
 01-operating-model/
-02-context/
+02-context/        # context-map, team-stack, UX contract, design quality bar
 03-capabilities/
 04-interfaces/
 05-state-runtime/
@@ -49,25 +50,9 @@ blueprint.yaml
 generated/
 ```
 
-`BUILDPRINT.md` is a compatibility router. `blueprint.yaml` is the machine contract, `03-capabilities/` owns capability packets, `08-evaluation/` defines required proof, and `09-evidence/evidence-ledger.jsonl` records proof or blockers.
+`BUILDPRINT.md` is a compatibility router. `blueprint.yaml` is the machine contract, `02-context/` owns routing and team/UX gates, `03-capabilities/` owns capability packets, `08-evaluation/` defines required proof, and `09-evidence/evidence-ledger.jsonl` seeds the writable runtime ledger at `.buildprint/evidence/evidence-ledger.jsonl`, where agents record proof or blockers.
 
-Legacy output remains valid during migration. Its spine is:
-
-```text
-BUILDPRINT.md
-CAPABILITY_INDEX.md
-CONTEXT_PACKET.json
-CONTRACTS.md
-VERIFICATION.md
-EXECUTION_PROTOCOL.md
-PRE_IMPLEMENTATION_QUESTIONS.md
-IMPLEMENTATION_PLAN.md
-CURRENT_STATE.md
-manifest.json
-capabilities/
-```
-
-Every included capability pack must contain `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`. `manifest.json` must match actual files and typo aliases such as `VERFICATION.md` are invalid.
+Legacy selected-output v1 files are no longer accepted: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, and `capabilities/`.
 
 ## Qualification
 

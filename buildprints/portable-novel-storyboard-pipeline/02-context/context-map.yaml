@@ -5,6 +5,10 @@ must_read:
   - START_HERE.md
   - blueprint.yaml
   - 02-context/context-map.yaml
+  - PRE_IMPLEMENTATION_QUESTIONS.md
+  - 02-context/team-stack.yaml
+  - 02-context/ux-contract.md
+  - 02-context/design-quality-bar.md
   - 03-capabilities/project-workspace-auth/capability.yaml
   - 03-capabilities/project-workspace-auth/product-contract.md
   - 03-capabilities/project-workspace-auth/implementation-workflow.md
@@ -17,7 +21,6 @@ read_if_needed:
   - 08-evaluation/quality-rubric.yaml
 do_not_read_yet:
   - 03-capabilities/* except 03-capabilities/project-workspace-auth/*
-  - generated/current-buildprint-compat/*
   - generated/agent-prompt.md
 advance_after_proof:
   lookup: 03-capabilities/capability-index.yaml
@@ -29,4 +32,3 @@ stop_conditions:
   - destructive safety issue
   - secret exposure
   - context/tooling limit
-

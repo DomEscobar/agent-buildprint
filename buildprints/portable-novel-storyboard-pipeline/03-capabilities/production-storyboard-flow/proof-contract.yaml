@@ -3,6 +3,8 @@ required_proofs:
   - provider_integration_proof
   - persistence_roundtrip
   - browser_runtime_trace
+  - ux_design_gate
+  - screenshot_state_set
 commands:
   suggested:
     - npm test -- production-storyboard-flow
@@ -11,8 +13,10 @@ negative_tests:
   - malformed storyboard output is rejected
   - saved flow reloads after restart
   - storyboard row without linked script/event/asset is blocked
-evidence_ledger: 09-evidence/evidence-ledger.jsonl
+evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+snapshot_evidence_seed: 09-evidence/evidence-ledger.jsonl
 promotion_blockers:
   - no storyboard browser proof
+  - no screenshots against 02-context/ux-contract.md and 02-context/design-quality-bar.md
+  - no storyboard screenshot showing linked rows, timeline lanes, selected-shot inspector, and persisted readback
   - no flow restart/readback proof
-

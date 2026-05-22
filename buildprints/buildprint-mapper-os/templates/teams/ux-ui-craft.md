@@ -10,7 +10,7 @@ Run this pass before frontend implementation and again before UI completion is c
 
 ### Taste Variables
 
-Set these values in `DESIGN_QUALITY_BAR.md` for the selected product surface:
+Set these values in `02-context/design-quality-bar.md` for the selected product surface:
 
 | Variable | Range | Meaning | Default |
 |---|---:|---|---:|
@@ -55,8 +55,8 @@ Do not ask the user to choose these unless the product intent is genuinely ambig
 
 ### Required Output
 
-- `UX_CONTRACT.md` with screen inventory, workflows, state inventory, component inventory, responsive behavior, accessibility proof, and browser proof plan.
-- `DESIGN_QUALITY_BAR.md` with taste variables, product category, density/motion targets, visual hierarchy, forbidden generic patterns, screenshot requirements, accessibility gates, and responsive gates.
+- `02-context/ux-contract.md` with screen inventory, workflows, state inventory, component inventory, responsive behavior, accessibility proof, and browser proof plan.
+- `02-context/design-quality-bar.md` with taste variables, product category, density/motion targets, visual hierarchy, forbidden generic patterns, screenshot requirements, accessibility gates, and responsive gates.
 - Browser automation or screenshots for each user-facing flow before UI completion is claimed.
 - Empty, loading, error, blocked, success, and partial-data states for every relevant workflow.
 

@@ -1,0 +1,19 @@
+capability_id: ingest-record
+status: INCLUDED_NEEDS_PROOF
+product_obligation_ids:
+  - OBL-INGEST
+source_surface_ids:
+  - SRC-INGEST-API
+autonomy_level: workflow
+proof_contract: 03-capabilities/ingest-record/proof-contract.yaml
+stable:
+  - accepts submitted records
+  - validates required fields
+  - persists records for readback
+free:
+  - internal module boundaries
+  - validation library choice
+stop_rules:
+  - stop if persistence proof cannot run
+  - stop if source evidence contradicts obligation mapping
+
