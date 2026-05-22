@@ -1,0 +1,4 @@
+source_surfaces:
+  - surface_id: SRC-BAD
+    obligation_id: missing
+

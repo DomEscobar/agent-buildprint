@@ -1,0 +1,13 @@
+proof_contract_id: proof-<capability-id>
+required_proofs:
+  - <proof-id>
+negative_tests:
+  - <negative-test-or-not-applicable>
+evidence_ledger: 09-evidence/evidence-ledger.jsonl
+promotion_blockers:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+  - security_boundary_review
+  - clean_room_implementation_trace
+

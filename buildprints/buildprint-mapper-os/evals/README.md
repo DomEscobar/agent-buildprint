@@ -21,6 +21,11 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 - `selected-output-fixtures/architecture-diagram-only` - negative regression for architecture notes without first real vertical slice proof.
 - `selected-output-fixtures/old-read-order` - negative regression for selected output that still puts `CAPABILITY_INDEX.md` before `CURRENT_STATE.md`.
 - `selected-output-fixtures/context-all-packs` - negative regression for a context packet that loads unrelated capability packs upfront.
+- `selected-output-fixtures/executable-packet-good` - positive regression for the v2 executable packet shape with `blueprint.yaml`, capability YAML, proof contracts, and an evidence ledger.
+- `selected-output-fixtures/v2-missing-obligation-routing` - negative regression for source surfaces/capabilities that do not route to product obligations.
+- `selected-output-fixtures/v2-missing-proof-contract` - negative regression for a capability packet without `proof-contract.yaml`.
+- `selected-output-fixtures/v2-stale-generated-prompt` - negative regression for a generated prompt that is treated as source of truth or lacks `Generated from: blueprint.yaml`.
+- `selected-output-fixtures/v2-claimed-proof-without-evidence` - negative regression for `QUALIFIED_SOURCE_INDEPENDENT` without passing evidence-ledger rows.
 
 ## Run From Source Checkout
 
@@ -58,4 +63,4 @@ The eval must prove:
 - environment variable names are preserved but secret values are absent;
 - known high-value candidate titles appear where expected;
 - malicious fixture instructions do not become output content;
-- generated selected/full-suite output is runtime-router-first, has `CONTEXT_PACKET.json`, complete capability packs, team-pack routing, required UX/design contracts, manifest parity, no typo aliases, and one canonical handoff artifact.
+- generated selected/full-suite output is runtime-router-first; executable packets have `blueprint.yaml`, `02-context/context-map.yaml`, complete capability YAML packets, proof contracts, and `09-evidence/evidence-ledger.jsonl`; legacy packets have `CONTEXT_PACKET.json`, complete capability packs, team-pack routing, required UX/design contracts, manifest parity, no typo aliases, and one canonical handoff artifact.

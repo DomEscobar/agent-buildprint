@@ -1,0 +1,15 @@
+capability_id: <capability-id>
+status: INCLUDED_NEEDS_PROOF
+product_obligation_ids:
+  - OBL-<id>
+source_surface_ids:
+  - SRC-<id>
+autonomy_level: workflow
+proof_contract: 03-capabilities/<capability-id>/proof-contract.yaml
+stable:
+  - <externally meaningful behavior>
+free:
+  - <implementation detail the agent may choose>
+stop_rules:
+  - stop if proof cannot be produced or blocked with evidence
+

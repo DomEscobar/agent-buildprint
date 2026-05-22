@@ -1,88 +1,16 @@
-schema: agent-buildprint/acceptance.v1
-canonical_start: BUILDPRINT.md
 acceptance:
-  default_provider_mode: mock-no-network
-  alignment:
-    default_phrase: Use default storyboard preset
-    questions_file: questions.md
-    require_confirmation_unless_default: true
-    forbid_broad_product_strategy_questions: true
-  required_commands:
-    - name: unit_and_contract_tests
-      command: npm test
-      evidence: test summary with pass/fail counts
-    - name: production_build
-      command: npm run build
-      evidence: build summary and generated artifact note
-  required_runtime:
-    browser_happy_path:
-      required: true
-      source: HEAD_TO_FOOT_QA.md
-      must_click_rendered_controls: true
-      must_parse_manifest_from_rendered_ui: true
-      screenshots_required:
-        - completed-state desktop
-        - completed-state mobile
-      visual_quality_required: true
-      must_render:
-        - local storyboard thumbnails or deterministic visual placeholders
-        - selected-shot inspector
-        - compact media tiles or badges
-        - secondary debug drawer for task log/raw refs/manifest
-      forbidden_primary_surfaces:
-        - raw media URI table
-        - manifest textarea
-        - task log
-        - generic admin dashboard/card soup
-    negative_paths:
-      required: true
-      source: BROWSER_QA_SCENARIOS.md
-      scenarios:
-        - event extraction failure shows reason and retry
-        - invalid storyboard XML shows validation error and preserves prior rows
-        - delayed job cancellation prevents success artifact creation
-        - mock media failure records failed state and retry can succeed
-        - storyboard mode switching changes prompt/image/track behavior
-  required_manifest_counts:
-    version: portable-preview-1
-    chapters_min: 3
-    events_min: 3
-    scripts_min: 1
-    assets_min: 4
-    storyboard_rows_min: 1
-    tracks_min: 1
-    media_records_min: 1
-    task_log_entries_min: 1
-    limitations_text_required: true
-  required_artifacts:
-    - BUILD_REPORT.md
-    - RUNTIME_LIVE_TEST_REPORT.md
-    - browser screenshot(s)
-    - completed-state desktop/mobile screenshot(s)
-    - visual fixture asset inventory
-    - product-quality QA notes
-    - chat handover summary
-    - filled validation report from VALIDATION_TEMPLATE.md
-    - completed checks/acceptance.md
-    - test/build command summary
-    - exported manifest sample
-    - explicit remaining gaps
-  static_gates:
-    - no provider secret values in artifacts
-    - no live network calls in default tests
-    - safe/unsafe claims visible in docs or UI
-    - no placeholder/no-op controls counted as implemented
-    - no raw provider refs as primary media UI
-    - no empty-state screenshot accepted as UX proof
-    - limitations visible but not dominant in primary workbench
-    - final chat handover includes outcome, evidence, gaps, and recommended next direction
-    - numbered phase plans followed or blockers recorded
-  optional_live_provider_gate:
-    required: false
-    env:
-      TOONFLOW_ENABLE_LIVE_PROVIDERS: "1"
-      NO_NETWORK: "0"
-    rules:
-      - credentials must not be persisted in manifest or task log
-      - live errors normalize into errorReason
-      - mock/no-network tests must still pass without credentials
+  - id: browser_runtime_trace
+    required: true
+    status: missing
+  - id: provider_integration_proof
+    required: true
+    status: missing
+  - id: persistence_roundtrip
+    required: true
+    status: missing
+  - id: security_boundary_review
+    required: true
+    status: missing
+  - id: clean_room_implementation_trace
+    required: true
+    status: missing

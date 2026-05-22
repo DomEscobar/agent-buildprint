@@ -1,15 +1,11 @@
-# Acceptance Checks
+# Acceptance Checklist
 
-- [ ] `BUILDPRINT.md` was read first and treated as the authority spine.
-- [ ] User accepted `Use default storyboard preset` or `questions.md` was asked exactly and confirmed.
-- [ ] `PLAN.md` and numbered `plans/*.md` were followed in order, or blocked phases are recorded.
-- [ ] Included scope is implemented or mapped end-to-end; excluded scope is explicit.
-- [ ] `SPEC.md` behavior requirements are satisfied or blockers are listed.
-- [ ] `CONTRACTS.md` interfaces, data boundaries, and integration assumptions are honored.
-- [ ] `TEST_MATRIX.md` checks passed or every skipped check has a concrete blocker.
-- [ ] `VALIDATION_TEMPLATE.md` is filled with exact commands, evidence, gaps, and final status.
-- [ ] Product UI is a creative workbench: storyboard thumbnails, timeline lanes, selected-shot inspector, compact media state, and export affordance are visible in completed screenshots.
-- [ ] Raw URI tables, task logs, manifest JSON, and limitations are secondary, not the primary preview surface.
-- [ ] Completed desktop and mobile screenshots are attached or referenced.
-- [ ] Final chat handover states outcome, evidence, known gaps, and recommended next direction.
-- [ ] No placeholder, no-op, skeleton, route-shaped, or mock-as-product implementation is claimed as complete.
+- [ ] `START_HERE.md` and `blueprint.yaml` are the active router.
+- [ ] The active capability packet is implemented before unrelated packets are loaded.
+- [ ] `09-evidence/evidence-ledger.jsonl` records proof or blocker rows for each capability.
+- [ ] Browser runtime proof covers real rendered states, not a static dashboard.
+- [ ] Persistence restart/readback proof passes.
+- [ ] Provider proof is deterministic by default and live-provider claims remain blocked without credentials.
+- [ ] Security boundary review covers auth, uploads, provider secrets, and destructive actions.
+- [ ] Clean-room proof excludes Toonflow source imports.
+- [ ] Claims avoid Toonflow clone, route/API parity, provider parity, Electron parity, and final stitched-video parity.

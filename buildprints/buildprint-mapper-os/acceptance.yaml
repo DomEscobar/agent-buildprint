@@ -14,6 +14,26 @@ acceptance:
       - root implementation scaffold
       - selected-buildprint without scope decision
   selected_output:
+    executable_packet_v2:
+      required_root:
+        - BUILDPRINT.md
+        - START_HERE.md
+        - blueprint.yaml
+        - 00-intent/source-surface-map.md
+        - 02-context/context-map.yaml
+        - 02-context/source-evidence-index.yaml
+        - 03-capabilities/capability-index.yaml
+        - 08-evaluation/acceptance.yaml
+        - 09-evidence/evidence-ledger.jsonl
+        - generated/agent-prompt.md
+      required_capability_packet:
+        - capability.yaml
+        - source-evidence.md
+        - product-contract.md
+        - implementation-workflow.md
+        - proof-contract.yaml
+      generated_prompt_policy: generated_from_blueprint_not_authority
+      promotion_source: evidence_ledger
     required_root:
       - BUILDPRINT.md
       - CAPABILITY_INDEX.md

@@ -1,0 +1,85 @@
+schema_version: mapper-os/executable-packet.v2
+canonical_start: BUILDPRINT.md
+source:
+  input: https://github.com/HBAI-Ltd/Toonflow-app
+  checkout_path: external-source-checkout
+  commit: 122d2aa431d3240fea3eab491e6fbc690bb088cb
+generated_at: 2026-05-22T00:00:00Z
+claim_status: SELECTED_UNQUALIFIED
+execution_mode: continuous-full-suite
+promotion_requires:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+  - security_boundary_review
+  - clean_room_implementation_trace
+obligations:
+  - obligation_id: OBL-PROJECT
+    title: Local project workspace, model choices, and auth/session boundary
+    source_surfaces: [SRC-AUTH, SRC-PROJECT, SRC-DB]
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-NOVEL
+    title: Ordered chapter import and deterministic event extraction
+    source_surfaces: [SRC-NOVEL, SRC-EVENTS, SRC-TEXT-PROVIDER]
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-SCRIPT
+    title: Script-agent workspace with structured outline, strategy, script, and asset extraction
+    source_surfaces: [SRC-SCRIPT-AGENT, SRC-SCRIPT-ASSETS, SRC-SKILLS]
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-STORYBOARD
+    title: Production-agent storyboard planning, panel rows, and flow persistence
+    source_surfaces: [SRC-PRODUCTION-AGENT, SRC-FLOW, SRC-STORYBOARD]
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-MEDIA
+    title: Mockable image/video media jobs and exportable preview manifest
+    source_surfaces: [SRC-IMAGE, SRC-VIDEO, SRC-EXPORT]
+    status: INCLUDED_NEEDS_PROOF
+  - obligation_id: OBL-SAFETY
+    title: Provider, upload, secret, persistence, and destructive-action safety boundary
+    source_surfaces: [SRC-PROVIDERS, SRC-UPLOADS, SRC-ADMIN, SRC-RUNTIME]
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+capabilities:
+  - capability_id: project-workspace-auth
+    obligation_ids: [OBL-PROJECT]
+    packet: 03-capabilities/project-workspace-auth
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/project-workspace-auth/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: novel-event-ingestion
+    obligation_ids: [OBL-NOVEL]
+    packet: 03-capabilities/novel-event-ingestion
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/novel-event-ingestion/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: script-agent-assets
+    obligation_ids: [OBL-SCRIPT]
+    packet: 03-capabilities/script-agent-assets
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/script-agent-assets/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: production-storyboard-flow
+    obligation_ids: [OBL-STORYBOARD]
+    packet: 03-capabilities/production-storyboard-flow
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/production-storyboard-flow/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: media-preview-export
+    obligation_ids: [OBL-MEDIA]
+    packet: 03-capabilities/media-preview-export
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/media-preview-export/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+  - capability_id: safety-runtime-boundary
+    obligation_ids: [OBL-SAFETY]
+    packet: 03-capabilities/safety-runtime-boundary
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/safety-runtime-boundary/proof-contract.yaml
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+context:
+  active_capability: project-workspace-auth
+  continue_after_proof: true
+  context_map: 02-context/context-map.yaml
+generated_artifacts:
+  agent_prompt: generated/agent-prompt.md
+  current_buildprint_compat: generated/current-buildprint-compat/
+

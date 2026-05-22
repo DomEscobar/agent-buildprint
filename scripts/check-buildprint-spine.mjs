@@ -48,6 +48,7 @@ function packageSlugs() {
     if (output) {
       return [...new Set(output
         .split(/\r?\n/)
+        .filter((file) => fs.existsSync(file))
         .map((file) => file.split('/')[1])
         .filter(Boolean))]
         .sort();
@@ -215,6 +216,12 @@ for (const slug of slugs) {
       ['selected extraction prompt depth gate', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /per-capability evidence\/depth matrix|per-capability depth matrix/i],
       ['selected extraction prompt proof ledger', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /Capability Proof Ledger/i],
       ['selected extraction prompt team routing', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /TEAM_STACK\.md|Team routing/i],
+      ['executable packet blueprint template', fs.readFileSync(path.join(dir, 'templates/executable-packet/blueprint.yaml'), 'utf8'), /schema_version:\s*mapper-os\/executable-packet\.v2/i],
+      ['executable packet router template', fs.readFileSync(path.join(dir, 'templates/executable-packet/BUILDPRINT.md'), 'utf8'), /compatibility router/i],
+      ['executable packet start template', fs.readFileSync(path.join(dir, 'templates/executable-packet/START_HERE.md'), 'utf8'), /09-evidence\/evidence-ledger\.jsonl/i],
+      ['executable packet capability template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-capabilities/_template/capability.yaml'), 'utf8'), /product_obligation_ids:/i],
+      ['executable packet proof template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-capabilities/_template/proof-contract.yaml'), 'utf8'), /evidence_ledger:\s*09-evidence\/evidence-ledger\.jsonl/i],
+      ['executable packet generated prompt template', fs.readFileSync(path.join(dir, 'templates/executable-packet/generated/agent-prompt.md'), 'utf8'), /Generated from:\s*blueprint\.yaml/i],
     ];
     for (const [label, text, pattern] of mapperRequired) {
       if (!pattern.test(text)) {

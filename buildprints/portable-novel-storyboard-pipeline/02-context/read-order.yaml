@@ -1,0 +1,16 @@
+initial:
+  - START_HERE.md
+  - blueprint.yaml
+  - 02-context/context-map.yaml
+  - active capability packet from context-map.yaml
+after_active_proof:
+  - append row to 09-evidence/evidence-ledger.jsonl
+  - consult 03-capabilities/capability-index.yaml
+  - update local context to next dependency-ready capability
+  - continue one packet at a time
+forbidden_initial:
+  - reading all 03-capabilities/* packets upfront
+  - using generated/agent-prompt.md as authority
+  - using Toonflow source as implementation input
+  - claiming qualification without evidence-ledger proof
+

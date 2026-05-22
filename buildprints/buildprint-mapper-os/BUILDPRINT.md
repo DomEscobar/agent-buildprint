@@ -57,7 +57,66 @@ Promoted only when the selected package is source-independent, capability-comple
 
 ## Selected Package Shape
 
-Small selected scopes may be flat:
+New selected outputs should use the executable packet shape. `BUILDPRINT.md` stays as a compatibility router; `blueprint.yaml`, `02-context/`, `03-capabilities/`, `08-evaluation/`, and `09-evidence/` are the machine-routable execution contract.
+
+```text
+BUILDPRINT.md
+START_HERE.md
+blueprint.yaml
+00-intent/
+  mission.md
+  product-obligations.md
+  source-surface-map.md
+01-operating-model/
+  workflow-vs-agentic.md
+  autonomy-levels.yaml
+  stop-rules.md
+  human-approval-policy.md
+02-context/
+  context-map.yaml
+  read-order.yaml
+  source-evidence-index.yaml
+03-capabilities/
+  capability-index.yaml
+  <capability-id>/
+    capability.yaml
+    source-evidence.md
+    product-contract.md
+    implementation-workflow.md
+    proof-contract.yaml
+04-interfaces/
+  api-contracts.yaml
+  tool-contracts.yaml
+  provider-contracts.yaml
+  schemas/
+05-state-runtime/
+  state-model.yaml
+  persistence.md
+  runtime-topology.md
+06-safety/
+  threat-model.md
+  secrets-policy.md
+  destructive-actions.md
+07-execution/
+  implementation-plan.yaml
+  phases/
+08-evaluation/
+  acceptance.yaml
+  test-matrix.yaml
+  quality-rubric.yaml
+09-evidence/
+  evidence-ledger.jsonl
+  unresolved-blockers.md
+generated/
+  agent-prompt.md
+  current-buildprint-compat/
+```
+
+`generated/agent-prompt.md` is compiled output and must not be treated as source of truth. `generated/current-buildprint-compat/` may contain old-shape docs for website/CLI compatibility during migration.
+
+Qualification is evidence-derived. `claim_status: SELECTED_UNQUALIFIED` can be promoted only when `09-evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable.
+
+Legacy selected outputs remain valid during migration. Small selected scopes may be flat:
 
 ```text
 BUILDPRINT.md
@@ -97,7 +156,9 @@ capabilities/<capability-id>/
   CONTRACTS.md
 ```
 
-This shape is mandatory. Full-suite output without `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, and `TEAM_STACK.md`, UI-bearing output without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`, or any included capability pack without sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`, is invalid.
+For executable packets, the packet shape above is mandatory. Output without `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `03-capabilities/capability-index.yaml`, per-capability `capability.yaml`, `implementation-workflow.md`, and `proof-contract.yaml`, `08-evaluation/acceptance.yaml`, or `09-evidence/evidence-ledger.jsonl` is invalid.
+
+For legacy packets during migration, this shape is mandatory. Full-suite output without `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, and `TEAM_STACK.md`, UI-bearing output without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`, or any included capability pack without sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`, is invalid.
 
 `manifest.json` must match actual package files, include `teamStack.teams` for selected outputs, and must not list typo aliases such as `VERFICATION.md`. A selected package must use one canonical handoff artifact; do not put both `HANDOFF.md` and `HANDOVER.md` in the spine. `CAPABILITY_INDEX.md` must include a `Required teams` column so each capability routes to the relevant team-pack gates.
 

@@ -1,0 +1,18 @@
+state_model:
+  project:
+    fields: [id, title, story_type, art_style, model_choices, created_at, updated_at]
+  chapter:
+    fields: [id, project_id, order_index, title, body, event_state, error_reason]
+  event:
+    fields: [id, chapter_id, summary, characters, locations, beats]
+  script_artifact:
+    fields: [id, project_id, outline, adaptation_strategy, script_text, parser_state]
+  asset:
+    fields: [id, project_id, type, name, description, source_script_id]
+  storyboard_row:
+    fields: [id, project_id, script_ref, asset_refs, shot, camera, action, dialogue, order_index]
+  media_task:
+    fields: [id, project_id, type, status, input_ref, output_ref, error_reason]
+  preview_manifest:
+    fields: [version, chapters, events, scripts, assets, storyboard_rows, tracks, media_records, task_log, limitations]
+

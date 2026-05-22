@@ -1,0 +1,35 @@
+schema_version: mapper-os/executable-packet.v2
+canonical_start: BUILDPRINT.md
+source:
+  input: fixtures/executable-packet-good
+  checkout_path: unavailable-fixture
+  commit: unavailable-fixture
+generated_at: 2026-05-22T00:00:00Z
+claim_status: SELECTED_UNQUALIFIED
+promotion_requires:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+  - security_boundary_review
+  - clean_room_implementation_trace
+obligations:
+  - obligation_id: OBL-INGEST
+    title: Ingest submitted records
+    source_surfaces:
+      - SRC-INGEST-API
+    status: INCLUDED_NEEDS_PROOF
+capabilities:
+  - capability_id: ingest-record
+    obligation_ids:
+      - OBL-INGEST
+    packet: 03-capabilities/ingest-record
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/ingest-record/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+context:
+  active_capability: ingest-record
+  context_map: 02-context/context-map.yaml
+generated_artifacts:
+  agent_prompt: generated/agent-prompt.md
+  current_buildprint_compat: generated/current-buildprint-compat/
+

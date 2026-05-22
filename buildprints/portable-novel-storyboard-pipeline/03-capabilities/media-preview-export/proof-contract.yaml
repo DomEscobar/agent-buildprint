@@ -1,0 +1,18 @@
+proof_contract_id: proof-media-preview-export
+required_proofs:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+commands:
+  suggested:
+    - npm test -- media-preview-export
+    - npm run test:browser -- media-preview-export
+negative_tests:
+  - failed media adapter creates failure state and retry affordance
+  - exported manifest includes limitations
+  - no network call occurs in default provider mode
+evidence_ledger: 09-evidence/evidence-ledger.jsonl
+promotion_blockers:
+  - no rendered export proof
+  - no no-network provider proof
+

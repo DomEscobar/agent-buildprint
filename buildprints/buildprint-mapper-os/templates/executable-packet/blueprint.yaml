@@ -1,0 +1,35 @@
+schema_version: mapper-os/executable-packet.v2
+canonical_start: BUILDPRINT.md
+source:
+  input: <source-input>
+  checkout_path: <source-checkout-path>
+  commit: <source-commit-or-unavailable>
+generated_at: <iso-timestamp>
+claim_status: SELECTED_UNQUALIFIED
+promotion_requires:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+  - security_boundary_review
+  - clean_room_implementation_trace
+obligations:
+  - obligation_id: OBL-<id>
+    title: <product obligation>
+    source_surfaces:
+      - SRC-<id>
+    status: INCLUDED_NEEDS_PROOF
+capabilities:
+  - capability_id: <capability-id>
+    obligation_ids:
+      - OBL-<id>
+    packet: 03-capabilities/<capability-id>
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/<capability-id>/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+context:
+  active_capability: <capability-id>
+  context_map: 02-context/context-map.yaml
+generated_artifacts:
+  agent_prompt: generated/agent-prompt.md
+  current_buildprint_compat: generated/current-buildprint-compat/
+

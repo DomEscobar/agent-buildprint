@@ -42,19 +42,30 @@ export function extractEvidence(pkg, options = {}) {
 
 function extractMachineMirror(pkg) {
   const refs = [];
-  const controls = ['buildprint.json', 'phases.yaml', 'phases.yml', 'acceptance.yaml', 'acceptance.yml', 'claims.yaml', 'claims.yml'];
+  const controls = ['buildprint.json', 'blueprint.yaml', 'blueprint.yml', 'phases.yaml', 'phases.yml', 'acceptance.yaml', 'acceptance.yml', 'claims.yaml', 'claims.yml'];
   const present = controls.filter((file) => pkg.has(file));
+  const blueprintText = pkg.get('blueprint.yaml') || pkg.get('blueprint.yml');
+  const blueprintPresent = pkg.has('blueprint.yaml') || pkg.has('blueprint.yml');
+  const blueprintRefs = blueprintText
+    ? extractFileRefs(blueprintText)
+    : [];
 
   if (pkg.buildprintJson?.ok) {
     refs.push(...(pkg.buildprintJson.data.files ?? []).map((file) => typeof file === 'string' ? file : file.path).filter(Boolean));
     refs.push(...(pkg.buildprintJson.data.requiredDetailFiles ?? []).filter(Boolean));
   }
+  refs.push(...blueprintRefs);
 
   return {
     present,
     buildprintJson: pkg.buildprintJson
       ? { present: true, valid: pkg.buildprintJson.ok, error: pkg.buildprintJson.error }
       : { present: false, valid: false, error: null },
+    blueprintYaml: {
+      present: blueprintPresent,
+      valid: blueprintPresent ? /^schema_version:\s*.+/m.test(blueprintText) && /^claim_status:\s*.+/m.test(blueprintText) : false,
+      error: blueprintPresent && !/^schema_version:\s*.+/m.test(blueprintText) ? 'missing schema_version' : blueprintPresent && !/^claim_status:\s*.+/m.test(blueprintText) ? 'missing claim_status' : null
+    },
     refs: unique(refs).sort(),
     missingRefs: unique(refs).filter((ref) => !pkg.has(ref)).sort()
   };

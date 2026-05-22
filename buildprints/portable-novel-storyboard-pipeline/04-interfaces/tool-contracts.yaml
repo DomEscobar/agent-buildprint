@@ -1,0 +1,17 @@
+tool_contracts:
+  - id: script_context_reader
+    reads: [chapters, events, project_settings]
+    writes: []
+  - id: script_artifact_writer
+    reads: [events]
+    writes: [outline, adaptation_strategy, episode_script]
+  - id: asset_extractor
+    reads: [episode_script]
+    writes: [assets, script_asset_links]
+  - id: storyboard_writer
+    reads: [script, assets, events]
+    writes: [director_plan, storyboard_table, storyboard_rows]
+  - id: preview_manifest_exporter
+    reads: [project, chapters, events, scripts, assets, storyboard_rows, tracks, media_tasks]
+    writes: [PortablePreviewManifest]
+

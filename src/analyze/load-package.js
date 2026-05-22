@@ -4,6 +4,8 @@ import { parseJson } from '../shared/json.js';
 
 const CORE_CANDIDATES = [
   'BUILDPRINT.md',
+  'START_HERE.md',
+  'blueprint.yaml',
   'README.md',
   'PLAN.md',
   'SPEC.md',

@@ -1,0 +1,18 @@
+proof_contract_id: proof-novel-event-ingestion
+required_proofs:
+  - provider_integration_proof
+  - persistence_roundtrip
+  - browser_runtime_trace
+commands:
+  suggested:
+    - npm test -- novel-event-ingestion
+    - npm run test:browser -- novel-event-ingestion
+negative_tests:
+  - empty chapter import is rejected
+  - malformed provider output records failure without corrupting prior success
+  - chapter order survives restart
+evidence_ledger: 09-evidence/evidence-ledger.jsonl
+promotion_blockers:
+  - no deterministic provider proof
+  - no browser proof for event states
+

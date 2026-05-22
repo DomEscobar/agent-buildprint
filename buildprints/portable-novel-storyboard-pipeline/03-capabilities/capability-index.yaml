@@ -1,0 +1,50 @@
+capabilities:
+  - capability_id: project-workspace-auth
+    obligation_ids: [OBL-PROJECT]
+    packet: 03-capabilities/project-workspace-auth
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/project-workspace-auth/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    next: novel-event-ingestion
+  - capability_id: novel-event-ingestion
+    obligation_ids: [OBL-NOVEL]
+    packet: 03-capabilities/novel-event-ingestion
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/novel-event-ingestion/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: [project-workspace-auth]
+    next: script-agent-assets
+  - capability_id: script-agent-assets
+    obligation_ids: [OBL-SCRIPT]
+    packet: 03-capabilities/script-agent-assets
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/script-agent-assets/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: [novel-event-ingestion]
+    next: production-storyboard-flow
+  - capability_id: production-storyboard-flow
+    obligation_ids: [OBL-STORYBOARD]
+    packet: 03-capabilities/production-storyboard-flow
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/production-storyboard-flow/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: [script-agent-assets]
+    next: media-preview-export
+  - capability_id: media-preview-export
+    obligation_ids: [OBL-MEDIA]
+    packet: 03-capabilities/media-preview-export
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/media-preview-export/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: [production-storyboard-flow]
+    next: safety-runtime-boundary
+  - capability_id: safety-runtime-boundary
+    obligation_ids: [OBL-SAFETY]
+    packet: 03-capabilities/safety-runtime-boundary
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/safety-runtime-boundary/proof-contract.yaml
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+    depends_on: [media-preview-export]
+    next: null
+

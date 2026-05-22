@@ -39,6 +39,10 @@ export function formatPacketMarkdown(packet) {
   lines.push(`- Machine mirror files: ${packet.machineMirror.present.join(', ') || 'none'}`);
   lines.push(`- buildprint.json valid: ${packet.machineMirror.buildprintJson.valid ? 'yes' : 'no'}`);
   if (packet.machineMirror.buildprintJson.error) lines.push(`- buildprint.json error: ${packet.machineMirror.buildprintJson.error}`);
+  if (packet.machineMirror.blueprintYaml?.present) {
+    lines.push(`- blueprint.yaml valid: ${packet.machineMirror.blueprintYaml.valid ? 'yes' : 'no'}`);
+    if (packet.machineMirror.blueprintYaml.error) lines.push(`- blueprint.yaml error: ${packet.machineMirror.blueprintYaml.error}`);
+  }
   listSection(lines, 'Machine mirror refs', packet.machineMirror.refs);
   listSection(lines, 'Machine mirror missing refs', packet.machineMirror.missingRefs);
   listSection(lines, 'Markdown referenced files missing from package', packet.authorityRefs.missingReferencedFiles);

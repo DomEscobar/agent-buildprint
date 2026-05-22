@@ -1,0 +1,19 @@
+provider_contracts:
+  default_mode: deterministic-no-network
+  text_provider:
+    required_for: [event_extraction, script_pipeline, storyboard_pipeline]
+    default: fixture_provider
+    live_status: blocked_until_credentials_and_sandbox_proof
+  image_provider:
+    required_for: [mock_storyboard_image_tasks]
+    default: deterministic_thumbnail_provider
+    live_status: blocked_until_credentials_and_sandbox_proof
+  video_provider:
+    required_for: [mock_video_task_records]
+    default: deterministic_clip_placeholder_provider
+    live_status: blocked_until_credentials_and_sandbox_proof
+  forbidden:
+    - live network calls in default proof
+    - logging secret values
+    - treating deterministic providers as live provider parity
+

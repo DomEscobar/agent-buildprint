@@ -1,0 +1,8 @@
+capabilities:
+  - capability_id: bad
+    obligation_ids:
+      - OBL-BAD
+    autonomy_level: workflow
+    proof_contract: 03-capabilities/bad/proof-contract.yaml
+    status: INCLUDED_NEEDS_PROOF
+

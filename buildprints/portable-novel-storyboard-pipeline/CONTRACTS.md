@@ -1,141 +1,16 @@
-# Contracts
+# CONTRACTS
 
-## ImportChapterInput
+## Stable Product Contracts
 
-```ts
-type ImportChapterInput = {
-  projectId: number | string;
-  chapters: { reel: string; chapter: string; chapterData: string }[];
-};
-```
-
-Output: inserted chapter records with monotonic `chapterIndex` and portable `eventState="pending"`.
-
-Observed Toonflow request body uses `data`, not `chapters`:
-
-```ts
-type ObservedAddNovelBody = {
-  projectId: number;
-  data: { index: number; reel: string; chapter: string; chapterData: string }[];
-};
-```
-
-Portable rebuild may rename `data` to `chapters`, but tests must preserve ordered insertion semantics.
-
-## State Mapping
-
-| Area | Observed Toonflow state | Portable state |
+| Contract | Required behavior | Proof |
 |---|---|---|
-| Novel event | `eventState: 0` | `pending` / `running` |
-| Novel event | `eventState: 1` | `success` |
-| Novel event | `eventState: -1` | `failure` with `errorReason` |
-| Script asset extraction | `extractState: 2` | `queued` |
-| Script asset extraction | `extractState: 0` | `running` |
-| Script asset extraction | `extractState: 1` | `success` |
-| Script asset extraction | `extractState: -1` | `failure` with `errorReason` |
-| Video generation | `生成中` | `running` |
-| Video generation | `生成成功` | `success` |
-| Video generation | `生成失败` | `failure` with `errorReason` |
+| Project workspace | Create/select project, model choices, and local auth/session gate. | API smoke, browser project flow, invalid token negative test. |
+| Novel ingestion | Import 3 ordered chapters and preserve order through restart. | Persistence roundtrip and order assertion. |
+| Event extraction | Deterministic provider returns 3 successful event records and malformed provider output fails without corrupting state. | Contract tests and evidence row. |
+| Script pipeline | Outline, strategy, script, and asset extraction are structured artifacts, not prose-only UI. | Unit tests and rendered UI proof. |
+| Storyboard flow | Director plan, storyboard table, and storyboard panel rows persist and hydrate into the workbench. | Restart/readback and browser screenshot. |
+| Media jobs | Mock image/video adapters create task records with pending/running/success/failure states. | Adapter tests and UI task state proof. |
+| Preview export | Export contains chapters, events, scripts, assets, storyboard rows, tracks, media records, task log, and limitations. | Manifest fixture parsed from rendered UI. |
 
-## EventExtractor
-
-```ts
-interface TextProvider {
-  generate(input: { system: string; messages: { role: string; content: string }[] }): Promise<{ text: string }>;
-}
-```
-
-Invariant: one input chapter yields one event summary or one failure record.
-
-## ScriptAgent Workspace
-
-```ts
-type ScriptPlanData = {
-  storySkeleton: string;
-  adaptationStrategy: string;
-  scripts: { id?: string | number; name: string; content: string }[];
-};
-```
-
-ScriptAgent tools must read events, chapter text, plan data, and previous scripts. Agent output can be mocked as structured XML or parsed JSON.
-
-## Production FlowData
-
-```ts
-type FlowData = {
-  script: string;
-  scriptPlan: string;
-  assets: Asset[];
-  storyboardTable: string;
-  storyboard: StoryboardItem[];
-};
-```
-
-Observed source schema: `src/agents/productionAgent/tools.ts:45-51`.
-
-## Media Adapter
-
-```ts
-interface ImageProvider {
-  run(input: { prompt: string; referenceList?: MediaRef[]; size: string; aspectRatio: string }): Promise<MediaBlob>;
-}
-interface VideoProvider {
-  run(input: { prompt: string; referenceList?: MediaRef[]; mode: unknown; duration: number; resolution: string; audio?: boolean }): Promise<MediaBlob>;
-}
-```
-
-Side effects: provider calls create task records and later update media state.
-
-Primary UI must not render raw provider refs as the main preview. Mock providers should also resolve deterministic local preview refs from `VISUAL_FIXTURE_PACK.md`.
-
-```ts
-type MediaRecord = {
-  uri: string;         // raw provider/mock ref, debug/details only
-  previewUri?: string; // deterministic local fixture ref for primary UI
-};
-```
-
-## StoryboardPanelRow
-
-```ts
-type StoryboardPanelRow = {
-  id?: string | number;
-  videoDesc: string;
-  prompt: string;
-  track: string | number;
-  duration: number;
-  associateAssetsIds: Array<string | number>;
-  shouldGenerateImage: boolean;
-  thumbnailUri?: string;
-};
-```
-
-Observed route validates `shouldGenerateImage` as `z.number()`, while the skill emits XML values `true`/`false`. Portable contract should use boolean and map to storage/API representation at adapter boundaries.
-
-Assets may expose a local preview fixture for primary UI:
-
-```ts
-type Asset = {
-  previewUri?: string;
-};
-```
-
-## PortablePreviewManifest
-
-```ts
-type PortablePreviewManifest = {
-  project: ProjectSummary;
-  chapters: Chapter[];
-  events: EventSummary[];
-  scripts: Script[];
-  assets: Asset[];
-  storyboardTable: string;
-  storyboard: StoryboardPanelRow[];
-  tracks: VideoTrack[];
-  media: MediaRecord[];
-  taskLog: TaskRecord[];
-};
-```
-
-INFERRED: This is the portable substitute for Toonflow preview/export behavior. Do not claim final stitched-video parity.
+Implementation choices are free when these contracts and proof gates are preserved.
 

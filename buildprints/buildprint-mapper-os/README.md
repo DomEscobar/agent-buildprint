@@ -30,7 +30,28 @@ For generated selected packages, downstream implementers should not read all Mar
 
 ## Selected Output
 
-Selected output belongs under `selected-buildprint/`. Its spine is:
+Selected output belongs under `selected-buildprint/`. New Mapper OS output should be an executable packet:
+
+```text
+BUILDPRINT.md
+START_HERE.md
+blueprint.yaml
+00-intent/
+01-operating-model/
+02-context/
+03-capabilities/
+04-interfaces/
+05-state-runtime/
+06-safety/
+07-execution/
+08-evaluation/
+09-evidence/
+generated/
+```
+
+`BUILDPRINT.md` is a compatibility router. `blueprint.yaml` is the machine contract, `03-capabilities/` owns capability packets, `08-evaluation/` defines required proof, and `09-evidence/evidence-ledger.jsonl` records proof or blockers.
+
+Legacy output remains valid during migration. Its spine is:
 
 ```text
 BUILDPRINT.md

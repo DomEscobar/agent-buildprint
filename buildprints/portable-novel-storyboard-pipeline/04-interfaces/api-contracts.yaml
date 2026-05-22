@@ -1,0 +1,17 @@
+api_contracts:
+  - id: project
+    operations: [create_project, list_projects, select_project, update_project]
+    failure_modes: [invalid_payload, unauthenticated, stale_project]
+  - id: novel
+    operations: [import_chapters, list_chapters, extract_events]
+    failure_modes: [empty_chapters, malformed_provider_output, provider_failure]
+  - id: script
+    operations: [generate_outline, generate_strategy, generate_script, extract_assets]
+    failure_modes: [missing_events, malformed_script_output, duplicate_assets]
+  - id: storyboard
+    operations: [generate_director_plan, generate_storyboard_table, generate_panel_rows, save_flow, load_flow]
+    failure_modes: [missing_script, malformed_storyboard_output, stale_asset_link]
+  - id: media
+    operations: [create_image_task, create_video_task, retry_task, cancel_task, export_preview_manifest]
+    failure_modes: [adapter_failure, blocked_live_provider, invalid_manifest]
+

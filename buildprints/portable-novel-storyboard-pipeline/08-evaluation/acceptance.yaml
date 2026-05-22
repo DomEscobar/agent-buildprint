@@ -1,0 +1,22 @@
+acceptance:
+  - proof_id: browser_runtime_trace
+    required: true
+    status: missing
+    description: Real browser proof for project, novel, script, storyboard, media, export, and safety states.
+  - proof_id: provider_integration_proof
+    required: true
+    status: missing
+    description: Deterministic no-network provider proof; live provider proof remains optional and blocked.
+  - proof_id: persistence_roundtrip
+    required: true
+    status: missing
+    description: Restart/readback proof for all durable pipeline state.
+  - proof_id: security_boundary_review
+    required: true
+    status: missing
+    description: Auth, uploads, secrets, provider adapters, and destructive actions reviewed.
+  - proof_id: clean_room_implementation_trace
+    required: true
+    status: missing
+    description: Implementation uses this packet and not Toonflow source imports.
+

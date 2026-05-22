@@ -1,0 +1,38 @@
+source_surfaces:
+  - source_surface_id: SRC-AUTH
+    obligation_id: OBL-PROJECT
+    evidence: src/routes/login/login.ts; socket auth guards; o_user and tokenKey tables
+  - source_surface_id: SRC-PROJECT
+    obligation_id: OBL-PROJECT
+    evidence: src/routes/project/*; model selection routes
+  - source_surface_id: SRC-NOVEL
+    obligation_id: OBL-NOVEL
+    evidence: src/routes/novel/addNovel.ts; src/routes/novel/getNovel.ts
+  - source_surface_id: SRC-EVENTS
+    obligation_id: OBL-NOVEL
+    evidence: src/routes/novel/event/generateEvents.ts; src/utils/cleanNovel.ts
+  - source_surface_id: SRC-SCRIPT-AGENT
+    obligation_id: OBL-SCRIPT
+    evidence: src/agents/scriptAgent/*; scriptAgent socket namespace
+  - source_surface_id: SRC-SCRIPT-ASSETS
+    obligation_id: OBL-SCRIPT
+    evidence: src/routes/script/extractAssets.ts; o_assets; o_scriptAssets
+  - source_surface_id: SRC-PRODUCTION-AGENT
+    obligation_id: OBL-STORYBOARD
+    evidence: src/agents/productionAgent/*; productionAgent socket namespace
+  - source_surface_id: SRC-FLOW
+    obligation_id: OBL-STORYBOARD
+    evidence: getFlowData/saveFlowData routes and flow data tables
+  - source_surface_id: SRC-IMAGE
+    obligation_id: OBL-MEDIA
+    evidence: assetsGenerate and storyboard image routes; src/utils/ai.ts image calls
+  - source_surface_id: SRC-VIDEO
+    obligation_id: OBL-MEDIA
+    evidence: production workbench video routes and task polling
+  - source_surface_id: SRC-PROVIDERS
+    obligation_id: OBL-SAFETY
+    evidence: vendor config routes; src/utils/vendor.ts; src/utils/vm.ts
+  - source_surface_id: SRC-ADMIN
+    obligation_id: OBL-SAFETY
+    evidence: db export/import/clear/delete routes
+

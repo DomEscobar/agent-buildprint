@@ -1,0 +1,15 @@
+capabilities:
+  - capability_id: <capability-id>
+    status: INCLUDED_NEEDS_PROOF
+    obligation_ids:
+      - OBL-<id>
+    source_surface_ids:
+      - SRC-<id>
+    autonomy_level: workflow
+    required_teams:
+      - test-and-verification
+    proof_contract: 03-capabilities/<capability-id>/proof-contract.yaml
+    current_status: SELECTED_UNQUALIFIED
+    promotion_blockers:
+      - <missing proof>
+

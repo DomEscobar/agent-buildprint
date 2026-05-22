@@ -1,0 +1,19 @@
+proof_contract_id: proof-project-workspace-auth
+required_proofs:
+  - browser_runtime_trace
+  - persistence_roundtrip
+  - security_boundary_review
+commands:
+  suggested:
+    - npm test -- project-workspace-auth
+    - npm run test:browser -- project-workspace-auth
+negative_tests:
+  - missing token cannot access protected API
+  - invalid token cannot open realtime channel
+  - restart preserves project and model choices
+evidence_ledger: 09-evidence/evidence-ledger.jsonl
+promotion_blockers:
+  - no browser login/project proof
+  - no invalid-token proof
+  - no restart/readback proof
+

@@ -1,0 +1,18 @@
+proof_contract_id: proof-production-storyboard-flow
+required_proofs:
+  - provider_integration_proof
+  - persistence_roundtrip
+  - browser_runtime_trace
+commands:
+  suggested:
+    - npm test -- production-storyboard-flow
+    - npm run test:browser -- production-storyboard-flow
+negative_tests:
+  - malformed storyboard output is rejected
+  - saved flow reloads after restart
+  - storyboard row without linked script/event/asset is blocked
+evidence_ledger: 09-evidence/evidence-ledger.jsonl
+promotion_blockers:
+  - no storyboard browser proof
+  - no flow restart/readback proof
+

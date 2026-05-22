@@ -1,0 +1,18 @@
+proof_contract_id: proof-script-agent-assets
+required_proofs:
+  - provider_integration_proof
+  - persistence_roundtrip
+  - browser_runtime_trace
+commands:
+  suggested:
+    - npm test -- script-agent-assets
+    - npm run test:browser -- script-agent-assets
+negative_tests:
+  - malformed script XML/JSON is rejected
+  - duplicate assets are deduped
+  - provider failure leaves prior valid script intact
+evidence_ledger: 09-evidence/evidence-ledger.jsonl
+promotion_blockers:
+  - no structured parser proof
+  - no browser workspace proof
+

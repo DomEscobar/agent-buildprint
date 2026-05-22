@@ -2,6 +2,10 @@
 
 - [ ] Default mapper run creates discovery/evidence/quality output only.
 - [ ] Selected extraction creates `selected-buildprint/`.
+- [ ] New selected extraction emits an executable packet with `START_HERE.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `03-capabilities/capability-index.yaml`, per-capability `capability.yaml`, `implementation-workflow.md`, `proof-contract.yaml`, `08-evaluation/`, and `09-evidence/evidence-ledger.jsonl`.
+- [ ] `BUILDPRINT.md` in executable packets is a compatibility router, not the primary machine contract.
+- [ ] `generated/agent-prompt.md` declares `Generated from: blueprint.yaml` and states that it is not source of truth.
+- [ ] `claim_status` promotion is blocked unless `09-evidence/evidence-ledger.jsonl` contains passing evidence rows for every required promotion proof.
 - [ ] Medium, large, and full-suite selected outputs include `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, and `capabilities/`.
 - [ ] UI-bearing selected outputs include `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` with screens, workflows, taste variables, state inventory, component inventory, responsive behavior, visual quality bar, accessibility proof, and browser proof plan.
 - [ ] Every included capability has `CAPABILITY.md`, `VERIFICATION.md`, and `IMPLEMENTATION.md`.

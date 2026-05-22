@@ -1,0 +1,32 @@
+schema_version: mapper-os/context-map.v2
+active_capability: project-workspace-auth
+execution_mode: continuous-full-suite
+must_read:
+  - START_HERE.md
+  - blueprint.yaml
+  - 02-context/context-map.yaml
+  - 03-capabilities/project-workspace-auth/capability.yaml
+  - 03-capabilities/project-workspace-auth/product-contract.md
+  - 03-capabilities/project-workspace-auth/implementation-workflow.md
+  - 03-capabilities/project-workspace-auth/proof-contract.yaml
+read_if_needed:
+  - 04-interfaces/api-contracts.yaml
+  - 05-state-runtime/state-model.yaml
+  - 05-state-runtime/persistence.md
+  - 06-safety/secrets-policy.md
+  - 08-evaluation/quality-rubric.yaml
+do_not_read_yet:
+  - 03-capabilities/* except 03-capabilities/project-workspace-auth/*
+  - generated/current-buildprint-compat/*
+  - generated/agent-prompt.md
+advance_after_proof:
+  lookup: 03-capabilities/capability-index.yaml
+  next: novel-event-ingestion
+stop_conditions:
+  - explicit blocker
+  - missing proof
+  - provider/runtime uncertainty
+  - destructive safety issue
+  - secret exposure
+  - context/tooling limit
+

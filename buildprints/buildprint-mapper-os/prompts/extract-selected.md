@@ -2,6 +2,66 @@
 
 Use Mapper OS to extract a selected candidate, explicit scope, or full-suite target into `selected-buildprint/`.
 
+## Primary Output: Executable Packet
+
+For new selected outputs, emit an agent-executable packet. The root `BUILDPRINT.md` remains only a compatibility router; `blueprint.yaml` and the capability/proof packets are the machine-routable contract.
+
+```text
+selected-buildprint/
+  BUILDPRINT.md
+  START_HERE.md
+  blueprint.yaml
+  00-intent/
+    mission.md
+    product-obligations.md
+    source-surface-map.md
+  01-operating-model/
+    workflow-vs-agentic.md
+    autonomy-levels.yaml
+    stop-rules.md
+    human-approval-policy.md
+  02-context/
+    context-map.yaml
+    read-order.yaml
+    source-evidence-index.yaml
+  03-capabilities/
+    capability-index.yaml
+    <capability-id>/
+      capability.yaml
+      source-evidence.md
+      product-contract.md
+      implementation-workflow.md
+      proof-contract.yaml
+  04-interfaces/
+    api-contracts.yaml
+    tool-contracts.yaml
+    provider-contracts.yaml
+    schemas/
+  05-state-runtime/
+    state-model.yaml
+    persistence.md
+    runtime-topology.md
+  06-safety/
+    threat-model.md
+    secrets-policy.md
+    destructive-actions.md
+  07-execution/
+    implementation-plan.yaml
+    phases/
+  08-evaluation/
+    acceptance.yaml
+    test-matrix.yaml
+    quality-rubric.yaml
+  09-evidence/
+    evidence-ledger.jsonl
+    unresolved-blockers.md
+  generated/
+    agent-prompt.md
+    current-buildprint-compat/
+```
+
+`generated/agent-prompt.md` must declare `Generated from: blueprint.yaml` and must state that it is not source of truth. `generated/current-buildprint-compat/` may contain old-shape docs such as `CAPABILITY_INDEX.md`, `CONTRACTS.md`, `VERIFICATION.md`, and `CURRENT_STATE.md` for website or CLI compatibility.
+
 ## Preconditions
 
 - Discovery has run.
@@ -9,7 +69,9 @@ Use Mapper OS to extract a selected candidate, explicit scope, or full-suite tar
 - Source evidence exists for included capabilities or blockers are recorded.
 - Sensitive surfaces have required hardening artifact requirements.
 
-## Required Selected Output
+## Legacy Selected Output During Migration
+
+The legacy doc-pack shape remains valid during migration. Prefer it only when a downstream tool cannot yet consume the executable packet.
 
 For medium, large, or full-suite scope:
 
@@ -40,23 +102,26 @@ For genuinely small scopes, a flat package may use `CAPABILITIES.md` instead of 
 
 ## Router-First Execution Packet Rule
 
-Medium, large, and full-suite outputs are invalid unless a fresh coding agent can start by reading only:
+Medium, large, and full-suite outputs are invalid unless a fresh coding agent can start by reading only the router and active context:
 
 1. `BUILDPRINT.md`
-2. `CURRENT_STATE.md`
-3. `EXECUTION_PROTOCOL.md`
-4. `PRE_IMPLEMENTATION_QUESTIONS.md`
-5. `TEAM_STACK.md`
-6. `CONTEXT_PACKET.json`
-7. the active capability pack named by `CURRENT_STATE.md` / `CONTEXT_PACKET.json`
+2. `START_HERE.md` and `blueprint.yaml` for executable packets, or `CURRENT_STATE.md` for legacy packets
+3. `02-context/context-map.yaml` for executable packets, or `CONTEXT_PACKET.json` for legacy packets
+4. the active capability packet only
 
-Do not require the implementing agent to read all Markdown files or all capability packs before it knows the next action. `CURRENT_STATE.md` is the human-readable router. `CONTEXT_PACKET.json` is the machine-readable active-context router. `TEAM_STACK.md` is the quality gate router. `CAPABILITY_INDEX.md` is consulted only after proof to choose the next dependency-ready pack. `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` are loaded only when the active context or `TEAM_STACK.md` selects `ux-ui-craft`.
+Do not require the implementing agent to read all Markdown files or all capability packs before it knows the next action. In executable packets, `02-context/context-map.yaml` is the active-context router and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready pack. In legacy packets, keep the existing `CURRENT_STATE.md` / `CONTEXT_PACKET.json` router rule. UI, provider, data, and security docs are loaded only when the active context requires them.
 
 Set an explicit execution mode. Default full-suite selected outputs to `continuous-full-suite`: the implementation agent starts with the active pack, proves it, advances `CURRENT_STATE.md` and `CONTEXT_PACKET.json`, then consults `CAPABILITY_INDEX.md` to choose the next dependency-ready pack without reading unrelated packs upfront. Use `active-capability-handoff` only when the user explicitly requests a constrained validation or handoff run.
 
 ## Extraction Rules
 
 - Convert source facts into source-independent behavior contracts.
+- Convert every high-signal source surface into either a product obligation, an explicit merge, a blocker, or an explicit out-of-scope decision.
+- For executable packets, `00-intent/source-surface-map.md` and `02-context/source-evidence-index.yaml` replace loose source-surface coverage prose.
+- For executable packets, `03-capabilities/capability-index.yaml` replaces `CAPABILITY_INDEX.md` as the machine-routable capability index.
+- For executable packets, each capability uses `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, and `proof-contract.yaml`; compatibility Markdown is generated output only.
+- For executable packets, split proof policy from proof result: `08-evaluation/` defines what must be proven and `09-evidence/evidence-ledger.jsonl` records what was actually proven or blocked.
+- Derive qualification from evidence ledger rows. Do not promote `claim_status` unless every required promotion proof has passing evidence.
 - Do not preserve source internals unless externally observable or qualification-relevant.
 - Every selected output must include `SOURCE_SURFACE_COVERAGE.md`.
 - `SOURCE_SURFACE_COVERAGE.md` must list every high-signal census surface and its disposition: `OWNED_BY_CAPABILITY`, `MERGED_INTO_CAPABILITY`, `OUT_OF_SCOPE_BY_USER_ONLY`, `BLOCKED_NEEDS_REVIEW`, or `LOW_SIGNAL_IGNORED_WITH_REASON` only when a previously high-signal surface is downgraded with evidence.
@@ -89,7 +154,7 @@ Set an explicit execution mode. Default full-suite selected outputs to `continuo
 - `HANDOFF.md` and `EXECUTION_PROTOCOL.md` must require the implementation agent to read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, record concrete max-quality defaults and execution mode in `CURRENT_STATE.md`, and execute team-pack gates from `TEAM_STACK.md`.
 - Keep unresolved questions out of files that claim implementation readiness.
 - Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
-- Validate selected output shape before handoff. Fail the package if `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, or `TEAM_STACK.md` is missing, `UX_CONTRACT.md` or `DESIGN_QUALITY_BAR.md` is missing for UI-bearing output, required team packs are absent, any included capability pack lacks sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, or `VERIFICATION.md`, `manifest.json` lists missing/non-canonical files, typo aliases such as `VERFICATION.md` exist, or both `HANDOFF.md` and `HANDOVER.md` appear as canonical spine files.
+- Validate selected output shape before handoff. Fail executable packets if `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `03-capabilities/capability-index.yaml`, a capability `proof-contract.yaml`, or `09-evidence/evidence-ledger.jsonl` is missing; fail legacy packets if `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, or `TEAM_STACK.md` is missing, `UX_CONTRACT.md` or `DESIGN_QUALITY_BAR.md` is missing for UI-bearing output, required team packs are absent, any included capability pack lacks sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, or `VERIFICATION.md`, `manifest.json` lists missing/non-canonical files, typo aliases such as `VERFICATION.md` exist, or both `HANDOFF.md` and `HANDOVER.md` appear as canonical spine files.
 
 ## Behavior Loss Review
 

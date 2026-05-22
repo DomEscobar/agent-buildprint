@@ -3,7 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const args = process.argv.slice(2);
-const targets = args.length ? args : ['buildprints/buildprint-mapper-os/evals/selected-output-fixtures/microfish-good-shape/selected-buildprint'];
+const targets = args.length ? args : [
+  'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/microfish-good-shape/selected-buildprint',
+  'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/executable-packet-good/selected-buildprint',
+];
 let failures = 0;
 
 const rootRequired = [
@@ -70,6 +73,62 @@ const sourceSurfaceDispositions = [
   'OUT_OF_SCOPE_BY_USER_ONLY',
   'BLOCKED_NEEDS_REVIEW',
   'LOW_SIGNAL_IGNORED_WITH_REASON',
+];
+const executableRequiredFiles = [
+  'BUILDPRINT.md',
+  'START_HERE.md',
+  'blueprint.yaml',
+  '00-intent/mission.md',
+  '00-intent/product-obligations.md',
+  '00-intent/source-surface-map.md',
+  '01-operating-model/workflow-vs-agentic.md',
+  '01-operating-model/autonomy-levels.yaml',
+  '01-operating-model/stop-rules.md',
+  '01-operating-model/human-approval-policy.md',
+  '02-context/context-map.yaml',
+  '02-context/read-order.yaml',
+  '02-context/source-evidence-index.yaml',
+  '03-capabilities/capability-index.yaml',
+  '04-interfaces/api-contracts.yaml',
+  '04-interfaces/tool-contracts.yaml',
+  '04-interfaces/provider-contracts.yaml',
+  '05-state-runtime/state-model.yaml',
+  '05-state-runtime/persistence.md',
+  '05-state-runtime/runtime-topology.md',
+  '06-safety/threat-model.md',
+  '06-safety/secrets-policy.md',
+  '06-safety/destructive-actions.md',
+  '07-execution/implementation-plan.yaml',
+  '08-evaluation/acceptance.yaml',
+  '08-evaluation/test-matrix.yaml',
+  '08-evaluation/quality-rubric.yaml',
+  '09-evidence/evidence-ledger.jsonl',
+  '09-evidence/unresolved-blockers.md',
+  'generated/agent-prompt.md',
+  'generated/current-buildprint-compat/BUILDPRINT.md',
+  'generated/current-buildprint-compat/CAPABILITY_INDEX.md',
+  'generated/current-buildprint-compat/CURRENT_STATE.md',
+  'generated/current-buildprint-compat/VERIFICATION.md',
+];
+const executableRequiredDirs = [
+  '03-capabilities',
+  '04-interfaces/schemas',
+  '07-execution/phases',
+  'generated/current-buildprint-compat',
+];
+const executableCapabilityFiles = [
+  'capability.yaml',
+  'source-evidence.md',
+  'product-contract.md',
+  'implementation-workflow.md',
+  'proof-contract.yaml',
+];
+const executablePromotionRequires = [
+  'browser_runtime_trace',
+  'provider_integration_proof',
+  'persistence_roundtrip',
+  'security_boundary_review',
+  'clean_room_implementation_trace',
 ];
 
 function relFiles(dir, base = dir) {
@@ -148,10 +207,236 @@ function normalizeCapabilityBase(activeCapability) {
   return `capabilities/${trimmed}`;
 }
 
+function safeRead(file) {
+  try {
+    return fs.readFileSync(file, 'utf8');
+  } catch {
+    return '';
+  }
+}
+
+function hasYamlKey(text, key) {
+  return new RegExp(`(^|\\n)${key}:`, 'm').test(text);
+}
+
+function requireYamlKeys(target, file, text, keys) {
+  for (const key of keys) {
+    if (!hasYamlKey(text, key)) fail(target, `${file} missing ${key}`);
+  }
+}
+
+function isExecutablePacket(dir) {
+  return fs.existsSync(path.join(dir, 'blueprint.yaml'))
+    || fs.existsSync(path.join(dir, 'START_HERE.md'))
+    || fs.existsSync(path.join(dir, '03-capabilities', 'capability-index.yaml'));
+}
+
+function jsonlRows(target, file) {
+  const text = safeRead(file);
+  const rows = [];
+  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  for (let index = 0; index < lines.length; index += 1) {
+    try {
+      rows.push(JSON.parse(lines[index]));
+    } catch (error) {
+      fail(target, `09-evidence/evidence-ledger.jsonl line ${index + 1} does not parse: ${error.message}`);
+    }
+  }
+  return rows;
+}
+
+function rowProves(row) {
+  if (Array.isArray(row.proves)) return row.proves.map(String);
+  if (typeof row.proves === 'string') return [row.proves];
+  return [];
+}
+
+function hasPassingEvidence(rows, proofId) {
+  return rows.some((row) => {
+    const status = String(row.status ?? '').toLowerCase();
+    return rowProves(row).includes(proofId) && ['passed', 'proven'].includes(status);
+  });
+}
+
+function validateExecutablePacket(target, dir) {
+  const files = relFiles(dir);
+  for (const file of files) {
+    const base = path.basename(file);
+    if (forbiddenFiles.has(base)) fail(target, `forbidden typo/legacy file ${file}`);
+  }
+
+  for (const file of executableRequiredFiles) {
+    if (!fs.existsSync(path.join(dir, file))) fail(target, `missing executable packet file ${file}`);
+  }
+  for (const directory of executableRequiredDirs) {
+    const full = path.join(dir, directory);
+    if (!fs.existsSync(full) || !fs.statSync(full).isDirectory()) {
+      fail(target, `missing executable packet directory ${directory}`);
+    }
+  }
+
+  const blueprint = safeRead(path.join(dir, 'blueprint.yaml'));
+  requireYamlKeys(target, 'blueprint.yaml', blueprint, [
+    'schema_version',
+    'canonical_start',
+    'claim_status',
+    'promotion_requires',
+    'obligations',
+    'capabilities',
+    'context',
+    'generated_artifacts',
+  ]);
+  if (!/schema_version:\s*mapper-os\/executable-packet\.v2/i.test(blueprint)) {
+    fail(target, 'blueprint.yaml schema_version must be mapper-os/executable-packet.v2');
+  }
+  const claimStatus = blueprint.match(/(?:^|\n)claim_status:\s*([A-Z_]+)/)?.[1];
+  if (!labels.has(claimStatus)) fail(target, `blueprint.yaml invalid claim_status ${claimStatus ?? 'missing'}`);
+  for (const proof of executablePromotionRequires) {
+    if (!blueprint.includes(proof)) fail(target, `blueprint.yaml promotion_requires missing ${proof}`);
+  }
+
+  const buildprint = safeRead(path.join(dir, 'BUILDPRINT.md'));
+  if (!/START_HERE\.md/i.test(buildprint) || !/blueprint\.yaml/i.test(buildprint)) {
+    fail(target, 'BUILDPRINT.md must route agents to START_HERE.md and blueprint.yaml');
+  }
+  if (!/compatibility router|compatibility/i.test(buildprint)) {
+    fail(target, 'BUILDPRINT.md must identify itself as a compatibility router');
+  }
+
+  const startHere = safeRead(path.join(dir, 'START_HERE.md'));
+  if (!/blueprint\.yaml/i.test(startHere) || !/active capability/i.test(startHere) || !/evidence ledger/i.test(startHere)) {
+    fail(target, 'START_HERE.md must route through blueprint.yaml, active capability, and evidence ledger');
+  }
+
+  const sourceSurfaceMap = safeRead(path.join(dir, '00-intent/source-surface-map.md'));
+  const hasDisposition = sourceSurfaceDispositions.some((label) => sourceSurfaceMap.includes(label));
+  if (!hasDisposition) fail(target, '00-intent/source-surface-map.md must include source surface disposition labels');
+  if (!/OBL-[A-Z0-9_-]+/i.test(sourceSurfaceMap)) {
+    fail(target, '00-intent/source-surface-map.md must route surfaces to product obligations');
+  }
+
+  const productObligations = safeRead(path.join(dir, '00-intent/product-obligations.md'));
+  if (!/OBL-[A-Z0-9_-]+/i.test(productObligations)) {
+    fail(target, '00-intent/product-obligations.md must define obligation IDs');
+  }
+
+  const contextMap = safeRead(path.join(dir, '02-context/context-map.yaml'));
+  requireYamlKeys(target, '02-context/context-map.yaml', contextMap, ['active_capability', 'must_read', 'read_if_needed', 'do_not_read_yet']);
+  if (/03-capabilities\/\*/i.test(contextMap) && !/do_not_read_yet:[\s\S]*03-capabilities\/\*/i.test(contextMap)) {
+    fail(target, '02-context/context-map.yaml must not load all capability packs upfront');
+  }
+
+  const readOrder = safeRead(path.join(dir, '02-context/read-order.yaml'));
+  requireYamlKeys(target, '02-context/read-order.yaml', readOrder, ['initial', 'after_active_proof', 'forbidden_initial']);
+  if (!/START_HERE\.md/i.test(readOrder) || !/blueprint\.yaml/i.test(readOrder)) {
+    fail(target, '02-context/read-order.yaml must start from START_HERE.md and blueprint.yaml');
+  }
+
+  const evidenceIndex = safeRead(path.join(dir, '02-context/source-evidence-index.yaml'));
+  requireYamlKeys(target, '02-context/source-evidence-index.yaml', evidenceIndex, ['source_surfaces']);
+  if (!/obligation_id:/i.test(evidenceIndex)) {
+    fail(target, '02-context/source-evidence-index.yaml must map source surfaces to obligation_id');
+  }
+
+  const capabilityIndex = safeRead(path.join(dir, '03-capabilities/capability-index.yaml'));
+  requireYamlKeys(target, '03-capabilities/capability-index.yaml', capabilityIndex, ['capabilities']);
+  for (const key of ['capability_id', 'obligation_ids', 'autonomy_level', 'proof_contract', 'status']) {
+    if (!new RegExp(`${key}:`, 'i').test(capabilityIndex)) {
+      fail(target, `03-capabilities/capability-index.yaml missing ${key}`);
+    }
+  }
+
+  const capsDir = path.join(dir, '03-capabilities');
+  const capabilityDirs = fs.existsSync(capsDir)
+    ? fs.readdirSync(capsDir, { withFileTypes: true }).filter((entry) => entry.isDirectory())
+    : [];
+  if (!capabilityDirs.length) fail(target, '03-capabilities/ must contain at least one capability packet');
+  for (const pack of capabilityDirs) {
+    const packBase = `03-capabilities/${pack.name}`;
+    for (const file of executableCapabilityFiles) {
+      if (!fs.existsSync(path.join(capsDir, pack.name, file))) {
+        fail(target, `${packBase} missing ${file}`);
+      }
+    }
+
+    const capability = safeRead(path.join(capsDir, pack.name, 'capability.yaml'));
+    requireYamlKeys(target, `${packBase}/capability.yaml`, capability, [
+      'capability_id',
+      'status',
+      'product_obligation_ids',
+      'source_surface_ids',
+      'autonomy_level',
+      'proof_contract',
+      'stable',
+      'free',
+      'stop_rules',
+    ]);
+    if (!/OBL-[A-Z0-9_-]+/i.test(capability)) {
+      fail(target, `${packBase}/capability.yaml must route to at least one product obligation`);
+    }
+    if (!/SRC-[A-Z0-9_-]+|routes\.|api\.|tables\.|jobs\.|providerAdapters\.|auth\.|admin\./i.test(capability)) {
+      fail(target, `${packBase}/capability.yaml must list source surface IDs or explicit source-independent reason`);
+    }
+
+    const proofContract = safeRead(path.join(capsDir, pack.name, 'proof-contract.yaml'));
+    requireYamlKeys(target, `${packBase}/proof-contract.yaml`, proofContract, [
+      'proof_contract_id',
+      'required_proofs',
+      'negative_tests',
+      'evidence_ledger',
+      'promotion_blockers',
+    ]);
+    if (!/09-evidence\/evidence-ledger\.jsonl/i.test(proofContract)) {
+      fail(target, `${packBase}/proof-contract.yaml must write evidence to 09-evidence/evidence-ledger.jsonl`);
+    }
+  }
+
+  const implementationPlan = safeRead(path.join(dir, '07-execution/implementation-plan.yaml'));
+  requireYamlKeys(target, '07-execution/implementation-plan.yaml', implementationPlan, ['phases']);
+  if (!/proof/i.test(implementationPlan) || !/evidence/i.test(implementationPlan)) {
+    fail(target, '07-execution/implementation-plan.yaml must include proof and evidence gates');
+  }
+
+  const acceptance = safeRead(path.join(dir, '08-evaluation/acceptance.yaml'));
+  requireYamlKeys(target, '08-evaluation/acceptance.yaml', acceptance, ['acceptance']);
+  for (const proof of executablePromotionRequires) {
+    if (!acceptance.includes(proof)) fail(target, `08-evaluation/acceptance.yaml missing ${proof}`);
+  }
+
+  const evidenceRows = jsonlRows(target, path.join(dir, '09-evidence/evidence-ledger.jsonl'));
+  for (const row of evidenceRows) {
+    for (const field of ['artifact_id', 'type', 'capability_id', 'status', 'source', 'proves']) {
+      if (!(field in row)) fail(target, `09-evidence/evidence-ledger.jsonl row missing ${field}`);
+    }
+  }
+  if (claimStatus === 'QUALIFIED_SOURCE_INDEPENDENT') {
+    for (const proof of executablePromotionRequires) {
+      if (!hasPassingEvidence(evidenceRows, proof)) {
+        fail(target, `QUALIFIED_SOURCE_INDEPENDENT requires passing evidence-ledger row for ${proof}`);
+      }
+    }
+  }
+
+  const prompt = safeRead(path.join(dir, 'generated/agent-prompt.md'));
+  if (!/Generated from:\s*blueprint\.yaml/i.test(prompt)) {
+    fail(target, 'generated/agent-prompt.md must declare Generated from: blueprint.yaml');
+  }
+  if (!/not source of truth|not authoritative/i.test(prompt)) {
+    fail(target, 'generated/agent-prompt.md must say it is not source of truth');
+  }
+  if (!/START_HERE\.md/i.test(prompt) || !/blueprint\.yaml/i.test(prompt)) {
+    fail(target, 'generated/agent-prompt.md must route back to START_HERE.md and blueprint.yaml');
+  }
+}
+
 for (const target of targets) {
   const dir = path.resolve(target);
   if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) {
     fail(target, 'selected Buildprint directory does not exist');
+    continue;
+  }
+  if (isExecutablePacket(dir)) {
+    validateExecutablePacket(target, dir);
     continue;
   }
 
