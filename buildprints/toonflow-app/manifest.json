@@ -7,6 +7,8 @@
   },
   "generatedAt": "2026-05-22T06:14:59.089101Z",
   "outputMode": "full-suite-extraction",
+  "executionMode": "continuous-full-suite",
+  "executionModePolicy": "start with CURRENT_STATE.md active capability; after proof, advance through CAPABILITY_INDEX.md one dependency-ready pack at a time; do not read unrelated packs upfront",
   "discoveryStatus": "SOURCE_BACKED_DISCOVERY_COMPLETE_WITH_BLOCKERS",
   "qualificationStatus": "SELECTED_UNQUALIFIED",
   "productionPosture": "requested full-suite scope preserved; implementation order may be sliced",
@@ -15,7 +17,7 @@
     "required": true,
     "file": "PRE_IMPLEMENTATION_QUESTIONS.md",
     "maxQuestions": 5,
-    "fallback": "record safest max-quality selected-scope defaults in CURRENT_STATE.md; do not silently shrink scope or downgrade quality"
+    "fallback": "use continuous-full-suite, trusted-local deployment, test-double providers, local durable persistence, confirmation-gated destructive actions, and the active first slice; do not silently shrink scope or downgrade quality"
   },
   "noFakeScanStatus": "manual source-backed no-fake review complete; runtime no-fake proof blocked",
   "completenessScore": {

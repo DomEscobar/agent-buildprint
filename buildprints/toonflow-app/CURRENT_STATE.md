@@ -2,6 +2,9 @@
 
 - Requested scope: full-suite Toonflow mapping.
 - Selected target / first slice: auth/API shell + project setup + SQLite persistence + browser proof.
+- Execution mode: `continuous-full-suite`.
+- Continue after proof: yes.
+- Stop only on: explicit blocker, missing proof, provider/runtime uncertainty, destructive safety issue, secret exposure, user interruption, or context/tooling limit.
 - Active capability: auth-api-access.
 - Completed capability packs: none.
 - Blocked capability packs: none excluded; provider/destructive/admin packs have proof/hardening blockers.
@@ -14,7 +17,7 @@
 1. Read `PRE_IMPLEMENTATION_QUESTIONS.md` and resolve or safely default the blocking questions.
 2. Read `TEAM_STACK.md` and execute the selected team gates for the active slice.
 3. Read only `capabilities/auth-api-access/` and the directly linked project setup/persistence files needed for the first vertical slice.
-4. Do not open or read unrelated capability packs upfront; use `CAPABILITY_INDEX.md` to advance one dependency-ready pack at a time after proof is recorded.
+4. Do not open or read unrelated capability packs upfront. In `continuous-full-suite` mode, use `CAPABILITY_INDEX.md` to advance one dependency-ready pack at a time after proof is recorded, then continue in the same session unless a stop condition applies.
 
 ## Scope Preservation
 
@@ -64,4 +67,5 @@
 ## Next Action
 
 Read `PRE_IMPLEMENTATION_QUESTIONS.md`, apply safe defaults, then implement and prove the first vertical slice.
+After `auth-api-access` proof passes, advance to `project-setup-model-selection`; after that proof passes, continue to `novel-ingestion-event-extraction` in the same session unless blocked.
 
