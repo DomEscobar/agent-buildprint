@@ -13,7 +13,8 @@
 | Team-pack router | selected extraction | `TEAM_STACK.md` exists, required teams are inferred from product signals, and lazy/simple/quick quality tiers are forbidden |
 | UX contract | UI-bearing selected extraction | `UX_CONTRACT.md` defines screens, workflows, state inventory, component inventory, responsive behavior, accessibility proof, interaction polish, and browser proof plan |
 | Design quality bar | UI-bearing selected extraction | `DESIGN_QUALITY_BAR.md` defines taste variables, visual hierarchy, forbidden generic patterns, accessibility gates, responsive gates, and required screenshot set |
-| Router-first packet | medium/large/full-suite | fresh agent can start from `BUILDPRINT.md`, `CAPABILITY_INDEX.md`, `CURRENT_STATE.md`, `TEAM_STACK.md`, `EXECUTION_PROTOCOL.md`, and one active capability pack without loading every Markdown file |
+| Runtime-router packet | medium/large/full-suite | fresh agent can start from `BUILDPRINT.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `TEAM_STACK.md`, `CONTEXT_PACKET.json`, and one active capability pack without loading every Markdown file; `CAPABILITY_INDEX.md` is post-proof continuation only |
+| Context packet | medium/large/full-suite | `CONTEXT_PACKET.json` has narrow `mustRead`, gated `readIfNeeded`, explicit `doNotReadYet`, proof gate, advance target, and stop conditions |
 | Manifest parity | selected extraction | `manifest.json` parses and file entries match actual selected package files |
 | Filename typo guard | selected extraction | typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, and `CAPABILTY_INDEX.md` are absent |
 | Handoff singularity | selected extraction | selected package spine does not contain both `HANDOFF.md` and `HANDOVER.md` |

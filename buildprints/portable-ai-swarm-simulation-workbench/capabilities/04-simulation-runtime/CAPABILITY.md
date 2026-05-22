@@ -17,6 +17,19 @@ No-fake checks: actions come from worker artifact; status survives refresh.
 Stop or escalate when: worker hosting model is unknown.
 Required team packs: product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence.
 
+## Owned source surfaces
+
+- `backend/app/api/simulation.py:1451`
+- `backend/app/api/simulation.py:1644`
+- `backend/app/services/simulation_runner.py`
+- `frontend/src/components/Step3Simulation.vue`
+
+## Product obligations
+
+- Start and stop a long-running simulation through an owned runtime boundary.
+- Surface rounds, actions, posts, comments, logs, and failure states in the UI.
+- Preserve status across refresh and stop the worker without fake completion.
+
 ## Behavior Contract
 
 - User/system action: user starts/stops simulation and monitors progress.

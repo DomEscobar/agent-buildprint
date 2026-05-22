@@ -9,6 +9,7 @@ let failures = 0;
 const rootRequired = [
   'BUILDPRINT.md',
   'CAPABILITY_INDEX.md',
+  'CONTEXT_PACKET.json',
   'SOURCE_SURFACE_COVERAGE.md',
   'CONTRACTS.md',
   'TEAM_STACK.md',
@@ -133,6 +134,18 @@ function requiredTeamsFor(signals) {
 
 function teamStackTeams(text) {
   return [...knownTeams].filter((team) => new RegExp(`\\b${team}\\b`, 'i').test(text));
+}
+
+function readOrderBlock(markdown) {
+  const match = markdown.match(/## Read Order\s*([\s\S]*?)(?:\n## |\n# |$)/i);
+  return match ? match[1] : '';
+}
+
+function normalizeCapabilityBase(activeCapability) {
+  if (!activeCapability || typeof activeCapability !== 'string') return '';
+  const trimmed = activeCapability.replace(/\\/g, '/').replace(/\/+$/g, '');
+  if (trimmed.startsWith('capabilities/')) return trimmed;
+  return `capabilities/${trimmed}`;
 }
 
 for (const target of targets) {
@@ -270,16 +283,82 @@ for (const target of targets) {
   if (fs.existsSync(currentStatePath)) {
     const currentState = fs.readFileSync(currentStatePath, 'utf8');
     if (!/Read Next/i.test(currentState)) fail(target, 'CURRENT_STATE.md missing Read Next router section');
+    if (!/Execution mode/i.test(currentState)) fail(target, 'CURRENT_STATE.md missing execution mode');
+    if (!/Active capability/i.test(currentState)) fail(target, 'CURRENT_STATE.md missing active capability');
+    if (!/Continue after proof/i.test(currentState)) fail(target, 'CURRENT_STATE.md missing continue-after-proof rule');
+    if (!/Stop only on|Stop conditions/i.test(currentState)) fail(target, 'CURRENT_STATE.md missing stop conditions');
     if (!/Do not (open|read).*unrelated|unrelated capability packs/i.test(currentState)) {
       fail(target, 'CURRENT_STATE.md must tell agents not to read unrelated packs upfront');
+    }
+  }
+
+  const contextPacketPath = path.join(dir, 'CONTEXT_PACKET.json');
+  if (fs.existsSync(contextPacketPath)) {
+    let packet = null;
+    try {
+      packet = JSON.parse(fs.readFileSync(contextPacketPath, 'utf8'));
+    } catch (error) {
+      fail(target, `CONTEXT_PACKET.json does not parse: ${error.message}`);
+    }
+    if (packet) {
+      for (const field of ['schemaVersion', 'executionMode', 'activeCapability', 'mustRead', 'readIfNeeded', 'doNotReadYet', 'proofGate', 'advanceAfterProofTo', 'stopConditions']) {
+        if (!(field in packet)) fail(target, `CONTEXT_PACKET.json missing ${field}`);
+      }
+      if (!['continuous-full-suite', 'active-capability-handoff'].includes(packet.executionMode)) {
+        fail(target, `CONTEXT_PACKET.json invalid executionMode ${packet.executionMode}`);
+      }
+      const activeBase = normalizeCapabilityBase(packet.activeCapability);
+      const mustRead = Array.isArray(packet.mustRead) ? packet.mustRead.map((entry) => `${entry}`.replace(/\\/g, '/')) : [];
+      const readIfNeeded = Array.isArray(packet.readIfNeeded) ? packet.readIfNeeded : [];
+      const doNotReadYet = Array.isArray(packet.doNotReadYet) ? packet.doNotReadYet : [];
+      const stopConditions = Array.isArray(packet.stopConditions) ? packet.stopConditions : [];
+      if (!mustRead.length) fail(target, 'CONTEXT_PACKET.json mustRead must be a non-empty array');
+      if (!readIfNeeded.length) fail(target, 'CONTEXT_PACKET.json readIfNeeded must be a non-empty array');
+      if (!doNotReadYet.length) fail(target, 'CONTEXT_PACKET.json doNotReadYet must be a non-empty array');
+      if (!stopConditions.length) fail(target, 'CONTEXT_PACKET.json stopConditions must be a non-empty array');
+      if (mustRead.includes('CAPABILITY_INDEX.md')) {
+        fail(target, 'CONTEXT_PACKET.json mustRead must not include CAPABILITY_INDEX.md; use it only after proof to advance');
+      }
+      for (const requiredFile of ['CURRENT_STATE.md', 'EXECUTION_PROTOCOL.md', 'TEAM_STACK.md']) {
+        if (!mustRead.includes(requiredFile)) fail(target, `CONTEXT_PACKET.json mustRead missing ${requiredFile}`);
+      }
+      for (const requiredFile of ['CAPABILITY.md', 'IMPLEMENTATION.md', 'VERIFICATION.md']) {
+        const expected = `${activeBase}/${requiredFile}`;
+        if (!mustRead.includes(expected)) fail(target, `CONTEXT_PACKET.json mustRead missing active pack file ${expected}`);
+      }
+      for (const entry of mustRead) {
+        if (entry.startsWith('capabilities/') && !entry.startsWith(`${activeBase}/`)) {
+          fail(target, `CONTEXT_PACKET.json mustRead includes unrelated capability pack file ${entry}`);
+        }
+      }
+      if (!doNotReadYet.some((entry) => /capabilities\/\*/i.test(`${entry}`) || /unrelated capability/i.test(`${entry}`) || /^capabilities\//i.test(`${entry}`))) {
+        fail(target, 'CONTEXT_PACKET.json doNotReadYet must block unrelated capability packs');
+      }
     }
   }
 
   const buildprintPath = path.join(dir, 'BUILDPRINT.md');
   if (fs.existsSync(buildprintPath)) {
     const buildprint = fs.readFileSync(buildprintPath, 'utf8');
-    if (!/CAPABILITY_INDEX\.md/i.test(buildprint) || !/CURRENT_STATE\.md/i.test(buildprint) || !/TEAM_STACK\.md/i.test(buildprint)) {
-      fail(target, 'BUILDPRINT.md read order must include CAPABILITY_INDEX.md, CURRENT_STATE.md, and TEAM_STACK.md');
+    const readOrder = readOrderBlock(buildprint);
+    if (!/CURRENT_STATE\.md/i.test(readOrder) || !/EXECUTION_PROTOCOL\.md/i.test(readOrder) || !/TEAM_STACK\.md/i.test(readOrder)) {
+      fail(target, 'BUILDPRINT.md read order must include CURRENT_STATE.md, EXECUTION_PROTOCOL.md, and TEAM_STACK.md');
+    }
+    const capabilityIndexPosition = readOrder.search(/CAPABILITY_INDEX\.md/i);
+    const currentStatePosition = readOrder.search(/CURRENT_STATE\.md/i);
+    if (capabilityIndexPosition !== -1 && currentStatePosition !== -1 && capabilityIndexPosition < currentStatePosition) {
+      fail(target, 'BUILDPRINT.md read order must not put CAPABILITY_INDEX.md before CURRENT_STATE.md');
+    }
+  }
+
+  const executionProtocolPath = path.join(dir, 'EXECUTION_PROTOCOL.md');
+  if (fs.existsSync(executionProtocolPath)) {
+    const protocol = fs.readFileSync(executionProtocolPath, 'utf8');
+    for (const line of protocol.split(/\r?\n/)) {
+      if (/read|load|context/i.test(line) && /CAPABILITY_INDEX\.md/i.test(line) && !/proof|prove|advance|dependency|continuation|consult/i.test(line)) {
+        fail(target, 'EXECUTION_PROTOCOL.md must not include CAPABILITY_INDEX.md in initial context load');
+        break;
+      }
     }
   }
 

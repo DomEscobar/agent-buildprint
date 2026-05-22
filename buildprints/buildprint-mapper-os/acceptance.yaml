@@ -17,6 +17,7 @@ acceptance:
     required_root:
       - BUILDPRINT.md
       - CAPABILITY_INDEX.md
+      - CONTEXT_PACKET.json
       - SOURCE_SURFACE_COVERAGE.md
       - CONTRACTS.md
       - VERIFICATION.md
@@ -31,9 +32,11 @@ acceptance:
       - IMPLEMENTATION.md
     router_first_read_order:
       - BUILDPRINT.md
-      - CAPABILITY_INDEX.md
       - CURRENT_STATE.md
       - EXECUTION_PROTOCOL.md
+      - PRE_IMPLEMENTATION_QUESTIONS.md
+      - TEAM_STACK.md
+      - CONTEXT_PACKET.json
       - active capability pack only
     forbidden_default_files:
       - AGENT_EXECUTION_BRIEF.md

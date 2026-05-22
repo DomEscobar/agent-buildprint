@@ -4,6 +4,8 @@ import { spawnSync } from 'node:child_process';
 const fixtures = [
   ['missing TEAM_STACK.md', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/missing-team-stack/selected-buildprint'],
   ['UI missing UX artifacts', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/ui-missing-ux/selected-buildprint'],
+  ['old read order', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/old-read-order/selected-buildprint'],
+  ['overbroad context packet', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/context-all-packs/selected-buildprint'],
 ];
 
 let failures = 0;
@@ -27,6 +29,18 @@ for (const [label, fixture] of fixtures) {
   if (label === 'UI missing UX artifacts' && !/UI-bearing selected output missing UX_CONTRACT\.md|UI-bearing selected output missing DESIGN_QUALITY_BAR\.md/i.test(output)) {
     failures++;
     console.error(`✗ ${label}: failed for the wrong reason`);
+    console.error(output);
+    continue;
+  }
+  if (label === 'old read order' && !/BUILDPRINT\.md read order must not put CAPABILITY_INDEX\.md before CURRENT_STATE\.md/i.test(output)) {
+    failures++;
+    console.error(`âœ— ${label}: failed for the wrong reason`);
+    console.error(output);
+    continue;
+  }
+  if (label === 'overbroad context packet' && !/CONTEXT_PACKET\.json mustRead includes unrelated capability pack file/i.test(output)) {
+    failures++;
+    console.error(`âœ— ${label}: failed for the wrong reason`);
     console.error(output);
     continue;
   }

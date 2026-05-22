@@ -6,6 +6,7 @@
 - Continue after proof: yes.
 - Stop only on: explicit blocker, missing proof, provider/runtime uncertainty, destructive safety issue, secret exposure, user interruption, or context/tooling limit.
 - Active capability: auth-api-access.
+- Active context packet: `CONTEXT_PACKET.json`.
 - Completed capability packs: none.
 - Blocked capability packs: none excluded; provider/destructive/admin packs have proof/hardening blockers.
 - Next pack: project-setup-model-selection.
@@ -16,8 +17,8 @@
 
 1. Read `PRE_IMPLEMENTATION_QUESTIONS.md` and resolve or safely default the blocking questions.
 2. Read `TEAM_STACK.md` and execute the selected team gates for the active slice.
-3. Read only `capabilities/auth-api-access/` and the directly linked project setup/persistence files needed for the first vertical slice.
-4. Do not open or read unrelated capability packs upfront. In `continuous-full-suite` mode, use `CAPABILITY_INDEX.md` to advance one dependency-ready pack at a time after proof is recorded, then continue in the same session unless a stop condition applies.
+3. Read `CONTEXT_PACKET.json` and then only `capabilities/auth-api-access/` plus the directly linked project setup/persistence files needed for the first vertical slice.
+4. Do not open or read unrelated capability packs upfront. Do not read `CAPABILITY_INDEX.md` until the active proof is recorded and the next dependency-ready pack must be selected. In `continuous-full-suite` mode, advance one pack at a time after proof, then continue in the same session unless a stop condition applies.
 
 ## Scope Preservation
 

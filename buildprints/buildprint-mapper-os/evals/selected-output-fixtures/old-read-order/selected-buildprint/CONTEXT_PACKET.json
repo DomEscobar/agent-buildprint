@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "mapper-os/context-packet.v1",
+  "executionMode": "continuous-full-suite",
+  "activeCapability": "capabilities/01-ingestion-ontology",
+  "mustRead": [
+    "CURRENT_STATE.md",
+    "EXECUTION_PROTOCOL.md",
+    "TEAM_STACK.md",
+    "capabilities/01-ingestion-ontology/CAPABILITY.md",
+    "capabilities/01-ingestion-ontology/IMPLEMENTATION.md",
+    "capabilities/01-ingestion-ontology/VERIFICATION.md"
+  ],
+  "readIfNeeded": [
+    {
+      "path": "UX_CONTRACT.md",
+      "when": "active UI proof is being implemented"
+    },
+    {
+      "path": "DESIGN_QUALITY_BAR.md",
+      "when": "active UI proof is being implemented"
+    },
+    {
+      "path": "CONTRACTS.md",
+      "when": "API/provider contract detail is needed"
+    }
+  ],
+  "doNotReadYet": [
+    "CAPABILITY_INDEX.md before active capability proof, except to resolve a missing active/next pointer",
+    "capabilities/* except capabilities/01-ingestion-ontology/*",
+    "unrelated capability packs until CURRENT_STATE.md advances"
+  ],
+  "proofGate": {
+    "command": "npm test -- ingestion-ontology",
+    "artifact": "artifacts/ingestion-ontology.json",
+    "negativeTest": "invalid upload fails without fake success"
+  },
+  "advanceAfterProofTo": "capabilities/02-graph-builder",
+  "stopConditions": [
+    "explicit blocker",
+    "missing proof",
+    "provider uncertainty",
+    "destructive safety issue",
+    "secret exposure",
+    "user interruption",
+    "context/tooling limit"
+  ]
+}

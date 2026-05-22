@@ -1,0 +1,3 @@
+# PRE_IMPLEMENTATION_QUESTIONS
+
+Use safe defaults.

@@ -1,0 +1,6 @@
+# CAPABILITY_INDEX
+
+| Capability | Status | Required teams | Owned source surfaces | Source evidence | Product obligation | Required topology | Topology status | UI/UX status | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker | Dependencies | Pack | Verification | Blockers |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Active | INCLUDED_NEEDS_PROOF | product-architect, test-and-verification | surface.active | OBSERVED fixture | Active behavior | UI/API/service/test | blocked | not-applicable | missing | missing | missing | missing | missing | npm test | artifacts/active.log | failure case | missing | CONTRACT_SEAM_ONLY | proof missing | none | capabilities/01-active/ | capabilities/01-active/VERIFICATION.md | proof missing |
+| Unrelated | INCLUDED_NEEDS_PROOF | product-architect, test-and-verification | surface.unrelated | OBSERVED fixture | Later behavior | UI/API/service/test | blocked | not-applicable | missing | missing | missing | missing | missing | npm test | artifacts/unrelated.log | failure case | missing | CONTRACT_SEAM_ONLY | proof missing | Active | capabilities/02-unrelated/ | capabilities/02-unrelated/VERIFICATION.md | proof missing |

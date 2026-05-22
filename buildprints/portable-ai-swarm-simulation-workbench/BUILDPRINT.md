@@ -7,13 +7,14 @@ This Buildprint is a source-independent implementation contract for recreating a
 ## Read Order
 
 1. `BUILDPRINT.md`
-2. `CAPABILITY_INDEX.md`
-3. `CURRENT_STATE.md`
-4. `TEAM_STACK.md`
-5. `EXECUTION_PROTOCOL.md`
-6. Only the active capability pack named by `CURRENT_STATE.md`
+2. `CURRENT_STATE.md`
+3. `EXECUTION_PROTOCOL.md`
+4. `PRE_IMPLEMENTATION_QUESTIONS.md`
+5. `TEAM_STACK.md`
+6. `CONTEXT_PACKET.json`
+7. Only the active capability pack named by `CURRENT_STATE.md` / `CONTEXT_PACKET.json`
 
-Do not read every Markdown file before coding. `CAPABILITY_INDEX.md` is the traffic controller, `CURRENT_STATE.md` is the active pointer, and `TEAM_STACK.md` is the quality gate router.
+Do not read every Markdown file before coding. `CURRENT_STATE.md` is the human-readable router, `CONTEXT_PACKET.json` is the machine-readable active-context router, and `TEAM_STACK.md` is the quality gate router. `CAPABILITY_INDEX.md` is the dependency and continuation index; consult it after proof to choose the next dependency-ready pack.
 
 ## Scope
 
@@ -37,4 +38,4 @@ Do not use validated, production-ready, complete, or end-to-end language unless 
 
 ## Package Shape Rule
 
-This is a full-suite selected output. It is invalid without `CAPABILITY_INDEX.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, and complete sibling files in every `capabilities/<id>/` pack.
+This is a full-suite selected output. It is invalid without `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, and complete sibling files in every `capabilities/<id>/` pack.

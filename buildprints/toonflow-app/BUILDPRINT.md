@@ -7,14 +7,16 @@ This Buildprint preserves the full relevant Toonflow product surface discovered 
 ## Read Order
 
 1. `BUILDPRINT.md`
-2. `CAPABILITY_INDEX.md`
-3. `CURRENT_STATE.md`
-4. `TEAM_STACK.md`
-5. `EXECUTION_PROTOCOL.md`
-6. `PRE_IMPLEMENTATION_QUESTIONS.md`
-7. active capability pack named by `CURRENT_STATE.md`
+2. `CURRENT_STATE.md`
+3. `EXECUTION_PROTOCOL.md`
+4. `PRE_IMPLEMENTATION_QUESTIONS.md`
+5. `TEAM_STACK.md`
+6. `CONTEXT_PACKET.json`
+7. active capability pack named by `CURRENT_STATE.md` / `CONTEXT_PACKET.json`
 8. `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` when `TEAM_STACK.md` selects `ux-ui-craft`
 9. supporting artifacts only when the active pack or team gate points to them
+
+`CAPABILITY_INDEX.md` is the dependency and continuation index. Consult it after the active proof gate closes to choose the next dependency-ready pack; do not read the whole index before the active context is loaded.
 
 ## Scope
 

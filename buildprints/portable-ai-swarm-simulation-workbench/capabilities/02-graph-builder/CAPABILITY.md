@@ -17,6 +17,19 @@ No-fake checks: graph data must come from adapter result and persisted graph id.
 Stop or escalate when: graph provider/delete semantics are unclear.
 Required team packs: product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence.
 
+## Owned source surfaces
+
+- `backend/app/api/graph.py:260`
+- `backend/app/api/graph.py:569`
+- `backend/app/services/graph_builder.py`
+- `frontend/src/components/GraphPanel.vue`
+
+## Product obligations
+
+- Build graph data from persisted project text and ontology.
+- Track async graph task state and provider/adapter failures.
+- Render real node/edge data with loading, empty, error, and success states.
+
 ## Behavior Contract
 
 - User/system action: user starts graph build from project.

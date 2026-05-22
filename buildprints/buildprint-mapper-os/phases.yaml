@@ -50,11 +50,12 @@ phases:
       - source-independent selected-buildprint package
       - capability contracts
       - stable-vs-free boundaries
-      - router-first read order with CAPABILITY_INDEX.md and CURRENT_STATE.md
+      - runtime-router read order with CURRENT_STATE.md and CONTEXT_PACKET.json before active capability loading
     must_pass:
       - selected output stays under selected-buildprint/
       - medium/large/full-suite output is hierarchical
       - medium/large/full-suite output includes CAPABILITY_INDEX.md
+      - medium/large/full-suite output includes CONTEXT_PACKET.json
       - every included capability pack has CAPABILITY.md, IMPLEMENTATION.md, and VERIFICATION.md
       - manifest.json matches actual selected package files
       - typo alias files such as VERFICATION.md are absent
@@ -69,7 +70,7 @@ phases:
       - repair-loop and stop/escalation rules
     must_pass:
       - implementing agent does not need to infer critical order, builder passes, or gates
-      - implementing agent can start without reading all Markdown files or unrelated capability packs
+      - implementing agent can start from CURRENT_STATE.md and CONTEXT_PACKET.json without reading all Markdown files, CAPABILITY_INDEX.md upfront, or unrelated capability packs
 
   - id: 06-qualification
     title: Qualification

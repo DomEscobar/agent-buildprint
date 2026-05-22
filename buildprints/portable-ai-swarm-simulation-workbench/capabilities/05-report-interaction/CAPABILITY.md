@@ -17,6 +17,20 @@ No-fake checks: report references simulation/graph artifacts; chat is not a cann
 Stop or escalate when: provider/tool access is unavailable.
 Required team packs: product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence.
 
+## Owned source surfaces
+
+- `backend/app/api/report.py:25`
+- `backend/app/api/report.py:472`
+- `backend/app/services/report_agent.py`
+- `frontend/src/components/Step4Report.vue`
+- `frontend/src/components/Step5Interaction.vue`
+
+## Product obligations
+
+- Generate report sections and logs from simulation and graph artifacts.
+- Support chat with report/agent context through provider/tool boundaries.
+- Expose progress, errors, downloads, and interaction transcripts without static canned success.
+
 ## Behavior Contract
 
 - User/system action: generate report and interact with report/agents.

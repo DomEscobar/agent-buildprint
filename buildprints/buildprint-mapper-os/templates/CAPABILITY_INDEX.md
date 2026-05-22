@@ -1,6 +1,6 @@
 # CAPABILITY_INDEX
 
-This file is the ordered traffic controller for the downstream coding agent. The agent should use this file plus `CURRENT_STATE.md` to choose exactly one capability pack to load next; it should not read all packs upfront. In `continuous-full-suite` mode, advance through this table dependency order after each capability proof passes.
+This file is the dependency and continuation index for the downstream coding agent. It is not an upfront context document. The agent starts from `CURRENT_STATE.md` and `CONTEXT_PACKET.json`, then consults this file only after the active capability proof passes or is explicitly blocked. In `continuous-full-suite` mode, advance through this table dependency order after each capability proof passes.
 
 | Capability | Status | Required teams | Owned source surfaces | Source evidence | Product obligation | Required topology | Topology status | UI/UX status | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker | Dependencies | Pack | Verification | Blockers |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

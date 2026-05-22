@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "mapper-os/context-packet.v1",
+  "executionMode": "continuous-full-suite",
+  "activeCapability": "capabilities/<active-capability>",
+  "mustRead": [
+    "CURRENT_STATE.md",
+    "EXECUTION_PROTOCOL.md",
+    "TEAM_STACK.md",
+    "capabilities/<active-capability>/CAPABILITY.md",
+    "capabilities/<active-capability>/IMPLEMENTATION.md",
+    "capabilities/<active-capability>/VERIFICATION.md"
+  ],
+  "readIfNeeded": [
+    "PRE_IMPLEMENTATION_QUESTIONS.md",
+    "UX_CONTRACT.md",
+    "DESIGN_QUALITY_BAR.md",
+    "PROVIDERS.md",
+    "DATA_LIFECYCLE.md",
+    "SECURITY.md",
+    "CONTRACTS.md"
+  ],
+  "doNotReadYet": [
+    "CAPABILITY_INDEX.md until the active proof gate closes and the next dependency-ready pack must be selected",
+    "capabilities/* except capabilities/<active-capability>/*"
+  ],
+  "proofGate": {
+    "capabilityVerification": "capabilities/<active-capability>/VERIFICATION.md",
+    "rootVerification": "VERIFICATION.md",
+    "requiredBeforeAdvance": [
+      "proof command or explicit blocker",
+      "proof artifact or explicit blocker",
+      "negative test or explicit not-applicable reason",
+      "runtime/browser/provider/persistence/security evidence when selected teams require it"
+    ]
+  },
+  "advanceAfterProofTo": "<next-dependency-ready-capability-or-null>",
+  "stopConditions": [
+    "explicit blocker",
+    "missing proof",
+    "provider/runtime uncertainty",
+    "destructive safety issue",
+    "secret exposure",
+    "user interruption",
+    "context/tooling limit"
+  ]
+}

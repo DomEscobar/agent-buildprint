@@ -17,6 +17,18 @@ No-fake checks: uploaded bytes are actually parsed and stored; ontology comes fr
 Stop or escalate when: provider credentials, persistence backend, or upload security policy is unclear.
 Required team packs: product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence.
 
+## Owned source surfaces
+
+- `backend/app/api/graph.py:122`
+- `backend/app/services/ontology_generator.py`
+- `backend/app/models/project.py`
+
+## Product obligations
+
+- Accept allowed document uploads plus requirement text.
+- Persist project files, extracted text, ontology, status, and errors.
+- Generate bounded ontology JSON through an adapter contract rather than static fixture data.
+
 ## Behavior Contract
 
 - User/system action: user uploads seed documents and enters prediction requirement.

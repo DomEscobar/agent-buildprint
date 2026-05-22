@@ -35,7 +35,7 @@ source acquisition
 - Prefer smaller complete selected scopes over broad partial scope.
 - Keep implementation scaffold out of the package root.
 - Use capability packs for medium, large, and full-suite selected outputs.
-- Make selected outputs router-first: `CAPABILITY_INDEX.md` routes capability loading, `CURRENT_STATE.md` names the active pack, and unrelated packs are not read until needed.
+- Make selected outputs runtime-router-first: `CURRENT_STATE.md` names the active pack, `CONTEXT_PACKET.json` bounds the active context, `CAPABILITY_INDEX.md` is consulted only after proof to select the next dependency-ready pack, and unrelated packs are not read until needed.
 - Validate selected output shape before handoff: complete capability packs, manifest parity, no typo aliases, and one canonical handoff artifact.
 - Record blockers instead of inventing behavior.
 - Treat full-suite as user intent, not proof.

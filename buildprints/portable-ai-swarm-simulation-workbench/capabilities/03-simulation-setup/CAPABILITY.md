@@ -17,6 +17,19 @@ No-fake checks: profiles map to graph entities; platform config is not hardcoded
 Stop or escalate when: platform requirements or provider mode are unclear.
 Required team packs: product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence.
 
+## Owned source surfaces
+
+- `backend/app/api/simulation.py:165`
+- `backend/app/api/simulation.py:359`
+- `backend/app/services/simulation_config_generator.py`
+- `frontend/src/components/Step2EnvSetup.vue`
+
+## Product obligations
+
+- Create simulation records from graph-backed projects.
+- Generate platform, time, event, and agent profile configuration from graph entities.
+- Persist setup progress, generated config, and failure reasons for restart/readback proof.
+
 ## Behavior Contract
 
 - User/system action: user creates and prepares simulation.

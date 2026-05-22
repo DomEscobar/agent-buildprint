@@ -2,10 +2,12 @@
 
 - [ ] Default mapper run creates discovery/evidence/quality output only.
 - [ ] Selected extraction creates `selected-buildprint/`.
-- [ ] Medium, large, and full-suite selected outputs include `CAPABILITY_INDEX.md`, `TEAM_STACK.md`, and `capabilities/`.
+- [ ] Medium, large, and full-suite selected outputs include `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, and `capabilities/`.
 - [ ] UI-bearing selected outputs include `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` with screens, workflows, taste variables, state inventory, component inventory, responsive behavior, visual quality bar, accessibility proof, and browser proof plan.
 - [ ] Every included capability has `CAPABILITY.md`, `VERIFICATION.md`, and `IMPLEMENTATION.md`.
-- [ ] Fresh coding agents can start from `BUILDPRINT.md` -> `CAPABILITY_INDEX.md` -> `CURRENT_STATE.md` -> `TEAM_STACK.md` -> `EXECUTION_PROTOCOL.md` -> one active capability pack without reading every Markdown file.
+- [ ] Fresh coding agents can start from `BUILDPRINT.md` -> `CURRENT_STATE.md` -> `EXECUTION_PROTOCOL.md` -> `PRE_IMPLEMENTATION_QUESTIONS.md` -> `TEAM_STACK.md` -> `CONTEXT_PACKET.json` -> one active capability pack without reading every Markdown file.
+- [ ] `CAPABILITY_INDEX.md` is used after proof to select the next dependency-ready pack, not as an upfront context document.
+- [ ] `CONTEXT_PACKET.json` contains narrow `mustRead`, gated `readIfNeeded`, explicit `doNotReadYet`, proof gate, advance target, and stop conditions.
 - [ ] `TEAM_STACK.md` selects required team packs from product signals and forbids lazy/simple/quick quality tiers.
 - [ ] `manifest.json` matches actual selected package files and does not list missing files, typo aliases, or non-canonical spine files.
 - [ ] Typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, or `CAPABILTY_INDEX.md` are absent.

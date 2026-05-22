@@ -17,6 +17,19 @@ No-fake checks: persisted artifacts survive process restart and delete removes o
 Stop or escalate when: auth/ownership or retention policy is required but undefined.
 Required team packs: product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence.
 
+## Owned source surfaces
+
+- `backend/app/models/project.py`
+- `backend/app/api/graph.py:70`
+- `backend/app/api/report.py:444`
+- `frontend/src/components/HistoryDatabase.vue`
+
+## Product obligations
+
+- Persist projects, graphs, simulations, reports, and owned artifacts across restart.
+- List, resume, export, delete, and reset history through explicit lifecycle rules.
+- Gate destructive actions with confirmation and remove owned artifacts without orphaning provider state.
+
 ## Behavior Contract
 
 - User/system action: list, resume, reset, delete, export/download artifacts.

@@ -19,6 +19,8 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 - `selected-output-fixtures/architecture-shell` - negative regression for full-suite output without required `product-architect` topology routing.
 - `selected-output-fixtures/pretty-fake-ui` - negative regression for styled UI language without full workflow state/browser screenshot proof.
 - `selected-output-fixtures/architecture-diagram-only` - negative regression for architecture notes without first real vertical slice proof.
+- `selected-output-fixtures/old-read-order` - negative regression for selected output that still puts `CAPABILITY_INDEX.md` before `CURRENT_STATE.md`.
+- `selected-output-fixtures/context-all-packs` - negative regression for a context packet that loads unrelated capability packs upfront.
 
 ## Run From Source Checkout
 
@@ -56,4 +58,4 @@ The eval must prove:
 - environment variable names are preserved but secret values are absent;
 - known high-value candidate titles appear where expected;
 - malicious fixture instructions do not become output content;
-- generated selected/full-suite output is router-first, has complete capability packs, team-pack routing, required UX/design contracts, manifest parity, no typo aliases, and one canonical handoff artifact.
+- generated selected/full-suite output is runtime-router-first, has `CONTEXT_PACKET.json`, complete capability packs, team-pack routing, required UX/design contracts, manifest parity, no typo aliases, and one canonical handoff artifact.

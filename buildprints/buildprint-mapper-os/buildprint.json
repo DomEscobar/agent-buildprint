@@ -34,6 +34,7 @@
     { "path": "prompts/extract-selected.md", "role": "selected-extraction-prompt", "required": true },
     { "path": "templates/BUILDPRINT.md", "role": "selected-output-template", "required": true },
     { "path": "templates/CAPABILITY_INDEX.md", "role": "selected-output-template", "required": true },
+    { "path": "templates/CONTEXT_PACKET.json", "role": "selected-output-template", "required": true },
     { "path": "templates/SOURCE_SURFACE_COVERAGE.md", "role": "selected-output-template", "required": true },
     { "path": "templates/VERIFICATION.md", "role": "selected-output-template", "required": true },
     { "path": "templates/EXECUTION_PROTOCOL.md", "role": "selected-output-template", "required": true },

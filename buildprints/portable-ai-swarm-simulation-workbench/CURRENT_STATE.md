@@ -12,11 +12,13 @@ Stop only on: explicit blocker, missing proof, provider uncertainty, destructive
 
 Active capability: `capabilities/01-ingestion-ontology/`
 
+Active context packet: `CONTEXT_PACKET.json`
+
 ## Read Next
 
-Read `capabilities/01-ingestion-ontology/CAPABILITY.md`, then `IMPLEMENTATION.md`, then `VERIFICATION.md`.
+Read `CONTEXT_PACKET.json`, then `capabilities/01-ingestion-ontology/CAPABILITY.md`, then `IMPLEMENTATION.md`, then `VERIFICATION.md`.
 
-Do not read unrelated capability packs upfront. In `continuous-full-suite` mode, advance to the next pack only after the active capability has proof, a documented blocker, or an explicit scope decision, then continue in the same session unless a stop condition applies.
+Do not read unrelated capability packs upfront. Do not read `CAPABILITY_INDEX.md` until the active capability has proof, a documented blocker, or an explicit scope decision and the next dependency-ready pack must be selected. In `continuous-full-suite` mode, advance one pack at a time, then continue in the same session unless a stop condition applies.
 
 ## Current Blockers
 

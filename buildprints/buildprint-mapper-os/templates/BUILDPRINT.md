@@ -7,13 +7,14 @@ This Buildprint is a source-independent implementation contract for the selected
 ## Read Order
 
 1. `BUILDPRINT.md`
-2. `CAPABILITY_INDEX.md`
-3. `CURRENT_STATE.md`
-4. `TEAM_STACK.md`
-5. `EXECUTION_PROTOCOL.md`
-6. Only the active capability pack named by `CURRENT_STATE.md`
+2. `CURRENT_STATE.md`
+3. `EXECUTION_PROTOCOL.md`
+4. `PRE_IMPLEMENTATION_QUESTIONS.md`
+5. `TEAM_STACK.md`
+6. `CONTEXT_PACKET.json`
+7. Only the active capability pack named by `CURRENT_STATE.md` / `CONTEXT_PACKET.json`
 
-Do not read every Markdown file before coding. For medium, large, and full-suite packages, `CAPABILITY_INDEX.md` is the traffic controller, `CURRENT_STATE.md` is the active pointer, and `TEAM_STACK.md` is the quality gate router. Load `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` only when `TEAM_STACK.md` selects `ux-ui-craft`. Load unrelated capability packs only after `CURRENT_STATE.md` advances to them.
+Do not read every Markdown file before coding. For medium, large, and full-suite packages, `CURRENT_STATE.md` is the human-readable router, `CONTEXT_PACKET.json` is the machine-readable active-context router, `TEAM_STACK.md` is the quality gate router, and `CAPABILITY_INDEX.md` is consulted only after proof to choose the next dependency-ready pack. Load `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md` only when the active context or team gate requires them. Load unrelated capability packs only after `CURRENT_STATE.md` advances to them.
 
 ## Scope
 
@@ -37,4 +38,4 @@ Do not use validated, production-ready, complete, or end-to-end language unless 
 
 ## Package Shape Rule
 
-Medium, large, and full-suite selected outputs are invalid unless they include `CAPABILITY_INDEX.md`, `TEAM_STACK.md`, and every included capability pack contains sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`. UI-bearing selected outputs are invalid without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`.
+Medium, large, and full-suite selected outputs are invalid unless they include `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, and every included capability pack contains sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`. UI-bearing selected outputs are invalid without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`.

@@ -25,7 +25,7 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 9. `policies/*.md`
 10. `prompts/*.md` and `templates/`
 
-For generated selected packages, do not make the implementing agent read all Markdown files or all capability packs before it knows the next action. `CAPABILITY_INDEX.md` is the traffic controller, `CURRENT_STATE.md` is the active pointer, and `TEAM_STACK.md` is the quality gate router.
+For generated selected packages, do not make the implementing agent read all Markdown files or all capability packs before it knows the next action. `CURRENT_STATE.md` is the human-readable router, `CONTEXT_PACKET.json` is the machine-readable active-context router, `TEAM_STACK.md` is the quality gate router, and `CAPABILITY_INDEX.md` is consulted only after proof to choose the next dependency-ready pack.
 
 ## Required Flow
 
@@ -79,6 +79,7 @@ Medium, large, and full-suite scopes must be hierarchical:
 ```text
 BUILDPRINT.md
 CAPABILITY_INDEX.md
+CONTEXT_PACKET.json
 CONTRACTS.md
 TEAM_STACK.md
 VERIFICATION.md
@@ -96,7 +97,7 @@ capabilities/<capability-id>/
   CONTRACTS.md
 ```
 
-This shape is mandatory. Full-suite output without `CAPABILITY_INDEX.md` and `TEAM_STACK.md`, UI-bearing output without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`, or any included capability pack without sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`, is invalid.
+This shape is mandatory. Full-suite output without `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, and `TEAM_STACK.md`, UI-bearing output without `UX_CONTRACT.md` and `DESIGN_QUALITY_BAR.md`, or any included capability pack without sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, and `VERIFICATION.md`, is invalid.
 
 `manifest.json` must match actual package files, include `teamStack.teams` for selected outputs, and must not list typo aliases such as `VERFICATION.md`. A selected package must use one canonical handoff artifact; do not put both `HANDOFF.md` and `HANDOVER.md` in the spine. `CAPABILITY_INDEX.md` must include a `Required teams` column so each capability routes to the relevant team-pack gates.
 

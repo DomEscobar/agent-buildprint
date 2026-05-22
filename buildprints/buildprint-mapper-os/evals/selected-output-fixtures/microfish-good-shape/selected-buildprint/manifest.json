@@ -20,12 +20,14 @@
       "ux-ui-craft",
       "test-and-verification",
       "integration-runtime",
+      "security-boundary",
       "data-persistence"
     ]
   },
   "files": [
     "BUILDPRINT.md",
     "CAPABILITY_INDEX.md",
+    "CONTEXT_PACKET.json",
     "SOURCE_SURFACE_COVERAGE.md",
     "CURRENT_STATE.md",
     "TEAM_STACK.md",

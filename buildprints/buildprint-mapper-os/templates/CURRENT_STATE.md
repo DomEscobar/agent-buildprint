@@ -1,5 +1,7 @@
 # CURRENT_STATE
 
+This file is the authoritative human-readable router for implementation. If local resume state exists, merge it here before coding; if a snapshot conflicts with local `.buildprint/state.json`, the local state wins for active capability and continuation.
+
 - Requested scope:
 - Selected target / first slice:
 - Execution mode: continuous-full-suite / active-capability-handoff
@@ -14,14 +16,23 @@
 ## Read Next
 
 - Active pack:
+- Active context packet: `CONTEXT_PACKET.json`
 - Open now:
+  - `EXECUTION_PROTOCOL.md`
+  - `PRE_IMPLEMENTATION_QUESTIONS.md`
   - `TEAM_STACK.md`
-  - `UX_CONTRACT.md` when `TEAM_STACK.md` selects `ux-ui-craft`
-  - `DESIGN_QUALITY_BAR.md` when `TEAM_STACK.md` selects `ux-ui-craft`
+  - `CONTEXT_PACKET.json`
   - `capabilities/<active-capability>/IMPLEMENTATION.md`
   - `capabilities/<active-capability>/CAPABILITY.md`
   - `capabilities/<active-capability>/VERIFICATION.md`
+- Open only if active context/team gate requires:
+  - `UX_CONTRACT.md`
+  - `DESIGN_QUALITY_BAR.md`
+  - `PROVIDERS.md`
+  - `DATA_LIFECYCLE.md`
+  - `SECURITY.md`
 - Do not open yet:
+  - `CAPABILITY_INDEX.md` until proof passes and the next dependency-ready pack must be selected
   - unrelated capability packs until this file advances the active pack
 
 ## Scope Preservation

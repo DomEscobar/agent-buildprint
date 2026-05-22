@@ -15,7 +15,7 @@ Read:
 5. `EXECUTION_PROTOCOL.md`
 6. `VERIFICATION.md`
 
-For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read `BUILDPRINT.md`, `CAPABILITY_INDEX.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, then only the active capability pack.
+For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read `BUILDPRINT.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `TEAM_STACK.md`, `CONTEXT_PACKET.json`, then only the active capability pack. `CAPABILITY_INDEX.md` is consulted after proof to choose the next dependency-ready pack.
 
 ## Default Behavior
 
@@ -35,6 +35,7 @@ Selected output belongs under `selected-buildprint/`. Its spine is:
 ```text
 BUILDPRINT.md
 CAPABILITY_INDEX.md
+CONTEXT_PACKET.json
 CONTRACTS.md
 VERIFICATION.md
 EXECUTION_PROTOCOL.md

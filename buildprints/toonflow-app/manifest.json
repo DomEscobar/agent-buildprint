@@ -168,6 +168,7 @@
   "files": [
     "BUILDPRINT.md",
     "CAPABILITY_INDEX.md",
+    "CONTEXT_PACKET.json",
     "SOURCE_SURFACE_COVERAGE.md",
     "CONTRACTS.md",
     "CURRENT_STATE.md",
