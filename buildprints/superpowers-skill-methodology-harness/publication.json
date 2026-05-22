@@ -1,0 +1,117 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "superpowers-skill-methodology-harness",
+  "title": "Superpowers Skill Methodology Harness",
+  "creator": "Agent Buildprint",
+  "category": "Workflow OS",
+  "tier": "agent-grade",
+  "status": "validated",
+  "runtime": [
+    "Claude Code",
+    "Codex",
+    "OpenCode",
+    "Gemini",
+    "Cursor",
+    "Copilot CLI"
+  ],
+  "stack": [
+    "Session bootstrap",
+    "Skill routing",
+    "TDD",
+    "Subagents",
+    "Transcript evals"
+  ],
+  "iconKeys": [
+    "md",
+    "json",
+    "typescript"
+  ],
+  "difficulty": "Advanced",
+  "featured": true,
+  "summary": "Validated Superpowers-inspired skill-methodology harness: bootstrap skill use before action, route to process skills, enforce design/planning/TDD, execute via subagents, and validate with transcripts.",
+  "plainDescription": "A blueprint for building an actual coding-agent skill setup harness, not a manager: startup bootstrap, skill activation, methodology gates, subagent execution, code review, branch finishing, and transcript tests.",
+  "promise": "A source-backed Buildprint for reconstructing the architecture and behavior contracts behind obra/superpowers as a portable skill-methodology harness.",
+  "whatYouGet": [
+    "Session-start bootstrap contract",
+    "Skill metadata and routing model",
+    "Brainstorming-before-code workflow",
+    "Spec and implementation-plan artifacts",
+    "TDD hard gate",
+    "Systematic debugging gate",
+    "Subagent implementation/review loop",
+    "Transcript acceptance test matrix"
+  ],
+  "whatYouNeed": [
+    "One target agent runtime to support first",
+    "A skill loading mechanism or plugin adapter",
+    "A transcript/eval runner",
+    "A safe subagent/task interface",
+    "Human policy for exceptions to TDD/design gates"
+  ],
+  "architectureFlow": [
+    "Bootstrap",
+    "Skill lookup",
+    "Design",
+    "Plan",
+    "TDD",
+    "Subagents",
+    "Review",
+    "Finish"
+  ],
+  "includes": [
+    "Pinned source trace",
+    "System map",
+    "Bootstrap and routing contract",
+    "Skill library map",
+    "Canonical workflow",
+    "Subagent orchestration contract",
+    "Plan/spec/test contracts",
+    "Transcript-based test matrix",
+    "Validation status and next proof plan"
+  ],
+  "risks": [
+    "Confusing skill files with a working harness",
+    "Skipping bootstrap injection",
+    "Skills not auto-triggering",
+    "Implementation before design approval",
+    "TDD theatre without observed red phase",
+    "Subagent context pollution",
+    "Reviewer trusting implementer summaries",
+    "Overclaiming official Superpowers compatibility"
+  ],
+  "checks": [
+    "Pinned Superpowers commit recorded",
+    "Source trace cites README, skill files, plugin manifests, OpenCode bootstrap, and eval/test docs",
+    "Buildprint distinguishes manager tooling from methodology harness behavior",
+    "Bootstrap/skill activation is treated as required runtime behavior",
+    "Acceptance prompt requires brainstorming before code",
+    "Clean-room proof passes npm test 6/6 and transcript evals 5/5"
+  ],
+  "trustBadges": [
+    {
+      "label": "Source-backed mapping",
+      "detail": "Mapped from obra/superpowers at commit f2cbfbefebbfef77321e4c9abc9e949826bea9d7.",
+      "tone": "success"
+    },
+    {
+      "label": "Actual skill harness",
+      "detail": "Focuses on bootstrap, activation, methodology gates, subagents, and transcripts—not dashboards or managers.",
+      "tone": "info"
+    },
+    {
+      "label": "Clean-room proof passed",
+      "detail": "Codex built a neutral Node.js proof from snapshots; npm test passed 6/6 and transcript evals passed 5/5.",
+      "tone": "success"
+    },
+    {
+      "label": "Scoped validation",
+      "detail": "Validated as an inspired/adaptive methodology harness proof, not a production runtime adapter or official clone.",
+      "tone": "warning"
+    }
+  ],
+  "originGithubUrl": "https://github.com/obra/superpowers",
+  "originLabel": "obra/superpowers",
+  "copyPrompt": "Use the Superpowers Skill Methodology Harness Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/superpowers-skill-methodology-harness/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/superpowers-skill-methodology-harness/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a clean-room skill-methodology harness proof. Do not make a dashboard/manager. Implement session bootstrap, skill lookup before action, brainstorming-before-code, TDD gate, subagent/review loop contracts, and transcript evals. Keep claims Superpowers-inspired unless installing the official plugin."
+}

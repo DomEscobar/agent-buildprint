@@ -1,0 +1,118 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "complete-agent-skills-evaluation-os",
+  "title": "Complete Agent Skills Evaluation OS",
+  "creator": "Agent Buildprint",
+  "category": "Workflow OS",
+  "tier": "agent-grade",
+  "status": "validated",
+  "runtime": [
+    "Any coding agent",
+    "JavaScript proof",
+    "CI-ready adapters"
+  ],
+  "stack": [
+    "Static lint",
+    "Loadout inventory",
+    "Skill tests",
+    "Activation evals",
+    "Transcript checks",
+    "Multi-agent safety"
+  ],
+  "iconKeys": [
+    "json",
+    "md",
+    "typescript"
+  ],
+  "difficulty": "Advanced",
+  "featured": true,
+  "summary": "Complete evaluation stack for agent skill setups: validate config, measure loadout cost, test skills, check activation, enforce transcript process, and score multi-agent safety.",
+  "plainDescription": "A blueprint for evaluating an entire coding-agent setup, not just one skill: installed skills, agents, commands, hooks, MCP, routers, subagents, workflow discipline, token cost, safety, and CI evidence.",
+  "promise": "A validated Buildprint for evaluating complete agent+skills installations from static validity through real behavior, with skill-eval-runner as the core module but not the whole system.",
+  "whatYouGet": [
+    "Setup snapshot and install parity model",
+    "Static lint gates for agent config files",
+    "Loadout and token-cost inventory",
+    "Skill unit/regression test harness pattern",
+    "Activation and routing eval pattern",
+    "Transcript/process invariant checks",
+    "E2E task benchmark model",
+    "Multi-agent/subagent safety gates",
+    "Weighted scorecard and CI report contract"
+  ],
+  "whatYouNeed": [
+    "A target agent setup to evaluate",
+    "Offline fixture cases for deterministic mode",
+    "Optional live agent/provider credentials for live adapters",
+    "A safety policy for external/destructive actions",
+    "A list of critical workflow invariants"
+  ],
+  "architectureFlow": [
+    "Snapshot",
+    "Lint",
+    "Inventory",
+    "Skill tests",
+    "Activation",
+    "Transcript",
+    "Scorecard"
+  ],
+  "includes": [
+    "Deep tool comparison",
+    "Static lint layer",
+    "Loadout inventory layer",
+    "Skill unit eval layer",
+    "Activation eval layer",
+    "Transcript process eval layer",
+    "E2E task bench",
+    "Multi-agent safety layer",
+    "Safety policy",
+    "Weighted scorecard",
+    "Offline JavaScript proof"
+  ],
+  "risks": [
+    "Mistaking per-skill tests for full setup proof",
+    "Ignoring activation failures",
+    "Skipping transcript/order evidence",
+    "Measuring a drifted install",
+    "Token bloat from unused loadout",
+    "Unsafe external actions in live tests",
+    "Subagent file ownership collisions"
+  ],
+  "checks": [
+    "Static-invalid setups fail before expensive behavior tests",
+    "Loadout inventory exposes loaded token tax and dormant artifacts",
+    "Skill unit tests are separated from activation tests",
+    "Activation evals include positive and negative prompts",
+    "Transcript checks enforce skill-before-action and approval-before-risky-action invariants",
+    "Multi-agent cases check parent context, output schema, and file ownership",
+    "Safety hard-fails override good final outputs",
+    "Offline proof passes 8/8 tests without live agents, providers, or network calls"
+  ],
+  "trustBadges": [
+    {
+      "label": "Deep stack design",
+      "detail": "Combines skill-eval-runner, cc-plugin-eval, Superpowers-style transcripts, agnix, loadout inventory, and multi-agent safety layers.",
+      "tone": "success"
+    },
+    {
+      "label": "Offline proof passed",
+      "detail": "Deterministic JavaScript proof validates snapshot, lint, loadout, activation, transcript, and multi-agent scoring.",
+      "tone": "success"
+    },
+    {
+      "label": "Not just skill tests",
+      "detail": "Skill unit tests are one module; activation, process compliance, safety, and loadout cost are separate gates.",
+      "tone": "info"
+    },
+    {
+      "label": "Safety hard-fails",
+      "detail": "Secrets, external writes, destructive actions, and fabricated evidence override aggregate scores.",
+      "tone": "warning"
+    }
+  ],
+  "originGithubUrl": "https://github.com/balyakin/skill-eval-runner",
+  "originLabel": "balyakin/skill-eval-runner + eval stack",
+  "copyPrompt": "Use the Complete Agent Skills Evaluation OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/complete-agent-skills-evaluation-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/complete-agent-skills-evaluation-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a complete evaluation stack for my coding-agent setup. Treat skill-eval-runner-style per-skill tests as one module only. Include setup snapshot, static lint, loadout/token inventory, activation/routing evals with positive and negative prompts, transcript/process checks, E2E task bench, multi-agent safety, safety hard-fails, and CI scorecard. Use offline fixtures by default; do not perform live external actions without approval."
+}

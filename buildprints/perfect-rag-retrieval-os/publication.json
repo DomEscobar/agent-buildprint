@@ -1,0 +1,106 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "perfect-rag-retrieval-os",
+  "title": "Perfect RAG / Retrieval OS",
+  "creator": "Agent Buildprint",
+  "category": "Workflow OS",
+  "tier": "agent-grade",
+  "status": "validated",
+  "runtime": [
+    "Any backend",
+    "TypeScript proof"
+  ],
+  "stack": [
+    "Hybrid retrieval",
+    "Reranking",
+    "Citations",
+    "RAG evals"
+  ],
+  "iconKeys": [
+    "typescript",
+    "json",
+    "md"
+  ],
+  "difficulty": "Advanced",
+  "featured": true,
+  "summary": "Production-grade RAG blueprint with ingestion, chunking, hybrid retrieval, reranking, grounded citations, refusal behavior, permission filtering, and eval gates.",
+  "plainDescription": "A stack-adaptable blueprint for building a serious RAG system: not just vector search, but measurable retrieval quality, reranking, grounded answers, and regression tests.",
+  "promise": "An agent-grade workflow Buildprint for building benchmark-informed RAG systems with hybrid retrieval, reranking, citations, refusal behavior, tenant-safe retrieval, and measurable quality gates.",
+  "whatYouGet": [
+    "Document ingestion and chunk contracts",
+    "Hybrid lexical/dense retrieval",
+    "Candidate fusion and dedupe",
+    "Reranker / late-interaction boundary",
+    "Citation-grounded answer generation",
+    "Refusal and permission-filter tests",
+    "Retrieval and answer-quality eval harness"
+  ],
+  "whatYouNeed": [
+    "Nothing for local deterministic proof mode",
+    "Your document corpus and permission model",
+    "Search/vector infrastructure for production mode",
+    "Embedding/reranker/LLM provider keys only for live adapters",
+    "Eval cases that represent your real user questions"
+  ],
+  "architectureFlow": [
+    "Documents",
+    "Chunks",
+    "Hybrid retrieve",
+    "Rerank",
+    "Grounded answer",
+    "Eval gates"
+  ],
+  "includes": [
+    "Source and chunk contracts",
+    "Dense plus lexical/sparse retrieval architecture",
+    "Fusion and dedupe policy",
+    "Permission and tenant filters",
+    "Reranker adapter boundary",
+    "Grounded answer contract",
+    "RAG eval harness",
+    "Advanced technique guidance for HyDE, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG, and CRAG",
+    "Offline TypeScript proof"
+  ],
+  "risks": [
+    "Vector-only false confidence",
+    "Hallucinated uncited answers",
+    "Permission leakage",
+    "Eval-free quality drift",
+    "Reranker latency/cost creep",
+    "Advanced-tech hype without measured gain"
+  ],
+  "checks": [
+    "Research report validated with 18 sources and 16 evidence-backed claims",
+    "Offline TypeScript proof builds without network or provider keys",
+    "Proof compares lexical, dense-like, hybrid, and reranked retrieval paths",
+    "Grounded answer includes citations from selected chunks",
+    "Unsupported query refuses with insufficient-evidence",
+    "Tenant/private retrieval filter blocks unauthorized chunks",
+    "Eval harness emits machine-readable recall@5 and MRR-style metrics"
+  ],
+  "trustBadges": [
+    {
+      "label": "Benchmark-informed",
+      "detail": "Research cross-checked BEIR, MTEB, ColBERT, SPLADE, HyDE, RAPTOR, Self-RAG, CRAG, GraphRAG, Ragas, and retrieval-eval docs.",
+      "tone": "success"
+    },
+    {
+      "label": "Hybrid + rerank by default",
+      "detail": "Blueprint avoids vector-only RAG and makes reranking/eval gates first-class.",
+      "tone": "success"
+    },
+    {
+      "label": "Offline proof",
+      "detail": "Deterministic TypeScript proof runs without live model, vector DB, or provider credentials.",
+      "tone": "info"
+    },
+    {
+      "label": "Permission-safe retrieval",
+      "detail": "Tenant/private filters are part of the proof and acceptance tests.",
+      "tone": "success"
+    }
+  ],
+  "copyPrompt": "Use the Perfect RAG / Retrieval OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/perfect-rag-retrieval-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/perfect-rag-retrieval-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. First identify my corpus, permissions, backend stack, search/vector infrastructure, latency/cost budget, and eval cases. Implement ingestion, chunking, hybrid retrieval, fusion/dedupe, permission filtering, reranking, grounded cited answers, refusal behavior, trace logging, and retrieval/answer evals. Use deterministic mocks in tests; do not call live model/vector/reranker providers unless explicitly configured."
+}

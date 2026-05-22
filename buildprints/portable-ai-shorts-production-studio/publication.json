@@ -1,0 +1,114 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "portable-ai-shorts-production-studio",
+  "title": "Portable AI Shorts Production Studio",
+  "creator": "Agent Buildprint",
+  "category": "Mapped Project",
+  "tier": "agent-grade",
+  "status": "validated",
+  "runtime": [
+    "JavaScript",
+    "Clean-room web proof"
+  ],
+  "stack": [
+    "Product analysis",
+    "UGC scripts",
+    "Actor / voice adapters",
+    "Video composition",
+    "Gallery SEO"
+  ],
+  "iconKeys": [
+    "typescript",
+    "json",
+    "md"
+  ],
+  "difficulty": "Advanced",
+  "featured": true,
+  "summary": "OpenShorts-inspired AI shorts production Buildprint with product analysis, UGC script generation, actor/voice provider adapters, mocked media jobs, 9:16 composition, gallery SEO, and social handoff.",
+  "plainDescription": "A blueprint for an AI shorts production studio: start from a product, generate a UGC script, choose actor/voice options, queue media jobs, plan a 9:16 video, and hand off gallery/social assets.",
+  "promise": "A validated mapped-project Buildprint for rebuilding a portable AI shorts production pipeline from public OpenShorts architecture patterns without claiming OpenShorts clone, provider/API, rendering-quality, or social-platform parity.",
+  "whatYouGet": [
+    "AI shorts production studio",
+    "Product input and product analysis flow",
+    "UGC script generator",
+    "Actor/avatar and voice selection flow",
+    "Mock talking-head, b-roll, and subtitle job pipeline",
+    "9:16 composition plus gallery/SEO/social handoff"
+  ],
+  "whatYouNeed": [
+    "Nothing for local/mock proof mode",
+    "AI provider key for real product analysis and script generation",
+    "TTS provider key for real voiceover",
+    "Image/video provider keys for live media generation",
+    "Storage or social credentials only if you want real publishing"
+  ],
+  "architectureFlow": [
+    "Product",
+    "Script",
+    "Voice/avatar",
+    "Media jobs",
+    "9:16 video",
+    "Gallery/social"
+  ],
+  "includes": [
+    "Pinned OpenShorts source trace",
+    "Repo facts and fork/license boundary notes",
+    "Product URL/manual-input analysis flow",
+    "Five-segment UGC script contract",
+    "Actor gallery/generated/uploaded selection model",
+    "Voiceover adapter contract",
+    "Talking-head/lipsync adapter contract",
+    "B-roll generation adapter contract",
+    "Subtitle and hook overlay composition plan",
+    "9:16 video manifest",
+    "Gallery SEO VideoObject manifest",
+    "Social publishing handoff manifest",
+    "Threat model for keys, likeness, scraping, and gallery exposure",
+    "Clean-room runnable proof with tests"
+  ],
+  "risks": [
+    "Accidentally implying OpenShorts clone parity",
+    "Provider/API parity overclaiming",
+    "Video quality/rendering parity overclaiming",
+    "Social platform publishing reliability overclaiming",
+    "User likeness/copyright/consent under-specification",
+    "Client-side API key handling scope creep"
+  ],
+  "checks": [
+    "Mapped source commit is recorded: fe87af6dd599b854e6eab2de0ca247ebafe13885",
+    "Required Mapper OS artifacts exist",
+    "Source trace cites concrete OpenShorts files/line ranges",
+    "Clean-room proof is built from Buildprint docs, not OpenShorts imports",
+    "npm run check passes in clean-room proof",
+    "7/7 proof tests pass",
+    "Claim boundary remains workflow-proof + contract-parity + mocked-provider proof",
+    "Full clone/provider/API/rendering/social-platform parity are explicitly out of scope"
+  ],
+  "trustBadges": [
+    {
+      "label": "Runnable proof passed",
+      "detail": "Clean-room JavaScript proof passes 7/7 tests and builds dist/.",
+      "tone": "success"
+    },
+    {
+      "label": "Visual product pipeline",
+      "detail": "Maps product analysis through script, actor, voice, media jobs, composition, gallery, and publishing handoff.",
+      "tone": "info"
+    },
+    {
+      "label": "OpenShorts-inspired, not clone",
+      "detail": "Public boundary excludes clone, provider/API, rendering-quality, and social-platform parity.",
+      "tone": "warning"
+    },
+    {
+      "label": "Mocked providers",
+      "detail": "External video, voice, storage, and social services are modeled as adapters/mocks.",
+      "tone": "neutral"
+    }
+  ],
+  "originGithubUrl": "https://github.com/mutonby/openshorts",
+  "originLabel": "mutonby/openshorts",
+  "copyPrompt": "Use the Portable AI Shorts Production Studio Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-shorts-production-studio/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-shorts-production-studio/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a clean-room AI shorts production proof from the Buildprint package. Keep claims scoped to workflow-proof + contract-parity + mocked-provider proof. Do not call it an OpenShorts clone, drop-in replacement, provider/API parity implementation, rendering-quality parity proof, or social-platform publishing parity proof."
+}
