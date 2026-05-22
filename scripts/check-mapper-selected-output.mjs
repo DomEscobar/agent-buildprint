@@ -9,6 +9,7 @@ let failures = 0;
 const rootRequired = [
   'BUILDPRINT.md',
   'CAPABILITY_INDEX.md',
+  'SOURCE_SURFACE_COVERAGE.md',
   'CONTRACTS.md',
   'TEAM_STACK.md',
   'VERIFICATION.md',
@@ -61,6 +62,13 @@ const designQualityRequiredSections = [
   /## Accessibility Gates/i,
   /## Responsive Gates/i,
   /## Required Screenshot Set/i,
+];
+const sourceSurfaceDispositions = [
+  'OWNED_BY_CAPABILITY',
+  'MERGED_INTO_CAPABILITY',
+  'OUT_OF_SCOPE_BY_USER_ONLY',
+  'BLOCKED_NEEDS_REVIEW',
+  'LOW_SIGNAL_IGNORED_WITH_REASON',
 ];
 
 function relFiles(dir, base = dir) {
@@ -193,6 +201,19 @@ for (const target of targets) {
     }
   }
 
+  const sourceSurfaceCoveragePath = path.join(dir, 'SOURCE_SURFACE_COVERAGE.md');
+  if (fs.existsSync(sourceSurfaceCoveragePath)) {
+    const coverage = fs.readFileSync(sourceSurfaceCoveragePath, 'utf8');
+    const hasDisposition = sourceSurfaceDispositions.some((label) => coverage.includes(label));
+    if (!hasDisposition) fail(target, 'SOURCE_SURFACE_COVERAGE.md must include at least one source surface disposition label');
+    if (!/Product obligation|Capability obligation|Owned by capability|OWNED_BY_CAPABILITY|Behavior Loss Review/i.test(coverage)) {
+      fail(target, 'SOURCE_SURFACE_COVERAGE.md must connect surfaces to product obligations, capabilities, blockers, merges, or explicit exclusions');
+    }
+    if (/route parity|required route count|1:1 route|one-to-one route/i.test(coverage) && !/not|anti-parity|not a route|not require/i.test(coverage)) {
+      fail(target, 'SOURCE_SURFACE_COVERAGE.md must not require route/function parity');
+    }
+  }
+
   if (signals.ui) {
     const uxPath = path.join(dir, 'UX_CONTRACT.md');
     if (!fs.existsSync(uxPath)) {
@@ -232,6 +253,16 @@ for (const target of targets) {
           fail(target, `capability pack ${pack.name} missing ${file}`);
         }
       }
+      const capabilityPath = path.join(capsDir, pack.name, 'CAPABILITY.md');
+      if (fs.existsSync(capabilityPath)) {
+        const capability = fs.readFileSync(capabilityPath, 'utf8');
+        if (!/Owned source surfaces/i.test(capability)) {
+          fail(target, `capability pack ${pack.name} missing Owned source surfaces section`);
+        }
+        if (/routes?\.|api\.|tables?\.|jobs?\.|providerAdapters?\.|auth\.|admin\.|uploads?\.|exports?\.|imports?\.|fileStores?\.|env\.|deployment\.|docs\./i.test(capability) && !/Product obligations?/i.test(capability)) {
+          fail(target, `capability pack ${pack.name} lists source surfaces without Product obligations section`);
+        }
+      }
     }
   }
 
@@ -255,7 +286,7 @@ for (const target of targets) {
   const capabilityIndexPath = path.join(dir, 'CAPABILITY_INDEX.md');
   if (fs.existsSync(capabilityIndexPath)) {
     const index = fs.readFileSync(capabilityIndexPath, 'utf8');
-    for (const requiredColumn of ['Required teams', 'Topology status', 'UI/UX status', 'Promotion blocker']) {
+    for (const requiredColumn of ['Required teams', 'Owned source surfaces', 'Topology status', 'UI/UX status', 'Promotion blocker']) {
       if (!index.includes(requiredColumn)) fail(target, `CAPABILITY_INDEX.md missing ${requiredColumn} column`);
     }
     for (const team of requiredTeams) {

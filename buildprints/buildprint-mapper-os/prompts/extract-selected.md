@@ -17,6 +17,7 @@ For medium, large, or full-suite scope:
 selected-buildprint/
   BUILDPRINT.md
   CAPABILITY_INDEX.md
+  SOURCE_SURFACE_COVERAGE.md
   CONTRACTS.md
   TEAM_STACK.md
   VERIFICATION.md
@@ -55,6 +56,12 @@ Set an explicit execution mode. Default full-suite selected outputs to `continuo
 
 - Convert source facts into source-independent behavior contracts.
 - Do not preserve source internals unless externally observable or qualification-relevant.
+- Every selected output must include `SOURCE_SURFACE_COVERAGE.md`.
+- `SOURCE_SURFACE_COVERAGE.md` must list every high-signal census surface and its disposition: `OWNED_BY_CAPABILITY`, `MERGED_INTO_CAPABILITY`, `OUT_OF_SCOPE_BY_USER_ONLY`, `BLOCKED_NEEDS_REVIEW`, or `LOW_SIGNAL_IGNORED_WITH_REASON` only when a previously high-signal surface is downgraded with evidence.
+- Capabilities must reference owned source surface IDs in their `CAPABILITY.md`; this is traceability, not route/function parity.
+- Do not map routes/functions 1:1 unless that is the real product boundary.
+- Do not satisfy source-surface coverage by dumping every route/function into a table. Each owned surface must connect to a named product obligation, contract, blocker, intentional merge, or explicit out-of-scope decision.
+- If a high-signal surface is not owned by any capability, mark it as `BLOCKED_NEEDS_REVIEW`, `MERGED_INTO_CAPABILITY`, or `OUT_OF_SCOPE_BY_USER_ONLY`; do not omit it.
 - Preserve the selected/requested capability surface. Do not convert “hard to prove,” “risky,” “external,” “destructive,” “provider-backed,” or “not first slice” into omission.
 - Classify every capability as `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `TEST_ONLY_MOCK`.
 - Use `OUT_OF_SCOPE_BY_USER_ONLY` only for explicit user exclusions or explicit selected-target boundaries; lack of proof is not enough.
@@ -80,6 +87,21 @@ Set an explicit execution mode. Default full-suite selected outputs to `continuo
 - Keep unresolved questions out of files that claim implementation readiness.
 - Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
 - Validate selected output shape before handoff. Fail the package if `CAPABILITY_INDEX.md` or `TEAM_STACK.md` is missing, `UX_CONTRACT.md` or `DESIGN_QUALITY_BAR.md` is missing for UI-bearing output, required team packs are absent, any included capability pack lacks sibling `CAPABILITY.md`, `IMPLEMENTATION.md`, or `VERIFICATION.md`, `manifest.json` lists missing/non-canonical files, typo aliases such as `VERFICATION.md` exist, or both `HANDOFF.md` and `HANDOVER.md` appear as canonical spine files.
+
+## Behavior Loss Review
+
+Before handoff, ask:
+
+> What source-backed product behavior, workflow, integration boundary, persistence behavior, auth/security rule, job/runtime behavior, import/export, or operational requirement would be impossible to rebuild from this Buildprint?
+
+Any identified loss must become one of:
+
+- a capability obligation;
+- a capability blocker;
+- an explicit user-approved exclusion;
+- or a documented merge into another capability.
+
+This review is adversarial: the goal is not source-shape parity, but preventing silent loss of product behavior.
 
 ## Forbidden Defaults
 

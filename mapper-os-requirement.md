@@ -42,9 +42,20 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
 - Census output may create only `CENSUS_HINT` or `PENDING_AGENT_DISCOVERY` claims.
 - Census output must not assert product behavior, absence, parity, route completeness, provider completeness, persistence guarantees, or candidate readiness.
 
+### Stage 2.5: Source Surface Census
+
+- Mapper OS must create a mechanical source-surface census before semantic capability mapping.
+- Source surfaces are evidence, not requirements. The Buildprint must not preserve source structure, route count, file layout, function names, or module boundaries unless they encode externally observable behavior or qualification-relevant boundaries.
+- Assign stable source surface IDs for high-signal surfaces, using prefixes such as `routes.*`, `api.*`, `tables.*`, `models.*`, `jobs.*`, `queues.*`, `sockets.*`, `providerAdapters.*`, `auth.*`, `admin.*`, `uploads.*`, `exports.*`, `imports.*`, `fileStores.*`, `env.*`, `deployment.*`, and `docs.*`.
+- Classify each surface signal level as `high`, `medium`, or `low`. High-signal surfaces include user-facing routes, API handlers, persistence models/tables, provider adapters, auth/admin paths, jobs, uploads, imports/exports, file stores, sockets, deployment/runtime config, and source docs that define product workflows.
+- The census may not infer product behavior. It may only record that a surface exists, where it was found, and why it may be relevant.
+- Every high-signal source surface must later receive exactly one disposition in selected output: `OWNED_BY_CAPABILITY`, `MERGED_INTO_CAPABILITY`, `OUT_OF_SCOPE_BY_USER_ONLY`, `BLOCKED_NEEDS_REVIEW`, or `LOW_SIGNAL_IGNORED_WITH_REASON` when the signal classification is downgraded with evidence.
+- The source-surface invariant is: the Buildprint does not need to preserve source structure; it must preserve source-backed product obligations, and every high-signal source surface must either support an obligation, be intentionally merged, or be explicitly blocked/out-of-scope.
+
 ### Stage 3: Capability Discovery
 
 - Discover product capabilities first. Files are evidence, not the product boundary.
+- Routes, functions, files, tables, jobs, provider adapters, and configs are evidence for product obligations, not one-to-one Buildprint requirements.
 - Read source entrypoints, manifests, route files, API handlers, models, workflow engines, state stores, provider adapters, tests, docs, deployment files, and security-relevant configs only to understand feature behavior and required boundaries.
 - Promote claims only with source evidence.
 - Use these claim states:
@@ -56,6 +67,9 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
   - `BLOCKED`
   - `OUT_OF_SCOPE`
 - Every `OBSERVED` claim must cite source path and line or section evidence.
+- Capabilities must declare owned source surface IDs when they are mapped from source. Ownership is traceability from source evidence to product obligation, not route/function parity.
+- A capability may own many routes, files, tables, jobs, or adapters when they belong to one product boundary.
+- High-signal source surfaces discovered in census must not silently disappear. If they are not owned by a capability, they must be intentionally merged, explicitly user-excluded, or blocked for review.
 - Absence is a claim and requires evidence. Missing scanner hints are not evidence of absence.
 - Internal classes, function names, folder layout, and source architecture are not preserved unless they are required for user-visible behavior, integration compatibility, operational compatibility, or qualification proof.
 

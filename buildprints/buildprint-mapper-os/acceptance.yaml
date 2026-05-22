@@ -17,6 +17,7 @@ acceptance:
     required_root:
       - BUILDPRINT.md
       - CAPABILITY_INDEX.md
+      - SOURCE_SURFACE_COVERAGE.md
       - CONTRACTS.md
       - VERIFICATION.md
       - EXECUTION_PROTOCOL.md
@@ -55,6 +56,12 @@ acceptance:
     - census hints are not product facts
     - every OBSERVED claim cites source evidence
     - selected scope explicit before selected extraction
+    - source surface census exists before selected extraction
+    - high-signal source surfaces have selected-output dispositions
+    - capability packs declare owned source surface IDs where mapped from source
+    - source surface ownership connects to product obligations, blockers, intentional merges, or explicit exclusions
+    - no route/function parity requirement
+    - no route/function dump accepted as capability discovery
     - capability status classification complete
     - selected output manifest matches actual files
     - selected output has no typo alias files

@@ -2,9 +2,9 @@
 
 This file is the ordered traffic controller for the downstream coding agent. The agent should use this file plus `CURRENT_STATE.md` to choose exactly one capability pack to load next; it should not read all packs upfront. In `continuous-full-suite` mode, advance through this table dependency order after each capability proof passes.
 
-| Capability | Status | Required teams | Source evidence | Product obligation | Required topology | Topology status | UI/UX status | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker | Dependencies | Pack | Verification | Blockers |
+| Capability | Status | Required teams | Owned source surfaces | Source evidence | Product obligation | Required topology | Topology status | UI/UX status | API | Domain logic | Persistence/state | Provider/runtime | Failure states | Proof command | Proof artifact | Negative test | Runtime/browser evidence | Depth status | Promotion blocker | Dependencies | Pack | Verification | Blockers |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|  | INCLUDED_READY / INCLUDED_NEEDS_PROOF / INCLUDED_BLOCKED / INCLUDED_RISKY_REQUIRES_HARDENING / OUT_OF_SCOPE_BY_USER_ONLY / TEST_ONLY_MOCK | test-and-verification | missing | missing | missing | missing | not-applicable / missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing |  | capabilities/<id>/ | missing |  |
+|  | INCLUDED_READY / INCLUDED_NEEDS_PROOF / INCLUDED_BLOCKED / INCLUDED_RISKY_REQUIRES_HARDENING / OUT_OF_SCOPE_BY_USER_ONLY / TEST_ONLY_MOCK | test-and-verification | missing | missing | missing | missing | missing | not-applicable / missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing | missing |  | capabilities/<id>/ | missing |  |
 
 ## Completeness
 
@@ -40,6 +40,7 @@ requirement -> source evidence -> Buildprint contract -> implementation check ->
 
 Each included capability must carry a concrete evidence contract, not only an implementation label.
 
+- `Owned source surfaces` must list stable source surface IDs from `SOURCE_SURFACE_COVERAGE.md` or say `none: <reason>` for genuinely source-independent/manual capabilities. This is traceability, not source-shape parity.
 - `Source evidence` must cite observed source files, routes, screens, jobs, docs, configs, or explicitly recorded inference/blocker evidence from discovery.
 - `Product obligation` must state the externally meaningful behavior the clean-room implementation must preserve.
 - `Required teams` must match `TEAM_STACK.md` and include every selected team that owns a gate for the capability.
@@ -57,7 +58,7 @@ Each included capability must carry a concrete evidence contract, not only an im
 The capability index is the handoff spine between roles:
 
 ```text
-source mapper fills Source evidence -> product-architect fills Product obligation and Required topology -> ux-ui-craft fills UI/UX status when selected -> test-and-verification fills Proof command/artifact/Negative test -> reviewer decides Depth status and Promotion blocker
+source mapper fills Owned source surfaces and Source evidence -> product-architect fills Product obligation and Required topology -> ux-ui-craft fills UI/UX status when selected -> test-and-verification fills Proof command/artifact/Negative test -> reviewer decides Depth status and Promotion blocker
 ```
 
 If a downstream role cannot consume an upstream field, stop and repair the field instead of guessing.
