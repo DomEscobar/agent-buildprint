@@ -1,16 +1,28 @@
 proof_contract_id: proof-<capability-id>
 required_proofs:
-  - <proof-id>
-  - ux_design_gate # required for UI-bearing capabilities
-  - screenshot_state_set # required for UI-bearing capabilities
+- <proof-id>
+- ux_design_gate
+- screenshot_state_set
 negative_tests:
-  - <negative-test-or-not-applicable>
+- <negative-test-or-not-applicable>
 evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
 snapshot_evidence_seed: 09-evidence/evidence-ledger.jsonl
 promotion_blockers:
-  - browser_runtime_trace
-  - no screenshots against 02-context/ux-contract.md and 02-context/design-quality-bar.md
-  - provider_integration_proof
-  - persistence_roundtrip
-  - security_boundary_review
-  - clean_room_implementation_trace
+- browser_runtime_trace
+- no screenshots against 02-context/ux-contract.md and 02-context/design-quality-bar.md
+- provider_integration_proof
+- persistence_roundtrip
+- security_boundary_review
+- clean_room_implementation_trace
+claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
+evidence_schema: 09-evidence/evidence-ledger.schema.json
+required_proof_types:
+- unit_or_integration_test
+- negative_test
+- browser_trace_or_runtime_trace
+- persistence_roundtrip_or_blocker
+- evidence_ledger_entry
+forbidden_upgrade_modes:
+- deterministic_adapter_only_as_live_provider_proof
+- in_memory_state_as_durable_persistence
+- static_ui_as_browser_proof

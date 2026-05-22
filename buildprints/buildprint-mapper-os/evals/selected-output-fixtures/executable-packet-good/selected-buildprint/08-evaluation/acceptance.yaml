@@ -1,10 +1,17 @@
 acceptance:
   promotion_requires:
-    - browser_runtime_trace
-    - provider_integration_proof
-    - persistence_roundtrip
-    - security_boundary_review
-    - clean_room_implementation_trace
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+  - security_boundary_review
+  - clean_room_implementation_trace
   capability_gates:
-    - proof-ingest-record
-
+  - proof-ingest-record
+claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
+evidence_schema: 09-evidence/evidence-ledger.schema.json
+active_slice_required: 02-context/active-slice.yaml
+global_acceptance:
+- active_slice_limits_initial_context
+- claim_upgrades_follow_claim_upgrade_rules
+- evidence_rows_match_schema
+- security_fixtures_pass_or_block

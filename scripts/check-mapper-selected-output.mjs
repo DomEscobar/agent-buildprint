@@ -76,6 +76,7 @@ const executableRequiredFiles = [
   '01-operating-model/stop-rules.md',
   '01-operating-model/human-approval-policy.md',
   '02-context/context-map.yaml',
+  '02-context/active-slice.yaml',
   '02-context/read-order.yaml',
   '02-context/team-stack.yaml',
   '02-context/ux-contract.md',
@@ -91,11 +92,14 @@ const executableRequiredFiles = [
   '06-safety/threat-model.md',
   '06-safety/secrets-policy.md',
   '06-safety/destructive-actions.md',
+  '06-safety/security-test-fixtures.yaml',
   '07-execution/implementation-plan.yaml',
   '08-evaluation/acceptance.yaml',
+  '08-evaluation/claim-upgrade-rules.yaml',
   '08-evaluation/test-matrix.yaml',
   '08-evaluation/quality-rubric.yaml',
   '09-evidence/evidence-ledger.jsonl',
+  '09-evidence/evidence-ledger.schema.json',
   '09-evidence/unresolved-blockers.md',
   'generated/agent-prompt.md',
 ];
@@ -224,7 +228,9 @@ function validateExecutablePacket(target, dir) {
   const blueprint = safeRead(path.join(dir, 'blueprint.yaml'));
   requireYamlKeys(target, 'blueprint.yaml', blueprint, [
     'schema_version',
-    'canonical_start',
+    'compatibility_start',
+    'execution_start',
+    'machine_contract',
     'claim_status',
     'promotion_requires',
     'obligations',
@@ -253,6 +259,9 @@ function validateExecutablePacket(target, dir) {
   if (!/blueprint\.yaml/i.test(startHere) || !/active capability/i.test(startHere) || !/evidence ledger/i.test(startHere)) {
     fail(target, 'START_HERE.md must route through blueprint.yaml, active capability, and evidence ledger');
   }
+  if (!/02-context\/active-slice\.yaml|active slice/i.test(startHere)) {
+    fail(target, 'START_HERE.md must route through 02-context/active-slice.yaml consumption protocol');
+  }
   if (!/PRE_IMPLEMENTATION_QUESTIONS\.md/i.test(startHere)) {
     fail(target, 'START_HERE.md must route through PRE_IMPLEMENTATION_QUESTIONS.md before coding');
   }
@@ -261,6 +270,14 @@ function validateExecutablePacket(target, dir) {
   }
   if (hasUiSignals && (!/02-context\/ux-contract\.md/i.test(startHere) || !/02-context\/design-quality-bar\.md/i.test(startHere))) {
     fail(target, 'START_HERE.md must route UI-bearing executable packets through ux-contract.md and design-quality-bar.md');
+  }
+
+  const activeSlice = safeRead(path.join(dir, '02-context/active-slice.yaml'));
+  for (const key of ['active_capability', 'read_only', 'write_only', 'required_deliverables', 'forbidden_actions', 'next_unlock']) {
+    if (!activeSlice.includes(`${key}:`)) fail(target, `02-context/active-slice.yaml missing ${key}`);
+  }
+  if (!/read_original_source_repo/i.test(activeSlice) || !/load_future_capability_packets_before_unlock/i.test(activeSlice)) {
+    fail(target, '02-context/active-slice.yaml must forbid source repo reads and future-pack loading before unlock');
   }
 
   const preQuestions = safeRead(path.join(dir, 'PRE_IMPLEMENTATION_QUESTIONS.md'));
@@ -281,6 +298,19 @@ function validateExecutablePacket(target, dir) {
   const productObligations = safeRead(path.join(dir, '00-intent/product-obligations.md'));
   if (!/OBL-[A-Z0-9_-]+/i.test(productObligations)) {
     fail(target, '00-intent/product-obligations.md must define obligation IDs');
+  }
+
+  const claimRules = safeRead(path.join(dir, '08-evaluation/claim-upgrade-rules.yaml'));
+  for (const proofType of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) {
+    if (!claimRules.includes(proofType)) fail(target, `08-evaluation/claim-upgrade-rules.yaml missing ${proofType}`);
+  }
+  const evidenceSchema = safeRead(path.join(dir, '09-evidence/evidence-ledger.schema.json'));
+  for (const field of ['capability_id', 'proof_type', 'provider_mode', 'upgrades_claim']) {
+    if (!evidenceSchema.includes(field)) fail(target, `09-evidence/evidence-ledger.schema.json missing ${field}`);
+  }
+  const securityFixtures = safeRead(path.join(dir, '06-safety/security-test-fixtures.yaml'));
+  for (const fixture of ['path_traversal', 'secret', 'destructive', 'subprocess']) {
+    if (!securityFixtures.toLowerCase().includes(fixture)) fail(target, `06-safety/security-test-fixtures.yaml missing ${fixture} fixture`);
   }
 
   const contextMap = safeRead(path.join(dir, '02-context/context-map.yaml'));

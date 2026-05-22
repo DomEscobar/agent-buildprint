@@ -1,35 +1,94 @@
-schema_version: mapper-os/source-evidence-index.v1
+schema_version: mapper-os/source-evidence-index.v2
+repo: https://github.com/666ghj/MiroFish
+commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+local_observed_root: /root/MiroFish
 surfaces:
-  - id: SRC-001
-    evidence: "/root/MiroFish/README.md:34-93 product promise, workflow, and broad scope"
-    status: OBSERVED
-  - id: SRC-002
-    evidence: "/root/MiroFish/backend/app/config.py:14-78 provider, upload, chunking, simulation, and report configuration"
-    status: OBSERVED
-  - id: SRC-003
-    evidence: "/root/MiroFish/backend/app/api/graph.py:36-622 project, upload, ontology, graph task, graph data, delete/reset routes"
-    status: OBSERVED
-  - id: SRC-004
-    evidence: "/root/MiroFish/backend/app/api/simulation.py:48-1740 entity, simulation creation, preparation, config/profile, start/stop/run-status/history routes"
-    status: OBSERVED
-  - id: SRC-005
-    evidence: "/root/MiroFish/backend/app/api/report.py:25-620 report generation, report retrieval/lifecycle, chat, progress/section routes"
-    status: OBSERVED
-  - id: SRC-006
-    evidence: "/root/MiroFish/backend/app/services/* graph, ontology, profile, simulation, report, Zep tools, IPC, runtime services"
-    status: OBSERVED
-  - id: SRC-007
-    evidence: "/root/MiroFish/backend/app/models/project.py:17-280 project persistence model and file/text storage"
-    status: OBSERVED
-  - id: SRC-008
-    evidence: "/root/MiroFish/backend/app/models/task.py:16-172 in-memory async task status model"
-    status: OBSERVED
-  - id: SRC-009
-    evidence: "/root/MiroFish/frontend/src/views/MainView.vue:1-260 workbench shell, graph/split/workbench layout, step routing, upload-to-graph flow"
-    status: OBSERVED
-  - id: SRC-010
-    evidence: "/root/MiroFish/frontend/src/components/GraphPanel.vue:17-220 graph visualization and details UI"
-    status: OBSERVED
-  - id: SRC-011
-    evidence: "/root/MiroFish/package.json:1-18, /root/MiroFish/backend/pyproject.toml:1-41, /root/MiroFish/frontend/package.json:1-22 stack and dependency evidence"
-    status: OBSERVED
+- id: SRC-001
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: README.md
+  summary: product promise, workflow, and broad scope
+  status: OBSERVED
+  lines: 34-93
+  local_observed_path: /root/MiroFish/README.md
+- id: SRC-002
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: backend/app/config.py
+  summary: provider, upload, chunking, simulation, and report configuration
+  status: OBSERVED
+  lines: 14-78
+  local_observed_path: /root/MiroFish/backend/app/config.py
+- id: SRC-003
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: backend/app/api/graph.py
+  summary: project, upload, ontology, graph task, graph data, delete/reset routes
+  status: OBSERVED
+  lines: 36-622
+  local_observed_path: /root/MiroFish/backend/app/api/graph.py
+- id: SRC-004
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: backend/app/api/simulation.py
+  summary: entity, simulation creation, preparation, config/profile, start/stop/run-status/history
+    routes
+  status: OBSERVED
+  lines: 48-1740
+  local_observed_path: /root/MiroFish/backend/app/api/simulation.py
+- id: SRC-005
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: backend/app/api/report.py
+  summary: report generation, report retrieval/lifecycle, chat, progress/section routes
+  status: OBSERVED
+  lines: 25-620
+  local_observed_path: /root/MiroFish/backend/app/api/report.py
+- id: SRC-006
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: backend/app/services/*
+  summary: graph, ontology, profile, simulation, report, Zep tools, IPC, runtime services
+  status: OBSERVED
+  local_observed_path: /root/MiroFish/backend/app/services/*
+- id: SRC-007
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: backend/app/models/project.py
+  summary: project persistence model and file/text storage
+  status: OBSERVED
+  lines: 17-280
+  local_observed_path: /root/MiroFish/backend/app/models/project.py
+- id: SRC-008
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: backend/app/models/task.py
+  summary: in-memory async task status model
+  status: OBSERVED
+  lines: 16-172
+  local_observed_path: /root/MiroFish/backend/app/models/task.py
+- id: SRC-009
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: frontend/src/views/MainView.vue
+  summary: workbench shell, graph/split/workbench layout, step routing, upload-to-graph
+    flow
+  status: OBSERVED
+  lines: 1-260
+  local_observed_path: /root/MiroFish/frontend/src/views/MainView.vue
+- id: SRC-010
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: frontend/src/components/GraphPanel.vue
+  summary: graph visualization and details UI
+  status: OBSERVED
+  lines: 17-220
+  local_observed_path: /root/MiroFish/frontend/src/components/GraphPanel.vue
+- id: SRC-011
+  repo: https://github.com/666ghj/MiroFish
+  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+  path: package.json, backend/pyproject.toml, frontend/package.json
+  summary: stack and dependency evidence
+  status: OBSERVED
+  lines: 1-18 / 1-41 / 1-22
+  local_observed_path: /root/MiroFish/package.json

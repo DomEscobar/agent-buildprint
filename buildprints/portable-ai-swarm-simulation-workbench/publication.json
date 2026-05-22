@@ -95,5 +95,9 @@
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use the Portable AI Swarm Simulation Workbench executable-packet v2. Start with BUILDPRINT.md, START_HERE.md, blueprint.yaml, 02-context/context-map.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, and 02-context/team-stack.yaml, then load only the active capability packet. Build source-independently; do not use the original MiroFish source. Keep status SELECTED_UNQUALIFIED until browser, provider, runtime, persistence, security, clean-room, and no-fake proof pass."
+  "copyPrompt": "Use the Portable AI Swarm Simulation Workbench executable-packet v2. Start with BUILDPRINT.md, START_HERE.md, blueprint.yaml, 02-context/context-map.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, and 02-context/team-stack.yaml, then load only the active capability packet. Build source-independently; do not use the original MiroFish source. Keep status SELECTED_UNQUALIFIED until browser, provider, runtime, persistence, security, clean-room, and no-fake proof pass.",
+  "publicStatus": {
+    "label": "Mapped, proof pending",
+    "explanation": "Source-independent packet exists; live implementation proof is not complete."
+  }
 }

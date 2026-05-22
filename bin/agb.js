@@ -34,6 +34,9 @@ Usage:
   agb analyze <buildprint-folder> [--phase <id>] [--json] [--yaml]
   agb check <blueprint-folder> [--code <generated-code-folder>]
   agb start <buildprint-package-json-url-or-file> [target-folder]
+  agb packet check <packet-folder-or-package-json-url>
+  agb packet next <packet-folder-or-build-state-folder>
+  agb evidence check <evidence-ledger-jsonl>
 
 Examples:
   agb analyze ./buildprints/buildprint-mapper-os
@@ -42,6 +45,9 @@ Examples:
   agb check ./my-buildprint
   agb check ./my-buildprint --code ./my-agent
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json ./my-build
+  agb packet check ./buildprints/portable-ai-swarm-simulation-workbench
+  agb packet next ./buildprints/portable-ai-swarm-simulation-workbench
+  agb evidence check .buildprint/evidence/evidence-ledger.jsonl
 
 Mapper note:
   The old agb map CLI has been removed. To map a source project, run an agent
@@ -2917,6 +2923,128 @@ function writeJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
 }
 
+function looksLikeManifestRef(value) {
+  return /package\.json(?:$|[?#])/i.test(value) || (exists(value) && path.basename(value) === 'package.json')
+}
+
+async function fetchJson(ref) {
+  if (isUrl(ref)) {
+    const res = await fetch(ref)
+    if (!res.ok) throw new Error(`failed to fetch ${ref}: ${res.status}`)
+    return await res.json()
+  }
+  return JSON.parse(readText(path.resolve(cwd, ref)))
+}
+
+async function packetDirFromRef(ref) {
+  if (!ref) throw new Error('missing packet reference')
+  const local = path.resolve(cwd, ref)
+  if (exists(local) && fs.statSync(local).isDirectory()) return local
+  if (!looksLikeManifestRef(ref)) return local
+  const manifest = await fetchJson(ref)
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'agb-packet-check-'))
+  const files = Array.isArray(manifest.files) ? manifest.files : []
+  const baseUrl = isUrl(ref) ? new URL('.', ref).toString() : null
+  for (const entry of files) {
+    const file = typeof entry === 'string' ? entry : entry?.path
+    const url = typeof entry === 'object' ? entry.url : null
+    if (!file) continue
+    const target = path.join(temp, file)
+    fs.mkdirSync(path.dirname(target), { recursive: true })
+    if (url || baseUrl) {
+      const source = url || new URL(file, baseUrl).toString()
+      const res = await fetch(source)
+      if (!res.ok) throw new Error(`failed to fetch packet file ${file}: ${res.status}`)
+      fs.writeFileSync(target, await res.text())
+    } else {
+      const source = path.resolve(path.dirname(path.resolve(cwd, ref)), file)
+      if (exists(source)) fs.copyFileSync(source, target)
+    }
+  }
+  return temp
+}
+
+function packetFiles(dir) {
+  return walk(dir).map((file) => path.relative(dir, file).split(path.sep).join('/')).sort()
+}
+
+function safeReadText(file) {
+  try { return readText(file) } catch { return '' }
+}
+
+function packetCheckResults(dir) {
+  const checks = []
+  const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
+  const files = new Set(packetFiles(dir))
+  const need = [
+    'BUILDPRINT.md', 'START_HERE.md', 'blueprint.yaml', '02-context/context-map.yaml',
+    '02-context/active-slice.yaml', '03-capabilities/capability-index.yaml',
+    '08-evaluation/claim-upgrade-rules.yaml', '09-evidence/evidence-ledger.schema.json',
+    '09-evidence/evidence-ledger.jsonl'
+  ]
+  for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
+  const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
+  ok('blueprint splits compatibility/execution start', /compatibility_start:\s*BUILDPRINT\.md/i.test(blueprint) && /execution_start:\s*START_HERE\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
+  const active = safeReadText(path.join(dir, '02-context/active-slice.yaml'))
+  for (const key of ['active_capability:', 'read_only:', 'write_only:', 'required_deliverables:', 'forbidden_actions:', 'next_unlock:']) ok(`active slice has ${key}`, active.includes(key))
+  ok('active slice forbids source repo reads', /read_original_source_repo/i.test(active))
+  const rules = safeReadText(path.join(dir, '08-evaluation/claim-upgrade-rules.yaml'))
+  for (const key of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) ok(`claim rules include ${key}`, rules.includes(key))
+  const schema = safeReadText(path.join(dir, '09-evidence/evidence-ledger.schema.json'))
+  for (const key of ['capability_id', 'proof_type', 'provider_mode', 'upgrades_claim']) ok(`evidence schema includes ${key}`, schema.includes(key))
+  return checks
+}
+
+function printPacketChecks(checks) {
+  let failed = 0
+  for (const check of checks) {
+    if (check.pass) console.log(`✓ ${check.label}`)
+    else { failed++; console.log(`✗ ${check.label}${check.detail ? `: ${check.detail}` : ''}`) }
+  }
+  console.log(`\nPacket check: ${failed ? 'FAIL' : 'PASS'} (${failed} failed)`)
+  return failed === 0
+}
+
+async function packetCheck(ref) {
+  const dir = await packetDirFromRef(ref)
+  return printPacketChecks(packetCheckResults(dir))
+}
+
+async function packetNext(ref) {
+  const dir = await packetDirFromRef(ref)
+  const active = safeReadText(path.join(dir, '02-context/active-slice.yaml'))
+  if (!active) throw new Error('missing 02-context/active-slice.yaml')
+  console.log(active.trim())
+}
+
+function evidenceCheck(file) {
+  const text = readText(path.resolve(cwd, file))
+  let failed = 0
+  let count = 0
+  for (const [index, raw] of text.split(/\r?\n/).entries()) {
+    const line = raw.trim()
+    if (!line) continue
+    count++
+    try {
+      const row = JSON.parse(line)
+      for (const field of ['capability_id', 'claim', 'proof_type', 'artifact', 'result', 'provider_mode', 'upgrades_claim']) {
+        if (!(field in row)) {
+          failed++
+          console.error(`✗ line ${index + 1}: missing ${field}`)
+        }
+      }
+      if (!['pass', 'fail', 'blocked'].includes(String(row.result))) {
+        failed++; console.error(`✗ line ${index + 1}: invalid result ${row.result}`)
+      }
+    } catch (error) {
+      failed++
+      console.error(`✗ line ${index + 1}: invalid JSON (${error.message})`)
+    }
+  }
+  if (!failed) console.log(`✓ evidence ledger valid (${count} row${count === 1 ? '' : 's'})`)
+  return failed === 0
+}
+
 
 function readJsonFile(file) {
   return JSON.parse(readText(file))
@@ -3136,6 +3264,35 @@ if (args[0] === 'start') {
     process.exit(0)
   } catch (error) {
     console.error(`Start failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
+
+if (args[0] === 'packet') {
+  const sub = args[1]
+  const ref = args[2]
+  if (!sub || isHelp(sub)) usage(0)
+  if (!ref) usage(1)
+  try {
+    if (sub === 'check') process.exit(await packetCheck(ref) ? 0 : 1)
+    if (sub === 'next') { await packetNext(ref); process.exit(0) }
+    throw new Error(`unknown packet subcommand: ${sub}`)
+  } catch (error) {
+    console.error(`Packet ${sub} failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
+if (args[0] === 'evidence') {
+  const sub = args[1]
+  const file = args[2]
+  if (!sub || isHelp(sub)) usage(0)
+  if (sub !== 'check' || !file) usage(1)
+  try {
+    process.exit(evidenceCheck(file) ? 0 : 1)
+  } catch (error) {
+    console.error(`Evidence check failed: ${error.message}`)
     process.exit(1)
   }
 }

@@ -1,5 +1,7 @@
 schema_version: mapper-os/executable-packet.v2
-canonical_start: BUILDPRINT.md
+compatibility_start: BUILDPRINT.md
+execution_start: START_HERE.md
+machine_contract: blueprint.yaml
 source:
   input: <source-input>
   checkout_path: <source-checkout-path>
@@ -12,6 +14,7 @@ promotion_requires:
   - persistence_roundtrip
   - security_boundary_review
   - clean_room_implementation_trace
+  - no_fake_scan_pass
 obligations:
   - obligation_id: OBL-<id>
     title: <product obligation>
@@ -29,8 +32,12 @@ capabilities:
 context:
   active_capability: <capability-id>
   context_map: 02-context/context-map.yaml
+  active_slice: 02-context/active-slice.yaml
+  read_order: 02-context/read-order.yaml
   team_stack: 02-context/team-stack.yaml
   ux_contract: 02-context/ux-contract.md
   design_quality_bar: 02-context/design-quality-bar.md
+  claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
+  evidence_schema: 09-evidence/evidence-ledger.schema.json
 generated_artifacts:
   agent_prompt: generated/agent-prompt.md

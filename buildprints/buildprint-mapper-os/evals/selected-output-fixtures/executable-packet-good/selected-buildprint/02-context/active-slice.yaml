@@ -1,0 +1,33 @@
+schema_version: mapper-os/active-slice.v1
+active_capability: ingest-record
+execution_start: START_HERE.md
+machine_contract: blueprint.yaml
+read_only:
+  - START_HERE.md
+  - blueprint.yaml
+  - 02-context/context-map.yaml
+  - 02-context/active-slice.yaml
+  - PRE_IMPLEMENTATION_QUESTIONS.md
+  - 02-context/team-stack.yaml
+  - 03-capabilities/ingest-record/capability.yaml
+  - 03-capabilities/ingest-record/product-contract.md
+  - 03-capabilities/ingest-record/implementation-workflow.md
+  - 03-capabilities/ingest-record/proof-contract.yaml
+  - 03-capabilities/ingest-record/source-evidence.md
+write_only:
+  - .buildprint/evidence/evidence-ledger.jsonl
+  - .buildprint/state.json
+  - .buildprint/progress.md
+  - .buildprint/blockers.md
+required_deliverables:
+  - record_ingestion
+  - negative_test
+  - evidence_ledger_row
+forbidden_actions:
+  - read_original_source_repo
+  - load_future_capability_packets_before_unlock
+  - count_deterministic_adapter_as_live_provider_proof
+  - upgrade_claim_status_without_claim_upgrade_rules
+next_unlock:
+  consult: 03-capabilities/capability-index.yaml
+  after: evidence rows satisfy the active capability proof contract

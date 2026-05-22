@@ -1,16 +1,23 @@
 schema_version: mapper-os/acceptance.v1
 claim_status: SELECTED_UNQUALIFIED
 promotion_requires:
-  - browser_runtime_trace
-  - provider_integration_proof
-  - persistence_roundtrip
-  - security_boundary_review
-  - clean_room_implementation_trace
-  - no_fake_scan_pass
+- browser_runtime_trace
+- provider_integration_proof
+- persistence_roundtrip
+- security_boundary_review
+- clean_room_implementation_trace
+- no_fake_scan_pass
 global_acceptance:
-  - all_included_capabilities_have_passing_proof_contracts
-  - implementation_does_not_require_original_source_repo
-  - runtime_ledger_contains_pass_or_blocker_for_each_capability
-  - publication_status_matches_evidence
+- all_included_capabilities_have_passing_proof_contracts
+- implementation_does_not_require_original_source_repo
+- runtime_ledger_contains_pass_or_blocker_for_each_capability
+- publication_status_matches_evidence
+- active_slice_limits_initial_context
+- claim_upgrades_follow_claim_upgrade_rules
+- evidence_rows_match_schema
+- security_fixtures_pass_or_block
 snapshot_ledger_seed: 09-evidence/evidence-ledger.jsonl
 runtime_ledger_required: .buildprint/evidence/evidence-ledger.jsonl
+claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
+evidence_schema: 09-evidence/evidence-ledger.schema.json
+active_slice_required: 02-context/active-slice.yaml
