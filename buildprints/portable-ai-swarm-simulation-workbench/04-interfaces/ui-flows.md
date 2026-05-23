@@ -1,5 +1,0 @@
-# UI Flows
-
-Primary flow: upload seed files and requirement -> ontology -> graph build/inspect -> simulation setup/profile/config -> runtime monitor/start/stop -> report generation/progress/sections -> chat/deep interaction -> history/list/reopen/delete.
-
-The graph can be shown full-width, hidden for workbench focus, or split with workflow panels. Progress logs and status indicators must reflect real task state and survive refresh through persisted identifiers.

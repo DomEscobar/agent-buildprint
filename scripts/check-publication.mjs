@@ -20,11 +20,12 @@ const requiredScalars = [
 ];
 const requiredArrays = ['runtime', 'stack', 'includes', 'risks', 'checks'];
 const executableReadOrder = [
-  'START_HERE.md',
+  'BUILDPRINT.md',
+  '01-questions.md',
+  '02-project-setup.md',
   'blueprint.yaml',
-  '02-context/context-map.yaml',
-  'PRE_IMPLEMENTATION_QUESTIONS.md',
-  '02-context/team-stack.yaml',
+  '03-phases/phase-index.yaml',
+  '04-evaluation.md',
 ];
 let failures = 0;
 
@@ -129,7 +130,7 @@ for (const slug of packageSlugs()) {
     }
   }
 
-  const isExecutable = fileSet.has('START_HERE.md') && fileSet.has('blueprint.yaml');
+  const isExecutable = fileSet.has('01-questions.md') && fileSet.has('02-project-setup.md') && fileSet.has('blueprint.yaml');
   if (isExecutable) {
     for (const file of executableReadOrder) {
       if (!fileSet.has(file)) fail(slug, `executable packet missing ${file}`);

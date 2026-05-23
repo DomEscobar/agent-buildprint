@@ -1,9 +1,0 @@
-# API Contracts
-
-Minimum interface families:
-
-- Graph/project API: create/list/get/reset/delete projects, upload documents, generate ontology, build graph, poll task, fetch graph data, delete graph.
-- Simulation API: fetch graph entities, create simulation, prepare simulation, poll preparation, fetch profiles/config, start/stop runtime, fetch run status/actions/timeline/history.
-- Report API: generate report, poll status/progress/sections/logs, fetch/list/download/delete reports, chat with ReportAgent.
-
-Every endpoint must return structured success/error envelopes and preserve actionable errors for missing IDs, invalid files, missing provider config, task failure, stale state, and destructive denial.

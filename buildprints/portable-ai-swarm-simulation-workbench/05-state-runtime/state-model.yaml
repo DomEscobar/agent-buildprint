@@ -1,5 +1,0 @@
-schema_version: mapper-os/state-model.v1
-state:
-  runtime_ledger: .buildprint/evidence/evidence-ledger.jsonl
-  durable_persistence: required_or_blocked
-  active_capability: tracked_by_context_map

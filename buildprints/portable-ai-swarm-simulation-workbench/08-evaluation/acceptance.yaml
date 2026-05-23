@@ -1,8 +1,0 @@
-schema_version: mapper-os/acceptance.v3
-acceptance:
-  - browser_runtime_trace
-  - provider_integration_proof
-  - persistence_roundtrip
-  - security_boundary_review
-  - clean_room_implementation_trace
-  - no_fake_scan_pass

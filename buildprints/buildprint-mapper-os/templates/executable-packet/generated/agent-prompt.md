@@ -1,5 +1,11 @@
-# Generated Agent Prompt
+# Agent prompt
 
 Generated from: blueprint.yaml
 
-This prompt is not source of truth. Start at `START_HERE.md`, then read `blueprint.yaml`, `02-context/context-map.yaml`, `PRE_IMPLEMENTATION_QUESTIONS.md`, and `02-context/team-stack.yaml`. For UI-bearing active capabilitys, read `02-context/ux-contract.md` and `02-context/design-quality-bar.md` before the active capability file.
+This generated prompt is convenience copy only. It is not source of truth and not authoritative.
+
+Start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`, `03-phases/phase-index.yaml`, the active phase file, `04-evaluation.md`, and `05-evidence/evidence-ledger.jsonl`.
+
+Do not start phase work until project setup is explicit enough to create root/local project `AGENTS.md` alignment.
+
+Use the implementation loop and repair routing before claiming done.

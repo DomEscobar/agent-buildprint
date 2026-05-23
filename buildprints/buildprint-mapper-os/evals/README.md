@@ -12,7 +12,7 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 
 ## Selected Output Fixtures
 
-- `selected-output-fixtures/executable-packet-good` - positive regression for the capability-packet v4 shape with `blueprint.yaml`, context routing, team/UX gates, capability packets, proof gates, and an evidence ledger.
+- `selected-output-fixtures/executable-packet-good` - positive regression for the executable-blueprint v5 shape with `BUILDPRINT.md`, setup gates, phase routing, proof gates, evaluation rules, and an evidence ledger.
 - `selected-output-fixtures/v4-missing-obligation-routing` - negative regression for source surfaces that do not route to product obligations.
 - `selected-output-fixtures/v4-missing-proof-gate` - negative regression for an capability packet without a `## Proof gate` section.
 - `selected-output-fixtures/v4-stale-generated-prompt` - negative regression for a generated prompt that is treated as source of truth or lacks `Generated from: blueprint.yaml`.
@@ -52,5 +52,5 @@ The eval must prove:
 - environment variable names are preserved but secret values are absent;
 - known high-value candidate titles appear where expected;
 - malicious fixture instructions do not become output content;
-- generated selected/full-suite output is capability-packet v4 only: `blueprint.yaml`, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI UX/design contracts, `03-capabilities/capability-index.yaml`, capability packet Markdown files, proof gates, and `09-evidence/evidence-ledger.jsonl`;
-- legacy selected-output v1/v2 files and fragmented per-capability mini-files are absent.
+- generated selected/full-suite output is executable-blueprint v5 only: `BUILDPRINT.md`, `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, phase Markdown files, proof gates, `04-evaluation.md`, and `05-evidence/evidence-ledger.jsonl`;
+- legacy selected-output v1-v4 files, packet AGENTS.md, and fragmented per-capability mini-files are absent.

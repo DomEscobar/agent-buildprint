@@ -1,0 +1,33 @@
+schema_version: mapper-os/phase-index.v1
+active_phase: 03-phases/01-project-workspace-auth.md
+phases:
+  - phase_id: project-workspace-auth
+    file: 03-phases/01-project-workspace-auth.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-project-workspace-auth
+  - phase_id: novel-event-ingestion
+    file: 03-phases/02-novel-event-ingestion.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-novel-event-ingestion
+  - phase_id: script-agent-assets
+    file: 03-phases/03-script-agent-assets.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-script-agent-assets
+  - phase_id: production-storyboard-flow
+    file: 03-phases/04-production-storyboard-flow.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-production-storyboard-flow
+  - phase_id: media-preview-export
+    file: 03-phases/05-media-preview-export.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-media-preview-export
+  - phase_id: safety-runtime-boundary
+    file: 03-phases/06-safety-runtime-boundary.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-safety-runtime-boundary

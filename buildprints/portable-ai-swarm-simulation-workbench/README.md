@@ -1,7 +1,5 @@
-# Portable AI Swarm Simulation Workbench
+# portable-ai-swarm-simulation-workbench
 
-This is an capability-packet v4 selected Buildprint remapped from [666ghj/MiroFish](https://github.com/666ghj/MiroFish).
+This is a Mapper OS executable-blueprint v5. Start at `BUILDPRINT.md`; it routes through `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, the active phase, `04-evaluation.md`, and `05-evidence/evidence-ledger.jsonl`.
 
-Agents should start at `BUILDPRINT.md`, then follow `START_HERE.md`, `blueprint.yaml`, and the context map. The original source repository is evidence only; implementation must be source-independent.
-
-Status: `selected-unqualified`.
+The original source repository is evidence only; implementation must be source-independent.

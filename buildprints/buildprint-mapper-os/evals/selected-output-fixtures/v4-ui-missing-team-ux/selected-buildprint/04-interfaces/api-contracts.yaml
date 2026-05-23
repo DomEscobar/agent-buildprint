@@ -1,6 +1,0 @@
-api_contracts:
-  - id: ingest-record-api
-    obligation_id: OBL-INGEST
-    request: submitted record
-    response: persisted record result
-

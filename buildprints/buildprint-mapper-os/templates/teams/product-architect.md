@@ -24,9 +24,9 @@ For medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime
 | View | Required Content | Evidence Location |
 |---|---|---|
 | Context | users, systems, providers, stores, deployment boundary | `07-execution/implementation-plan.yaml` |
-| Component | UI/API/service/provider/storage/job/test modules | `03-capabilities/capability-index.yaml` |
+| Component | UI/API/service/provider/storage/job/test modules | `03-phases/phase-index.yaml` |
 | Data flow | one real vertical slice from input to observable result | active capability file |
-| Cross-cutting | auth, errors, logging, validation, secrets, limits | `06-safety/`, `08-evaluation/`, active capability |
+| Cross-cutting | auth, errors, logging, validation, secrets, limits | active phase safety, `04-evaluation.md`, active phase |
 | Decision notes | choice, alternatives, tradeoff, consequence | `07-execution/implementation-plan.yaml` |
 
 ### Boundary Decision Rules

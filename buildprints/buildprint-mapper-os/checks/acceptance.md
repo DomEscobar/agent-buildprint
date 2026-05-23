@@ -2,25 +2,26 @@
 
 - [ ] Default mapper run creates discovery/evidence/quality output only.
 - [ ] Selected extraction creates `selected-buildprint/`.
-- [ ] Selected extraction emits capability-packet v4 only; this is the current executable packet spine.
-- [ ] Execution packets include `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI `02-context/ux-contract.md`, UI `02-context/design-quality-bar.md`, `03-capabilities/capability-index.yaml`, at least one capability packet Markdown file, `08-evaluation/`, and `09-evidence/evidence-ledger.jsonl`.
-- [ ] Root `BUILDPRINT.md` is a package overview only; execution authority is `START_HERE.md` plus `blueprint.yaml`.
+- [ ] Selected extraction emits executable-blueprint v5 only; this is the current executable blueprint spine.
+- [ ] Execution blueprints include `BUILDPRINT.md`, `blueprint.yaml`, `01-questions.md`, `02-project-setup.md`, `03-phases/phase-index.yaml`, at least one phase Markdown file, `04-evaluation.md`, and `05-evidence/evidence-ledger.jsonl`.
+- [ ] Root `BUILDPRINT.md` is the only starting point and owns the canonical read order.
 - [ ] `generated/agent-prompt.md` declares `Generated from: blueprint.yaml` and states that it is not source of truth.
-- [ ] Execution packet agents read `PRE_IMPLEMENTATION_QUESTIONS.md` before coding, ask unresolved blockers, or apply concrete safe defaults.
-- [ ] `02-context/context-map.yaml` and `02-context/read-order.yaml` route through team gates before active capability implementation.
-- [ ] UI-bearing packets route through `02-context/ux-contract.md` and `02-context/design-quality-bar.md`; capability proof gates require `ux_design_gate`, `screenshot_state_set`, and browser evidence tied to empty/loading/error/blocked/success states.
-- [ ] `03-capabilities/capability-index.yaml` is the dependency/continuation index and is consulted after proof to choose the next dependency-ready slice.
-- [ ] Every included capability packet contains build target, product/source evidence, required teams, architecture/UI obligations, inputs/outputs, stop rules, proof gate, runtime evidence path, and unlock rule.
-- [ ] Every proof gate writes runtime evidence only to `.buildprint/evidence/evidence-ledger.jsonl` and preserves packaged `09-evidence/evidence-ledger.jsonl` as the immutable seed.
-- [ ] `claim_status` promotion is blocked unless runtime evidence contains passing rows for every required promotion proof.
-- [ ] Legacy selected-output files are absent: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and `generated/current-buildprint-compat/`.
-- [ ] Fragmented per-capability mini-files are absent: `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, and `proof-contract.yaml`.
+- [ ] `01-questions.md` uses numbered questions and AI-best-judgment defaults; blank answers do not block ordinary engineering decisions.
+- [ ] `02-project-setup.md` records human preferences, inferred project shape, stack decisions, architecture rules, team operating model, root/local `AGENTS.md` plan, quality gates, safety/permissions, assumptions, and the phase start gate.
+- [ ] No phase starts until `02-project-setup.md` is explicit enough to create implementation-project root/local `AGENTS.md` without inventing architecture.
+- [ ] `03-phases/phase-index.yaml` is the dependency/continuation index and points to the active proof-gated phase.
+- [ ] Every phase file contains product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
+- [ ] Every phase is a vertical product slice, not a backend/frontend/test waterfall bucket.
+- [ ] Every phase requires the implementation loop: observe → plan → execute → verify → reflect → record.
+- [ ] Error repair routes failed test/build/runtime/UI/proof checks back to the current phase, setup contradictions to `02-project-setup.md`, product-defining ambiguity to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.
+- [ ] Every proof gate writes evidence or blockers to `05-evidence/evidence-ledger.jsonl`.
+- [ ] `claim_status` promotion is blocked unless evidence contains passing rows for required promotion proof.
+- [ ] Legacy v4 files are absent: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, and packet `AGENTS.md`.
 - [ ] Typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, or `CAPABILTY_INDEX.md` are absent.
 - [ ] Canonical handoff is singular; both `HANDOFF.md` and `HANDOVER.md` do not appear as selected package spine files.
 - [ ] Every `OBSERVED` claim cites source path and line or section.
 - [ ] Census hints never assert product behavior, absence, parity, provider completeness, persistence, or readiness.
-- [ ] Included/excluded/blocked/test-only capability statuses are complete.
-- [ ] No included capability is placeholder-backed, mock-backed, no-op, skeleton, deterministic-adapter-only, static-shell-only, or in-memory-only where persistence is claimed.
-- [ ] Medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy selected outputs include topology and first-capability proof gates in execution-packet files.
+- [ ] Included/excluded/blocked/test-only phase statuses are complete.
+- [ ] No included phase is placeholder-backed, mock-backed, no-op, skeleton, deterministic-adapter-only, static-shell-only, or in-memory-only where persistence is claimed.
 - [ ] Qualification label is one of `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
 - [ ] Public wording avoids validated/production-ready/complete/end-to-end unless qualified evidence exists.

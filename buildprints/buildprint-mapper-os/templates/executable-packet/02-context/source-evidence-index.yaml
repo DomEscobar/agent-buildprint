@@ -1,7 +1,0 @@
-source_surfaces:
-  - surface_id: SRC-<id>
-    kind: <route/api/table/job/provider/auth/admin/upload/export/import/deployment/doc>
-    evidence: OBSERVED(path:line)
-    obligation_id: OBL-<id>
-    disposition: OWNED_BY_CAPABILITY
-

@@ -1,6 +1,0 @@
-quality_rubric:
-  evidence_first: required
-  source_independent_execution: required
-  no_fake_completion: required
-  product_depth_preserved: required
-  ui_quality_gates_when_ui_bearing: required

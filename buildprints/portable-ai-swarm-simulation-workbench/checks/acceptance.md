@@ -1,10 +1,8 @@
-# Acceptance Checklist
+# Acceptance
 
-- [ ] `BUILDPRINT.md`, `START_HERE.md`, `blueprint.yaml`, and context files are read in order.
-- [ ] Each capability packet is implemented only when dependency-ready.
-- [ ] Upload, ontology, graph, simulation setup, simulation runtime, report/chat, and history lifecycle are proven in browser/runtime traces.
-- [ ] Provider-backed behavior is either explicitly deterministic-test-double or proven live with credentials.
-- [ ] Persistence restart/readback and delete/reset behavior are proven.
-- [ ] Secrets, uploads, subprocess/runtime controls, logs, screenshots, and report data pass security review.
-- [ ] `.buildprint/evidence/evidence-ledger.jsonl` contains proof rows for every upgraded claim.
-- [ ] No fake/static graph/report/runtime/chat/history behavior is accepted.
+- [ ] `BUILDPRINT.md` is the only start point.
+- [ ] `01-questions.md` and `02-project-setup.md` are resolved before phase work.
+- [ ] `03-phases/phase-index.yaml` identifies the active phase.
+- [ ] Each phase uses observe/plan/execute/verify/reflect/record.
+- [ ] Failed verification routes back to the current phase or responsible setup/question/prior-phase blocker.
+- [ ] Proof/blockers are recorded in `05-evidence/evidence-ledger.jsonl`.

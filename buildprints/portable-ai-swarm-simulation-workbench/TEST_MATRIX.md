@@ -1,5 +1,3 @@
-# TEST_MATRIX.md — compatibility route
+# Test Matrix
 
-The active test matrix is `08-evaluation/test-matrix.yaml`.
-
-Qualification requires browser/runtime traces, provider proof, persistence restart/readback and delete/reset proof, security review, clean-room implementation trace, and no-fake scan evidence.
+The active quality/proof rules live in `04-evaluation.md` and each `03-phases/*.md` proof gate. Evidence or blockers must be recorded in `05-evidence/evidence-ledger.jsonl`.

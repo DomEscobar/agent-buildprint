@@ -1,0 +1,43 @@
+# BUILDPRINT: executable packet good fixture
+
+This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files.
+
+## Required read order
+
+1. Read this `BUILDPRINT.md`.
+4. Read `blueprint.yaml` as the machine-readable mirror.
+5. Read `03-phases/phase-index.yaml`.
+6. Read only the active phase file: `03-phases/01-ingest-record.md`.
+7. Read `04-evaluation.md`.
+8. Append proof or blocker rows to `05-evidence/evidence-ledger.jsonl`.
+
+## Project setup gate
+
+
+
+## Implementation loop
+
+Every phase must repeat this loop until the proof gate passes or a real blocker is recorded:
+
+1. Observe: inspect existing project files, nearest `AGENTS.md`, current behavior, and constraints.
+2. Plan: state the smallest coherent change, likely files, and verification gate.
+3. Execute: make scoped changes without silently expanding architecture.
+4. Verify: run the planned test/build/browser/runtime gate and inspect output.
+5. Reflect: compare results against the phase proof gate.
+6. Record: append evidence or blocker rows before claiming progress.
+
+A phase cannot be marked done from code edits alone.
+
+## Repair routing
+
+If verification fails, route back before editing again:
+
+- test/build/runtime/UI/proof failure -> current phase file
+- missing dependency -> required prior phase
+- external blocker -> `05-evidence/evidence-ledger.jsonl`
+
+Do not mark a phase complete while its verification failure is unresolved.
+
+## Phase discipline
+
+A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.

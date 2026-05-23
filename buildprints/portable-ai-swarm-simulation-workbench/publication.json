@@ -30,12 +30,12 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Executable-packet v4 Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history through proof-gated capability packets.",
+  "summary": "Executable-packet v4 Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history through proof-gated phase files.",
   "plainDescription": "A fresh Mapper OS selected packet remapped from MiroFish source evidence and scoped as the full portable AI swarm simulation workbench. It preserves broad product scope while keeping qualification honest until live provider, runtime, browser, persistence, and security proof passes.",
   "promise": "Build a portable AI swarm simulation workbench without depending on the original source repo. Status remains SELECTED_UNQUALIFIED until all proof gates pass.",
   "whatYouGet": [
-    "Executable-packet v4 START_HERE router and machine contract",
-    "Six consolidated capability packets with source evidence, implementation paths, team gates, and proof gates",
+    "Executable-blueprint v5 BUILDPRINT start and machine contract",
+    "Six consolidated phase files with source evidence, implementation paths, team gates, and proof gates",
     "Team stack, UX contract, design quality bar, safety boundaries, and evaluation matrix",
     "Evidence ledger seed and unresolved blocker list"
   ],
@@ -61,7 +61,13 @@
     "Simulation Setup",
     "Simulation Runtime Monitoring",
     "Report And Deep Interaction",
-    "History And Data Lifecycle"
+    "History And Data Lifecycle",
+    "BUILDPRINT.md canonical start",
+    "01-questions.md numbered alignment",
+    "02-project-setup.md architecture and AGENTS plan",
+    "03-phases proof-gated phase files",
+    "04-evaluation.md claim rules",
+    "05-evidence/evidence-ledger.jsonl proof/blocker ledger"
   ],
   "risks": [
     "Overclaiming MiroFish clone parity",
@@ -95,7 +101,7 @@
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use the Portable AI Swarm Simulation Workbench capability-packet v4. Start with BUILDPRINT.md, START_HERE.md, blueprint.yaml, 02-context/context-map.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, and 02-context/team-stack.yaml, then load only the active capability packet. Build source-independently; do not use the original MiroFish source. Keep status SELECTED_UNQUALIFIED until browser, provider, runtime, persistence, security, clean-room, and no-fake proof pass.",
+  "copyPrompt": "Use this Mapper OS executable-blueprint v5. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims SELECTED_UNQUALIFIED until proof rows pass.",
   "publicStatus": {
     "label": "Mapped, proof pending",
     "explanation": "Source-independent packet exists; live implementation proof is not complete."

@@ -1,16 +1,8 @@
-schema_version: mapper-os/acceptance.v1
-claim_status: SELECTED_UNQUALIFIED
-promotion_requires:
-  - browser_runtime_trace
-  - provider_integration_proof
-  - persistence_roundtrip
-  - security_boundary_review
-  - clean_room_implementation_trace
-  - no_fake_scan_pass
-global_acceptance:
-  - all_included_capabilities_have_passing_proof_contracts
-  - implementation_does_not_require_original_source_repo
-  - runtime_ledger_contains_pass_or_blocker_for_each_capability
-  - publication_status_matches_evidence
-snapshot_ledger_seed: 09-evidence/evidence-ledger.jsonl
-runtime_ledger_required: .buildprint/evidence/evidence-ledger.jsonl
+acceptance:
+  - buildprint_is_only_start_point
+  - questions_and_project_setup_resolved_before_phase_work
+  - phases_are_vertical_product_slices
+  - implementation_loop_completed
+  - repair_routing_followed
+  - evidence_ledger_updated
+snapshot_ledger_seed: 05-evidence/evidence-ledger.jsonl

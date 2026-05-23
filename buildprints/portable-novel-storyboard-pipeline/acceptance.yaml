@@ -1,16 +1,8 @@
 acceptance:
-  - id: browser_runtime_trace
-    required: true
-    status: missing
-  - id: provider_integration_proof
-    required: true
-    status: missing
-  - id: persistence_roundtrip
-    required: true
-    status: missing
-  - id: security_boundary_review
-    required: true
-    status: missing
-  - id: clean_room_implementation_trace
-    required: true
-    status: missing
+  - buildprint_is_only_start_point
+  - questions_and_project_setup_resolved_before_phase_work
+  - phases_are_vertical_product_slices
+  - implementation_loop_completed
+  - repair_routing_followed
+  - evidence_ledger_updated
+snapshot_ledger_seed: 05-evidence/evidence-ledger.jsonl

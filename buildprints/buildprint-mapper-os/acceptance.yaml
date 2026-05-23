@@ -14,38 +14,42 @@ acceptance:
       - root implementation scaffold
       - selected-buildprint without scope decision
   selected_output:
-    execution_packet_v3:
+    executable_blueprint_v5:
       required_root:
         - BUILDPRINT.md
-        - START_HERE.md
-        - PRE_IMPLEMENTATION_QUESTIONS.md
+        - 01-questions.md
+        - 02-project-setup.md
         - blueprint.yaml
-        - 00-intent/source-surface-map.md
-        - 02-context/context-map.yaml
-        - 02-context/team-stack.yaml
-        - 02-context/ux-contract.md
-        - 02-context/design-quality-bar.md
-        - 02-context/source-evidence-index.yaml
-        - 03-capabilities/capability-index.yaml
-        - 08-evaluation/acceptance.yaml
-        - 08-evaluation/claim-upgrade-rules.yaml
-        - 09-evidence/evidence-ledger.schema.json
-        - 09-evidence/evidence-ledger.jsonl
+        - 03-phases/phase-index.yaml
+        - 04-evaluation.md
+        - 05-evidence/evidence-ledger.schema.json
+        - 05-evidence/evidence-ledger.jsonl
         - generated/agent-prompt.md
-      required_execution_slice_sections:
+      required_phase_sections:
         - Build target
-        - Required teams and gates
-        - Implementation path
-        - Stop rules
+        - Interfaces touched
+        - State/runtime touched
+        - UX/UI requirements
+        - Safety/security constraints
+        - Implementation loop
         - Proof gate
-        - Unlocks
+        - Repair routing
       generated_prompt_policy: generated_from_blueprint_not_authority
       promotion_source: runtime_evidence_ledger
       runtime_evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
       packaged_evidence_ledger: immutable_seed_only
-    legacy_selected_output_v1_v2:
+    legacy_selected_output_v1_v4:
       status: forbidden
       forbidden_paths:
+        - START_HERE.md
+        - PRE_IMPLEMENTATION_QUESTIONS.md
+        - AGENTS.md
+        - 03-capabilities/
+        - 04-interfaces/
+        - 05-state-runtime/
+        - 06-safety/
+        - 08-evaluation/
+        - 09-evidence/
         - CAPABILITY_INDEX.md
         - CONTEXT_PACKET.json
         - SOURCE_SURFACE_COVERAGE.md
@@ -57,7 +61,6 @@ acceptance:
         - IMPLEMENTATION_PLAN.md
         - manifest.json
         - 02-context/active-slice.yaml
-        - 03-capabilities/
         - 07-execution/phases/
         - capabilities/
         - generated/current-buildprint-compat/

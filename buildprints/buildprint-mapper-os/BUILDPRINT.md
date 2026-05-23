@@ -57,69 +57,33 @@ Promoted only when the selected package is source-independent, behavior-complete
 
 ## Selected Package Shape
 
-Selected outputs must use capability-packet v4. `BUILDPRINT.md` is a package overview; `START_HERE.md`, `blueprint.yaml`, `02-context/`, `08-evaluation/`, and `09-evidence/` are the machine-routable execution contract.
+Selected outputs must use executable-blueprint v5. `BUILDPRINT.md` is the only start point and read-order authority; `blueprint.yaml` is the machine contract; `01-questions.md` and `02-project-setup.md` gate alignment and setup; `03-phases/` owns proof-gated vertical implementation slices; `04-evaluation.md` defines promotion proofs; and `05-evidence/evidence-ledger.jsonl` seeds runtime evidence recording.
 
 ```text
 BUILDPRINT.md
-START_HERE.md
-PRE_IMPLEMENTATION_QUESTIONS.md
+01-questions.md
+02-project-setup.md
 blueprint.yaml
-00-intent/
-  mission.md
-  product-obligations.md
-  source-surface-map.md
-01-operating-model/
-  workflow-vs-agentic.md
-  autonomy-levels.yaml
-  stop-rules.md
-  human-approval-policy.md
-02-context/
-  context-map.yaml
-  read-order.yaml
-  team-stack.yaml
-  ux-contract.md
-  design-quality-bar.md
-  source-evidence-index.yaml
-03-capabilities/
-  capability-index.yaml
-  01-<capability-id>.md
-04-interfaces/
-  api-contracts.yaml
-  tool-contracts.yaml
-  provider-contracts.yaml
-  schemas/
-05-state-runtime/
-  state-model.yaml
-  persistence.md
-  runtime-topology.md
-06-safety/
-  threat-model.md
-  secrets-policy.md
-  destructive-actions.md
-07-execution/
-  implementation-plan.yaml
-08-evaluation/
-  acceptance.yaml
-  test-matrix.yaml
-  quality-rubric.yaml
-  claim-upgrade-rules.yaml
-09-evidence/
+03-phases/
+  phase-index.yaml
+  01-<phase-id>.md
+04-evaluation.md
+05-evidence/
   evidence-ledger.jsonl
   evidence-ledger.schema.json
-  unresolved-blockers.md
 generated/
   agent-prompt.md
 ```
 
 `generated/agent-prompt.md` is compiled output and must not be treated as source of truth.
 
-Qualification is evidence-derived. `claim_status: SELECTED_UNQUALIFIED` can be promoted only when runtime `.buildprint/evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable. The packaged `09-evidence/evidence-ledger.jsonl` is an immutable seed/template, not the write target.
+Qualification is evidence-derived. `claim_status: SELECTED_UNQUALIFIED` can be promoted only when runtime `.buildprint/evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable. The packaged `05-evidence/evidence-ledger.jsonl` is an immutable seed/template, not the write target.
 
-The packet shape above is mandatory. Output without `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI `02-context/ux-contract.md`, UI `02-context/design-quality-bar.md`, `03-capabilities/capability-index.yaml`, at least one capability packet Markdown file, `08-evaluation/acceptance.yaml`, or `09-evidence/evidence-ledger.jsonl` is invalid.
+The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questions.md`, `02-project-setup.md`, `03-phases/phase-index.yaml`, at least one phase Markdown file, `04-evaluation.md`, or `05-evidence/evidence-ledger.jsonl` is invalid.
 
-Purged legacy files are forbidden: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
+Legacy files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
-`02-context/team-stack.yaml` is mandatory for selected output. It infers internal team packs from product shape; it must not ask the user to choose lazy/simple/quick quality. UI-bearing output selects `ux-ui-craft`, broad output selects `product-architect`, and every selected output selects `test-and-verification`.
+`02-project-setup.md` is mandatory for selected output. It defines architecture rules, team operating model, root/local AGENTS.md plan, quality gates, safety/permissions, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
 
 ## Non-Negotiables
 
@@ -134,7 +98,7 @@ Purged legacy files are forbidden: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.j
 
 Every selected package must tell the next coding agent:
 
-- what capability packet to implement next;
+- what phase packet to implement next;
 - what behavior is stable;
 - what implementation choices are free;
 - which pre-implementation questions must be asked or safely defaulted before coding;

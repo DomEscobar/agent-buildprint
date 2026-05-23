@@ -1,42 +1,48 @@
-schema_version: mapper-os/capability-packet.v4
-execution_start: START_HERE.md
+schema_version: mapper-os/executable-blueprint.v5
+execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 source:
-  input: <source-input>
+input: <source-input>
   checkout_path: <source-checkout-path>
   commit: <source-commit-or-unavailable>
 generated_at: <iso-timestamp>
 claim_status: SELECTED_UNQUALIFIED
-promotion_requires:
-  - browser_runtime_trace
-  - provider_integration_proof
-  - persistence_roundtrip
-  - security_boundary_review
-  - clean_room_implementation_trace
-  - no_fake_scan_pass
-obligations:
-  - obligation_id: OBL-<id>
-    title: <product obligation>
-    source_surfaces:
-      - SRC-<id>
-    status: INCLUDED_NEEDS_PROOF
-capabilities:
-  - capability_id: <capability-id>
-    title: <vertical build target>
-    obligation_ids:
-      - OBL-<id>
-    file: 03-capabilities/<capability-id>.md
-    autonomy_level: workflow
-    proof_gate: <proof-id>
+setup_gate:
+  questions: 01-questions.md
+  project_setup: 02-project-setup.md
+  required_before_phases: true
+implementation_loop:
+  required: true
+  steps:
+    - observe
+    - plan
+    - execute
+    - verify
+    - reflect
+    - record
+  completion_requires:
+    - proof_gate_passed
+    - evidence_recorded
+repair_loop:
+  on_failure:
+    test_failed: current_phase
+    build_failed: current_phase
+    runtime_error: current_phase
+    ui_quality_failed: current_phase
+    proof_gate_failed: current_phase
+    architecture_contradiction: 02-project-setup.md
+    missing_human_preference: 01-questions.md
+    missing_dependency_phase: required_prior_phase
+    external_blocker: 05-evidence/evidence-ledger.jsonl
+phases:
+  - phase_id: example-phase
+    title: 01-example-phase
+    file: 03-phases/01-example-phase.md
     status: INCLUDED_NEEDS_PROOF
 context:
-  active_capability: 03-capabilities/<capability-id>.md
-  context_map: 02-context/context-map.yaml
-  read_order: 02-context/read-order.yaml
-  team_stack: 02-context/team-stack.yaml
-  ux_contract: 02-context/ux-contract.md
-  design_quality_bar: 02-context/design-quality-bar.md
-  claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
-  evidence_schema: 09-evidence/evidence-ledger.schema.json
+  phase_index: 03-phases/phase-index.yaml
+  active_phase: 03-phases/01-example-phase.md
+  evaluation: 04-evaluation.md
+  evidence_schema: 05-evidence/evidence-ledger.schema.json
 generated_artifacts:
   agent_prompt: generated/agent-prompt.md

@@ -1,1 +1,0 @@
-{"artifact_id":"<artifact-id>","type":"proof","capability_id":"<capability-id>","status":"missing","source":"<command-or-path>","proves":["<proof-id>"],"proof_type":"<proof-type>","provider_mode":"none","upgrades_claim":false,"notes":"Replace this seed row with runtime proof or blocker evidence in .buildprint/evidence/evidence-ledger.jsonl."}

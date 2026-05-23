@@ -1,5 +1,0 @@
-test_matrix:
-  - id: ingest-required-fields
-    capability_id: ingest-record
-    type: negative
-

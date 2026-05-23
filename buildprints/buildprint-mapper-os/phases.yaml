@@ -47,18 +47,18 @@ phases:
     title: Source Distillation
     inputs: [prompts/extract-selected.md, templates/]
     must_produce:
-      - source-independent selected-buildprint capability-packet v4
+      - source-independent selected-buildprint executable-blueprint v5
       - product obligations
-      - capability packets
+      - proof-gated phase packets
       - stable-vs-free boundaries
-      - router-first read order with START_HERE.md, blueprint.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, 02-context/context-map.yaml, and 02-context/team-stack.yaml before active capability loading
+      - BUILDPRINT-first read order with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, and 03-phases/phase-index.yaml before active phase loading
     must_pass:
       - selected output stays under selected-buildprint/
       - medium/large/full-suite output is hierarchical
-      - medium/large/full-suite output includes 03-capabilities/capability-index.yaml
-      - medium/large/full-suite output includes at least one capability packet markdown file
-      - medium/large/full-suite output includes 09-evidence/evidence-ledger.jsonl and 09-evidence/evidence-ledger.schema.json
-      - capability packets include proof gates, stop rules, required teams, and unlock policy
+      - medium/large/full-suite output includes 03-phases/phase-index.yaml
+      - medium/large/full-suite output includes at least one phase markdown file
+      - medium/large/full-suite output includes 05-evidence/evidence-ledger.jsonl and 05-evidence/evidence-ledger.schema.json
+      - phase packets include proof gates, stop rules, implementation loop, repair routing, and unlock policy
       - legacy selected-output v1/v2 spine files are absent
       - fragmented per-capability mini-files are absent
       - typo alias files such as VERFICATION.md are absent
@@ -67,13 +67,13 @@ phases:
     title: Downstream Execution Planning
     inputs: [prompts/extract-selected.md, templates/executable-packet/]
     must_produce:
-      - first active capability without hiding later work
-      - first verification gate per included capability
+      - first active phase without hiding later work
+      - first verification gate per included phase
       - implementation-team signals for downstream harness selection
       - repair-loop and stop/escalation rules
     must_pass:
       - implementing agent does not need to infer critical order, builder passes, or gates
-      - implementing agent can start from START_HERE.md and 02-context/context-map.yaml without reading all Markdown files, all capability packets upfront, or unrelated capabilities
+      - implementing agent can start from BUILDPRINT.md and 03-phases/phase-index.yaml without reading all Markdown files, all phase packets upfront, or unrelated phases
 
   - id: 06-qualification
     title: Qualification

@@ -8,129 +8,67 @@ const targets = args.length ? args : [
 ];
 let failures = 0;
 
-const forbiddenFiles = new Set([
-  'VERFICATION.md',
-  'IMPLEMENATION.md',
-  'CAPABILTY_INDEX.md',
-  'AGENT_EXECUTION_BRIEF.md',
-  'agent-contract.xml',
-  'PHASE_PLAN.md',
-  'LOOP_GATES.md',
-]);
-const forbiddenLegacyPaths = [
-  'CAPABILITY_INDEX.md',
-  'CONTEXT_PACKET.json',
-  'SOURCE_SURFACE_COVERAGE.md',
-  'TEAM_STACK.md',
-  'UX_CONTRACT.md',
-  'DESIGN_QUALITY_BAR.md',
-  'CURRENT_STATE.md',
-  'EXECUTION_PROTOCOL.md',
-  'IMPLEMENTATION_PLAN.md',
-  'manifest.json',
-  '02-context/active-slice.yaml',
-  '03-capabilities/*/capability.yaml',
-  '03-capabilities/*/product-contract.md',
-  '03-capabilities/*/implementation-workflow.md',
-  '03-capabilities/*/proof-contract.yaml',
-  '03-capabilities/*/source-evidence.md',
-  '07-execution/phases/',
-  'capabilities/',
-  'generated/current-buildprint-compat/',
-];
-const labels = new Set(['DISCOVERY_ONLY', 'SELECTED_UNQUALIFIED', 'QUALIFIED_SOURCE_INDEPENDENT']);
-const executableUxRequiredSections = [
-  /## Screen Inventory/i,
-  /## Workflow States/i,
-  /## Component Inventory/i,
-  /## Responsive Rules/i,
-  /## Accessibility/i,
-  /## Browser Proof Plan/i,
-];
-const executableDesignRequiredSections = [
-  /## Product Category/i,
-  /## Taste Direction/i,
-  /## Visual Hierarchy/i,
-  /## Forbidden Generic Patterns/i,
-  /## Interaction Polish/i,
-  /## Accessibility Gates/i,
-  /## Responsive Gates/i,
-  /## Required Screenshot Set/i,
-];
-const sourceSurfaceDispositions = [
-  'OWNED_BY_CAPABILITY',
-  'MERGED_INTO_CAPABILITY',
-  'OWNED_BY_CAPABILITY',
-  'MERGED_INTO_CAPABILITY',
-  'OUT_OF_SCOPE_BY_USER_ONLY',
-  'BLOCKED_NEEDS_REVIEW',
-  'LOW_SIGNAL_IGNORED_WITH_REASON',
-];
-const executableRequiredFiles = [
+const requiredFiles = [
   'BUILDPRINT.md',
-  'START_HERE.md',
-  'PRE_IMPLEMENTATION_QUESTIONS.md',
   'blueprint.yaml',
-  '00-intent/mission.md',
-  '00-intent/product-obligations.md',
-  '00-intent/source-surface-map.md',
-  '01-operating-model/workflow-vs-agentic.md',
-  '01-operating-model/autonomy-levels.yaml',
-  '01-operating-model/stop-rules.md',
-  '01-operating-model/human-approval-policy.md',
-  '02-context/context-map.yaml',
-  '02-context/read-order.yaml',
-  '02-context/team-stack.yaml',
-  '02-context/ux-contract.md',
-  '02-context/design-quality-bar.md',
-  '02-context/source-evidence-index.yaml',
-  '03-capabilities/capability-index.yaml',
-  '04-interfaces/api-contracts.yaml',
-  '04-interfaces/tool-contracts.yaml',
-  '04-interfaces/provider-contracts.yaml',
-  '05-state-runtime/state-model.yaml',
-  '05-state-runtime/persistence.md',
-  '05-state-runtime/runtime-topology.md',
-  '06-safety/threat-model.md',
-  '06-safety/secrets-policy.md',
-  '06-safety/destructive-actions.md',
-  '06-safety/security-test-fixtures.yaml',
-  '07-execution/implementation-plan.yaml',
-  '08-evaluation/acceptance.yaml',
-  '08-evaluation/claim-upgrade-rules.yaml',
-  '08-evaluation/test-matrix.yaml',
-  '08-evaluation/quality-rubric.yaml',
-  '09-evidence/evidence-ledger.jsonl',
-  '09-evidence/evidence-ledger.schema.json',
-  '09-evidence/unresolved-blockers.md',
+  '01-questions.md',
+  '02-project-setup.md',
+  '03-phases/phase-index.yaml',
+  '04-evaluation.md',
+  '05-evidence/evidence-ledger.jsonl',
+  '05-evidence/evidence-ledger.schema.json',
   'generated/agent-prompt.md',
 ];
-const executableRequiredDirs = [
-  '03-capabilities',
-  '04-interfaces/schemas',
+const forbiddenPaths = [
+  'START_HERE.md',
+  'PRE_IMPLEMENTATION_QUESTIONS.md',
+  'AGENTS.md',
+  '00-intent/',
+  '01-operating-model/',
+  '02-context/',
+  '03-capabilities/',
+  '04-interfaces/',
+  '05-state-runtime/',
+  '06-safety/',
+  '07-execution/',
+  '08-evaluation/',
+  '09-evidence/',
+  'docs/',
 ];
-const executablePromotionRequires = [
-  'browser_runtime_trace',
-  'provider_integration_proof',
-  'persistence_roundtrip',
-  'security_boundary_review',
-  'clean_room_implementation_trace',
+const setupSections = [
+  /## Human preferences/i,
+  /## Inferred project shape/i,
+  /## Stack decisions/i,
+  /## Architecture rules/i,
+  /## Team operating model/i,
+  /## AGENTS\.md plan/i,
+  /## Quality gates/i,
+  /## Safety and permissions/i,
+  /## Open questions and assumptions/i,
+  /## Phase start gate/i,
 ];
-const capabilityRequiredSections = [
-  /## Build target/i,
-  /## Why this capability exists/i,
-  /## Required global context/i,
-  /## Required teams and gates/i,
-  /## User-visible outcome/i,
-  /## System and architecture obligations/i,
-  /## UI obligations/i,
-  /## Inputs/i,
-  /## Outputs and downstream handoff/i,
-  /## Implementation path/i,
-  /## Stop rules/i,
+const phaseSections = [
+  /## Product outcome/i,
+  /## Source evidence/i,
+  /## Implementation scope/i,
+  /## Interfaces touched/i,
+  /## State\/runtime touched/i,
+  /## UX\/UI requirements/i,
+  /## Safety\/security constraints/i,
+  /## Quality gates/i,
   /## Proof gate/i,
-  /## Unlocks/i,
+  /## Repair routing/i,
 ];
+
+function fail(target, message) {
+  failures += 1;
+  console.error(`x ${target}: ${message}`);
+}
+
+function safeRead(file) {
+  try { return fs.readFileSync(file, 'utf8'); }
+  catch { return ''; }
+}
 
 function relFiles(dir, base = dir) {
   const out = [];
@@ -142,270 +80,107 @@ function relFiles(dir, base = dir) {
   return out.sort();
 }
 
-function fail(target, message) {
-  failures++;
-  console.error(`x ${target}: ${message}`);
-}
-
-function markdownCorpus(dir, files) {
-  return files
-    .filter((file) => file.endsWith('.md'))
-    .map((file) => {
-      try { return fs.readFileSync(path.join(dir, file), 'utf8'); }
-      catch { return ''; }
-    })
-    .join('\n')
-    .toLowerCase();
-}
-
-function safeRead(file) {
-  try { return fs.readFileSync(file, 'utf8'); }
-  catch { return ''; }
-}
-
 function hasYamlKey(text, key) {
-  return new RegExp(`(^|\n)${key}:`, 'm').test(text);
+  return new RegExp(`(^|\\n)${key}:`, 'm').test(text);
 }
 
 function requireYamlKeys(target, file, text, keys) {
-  for (const key of keys) {
-    if (!hasYamlKey(text, key)) fail(target, `${file} missing ${key}`);
-  }
+  for (const key of keys) if (!hasYamlKey(text, key)) fail(target, `${file} missing ${key}`);
 }
 
-function isExecutablePacket(dir) {
-  return fs.existsSync(path.join(dir, 'blueprint.yaml'))
-    || fs.existsSync(path.join(dir, 'START_HERE.md'))
-    || fs.existsSync(path.join(dir, '03-capabilities', 'capability-index.yaml'));
-}
-
-function jsonlRows(target, file) {
-  const text = safeRead(file);
+function jsonlRows(target, file, label) {
   const rows = [];
-  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const lines = safeRead(file).split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
   for (let index = 0; index < lines.length; index += 1) {
     try { rows.push(JSON.parse(lines[index])); }
-    catch (error) { fail(target, `09-evidence/evidence-ledger.jsonl line ${index + 1} does not parse: ${error.message}`); }
+    catch (error) { fail(target, `${label} line ${index + 1} does not parse: ${error.message}`); }
   }
   return rows;
 }
 
-function rowProves(row) {
-  if (Array.isArray(row.proves)) return row.proves.map(String);
-  if (typeof row.proves === 'string') return [row.proves];
-  return [];
-}
-
-function hasPassingEvidence(rows, proofId) {
-  return rows.some((row) => {
-    const status = String(row.status ?? '').toLowerCase();
-    return rowProves(row).includes(proofId) && ['passed', 'proven'].includes(status);
-  });
-}
-
-function validateExecutablePacket(target, dir) {
+function validate(target, dir) {
   const files = relFiles(dir);
-  const corpus = markdownCorpus(dir, files);
-  const hasUiSignals = /\b(browser_runtime_trace|user-facing ui|browser workflow|dashboard|graph|report|visual editor|operator console|screen inventory|ux_contract|storyboard|workbench|screenshot_state_set|ux_design_gate)\b/i.test(corpus);
-
+  for (const file of requiredFiles) {
+    if (!fs.existsSync(path.join(dir, file))) fail(target, `missing executable blueprint file ${file}`);
+  }
   for (const file of files) {
-    const base = path.basename(file);
-    if (forbiddenFiles.has(base)) fail(target, `forbidden typo/legacy file ${file}`);
-    if (forbiddenLegacyPaths.some((legacy) => {
-      if (legacy.includes('*')) {
-        const pattern = new RegExp(`^${legacy.split('*').map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('[^/]+')}$`);
-        return pattern.test(file);
+    for (const forbidden of forbiddenPaths) {
+      if (forbidden.endsWith('/') ? file.startsWith(forbidden) : file === forbidden) {
+        fail(target, `forbidden legacy/project-runtime file in executable-blueprint v5: ${file}`);
       }
-      return legacy.endsWith('/') ? file.startsWith(legacy) : file === legacy;
-    })) {
-      fail(target, `legacy or fragmented packet file is forbidden in capability-packet v4: ${file}`);
     }
-    if (/\b(capability\.yaml|product-contract\.md|implementation-workflow\.md|proof-contract\.yaml|source-evidence\.md)$/i.test(file)) {
-      fail(target, `fragmented capability mini-file is forbidden in capability-packet v4: ${file}`);
-    }
-  }
-
-  for (const file of executableRequiredFiles) {
-    if (!fs.existsSync(path.join(dir, file))) fail(target, `missing executable packet file ${file}`);
-  }
-  for (const directory of executableRequiredDirs) {
-    const full = path.join(dir, directory);
-    if (!fs.existsSync(full) || !fs.statSync(full).isDirectory()) fail(target, `missing executable packet directory ${directory}`);
   }
 
   const blueprint = safeRead(path.join(dir, 'blueprint.yaml'));
   requireYamlKeys(target, 'blueprint.yaml', blueprint, [
-    'schema_version',
-    'execution_start',
-    'machine_contract',
-    'claim_status',
-    'promotion_requires',
-    'obligations',
-    'capabilities',
-    'context',
-    'generated_artifacts',
+    'schema_version', 'execution_start', 'machine_contract', 'claim_status', 'setup_gate',
+    'implementation_loop', 'repair_loop', 'phases', 'context', 'generated_artifacts',
   ]);
-  if (!/schema_version:\s*mapper-os\/capability-packet\.v4/i.test(blueprint)) {
-    fail(target, 'blueprint.yaml schema_version must be mapper-os/capability-packet.v4');
-  }
-  if (/compatibility_start|proof_contract:/i.test(blueprint)) {
-    fail(target, 'blueprint.yaml must not contain compatibility_start or fragmented proof_contract routing');
-  }
-  const claimStatus = blueprint.match(/(?:^|\n)claim_status:\s*([A-Z_]+)/)?.[1];
-  if (!labels.has(claimStatus)) fail(target, `blueprint.yaml invalid claim_status ${claimStatus ?? 'missing'}`);
-  for (const proof of executablePromotionRequires) {
-    if (!blueprint.includes(proof)) fail(target, `blueprint.yaml promotion_requires missing ${proof}`);
-  }
-  if (!/active_capability:\s*03-capabilities\//i.test(blueprint)) {
-    fail(target, 'blueprint.yaml context.active_capability must point to 03-capabilities/<capability>.md');
-  }
+  if (!/schema_version:\s*mapper-os\/executable-blueprint\.v5/i.test(blueprint)) fail(target, 'blueprint.yaml schema_version must be mapper-os/executable-blueprint.v5');
+  if (!/execution_start:\s*BUILDPRINT\.md/i.test(blueprint)) fail(target, 'blueprint.yaml execution_start must be BUILDPRINT.md');
+  if (!/questions:\s*01-questions\.md/i.test(blueprint) || !/project_setup:\s*02-project-setup\.md/i.test(blueprint)) fail(target, 'blueprint.yaml setup_gate must route 01-questions.md and 02-project-setup.md');
+  if (!/observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint)) fail(target, 'blueprint.yaml implementation_loop must include observe/plan/execute/verify/reflect/record');
+  if (!/proof_gate_failed:\s*current_phase/i.test(blueprint) || !/architecture_contradiction:\s*02-project-setup\.md/i.test(blueprint)) fail(target, 'blueprint.yaml repair_loop must route failures to current phase/setup/questions/evidence');
+  if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities|08-evaluation|09-evidence|04-interfaces|05-state-runtime/i.test(blueprint)) fail(target, 'blueprint.yaml contains legacy v4 paths');
 
   const buildprint = safeRead(path.join(dir, 'BUILDPRINT.md'));
-  if (!/START_HERE\.md/i.test(buildprint) || !/blueprint\.yaml/i.test(buildprint)) {
-    fail(target, 'BUILDPRINT.md must route agents to START_HERE.md and blueprint.yaml');
+  if (!/^# BUILDPRINT:/m.test(buildprint)) fail(target, 'BUILDPRINT.md must be the canonical start file');
+  for (const token of ['01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
+    if (!buildprint.includes(token)) fail(target, `BUILDPRINT.md read order missing ${token}`);
   }
-  if (/compatibility router|compatibility_start/i.test(buildprint)) {
-    fail(target, 'BUILDPRINT.md must not be a legacy compatibility router in capability-packet v4');
-  }
+  if (!/Implementation loop/i.test(buildprint) || !/Repair routing/i.test(buildprint)) fail(target, 'BUILDPRINT.md must include implementation loop and repair routing');
+  if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities/i.test(buildprint)) fail(target, 'BUILDPRINT.md contains legacy v4 entrypoint/capability wording');
 
-  const startHere = safeRead(path.join(dir, 'START_HERE.md'));
-  if (!/blueprint\.yaml/i.test(startHere) || !/active capability/i.test(startHere) || !/evidence ledger/i.test(startHere)) {
-    fail(target, 'START_HERE.md must route through blueprint.yaml, active capability, and evidence ledger');
-  }
-  if (!/03-capabilities\/capability-index\.yaml/i.test(startHere)) {
-    fail(target, 'START_HERE.md must consult 03-capabilities/capability-index.yaml only after active proof');
-  }
-  if (!/PRE_IMPLEMENTATION_QUESTIONS\.md/i.test(startHere)) fail(target, 'START_HERE.md must route through PRE_IMPLEMENTATION_QUESTIONS.md before coding');
-  if (!/02-context\/team-stack\.yaml/i.test(startHere) || !/team gates/i.test(startHere)) fail(target, 'START_HERE.md must route through 02-context/team-stack.yaml before coding');
-  if (hasUiSignals && (!/02-context\/ux-contract\.md/i.test(startHere) || !/02-context\/design-quality-bar\.md/i.test(startHere))) {
-    fail(target, 'START_HERE.md must route UI-bearing executable packets through ux-contract.md and design-quality-bar.md');
-  }
+  const questions = safeRead(path.join(dir, '01-questions.md'));
+  for (const n of [1, 2, 3, 4, 5, 6]) if (!new RegExp(`## ${n}\\.`, 'i').test(questions)) fail(target, `01-questions.md missing numbered question ${n}`);
+  if (!/AI best judgment/i.test(questions) || !/highest-quality appropriate/i.test(questions)) fail(target, '01-questions.md must define AI best-judgment defaults');
+  if (!/Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks/i.test(questions)) fail(target, '01-questions.md must avoid blocking on ordinary engineering choices');
 
-  const preQuestions = safeRead(path.join(dir, 'PRE_IMPLEMENTATION_QUESTIONS.md'));
-  if (!/safe defaults/i.test(preQuestions) || !/at most five/i.test(preQuestions)) fail(target, 'PRE_IMPLEMENTATION_QUESTIONS.md must include at-most-five rule and concrete safe defaults');
-  if (/quality tier|choose.*team|lazy\/simple/i.test(preQuestions) && !/do not ask|forbid|forbidden/i.test(preQuestions)) fail(target, 'PRE_IMPLEMENTATION_QUESTIONS.md must forbid quality-tier and team-choice questions');
+  const setup = safeRead(path.join(dir, '02-project-setup.md'));
+  for (const pattern of setupSections) if (!pattern.test(setup)) fail(target, `02-project-setup.md missing ${pattern.source.replace(/\\/g, '')}`);
+  if (!/root\/local `AGENTS\.md`|local `AGENTS\.md`|Root `AGENTS\.md`/i.test(setup)) fail(target, '02-project-setup.md must define root/local AGENTS.md plan');
+  if (!/Do not start `03-phases\/\*`/i.test(setup)) fail(target, '02-project-setup.md must block phases until setup is explicit');
 
-  const sourceSurfaceMap = safeRead(path.join(dir, '00-intent/source-surface-map.md'));
-  const hasDisposition = sourceSurfaceDispositions.some((label) => sourceSurfaceMap.includes(label));
-  if (!hasDisposition) fail(target, '00-intent/source-surface-map.md must include source surface disposition labels');
-  if (!/OBL-[A-Z0-9_-]+/i.test(sourceSurfaceMap)) fail(target, '00-intent/source-surface-map.md must route surfaces to product obligations');
+  const phaseIndex = safeRead(path.join(dir, '03-phases/phase-index.yaml'));
+  requireYamlKeys(target, '03-phases/phase-index.yaml', phaseIndex, ['schema_version', 'active_phase', 'phases']);
+  if (!/active_phase:\s*03-phases\//i.test(phaseIndex)) fail(target, '03-phases/phase-index.yaml active_phase must point to 03-phases/<phase>.md');
+  if (!/phase_id:/i.test(phaseIndex) || !/proof_gate:/i.test(phaseIndex)) fail(target, '03-phases/phase-index.yaml must list phase_id and proof_gate');
 
-  const productObligations = safeRead(path.join(dir, '00-intent/product-obligations.md'));
-  if (!/OBL-[A-Z0-9_-]+/i.test(productObligations)) fail(target, '00-intent/product-obligations.md must define obligation IDs');
-
-  const claimRules = safeRead(path.join(dir, '08-evaluation/claim-upgrade-rules.yaml'));
-  for (const proofType of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) {
-    if (!claimRules.includes(proofType)) fail(target, `08-evaluation/claim-upgrade-rules.yaml missing ${proofType}`);
-  }
-  const evidenceSchema = safeRead(path.join(dir, '09-evidence/evidence-ledger.schema.json'));
-  for (const field of ['capability_id', 'proof_type', 'provider_mode', 'upgrades_claim']) {
-    if (!evidenceSchema.includes(field)) fail(target, `09-evidence/evidence-ledger.schema.json missing ${field}`);
-  }
-
-
-  const securityFixtures = safeRead(path.join(dir, '06-safety/security-test-fixtures.yaml'));
-  for (const fixture of ['path_traversal', 'secret', 'destructive', 'subprocess']) {
-    if (!securityFixtures.toLowerCase().includes(fixture)) fail(target, `06-safety/security-test-fixtures.yaml missing ${fixture} fixture`);
-  }
-
-  const contextMap = safeRead(path.join(dir, '02-context/context-map.yaml'));
-  requireYamlKeys(target, '02-context/context-map.yaml', contextMap, ['active_capability', 'must_read', 'read_if_needed', 'do_not_read_yet']);
-  if (!/must_read:[\s\S]*PRE_IMPLEMENTATION_QUESTIONS\.md/i.test(contextMap)) fail(target, '02-context/context-map.yaml must include PRE_IMPLEMENTATION_QUESTIONS.md in must_read');
-  if (!/must_read:[\s\S]*02-context\/team-stack\.yaml/i.test(contextMap)) fail(target, '02-context/context-map.yaml must include 02-context/team-stack.yaml in must_read');
-  if (!/must_read:[\s\S]*03-capabilities\//i.test(contextMap)) fail(target, '02-context/context-map.yaml must include the active capability in must_read');
-  if (hasUiSignals && (!/02-context\/ux-contract\.md/i.test(contextMap) || !/02-context\/design-quality-bar\.md/i.test(contextMap))) fail(target, '02-context/context-map.yaml must route UI-bearing executable packets through ux-contract.md and design-quality-bar.md');
-  if (/03-capabilities\/\*/i.test(contextMap) && !/do_not_read_yet:[\s\S]*03-capabilities\/\*/i.test(contextMap)) fail(target, '02-context/context-map.yaml must not load all capability packets upfront');
-
-  const teamStack = safeRead(path.join(dir, '02-context/team-stack.yaml'));
-  requireYamlKeys(target, '02-context/team-stack.yaml', teamStack, ['schema_version', 'selected_teams', 'review_order', 'forbidden']);
-  for (const team of ['product-architect', 'test-and-verification']) {
-    if (!new RegExp(`\\b${team}\\b`, 'i').test(teamStack)) fail(target, `02-context/team-stack.yaml missing required team ${team}`);
-  }
-  if (hasUiSignals && !/\bux-ui-craft\b/i.test(teamStack)) fail(target, '02-context/team-stack.yaml missing required team ux-ui-craft for UI-bearing executable packet');
-  if (!/quality-tier|lazy\/simple|lazy|simple/i.test(teamStack)) fail(target, '02-context/team-stack.yaml must forbid quality-tier/lazy/simple team choices');
-
-  if (hasUiSignals) {
-    const ux = safeRead(path.join(dir, '02-context/ux-contract.md'));
-    const design = safeRead(path.join(dir, '02-context/design-quality-bar.md'));
-    if (!ux) fail(target, 'UI-bearing executable packet missing 02-context/ux-contract.md');
-    if (!design) fail(target, 'UI-bearing executable packet missing 02-context/design-quality-bar.md');
-    for (const pattern of executableUxRequiredSections) if (ux && !pattern.test(ux)) fail(target, `02-context/ux-contract.md missing required section ${pattern.source.replace(/\\/g, '')}`);
-    if ((ux && !/Empty:/i.test(ux)) || (ux && !/Loading:/i.test(ux)) || (ux && !/Error:/i.test(ux)) || (ux && !/Blocked:/i.test(ux)) || (ux && !/Success\/ready:/i.test(ux))) fail(target, '02-context/ux-contract.md must define empty/loading/error/blocked/success UI states');
-    if (ux && !/screenshot|browser trace|browser proof/i.test(ux)) fail(target, '02-context/ux-contract.md must include screenshot/browser proof plan');
-    for (const pattern of executableDesignRequiredSections) if (design && !pattern.test(design)) fail(target, `02-context/design-quality-bar.md missing required section ${pattern.source.replace(/\\/g, '')}`);
-    if (design && (!/Empty:/i.test(design) || !/Loading:/i.test(design) || !/Error:/i.test(design) || !/Blocked:/i.test(design) || !/Success\/ready:/i.test(design))) fail(target, '02-context/design-quality-bar.md must require screenshots for empty/loading/error/blocked/success states');
-  }
-
-  const readOrder = safeRead(path.join(dir, '02-context/read-order.yaml'));
-  requireYamlKeys(target, '02-context/read-order.yaml', readOrder, ['initial', 'after_active_proof', 'forbidden_initial']);
-  if (!/START_HERE\.md/i.test(readOrder) || !/blueprint\.yaml/i.test(readOrder)) fail(target, '02-context/read-order.yaml must start from START_HERE.md and blueprint.yaml');
-  if (!/PRE_IMPLEMENTATION_QUESTIONS\.md/i.test(readOrder)) fail(target, '02-context/read-order.yaml must include PRE_IMPLEMENTATION_QUESTIONS.md before active capability loading');
-  if (!/02-context\/team-stack\.yaml/i.test(readOrder)) fail(target, '02-context/read-order.yaml must include 02-context/team-stack.yaml before active capability loading');
-  if (!/active capability/i.test(readOrder) && !/03-capabilities\//i.test(readOrder)) fail(target, '02-context/read-order.yaml must route the active capability');
-  if (hasUiSignals && (!/02-context\/ux-contract\.md/i.test(readOrder) || !/02-context\/design-quality-bar\.md/i.test(readOrder))) fail(target, '02-context/read-order.yaml must include UI gate files for UI-bearing active capabilitys');
-
-  const evidenceIndex = safeRead(path.join(dir, '02-context/source-evidence-index.yaml'));
-  requireYamlKeys(target, '02-context/source-evidence-index.yaml', evidenceIndex, ['source_surfaces']);
-  if (!/obligation_id:/i.test(evidenceIndex)) fail(target, '02-context/source-evidence-index.yaml must map source surfaces to obligation_id');
-
-  const capabilityIndex = safeRead(path.join(dir, '03-capabilities/capability-index.yaml'));
-  requireYamlKeys(target, '03-capabilities/capability-index.yaml', capabilityIndex, ['capabilities']);
-  for (const key of ['capability_id', 'file', 'obligation_ids', 'required_teams', 'proof_gate', 'status']) {
-    if (!new RegExp(`${key}:`, 'i').test(capabilityIndex)) fail(target, `03-capabilities/capability-index.yaml missing ${key}`);
-  }
-  if (!/OBL-[A-Z0-9_-]+/i.test(capabilityIndex)) fail(target, '03-capabilities/capability-index.yaml must route capabilities to product obligations');
-
-  const capabilitiesDir = path.join(dir, '03-capabilities');
-  const capabilityFiles = fs.existsSync(capabilitiesDir)
-    ? fs.readdirSync(capabilitiesDir, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith('.md') && !entry.name.startsWith('_')).map((entry) => entry.name).sort()
+  const phasesDir = path.join(dir, '03-phases');
+  const phaseFiles = fs.existsSync(phasesDir)
+    ? fs.readdirSync(phasesDir, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith('.md')).map((entry) => entry.name).sort()
     : [];
-  if (!capabilityFiles.length) fail(target, '03-capabilities/ must contain at least one capability packet markdown file');
-  for (const capabilityFile of capabilityFiles) {
-    const rel = `03-capabilities/${capabilityFile}`;
-    const text = safeRead(path.join(capabilitiesDir, capabilityFile));
-    for (const pattern of capabilityRequiredSections) {
-      if (!pattern.test(text)) fail(target, `${rel} missing required section ${pattern.source.replace(/\\/g, '')}`);
-    }
-    for (const token of ['OBL-', 'SRC-', 'Required teams and gates', 'Proof gate', '.buildprint/evidence/evidence-ledger.jsonl', '09-evidence/evidence-ledger.jsonl']) {
+  if (!phaseFiles.length) fail(target, '03-phases/ must contain at least one phase markdown file');
+  for (const phaseFile of phaseFiles) {
+    const rel = `03-phases/${phaseFile}`;
+    const text = safeRead(path.join(phasesDir, phaseFile));
+    for (const pattern of phaseSections) if (!pattern.test(text)) fail(target, `${rel} missing ${pattern.source.replace(/\\/g, '')}`);
+    for (const token of ['05-evidence/evidence-ledger.jsonl', 'phase_id:', 'current phase', '02-project-setup.md', '01-questions.md']) {
       if (!text.includes(token)) fail(target, `${rel} missing ${token}`);
     }
-    if (/proof-contract\.yaml|product-contract\.md|implementation-workflow\.md|capability\.yaml/i.test(text)) {
-      fail(target, `${rel} must not route to fragmented legacy capability files`);
-    }
-    if (/browser_runtime_trace/i.test(text)) {
-      if (!/ux_design_gate/i.test(text) || !/screenshot_state_set/i.test(text)) fail(target, `${rel} with browser_runtime_trace must require ux_design_gate and screenshot_state_set`);
-      if (!/02-context\/ux-contract\.md/i.test(text) || !/02-context\/design-quality-bar\.md/i.test(text)) fail(target, `${rel} with browser_runtime_trace must tie proof to ux-contract.md and design-quality-bar.md`);
-    }
+    if (/03-capabilities|09-evidence|08-evaluation|06-safety\/security-test-fixtures/i.test(text)) fail(target, `${rel} contains legacy v4 paths`);
   }
 
-  const implementationPlan = safeRead(path.join(dir, '07-execution/implementation-plan.yaml'));
-  requireYamlKeys(target, '07-execution/implementation-plan.yaml', implementationPlan, ['phases']);
-  if (!/proof/i.test(implementationPlan) || !/evidence/i.test(implementationPlan)) fail(target, '07-execution/implementation-plan.yaml must include proof and evidence gates');
-
-  const acceptance = safeRead(path.join(dir, '08-evaluation/acceptance.yaml'));
-  requireYamlKeys(target, '08-evaluation/acceptance.yaml', acceptance, ['acceptance']);
-  for (const proof of executablePromotionRequires) if (!acceptance.includes(proof)) fail(target, `08-evaluation/acceptance.yaml missing ${proof}`);
-
-  const evidenceRows = jsonlRows(target, path.join(dir, '09-evidence/evidence-ledger.jsonl'));
-  for (const row of evidenceRows) {
-    for (const field of ['artifact_id', 'type', 'capability_id', 'status', 'source', 'proves']) {
-      if (!(field in row)) fail(target, `09-evidence/evidence-ledger.jsonl row missing ${field}`);
-    }
+  const evaluation = safeRead(path.join(dir, '04-evaluation.md'));
+  for (const token of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake', 'Loop completion rule', 'Blocker honesty']) {
+    if (!evaluation.includes(token)) fail(target, `04-evaluation.md missing ${token}`);
   }
-  if (claimStatus === 'QUALIFIED_SOURCE_INDEPENDENT') {
-    for (const proof of executablePromotionRequires) {
-      if (!hasPassingEvidence(evidenceRows, proof)) fail(target, `QUALIFIED_SOURCE_INDEPENDENT requires passing evidence-ledger row for ${proof}`);
+
+  const schema = safeRead(path.join(dir, '05-evidence/evidence-ledger.schema.json'));
+  for (const field of ['phase_id', 'proof_type', 'provider_mode', 'upgrades_claim']) if (!schema.includes(field)) fail(target, `05-evidence/evidence-ledger.schema.json missing ${field}`);
+  const rows = jsonlRows(target, path.join(dir, '05-evidence/evidence-ledger.jsonl'), '05-evidence/evidence-ledger.jsonl');
+  for (const row of rows) {
+    for (const field of ['artifact_id', 'type', 'phase_id', 'status', 'source', 'proves', 'proof_type', 'provider_mode', 'upgrades_claim']) {
+      if (!(field in row)) fail(target, `05-evidence/evidence-ledger.jsonl row missing ${field}`);
     }
   }
 
   const prompt = safeRead(path.join(dir, 'generated/agent-prompt.md'));
   if (!/Generated from:\s*blueprint\.yaml/i.test(prompt)) fail(target, 'generated/agent-prompt.md must declare Generated from: blueprint.yaml');
   if (!/not source of truth|not authoritative/i.test(prompt)) fail(target, 'generated/agent-prompt.md must say it is not source of truth');
-  if (!/START_HERE\.md/i.test(prompt) || !/blueprint\.yaml/i.test(prompt)) fail(target, 'generated/agent-prompt.md must route back to START_HERE.md and blueprint.yaml');
-  if (!/PRE_IMPLEMENTATION_QUESTIONS\.md/i.test(prompt)) fail(target, 'generated/agent-prompt.md must route through PRE_IMPLEMENTATION_QUESTIONS.md before coding');
-  if (!/02-context\/team-stack\.yaml/i.test(prompt)) fail(target, 'generated/agent-prompt.md must route through 02-context/team-stack.yaml before coding');
-  if (!/active capability/i.test(prompt) && !/03-capabilities\//i.test(prompt)) fail(target, 'generated/agent-prompt.md must route to the active capability');
-  if (hasUiSignals && (!/02-context\/ux-contract\.md/i.test(prompt) || !/02-context\/design-quality-bar\.md/i.test(prompt))) fail(target, 'generated/agent-prompt.md must route UI-bearing executable packets through ux-contract.md and design-quality-bar.md');
+  for (const token of ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', '03-phases/phase-index.yaml', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
+    if (!prompt.includes(token)) fail(target, `generated/agent-prompt.md missing ${token}`);
+  }
 }
 
 for (const target of targets) {
@@ -414,11 +189,7 @@ for (const target of targets) {
     fail(target, 'selected Buildprint directory does not exist');
     continue;
   }
-  if (isExecutablePacket(dir)) {
-    validateExecutablePacket(target, dir);
-    continue;
-  }
-  fail(target, 'selected Buildprint must be capability-packet v4; legacy selected-output v1/v2 packet shapes are forbidden');
+  validate(target, dir);
 }
 
 if (failures) {

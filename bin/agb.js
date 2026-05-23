@@ -2923,6 +2923,7 @@ function writeJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
 }
 
+
 function looksLikeManifestRef(value) {
   return /package\.json(?:$|[?#])/i.test(value) || (exists(value) && path.basename(value) === 'package.json')
 }
@@ -2972,29 +2973,51 @@ function safeReadText(file) {
   try { return readText(file) } catch { return '' }
 }
 
+function packetCheckRoot(dir) {
+  const directBlueprint = path.join(dir, 'blueprint.yaml')
+  const templateBlueprint = path.join(dir, 'templates', 'executable-packet', 'blueprint.yaml')
+  if (!exists(directBlueprint) && exists(templateBlueprint)) return path.join(dir, 'templates', 'executable-packet')
+  return dir
+}
+
 function packetCheckResults(dir) {
+  dir = packetCheckRoot(dir)
   const checks = []
   const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
   const files = new Set(packetFiles(dir))
   const need = [
-    'BUILDPRINT.md', 'START_HERE.md', 'blueprint.yaml', '02-context/context-map.yaml',
-    '02-context/read-order.yaml', '03-capabilities/capability-index.yaml',
-    '08-evaluation/claim-upgrade-rules.yaml', '09-evidence/evidence-ledger.schema.json',
-    '09-evidence/evidence-ledger.jsonl'
+    'BUILDPRINT.md', 'blueprint.yaml', '01-questions.md', '02-project-setup.md',
+    '03-phases/phase-index.yaml', '04-evaluation.md',
+    '05-evidence/evidence-ledger.schema.json', '05-evidence/evidence-ledger.jsonl'
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
+  ok('packet does not ship project AGENTS.md', !files.has('AGENTS.md') && !Array.from(files).some((file) => file.startsWith('docs/')))
+  ok('packet avoids legacy v4 router/files', !Array.from(files).some((file) => file === 'START_HERE.md' || file === 'PRE_IMPLEMENTATION_QUESTIONS.md' || file.startsWith('03-capabilities/') || file.startsWith('04-interfaces/') || file.startsWith('05-state-runtime/') || file.startsWith('06-safety/') || file.startsWith('08-evaluation/') || file.startsWith('09-evidence/')))
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
-  ok('blueprint declares capability-packet v4 authority', /schema_version:\s*mapper-os\/capability-packet\.v4/i.test(blueprint) && /execution_start:\s*START_HERE\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
-  ok('blueprint avoids legacy selected-output routing', !/compatibility_start|proof_contract:|07-execution\/phases|manifest\.json/i.test(blueprint))
-  const contextMap = safeReadText(path.join(dir, '02-context/context-map.yaml'))
-  ok('context map names active capability', /active_capability:\s*03-capabilities\//i.test(contextMap))
-  ok('context map forbids original source for implementation', /original_source_policy:\s*do_not_open_for_implementation/i.test(contextMap))
-  const capabilityIndex = safeReadText(path.join(dir, '03-capabilities/capability-index.yaml'))
-  ok('capability index lists proof-gated capabilities', /proof_gate:/i.test(capabilityIndex) && /capability_id:/i.test(capabilityIndex))
-  const rules = safeReadText(path.join(dir, '08-evaluation/claim-upgrade-rules.yaml'))
-  for (const key of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) ok(`claim rules include ${key}`, rules.includes(key))
-  const schema = safeReadText(path.join(dir, '09-evidence/evidence-ledger.schema.json'))
-  for (const key of ['capability_id', 'proof_type', 'provider_mode', 'upgrades_claim']) ok(`evidence schema includes ${key}`, schema.includes(key))
+  ok('blueprint declares executable-blueprint v5 authority', /schema_version:\s*mapper-os\/executable-blueprint\.v5/i.test(blueprint) && /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
+  ok('blueprint includes project setup gate', /questions:\s*01-questions\.md/i.test(blueprint) && /project_setup:\s*02-project-setup\.md/i.test(blueprint))
+  ok('blueprint includes implementation loop', /observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint))
+  ok('blueprint includes repair routing', /proof_gate_failed:\s*current_phase/i.test(blueprint) && /architecture_contradiction:\s*02-project-setup\.md/i.test(blueprint))
+  const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
+  ok('BUILDPRINT owns read order', /01-questions\.md[\s\S]*02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml/i.test(buildprint))
+  ok('BUILDPRINT includes loop and repair protocol', /Implementation loop/i.test(buildprint) && /Repair routing/i.test(buildprint))
+  const questions = safeReadText(path.join(dir, '01-questions.md'))
+  ok('questions use numbered AI-default alignment', /## 1\./.test(questions) && /## 6\./.test(questions) && /AI best judgment/i.test(questions))
+  const setup = safeReadText(path.join(dir, '02-project-setup.md'))
+  ok('project setup defines architecture and AGENTS plan', /## Architecture rules/i.test(setup) && /## AGENTS\.md plan/i.test(setup) && /## Phase start gate/i.test(setup))
+  const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
+  ok('phase index names active proof-gated phase', /active_phase:\s*03-phases\//i.test(phaseIndex) && /phase_id:/i.test(phaseIndex) && /proof_gate:/i.test(phaseIndex))
+  const phaseDir = path.join(dir, '03-phases')
+  const phases = exists(phaseDir) ? fs.readdirSync(phaseDir).filter((file) => file.endsWith('.md')).sort() : []
+  ok('packet has at least one phase file', phases.length > 0)
+  for (const file of phases) {
+    const text = safeReadText(path.join(phaseDir, file))
+    ok(`${file} includes inline interfaces/state/proof/repair`, /## Interfaces touched/i.test(text) && /## State\/runtime touched/i.test(text) && /## Proof gate/i.test(text) && /## Repair routing/i.test(text))
+  }
+  const rules = safeReadText(path.join(dir, '04-evaluation.md'))
+  for (const key of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) ok(`evaluation includes ${key}`, rules.includes(key))
+  const schema = safeReadText(path.join(dir, '05-evidence/evidence-ledger.schema.json'))
+  for (const key of ['phase_id', 'proof_type', 'provider_mode', 'upgrades_claim']) ok(`evidence schema includes ${key}`, schema.includes(key))
   return checks
 }
 
@@ -3014,14 +3037,15 @@ async function packetCheck(ref) {
 }
 
 async function packetNext(ref) {
-  const dir = await packetDirFromRef(ref)
-  const contextMap = safeReadText(path.join(dir, '02-context/context-map.yaml'))
-  const activePath = contextMap.match(/active_capability:\s*([^\s#]+)/)?.[1]
-  if (!activePath) throw new Error('missing active_capability in 02-context/context-map.yaml')
+  const dir = packetCheckRoot(await packetDirFromRef(ref))
+  const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
+  const activePath = phaseIndex.match(/active_phase:\s*([^\s#]+)/)?.[1]
+  if (!activePath) throw new Error('missing active_phase in 03-phases/phase-index.yaml')
   const active = safeReadText(path.join(dir, activePath))
-  if (!active) throw new Error(`missing active capability ${activePath}`)
+  if (!active) throw new Error(`missing active phase ${activePath}`)
   console.log(active.trim())
 }
+
 
 function evidenceCheck(file) {
   const text = readText(path.resolve(cwd, file))
@@ -3033,7 +3057,7 @@ function evidenceCheck(file) {
     count++
     try {
       const row = JSON.parse(line)
-      for (const field of ['artifact_id', 'type', 'capability_id', 'status', 'source', 'proves', 'proof_type', 'provider_mode', 'upgrades_claim']) {
+      for (const field of ['artifact_id', 'type', 'status', 'source', 'proves', 'proof_type', 'provider_mode', 'upgrades_claim']) {
         if (!(field in row)) {
           failed++
           console.error(`✗ line ${index + 1}: missing ${field}`)
@@ -3116,11 +3140,11 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
   const manifestFilePaths = manifest.files.map((file) => file.path).filter(Boolean)
   const hasManifestFile = (filePath) => manifestFilePaths.includes(filePath)
-  const isExecutablePacket = hasManifestFile('START_HERE.md') && hasManifestFile('blueprint.yaml')
+  const isExecutablePacket = hasManifestFile('01-questions.md') && hasManifestFile('02-project-setup.md') && hasManifestFile('blueprint.yaml')
   const manifestReadOrder = Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length
     ? manifest.instructions.readOrder
     : (isExecutablePacket
-      ? ['BUILDPRINT.md', 'START_HERE.md', 'blueprint.yaml', '02-context/context-map.yaml', 'PRE_IMPLEMENTATION_QUESTIONS.md', '02-context/team-stack.yaml', '02-context/ux-contract.md', '02-context/design-quality-bar.md'].filter(hasManifestFile)
+      ? ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
       : ['BUILDPRINT.md'])
 
   const targetRoot = path.resolve(cwd, targetFolder)
@@ -3143,13 +3167,13 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   }
 
   const now = new Date().toISOString()
-  const contextMapPath = path.join(snapshotDir, '02-context', 'context-map.yaml')
-  const contextMapText = fs.existsSync(contextMapPath) ? fs.readFileSync(contextMapPath, 'utf8') : ''
-  const activeCapability = contextMapText.match(/active_capability:\s*([^\s#]+)/)?.[1] || null
-  const activeCapabilityId = activeCapability ? path.basename(activeCapability, path.extname(activeCapability)).replace(/^\d+-/, '') : null
+  const phaseIndexPath = path.join(snapshotDir, '03-phases', 'phase-index.yaml')
+  const phaseIndexText = fs.existsSync(phaseIndexPath) ? fs.readFileSync(phaseIndexPath, 'utf8') : ''
+  const activePhase = phaseIndexText.match(/active_phase:\s*([^\s#]+)/)?.[1] || null
+  const activePhaseId = activePhase ? path.basename(activePhase, path.extname(activePhase)).replace(/^\d+-/, '') : null
   const evidenceDir = path.join(stateDir, 'evidence')
   const runtimeEvidencePath = path.join(evidenceDir, 'evidence-ledger.jsonl')
-  const snapshotEvidencePath = path.join(snapshotDir, '09-evidence', 'evidence-ledger.jsonl')
+  const snapshotEvidencePath = path.join(snapshotDir, '05-evidence', 'evidence-ledger.jsonl')
   fs.mkdirSync(evidenceDir, { recursive: true })
   fs.writeFileSync(runtimeEvidencePath, fs.existsSync(snapshotEvidencePath) ? fs.readFileSync(snapshotEvidencePath, 'utf8') : '')
 
@@ -3173,22 +3197,22 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
   writeJson(path.join(stateDir, 'state.json'), {
     buildprint: manifest.slug,
-    currentPhase: isExecutablePacket ? activeCapabilityId || 'active-capability' : '00-alignment',
-    activeCapability,
-    activeCapabilityId,
-    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'capability-gated' : null),
+    currentPhase: isExecutablePacket ? activePhaseId || 'active-phase' : '00-alignment',
+    activePhase,
+    activePhaseId,
+    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'phase-gated' : null),
     completedPhases: [],
     blocked: false,
     lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
     nextAction: isExecutablePacket
-      ? 'read .buildprint/next-agent.md, then follow the capability-packet v4 router for the active capability'
+      ? 'read .buildprint/next-agent.md, complete project setup, then follow the active phase loop'
       : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
     runtimeEvidenceLedger: '.buildprint/evidence/evidence-ledger.jsonl',
     updatedAt: now,
   })
 
   fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
-    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Initialized writable runtime evidence ledger at \`.buildprint/evidence/evidence-ledger.jsonl\`.\n\n## Current\n- Active capability: \`${activeCapability || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\` and the capability-packet v4 router.\n`
+    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Initialized writable runtime evidence ledger at \`.buildprint/evidence/evidence-ledger.jsonl\`.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, complete project setup, then execute the active phase loop.\n`
     : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
@@ -3196,25 +3220,25 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
 Start here.
 
-This is a Mapper OS capability-packet v4. Local runtime state wins over stale snapshot assumptions.
+This is a Mapper OS executable-blueprint v5. Local runtime state wins over stale assumptions, but package snapshots remain read-only.
 
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
-3. Read \`.buildprint/snapshots/02-context/context-map.yaml\`.
-4. Execute team gates from \`.buildprint/snapshots/02-context/team-stack.yaml\`; for UI-bearing active capabilitys, also apply \`.buildprint/snapshots/02-context/ux-contract.md\` and \`.buildprint/snapshots/02-context/design-quality-bar.md\`.
-5. Load only the active capability named by the context map: \`${activeCapability || 'unknown'}\`.
-6. Implement and prove that capability.
+3. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work.
+4. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
+5. Execute the phase implementation loop: observe, plan, execute, verify, reflect, record.
+6. If verification fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
 7. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`.
-8. After proof, consult \`.buildprint/snapshots/03-capabilities/capability-index.yaml\`, update local state, and continue one dependency-ready capability at a time.
+8. After proof, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
 
 Rules:
 
-- Do not read every capability packet upfront.
+- Do not read every phase upfront.
 - Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
-- \`.buildprint/evidence/evidence-ledger.jsonl\` is the writable runtime evidence ledger.
+- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created from \`02-project-setup.md\`, not shipped in the packet.
 - Keep claims scoped until runtime evidence rows prove the required gates.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
-- If blocked, update \`.buildprint/blockers.md\`.
+- If blocked, update \`.buildprint/blockers.md\` and evidence ledger.
 ` : `# Next Agent Instructions
 
 Start here.

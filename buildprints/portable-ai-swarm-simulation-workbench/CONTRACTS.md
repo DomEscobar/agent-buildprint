@@ -1,11 +1,3 @@
-# CONTRACTS.md — compatibility route
+# Contracts
 
-Interface, provider, state, runtime, and proof contracts live in the capability-packet v4 packet:
-
-- `04-interfaces/api-contracts.md`
-- `04-interfaces/provider-adapters.md`
-- `04-interfaces/ui-flows.md`
-- `05-state-runtime/persistence-contract.md`
-- `03-capabilities/*/Proof gate in the active capability`
-
-This file only routes legacy readers into the executable packet.
+Interface, provider, state, runtime, UX, safety, and proof contracts are captured inline per phase under `03-phases/*.md`. Shared project-level architecture and AGENTS alignment are captured in `02-project-setup.md`. Claim promotion is governed by `04-evaluation.md` and evidence rows in `05-evidence/evidence-ledger.jsonl`.

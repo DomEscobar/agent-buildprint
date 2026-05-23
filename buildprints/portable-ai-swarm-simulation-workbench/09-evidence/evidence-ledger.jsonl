@@ -1,1 +1,0 @@
-{"artifact_id": "mapping-seed-001", "type": "mapping_seed", "capability_id": "01-ingestion-ontology", "status": "blocked", "source": "Mapper OS source evidence was distilled; implementation/runtime proof has not run.", "proves": ["source_surface_mapping"], "provider_mode": "not_executed", "upgrades_claim": false}

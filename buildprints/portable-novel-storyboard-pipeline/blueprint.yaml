@@ -1,103 +1,68 @@
-schema_version: mapper-os/capability-packet.v4
-execution_start: START_HERE.md
+schema_version: mapper-os/executable-blueprint.v5
+execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 source:
-  input: https://github.com/HBAI-Ltd/Toonflow-app
+input: https://github.com/HBAI-Ltd/Toonflow-app
   checkout_path: external-source-checkout
   commit: 122d2aa431d3240fea3eab491e6fbc690bb088cb
-generated_at: 2026-05-22T00:00:00Z
+generated_at: <iso-timestamp>
 claim_status: SELECTED_UNQUALIFIED
-promotion_requires:
-  - browser_runtime_trace
-  - provider_integration_proof
-  - persistence_roundtrip
-  - security_boundary_review
-  - clean_room_implementation_trace
-  - no_fake_scan_pass
-obligations:
-  - obligation_id: OBL-PROJECT
-    title: Local project workspace, model choices, and auth/session boundary
-    source_surfaces: [SRC-AUTH, SRC-PROJECT, SRC-DB]
+setup_gate:
+  questions: 01-questions.md
+  project_setup: 02-project-setup.md
+  required_before_phases: true
+implementation_loop:
+  required: true
+  steps:
+    - observe
+    - plan
+    - execute
+    - verify
+    - reflect
+    - record
+  completion_requires:
+    - proof_gate_passed
+    - evidence_recorded
+repair_loop:
+  on_failure:
+    test_failed: current_phase
+    build_failed: current_phase
+    runtime_error: current_phase
+    ui_quality_failed: current_phase
+    proof_gate_failed: current_phase
+    architecture_contradiction: 02-project-setup.md
+    missing_human_preference: 01-questions.md
+    missing_dependency_phase: required_prior_phase
+    external_blocker: 05-evidence/evidence-ledger.jsonl
+phases:
+  - phase_id: project-workspace-auth
+    title: 01-project-workspace-auth
+    file: 03-phases/01-project-workspace-auth.md
     status: INCLUDED_NEEDS_PROOF
-  - obligation_id: OBL-NOVEL
-    title: Ordered chapter import and deterministic event extraction
-    source_surfaces: [SRC-NOVEL, SRC-EVENTS, SRC-TEXT-PROVIDER]
+  - phase_id: novel-event-ingestion
+    title: 02-novel-event-ingestion
+    file: 03-phases/02-novel-event-ingestion.md
     status: INCLUDED_NEEDS_PROOF
-  - obligation_id: OBL-SCRIPT
-    title: Script-agent workspace with structured outline, strategy, script, and asset extraction
-    source_surfaces: [SRC-SCRIPT-AGENT, SRC-SCRIPT-ASSETS, SRC-SKILLS]
+  - phase_id: script-agent-assets
+    title: 03-script-agent-assets
+    file: 03-phases/03-script-agent-assets.md
     status: INCLUDED_NEEDS_PROOF
-  - obligation_id: OBL-STORYBOARD
-    title: Production-agent storyboard planning, panel rows, and flow persistence
-    source_surfaces: [SRC-PRODUCTION-AGENT, SRC-FLOW, SRC-STORYBOARD]
+  - phase_id: production-storyboard-flow
+    title: 04-production-storyboard-flow
+    file: 03-phases/04-production-storyboard-flow.md
     status: INCLUDED_NEEDS_PROOF
-  - obligation_id: OBL-MEDIA
-    title: Mockable image/video media jobs and exportable preview manifest
-    source_surfaces: [SRC-IMAGE, SRC-VIDEO, SRC-EXPORT]
+  - phase_id: media-preview-export
+    title: 05-media-preview-export
+    file: 03-phases/05-media-preview-export.md
     status: INCLUDED_NEEDS_PROOF
-  - obligation_id: OBL-SAFETY
-    title: Provider, upload, secret, persistence, and destructive-action safety boundary
-    source_surfaces: [SRC-PROVIDERS, SRC-UPLOADS, SRC-ADMIN, SRC-RUNTIME]
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
-capabilities:
-  - capability_id: project-workspace-auth
-    title: Local project workspace, model choices, and auth/session boundary
-    obligation_ids:
-      - OBL-PROJECT
-    file: 03-capabilities/01-project-workspace-auth.md
-    autonomy_level: workflow
-    proof_gate: proof-project-workspace-auth
+  - phase_id: safety-runtime-boundary
+    title: 06-safety-runtime-boundary
+    file: 03-phases/06-safety-runtime-boundary.md
     status: INCLUDED_NEEDS_PROOF
-  - capability_id: novel-event-ingestion
-    title: Ordered chapter import and deterministic event extraction
-    obligation_ids:
-      - OBL-NOVEL
-    file: 03-capabilities/02-novel-event-ingestion.md
-    autonomy_level: workflow
-    proof_gate: proof-novel-event-ingestion
-    status: INCLUDED_NEEDS_PROOF
-  - capability_id: script-agent-assets
-    title: Script-agent workspace with structured outline, strategy, script, and asset extraction
-    obligation_ids:
-      - OBL-SCRIPT
-    file: 03-capabilities/03-script-agent-assets.md
-    autonomy_level: workflow
-    proof_gate: proof-script-agent-assets
-    status: INCLUDED_NEEDS_PROOF
-  - capability_id: production-storyboard-flow
-    title: Production-agent storyboard planning, panel rows, and flow persistence
-    obligation_ids:
-      - OBL-STORYBOARD
-    file: 03-capabilities/04-production-storyboard-flow.md
-    autonomy_level: workflow
-    proof_gate: proof-production-storyboard-flow
-    status: INCLUDED_NEEDS_PROOF
-  - capability_id: media-preview-export
-    title: Mockable image/video media jobs and exportable preview manifest
-    obligation_ids:
-      - OBL-MEDIA
-    file: 03-capabilities/05-media-preview-export.md
-    autonomy_level: workflow
-    proof_gate: proof-media-preview-export
-    status: INCLUDED_NEEDS_PROOF
-  - capability_id: safety-runtime-boundary
-    title: Provider, upload, secret, persistence, and destructive-action safety boundary
-    obligation_ids:
-      - OBL-SAFETY
-    file: 03-capabilities/06-safety-runtime-boundary.md
-    autonomy_level: workflow
-    proof_gate: proof-safety-runtime-boundary
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
 context:
-  active_capability: 03-capabilities/01-project-workspace-auth.md
-  context_map: 02-context/context-map.yaml
-  read_order: 02-context/read-order.yaml
-  pre_implementation_questions: PRE_IMPLEMENTATION_QUESTIONS.md
-  team_stack: 02-context/team-stack.yaml
-  ux_contract: 02-context/ux-contract.md
-  design_quality_bar: 02-context/design-quality-bar.md
-  source_evidence_index: 02-context/source-evidence-index.yaml
-  claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
-  evidence_schema: 09-evidence/evidence-ledger.schema.json
+  phase_index: 03-phases/phase-index.yaml
+  active_phase: 03-phases/01-project-workspace-auth.md
+  evaluation: 04-evaluation.md
+  evidence_schema: 05-evidence/evidence-ledger.schema.json
 generated_artifacts:
   agent_prompt: generated/agent-prompt.md

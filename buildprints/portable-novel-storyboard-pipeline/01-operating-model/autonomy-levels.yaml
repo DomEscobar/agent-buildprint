@@ -1,7 +1,0 @@
-autonomy_levels:
-  workflow:
-    description: Follow packet order and proof gates; choose implementation details within contracts.
-  requires_human_review:
-    description: Provider secrets, destructive data actions, public deployment, and live media generation.
-default: workflow
-

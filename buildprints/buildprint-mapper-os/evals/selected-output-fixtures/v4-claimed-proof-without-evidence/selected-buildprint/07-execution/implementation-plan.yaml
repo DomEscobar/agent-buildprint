@@ -1,6 +1,0 @@
-phases:
-  - id: implement-ingest
-    capability_id: ingest-record
-    proof: persistence_roundtrip
-    evidence: 09-evidence/evidence-ledger.jsonl
-

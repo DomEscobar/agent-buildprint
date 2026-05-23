@@ -2,21 +2,27 @@
 import { spawnSync } from 'node:child_process';
 
 const fixtures = [
-  ['v4 missing obligation routing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-missing-obligation-routing/selected-buildprint'],
-  ['v4 missing proof gate', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-missing-proof-gate/selected-buildprint'],
-  ['v4 stale generated prompt', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-stale-generated-prompt/selected-buildprint'],
-  ['v4 missing pre questions', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-missing-pre-questions/selected-buildprint'],
-  ['v4 UI missing team UX gates', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-ui-missing-team-ux/selected-buildprint'],
-  ['v4 claimed proof without evidence', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-claimed-proof-without-evidence/selected-buildprint'],
+  ['old START_HERE.md forbidden', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-old-start-here/selected-buildprint'],
+  ['old PRE_IMPLEMENTATION_QUESTIONS.md forbidden', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-old-pre-implementation-questions/selected-buildprint'],
+  ['still using 03-capabilities forbidden', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-still-using-03-capabilities/selected-buildprint'],
+  ['missing 02-project-setup.md', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-missing-project-setup/selected-buildprint'],
+  ['phase missing repair routing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-phase-missing-repair-routing/selected-buildprint'],
+  ['phase missing proof gate', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-phase-missing-proof-gate/selected-buildprint'],
+  ['phase missing interfaces/state sections', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-phase-missing-interfaces-state/selected-buildprint'],
+  ['BUILDPRINT read order skipping questions/setup', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-buildprint-skips-questions-setup/selected-buildprint'],
+  ['packet AGENTS.md present', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v5-packet-agents-present/selected-buildprint'],
 ];
 
 const expectations = new Map([
-  ['v4 missing obligation routing', /source-surface-map\.md must route surfaces to product obligations|source surface disposition labels/i],
-  ['v4 missing proof gate', /03-capabilities\/01-ingest-record\.md missing required section ## Proof gate|missing Proof gate/i],
-  ['v4 stale generated prompt', /generated\/agent-prompt\.md must declare Generated from: blueprint\.yaml|generated\/agent-prompt\.md must say it is not source of truth/i],
-  ['v4 missing pre questions', /missing executable packet file PRE_IMPLEMENTATION_QUESTIONS\.md|START_HERE\.md must route through PRE_IMPLEMENTATION_QUESTIONS\.md|context-map\.yaml must include PRE_IMPLEMENTATION_QUESTIONS\.md/i],
-  ['v4 UI missing team UX gates', /missing executable packet file 02-context\/team-stack\.yaml|team-stack\.yaml/i],
-  ['v4 claimed proof without evidence', /QUALIFIED_SOURCE_INDEPENDENT requires passing evidence-ledger row/i],
+  ['old START_HERE.md forbidden', /forbidden legacy\/project-runtime file in executable-blueprint v5: START_HERE\.md/i],
+  ['old PRE_IMPLEMENTATION_QUESTIONS.md forbidden', /forbidden legacy\/project-runtime file in executable-blueprint v5: PRE_IMPLEMENTATION_QUESTIONS\.md/i],
+  ['still using 03-capabilities forbidden', /forbidden legacy\/project-runtime file in executable-blueprint v5: 03-capabilities\//i],
+  ['missing 02-project-setup.md', /missing executable blueprint file 02-project-setup\.md/i],
+  ['phase missing repair routing', /03-phases\/01-ingest-record\.md missing ## Repair routing/i],
+  ['phase missing proof gate', /03-phases\/01-ingest-record\.md missing ## Proof gate/i],
+  ['phase missing interfaces/state sections', /03-phases\/01-ingest-record\.md missing ## Interfaces touched|03-phases\/01-ingest-record\.md missing ## State\/runtime touched/i],
+  ['BUILDPRINT read order skipping questions/setup', /BUILDPRINT\.md read order missing 01-questions\.md|BUILDPRINT\.md read order missing 02-project-setup\.md/i],
+  ['packet AGENTS.md present', /forbidden legacy\/project-runtime file in executable-blueprint v5: AGENTS\.md/i],
 ]);
 
 let failures = 0;

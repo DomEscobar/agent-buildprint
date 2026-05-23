@@ -1,0 +1,33 @@
+schema_version: mapper-os/phase-index.v1
+active_phase: 03-phases/01-ingestion-ontology.md
+phases:
+  - phase_id: ingestion-ontology
+    file: 03-phases/01-ingestion-ontology.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-ingestion-ontology
+  - phase_id: graph-builder
+    file: 03-phases/02-graph-builder.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-graph-builder
+  - phase_id: simulation-setup
+    file: 03-phases/03-simulation-setup.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-simulation-setup
+  - phase_id: simulation-runtime
+    file: 03-phases/04-simulation-runtime.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-simulation-runtime
+  - phase_id: report-interaction
+    file: 03-phases/05-report-interaction.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-report-interaction
+  - phase_id: data-lifecycle
+    file: 03-phases/06-data-lifecycle.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-data-lifecycle
