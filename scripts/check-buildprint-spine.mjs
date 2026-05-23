@@ -26,22 +26,6 @@ const packageRequired = {
     'checks/acceptance.md',
   ]
 };
-const selectedOutputRequired = [
-  'BUILDPRINT.md',
-  'CAPABILITY_INDEX.md',
-  'CONTRACTS.md',
-  'CURRENT_STATE.md',
-  'EXECUTION_PROTOCOL.md',
-  'IMPLEMENTATION_PLAN.md',
-  'PRE_IMPLEMENTATION_QUESTIONS.md',
-  'TEAM_STACK.md',
-  'VERIFICATION.md',
-  'manifest.json',
-  'capabilities',
-];
-const selectedUiRequired = ['UX_CONTRACT.md', 'DESIGN_QUALITY_BAR.md'];
-const selectedCapabilityRequired = ['CAPABILITY.md', 'IMPLEMENTATION.md', 'VERIFICATION.md'];
-
 function packageSlugs() {
   try {
     const output = execFileSync('git', ['ls-files', 'buildprints/*/BUILDPRINT.md'], { encoding: 'utf8' }).trim();
@@ -64,88 +48,6 @@ let failures = 0;
 
 for (const slug of slugs) {
   const dir = path.join(root, slug);
-  const isSelectedOutputPackage = slug !== 'buildprint-mapper-os'
-    && fs.existsSync(path.join(dir, 'CAPABILITY_INDEX.md'))
-    && fs.existsSync(path.join(dir, 'capabilities'));
-
-  if (isSelectedOutputPackage) {
-    const missing = selectedOutputRequired.filter((file) => !fs.existsSync(path.join(dir, file)));
-    if (missing.length) {
-      failures += missing.length;
-      console.error(`✗ ${slug}: selected output missing ${missing.join(', ')}`);
-    }
-
-    let manifest = null;
-    if (fs.existsSync(path.join(dir, 'manifest.json'))) {
-      try {
-        manifest = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8'));
-      } catch (error) {
-        failures++;
-        console.error(`✗ ${slug}: selected output manifest.json must parse as JSON (${error.message})`);
-      }
-    }
-
-    const teamStack = manifest?.teamStack;
-    if (!teamStack || !Array.isArray(teamStack.teams) || teamStack.teams.length === 0) {
-      failures++;
-      console.error(`✗ ${slug}: selected output manifest.json must define teamStack.teams`);
-    }
-
-    const hasUserFacingUI = manifest?.implementationSignals?.hasUserFacingUI === true
-      || (Array.isArray(teamStack?.teams) && teamStack.teams.includes('ux-ui-craft'));
-    if (hasUserFacingUI) {
-      const missingUi = selectedUiRequired.filter((file) => !fs.existsSync(path.join(dir, file)));
-      if (missingUi.length) {
-        failures += missingUi.length;
-        console.error(`✗ ${slug}: UI-bearing selected output missing ${missingUi.join(', ')}`);
-      }
-    }
-
-    if (fs.existsSync(path.join(dir, 'CAPABILITY_INDEX.md'))) {
-      const capabilityIndex = fs.readFileSync(path.join(dir, 'CAPABILITY_INDEX.md'), 'utf8');
-      if (!/Required teams/i.test(capabilityIndex)) {
-        failures++;
-        console.error(`✗ ${slug}: CAPABILITY_INDEX.md must include Required teams column`);
-      }
-      if (hasUserFacingUI && !/UX_CONTRACT\.md|ux-ui-craft|UI\/UX status/i.test(capabilityIndex)) {
-        failures++;
-        console.error(`✗ ${slug}: UI-bearing CAPABILITY_INDEX.md must route UI/UX gates to UX_CONTRACT.md or ux-ui-craft`);
-      }
-    }
-
-    const capabilitiesDir = path.join(dir, 'capabilities');
-    const capabilityIds = fs.existsSync(capabilitiesDir)
-      ? fs.readdirSync(capabilitiesDir).filter((name) => fs.statSync(path.join(capabilitiesDir, name)).isDirectory()).sort()
-      : [];
-    if (!capabilityIds.length) {
-      failures++;
-      console.error(`✗ ${slug}: selected output must contain at least one capability pack`);
-    }
-    for (const capabilityId of capabilityIds) {
-      const capabilityDir = path.join(capabilitiesDir, capabilityId);
-      const missingCapabilityFiles = selectedCapabilityRequired.filter((file) => !fs.existsSync(path.join(capabilityDir, file)));
-      if (missingCapabilityFiles.length) {
-        failures += missingCapabilityFiles.length;
-        console.error(`✗ ${slug}: capabilities/${capabilityId} missing ${missingCapabilityFiles.join(', ')}`);
-      }
-    }
-
-    const manifestFiles = Array.isArray(manifest?.files)
-      ? manifest.files.map((entry) => typeof entry === 'string' ? entry : entry?.path).filter(Boolean)
-      : [];
-    if (!manifestFiles.length) {
-      failures++;
-      console.error(`✗ ${slug}: selected output manifest.json must list files`);
-    }
-    for (const file of manifestFiles) {
-      if (!fs.existsSync(path.join(dir, file))) {
-        failures++;
-        console.error(`✗ ${slug}: selected output manifest lists missing file ${file}`);
-      }
-    }
-    continue;
-  }
-
   const requiredForPackage = packageRequired[slug] ?? required;
   const missing = requiredForPackage.filter((file) => !fs.existsSync(path.join(dir, file)));
   if (missing.length) {
@@ -190,28 +92,45 @@ for (const slug of slugs) {
   if (slug === 'buildprint-mapper-os') {
     const mapperRequired = [
       ['acceptance executable packet spine', acceptance, /executable packet/i],
-      ['acceptance capability index', acceptance, /03-capabilities\/capability-index\.yaml/i],
+      ['acceptance capability packet index', acceptance, /03-capabilities\/capability-index\.yaml/i],
       ['acceptance proof ledger closure', acceptance, /evidence-ledger|proof/i],
       ['acceptance fake placeholder rejection', acceptance, /FAKE_OR_PLACEHOLDER_FAIL|static-shell-only|deterministic-adapter-only/i],
       ['template ux skill capsule', fs.readFileSync(path.join(dir, 'templates/teams/ux-ui-craft.md'), 'utf8'), /Skill Capsule|Taste Variables/i],
       ['template architect skill capsule', fs.readFileSync(path.join(dir, 'templates/teams/product-architect.md'), 'utf8'), /Skill Capsule|Architecture Blueprint Workflow/i],
-      ['selected extraction prompt executable packet only', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /legacy selected-output v1 files/i],
+      ['selected extraction prompt capability packet only', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /capability-packet v4|capability packets/i],
       ['selected extraction prompt proof ledger', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /evidence-ledger\.jsonl/i],
       ['selected extraction prompt team routing', fs.readFileSync(path.join(dir, 'prompts/extract-selected.md'), 'utf8'), /02-context\/team-stack\.yaml|Team routing/i],
-      ['executable packet blueprint template', fs.readFileSync(path.join(dir, 'templates/executable-packet/blueprint.yaml'), 'utf8'), /schema_version:\s*mapper-os\/executable-packet\.v2/i],
-      ['executable packet execution start split', fs.readFileSync(path.join(dir, 'templates/executable-packet/blueprint.yaml'), 'utf8'), /compatibility_start:\s*BUILDPRINT\.md[\s\S]*execution_start:\s*START_HERE\.md[\s\S]*machine_contract:\s*blueprint\.yaml/i],
-      ['executable packet active slice template', fs.readFileSync(path.join(dir, 'templates/executable-packet/02-context/active-slice.yaml'), 'utf8'), /read_only:[\s\S]*write_only:[\s\S]*forbidden_actions:/i],
+      ['capability packet blueprint template', fs.readFileSync(path.join(dir, 'templates/executable-packet/blueprint.yaml'), 'utf8'), /schema_version:\s*mapper-os\/capability-packet\.v4/i],
+      ['execution packet primary start split', fs.readFileSync(path.join(dir, 'templates/executable-packet/blueprint.yaml'), 'utf8'), /execution_start:\s*START_HERE\.md[\s\S]*machine_contract:\s*blueprint\.yaml/i],
+      ['capability packet index template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-capabilities/capability-index.yaml'), 'utf8'), /capabilities:[\s\S]*capability_id:[\s\S]*proof_gate:/i],
+      ['capability packet markdown template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-capabilities/_template.md'), 'utf8'), /## Build target[\s\S]*## Required teams and gates[\s\S]*## Proof gate/i],
       ['executable packet claim upgrade template', fs.readFileSync(path.join(dir, 'templates/executable-packet/08-evaluation/claim-upgrade-rules.yaml'), 'utf8'), /provider_live[\s\S]*durable_persistence[\s\S]*no_fake/i],
-      ['executable packet evidence schema template', fs.readFileSync(path.join(dir, 'templates/executable-packet/09-evidence/evidence-ledger.schema.json'), 'utf8'), /proof_type[\s\S]*provider_mode[\s\S]*upgrades_claim/i],
+      ['executable packet evidence schema template', fs.readFileSync(path.join(dir, 'templates/executable-packet/09-evidence/evidence-ledger.schema.json'), 'utf8'), /capability_id[\s\S]*proof_type[\s\S]*provider_mode[\s\S]*upgrades_claim/i],
       ['executable packet security fixtures template', fs.readFileSync(path.join(dir, 'templates/executable-packet/06-safety/security-test-fixtures.yaml'), 'utf8'), /path_traversal|secret_like_value|subprocess_runtime/i],
-      ['executable packet router template', fs.readFileSync(path.join(dir, 'templates/executable-packet/BUILDPRINT.md'), 'utf8'), /compatibility router/i],
+      ['executable packet overview template', fs.readFileSync(path.join(dir, 'templates/executable-packet/BUILDPRINT.md'), 'utf8'), /execution authority/i],
       ['executable packet start template', fs.readFileSync(path.join(dir, 'templates/executable-packet/START_HERE.md'), 'utf8'), /\.buildprint\/evidence\/evidence-ledger\.jsonl/i],
       ['executable packet pre-question template', fs.readFileSync(path.join(dir, 'templates/executable-packet/PRE_IMPLEMENTATION_QUESTIONS.md'), 'utf8'), /Safe Defaults/i],
+      ['executable packet mission template', fs.readFileSync(path.join(dir, 'templates/executable-packet/00-intent/mission.md'), 'utf8'), /source-independent capability packet/i],
+      ['executable packet obligations template', fs.readFileSync(path.join(dir, 'templates/executable-packet/00-intent/product-obligations.md'), 'utf8'), /OBL-<id>[\s\S]*proof expectation/i],
+      ['executable packet autonomy template', fs.readFileSync(path.join(dir, 'templates/executable-packet/01-operating-model/autonomy-levels.yaml'), 'utf8'), /workflow:[\s\S]*claiming proof without evidence-ledger rows/i],
+      ['executable packet stop rules template', fs.readFileSync(path.join(dir, 'templates/executable-packet/01-operating-model/stop-rules.md'), 'utf8'), /Stop and write a blocker row/i],
+      ['executable packet approval policy template', fs.readFileSync(path.join(dir, 'templates/executable-packet/01-operating-model/human-approval-policy.md'), 'utf8'), /destructive actions[\s\S]*public publishing/i],
+      ['executable packet workflow model template', fs.readFileSync(path.join(dir, 'templates/executable-packet/01-operating-model/workflow-vs-agentic.md'), 'utf8'), /workflow-led/i],
       ['executable packet team stack template', fs.readFileSync(path.join(dir, 'templates/executable-packet/02-context/team-stack.yaml'), 'utf8'), /ux-ui-craft|product-architect|test-and-verification/i],
       ['executable packet UX contract template', fs.readFileSync(path.join(dir, 'templates/executable-packet/02-context/ux-contract.md'), 'utf8'), /Browser Proof Plan|Workflow States/i],
       ['executable packet design quality bar template', fs.readFileSync(path.join(dir, 'templates/executable-packet/02-context/design-quality-bar.md'), 'utf8'), /Taste Direction|Required Screenshot Set/i],
-      ['executable packet capability template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-capabilities/_template/capability.yaml'), 'utf8'), /product_obligation_ids:/i],
-      ['executable packet proof template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-capabilities/_template/proof-contract.yaml'), 'utf8'), /evidence_ledger:\s*\.buildprint\/evidence\/evidence-ledger\.jsonl/i],
+      ['executable packet API contracts template', fs.readFileSync(path.join(dir, 'templates/executable-packet/04-interfaces/api-contracts.yaml'), 'utf8'), /api_contracts:[\s\S]*proof_expectation/i],
+      ['executable packet provider contracts template', fs.readFileSync(path.join(dir, 'templates/executable-packet/04-interfaces/provider-contracts.yaml'), 'utf8'), /provider_contracts:[\s\S]*provider_live/i],
+      ['executable packet tool contracts template', fs.readFileSync(path.join(dir, 'templates/executable-packet/04-interfaces/tool-contracts.yaml'), 'utf8'), /tool_contracts:[\s\S]*forbidden_without_approval/i],
+      ['executable packet state model template', fs.readFileSync(path.join(dir, 'templates/executable-packet/05-state-runtime/state-model.yaml'), 'utf8'), /state_model:[\s\S]*proof_expectation/i],
+      ['executable packet persistence template', fs.readFileSync(path.join(dir, 'templates/executable-packet/05-state-runtime/persistence.md'), 'utf8'), /persistence roundtrip evidence row/i],
+      ['executable packet runtime topology template', fs.readFileSync(path.join(dir, 'templates/executable-packet/05-state-runtime/runtime-topology.md'), 'utf8'), /UI, API, worker\/job, provider adapter, storage/i],
+      ['executable packet destructive actions template', fs.readFileSync(path.join(dir, 'templates/executable-packet/06-safety/destructive-actions.md'), 'utf8'), /forbidden without human approval/i],
+      ['executable packet secrets policy template', fs.readFileSync(path.join(dir, 'templates/executable-packet/06-safety/secrets-policy.md'), 'utf8'), /values must be redacted/i],
+      ['executable packet threat model template', fs.readFileSync(path.join(dir, 'templates/executable-packet/06-safety/threat-model.md'), 'utf8'), /fake persistence/i],
+      ['executable packet quality rubric template', fs.readFileSync(path.join(dir, 'templates/executable-packet/08-evaluation/quality-rubric.yaml'), 'utf8'), /product_depth_preserved/i],
+      ['executable packet test matrix template', fs.readFileSync(path.join(dir, 'templates/executable-packet/08-evaluation/test-matrix.yaml'), 'utf8'), /capability_id:[\s\S]*required_for_claim/i],
+      ['executable packet unresolved blockers template', fs.readFileSync(path.join(dir, 'templates/executable-packet/09-evidence/unresolved-blockers.md'), 'utf8'), /Preserve scope honestly/i],
       ['executable packet generated prompt template', fs.readFileSync(path.join(dir, 'templates/executable-packet/generated/agent-prompt.md'), 'utf8'), /Generated from:\s*blueprint\.yaml/i],
     ];
     for (const [label, text, pattern] of mapperRequired) {

@@ -1,0 +1,5 @@
+schema_version: mapper-os/autonomy-levels.v1
+levels:
+  active_capability: workflow
+  implementation_choices: agentic_within_contract
+  claim_upgrades: evidence_gated

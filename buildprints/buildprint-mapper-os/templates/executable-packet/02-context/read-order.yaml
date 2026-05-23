@@ -1,0 +1,13 @@
+initial:
+  - START_HERE.md
+  - blueprint.yaml
+  - 02-context/context-map.yaml
+  - PRE_IMPLEMENTATION_QUESTIONS.md
+  - 02-context/team-stack.yaml
+  - 03-capabilities/<capability-id>.md
+after_active_proof:
+  - 03-capabilities/capability-index.yaml
+  - 08-evaluation/acceptance.yaml
+forbidden_initial:
+  - 03-capabilities/* except the active capability
+  - original source repository

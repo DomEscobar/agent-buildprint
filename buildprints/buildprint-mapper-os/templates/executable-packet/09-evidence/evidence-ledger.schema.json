@@ -1,65 +1,59 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Mapper OS Runtime Evidence Ledger Row",
   "type": "object",
   "required": [
+    "artifact_id",
+    "type",
     "capability_id",
-    "claim",
+    "status",
+    "source",
+    "proves",
     "proof_type",
-    "artifact",
-    "result",
     "provider_mode",
     "upgrades_claim"
   ],
   "properties": {
+    "artifact_id": {
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "proof",
+        "blocker",
+        "risk",
+        "note"
+      ]
+    },
     "capability_id": {
       "type": "string"
     },
-    "claim": {
+    "status": {
+      "enum": [
+        "missing",
+        "passed",
+        "proven",
+        "blocked",
+        "failed",
+        "skipped"
+      ]
+    },
+    "source": {
       "type": "string"
+    },
+    "proves": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "proof_type": {
-      "type": "string",
-      "enum": [
-        "unit_or_integration_test",
-        "negative_test",
-        "browser_trace",
-        "runtime_trace",
-        "persistence_roundtrip",
-        "provider_integration_proof",
-        "security_fixture_pass",
-        "secret_redaction_scan",
-        "clean_room_trace",
-        "no_fake_scan",
-        "evidence_ledger_entry",
-        "blocker"
-      ]
-    },
-    "artifact": {
       "type": "string"
     },
-    "result": {
-      "type": "string",
-      "enum": [
-        "pass",
-        "fail",
-        "blocked"
-      ]
-    },
     "provider_mode": {
-      "type": "string",
-      "enum": [
-        "none",
-        "deterministic",
-        "sandbox_live",
-        "production_live"
-      ]
+      "type": "string"
     },
     "upgrades_claim": {
       "type": "boolean"
-    },
-    "blocker": {
-      "type": "string"
     },
     "notes": {
       "type": "string"

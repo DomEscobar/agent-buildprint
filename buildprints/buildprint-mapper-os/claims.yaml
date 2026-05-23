@@ -1,4 +1,4 @@
-schema: mapper-os/claims.v2
+schema: mapper-os/claims.v3
 claim_states:
   - CENSUS_HINT
   - PENDING_AGENT_DISCOVERY
@@ -7,7 +7,7 @@ claim_states:
   - QUESTION
   - BLOCKED
   - OUT_OF_SCOPE
-capability_statuses:
+slice_statuses:
   - INCLUDED_READY
   - INCLUDED_NEEDS_PROOF
   - INCLUDED_BLOCKED
@@ -19,8 +19,8 @@ qualification_labels:
   - SELECTED_UNQUALIFIED
   - QUALIFIED_SOURCE_INDEPENDENT
 source_surface_dispositions:
-  - OWNED_BY_CAPABILITY
-  - MERGED_INTO_CAPABILITY
+  - OWNED_BY_SLICE
+  - MERGED_INTO_SLICE
   - OUT_OF_SCOPE_BY_USER_ONLY
   - BLOCKED_NEEDS_REVIEW
   - LOW_SIGNAL_IGNORED_WITH_REASON

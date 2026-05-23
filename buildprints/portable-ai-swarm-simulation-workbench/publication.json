@@ -30,12 +30,12 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Executable-packet v2 Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history.",
+  "summary": "Executable-packet v4 Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history through proof-gated capability packets.",
   "plainDescription": "A fresh Mapper OS selected packet remapped from MiroFish source evidence and scoped as the full portable AI swarm simulation workbench. It preserves broad product scope while keeping qualification honest until live provider, runtime, browser, persistence, and security proof passes.",
   "promise": "Build a portable AI swarm simulation workbench without depending on the original source repo. Status remains SELECTED_UNQUALIFIED until all proof gates pass.",
   "whatYouGet": [
-    "Executable-packet v2 router and machine contract",
-    "Six capability packets with source evidence and proof contracts",
+    "Executable-packet v4 START_HERE router and machine contract",
+    "Six consolidated capability packets with source evidence, implementation paths, team gates, and proof gates",
     "Team stack, UX contract, design quality bar, safety boundaries, and evaluation matrix",
     "Evidence ledger seed and unresolved blocker list"
   ],
@@ -72,14 +72,14 @@
     "Secret leakage through logs, reports, screenshots, or ledger entries"
   ],
   "checks": [
-    "Executable-packet v2 file shape generated",
+    "Executable-packet v4 file shape generated",
     "YAML/JSON/JSONL parse validation expected before publication",
     "Qualification remains SELECTED_UNQUALIFIED until proof gates pass"
   ],
   "trustBadges": [
     {
-      "label": "Executable-packet v2",
-      "detail": "Router-first v2 selected packet shape.",
+      "label": "Capability-packet v4",
+      "detail": "Capability-packet v4 selected packet shape.",
       "tone": "success"
     },
     {
@@ -95,7 +95,7 @@
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use the Portable AI Swarm Simulation Workbench executable-packet v2. Start with BUILDPRINT.md, START_HERE.md, blueprint.yaml, 02-context/context-map.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, and 02-context/team-stack.yaml, then load only the active capability packet. Build source-independently; do not use the original MiroFish source. Keep status SELECTED_UNQUALIFIED until browser, provider, runtime, persistence, security, clean-room, and no-fake proof pass.",
+  "copyPrompt": "Use the Portable AI Swarm Simulation Workbench capability-packet v4. Start with BUILDPRINT.md, START_HERE.md, blueprint.yaml, 02-context/context-map.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, and 02-context/team-stack.yaml, then load only the active capability packet. Build source-independently; do not use the original MiroFish source. Keep status SELECTED_UNQUALIFIED until browser, provider, runtime, persistence, security, clean-room, and no-fake proof pass.",
   "publicStatus": {
     "label": "Mapped, proof pending",
     "explanation": "Source-independent packet exists; live implementation proof is not complete."

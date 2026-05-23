@@ -1,0 +1,1 @@
+{"artifact_id":"bad","type":"proof","capability_id":"ingest-record","status":"missing","source":"fixture","proves":["browser_runtime_trace"],"proof_type":"browser_trace","provider_mode":"none","upgrades_claim":false}

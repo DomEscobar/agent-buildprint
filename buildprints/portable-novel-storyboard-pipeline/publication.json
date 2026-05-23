@@ -9,7 +9,7 @@
   "tier": "agent-grade",
   "status": "validated",
   "runtime": [
-    "Executable packet v2",
+    "Capability-packet v4",
     "Mock-first AI providers",
     "Browser QA"
   ],
@@ -27,14 +27,14 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Executable-packet remap of the Toonflow-inspired portable creative pipeline: project workspace, ordered novel ingestion, event extraction, scripts/assets, storyboard flow, media tasks, preview export, and safety gates.",
-  "plainDescription": "A router-first Buildprint for a novel-to-storyboard workbench. Agents start at START_HERE.md and blueprint.yaml, load one active capability packet at a time, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
-  "promise": "A Mapper OS executable packet for rebuilding the portable novel-to-storyboard workflow without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
+  "summary": "Execution-packet remap of the Toonflow-inspired portable creative pipeline: project workspace, ordered novel ingestion, event extraction, scripts/assets, storyboard flow, media tasks, preview export, and safety gates.",
+  "plainDescription": "A router-first Buildprint for a novel-to-storyboard workbench. Agents start at START_HERE.md and blueprint.yaml, load one active capability at a time, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
+  "promise": "A Mapper OS execution-packet for rebuilding the portable novel-to-storyboard workflow without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
   "whatYouGet": [
-    "Executable packet v2 shape",
+    "Capability-packet v4 shape",
     "START_HERE.md and blueprint.yaml router",
     "Context map that names the active capability",
-    "Six capability packets with product contracts and proof contracts",
+    "Six capability packets with consolidated contracts and proof gates",
     "Source-surface map tied to product obligations",
     "Provider, state, runtime, safety, acceptance, and evidence ledgers"
   ],
@@ -54,13 +54,13 @@
     "Safety"
   ],
   "includes": [
-    "BUILDPRINT.md compatibility router",
+    "BUILDPRINT.md execution entry",
     "START_HERE.md executable start file",
     "blueprint.yaml authority packet",
     "00-intent mission, obligations, and source-surface map",
     "01-operating-model stop rules and autonomy policy",
     "02-context active context map and read order",
-    "03-capabilities capability index and six capability packets",
+    "03-capabilities slice index and six capability packets",
     "04-interfaces API/tool/provider contracts",
     "05-state-runtime persistence and topology contracts",
     "06-safety threat model and secrets/destructive-action policy",
@@ -78,23 +78,23 @@
     "Using Toonflow source as implementation input"
   ],
   "checks": [
-    "Mapper executable packet validator passes",
-    "START_HERE.md routes to blueprint.yaml, team/UX gates, and active capability packet",
+    "Mapper execution-packet validator passes",
+    "START_HERE.md routes to blueprint.yaml, team/UX gates, and active capability",
     "02-context/context-map.yaml blocks reading unrelated capability packets upfront",
-    "02-context/team-stack.yaml, ux-contract.md, and design-quality-bar.md gate UI-bearing capabilities",
-    "Each capability packet has capability.yaml, product-contract.md, implementation-workflow.md, source-evidence.md, and proof-contract.yaml",
+    "02-context/team-stack.yaml, ux-contract.md, and design-quality-bar.md gate UI-bearing capability packets",
+    "Each capability packet has slice entry, active capability contract, active capability implementation path, source-evidence-index.yaml, and Proof gate in the active capability",
     "09-evidence/evidence-ledger.jsonl is the claim-promotion authority",
     "Claim status remains SELECTED_UNQUALIFIED until browser, provider, persistence, security, and clean-room proof rows pass"
   ],
   "trustBadges": [
     {
-      "label": "Executable packet v2",
+      "label": "Capability-packet v4",
       "detail": "Router, context map, capability packets, acceptance gates, and evidence ledger are separated.",
       "tone": "success"
     },
     {
-      "label": "One-pack-at-a-time execution",
-      "detail": "Agents load the active capability packet first and consult the capability index only after proof.",
+      "label": "One-slice-at-a-time execution",
+      "detail": "Agents load the active capability first and consult the slice index only after proof.",
       "tone": "success"
     },
     {
@@ -110,5 +110,5 @@
   ],
   "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
   "originLabel": "HBAI-Ltd/Toonflow-app",
-  "copyPrompt": "Use the Portable Novel-to-Storyboard Pipeline Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-novel-storyboard-pipeline/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-novel-storyboard-pipeline/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Treat the downloaded package as a Mapper OS executable packet. Read START_HERE.md, then blueprint.yaml, then 02-context/context-map.yaml, then PRE_IMPLEMENTATION_QUESTIONS.md, then 02-context/team-stack.yaml. Ask unresolved blockers or apply the safe defaults before coding. For UI-bearing active capabilities, also read 02-context/ux-contract.md and 02-context/design-quality-bar.md; they are blocking gates, not optional polish. Load only the active capability packet named there, starting with 03-capabilities/project-workspace-auth/. Implement and prove that packet, append proof or blocker rows to .buildprint/evidence/evidence-ledger.jsonl, then consult 03-capabilities/capability-index.yaml and continue one dependency-ready packet at a time. Do not write into .buildprint/snapshots/**. Do not read every capability packet upfront. Use deterministic no-network providers by default. Do not use Toonflow source as implementation input. Keep claims scoped to SELECTED_UNQUALIFIED until browser runtime, provider, persistence, security, and clean-room proof rows pass. Do not claim Toonflow clone, live provider parity, Electron parity, exact UI/canvas parity, or final stitched-video export parity."
+  "copyPrompt": "Use the Portable Novel-to-Storyboard Pipeline Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-novel-storyboard-pipeline/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-novel-storyboard-pipeline/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Treat the downloaded package as a Mapper OS execution-packet. Read START_HERE.md, then blueprint.yaml, then 02-context/context-map.yaml, then PRE_IMPLEMENTATION_QUESTIONS.md, then 02-context/team-stack.yaml. Ask unresolved blockers or apply the safe defaults before coding. For UI-bearing active capabilitys, also read 02-context/ux-contract.md and 02-context/design-quality-bar.md; they are blocking gates, not optional polish. Load only the active capability named there, starting with 03-capabilities/01-project-workspace-auth.md. Implement and prove that slice, append proof or blocker rows to .buildprint/evidence/evidence-ledger.jsonl, then consult 03-capabilities/capability-index.yaml and continue one dependency-ready slice at a time. Do not write into .buildprint/snapshots/**. Do not read every capability packet upfront. Use deterministic no-network providers by default. Do not use Toonflow source as implementation input. Keep claims scoped to SELECTED_UNQUALIFIED until browser runtime, provider, persistence, security, and clean-room proof rows pass. Do not claim Toonflow clone, live provider parity, Electron parity, exact UI/canvas parity, or final stitched-video export parity."
 }

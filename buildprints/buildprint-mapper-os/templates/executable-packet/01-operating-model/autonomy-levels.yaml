@@ -1,0 +1,11 @@
+autonomy_levels:
+  workflow:
+    description: bounded implementation sequence for a proof-gated capability packet
+    allowed_decisions:
+      - internal module names
+      - local helper structure
+      - non-product-visible refactors needed to satisfy proof
+    forbidden_decisions:
+      - dropping source-backed obligations
+      - lowering product quality without user approval
+      - claiming proof without evidence-ledger rows

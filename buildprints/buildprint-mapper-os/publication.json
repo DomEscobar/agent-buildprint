@@ -33,8 +33,8 @@
     "Repo mapping prompt for Codex, Cursor, Claude Code, or another coding agent",
     "SYSTEM_MAP.md with architecture, flows, data, integrations, tests, side effects, and unknowns",
     "BUILDPRINT_CANDIDATES.md with scoped reusable Buildprint options",
-    "A selected executable-packet v2 when you pick a candidate",
-    "START_HERE.md, blueprint.yaml, context map, team-stack, UX/design gates, capability packets, proof contracts, and evidence ledger",
+    "A selected capability-packet v4 when you pick a candidate",
+    "START_HERE.md, blueprint.yaml, context map, team-stack, UX/design gates, capability packets, proof gates, and evidence ledger",
     "Clean-room handoff so the implementation agent does not need original source access",
     "No-fake rails: included capabilities must be real, wired, persistent where claimed, and testable",
     "Final handover with evidence inspected, files generated, commands run, blockers, and next direction"
@@ -66,7 +66,7 @@
     "Executable-packet templates",
     "02-context/team-stack.yaml team-pack routing",
     "02-context UX/design contracts",
-    "proof-contract.yaml and evidence-ledger rules",
+    "capability proof gates and evidence-ledger rules",
     "Clean-room REVERSAL_REPORT.md",
     "QA_REPORT.md",
     "Single Buildprint extraction",
@@ -97,9 +97,9 @@
     "Generated claims are labeled OBSERVED, INFERRED, QUESTION, or OUT_OF_SCOPE",
     "Secrets and source code are not copied into the generated implementation package",
     "Selected output is source-independent enough for a fresh implementation agent",
-    "Selected output uses executable-packet v2: START_HERE.md, blueprint.yaml, 02-context, 03-capabilities, 08-evaluation, and 09-evidence",
+    "Selected output uses capability-packet v4: START_HERE.md, blueprint.yaml, 02-context, 03-capabilities, 08-evaluation, and 09-evidence",
     "UI-bearing scopes include ux-contract.md, design-quality-bar.md, and ux-ui-craft routing in team-stack.yaml",
-    "Capability packets include product contracts, implementation workflow, source evidence, proof contracts, negative tests, artifacts, and promotion blockers",
+    "Capability packets include product contracts, implementation workflow, source evidence, proof gates, negative tests, artifacts, and promotion blockers",
     "Mocks/fixtures are not counted as shipped product behavior",
     "Durability, providers, jobs, exports, auth, security, and browser/runtime behavior are real or explicitly blocked/out of scope",
     "Final handover states selected scope, evidence inspected, files generated, commands run, known gaps, and recommended next direction"
@@ -170,18 +170,18 @@
     },
     {
       "title": "5. Extract the executable packet",
-      "detail": "The selected package should be an executable-packet v2 with START_HERE.md, blueprint.yaml, context/team/UX gates, capability packets, evaluation gates, evidence ledger, and a final handover."
+      "detail": "The selected package should be an capability-packet v4 with START_HERE.md, blueprint.yaml, context/team/UX gates, capability packets, evaluation gates, evidence ledger, and a final handover."
     }
   ],
   "resultChecklist": [
     "SYSTEM_MAP.md with source-backed architecture, flows, routes/services, data, integrations, side effects, tests, and unknowns",
     "BUILDPRINT_CANDIDATES.md with scoped candidates and clear included/excluded surfaces",
-    "A selected executable-packet v2, not legacy root CAPABILITY_INDEX/TEAM_STACK/UX_CONTRACT sludge",
+    "A selected capability-packet v4, not legacy root CAPABILITY_INDEX/TEAM_STACK/UX_CONTRACT sludge",
     "PRE_IMPLEMENTATION_QUESTIONS.md with only blocking questions and safe defaults",
     "02-context/context-map.yaml, team-stack.yaml, ux-contract.md, and design-quality-bar.md where relevant",
-    "03-capabilities/* packets with product contract, implementation workflow, source evidence, and proof-contract.yaml",
+    "03-capabilities/* capabilities with product obligation, source evidence, implementation path, stop rules, and proof gate",
     "08-evaluation gates separated from 09-evidence/evidence-ledger.jsonl proof/blocker rows",
     "Final handover with selected scope, evidence inspected, files generated, commands run, known gaps, and next recommended action"
   ],
-  "copyPrompt": "Use the Buildprint Mapper OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Use it to map a target repo in the current agent session. First resolve the target: if the user has not clearly provided a repository URL, local path, or already-opened current working repo, ask exactly one blocking question: 'Which repo URL or local path should I map?' Do not start discovery until the target is explicit. Do not run agb map; that CLI does not exist. Ask only minimal safety/scope questions before discovery. Then inspect the resolved repo and create SYSTEM_MAP.md and BUILDPRINT_CANDIDATES.md before selected extraction unless I already picked a scope. Ask me to choose one candidate. After selection, extract only that scope into selected-buildprint/ as executable-packet v2 with START_HERE.md, PRE_IMPLEMENTATION_QUESTIONS.md, blueprint.yaml, 02-context/context-map.yaml, 02-context/team-stack.yaml, 03-capabilities/capability-index.yaml, per-capability YAML/proof packets, 08-evaluation gates, and 09-evidence/evidence-ledger.jsonl. If the selected scope has user-facing UI, include 02-context/ux-contract.md, 02-context/design-quality-bar.md, and route ux-ui-craft in 02-context/team-stack.yaml. Infer team packs from product signals; do not ask me to choose a quality tier or team. The selected packet must be source-independent enough for a fresh coding agent to implement without original source access. Default to production-grade selected scope: smaller scope is OK, but do not create a lazy MVP, mock services as product behavior, placeholder routes, no-op controls, skeleton adapters, static UI shells, or in-memory-only persistence when durability is claimed. Do not copy secrets, do not invent validation results, and do not flatten the repo into one vague document. Finish with a chat handover containing outcome, selected scope, evidence inspected, files generated, commands run, known gaps, and recommended next direction."
+  "copyPrompt": "Use the Buildprint Mapper OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Use it to map a target repo in the current agent session. First resolve the target: if the user has not clearly provided a repository URL, local path, or already-opened current working repo, ask exactly one blocking question: 'Which repo URL or local path should I map?' Do not start discovery until the target is explicit. Do not run agb map; that CLI does not exist. Ask only minimal safety/scope questions before discovery. Then inspect the resolved repo and create SYSTEM_MAP.md and BUILDPRINT_CANDIDATES.md before selected extraction unless I already picked a scope. Ask me to choose one candidate. After selection, extract only that scope into selected-buildprint/ as capability-packet v4 with START_HERE.md, PRE_IMPLEMENTATION_QUESTIONS.md, blueprint.yaml, 02-context/context-map.yaml, 02-context/team-stack.yaml, 03-capabilities/capability-index.yaml, capability Markdown files with product obligations/source evidence/implementation path/proof gate, 08-evaluation gates, and 09-evidence/evidence-ledger.jsonl. Do not emit legacy v1/v2 selected-output files, 02-context/active-slice.yaml, 07-execution/phases/, capabilities/, manifest.json, or fragmented per-capability mini-files. If the selected scope has user-facing UI, include 02-context/ux-contract.md, 02-context/design-quality-bar.md, and route ux-ui-craft in 02-context/team-stack.yaml. Infer team packs from product signals; do not ask me to choose a quality tier or team. The selected packet must be source-independent enough for a fresh coding agent to implement without original source access. Default to production-grade selected scope: smaller scope is OK, but do not create a lazy MVP, mock services as product behavior, placeholder routes, no-op controls, skeleton adapters, static UI shells, or in-memory-only persistence when durability is claimed. Do not copy secrets, do not invent validation results, and do not flatten the repo into one vague document. Finish with a chat handover containing outcome, selected scope, evidence inspected, files generated, commands run, known gaps, and recommended next direction."
 }

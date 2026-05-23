@@ -1,10 +1,7 @@
-# Agent Prompt
+# Generated Agent Prompt
 
-Use the Portable AI Swarm Simulation Workbench executable-packet v2 at `https://agent-buildprint.com/buildprints/portable-ai-swarm-simulation-workbench/`.
+Generated from: blueprint.yaml
 
-Start with `BUILDPRINT.md`, `START_HERE.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/team-stack.yaml`, `02-context/active-slice.yaml`, then only the active capability packet `03-capabilities/01-ingestion-ontology/`.
+This file is not source of truth. If it conflicts with `START_HERE.md`, `blueprint.yaml`, `02-context/context-map.yaml`, or the active capability, follow those files.
 
-Build source-independently. Do not use `/root/MiroFish` as implementation input. Keep status `SELECTED_UNQUALIFIED` until browser, provider, runtime, persistence, security, clean-room, and no-fake proof pass. Use deterministic test doubles unless live credentials and runtime are explicitly supplied, and never count those doubles as live provider proof.
-
-
-Use `02-context/active-slice.yaml` as the consumption protocol: read only the listed slice files, write only runtime state/evidence/artifacts, and unlock the next capability only after the proof contract and claim-upgrade rules pass.
+Start at `START_HERE.md`, read `blueprint.yaml`, resolve `PRE_IMPLEMENTATION_QUESTIONS.md` with safe defaults where possible, load `02-context/team-stack.yaml`, and for UI-bearing work load `02-context/ux-contract.md` plus `02-context/design-quality-bar.md`. Then implement only the active capability `03-capabilities/01-01-ingestion-ontology.md`. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`; after the active proof closes, consult `03-capabilities/capability-index.yaml`.

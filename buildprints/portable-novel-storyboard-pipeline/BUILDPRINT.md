@@ -1,7 +1,19 @@
-# BUILDPRINT: Portable Novel-to-Storyboard Pipeline
+# Portable Novel-to-Storyboard Pipeline
 
-This file is a compatibility router for agents and tools that still start from `BUILDPRINT.md`.
+This is a Mapper OS capability-packet v4 selected Buildprint. It is source-independent and must be implemented from this packet, not from the original source repository.
 
-Read `START_HERE.md`, then `blueprint.yaml`, then the active context and capability packet. Do not treat `generated/agent-prompt.md` as source of truth.
+## Execution authority
 
-The package is a clean-room, source-independent Buildprint derived from Toonflow source evidence. It does not claim Toonflow clone parity, exact UI/canvas parity, Electron parity, live provider parity, or final stitched-video export parity.
+Read in this order:
+
+1. `START_HERE.md`
+2. `blueprint.yaml`
+3. `02-context/context-map.yaml`
+4. `PRE_IMPLEMENTATION_QUESTIONS.md`
+5. `02-context/team-stack.yaml`
+6. `02-context/ux-contract.md` and `02-context/design-quality-bar.md` for UI gates
+7. The active capability: `03-capabilities/05-media-preview-export.md`
+
+Do not load every capability packet upfront. After the active slice is proven or honestly blocked, consult `03-capabilities/capability-index.yaml` for the next dependency-ready slice.
+
+Status: `SELECTED_UNQUALIFIED` until runtime evidence rows prove browser/runtime, provider, persistence, security, clean-room, and no-fake gates.

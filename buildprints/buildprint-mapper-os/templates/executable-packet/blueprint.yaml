@@ -1,5 +1,4 @@
-schema_version: mapper-os/executable-packet.v2
-compatibility_start: BUILDPRINT.md
+schema_version: mapper-os/capability-packet.v4
 execution_start: START_HERE.md
 machine_contract: blueprint.yaml
 source:
@@ -23,16 +22,16 @@ obligations:
     status: INCLUDED_NEEDS_PROOF
 capabilities:
   - capability_id: <capability-id>
+    title: <vertical build target>
     obligation_ids:
       - OBL-<id>
-    packet: 03-capabilities/<capability-id>
+    file: 03-capabilities/<capability-id>.md
     autonomy_level: workflow
-    proof_contract: 03-capabilities/<capability-id>/proof-contract.yaml
+    proof_gate: <proof-id>
     status: INCLUDED_NEEDS_PROOF
 context:
-  active_capability: <capability-id>
+  active_capability: 03-capabilities/<capability-id>.md
   context_map: 02-context/context-map.yaml
-  active_slice: 02-context/active-slice.yaml
   read_order: 02-context/read-order.yaml
   team_stack: 02-context/team-stack.yaml
   ux_contract: 02-context/ux-contract.md

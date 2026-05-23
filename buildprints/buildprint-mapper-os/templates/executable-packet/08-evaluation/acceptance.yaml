@@ -9,9 +9,9 @@ acceptance:
   runtime_ledger_required: .buildprint/evidence/evidence-ledger.jsonl
 claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
 evidence_schema: 09-evidence/evidence-ledger.schema.json
-active_slice_required: 02-context/active-slice.yaml
+active_capability_required: 03-capabilities/<capability-id>.md
 global_acceptance:
-- active_slice_limits_initial_context
+- active_capability_limits_initial_context
 - claim_upgrades_follow_claim_upgrade_rules
 - evidence_rows_match_schema
 - security_fixtures_pass_or_block

@@ -1,0 +1,5 @@
+provider_contracts:
+  - id: <provider-contract-id>
+    obligation_id: OBL-<id>
+    provider_mode: deterministic_adapter_until_live_provider_proven
+    promotion_requires: provider_live evidence row when live provider behavior is claimed

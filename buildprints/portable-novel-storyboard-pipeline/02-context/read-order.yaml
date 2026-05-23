@@ -1,19 +1,16 @@
+schema_version: mapper-os/read-order.v2
 initial:
   - START_HERE.md
   - blueprint.yaml
-  - 02-context/context-map.yaml
   - PRE_IMPLEMENTATION_QUESTIONS.md
   - 02-context/team-stack.yaml
-  - 02-context/ux-contract.md when active capability is UI-bearing
-  - 02-context/design-quality-bar.md when active capability is UI-bearing
-  - active capability packet from context-map.yaml
+  - 02-context/ux-contract.md
+  - 02-context/design-quality-bar.md
+  - 03-capabilities/05-media-preview-export.md
 after_active_proof:
-  - append row to .buildprint/evidence/evidence-ledger.jsonl
-  - consult 03-capabilities/capability-index.yaml
-  - update local context to next dependency-ready capability
-  - continue one packet at a time
+  - 03-capabilities/capability-index.yaml
+  - next dependency-ready active capability only
 forbidden_initial:
-  - reading all 03-capabilities/* packets upfront
-  - using generated/agent-prompt.md as authority
-  - using Toonflow source as implementation input
-  - claiming qualification without evidence-ledger proof
+  - 03-capabilities/* except 03-capabilities/05-media-preview-export.md
+  - original source repository
+  - all future slices upfront

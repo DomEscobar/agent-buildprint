@@ -3,7 +3,7 @@
 Implementation plan and phase rails live in:
 
 - `07-execution/implementation-plan.yaml`
-- `07-execution/phases/`
+- `03-capabilities/`
 - `03-capabilities/capability-index.yaml`
 
 Read Order:

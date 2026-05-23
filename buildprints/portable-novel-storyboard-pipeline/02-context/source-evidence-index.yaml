@@ -1,38 +1,97 @@
+schema_version: mapper-os/source-evidence-index.v3
 source_surfaces:
-  - source_surface_id: SRC-AUTH
+  - id: SRC-AUTH
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-PROJECT
-    evidence: src/routes/login/login.ts; socket auth guards; o_user and tokenKey tables
-  - source_surface_id: SRC-PROJECT
+    capability_id: project-workspace-auth
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-PROJECT
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-PROJECT
-    evidence: src/routes/project/*; model selection routes
-  - source_surface_id: SRC-NOVEL
+    capability_id: project-workspace-auth
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-DB
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-PROJECT
+    capability_id: project-workspace-auth
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-NOVEL
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-NOVEL
-    evidence: src/routes/novel/addNovel.ts; src/routes/novel/getNovel.ts
-  - source_surface_id: SRC-EVENTS
+    capability_id: novel-event-ingestion
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-EVENTS
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-NOVEL
-    evidence: src/routes/novel/event/generateEvents.ts; src/utils/cleanNovel.ts
-  - source_surface_id: SRC-SCRIPT-AGENT
+    capability_id: novel-event-ingestion
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-TEXT-PROVIDER
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-NOVEL
+    capability_id: novel-event-ingestion
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-SCRIPT-AGENT
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-SCRIPT
-    evidence: src/agents/scriptAgent/*; scriptAgent socket namespace
-  - source_surface_id: SRC-SCRIPT-ASSETS
+    capability_id: script-agent-assets
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-SCRIPT-ASSETS
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-SCRIPT
-    evidence: src/routes/script/extractAssets.ts; o_assets; o_scriptAssets
-  - source_surface_id: SRC-PRODUCTION-AGENT
+    capability_id: script-agent-assets
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-SKILLS
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-SCRIPT
+    capability_id: script-agent-assets
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-PRODUCTION-AGENT
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-STORYBOARD
-    evidence: src/agents/productionAgent/*; productionAgent socket namespace
-  - source_surface_id: SRC-FLOW
+    capability_id: production-storyboard-flow
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-FLOW
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-STORYBOARD
-    evidence: getFlowData/saveFlowData routes and flow data tables
-  - source_surface_id: SRC-IMAGE
+    capability_id: production-storyboard-flow
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-STORYBOARD
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-STORYBOARD
+    capability_id: production-storyboard-flow
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-IMAGE
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-MEDIA
-    evidence: assetsGenerate and storyboard image routes; src/utils/ai.ts image calls
-  - source_surface_id: SRC-VIDEO
+    capability_id: media-preview-export
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-VIDEO
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-MEDIA
-    evidence: production workbench video routes and task polling
-  - source_surface_id: SRC-PROVIDERS
+    capability_id: media-preview-export
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-EXPORT
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-MEDIA
+    capability_id: media-preview-export
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-PROVIDERS
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-SAFETY
-    evidence: vendor config routes; src/utils/vendor.ts; src/utils/vm.ts
-  - source_surface_id: SRC-ADMIN
+    capability_id: safety-runtime-boundary
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-UPLOADS
+    disposition: OWNED_BY_CAPABILITY
     obligation_id: OBL-SAFETY
-    evidence: db export/import/clear/delete routes
-
+    capability_id: safety-runtime-boundary
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-ADMIN
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-SAFETY
+    capability_id: safety-runtime-boundary
+    evidence: mapped from source census; use as traceability, not implementation dependency
+  - id: SRC-RUNTIME
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-SAFETY
+    capability_id: safety-runtime-boundary
+    evidence: mapped from source census; use as traceability, not implementation dependency

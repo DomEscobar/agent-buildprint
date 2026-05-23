@@ -1,0 +1,27 @@
+schema_version: mapper-os/claim-upgrade-rules.v1
+claim_status_order:
+  - SELECTED_UNQUALIFIED
+  - QUALIFIED_SOURCE_INDEPENDENT
+required_global_proofs:
+  - browser_runtime_trace
+  - provider_integration_proof
+  - persistence_roundtrip
+  - security_boundary_review
+  - clean_room_implementation_trace
+  - no_fake_scan_pass
+claims:
+  workflow_shape:
+    requires: [unit_or_integration_test, negative_test, evidence_ledger_entry]
+  browser_verified:
+    requires: [browser_trace, screenshot_or_trace_artifact, linked_backend_or_state_artifact, evidence_ledger_entry]
+  provider_live:
+    requires: [provider_integration_proof, provider_mode_production_live_or_sandbox_live, secret_redaction_scan, evidence_ledger_entry]
+    forbids: [deterministic_adapter_only]
+  durable_persistence:
+    requires: [restart_readback, delete_reset_roundtrip, evidence_ledger_entry]
+    forbids: [in_memory_only]
+  security_boundary:
+    requires: [security_fixture_pass, secret_redaction_scan, destructive_action_confirmation_test, evidence_ledger_entry]
+  no_fake:
+    requires: [no_static_success_data, no_noop_controls, no_placeholder_runtime, evidence_ledger_entry]
+upgrade_rule: claims may upgrade only when required proof types have passing evidence rows and no forbidden proof mode is present.

@@ -1,0 +1,10 @@
+tool_contracts:
+  - id: <tool-contract-id>
+    obligation_id: OBL-<id>
+    allowed_actions:
+      - inspect
+      - local_test
+    forbidden_without_approval:
+      - destructive_action
+      - public_publish
+      - secret_exfiltration

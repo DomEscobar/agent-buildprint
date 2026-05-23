@@ -1902,7 +1902,7 @@ function implementationPhases(facts) {
 }
 
 function modularImplementationIndexMd(facts) {
-  return ['# Implementation', '', 'This folder is modular. `PHASE_PLAN.md` is an index only; phase details, vertical slices, loops, and task checklists live in subfolders.', '', '## Read order', '', '1. `PHASE_PLAN.md`', '2. `phases/*.md`', '3. `slices/*.md` for selected feature work', '4. `loops/*.md` during implementation/validation', '5. `tasks/*.md` for concrete execution', ''].join('\n')
+  return ['# Implementation', '', 'This folder is modular. `PHASE_PLAN.md` is an index only; phase details, vertical slices, loops, and task checklists live in subfolders.', '', '## Read order', '', '1. `PHASE_PLAN.md`', '2. `phases/*.md`', '3. `capabilities/*.md` for selected feature work', '4. `loops/*.md` during implementation/validation', '5. `tasks/*.md` for concrete execution', ''].join('\n')
 }
 
 function parityAcceptanceMd(facts) {
@@ -2841,7 +2841,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     writeOut(`implementation/phases/${id}.md`, phaseDefinitionMd(id, title, goal, featureNames))
     writeOut(`implementation/tasks/${id}.tasks.md`, phaseDefinitionMd(id, `${title} Tasks`, goal, featureNames))
   }
-  for (const feature of featureInventory(facts).slice(0, 24)) writeOut(`implementation/slices/${slugify(feature.title)}.md`, verticalSliceMd(feature))
+  for (const feature of featureInventory(facts).slice(0, 24)) writeOut(`implementation/capabilities/${slugify(feature.title)}.md`, verticalSliceMd(feature))
   writeOut('implementation/loops/feature-contract-loop.md', loopGatesMd(facts))
   writeOut('implementation/loops/persistence-loop.md', loopGatesMd(facts))
   writeOut('implementation/loops/integration-contract-loop.md', loopGatesMd(facts))
@@ -2978,16 +2978,19 @@ function packetCheckResults(dir) {
   const files = new Set(packetFiles(dir))
   const need = [
     'BUILDPRINT.md', 'START_HERE.md', 'blueprint.yaml', '02-context/context-map.yaml',
-    '02-context/active-slice.yaml', '03-capabilities/capability-index.yaml',
+    '02-context/read-order.yaml', '03-capabilities/capability-index.yaml',
     '08-evaluation/claim-upgrade-rules.yaml', '09-evidence/evidence-ledger.schema.json',
     '09-evidence/evidence-ledger.jsonl'
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
-  ok('blueprint splits compatibility/execution start', /compatibility_start:\s*BUILDPRINT\.md/i.test(blueprint) && /execution_start:\s*START_HERE\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
-  const active = safeReadText(path.join(dir, '02-context/active-slice.yaml'))
-  for (const key of ['active_capability:', 'read_only:', 'write_only:', 'required_deliverables:', 'forbidden_actions:', 'next_unlock:']) ok(`active slice has ${key}`, active.includes(key))
-  ok('active slice forbids source repo reads', /read_original_source_repo/i.test(active))
+  ok('blueprint declares capability-packet v4 authority', /schema_version:\s*mapper-os\/capability-packet\.v4/i.test(blueprint) && /execution_start:\s*START_HERE\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
+  ok('blueprint avoids legacy selected-output routing', !/compatibility_start|proof_contract:|07-execution\/phases|manifest\.json/i.test(blueprint))
+  const contextMap = safeReadText(path.join(dir, '02-context/context-map.yaml'))
+  ok('context map names active capability', /active_capability:\s*03-capabilities\//i.test(contextMap))
+  ok('context map forbids original source for implementation', /original_source_policy:\s*do_not_open_for_implementation/i.test(contextMap))
+  const capabilityIndex = safeReadText(path.join(dir, '03-capabilities/capability-index.yaml'))
+  ok('capability index lists proof-gated capabilities', /proof_gate:/i.test(capabilityIndex) && /capability_id:/i.test(capabilityIndex))
   const rules = safeReadText(path.join(dir, '08-evaluation/claim-upgrade-rules.yaml'))
   for (const key of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) ok(`claim rules include ${key}`, rules.includes(key))
   const schema = safeReadText(path.join(dir, '09-evidence/evidence-ledger.schema.json'))
@@ -3012,8 +3015,11 @@ async function packetCheck(ref) {
 
 async function packetNext(ref) {
   const dir = await packetDirFromRef(ref)
-  const active = safeReadText(path.join(dir, '02-context/active-slice.yaml'))
-  if (!active) throw new Error('missing 02-context/active-slice.yaml')
+  const contextMap = safeReadText(path.join(dir, '02-context/context-map.yaml'))
+  const activePath = contextMap.match(/active_capability:\s*([^\s#]+)/)?.[1]
+  if (!activePath) throw new Error('missing active_capability in 02-context/context-map.yaml')
+  const active = safeReadText(path.join(dir, activePath))
+  if (!active) throw new Error(`missing active capability ${activePath}`)
   console.log(active.trim())
 }
 
@@ -3027,14 +3033,14 @@ function evidenceCheck(file) {
     count++
     try {
       const row = JSON.parse(line)
-      for (const field of ['capability_id', 'claim', 'proof_type', 'artifact', 'result', 'provider_mode', 'upgrades_claim']) {
+      for (const field of ['artifact_id', 'type', 'capability_id', 'status', 'source', 'proves', 'proof_type', 'provider_mode', 'upgrades_claim']) {
         if (!(field in row)) {
           failed++
           console.error(`✗ line ${index + 1}: missing ${field}`)
         }
       }
-      if (!['pass', 'fail', 'blocked'].includes(String(row.result))) {
-        failed++; console.error(`✗ line ${index + 1}: invalid result ${row.result}`)
+      if (!['missing', 'passed', 'proven', 'blocked', 'failed', 'skipped'].includes(String(row.status))) {
+        failed++; console.error(`✗ line ${index + 1}: invalid status ${row.status}`)
       }
     } catch (error) {
       failed++
@@ -3140,6 +3146,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   const contextMapPath = path.join(snapshotDir, '02-context', 'context-map.yaml')
   const contextMapText = fs.existsSync(contextMapPath) ? fs.readFileSync(contextMapPath, 'utf8') : ''
   const activeCapability = contextMapText.match(/active_capability:\s*([^\s#]+)/)?.[1] || null
+  const activeCapabilityId = activeCapability ? path.basename(activeCapability, path.extname(activeCapability)).replace(/^\d+-/, '') : null
   const evidenceDir = path.join(stateDir, 'evidence')
   const runtimeEvidencePath = path.join(evidenceDir, 'evidence-ledger.jsonl')
   const snapshotEvidencePath = path.join(snapshotDir, '09-evidence', 'evidence-ledger.jsonl')
@@ -3166,21 +3173,22 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
   writeJson(path.join(stateDir, 'state.json'), {
     buildprint: manifest.slug,
-    currentPhase: isExecutablePacket ? activeCapability || 'active-capability' : '00-alignment',
+    currentPhase: isExecutablePacket ? activeCapabilityId || 'active-capability' : '00-alignment',
     activeCapability,
-    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'continuous-full-suite' : null),
+    activeCapabilityId,
+    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'capability-gated' : null),
     completedPhases: [],
     blocked: false,
     lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
     nextAction: isExecutablePacket
-      ? 'read .buildprint/next-agent.md, then follow the executable packet router for the active capability'
+      ? 'read .buildprint/next-agent.md, then follow the capability-packet v4 router for the active capability'
       : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
     runtimeEvidenceLedger: '.buildprint/evidence/evidence-ledger.jsonl',
     updatedAt: now,
   })
 
   fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
-    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Initialized writable runtime evidence ledger at \`.buildprint/evidence/evidence-ledger.jsonl\`.\n\n## Current\n- Active capability: \`${activeCapability || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\` and the executable packet router.\n`
+    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Initialized writable runtime evidence ledger at \`.buildprint/evidence/evidence-ledger.jsonl\`.\n\n## Current\n- Active capability: \`${activeCapability || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\` and the capability-packet v4 router.\n`
     : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
@@ -3188,16 +3196,16 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
 Start here.
 
-This is a Mapper OS executable packet. Local runtime state wins over stale snapshot assumptions.
+This is a Mapper OS capability-packet v4. Local runtime state wins over stale snapshot assumptions.
 
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read \`.buildprint/snapshots/02-context/context-map.yaml\`.
-4. Execute team gates from \`.buildprint/snapshots/02-context/team-stack.yaml\`; for UI-bearing active capabilities, also apply \`.buildprint/snapshots/02-context/ux-contract.md\` and \`.buildprint/snapshots/02-context/design-quality-bar.md\`.
-5. Load only the active capability packet named by the context map: \`${activeCapability || 'unknown'}\`.
-6. Implement and prove that packet.
+4. Execute team gates from \`.buildprint/snapshots/02-context/team-stack.yaml\`; for UI-bearing active capabilitys, also apply \`.buildprint/snapshots/02-context/ux-contract.md\` and \`.buildprint/snapshots/02-context/design-quality-bar.md\`.
+5. Load only the active capability named by the context map: \`${activeCapability || 'unknown'}\`.
+6. Implement and prove that capability.
 7. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`.
-8. After proof, consult \`.buildprint/snapshots/03-capabilities/capability-index.yaml\`, update local state, and continue one dependency-ready packet at a time.
+8. After proof, consult \`.buildprint/snapshots/03-capabilities/capability-index.yaml\`, update local state, and continue one dependency-ready capability at a time.
 
 Rules:
 

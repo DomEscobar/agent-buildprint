@@ -1,103 +1,31 @@
 schema_version: mapper-os/team-stack.v2
 selected_teams:
-  - team: product-architect
-    trigger_signals:
-      - full-suite browser workbench
-      - project, novel, script, storyboard, media, export, and safety capabilities
-    required_gates:
-      - declare UI, API/app, domain service, adapter, persistence, and proof harness boundaries
-      - prove one real vertical slice per capability, not a UI-only shell
-      - reject single-file apps, route-shaped handlers, and in-memory-only product state
-  - team: ux-ui-craft
-    trigger_signals:
-      - browser storyboard workbench
-      - multi-state project/session, ingestion, script, storyboard, media, and export UI
-    required_gates:
-      - read 02-context/ux-contract.md before implementing a UI-bearing capability
-      - read 02-context/design-quality-bar.md before implementing a UI-bearing capability
-      - prove empty, loading, error, blocked, success, and restart/readback states with screenshots or browser traces
-  - team: test-and-verification
-    trigger_signals:
-      - every included capability
-    required_gates:
-      - run capability proof commands or record blockers
-      - include negative tests for invalid auth, malformed provider output, persistence restart, blocked provider, and export integrity
-      - append runtime proof only to .buildprint/evidence/evidence-ledger.jsonl
-  - team: integration-runtime
-    trigger_signals:
-      - deterministic provider adapters
-      - media tasks
-      - export manifest generation
-    required_gates:
-      - default to no-network deterministic providers
-      - block live provider parity claims until credentials and runtime proof exist
-      - model pending/running/success/failure task state
-  - team: security-boundary
-    trigger_signals:
-      - local auth/session gate
-      - user project data
-      - destructive/reset/export actions
-      - provider secrets
-    required_gates:
-      - no copied secrets
-      - destructive actions disabled or locally confirmed
-      - invalid token/session and blocked-provider paths tested
-  - team: data-persistence
-    trigger_signals:
-      - project workspace state
-      - chapter/event/script/storyboard/media/export data
-      - restart/readback requirements
-    required_gates:
-      - use durable local filesystem or SQLite persistence by default
-      - prove saved project reloads after restart
-      - prove export is derived from persisted/rendered state
+  - id: product-architect
+    blocking_gates: [scope_preservation, architecture_topology, product_depth]
+    required_evidence: [obligation_trace, topology_decision, no_scope_shrink]
+  - id: ux-ui-craft
+    blocking_gates: [ux_contract, design_quality_bar, screenshot_state_set]
+    required_evidence: [browser_runtime_trace, responsive_states, accessibility_review]
+  - id: integration-runtime
+    blocking_gates: [api_provider_runtime, async_jobs, external_side_effects]
+    required_evidence: [provider_mode_disclosure, runtime_trace_or_blocker]
+  - id: data-persistence
+    blocking_gates: [durable_state, restart_readback, delete_export]
+    required_evidence: [persistence_roundtrip_or_blocker]
+  - id: security-boundary
+    blocking_gates: [uploads, secrets, subprocess_runtime, destructive_actions]
+    required_evidence: [security_fixture_pass, secret_redaction_scan]
+  - id: test-and-verification
+    blocking_gates: [proof_commands, negative_tests, evidence_ledger]
+    required_evidence: [test_results, blocker_rows, no_fake_scan]
 review_order:
   - product-architect
-  - ux-ui-craft
   - integration-runtime
-  - security-boundary
   - data-persistence
+  - security-boundary
+  - ux-ui-craft
   - test-and-verification
-capability_team_map:
-  project-workspace-auth:
-    - product-architect
-    - ux-ui-craft
-    - test-and-verification
-    - security-boundary
-    - data-persistence
-  novel-event-ingestion:
-    - product-architect
-    - ux-ui-craft
-    - test-and-verification
-    - integration-runtime
-    - data-persistence
-  script-agent-assets:
-    - product-architect
-    - ux-ui-craft
-    - test-and-verification
-    - integration-runtime
-    - data-persistence
-  production-storyboard-flow:
-    - product-architect
-    - ux-ui-craft
-    - test-and-verification
-    - integration-runtime
-    - data-persistence
-  media-preview-export:
-    - product-architect
-    - ux-ui-craft
-    - test-and-verification
-    - integration-runtime
-    - data-persistence
-  safety-runtime-boundary:
-    - product-architect
-    - test-and-verification
-    - integration-runtime
-    - security-boundary
-    - data-persistence
 forbidden:
-  - quality-tier questions
-  - lazy/simple team choices
-  - generic dashboard cards as product completion
-  - static UI shells with no persisted storyboard data path
-  - reading unrelated capability packets upfront
+  - quality-tier selection by user
+  - lazy/simple/quick team choices
+  - treating team packs as optional polish

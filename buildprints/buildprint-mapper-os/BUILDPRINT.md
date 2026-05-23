@@ -2,13 +2,13 @@
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command and not a source-code clone plan.
 
-The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant capability surface, classifies readiness honestly, distills source behavior into contracts, emits a team-pack quality router for the downstream harness, and records qualification blockers honestly.
+The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant behavior surface, classifies readiness honestly, distills source behavior into capability packets, emits a team-pack quality router for the downstream harness, and records qualification blockers honestly.
 
 ## Authority
 
 - `mapper-os-requirement.md` is the root product requirement.
 - This package is the operating Buildprint for agents performing mapping.
-- Source files are evidence. Product capabilities are the rebuild contract.
+- Source files are evidence. Product obligations and capability packets are the rebuild contract.
 - Static scanning may guide discovery but must never become product authority.
 - A qualified Buildprint is an implementation input, not proof that a future implementation already works.
 
@@ -25,16 +25,16 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 9. `policies/*.md`
 10. `prompts/*.md` and `templates/`
 
-For generated selected packages, do not make the implementing agent read all Markdown files or all capability packs before it knows the next action. `START_HERE.md` is the human-readable router, `blueprint.yaml` is the machine-readable contract, `02-context/context-map.yaml` is the active-context router, `02-context/team-stack.yaml` is the quality gate router, and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready pack.
+For generated selected packages, do not make the implementing agent read all Markdown files or all capabilities before it knows the next action. `START_HERE.md` is the execution start, `blueprint.yaml` is the machine-readable contract, `02-context/context-map.yaml` is the active-context router, `02-context/team-stack.yaml` is the quality gate router, and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready slice.
 
 ## Required Flow
 
 1. Source acquisition: use a local folder or clone/check out a Git URL into a temporary read-only source checkout.
 2. Safe census: collect file tree, manifests, dependency hints, framework hints, env var names, scripts, deploy hints, and test hints as `CENSUS_HINT` only.
-3. Capability discovery: read source surfaces to discover product capabilities and promote claims to `OBSERVED`, `INFERRED`, `QUESTION`, `BLOCKED`, or `OUT_OF_SCOPE`.
+3. Behavior discovery: read source surfaces to discover product behavior and promote claims to `OBSERVED`, `INFERRED`, `QUESTION`, `BLOCKED`, or `OUT_OF_SCOPE`.
 4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection; never shrink selected scope without explicit user decision.
-5. Source distillation: convert source facts into source-independent behavior contracts and verification oracles.
-6. Execution planning: give the downstream coding agent capability readiness, first slices, verification gates, implementation-team signals, repair loops, review rules, and handoff requirements.
+5. Source distillation: convert source facts into source-independent obligations, capability packets, and verification oracles.
+6. Execution planning: give the downstream coding agent slice readiness, verification gates, implementation-team signals, repair loops, review rules, and handoff requirements.
 7. Qualification: keep output unqualified until required evidence, runtime/test proof, no-fake checks, hardening artifacts, and reversal evidence exist.
 
 ## Output Modes
@@ -45,7 +45,7 @@ Default mode. It may produce discovery, evidence, and quality files only. It mus
 
 ### Selected Extraction
 
-Creates `selected-buildprint/` with a small or medium package for the chosen capability set. It remains `SELECTED_UNQUALIFIED` until qualification proof exists.
+Creates `selected-buildprint/` with a small or medium package for the chosen behavior set. It remains `SELECTED_UNQUALIFIED` until qualification proof exists.
 
 ### Full-Suite Extraction
 
@@ -53,11 +53,11 @@ Creates a hierarchical `selected-buildprint/` for the complete feature suite onl
 
 ### Qualified Buildprint
 
-Promoted only when the selected package is source-independent, capability-complete, verified, free of critical no-fake findings, and safe to hand to another coding agent without source access.
+Promoted only when the selected package is source-independent, behavior-complete for the selected scope, verified, free of critical no-fake findings, and safe to hand to another coding agent without source access.
 
 ## Selected Package Shape
 
-Selected outputs must use the executable packet shape. `BUILDPRINT.md` stays as a compatibility router; `blueprint.yaml`, `02-context/`, `03-capabilities/`, `08-evaluation/`, and `09-evidence/` are the machine-routable execution contract.
+Selected outputs must use capability-packet v4. `BUILDPRINT.md` is a package overview; `START_HERE.md`, `blueprint.yaml`, `02-context/`, `08-evaluation/`, and `09-evidence/` are the machine-routable execution contract.
 
 ```text
 BUILDPRINT.md
@@ -82,12 +82,7 @@ blueprint.yaml
   source-evidence-index.yaml
 03-capabilities/
   capability-index.yaml
-  <capability-id>/
-    capability.yaml
-    source-evidence.md
-    product-contract.md
-    implementation-workflow.md
-    proof-contract.yaml
+  01-<capability-id>.md
 04-interfaces/
   api-contracts.yaml
   tool-contracts.yaml
@@ -103,13 +98,14 @@ blueprint.yaml
   destructive-actions.md
 07-execution/
   implementation-plan.yaml
-  phases/
 08-evaluation/
   acceptance.yaml
   test-matrix.yaml
   quality-rubric.yaml
+  claim-upgrade-rules.yaml
 09-evidence/
   evidence-ledger.jsonl
+  evidence-ledger.schema.json
   unresolved-blockers.md
 generated/
   agent-prompt.md
@@ -119,9 +115,9 @@ generated/
 
 Qualification is evidence-derived. `claim_status: SELECTED_UNQUALIFIED` can be promoted only when runtime `.buildprint/evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable. The packaged `09-evidence/evidence-ledger.jsonl` is an immutable seed/template, not the write target.
 
-The packet shape above is mandatory. Output without `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI `02-context/ux-contract.md`, UI `02-context/design-quality-bar.md`, `03-capabilities/capability-index.yaml`, per-capability `capability.yaml`, `implementation-workflow.md`, and `proof-contract.yaml`, `08-evaluation/acceptance.yaml`, or `09-evidence/evidence-ledger.jsonl` is invalid.
+The packet shape above is mandatory. Output without `blueprint.yaml`, `START_HERE.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI `02-context/ux-contract.md`, UI `02-context/design-quality-bar.md`, `03-capabilities/capability-index.yaml`, at least one capability packet Markdown file, `08-evaluation/acceptance.yaml`, or `09-evidence/evidence-ledger.jsonl` is invalid.
 
-Legacy selected-output v1 files are forbidden: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, and `capabilities/`.
+Purged legacy files are forbidden: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
 `02-context/team-stack.yaml` is mandatory for selected output. It infers internal team packs from product shape; it must not ask the user to choose lazy/simple/quick quality. UI-bearing output selects `ux-ui-craft`, broad output selects `product-architect`, and every selected output selects `test-and-verification`.
 
@@ -138,12 +134,11 @@ Legacy selected-output v1 files are forbidden: root `CAPABILITY_INDEX.md`, `CONT
 
 Every selected package must tell the next coding agent:
 
-- what capability to implement next;
+- what capability packet to implement next;
 - what behavior is stable;
 - what implementation choices are free;
 - which pre-implementation questions must be asked or safely defaulted before coding;
 - which team-pack gates must run before and during coding;
-- what first slice to build;
 - what verification gate to run immediately;
 - what evidence is missing;
 - when to stop, replan, or escalate.

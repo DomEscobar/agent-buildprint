@@ -1,26 +1,32 @@
 # START_HERE
 
-Build the workbench from this packet, not from the original source repository.
+Build from this capability-packet v4, not from the original source repository.
 
 ## Current State
 
 - Qualification: `SELECTED_UNQUALIFIED`
-- Active capability: `01-ingestion-ontology`
-- Scope: full portable AI swarm simulation workbench
-- Public URL concept: `https://agent-buildprint.com/buildprints/portable-ai-swarm-simulation-workbench/`
+- Active capability: `03-capabilities/01-01-ingestion-ontology.md`
+- Runtime evidence ledger: `.buildprint/evidence/evidence-ledger.jsonl`
+- Immutable seed ledger: `09-evidence/evidence-ledger.jsonl`
+
+## Before Coding
+
+1. Read `blueprint.yaml` for the machine contract.
+2. Read `PRE_IMPLEMENTATION_QUESTIONS.md`; ask only unresolved blockers, otherwise apply its safe defaults.
+3. Read `02-context/team-stack.yaml` and execute the blocking team gates.
+4. For UI-bearing work, read `02-context/ux-contract.md` and `02-context/design-quality-bar.md` before implementation.
+5. Read only the active capability: `03-capabilities/01-01-ingestion-ontology.md`.
 
 ## Working Rules
 
-- Ask `PRE_IMPLEMENTATION_QUESTIONS.md` only for decisions that change security, provider behavior, persistence, or UX scope.
-- Use deterministic adapters for first-slice proof unless live LLM, graph-memory, and simulation runtime credentials are explicitly supplied.
-- Do not claim live provider/runtime qualification from test doubles.
-- Record proof and blockers in `.buildprint/evidence/evidence-ledger.jsonl`, seeded from `09-evidence/evidence-ledger.jsonl`.
+- Do not claim live provider/runtime qualification from deterministic adapters.
+- Do not claim persistence without restart/readback/delete/export proof where applicable.
+- Do not claim UI proof from static labels or screenshots disconnected from real state.
+- Record proof and blockers in `.buildprint/evidence/evidence-ledger.jsonl`.
 - Stop on missing proof, secret exposure, destructive uncertainty, provider ambiguity, or no-fake failure.
-
-## Consumption Protocol
-
-Before coding, read `02-context/active-slice.yaml`. It is the exact active-slice contract: read only the listed slice files, write only runtime state/evidence/artifacts, and unlock the next capability only after proof and claim-upgrade rules pass.
 
 ## First Move
 
-Implement `03-capabilities/01-ingestion-ontology/` enough to prove upload validation, text extraction, project persistence, ontology generation through a deterministic adapter, UI states, and negative tests. Then consult `03-capabilities/capability-index.yaml`.
+Implement and prove `03-capabilities/01-01-ingestion-ontology.md`. Only after proof or blocker rows close it honestly, consult `03-capabilities/capability-index.yaml` for the next dependency-ready slice.
+
+Evidence ledger closure is required before any claim upgrade.

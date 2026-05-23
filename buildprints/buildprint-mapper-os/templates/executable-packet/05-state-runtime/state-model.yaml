@@ -1,0 +1,6 @@
+state_model:
+  entities:
+    - id: <entity-id>
+      obligation_id: OBL-<id>
+      persisted: <true|false>
+      proof_expectation: <roundtrip-or-not-applicable>

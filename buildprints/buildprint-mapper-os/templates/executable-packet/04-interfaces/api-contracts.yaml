@@ -1,0 +1,6 @@
+api_contracts:
+  - id: <api-contract-id>
+    obligation_id: OBL-<id>
+    request: <request shape or not_applicable>
+    response: <response shape or not_applicable>
+    proof_expectation: <contract/runtime proof>

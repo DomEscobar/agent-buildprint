@@ -1,34 +1,35 @@
 schema_version: mapper-os/context-map.v2
-active_capability: project-workspace-auth
-execution_mode: continuous-full-suite
+active_capability: 03-capabilities/05-media-preview-export.md
 must_read:
+  - BUILDPRINT.md
   - START_HERE.md
   - blueprint.yaml
-  - 02-context/context-map.yaml
   - PRE_IMPLEMENTATION_QUESTIONS.md
   - 02-context/team-stack.yaml
   - 02-context/ux-contract.md
   - 02-context/design-quality-bar.md
-  - 03-capabilities/project-workspace-auth/capability.yaml
-  - 03-capabilities/project-workspace-auth/product-contract.md
-  - 03-capabilities/project-workspace-auth/implementation-workflow.md
-  - 03-capabilities/project-workspace-auth/proof-contract.yaml
+  - 03-capabilities/05-media-preview-export.md
 read_if_needed:
+  - 00-intent/product-obligations.md
+  - 00-intent/source-surface-map.md
+  - 02-context/source-evidence-index.yaml
   - 04-interfaces/api-contracts.yaml
+  - 04-interfaces/tool-contracts.yaml
+  - 04-interfaces/provider-contracts.yaml
   - 05-state-runtime/state-model.yaml
   - 05-state-runtime/persistence.md
+  - 05-state-runtime/runtime-topology.md
+  - 06-safety/threat-model.md
   - 06-safety/secrets-policy.md
-  - 08-evaluation/quality-rubric.yaml
+  - 06-safety/destructive-actions.md
+  - 06-safety/security-test-fixtures.yaml
+  - 08-evaluation/claim-upgrade-rules.yaml
+  - 09-evidence/evidence-ledger.schema.json
 do_not_read_yet:
-  - 03-capabilities/* except 03-capabilities/project-workspace-auth/*
-  - generated/agent-prompt.md
-advance_after_proof:
-  lookup: 03-capabilities/capability-index.yaml
-  next: novel-event-ingestion
-stop_conditions:
-  - explicit blocker
-  - missing proof
-  - provider/runtime uncertainty
-  - destructive safety issue
-  - secret exposure
-  - context/tooling limit
+  - 03-capabilities/* except 03-capabilities/05-media-preview-export.md
+source_independence:
+  original_source_required: false
+  original_source_policy: do_not_open_for_implementation
+ledger:
+  seed: 09-evidence/evidence-ledger.jsonl
+  runtime_target: .buildprint/evidence/evidence-ledger.jsonl

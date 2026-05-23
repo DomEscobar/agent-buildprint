@@ -1,2 +1,1 @@
-{"artifact_id":"source-map-001","type":"source_mapping","capability_id":"package","status":"blocked","source":"Toonflow source evidence mapped to product obligations; runtime proof not executed","proves":["source_surface_mapping"],"notes":"Claim status remains SELECTED_UNQUALIFIED until implementation evidence exists."}
-
+{"artifact_id": "mapping-seed-001", "type": "mapping_seed", "capability_id": "media-preview-export", "status": "blocked", "source": "Mapper OS source evidence was distilled; implementation/runtime proof has not run.", "proves": ["source_surface_mapping"], "provider_mode": "not_executed", "upgrades_claim": false}

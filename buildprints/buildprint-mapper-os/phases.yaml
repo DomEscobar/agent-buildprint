@@ -1,4 +1,4 @@
-schema: agent-buildprint/phases.v2
+schema: agent-buildprint/phases.v3
 canonical_start: BUILDPRINT.md
 phases:
   - id: 00-safety-boundaries
@@ -22,11 +22,11 @@ phases:
     must_pass:
       - no product behavior, absence, parity, provider, or persistence claims
 
-  - id: 02-capability-discovery
-    title: Capability Discovery
+  - id: 02-behavior-discovery
+    title: Behavior Discovery
     inputs: [plans/02-system-map.md, CONTRACTS.md]
     must_produce:
-      - capability inventory
+      - behavior inventory
       - promoted claim register
       - source evidence paths and lines or sections
     must_pass:
@@ -38,7 +38,7 @@ phases:
     inputs: [plans/03-candidate-buildprints.md, plans/04-scope-decision.md, questions.md]
     must_produce:
       - selected candidate, explicit scope, full-suite target, or discovery-only blocker
-      - capability readiness classification across the requested/selected surface
+      - readiness classification across the requested/selected surface
     must_pass:
       - no silent scope shrinkage
       - no placeholder replacement for explicit scope cuts
@@ -47,30 +47,33 @@ phases:
     title: Source Distillation
     inputs: [prompts/extract-selected.md, templates/]
     must_produce:
-      - source-independent selected-buildprint package
-      - capability contracts
+      - source-independent selected-buildprint capability-packet v4
+      - product obligations
+      - capability packets
       - stable-vs-free boundaries
-      - executable-packet read order with START_HERE.md, blueprint.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, 02-context/context-map.yaml, and 02-context/team-stack.yaml before active capability loading
+      - router-first read order with START_HERE.md, blueprint.yaml, PRE_IMPLEMENTATION_QUESTIONS.md, 02-context/context-map.yaml, and 02-context/team-stack.yaml before active capability loading
     must_pass:
       - selected output stays under selected-buildprint/
       - medium/large/full-suite output is hierarchical
       - medium/large/full-suite output includes 03-capabilities/capability-index.yaml
-      - medium/large/full-suite output includes 09-evidence/evidence-ledger.jsonl
-      - every included capability packet has capability.yaml, source-evidence.md, product-contract.md, implementation-workflow.md, and proof-contract.yaml
-      - legacy selected-output v1 spine files are absent
+      - medium/large/full-suite output includes at least one capability packet markdown file
+      - medium/large/full-suite output includes 09-evidence/evidence-ledger.jsonl and 09-evidence/evidence-ledger.schema.json
+      - capability packets include proof gates, stop rules, required teams, and unlock policy
+      - legacy selected-output v1/v2 spine files are absent
+      - fragmented per-capability mini-files are absent
       - typo alias files such as VERFICATION.md are absent
 
   - id: 05-execution-planning
     title: Downstream Execution Planning
     inputs: [prompts/extract-selected.md, templates/executable-packet/]
     must_produce:
-      - first slice per included capability without hiding later capability work
+      - first active capability without hiding later work
       - first verification gate per included capability
       - implementation-team signals for downstream harness selection
       - repair-loop and stop/escalation rules
     must_pass:
       - implementing agent does not need to infer critical order, builder passes, or gates
-      - implementing agent can start from START_HERE.md and 02-context/context-map.yaml without reading all Markdown files, all capability packets upfront, or unrelated capability packets
+      - implementing agent can start from START_HERE.md and 02-context/context-map.yaml without reading all Markdown files, all capability packets upfront, or unrelated capabilities
 
   - id: 06-qualification
     title: Qualification

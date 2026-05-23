@@ -1,18 +1,19 @@
-schema_version: mapper-os/executable-packet.v2
-canonical_start: BUILDPRINT.md
+schema_version: mapper-os/capability-packet.v4
+execution_start: START_HERE.md
+machine_contract: blueprint.yaml
 source:
   input: https://github.com/HBAI-Ltd/Toonflow-app
   checkout_path: external-source-checkout
   commit: 122d2aa431d3240fea3eab491e6fbc690bb088cb
 generated_at: 2026-05-22T00:00:00Z
 claim_status: SELECTED_UNQUALIFIED
-execution_mode: continuous-full-suite
 promotion_requires:
   - browser_runtime_trace
   - provider_integration_proof
   - persistence_roundtrip
   - security_boundary_review
   - clean_room_implementation_trace
+  - no_fake_scan_pass
 obligations:
   - obligation_id: OBL-PROJECT
     title: Local project workspace, model choices, and auth/session boundary
@@ -40,48 +41,63 @@ obligations:
     status: INCLUDED_RISKY_REQUIRES_HARDENING
 capabilities:
   - capability_id: project-workspace-auth
-    obligation_ids: [OBL-PROJECT]
-    packet: 03-capabilities/project-workspace-auth
+    title: Local project workspace, model choices, and auth/session boundary
+    obligation_ids:
+      - OBL-PROJECT
+    file: 03-capabilities/01-project-workspace-auth.md
     autonomy_level: workflow
-    proof_contract: 03-capabilities/project-workspace-auth/proof-contract.yaml
+    proof_gate: proof-project-workspace-auth
     status: INCLUDED_NEEDS_PROOF
   - capability_id: novel-event-ingestion
-    obligation_ids: [OBL-NOVEL]
-    packet: 03-capabilities/novel-event-ingestion
+    title: Ordered chapter import and deterministic event extraction
+    obligation_ids:
+      - OBL-NOVEL
+    file: 03-capabilities/02-novel-event-ingestion.md
     autonomy_level: workflow
-    proof_contract: 03-capabilities/novel-event-ingestion/proof-contract.yaml
+    proof_gate: proof-novel-event-ingestion
     status: INCLUDED_NEEDS_PROOF
   - capability_id: script-agent-assets
-    obligation_ids: [OBL-SCRIPT]
-    packet: 03-capabilities/script-agent-assets
+    title: Script-agent workspace with structured outline, strategy, script, and asset extraction
+    obligation_ids:
+      - OBL-SCRIPT
+    file: 03-capabilities/03-script-agent-assets.md
     autonomy_level: workflow
-    proof_contract: 03-capabilities/script-agent-assets/proof-contract.yaml
+    proof_gate: proof-script-agent-assets
     status: INCLUDED_NEEDS_PROOF
   - capability_id: production-storyboard-flow
-    obligation_ids: [OBL-STORYBOARD]
-    packet: 03-capabilities/production-storyboard-flow
+    title: Production-agent storyboard planning, panel rows, and flow persistence
+    obligation_ids:
+      - OBL-STORYBOARD
+    file: 03-capabilities/04-production-storyboard-flow.md
     autonomy_level: workflow
-    proof_contract: 03-capabilities/production-storyboard-flow/proof-contract.yaml
+    proof_gate: proof-production-storyboard-flow
     status: INCLUDED_NEEDS_PROOF
   - capability_id: media-preview-export
-    obligation_ids: [OBL-MEDIA]
-    packet: 03-capabilities/media-preview-export
+    title: Mockable image/video media jobs and exportable preview manifest
+    obligation_ids:
+      - OBL-MEDIA
+    file: 03-capabilities/05-media-preview-export.md
     autonomy_level: workflow
-    proof_contract: 03-capabilities/media-preview-export/proof-contract.yaml
+    proof_gate: proof-media-preview-export
     status: INCLUDED_NEEDS_PROOF
   - capability_id: safety-runtime-boundary
-    obligation_ids: [OBL-SAFETY]
-    packet: 03-capabilities/safety-runtime-boundary
+    title: Provider, upload, secret, persistence, and destructive-action safety boundary
+    obligation_ids:
+      - OBL-SAFETY
+    file: 03-capabilities/06-safety-runtime-boundary.md
     autonomy_level: workflow
-    proof_contract: 03-capabilities/safety-runtime-boundary/proof-contract.yaml
+    proof_gate: proof-safety-runtime-boundary
     status: INCLUDED_RISKY_REQUIRES_HARDENING
 context:
-  active_capability: project-workspace-auth
-  continue_after_proof: true
+  active_capability: 03-capabilities/01-project-workspace-auth.md
   context_map: 02-context/context-map.yaml
+  read_order: 02-context/read-order.yaml
   pre_implementation_questions: PRE_IMPLEMENTATION_QUESTIONS.md
   team_stack: 02-context/team-stack.yaml
   ux_contract: 02-context/ux-contract.md
   design_quality_bar: 02-context/design-quality-bar.md
+  source_evidence_index: 02-context/source-evidence-index.yaml
+  claim_upgrade_rules: 08-evaluation/claim-upgrade-rules.yaml
+  evidence_schema: 09-evidence/evidence-ledger.schema.json
 generated_artifacts:
   agent_prompt: generated/agent-prompt.md

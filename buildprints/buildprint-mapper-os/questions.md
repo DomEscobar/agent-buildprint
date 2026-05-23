@@ -41,7 +41,7 @@ Mapping alignment summary
 - Source input:
 - Output mode:
 - Requested scope:
-- Selected target / first slice:
+- Selected target / first capability:
 - Capability readiness summary:
 - Explicitly user-excluded capabilities:
 - Blocked capabilities:

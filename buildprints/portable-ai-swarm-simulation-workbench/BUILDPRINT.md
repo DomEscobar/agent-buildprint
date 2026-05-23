@@ -1,6 +1,8 @@
 # Portable AI Swarm Simulation Workbench
 
-This is an executable-packet v2 selected Buildprint generated from MiroFish source evidence.
+This is a Mapper OS capability-packet v4 selected Buildprint. It is source-independent and must be implemented from this packet, not from the original source repository.
+
+## Execution authority
 
 Read in this order:
 
@@ -9,10 +11,9 @@ Read in this order:
 3. `02-context/context-map.yaml`
 4. `PRE_IMPLEMENTATION_QUESTIONS.md`
 5. `02-context/team-stack.yaml`
-6. The active capability packet, starting with `03-capabilities/01-ingestion-ontology/`
+6. `02-context/ux-contract.md` and `02-context/design-quality-bar.md` for UI gates
+7. The active capability: `03-capabilities/01-01-ingestion-ontology.md`
 
-Do not load every capability upfront. After each capability is implemented and proven, consult `03-capabilities/capability-index.yaml` for the next dependency-ready packet.
+Do not load every capability packet upfront. After the active capability is proven or honestly blocked, consult `03-capabilities/capability-index.yaml` for the next dependency-ready slice.
 
-Status: `SELECTED_UNQUALIFIED`.
-
-Source independence: this packet includes all required contracts and evidence summaries. Implementation agents must not depend on `/root/MiroFish` being present.
+Status: `SELECTED_UNQUALIFIED` until runtime evidence rows prove browser/runtime, provider, persistence, security, clean-room, and no-fake gates.

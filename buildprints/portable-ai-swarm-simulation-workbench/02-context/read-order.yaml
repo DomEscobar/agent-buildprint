@@ -1,20 +1,16 @@
-schema_version: mapper-os/read-order.v1
+schema_version: mapper-os/read-order.v3
 initial:
-  - BUILDPRINT.md
   - START_HERE.md
   - blueprint.yaml
-  - 02-context/context-map.yaml
   - PRE_IMPLEMENTATION_QUESTIONS.md
   - 02-context/team-stack.yaml
   - 02-context/ux-contract.md
   - 02-context/design-quality-bar.md
-active_packet:
-  - 03-capabilities/01-ingestion-ontology/capability.yaml
-  - 03-capabilities/01-ingestion-ontology/product-contract.md
-  - 03-capabilities/01-ingestion-ontology/implementation-workflow.md
-  - 03-capabilities/01-ingestion-ontology/proof-contract.yaml
-after_each_proof:
+  - 03-capabilities/01-01-ingestion-ontology.md
+after_active_proof:
   - 03-capabilities/capability-index.yaml
-avoid_initial_bulk_read:
-  - 03-capabilities/*/source-evidence.md
-  - 07-execution/phases/*
+  - next dependency-ready active capability only
+forbidden_initial:
+  - 03-capabilities/* except 03-capabilities/01-01-ingestion-ontology.md
+  - original source repository
+  - all future capabilities upfront

@@ -1,0 +1,23 @@
+schema_version: mapper-os/team-stack.v2
+selected_teams:
+  - team: product-architect
+    trigger_signals: [executable packet, stateful API]
+    required_gates: [topology declared, real persistence slice]
+  - team: ux-ui-craft
+    trigger_signals: [browser_runtime_trace promotion requirement]
+    required_gates: [ux-contract, design-quality-bar, screenshot proof or blocker]
+  - team: test-and-verification
+    trigger_signals: [every selected output]
+    required_gates: [proof command, negative test, evidence ledger row]
+  - team: data-persistence
+    trigger_signals: [persistence_roundtrip promotion requirement]
+    required_gates: [restart/readback proof]
+review_order:
+  - product-architect
+  - ux-ui-craft
+  - data-persistence
+  - test-and-verification
+forbidden:
+  - quality-tier questions
+  - lazy/simple team choices
+  - reading unrelated capability packets upfront

@@ -21,7 +21,7 @@ selected_teams:
     trigger_signals:
       - every selected output
     required_gates:
-      - proof command or blocker for each capability
+      - proof command or blocker for each capability packet
       - negative tests for risky state, provider, browser, and persistence paths
       - runtime evidence rows appended only to .buildprint/evidence/evidence-ledger.jsonl
   - team: integration-runtime

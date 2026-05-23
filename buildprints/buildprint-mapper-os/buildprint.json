@@ -9,46 +9,185 @@
     "source acquisition with read-only boundary",
     "safe census with CENSUS_HINT-only authority",
     "source-surface census with high-signal disposition tracking",
-    "capability discovery with source evidence promotion",
+    "behavior discovery with source evidence promotion",
     "scope selection before selected extraction",
-    "source-independent capability distillation",
-    "selected-buildprint package shape",
+    "source-independent capability-packet distillation",
+    "selected-buildprint capability-packet v4 shape",
     "downstream-agent execution planning",
     "qualification gates and no-fake blockers",
     "handoff without source dependency"
   ],
   "files": [
-    { "path": "BUILDPRINT.md", "role": "canonical-control", "required": true },
-    { "path": "SPEC.md", "role": "behavior-contract", "required": true },
-    { "path": "CONTRACTS.md", "role": "status-and-claim-contracts", "required": true },
-    { "path": "PLAN.md", "role": "phase-index", "required": true },
-    { "path": "EXECUTION_PROTOCOL.md", "role": "agent-work-loop", "required": true },
-    { "path": "IMPLEMENTATION_PLAN.md", "role": "maintenance-plan", "required": true },
-    { "path": "VERIFICATION.md", "role": "verification-gates", "required": true },
-    { "path": "CURRENT_STATE.md", "role": "current-state", "required": true },
-    { "path": "questions.md", "role": "minimal-question-policy", "required": true },
-    { "path": "policies/safety.md", "role": "safety-policy", "required": true },
-    { "path": "policies/quality.md", "role": "quality-policy", "required": true },
-    { "path": "policies/questions.md", "role": "question-policy", "required": true },
-    { "path": "prompts/discover.md", "role": "discovery-prompt", "required": true },
-    { "path": "prompts/extract-selected.md", "role": "selected-extraction-prompt", "required": true },
-    { "path": "templates/executable-packet/BUILDPRINT.md", "role": "executable-packet-template", "required": true },
-    { "path": "templates/executable-packet/START_HERE.md", "role": "executable-packet-template", "required": true },
-    { "path": "templates/executable-packet/PRE_IMPLEMENTATION_QUESTIONS.md", "role": "executable-packet-question-gate-template", "required": true },
-    { "path": "templates/executable-packet/blueprint.yaml", "role": "executable-packet-machine-contract-template", "required": true },
-    { "path": "templates/executable-packet/00-intent/source-surface-map.md", "role": "executable-packet-source-surface-template", "required": true },
-    { "path": "templates/executable-packet/02-context/team-stack.yaml", "role": "executable-packet-team-gate-template", "required": true },
-    { "path": "templates/executable-packet/02-context/ux-contract.md", "role": "executable-packet-ux-contract-template", "required": true },
-    { "path": "templates/executable-packet/02-context/design-quality-bar.md", "role": "executable-packet-design-quality-template", "required": true },
-    { "path": "templates/executable-packet/02-context/source-evidence-index.yaml", "role": "executable-packet-evidence-index-template", "required": true },
-    { "path": "templates/executable-packet/03-capabilities/capability-index.yaml", "role": "executable-packet-capability-index-template", "required": true },
-    { "path": "templates/executable-packet/03-capabilities/_template/capability.yaml", "role": "executable-capability-packet-template", "required": true },
-    { "path": "templates/executable-packet/03-capabilities/_template/proof-contract.yaml", "role": "executable-capability-proof-template", "required": true },
-    { "path": "templates/executable-packet/08-evaluation/acceptance.yaml", "role": "executable-packet-evaluation-template", "required": true },
-    { "path": "templates/executable-packet/09-evidence/evidence-ledger.jsonl", "role": "executable-packet-evidence-ledger-template", "required": true },
-    { "path": "templates/executable-packet/generated/agent-prompt.md", "role": "generated-prompt-template", "required": true },
-    { "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/blueprint.yaml", "role": "positive-executable-packet-fixture", "required": true },
-    { "path": "evals/selected-output-fixtures/v2-ui-missing-team-ux/selected-buildprint/blueprint.yaml", "role": "negative-executable-packet-fixture", "required": true }
+    {
+      "path": "BUILDPRINT.md",
+      "role": "canonical-control",
+      "required": true
+    },
+    {
+      "path": "SPEC.md",
+      "role": "behavior-contract",
+      "required": true
+    },
+    {
+      "path": "CONTRACTS.md",
+      "role": "status-and-claim-contracts",
+      "required": true
+    },
+    {
+      "path": "PLAN.md",
+      "role": "phase-index",
+      "required": true
+    },
+    {
+      "path": "EXECUTION_PROTOCOL.md",
+      "role": "agent-work-loop",
+      "required": true
+    },
+    {
+      "path": "IMPLEMENTATION_PLAN.md",
+      "role": "maintenance-plan",
+      "required": true
+    },
+    {
+      "path": "VERIFICATION.md",
+      "role": "verification-gates",
+      "required": true
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "role": "current-state",
+      "required": true
+    },
+    {
+      "path": "questions.md",
+      "role": "minimal-question-policy",
+      "required": true
+    },
+    {
+      "path": "policies/safety.md",
+      "role": "safety-policy",
+      "required": true
+    },
+    {
+      "path": "policies/quality.md",
+      "role": "quality-policy",
+      "required": true
+    },
+    {
+      "path": "policies/questions.md",
+      "role": "question-policy",
+      "required": true
+    },
+    {
+      "path": "prompts/discover.md",
+      "role": "discovery-prompt",
+      "required": true
+    },
+    {
+      "path": "prompts/extract-selected.md",
+      "role": "selected-extraction-prompt",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/BUILDPRINT.md",
+      "role": "executable-packet-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/START_HERE.md",
+      "role": "executable-packet-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/PRE_IMPLEMENTATION_QUESTIONS.md",
+      "role": "executable-packet-question-gate-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/blueprint.yaml",
+      "role": "executable-packet-machine-contract-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/00-intent/source-surface-map.md",
+      "role": "executable-packet-source-surface-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/02-context/team-stack.yaml",
+      "role": "executable-packet-team-gate-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/02-context/ux-contract.md",
+      "role": "executable-packet-ux-contract-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/02-context/design-quality-bar.md",
+      "role": "executable-packet-design-quality-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/02-context/source-evidence-index.yaml",
+      "role": "executable-packet-evidence-index-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/08-evaluation/acceptance.yaml",
+      "role": "executable-packet-evaluation-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/09-evidence/evidence-ledger.jsonl",
+      "role": "executable-packet-evidence-ledger-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/generated/agent-prompt.md",
+      "role": "generated-prompt-template",
+      "required": true
+    },
+    {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/blueprint.yaml",
+      "role": "positive-executable-packet-fixture",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/02-context/context-map.yaml",
+      "role": "executable-packet-context-map-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/02-context/read-order.yaml",
+      "role": "executable-packet-read-order-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/03-capabilities/capability-index.yaml",
+      "role": "capability-packet-index-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/03-capabilities/_template.md",
+      "role": "capability-packet-markdown-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/08-evaluation/claim-upgrade-rules.yaml",
+      "role": "claim-upgrade-rules-template",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/09-evidence/evidence-ledger.schema.json",
+      "role": "evidence-ledger-schema-template",
+      "required": true
+    },
+    {
+      "path": "evals/selected-output-fixtures/v4-ui-missing-team-ux/selected-buildprint/blueprint.yaml",
+      "role": "negative-execution-packet-fixture",
+      "required": true
+    }
   ],
   "forbiddenDefaults": [
     "agb map CLI entrypoint",
@@ -59,17 +198,18 @@
     "selected extraction without scope decision",
     "root implementation scaffold",
     "legacy selected-output v1 template spine",
-    "one giant capability file for medium/large/full-suite scopes",
+    "one giant execution file for medium/large/full-suite scopes",
     "mocks or fixtures counted as product implementation",
     "validation or parity claims without evidence",
     "route/function parity as a selected-output requirement",
     "high-signal source surfaces disappearing without disposition",
-    "selected-output manifest drift",
+    "selected-output router drift",
     "typo alias files such as VERFICATION.md, IMPLEMENATION.md, or CAPABILTY_INDEX.md",
     "duplicate canonical handoff files such as both HANDOFF.md and HANDOVER.md",
     "downstream agent required to read all markdown files before first action",
-    "legacy selected-output v1 files: CAPABILITY_INDEX.md, CONTEXT_PACKET.json, TEAM_STACK.md, UX_CONTRACT.md, DESIGN_QUALITY_BAR.md, CURRENT_STATE.md, EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md, manifest.json, capabilities/",
-    "legacy default selected files: AGENT_EXECUTION_BRIEF.md, agent-contract.xml, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, IMPLEMENTATION_COMPLETENESS.md"
+    "legacy selected-output v1/v2 files: CAPABILITY_INDEX.md, CONTEXT_PACKET.json, TEAM_STACK.md, UX_CONTRACT.md, DESIGN_QUALITY_BAR.md, CURRENT_STATE.md, EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md, manifest.json, 02-context/active-slice.yaml, 07-execution/phases/, capabilities/, generated/current-buildprint-compat/",
+    "legacy default selected files: AGENT_EXECUTION_BRIEF.md, agent-contract.xml, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, IMPLEMENTATION_COMPLETENESS.md",
+    "fragmented per-capability mini-files such as capability.yaml, source-evidence.md, product-contract.md, implementation-workflow.md, or proof-contract.yaml"
   ],
   "authoritySpine": "BUILDPRINT.md",
   "mirrorFiles": [
@@ -92,6 +232,7 @@
   ],
   "requiredChecks": [
     "npm run check:mapper-output",
-    "npm run check:mapper-output:bad must fail for the negative fixture"
+    "npm run check:mapper-output:negative",
+    "npm run check:spine"
   ]
 }

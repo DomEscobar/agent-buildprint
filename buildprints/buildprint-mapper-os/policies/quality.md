@@ -9,7 +9,7 @@ A Mapper OS output is acceptable only when:
 - scanner hints remain non-authoritative;
 - every observed claim has source evidence;
 - capability boundaries are product-behavior boundaries, not folder boundaries;
-- included capabilities have contracts, verification, no-fake checks, execution slices, and a recorded implementation depth status;
+- included capabilities have contracts, verification, no-fake checks, capability packets, and a recorded implementation depth status;
 - scope preservation is not enough: selected outputs must also preserve quality/depth by distinguishing real implementation from contract seams, blockers, and fake placeholders;
 - medium, large, UI-bearing, provider-backed, or full-suite outputs include an architecture topology gate instead of accepting flat route/static-shell prototypes as product-quality implementation;
 - missing evidence is marked `QUESTION`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, or `INCLUDED_RISKY_REQUIRES_HARDENING`;

@@ -1,12 +1,32 @@
-# Start Here
+# START_HERE
 
-1. Read `blueprint.yaml`.
-2. Read `02-context/context-map.yaml`.
-3. Read `PRE_IMPLEMENTATION_QUESTIONS.md`; ask unresolved blockers or apply its safe defaults before coding.
-4. Read `02-context/team-stack.yaml` and execute required team gates for the active capability.
-5. If the active capability is UI-bearing, read `02-context/ux-contract.md` and `02-context/design-quality-bar.md`; these are blocking gates, not optional polish.
-6. Read only the active capability packet named there.
-7. Run or block the active proof contract.
-8. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.
+Build from this capability-packet v4, not from the original source repository.
 
-The packet is evidence-gated. `09-evidence/evidence-ledger.jsonl` is the immutable seed downloaded with the package; `.buildprint/evidence/evidence-ledger.jsonl` is the writable runtime evidence ledger. Claim promotion comes from runtime evidence rows, not from prose.
+## Current State
+
+- Qualification: `SELECTED_UNQUALIFIED`
+- Active capability: `03-capabilities/05-media-preview-export.md`
+- Runtime evidence ledger: `.buildprint/evidence/evidence-ledger.jsonl`
+- Immutable seed ledger: `09-evidence/evidence-ledger.jsonl`
+
+## Before Coding
+
+1. Read `blueprint.yaml` for the machine contract.
+2. Read `PRE_IMPLEMENTATION_QUESTIONS.md`; ask only unresolved blockers, otherwise apply its safe defaults.
+3. Read `02-context/team-stack.yaml` and execute the blocking team gates.
+4. For UI-bearing work, read `02-context/ux-contract.md` and `02-context/design-quality-bar.md` before implementation.
+5. Read only the active capability: `03-capabilities/05-media-preview-export.md`.
+
+## Working Rules
+
+- Do not claim live provider/runtime qualification from deterministic adapters.
+- Do not claim persistence without restart/readback/delete/export proof where applicable.
+- Do not claim UI proof from static labels or screenshots disconnected from real state.
+- Record proof and blockers in `.buildprint/evidence/evidence-ledger.jsonl`.
+- Stop on missing proof, secret exposure, destructive uncertainty, provider ambiguity, or no-fake failure.
+
+## First Move
+
+Implement and prove `03-capabilities/05-media-preview-export.md`. Only after proof or blocker rows close it honestly, consult `03-capabilities/capability-index.yaml` for the next dependency-ready slice.
+
+Evidence ledger closure is required before any claim upgrade.

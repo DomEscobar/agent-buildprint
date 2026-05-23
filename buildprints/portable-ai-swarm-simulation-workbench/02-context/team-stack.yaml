@@ -1,32 +1,31 @@
-schema_version: mapper-os/team-stack.v1
-quality_tier: agent-grade
-forbidden_tiers:
-  - lazy
-  - simple
-  - quick
-teams:
-  product-architect:
-    required: true
-    owns: [workflow, capability_dependencies, product_depth]
-  ux-ui-craft:
-    required: true
-    owns: [workbench_ui, graph_visualization, responsive_states, browser_proof]
-  integration-runtime:
-    required: true
-    owns: [api_contracts, async_tasks, providers, simulation_worker, polling]
-  data-persistence:
-    required: true
-    owns: [projects, uploads, simulations, reports, restart_readback, delete_reset]
-  security-boundary:
-    required: true
-    owns: [uploads, secrets, provider_logs, subprocess_controls, destructive_actions]
-  test-and-verification:
-    required: true
-    owns: [unit_tests, integration_tests, browser_tests, no_fake_scan, evidence_ledger]
-fresh_review_triggers:
-  - uploads
-  - external_providers
-  - subprocess_runtime
-  - user_data_operations
-  - destructive_actions
-  - provider_logs
+schema_version: mapper-os/team-stack.v2
+selected_teams:
+  - id: product-architect
+    blocking_gates: [scope_preservation, architecture_topology, product_depth]
+    required_evidence: [obligation_trace, topology_decision, no_scope_shrink]
+  - id: ux-ui-craft
+    blocking_gates: [ux_contract, design_quality_bar, screenshot_state_set]
+    required_evidence: [browser_runtime_trace, responsive_states, accessibility_review]
+  - id: integration-runtime
+    blocking_gates: [api_provider_runtime, async_jobs, external_side_effects]
+    required_evidence: [provider_mode_disclosure, runtime_trace_or_blocker]
+  - id: data-persistence
+    blocking_gates: [durable_state, restart_readback, delete_export]
+    required_evidence: [persistence_roundtrip_or_blocker]
+  - id: security-boundary
+    blocking_gates: [uploads, secrets, subprocess_runtime, destructive_actions]
+    required_evidence: [security_fixture_pass, secret_redaction_scan]
+  - id: test-and-verification
+    blocking_gates: [proof_commands, negative_tests, evidence_ledger]
+    required_evidence: [test_results, blocker_rows, no_fake_scan]
+review_order:
+  - product-architect
+  - integration-runtime
+  - data-persistence
+  - security-boundary
+  - ux-ui-craft
+  - test-and-verification
+forbidden:
+  - quality-tier selection by user
+  - lazy/simple/quick team choices
+  - treating team packs as optional polish

@@ -1,0 +1,6 @@
+test_matrix:
+  - id: <test-id>
+    capability_id: <capability-id>
+    type: <positive|negative|browser|persistence|security|provider>
+    command_or_artifact: <proof command or artifact path>
+    required_for_claim: <claim-or-not-applicable>

@@ -12,13 +12,13 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 
 ## Selected Output Fixtures
 
-- `selected-output-fixtures/executable-packet-good` - positive regression for the v2 executable packet shape with `blueprint.yaml`, context routing, team/UX gates, capability YAML, proof contracts, and an evidence ledger.
-- `selected-output-fixtures/v2-missing-obligation-routing` - negative regression for source surfaces/capabilities that do not route to product obligations.
-- `selected-output-fixtures/v2-missing-proof-contract` - negative regression for a capability packet without `proof-contract.yaml`.
-- `selected-output-fixtures/v2-stale-generated-prompt` - negative regression for a generated prompt that is treated as source of truth or lacks `Generated from: blueprint.yaml`.
-- `selected-output-fixtures/v2-claimed-proof-without-evidence` - negative regression for `QUALIFIED_SOURCE_INDEPENDENT` without passing evidence-ledger rows.
-- `selected-output-fixtures/v2-missing-pre-questions` - negative regression for executable packets that skip the pre-implementation question gate.
-- `selected-output-fixtures/v2-ui-missing-team-ux` - negative regression for UI-bearing executable packets without `02-context/team-stack.yaml`, `ux-contract.md`, or `design-quality-bar.md`.
+- `selected-output-fixtures/executable-packet-good` - positive regression for the capability-packet v4 shape with `blueprint.yaml`, context routing, team/UX gates, capability packets, proof gates, and an evidence ledger.
+- `selected-output-fixtures/v4-missing-obligation-routing` - negative regression for source surfaces that do not route to product obligations.
+- `selected-output-fixtures/v4-missing-proof-gate` - negative regression for an capability packet without a `## Proof gate` section.
+- `selected-output-fixtures/v4-stale-generated-prompt` - negative regression for a generated prompt that is treated as source of truth or lacks `Generated from: blueprint.yaml`.
+- `selected-output-fixtures/v4-claimed-proof-without-evidence` - negative regression for `QUALIFIED_SOURCE_INDEPENDENT` without passing runtime evidence-ledger rows.
+- `selected-output-fixtures/v4-missing-pre-questions` - negative regression for capability packets that skip the pre-implementation question gate.
+- `selected-output-fixtures/v4-ui-missing-team-ux` - negative regression for UI-bearing capability packets without `02-context/team-stack.yaml`, `ux-contract.md`, or `design-quality-bar.md`.
 
 ## Run From Source Checkout
 
@@ -36,7 +36,7 @@ Run:
 npm run check:mapper-output
 ```
 
-Negative v2 fixtures are intentionally excluded from the passing script. They must fail through:
+Negative v4 fixtures are intentionally excluded from the passing script. They must fail through:
 
 ```bash
 npm run check:mapper-output:negative
@@ -52,5 +52,5 @@ The eval must prove:
 - environment variable names are preserved but secret values are absent;
 - known high-value candidate titles appear where expected;
 - malicious fixture instructions do not become output content;
-- generated selected/full-suite output is executable-packet v2 only: `blueprint.yaml`, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI UX/design contracts, complete capability YAML packets, proof contracts, and `09-evidence/evidence-ledger.jsonl`;
-- legacy selected-output v1 files are absent.
+- generated selected/full-suite output is capability-packet v4 only: `blueprint.yaml`, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/context-map.yaml`, `02-context/team-stack.yaml`, UI UX/design contracts, `03-capabilities/capability-index.yaml`, capability packet Markdown files, proof gates, and `09-evidence/evidence-ledger.jsonl`;
+- legacy selected-output v1/v2 files and fragmented per-capability mini-files are absent.

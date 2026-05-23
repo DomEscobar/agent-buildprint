@@ -2,21 +2,21 @@
 import { spawnSync } from 'node:child_process';
 
 const fixtures = [
-  ['v2 missing obligation routing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v2-missing-obligation-routing/selected-buildprint'],
-  ['v2 missing proof contract', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v2-missing-proof-contract/selected-buildprint'],
-  ['v2 stale generated prompt', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v2-stale-generated-prompt/selected-buildprint'],
-  ['v2 missing pre questions', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v2-missing-pre-questions/selected-buildprint'],
-  ['v2 UI missing team UX gates', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v2-ui-missing-team-ux/selected-buildprint'],
-  ['v2 claimed proof without evidence', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v2-claimed-proof-without-evidence/selected-buildprint'],
+  ['v4 missing obligation routing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-missing-obligation-routing/selected-buildprint'],
+  ['v4 missing proof gate', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-missing-proof-gate/selected-buildprint'],
+  ['v4 stale generated prompt', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-stale-generated-prompt/selected-buildprint'],
+  ['v4 missing pre questions', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-missing-pre-questions/selected-buildprint'],
+  ['v4 UI missing team UX gates', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-ui-missing-team-ux/selected-buildprint'],
+  ['v4 claimed proof without evidence', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/v4-claimed-proof-without-evidence/selected-buildprint'],
 ];
 
 const expectations = new Map([
-  ['v2 missing obligation routing', /capability\.yaml must route to at least one product obligation|source-surface-map\.md must route surfaces to product obligations|product-obligations\.md must define obligation IDs/i],
-  ['v2 missing proof contract', /missing proof-contract\.yaml/i],
-  ['v2 stale generated prompt', /generated\/agent-prompt\.md must declare Generated from: blueprint\.yaml|generated\/agent-prompt\.md must say it is not source of truth/i],
-  ['v2 missing pre questions', /missing executable packet file PRE_IMPLEMENTATION_QUESTIONS\.md|START_HERE\.md must route through PRE_IMPLEMENTATION_QUESTIONS\.md|context-map\.yaml must include PRE_IMPLEMENTATION_QUESTIONS\.md/i],
-  ['v2 UI missing team UX gates', /missing executable packet file 02-context\/team-stack\.yaml|missing executable packet file 02-context\/ux-contract\.md|missing executable packet file 02-context\/design-quality-bar\.md|team-stack\.yaml/i],
-  ['v2 claimed proof without evidence', /QUALIFIED_SOURCE_INDEPENDENT requires passing evidence-ledger row/i],
+  ['v4 missing obligation routing', /source-surface-map\.md must route surfaces to product obligations|source surface disposition labels/i],
+  ['v4 missing proof gate', /03-capabilities\/01-ingest-record\.md missing required section ## Proof gate|missing Proof gate/i],
+  ['v4 stale generated prompt', /generated\/agent-prompt\.md must declare Generated from: blueprint\.yaml|generated\/agent-prompt\.md must say it is not source of truth/i],
+  ['v4 missing pre questions', /missing executable packet file PRE_IMPLEMENTATION_QUESTIONS\.md|START_HERE\.md must route through PRE_IMPLEMENTATION_QUESTIONS\.md|context-map\.yaml must include PRE_IMPLEMENTATION_QUESTIONS\.md/i],
+  ['v4 UI missing team UX gates', /missing executable packet file 02-context\/team-stack\.yaml|team-stack\.yaml/i],
+  ['v4 claimed proof without evidence', /QUALIFIED_SOURCE_INDEPENDENT requires passing evidence-ledger row/i],
 ]);
 
 let failures = 0;

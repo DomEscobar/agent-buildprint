@@ -2,7 +2,7 @@
 
 Use this Buildprint to map a source project into a source-independent Buildprint package.
 
-Mapper OS is run by an agent. It reads source, records evidence, distills capability contracts, and produces either discovery output or a selected `selected-buildprint/` package.
+Mapper OS is run by an agent. It reads source, records evidence, distills product obligations, and produces either discovery output or a selected `selected-buildprint/` execution packet.
 
 ## Start Here
 
@@ -15,7 +15,7 @@ Read:
 5. `EXECUTION_PROTOCOL.md`
 6. `VERIFICATION.md`
 
-For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read the executable packet router: `BUILDPRINT.md`, `START_HERE.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/team-stack.yaml`, then only the active capability packet. `03-capabilities/capability-index.yaml` is consulted after proof to choose the next dependency-ready pack.
+For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read: `BUILDPRINT.md`, `START_HERE.md`, `blueprint.yaml`, `02-context/context-map.yaml`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `02-context/team-stack.yaml`, then only the active capability named by the context map. `03-capabilities/capability-index.yaml` is consulted after proof to choose the next dependency-ready slice.
 
 ## Default Behavior
 
@@ -24,13 +24,13 @@ For generated selected packages, downstream implementers should not read all Mar
 - Selected output must include a pre-implementation question gate so downstream agents ask or safely default the few decisions that change quality/security.
 - Treat scanner output as hints only.
 - Keep output discovery-only until scope is selected.
-- Preserve requested scope; sequence implementation into slices, but do not hide broad/blocked/unproven capabilities.
-- Produce capability packs for medium, large, and full-suite selected outputs.
+- Preserve requested scope; sequence implementation into capability packets, but do not hide broad/blocked/unproven behavior.
+- Produce capability-packet packets for medium, large, and full-suite selected outputs.
 - Emit implementation signals so the downstream harness can choose an appropriate builder team/passes without Mapper OS prescribing architecture.
 
 ## Selected Output
 
-Selected output belongs under `selected-buildprint/`. Mapper OS output must be an executable packet:
+Selected output belongs under `selected-buildprint/`. Mapper OS output must be an capability-packet v4:
 
 ```text
 BUILDPRINT.md
@@ -50,9 +50,9 @@ blueprint.yaml
 generated/
 ```
 
-`BUILDPRINT.md` is a compatibility router. `blueprint.yaml` is the machine contract, `02-context/` owns routing and team/UX gates, `03-capabilities/` owns capability packets, `08-evaluation/` defines required proof, and `09-evidence/evidence-ledger.jsonl` seeds the writable runtime ledger at `.buildprint/evidence/evidence-ledger.jsonl`, where agents record proof or blockers.
+`BUILDPRINT.md` is a package overview. `START_HERE.md` is the execution start, `blueprint.yaml` is the machine contract, `02-context/` owns routing and team/UX gates, `03-capabilities/` owns active vertical work packets, `08-evaluation/` defines required proof, and `09-evidence/evidence-ledger.jsonl` seeds the writable runtime ledger at `.buildprint/evidence/evidence-ledger.jsonl`, where agents record proof or blockers.
 
-Legacy selected-output v1 files are no longer accepted: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, and `capabilities/`.
+Purged legacy selected-output shapes are not accepted: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and per-capability mini-files.
 
 ## Qualification
 

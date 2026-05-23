@@ -1,4 +1,4 @@
-schema: agent-buildprint/acceptance.v2
+schema: agent-buildprint/acceptance.v3
 canonical_start: BUILDPRINT.md
 acceptance:
   safety:
@@ -14,7 +14,7 @@ acceptance:
       - root implementation scaffold
       - selected-buildprint without scope decision
   selected_output:
-    executable_packet_v2:
+    execution_packet_v3:
       required_root:
         - BUILDPRINT.md
         - START_HERE.md
@@ -28,21 +28,27 @@ acceptance:
         - 02-context/source-evidence-index.yaml
         - 03-capabilities/capability-index.yaml
         - 08-evaluation/acceptance.yaml
+        - 08-evaluation/claim-upgrade-rules.yaml
+        - 09-evidence/evidence-ledger.schema.json
         - 09-evidence/evidence-ledger.jsonl
         - generated/agent-prompt.md
-      required_capability_packet:
-        - capability.yaml
-        - source-evidence.md
-        - product-contract.md
-        - implementation-workflow.md
-        - proof-contract.yaml
+      required_execution_slice_sections:
+        - Build target
+        - Required teams and gates
+        - Implementation path
+        - Stop rules
+        - Proof gate
+        - Unlocks
       generated_prompt_policy: generated_from_blueprint_not_authority
-      promotion_source: evidence_ledger
-    legacy_selected_output_v1:
+      promotion_source: runtime_evidence_ledger
+      runtime_evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+      packaged_evidence_ledger: immutable_seed_only
+    legacy_selected_output_v1_v2:
       status: forbidden
-      forbidden_root:
+      forbidden_paths:
         - CAPABILITY_INDEX.md
         - CONTEXT_PACKET.json
+        - SOURCE_SURFACE_COVERAGE.md
         - TEAM_STACK.md
         - UX_CONTRACT.md
         - DESIGN_QUALITY_BAR.md
@@ -50,7 +56,17 @@ acceptance:
         - EXECUTION_PROTOCOL.md
         - IMPLEMENTATION_PLAN.md
         - manifest.json
+        - 02-context/active-slice.yaml
+        - 03-capabilities/
+        - 07-execution/phases/
         - capabilities/
+        - generated/current-buildprint-compat/
+      forbidden_fragmented_files:
+        - capability.yaml
+        - source-evidence.md
+        - product-contract.md
+        - implementation-workflow.md
+        - proof-contract.yaml
     forbidden_default_files:
       - AGENT_EXECUTION_BRIEF.md
       - agent-contract.xml
@@ -65,7 +81,6 @@ acceptance:
       - CAPABILTY_INDEX.md
     forbidden_duplicate_spine_sets:
       - [HANDOFF.md, HANDOVER.md]
-    manifest_parity: required
   static_gates:
     - discover first and ask later
     - no broad pre-discovery questionnaire
@@ -74,12 +89,11 @@ acceptance:
     - selected scope explicit before selected extraction
     - source surface census exists before selected extraction
     - high-signal source surfaces have selected-output dispositions
-    - capability packs declare owned source surface IDs where mapped from source
+    - capability packets declare owned source surface IDs where mapped from source
     - source surface ownership connects to product obligations, blockers, intentional merges, or explicit exclusions
     - no route/function parity requirement
-    - no route/function dump accepted as capability discovery
-    - capability status classification complete
-    - selected output manifest matches actual files
+    - no route/function dump accepted as behavior discovery
+    - capability-packet status classification complete
     - selected output has no typo alias files
     - selected output has exactly one canonical handoff artifact
     - no mocks or fixtures counted as product implementation

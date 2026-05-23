@@ -1,94 +1,62 @@
-schema_version: mapper-os/source-evidence-index.v2
-repo: https://github.com/666ghj/MiroFish
-commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-local_observed_root: /root/MiroFish
-surfaces:
-- id: SRC-001
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: README.md
-  summary: product promise, workflow, and broad scope
-  status: OBSERVED
-  lines: 34-93
-  local_observed_path: /root/MiroFish/README.md
-- id: SRC-002
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: backend/app/config.py
-  summary: provider, upload, chunking, simulation, and report configuration
-  status: OBSERVED
-  lines: 14-78
-  local_observed_path: /root/MiroFish/backend/app/config.py
-- id: SRC-003
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: backend/app/api/graph.py
-  summary: project, upload, ontology, graph task, graph data, delete/reset routes
-  status: OBSERVED
-  lines: 36-622
-  local_observed_path: /root/MiroFish/backend/app/api/graph.py
-- id: SRC-004
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: backend/app/api/simulation.py
-  summary: entity, simulation creation, preparation, config/profile, start/stop/run-status/history
-    routes
-  status: OBSERVED
-  lines: 48-1740
-  local_observed_path: /root/MiroFish/backend/app/api/simulation.py
-- id: SRC-005
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: backend/app/api/report.py
-  summary: report generation, report retrieval/lifecycle, chat, progress/section routes
-  status: OBSERVED
-  lines: 25-620
-  local_observed_path: /root/MiroFish/backend/app/api/report.py
-- id: SRC-006
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: backend/app/services/*
-  summary: graph, ontology, profile, simulation, report, Zep tools, IPC, runtime services
-  status: OBSERVED
-  local_observed_path: /root/MiroFish/backend/app/services/*
-- id: SRC-007
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: backend/app/models/project.py
-  summary: project persistence model and file/text storage
-  status: OBSERVED
-  lines: 17-280
-  local_observed_path: /root/MiroFish/backend/app/models/project.py
-- id: SRC-008
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: backend/app/models/task.py
-  summary: in-memory async task status model
-  status: OBSERVED
-  lines: 16-172
-  local_observed_path: /root/MiroFish/backend/app/models/task.py
-- id: SRC-009
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: frontend/src/views/MainView.vue
-  summary: workbench shell, graph/split/workbench layout, step routing, upload-to-graph
-    flow
-  status: OBSERVED
-  lines: 1-260
-  local_observed_path: /root/MiroFish/frontend/src/views/MainView.vue
-- id: SRC-010
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: frontend/src/components/GraphPanel.vue
-  summary: graph visualization and details UI
-  status: OBSERVED
-  lines: 17-220
-  local_observed_path: /root/MiroFish/frontend/src/components/GraphPanel.vue
-- id: SRC-011
-  repo: https://github.com/666ghj/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-  path: package.json, backend/pyproject.toml, frontend/package.json
-  summary: stack and dependency evidence
-  status: OBSERVED
-  lines: 1-18 / 1-41 / 1-22
-  local_observed_path: /root/MiroFish/package.json
+schema_version: mapper-os/source-evidence-index.v3
+source_checkout: /root/MiroFish
+source_commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
+source_policy: evidence_only_do_not_require_for_implementation
+source_surfaces:
+  - id: SRC-003
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-001
+    capability_id: 01-ingestion-ontology
+    evidence:
+      - OBSERVED(/root/MiroFish/README.md:27-32) product promise: upload seed materials and natural-language prediction requirements, receive detailed report and interactive world.
+      - OBSERVED(/root/MiroFish/backend/app/api/graph.py:122-248) multipart ontology generation creates projects, saves files, extracts text, calls ontology generation, and returns project/ontology payload.
+      - OBSERVED(/root/MiroFish/backend/app/utils/file_parser.py:61-94) accepted parse formats are PDF, Markdown, and text.
+      - OBSERVED(/root/MiroFish/backend/app/models/project.py:17-73) project model includes status, files, ontology, graph id, requirement, and error state.
+  - id: SRC-004
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-002
+    capability_id: 02-graph-builder
+    evidence:
+      - OBSERVED(/root/MiroFish/README.md:86-93) workflow includes graph building, memory injection, and GraphRAG construction.
+      - OBSERVED(/root/MiroFish/backend/app/api/graph.py:260-522) graph build is asynchronous, updates task progress, creates graph memory, stores graph id, and records node/edge counts.
+      - OBSERVED(/root/MiroFish/backend/app/api/graph.py:534-622) task status, graph data retrieval, and graph deletion are exposed.
+      - OBSERVED(/root/MiroFish/frontend/src/components/GraphPanel.vue:17-220) UI visualizes graph state, loading/empty behavior, legend, and node/edge detail surfaces.
+  - id: SRC-005
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-003
+    capability_id: 03-simulation-setup
+    evidence:
+      - OBSERVED(/root/MiroFish/README.md:86-93) environment setup includes entity extraction, persona generation, and agent configuration injection.
+      - OBSERVED(/root/MiroFish/backend/app/api/simulation.py:165-229) simulation creation binds project and graph identifiers.
+      - OBSERVED(/root/MiroFish/backend/app/api/simulation.py:359-625) prepare flow validates simulation state, reads graph entities, generates profiles/config, and reports progress.
+      - OBSERVED(/root/MiroFish/frontend/src/components/Step2EnvSetup.vue:51-524) UI exposes profile/config generation, config detail panels, progress polling, and start readiness.
+  - id: SRC-006
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-004
+    capability_id: 04-simulation-runtime
+    evidence:
+      - OBSERVED(/root/MiroFish/README.md:86-93) simulation includes dual-platform parallel simulation and dynamic temporal memory updates.
+      - OBSERVED(/root/MiroFish/backend/app/api/simulation.py:1451-1700) runtime API starts, stops, force-restarts, and validates simulation readiness.
+      - OBSERVED(/root/MiroFish/backend/app/services/simulation_runner.py:196-305) runner responsibilities include background OASIS runs, realtime status, state reload, and stop/resume behavior.
+      - OBSERVED(/root/MiroFish/frontend/src/components/Step3Simulation.vue:376-564) UI starts/stops simulation, polls run status/detail, and surfaces platform completion/error state.
+  - id: SRC-007
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-005
+    capability_id: 05-report-interaction
+    evidence:
+      - OBSERVED(/root/MiroFish/README.md:86-93) workflow includes report generation and deep interaction with the post-simulation environment.
+      - OBSERVED(/root/MiroFish/backend/app/api/report.py:25-200) report generation is asynchronous and task-backed.
+      - OBSERVED(/root/MiroFish/backend/app/api/report.py:277-467) reports can be retrieved, listed, downloaded, and deleted.
+      - OBSERVED(/root/MiroFish/backend/app/api/report.py:472-564) ReportAgent chat uses simulation and graph context.
+      - OBSERVED(/root/MiroFish/frontend/src/components/Step4Report.vue:6-381) UI renders report progress, sections, logs, tool calls, and completion.
+      - OBSERVED(/root/MiroFish/frontend/src/components/Step5Interaction.vue:95-304) UI supports chat with ReportAgent and selected simulated agents.
+  - id: SRC-008
+    disposition: OWNED_BY_CAPABILITY
+    obligation_id: OBL-006
+    capability_id: 06-data-lifecycle
+    evidence:
+      - OBSERVED(/root/MiroFish/backend/app/models/project.py:101-305) project metadata, files, and extracted text are persisted under upload storage and support list/delete/readback.
+      - OBSERVED(/root/MiroFish/backend/app/api/graph.py:36-117) project list/get/reset/delete APIs manage lifecycle state.
+      - OBSERVED(/root/MiroFish/backend/app/api/simulation.py:788-987) simulations are listed and enriched into history-style records.
+      - OBSERVED(/root/MiroFish/backend/app/api/report.py:358-467) report lifecycle supports list/download/delete.
+      - OBSERVED(/root/MiroFish/frontend/src/components/HistoryDatabase.vue:16-184) history UI surfaces simulation status, files, reports, replay actions, and unavailable states.

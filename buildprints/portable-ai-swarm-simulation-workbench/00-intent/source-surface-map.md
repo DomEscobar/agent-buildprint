@@ -1,15 +1,12 @@
 # Source Surface Map
 
-- SRC-001: /root/MiroFish/README.md:34-93 product promise, workflow, and broad scope
-- SRC-002: /root/MiroFish/backend/app/config.py:14-78 provider, upload, chunking, simulation, and report configuration
-- SRC-003: /root/MiroFish/backend/app/api/graph.py:36-622 project, upload, ontology, graph task, graph data, delete/reset routes
-- SRC-004: /root/MiroFish/backend/app/api/simulation.py:48-1740 entity, simulation creation, preparation, config/profile, start/stop/run-status/history routes
-- SRC-005: /root/MiroFish/backend/app/api/report.py:25-620 report generation, report retrieval/lifecycle, chat, progress/section routes
-- SRC-006: /root/MiroFish/backend/app/services/* graph, ontology, profile, simulation, report, Zep tools, IPC, runtime services
-- SRC-007: /root/MiroFish/backend/app/models/project.py:17-280 project persistence model and file/text storage
-- SRC-008: /root/MiroFish/backend/app/models/task.py:16-172 in-memory async task status model
-- SRC-009: /root/MiroFish/frontend/src/views/MainView.vue:1-260 workbench shell, graph/split/workbench layout, step routing, upload-to-graph flow
-- SRC-010: /root/MiroFish/frontend/src/components/GraphPanel.vue:17-220 graph visualization and details UI
-- SRC-011: /root/MiroFish/package.json:1-18, /root/MiroFish/backend/pyproject.toml:1-41, /root/MiroFish/frontend/package.json:1-22 stack and dependency evidence
+| Surface ID | Disposition | Product obligation | Capability packet | Evidence |
+|---|---|---|---|---|
+| SRC-003 | OWNED_BY_CAPABILITY | OBL-001 | 01-ingestion-ontology | See `02-context/source-evidence-index.yaml` |
+| SRC-004 | OWNED_BY_CAPABILITY | OBL-002 | 02-graph-builder | See `02-context/source-evidence-index.yaml` |
+| SRC-005 | OWNED_BY_CAPABILITY | OBL-003 | 03-simulation-setup | See `02-context/source-evidence-index.yaml` |
+| SRC-006 | OWNED_BY_CAPABILITY | OBL-004 | 04-simulation-runtime | See `02-context/source-evidence-index.yaml` |
+| SRC-007 | OWNED_BY_CAPABILITY | OBL-005 | 05-report-interaction | See `02-context/source-evidence-index.yaml` |
+| SRC-008 | OWNED_BY_CAPABILITY | OBL-006 | 06-data-lifecycle | See `02-context/source-evidence-index.yaml` |
 
-Source evidence is for traceability only. Downstream implementers must rely on this packet, not the original checkout.
+Every high-signal source surface is routed to a product obligation, merged into an capability packet, blocked, or explicitly out of scope. Source evidence is traceability only; downstream implementers must not depend on the original checkout.

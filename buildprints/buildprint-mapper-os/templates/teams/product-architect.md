@@ -6,7 +6,7 @@ This is an original Mapper OS skill capsule. It may be informed by public archit
 
 ## Skill Capsule
 
-Run this pass before implementation planning and again before a capability is promoted to `REAL_IMPLEMENTED`.
+Run this pass before implementation planning and again before an capability packet is promoted to `REAL_IMPLEMENTED`.
 
 ### Architecture Blueprint Workflow
 
@@ -25,8 +25,8 @@ For medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime
 |---|---|---|
 | Context | users, systems, providers, stores, deployment boundary | `07-execution/implementation-plan.yaml` |
 | Component | UI/API/service/provider/storage/job/test modules | `03-capabilities/capability-index.yaml` |
-| Data flow | one real vertical slice from input to observable result | capability `IMPLEMENTATION.md` |
-| Cross-cutting | auth, errors, logging, validation, secrets, limits | `SECURITY.md`, `OBSERVABILITY.md`, capability pack |
+| Data flow | one real vertical slice from input to observable result | active capability file |
+| Cross-cutting | auth, errors, logging, validation, secrets, limits | `06-safety/`, `08-evaluation/`, active capability |
 | Decision notes | choice, alternatives, tradeoff, consequence | `07-execution/implementation-plan.yaml` |
 
 ### Boundary Decision Rules
@@ -46,7 +46,7 @@ Every non-tiny selected output must include decision notes:
 |---|---|---|---|---|
 |  |  |  |  |  |
 
-### First-Slice Topology Proof
+### First-Capability Topology Proof
 
 The first implementation slice must prove one real path:
 
@@ -67,7 +67,7 @@ If any segment is unavailable, keep the capability selected but downgrade it to 
 
 - Single-file app structure for medium/large/full-suite scopes.
 - UI-only shell without a real data path.
-- Diagram-only architecture without a first-slice topology proof.
+- Diagram-only architecture without a first-capability topology proof.
 - Route-shaped endpoints that do not call domain/service/storage/provider boundaries.
 - Seam-only adapters promoted as product-grade implementation.
 - In-memory-only product state when persistence or restart/readback is claimed.

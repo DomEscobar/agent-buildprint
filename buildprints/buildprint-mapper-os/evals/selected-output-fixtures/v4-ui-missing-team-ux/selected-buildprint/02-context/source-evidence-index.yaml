@@ -1,0 +1,7 @@
+source_surfaces:
+  - surface_id: SRC-INGEST-API
+    kind: api
+    evidence: OBSERVED(api/records.ts:1-20)
+    obligation_id: OBL-INGEST
+    disposition: OWNED_BY_SLICE
+
