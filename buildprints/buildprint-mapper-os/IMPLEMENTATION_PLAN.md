@@ -14,7 +14,7 @@ This file describes how to maintain Mapper OS itself.
 2. Keep executable-blueprint v5 templates aligned to the required package shape.
 3. Keep policies focused on evidence, no-fake behavior, minimal questions, and source independence.
 4. Keep fixture review under `evals/golden-projects/` as manual or agent-run regression input.
-5. Keep `agb analyze`, `agb check`, and `agb start` working; do not reintroduce `agb map`.
+5. Keep `agb check`, `agb start`, and isolated eval harnesses working; do not reintroduce `agb map` or `agb analyze`.
 
 ## Decision Log
 

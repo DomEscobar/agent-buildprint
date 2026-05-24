@@ -10,7 +10,7 @@ Mapper OS is an agent-run workflow for mapping source projects into source-indep
 
 - Align package docs and templates with `mapper-os-requirement.md`.
 - Remove legacy selected-output defaults.
-- Preserve `agb analyze`, `agb check`, and `agb start`.
+- Preserve `agb check`, `agb start`, and isolated eval harnesses; `agb analyze` is intentionally removed.
 
 ## Completed
 

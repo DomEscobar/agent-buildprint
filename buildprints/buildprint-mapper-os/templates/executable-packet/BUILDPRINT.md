@@ -1,17 +1,17 @@
 # BUILDPRINT: <mapped-app>
 
-This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files.
+This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files. Your first action must be reading this file; do not inventory, glob, or enumerate packet files before this read order is established.
 
 ## Required read order
 
-1. Read this `BUILDPRINT.md`.
+1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.
 2. Read `01-questions.md`.
 3. Read and complete `02-project-setup.md`.
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
 6. Read only the active phase file: `03-phases/01-example-phase.md`.
 7. Read `04-evaluation.md`.
-8. Append proof or blocker rows to `05-evidence/evidence-ledger.jsonl`.
+8. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 
 ## Project setup gate
 
@@ -40,7 +40,7 @@ If verification fails, route back before editing again:
 - architecture contradiction -> `02-project-setup.md`
 - missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
 - missing dependency -> required prior phase
-- external blocker -> `05-evidence/evidence-ledger.jsonl`
+- external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`
 
 Do not mark a phase complete while its verification failure is unresolved.
 

@@ -87,3 +87,5 @@ If this phase fails verification, return here before editing again. Re-read prod
 - missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
 - missing dependency -> required prior phase from `03-phases/phase-index.yaml`
 - external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`
+
+- Bad ambiguous reference: `missing-contract.md`

@@ -26,6 +26,18 @@ selected-buildprint/
 
 `schema_version` must be `mapper-os/executable-blueprint.v5`.
 
+## Scaffold preservation contract
+
+Start from `templates/executable-packet/` as the structural authority. Preserve the current scaffold keys, headings, and validator tokens exactly, then fill source-specific content around them. Do not paraphrase or rename the scaffold just because a synonym reads better.
+
+Required exact anchors include:
+
+- `blueprint.yaml`: `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure.proof_gate_failed: current_phase`, `repair_loop.on_failure.architecture_contradiction: 02-project-setup.md`.
+- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Required read order`, `## Project setup gate`, `## Implementation loop`, and `## Repair routing`.
+- `01-questions.md`: use headings `## 1.` through `## 6.` and include the exact AI-best-judgment default phrase below.
+- `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
+- `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, and `no_fake`.
+
 `generated/agent-prompt.md` must declare `Generated from: blueprint.yaml` and state that it is not source of truth.
 
 Do **not** place `AGENTS.md` in `selected-buildprint/` or inside the Buildprint packet. `AGENTS.md` belongs to the downstream implementation project. `02-project-setup.md` defines the root/local `AGENTS.md` plan.
@@ -53,7 +65,7 @@ Do not emit:
 
 ## Read order and execution protocol
 
-`BUILDPRINT.md` must route agents through:
+`BUILDPRINT.md` must route agents through this exact first-action protocol. The downstream runner must read `BUILDPRINT.md` before inventorying, globbing, or enumerating packet files; file discovery is allowed only after `BUILDPRINT.md` has established the read order:
 
 1. `BUILDPRINT.md`
 2. `01-questions.md`
@@ -79,7 +91,7 @@ Use numbered questions, not a vague blob. Include exactly these question areas:
 
 Default rule:
 
-> If blank, AI chooses the best-fit implementation path. Prefer high-quality, maintainable, secure, polished outcomes. Favor simplicity unless source evidence or product goals prove complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
+> Use AI best judgment to produce the highest-quality appropriate implementation. Prefer clean architecture, excellent UX/UI, strong security, maintainable code, real persistence where needed, and proof-backed completion. Favor simplicity unless source evidence or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
 ## 02-project-setup.md
 
@@ -104,7 +116,14 @@ Replace capabilities with phases, but keep capability discipline inside them.
 
 A phase is **not** a waterfall time bucket. A phase is a proof-gated vertical product slice.
 
-`03-phases/phase-index.yaml` must include `active_phase`, `phase_id`, `file`, `status`, dependencies, and proof gate.
+`03-phases/phase-index.yaml` must include `active_phase`, `phase_id`, `file`, `status`, dependencies, and proof gate. `active_phase` and every `file` value must point to the full packet-relative phase file path under `03-phases/`.
+
+Phase identity rules:
+
+- Use one canonical `phase_id` per phase everywhere: `phase-index.yaml`, `blueprint.yaml`, phase files, proof gates, and seed evidence rows.
+- Prefer stable numbered IDs that match the phase filename, e.g. `01-ingestion-ontology`, not both `ingestion-ontology` and `01-ingestion-ontology`.
+- Do not use `capability_id` for phase proof instructions. Runtime proof rows must use `phase_id`.
+- For stateful workflows, dependencies must model the source-backed execution order. Do not emit `depends_on: []` for every phase unless the packet explicitly justifies independent parallel phases.
 
 Every `03-phases/*.md` file must include:
 
@@ -120,6 +139,8 @@ Every `03-phases/*.md` file must include:
 - `## Repair routing`
 
 Interfaces, state/runtime, UX, and safety live inline in each phase unless the project genuinely needs a larger shared contract.
+
+UI-bearing phases must not reference non-existent shared files such as `02-context/ux-contract.md` or `design-quality-bar.md`. Put the UX/UI contract inline in the phase or add an actual packet file and list it in the package.
 
 ## Implementation loop
 
@@ -140,6 +161,7 @@ If verification fails, route back before editing again:
 - missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
 - missing dependency -> required prior phase
 - external blocker -> `05-evidence/evidence-ledger.jsonl`
+- runtime proof/blocker row -> `.buildprint/evidence/evidence-ledger.jsonl` in the implementation workspace
 
 Do not mark a phase complete while its verification failure is unresolved.
 
@@ -149,13 +171,16 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 `05-evidence/evidence-ledger.schema.json` must require `phase_id`, `proof_type`, `provider_mode`, and `upgrades_claim`.
 
-`05-evidence/evidence-ledger.jsonl` is the packaged seed ledger. Runtime/implementation may copy from it, but claims only upgrade from passing evidence rows.
+`05-evidence/evidence-ledger.jsonl` is the packaged immutable seed ledger. Runtime/implementation may copy from it, but implementation proof and blockers are appended only to `.buildprint/evidence/evidence-ledger.jsonl`; claims only upgrade from passing runtime evidence rows with canonical `phase_id`.
 
 ## Extraction rules
 
 - Convert source facts into source-independent product obligations inside setup and phase files.
+- Include a `## Source capability/surface ledger` in `02-project-setup.md`. It must account for high-signal source surfaces (routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime) with: source anchor, source capability, target disposition (`preserve`, `replace`, `merge`, `defer`, or `drop`), target contract, compatibility impact, and owning phase/blocker destination.
+- Treat route/function/file names as evidence anchors and compatibility signals, not mandatory clone targets. Do not require 1:1 route/function parity unless the source route/function is the real product boundary. The target may improve, rename, merge, or redesign surfaces when the equivalent capability and compatibility impact are explicit.
+- Clearly distinguish file-reference roles. A backticked file-ish reference ending in `.md`, `.yaml`, `.json`, or `.jsonl` must either be an actual packet file in `selected-buildprint/` or be role-labeled in the same sentence/line as a source path/source anchor, runtime artifact/generated output, or downstream implementation project file. Do not leave naked ambiguous refs such as “writes `report.md`”. Write “writes runtime artifact `report.md`” instead.
+- Only actual packet files are packet links. Source repository files such as package manifests/lockfiles/route files must be labeled as source paths, not ambiguous packet-file references. Runtime artifacts such as `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, `section_XX.md`, upload paths, report files, provider output files, or `<id>` paths must be labeled as runtime artifact paths and should not be written as ambiguous packet-file references.
 - Preserve selected/requested behavior. Do not omit hard/risky/external/provider/stateful behavior; mark blockers honestly when proof is missing.
-- Do not map routes/functions 1:1 unless that is the real product boundary.
 - Include stable-vs-free boundaries inside relevant phase files.
 - Include source evidence refs inside each phase.
 - Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
@@ -168,3 +193,19 @@ Before handoff, ask:
 > What source-backed product behavior, workflow, integration boundary, persistence behavior, auth/security rule, job/runtime behavior, import/export, or operational requirement would be impossible to rebuild from this Buildprint?
 
 Any identified loss must become a phase, a blocker, an explicit user-approved exclusion, or a documented merge into another phase.
+
+## Required self-check before handoff
+
+Before returning selected output, run the product-facing packet check when the CLI is available:
+
+```bash
+node /root/blueprint/bin/agb.js packet check <selected-buildprint-dir>
+```
+
+If working inside the `/root/blueprint` repository, also run:
+
+```bash
+node /root/blueprint/scripts/check-mapper-selected-output.mjs <selected-buildprint-dir>
+```
+
+A generated packet that fails these checks is not ready. Fix the root structural cause in the packet output rather than explaining the failure away.

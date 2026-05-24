@@ -5,10 +5,6 @@ import os from 'node:os'
 import { fileURLToPath } from 'node:url'
 import crypto from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { buildAnalyzePacket } from '../src/analyze/build-packet.js'
-import { formatPacketMarkdown } from '../src/analyze/format-markdown.js'
-import { formatPacketJson } from '../src/analyze/format-json.js'
-import { formatPacketYaml } from '../src/analyze/format-yaml.js'
 
 const cwd = process.cwd()
 const cliDir = path.dirname(fileURLToPath(import.meta.url))
@@ -31,7 +27,6 @@ function usage(exitCode = 0) {
   console.log(`Agent Buildprint
 
 Usage:
-  agb analyze <buildprint-folder> [--phase <id>] [--json] [--yaml]
   agb check <blueprint-folder> [--code <generated-code-folder>]
   agb start <buildprint-package-json-url-or-file> [target-folder]
   agb packet check <packet-folder-or-package-json-url>
@@ -39,9 +34,6 @@ Usage:
   agb evidence check <evidence-ledger-jsonl>
 
 Examples:
-  agb analyze ./buildprints/buildprint-mapper-os
-  agb analyze ./buildprints/portable-novel-storyboard-pipeline --phase 04-workbench-ui
-  agb analyze ./buildprints/buildprint-mapper-os --json
   agb check ./my-buildprint
   agb check ./my-buildprint --code ./my-agent
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json ./my-build
@@ -1551,7 +1543,7 @@ function formatMapReviewProtocol(packet) {
   return [
     '# Mapped Buildprint AI Review Protocol',
     '',
-    'This file mirrors the `agb analyze` review-packet pattern for mapped existing projects.',
+    'This file is legacy map-review scaffolding retained only for removed map command history.',
     '',
     '## Protocol',
     '',
@@ -2497,7 +2489,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       rules: [
         'agb map bootstraps a guided discovery workbench and explicit promotion gate.',
         'Scanner census hints are not product facts and cannot qualify routes, APIs, providers, persistence, or parity.',
-        'agb analyze reviews existing Buildprints or mapped packages analytically.',
+        'Isolated eval harnesses review Mapper OS packets and downstream outcomes.',
         'No separate top-level qualify command is required for the core product flow.',
         'Side effects, auth, privacy, and external behavior require runtime/test proof before final promotion.',
         'Blocked unknowns must remain explicit and must not enter parity claims.'
@@ -2854,7 +2846,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   writeOut('quality/NO_FAKE_CHECKS.md', implementationCompletenessMd)
   writeOut('quality/SECURITY_PRIVACY_REVIEW.md', needsThreatModel ? threatModelMd : '# SECURITY_PRIVACY_REVIEW\n\nNo high-risk security surface detected by static mapper; still validate before qualification.\n')
   writeOut('quality/OBSERVABILITY.md', observabilityMd)
-  writeOut('quality/PROMOTION_GATE.md', ['# PROMOTION_GATE', '', `Promotion status: ${manifestJson.qualificationStatus}`, '', '- `agb map` is allowed to generate evidence-backed draft packages only.', '- `agb analyze` is the analytic review surface for existing mapped packages.', '- Final `QUALIFIED_BUILDPRINT` requires readable source evidence plus runtime/test proof where required.', '- Scope preservation alone is insufficient; broad/product scopes also require architecture topology evidence and a capability depth matrix.', '- Route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, and flat single-file prototypes are not product implementation unless proven by the applicable gates.', '- If any record is `blocked_unknown`, implementation phases may use it only as an open question or excluded scope.', ''].join('\n'))
+  writeOut('quality/PROMOTION_GATE.md', ['# PROMOTION_GATE', '', `Promotion status: ${manifestJson.qualificationStatus}`, '', '- `agb map` is allowed to generate evidence-backed draft packages only.', '- Isolated eval harnesses are the analytic review surface for mapped packages.', '- Final `QUALIFIED_BUILDPRINT` requires readable source evidence plus runtime/test proof where required.', '- Scope preservation alone is insufficient; broad/product scopes also require architecture topology evidence and a capability depth matrix.', '- Route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, and flat single-file prototypes are not product implementation unless proven by the applicable gates.', '- If any record is `blocked_unknown`, implementation phases may use it only as an open question or excluded scope.', ''].join('\n'))
 
   writeOut('evidence/README.md', '# Evidence\n\nSource evidence, coverage, validation logs, and review packet.\n')
   writeOut('evidence/SOURCE_EVIDENCE.md', '# SOURCE_EVIDENCE\n\n- Facts: `../facts.json` or root `facts.json`\n- Files scanned: ' + facts.totalFilesScanned + '\n- Routes: ' + facts.routes.length + '\n- APIs: ' + facts.apis.length + '\n- Tests: ' + facts.tests.length + '\n')
@@ -2996,6 +2988,7 @@ function packetCheckResults(dir) {
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
   ok('blueprint declares executable-blueprint v5 authority', /schema_version:\s*mapper-os\/executable-blueprint\.v5/i.test(blueprint) && /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
   ok('blueprint includes project setup gate', /questions:\s*01-questions\.md/i.test(blueprint) && /project_setup:\s*02-project-setup\.md/i.test(blueprint))
+  ok('blueprint source fields are nested under source', !/\nsource:\s*\ninput:/i.test(`\n${blueprint}`))
   ok('blueprint includes implementation loop', /observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint))
   ok('blueprint includes repair routing', /proof_gate_failed:\s*current_phase/i.test(blueprint) && /architecture_contradiction:\s*02-project-setup\.md/i.test(blueprint))
   const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
@@ -3007,17 +3000,24 @@ function packetCheckResults(dir) {
   ok('project setup defines architecture and AGENTS plan', /## Architecture rules/i.test(setup) && /## AGENTS\.md plan/i.test(setup) && /## Phase start gate/i.test(setup))
   const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
   ok('phase index names active proof-gated phase', /active_phase:\s*03-phases\//i.test(phaseIndex) && /phase_id:/i.test(phaseIndex) && /proof_gate:/i.test(phaseIndex))
+  const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
+  const phaseIdSet = new Set(phaseIds)
+  ok('phase index has unique canonical phase ids', phaseIds.length === phaseIdSet.size)
   const phaseDir = path.join(dir, '03-phases')
   const phases = exists(phaseDir) ? fs.readdirSync(phaseDir).filter((file) => file.endsWith('.md')).sort() : []
   ok('packet has at least one phase file', phases.length > 0)
   for (const file of phases) {
     const text = safeReadText(path.join(phaseDir, file))
     ok(`${file} includes inline interfaces/state/proof/repair`, /## Interfaces touched/i.test(text) && /## State\/runtime touched/i.test(text) && /## Proof gate/i.test(text) && /## Repair routing/i.test(text))
+    ok(`${file} uses phase_id not capability_id for proof rows`, !/capability_id\s*:/i.test(text))
+    ok(`${file} does not reference missing shared UX context`, !/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text))
   }
   const rules = safeReadText(path.join(dir, '04-evaluation.md'))
   for (const key of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) ok(`evaluation includes ${key}`, rules.includes(key))
   const schema = safeReadText(path.join(dir, '05-evidence/evidence-ledger.schema.json'))
   for (const key of ['phase_id', 'proof_type', 'provider_mode', 'upgrades_claim']) ok(`evidence schema includes ${key}`, schema.includes(key))
+  const seedRows = safeReadText(path.join(dir, '05-evidence/evidence-ledger.jsonl')).split(/\r?\n/).map((line) => line.trim()).filter(Boolean).flatMap((line) => { try { return [JSON.parse(line)] } catch { return [] } })
+  ok('seed evidence phase ids match phase index', seedRows.every((row) => !row.phase_id || phaseIdSet.has(row.phase_id)))
   return checks
 }
 
@@ -3266,23 +3266,10 @@ if (args.length === 0 || isHelp(args[0])) usage(0)
 
 
 if (args[0] === 'analyze') {
-  if (isHelp(args[1])) usage(0)
-  const folder = args[1]
-  if (!folder) usage(1)
-  try {
-    const phase = optionValue('--phase')
-    if (args.includes('--strict')) throw new Error('unsupported option for analyze: --strict; agb analyze now emits review packets instead of pass/fail verdicts')
-    if (args.includes('--scan')) throw new Error('unsupported option for analyze: --scan; use default Markdown, --json, or --yaml packet output')
-    const json = args.includes('--json')
-    const yaml = args.includes('--yaml')
-    const packet = buildAnalyzePacket(folder, { phase })
-    process.stdout.write(json ? formatPacketJson(packet) : yaml ? formatPacketYaml(packet) : formatPacketMarkdown(packet))
-    process.exit(0)
-  } catch (error) {
-    console.error(`Analyze failed: ${error.message}`)
-    process.exit(1)
-  }
+  console.error('agb analyze has been removed. Use isolated eval harnesses such as npm run eval:mapper-replay or npm run eval:mirofish-flow.')
+  process.exit(1)
 }
+
 
 
 

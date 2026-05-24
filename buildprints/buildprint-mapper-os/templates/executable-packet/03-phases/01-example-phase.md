@@ -8,6 +8,10 @@ Describe the working product slice this phase delivers.
 
 List source surfaces and product obligations this phase preserves.
 
+## Source surface dispositions
+
+For each source-backed surface this phase owns, state disposition as preserve, replace, merge, defer, or drop. If not preserved exactly, name the equivalent target behavior and compatibility impact. Do not require route/function parity unless it is the product boundary.
+
 ## Implementation scope
 
 Describe the smallest real vertical implementation path.
@@ -23,6 +27,7 @@ Describe the smallest real vertical implementation path.
 - Database/persistence:
 - Env/config:
 - Jobs/workers/runtime:
+- Runtime artifacts/generated outputs: label future product files explicitly as runtime artifacts or generated outputs; do not use naked ambiguous file refs.
 - None — reason:
 
 ## UX/UI requirements

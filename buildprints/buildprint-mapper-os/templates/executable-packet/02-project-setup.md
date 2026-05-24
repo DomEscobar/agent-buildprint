@@ -11,9 +11,9 @@ This setup contract is completed before phase implementation. It turns short hum
 ## Inferred project shape
 
 - Product: <mapped-app>
-- Frontend/UI surfaces: infer from phase UX/UI requirements and source evidence.
-- Backend/API surfaces: infer from phase interfaces touched and source evidence.
-- State/runtime surfaces: infer from phase state/runtime touched and source evidence.
+- Frontend/UI surfaces: list the source-observed screens, flows, states, and interaction entry points. Do not leave this as a generic placeholder when source evidence exists.
+- Backend/API surfaces: list source-observed route/API/job/provider contract families with prefixes, request/response shape notes, and side effects. Do not leave this as a generic placeholder when source evidence exists.
+- State/runtime surfaces: list source-observed durable state, task/runtime state, provider/runtime dependencies, files/artifacts, import/export, and lifecycle operations. Do not leave this as a generic placeholder when source evidence exists.
 - Tests/evaluation: derive from `04-evaluation.md` and phase proof gates.
 
 ## Stack decisions
@@ -31,6 +31,41 @@ Record decisions with short evidence, not bureaucracy:
   - Evidence: state/runtime requirements in phases.
 - Auth/providers/deployment:
   - Decision: best-fit default unless credentials, cost, or irreversible deployment choices require human confirmation.
+
+## Source contract anchors
+
+Promote concrete source observations into implementation contracts before starting phases:
+
+- Route/API/job prefixes and handlers:
+- Request/response payloads and validation errors:
+- Provider/runtime boundaries and env var names only:
+- Durable state, generated artifacts, retention, import/export, and delete/reset behavior: label future product outputs as runtime artifacts/generated outputs, not packet files.
+- UI flow/state anchors including empty/loading/error/blocked/success states:
+
+
+## Source capability/surface ledger
+
+Before phase work, account for every high-signal source surface from the mapper census/evidence: user-facing routes/screens, API handlers, jobs/workers, provider adapters, auth/admin boundaries, persistence models/stores, uploads/imports/exports, generated artifacts, destructive lifecycle actions, and deployment/runtime requirements.
+
+Use this format for each entry:
+
+- Surface id:
+  - Source anchor: source path plus line/section or route/job/provider marker.
+  - Source capability: what user/product capability this surface provides.
+  - Target disposition: preserve | replace | merge | defer | drop.
+  - Target contract: equivalent target behavior or explicit out-of-scope reason.
+  - Compatibility impact: API/UX/data/provider behavior that changes, if any.
+  - Phase(s): `03-phases/<phase>.md` or blocker/evaluation destination.
+
+Rules:
+
+- This is not route/function parity. Prefer cleaner target architecture when it preserves or intentionally improves the capability.
+- No source-backed surface may disappear silently. If it is merged, replaced, deferred, or dropped, record why and where the equivalent obligation or blocker lives.
+- Source repository filenames such as package manifests, lockfiles, or route files are source anchors, not packet file references. Label them as source paths instead of ambiguous packet links.
+- Future files produced by the implementation/product are runtime artifacts or generated outputs, not packet files. Label them inline, e.g. `runtime artifact: <name>` or `generated output: <name>`.
+- Unlabeled backticked `.md`, `.yaml`, `.json`, or `.jsonl` references are reserved for actual packet files that exist in `selected-buildprint/`.
+
+If a source-backed contract cannot be made self-contained, record the blocker before phase work instead of relying on the original source checkout.
 
 ## Architecture rules
 

@@ -11,7 +11,6 @@ Agent Buildprint is a registry/marketplace for building plans that coding agents
 
 ## Current MVP
 
-- `agb analyze` prints a local Buildprint AI review packet for Agents; it gathers evidence and schemas but does not judge quality itself.
 - `agb check` validates Buildprint folders and generated code imports.
 - `agb start <package.json URL>` bootstraps `.buildprint/` in a new implementation repo by downloading exact Buildprint snapshots and writing continuation state.
 - Repository mapping is handled by an agent session using `buildprints/buildprint-mapper-os/`, not by a deterministic CLI command.
@@ -28,9 +27,6 @@ You can also run from a checkout with `node ./bin/agb.js ...`.
 ## Commands
 
 ```bash
-agb analyze ./buildprints/buildprint-mapper-os
-agb analyze ./buildprints/portable-novel-storyboard-pipeline --phase 04-workbench-ui
-agb analyze ./buildprints/buildprint-mapper-os --json
 agb check ./my-buildprint
 agb check ./my-buildprint --code ./generated-code
 agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json

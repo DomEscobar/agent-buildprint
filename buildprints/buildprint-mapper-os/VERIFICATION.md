@@ -25,6 +25,14 @@
 
 ## Fixture Review
 
+Run the deterministic source-signal oracle first:
+
+```bash
+npm run eval:mapper-golden
+```
+
+It writes `quality/mapper-eval-report.json` and verifies that golden fixture expectations are source-backed, secret-safe, prompt-injection-safe, and read-only. This is a prerequisite for slower manual or agent-run replay checks, not a replacement for them.
+
 Use `evals/golden-projects/` as regression input for manual or agent-run review. Each fixture review must record:
 
 - source input;
@@ -38,16 +46,41 @@ Use `evals/golden-projects/` as regression input for manual or agent-run review.
 
 Use `evals/selected-output-fixtures/` with `scripts/check-mapper-selected-output.mjs` for shape regression. The execution-packet-good fixture must pass while remaining `SELECTED_UNQUALIFIED`. The v5 negative fixtures for old router files, missing setup, missing proof gates, missing repair routing, missing interfaces/state sections, skipped read order, and packet AGENTS.md must fail.
 
+## Fresh-Agent Replay Eval
+
+Run the deterministic mechanics check:
+
+```bash
+npm run eval:mapper-replay -- --dry-run
+```
+
+Run the real Codex replay when LLM/model access is available:
+
+```bash
+npm run eval:mapper-replay
+```
+
+The replay harness copies the selected executable blueprint into `/tmp/mapper-replay-*`, initializes git in that temp workspace, invokes Codex CLI as the isolated downstream implementation agent via `codex exec --full-auto <prompt>`, captures stdout/stderr/transcript, and writes `quality/mapper-replay-report.json`.
+
+Automated scoring currently checks read-order/setup adherence signals, question/setup gate handling, active phase/proof-gate references, runtime evidence-ledger behavior, and absence of legacy routing tokens (`START_HERE`, `PRE_IMPLEMENTATION_QUESTIONS`, `03-capabilities`). Manual review still owns no-fake implementation quality, product completeness, proof sufficiency, UX/design proof quality, and blocker honesty.
+
+The dry-run mode does not invoke Codex and is safe for normal CI. The real replay is intentionally not part of `npm test` because it depends on an LLM agent and may require network/model access.
+
 ## Repository Checks
 
 Run after changing Mapper OS package files:
 
 ```bash
 node --check bin/agb.js
+node --check scripts/eval-mapper-golden.mjs
+node --check scripts/eval-mapper-replay.mjs
 npm run check:spine
 npm run check:mapper-output
 npm run check:mapper-output:negative
+npm run eval:mapper-golden
+npm run eval:mapper-replay -- --dry-run
 npm test
+npm run pack:smoke
 git diff --check
 ```
 

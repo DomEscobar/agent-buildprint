@@ -39,6 +39,8 @@ const setupSections = [
   /## Human preferences/i,
   /## Inferred project shape/i,
   /## Stack decisions/i,
+  /## Source contract anchors/i,
+  /## Source capability\/surface ledger/i,
   /## Architecture rules/i,
   /## Team operating model/i,
   /## AGENTS\.md plan/i,
@@ -50,6 +52,7 @@ const setupSections = [
 const phaseSections = [
   /## Product outcome/i,
   /## Source evidence/i,
+  /## Source surface dispositions/i,
   /## Implementation scope/i,
   /## Interfaces touched/i,
   /## State\/runtime touched/i,
@@ -98,15 +101,48 @@ function jsonlRows(target, file, label) {
   return rows;
 }
 
+function isReferenceRoleLabeled(line) {
+  return /\b(?:packet file|packet authority|source path|source anchor|source evidence|source repo|source repository|source file|runtime artifact|runtime output|product artifact|generated artifact|generated output|implementation artifact|implementation output|storage artifact|report output|downstream implementation|implementation project|root\/local)\b/i.test(line);
+}
+
+function isIgnoredReference(ref) {
+  return ref.startsWith('/')
+    || ref.startsWith('http')
+    || ref.includes('*')
+    || ref.startsWith('.buildprint/')
+    || ref.includes('<')
+    || ref.includes('>');
+}
+
+function validateClassifiedFileReferences(target, dir, files) {
+  for (const file of files) {
+    if (!file.endsWith('.md') && !file.endsWith('.yaml') && !file.endsWith('.json') && !file.endsWith('.jsonl')) continue;
+    const text = safeRead(path.join(dir, file));
+    const lines = text.split(/\r?\n/);
+    for (let index = 0; index < lines.length; index += 1) {
+      const line = lines[index];
+      for (const match of line.matchAll(/`([^`]+\.(?:md|yaml|json|jsonl))`/g)) {
+        const ref = match[1];
+        if (isIgnoredReference(ref)) continue;
+        if (ref === 'AGENTS.md') continue;
+        if (files.includes(ref)) continue;
+        if (isReferenceRoleLabeled(line)) continue;
+        fail(target, `${file}:${index + 1} has unclassified file reference ${ref}; label it as packet file, source path, runtime artifact, or implementation project file`);
+      }
+    }
+  }
+}
+
 function validate(target, dir) {
   const files = relFiles(dir);
+  validateClassifiedFileReferences(target, dir, files);
   for (const file of requiredFiles) {
     if (!fs.existsSync(path.join(dir, file))) fail(target, `missing executable blueprint file ${file}`);
   }
   for (const file of files) {
     for (const forbidden of forbiddenPaths) {
       if (forbidden.endsWith('/') ? file.startsWith(forbidden) : file === forbidden) {
-        fail(target, `forbidden legacy/project-runtime file in executable-blueprint v5: ${file}`);
+        fail(target, `forbidden file in current executable packet baseline: ${file}`);
       }
     }
   }
@@ -121,7 +157,8 @@ function validate(target, dir) {
   if (!/questions:\s*01-questions\.md/i.test(blueprint) || !/project_setup:\s*02-project-setup\.md/i.test(blueprint)) fail(target, 'blueprint.yaml setup_gate must route 01-questions.md and 02-project-setup.md');
   if (!/observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint)) fail(target, 'blueprint.yaml implementation_loop must include observe/plan/execute/verify/reflect/record');
   if (!/proof_gate_failed:\s*current_phase/i.test(blueprint) || !/architecture_contradiction:\s*02-project-setup\.md/i.test(blueprint)) fail(target, 'blueprint.yaml repair_loop must route failures to current phase/setup/questions/evidence');
-  if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities|08-evaluation|09-evidence|04-interfaces|05-state-runtime/i.test(blueprint)) fail(target, 'blueprint.yaml contains legacy v4 paths');
+  if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities|08-evaluation|09-evidence|04-interfaces|05-state-runtime/i.test(blueprint)) fail(target, 'blueprint.yaml contains obsolete pre-baseline paths');
+  if (new RegExp('\\nsource:\\s*\\ninput:', 'i').test(`\n${blueprint}`)) fail(target, 'blueprint.yaml source.input must be indented under source');
 
   const buildprint = safeRead(path.join(dir, 'BUILDPRINT.md'));
   if (!/^# BUILDPRINT:/m.test(buildprint)) fail(target, 'BUILDPRINT.md must be the canonical start file');
@@ -129,7 +166,7 @@ function validate(target, dir) {
     if (!buildprint.includes(token)) fail(target, `BUILDPRINT.md read order missing ${token}`);
   }
   if (!/Implementation loop/i.test(buildprint) || !/Repair routing/i.test(buildprint)) fail(target, 'BUILDPRINT.md must include implementation loop and repair routing');
-  if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities/i.test(buildprint)) fail(target, 'BUILDPRINT.md contains legacy v4 entrypoint/capability wording');
+  if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities/i.test(buildprint)) fail(target, 'BUILDPRINT.md contains obsolete pre-baseline entrypoint/capability wording');
 
   const questions = safeRead(path.join(dir, '01-questions.md'));
   for (const n of [1, 2, 3, 4, 5, 6]) if (!new RegExp(`## ${n}\\.`, 'i').test(questions)) fail(target, `01-questions.md missing numbered question ${n}`);
@@ -140,11 +177,17 @@ function validate(target, dir) {
   for (const pattern of setupSections) if (!pattern.test(setup)) fail(target, `02-project-setup.md missing ${pattern.source.replace(/\\/g, '')}`);
   if (!/root\/local `AGENTS\.md`|local `AGENTS\.md`|Root `AGENTS\.md`/i.test(setup)) fail(target, '02-project-setup.md must define root/local AGENTS.md plan');
   if (!/Do not start `03-phases\/\*`/i.test(setup)) fail(target, '02-project-setup.md must block phases until setup is explicit');
+  for (const token of ['Target disposition', 'preserve | replace | merge | defer | drop', 'Compatibility impact', 'not route/function parity']) {
+    if (!setup.includes(token)) fail(target, `02-project-setup.md source capability/surface ledger missing ${token}`);
+  }
 
   const phaseIndex = safeRead(path.join(dir, '03-phases/phase-index.yaml'));
   requireYamlKeys(target, '03-phases/phase-index.yaml', phaseIndex, ['schema_version', 'active_phase', 'phases']);
   if (!/active_phase:\s*03-phases\//i.test(phaseIndex)) fail(target, '03-phases/phase-index.yaml active_phase must point to 03-phases/<phase>.md');
   if (!/phase_id:/i.test(phaseIndex) || !/proof_gate:/i.test(phaseIndex)) fail(target, '03-phases/phase-index.yaml must list phase_id and proof_gate');
+  const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim());
+  const uniquePhaseIds = new Set(phaseIds);
+  if (phaseIds.length !== uniquePhaseIds.size) fail(target, '03-phases/phase-index.yaml contains duplicate phase_id values');
 
   const phasesDir = path.join(dir, '03-phases');
   const phaseFiles = fs.existsSync(phasesDir)
@@ -158,7 +201,12 @@ function validate(target, dir) {
     for (const token of ['05-evidence/evidence-ledger.jsonl', 'phase_id:', 'current phase', '02-project-setup.md', '01-questions.md']) {
       if (!text.includes(token)) fail(target, `${rel} missing ${token}`);
     }
-    if (/03-capabilities|09-evidence|08-evaluation|06-safety\/security-test-fixtures/i.test(text)) fail(target, `${rel} contains legacy v4 paths`);
+    if (/03-capabilities|09-evidence|08-evaluation|06-safety\/security-test-fixtures/i.test(text)) fail(target, `${rel} contains obsolete pre-baseline paths`);
+    if (/capability_id\s*:/i.test(text)) fail(target, `${rel} must use phase_id, not capability_id, for proof rows`);
+    if (/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text)) fail(target, `${rel} references missing shared UX/design context instead of inline UX contract`);
+    if (/Runtime evidence ledger:\s*`05-evidence\/evidence-ledger\.jsonl`/i.test(text)) fail(target, `${rel} must write runtime evidence to .buildprint/evidence/evidence-ledger.jsonl, not the packet seed ledger`);
+    if (!/preserve|replace|merge|defer|drop/i.test(text)) fail(target, `${rel} source surface dispositions must include disposition language`);
+    if (!/equivalent target behavior|compatibility impact/i.test(text)) fail(target, `${rel} source surface dispositions must preserve capability without forcing route/function parity`);
   }
 
   const evaluation = safeRead(path.join(dir, '04-evaluation.md'));
@@ -173,6 +221,7 @@ function validate(target, dir) {
     for (const field of ['artifact_id', 'type', 'phase_id', 'status', 'source', 'proves', 'proof_type', 'provider_mode', 'upgrades_claim']) {
       if (!(field in row)) fail(target, `05-evidence/evidence-ledger.jsonl row missing ${field}`);
     }
+    if (row.phase_id && phaseIds.length && !uniquePhaseIds.has(row.phase_id)) fail(target, `05-evidence/evidence-ledger.jsonl row phase_id ${row.phase_id} is not in phase-index.yaml`);
   }
 
   const prompt = safeRead(path.join(dir, 'generated/agent-prompt.md'));

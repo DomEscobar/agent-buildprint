@@ -2,7 +2,7 @@ schema_version: mapper-os/executable-blueprint.v5
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 source:
-input: <source-input>
+  input: <source-input>
   checkout_path: <source-checkout-path>
   commit: <source-commit-or-unavailable>
 generated_at: <iso-timestamp>

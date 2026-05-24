@@ -3,25 +3,29 @@
 - [ ] Default mapper run creates discovery/evidence/quality output only.
 - [ ] Selected extraction creates `selected-buildprint/`.
 - [ ] Selected extraction emits executable-blueprint v5 only; this is the current executable blueprint spine.
+- [ ] Selected extraction preserves the executable-packet scaffold anchors exactly before adding source-specific content; mapper agents do not paraphrase validator-owned keys/headings/tokens.
+- [ ] `blueprint.yaml` includes `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure` routes including `proof_gate_failed: current_phase` and `architecture_contradiction: 02-project-setup.md`.
 - [ ] Execution blueprints include `BUILDPRINT.md`, `blueprint.yaml`, `01-questions.md`, `02-project-setup.md`, `03-phases/phase-index.yaml`, at least one phase Markdown file, `04-evaluation.md`, and `05-evidence/evidence-ledger.jsonl`.
-- [ ] Root `BUILDPRINT.md` is the only starting point and owns the canonical read order.
+- [ ] Root `BUILDPRINT.md` is the only starting point and owns the canonical read order; downstream runners must read it before inventorying or enumerating packet files.
 - [ ] `generated/agent-prompt.md` declares `Generated from: blueprint.yaml` and states that it is not source of truth.
-- [ ] `01-questions.md` uses numbered questions and AI-best-judgment defaults; blank answers do not block ordinary engineering decisions.
+- [ ] `01-questions.md` uses numbered questions and the exact AI-best-judgment default phrase; blank answers do not block ordinary engineering decisions.
 - [ ] `02-project-setup.md` records human preferences, inferred project shape, stack decisions, architecture rules, team operating model, root/local `AGENTS.md` plan, quality gates, safety/permissions, assumptions, and the phase start gate.
 - [ ] No phase starts until `02-project-setup.md` is explicit enough to create implementation-project root/local `AGENTS.md` without inventing architecture.
-- [ ] `03-phases/phase-index.yaml` is the dependency/continuation index and points to the active proof-gated phase.
+- [ ] `03-phases/phase-index.yaml` is the dependency/continuation index and points to the active proof-gated phase using a full packet-relative `03-phases/<phase>.md` path for `active_phase` and phase `file` values.
 - [ ] Every phase file contains product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
 - [ ] Every phase is a vertical product slice, not a backend/frontend/test waterfall bucket.
 - [ ] Every phase requires the implementation loop: observe → plan → execute → verify → reflect → record.
 - [ ] Error repair routes failed test/build/runtime/UI/proof checks back to the current phase, setup contradictions to `02-project-setup.md`, product-defining ambiguity to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.
-- [ ] Every proof gate writes evidence or blockers to `05-evidence/evidence-ledger.jsonl`.
+- [ ] Every proof gate writes implementation evidence or blockers to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` remains an immutable seed.
 - [ ] `claim_status` promotion is blocked unless evidence contains passing rows for required promotion proof.
 - [ ] Legacy v4 files are absent: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, and packet `AGENTS.md`.
 - [ ] Typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, or `CAPABILTY_INDEX.md` are absent.
 - [ ] Canonical handoff is singular; both `HANDOFF.md` and `HANDOVER.md` do not appear as selected package spine files.
-- [ ] Every `OBSERVED` claim cites source path and line or section.
+- [ ] Every `OBSERVED` claim cites source path and line or section. Runtime artifact paths are explicitly labeled and not formatted as packet-file references unless the file exists in the packet; examples include `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, and `section_XX.md`.
 - [ ] Census hints never assert product behavior, absence, parity, provider completeness, persistence, or readiness.
 - [ ] Included/excluded/blocked/test-only phase statuses are complete.
 - [ ] No included phase is placeholder-backed, mock-backed, no-op, skeleton, deterministic-adapter-only, static-shell-only, or in-memory-only where persistence is claimed.
 - [ ] Qualification label is one of `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
+- [ ] `04-evaluation.md` includes literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, and `no_fake`.
+- [ ] Before handoff, the selected packet passes `node /root/blueprint/bin/agb.js packet check <selected-buildprint-dir>` when that CLI is available; if running inside `/root/blueprint`, it also passes `node /root/blueprint/scripts/check-mapper-selected-output.mjs <selected-buildprint-dir>`.
 - [ ] Public wording avoids validated/production-ready/complete/end-to-end unless qualified evidence exists.
