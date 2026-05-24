@@ -1,0 +1,27 @@
+schema_version: mapper-os/phase-index.v1
+active_phase: 03-phases/01-instance-auth-config-provider-setup.md
+phases:
+  - phase_id: instance-auth-config-provider-setup
+    file: 03-phases/01-instance-auth-config-provider-setup.md
+    depends_on: []
+    proof_gate: instance boot, admin auth, provider config, persistence roots, runtime mode disclosure
+  - phase_id: content-ingestion-outline-generation
+    file: 03-phases/02-content-ingestion-outline-generation.md
+    depends_on: [instance-auth-config-provider-setup]
+    proof_gate: prompt/file ingestion, document parsing, outline generation, streaming status
+  - phase_id: deck-structure-slide-generation
+    file: 03-phases/03-deck-structure-slide-generation.md
+    depends_on: [content-ingestion-outline-generation]
+    proof_gate: slide structure, slide content, layout selection, persisted deck model
+  - phase_id: media-template-theme-assets
+    file: 03-phases/04-media-template-theme-assets.md
+    depends_on: [deck-structure-slide-generation]
+    proof_gate: image/icon/font/theme/template asset lifecycle
+  - phase_id: editor-chat-iteration-workflow
+    file: 03-phases/05-editor-chat-iteration-workflow.md
+    depends_on: [deck-structure-slide-generation, media-template-theme-assets]
+    proof_gate: editable presentation UI, slide edits, chat-assisted iteration, memory boundaries
+  - phase_id: export-api-webhooks-mcp-desktop
+    file: 03-phases/06-export-api-webhooks-mcp-desktop.md
+    depends_on: [editor-chat-iteration-workflow]
+    proof_gate: PPTX/PDF export, authenticated API, async task/webhook delivery, MCP/desktop packaging boundary

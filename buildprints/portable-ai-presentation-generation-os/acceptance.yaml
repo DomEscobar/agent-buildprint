@@ -1,0 +1,11 @@
+claim_status: SELECTED_UNQUALIFIED
+required_before_promotion:
+  - browser_runtime_trace
+  - provider_integration_proof_or_blocker
+  - image_provider_live_or_blocker
+  - document_ingestion
+  - persistence_roundtrip
+  - export_roundtrip
+  - api_contract
+  - security_boundary_review
+  - no_fake_scan_pass
