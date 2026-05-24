@@ -17,7 +17,8 @@
     "eval:mapper-replay": "node scripts/eval-mapper-replay.mjs",
     "eval:mapper-replay:dry-run": "node scripts/eval-mapper-replay.mjs --dry-run",
     "eval:mirofish-flow": "node scripts/eval-mirofish-flow.mjs",
-    "eval:personal-agent-flow": "node scripts/eval-personal-agent-flow.mjs"
+    "eval:personal-agent-flow": "node scripts/eval-personal-agent-flow.mjs",
+    "eval:taxhacker-flow": "node scripts/eval-taxhacker-flow.mjs"
   },
   "dependencies": {},
   "description": "CLI for bootstrapping, checking, and analyzing Agent Buildprints for coding agents.",
