@@ -38,6 +38,9 @@ acceptance:
       promotion_source: runtime_evidence_ledger
       runtime_evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
       packaged_evidence_ledger: immutable_seed_only
+      execution_authority_model: required
+      delegation_handoff_protocol: required
+      root_agents_md_policy: scope_governor_not_product_brain
     legacy_selected_output_v1_v4:
       status: forbidden
       forbidden_paths:
@@ -92,6 +95,7 @@ acceptance:
     - selected scope explicit before selected extraction
     - source surface census exists before selected extraction
     - high-signal source surfaces have selected-output dispositions
+    - multi-phase selected output defines orchestrator handoff protocol
     - capability packets declare owned source surface IDs where mapped from source
     - source surface ownership connects to product obligations, blockers, intentional merges, or explicit exclusions
     - no route/function parity requirement

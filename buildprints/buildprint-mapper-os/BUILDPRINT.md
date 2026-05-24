@@ -34,7 +34,7 @@ For generated selected packages, do not make the implementing agent read all Mar
 3. Behavior discovery: read source surfaces to discover product behavior and promote claims to `OBSERVED`, `INFERRED`, `QUESTION`, `BLOCKED`, or `OUT_OF_SCOPE`.
 4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection; never shrink selected scope without explicit user decision.
 5. Source distillation: convert source facts into source-independent obligations, capability packets, and verification oracles.
-6. Execution planning: give the downstream coding agent slice readiness, verification gates, implementation-team signals, repair loops, review rules, and handoff requirements.
+6. Execution planning: give the downstream coding agent slice readiness, verification gates, implementation-team signals, repair loops, review rules, and handoff requirements. Multi-phase outputs must define an orchestrated execution model: the main coding session plans, writes bounded handoffs, delegates specialist work, integrates, verifies, and records evidence phase by phase.
 7. Qualification: keep output unqualified until required evidence, runtime/test proof, no-fake checks, hardening artifacts, and reversal evidence exist.
 
 ## Output Modes
@@ -83,7 +83,7 @@ The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questi
 
 Legacy files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
-`02-project-setup.md` is mandatory for selected output. It defines architecture rules, team operating model, root/local AGENTS.md plan, quality gates, safety/permissions, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
+`02-project-setup.md` is mandatory for selected output. It defines architecture rules, team operating model, execution authority model, delegation/handoff protocol, root/local AGENTS.md plan, quality gates, safety/permissions, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
 
 ## Non-Negotiables
 
@@ -98,6 +98,10 @@ Legacy files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTAT
 
 Every selected package must tell the next coding agent:
 
+- that `AGENTS.md` in the downstream repo is a scope governor, not a product brain;
+- that `.buildprint/next-agent.md` is continuity for fresh sessions;
+- that bounded assignment/handoff text is the unit of delegated work;
+- that orchestrator/integrator authority must be explicit in the task prompt, not inferred from the repo;
 - what phase packet to implement next;
 - what behavior is stable;
 - what implementation choices are free;

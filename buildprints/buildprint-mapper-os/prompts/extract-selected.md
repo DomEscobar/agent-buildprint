@@ -102,6 +102,8 @@ This is the pre-phase setup contract. Required sections:
 - `## Stack decisions`
 - `## Architecture rules`
 - `## Team operating model`
+- `## Execution authority model`
+- `## Delegation and handoff protocol`
 - `## AGENTS.md plan`
 - `## Quality gates`
 - `## Safety and permissions`
@@ -109,6 +111,29 @@ This is the pre-phase setup contract. Required sections:
 - `## Phase start gate`
 
 AI may decide ordinary engineering defaults, but each default must be appropriate, source/product-grounded, and not maximal for its own sake. Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks.
+
+
+## Execution authority and delegation
+
+Selected packets for multi-phase work must compile into orchestrator handoffs, not only implementation instructions.
+
+`02-project-setup.md` must include:
+
+- `## Execution authority model`: define `AGENTS.md` as a scope governor, `.buildprint/next-agent.md` as continuity, and explicit task/handoff text as the only valid source of delegated role/scope. Do not rely on agents knowing whether they are "subagents"; the task prompt/handoff must state authority and scope.
+- `## Delegation and handoff protocol`: define how the main coding session plans each phase, creates bounded assignments, gives exact files/scope/success criteria/proof commands/evidence requirements, reviews worker output, integrates changes, updates `.buildprint/progress.md` and `.buildprint/next-agent.md`, and refuses vague/global delegation.
+- `## AGENTS.md plan`: specify that the downstream root `AGENTS.md` stays short and prevents drift: follow the current assignment, do not broaden scope, read only named Buildprint/phase files, do not update `.buildprint/state.json`, `.buildprint/progress.md`, or `.buildprint/next-agent.md` unless explicitly assigned, and return changed files/proof/evidence draft/risks.
+
+For long-running full-suite execution, the orchestrated phase-suite loop is mandatory:
+
+1. Orchestrator reads Buildprint state and active phase.
+2. Orchestrator writes bounded handoffs for specialist work.
+3. Specialists implement or review scoped slices from those handoffs.
+4. Orchestrator integrates results in one workspace.
+5. Proof gate runs for the phase.
+6. Runtime evidence rows are appended to `.buildprint/evidence/evidence-ledger.jsonl`.
+7. Progress and next-agent continuity are updated before moving to the next phase.
+
+A full-suite replay must fail if later phases are merely reserved, stubbed, or blocked while the run claims pass.
 
 ## Phase contract
 

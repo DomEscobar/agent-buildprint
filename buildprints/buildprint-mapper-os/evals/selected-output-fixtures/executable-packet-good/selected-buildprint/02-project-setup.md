@@ -81,6 +81,18 @@ Use these review lenses during every implementation loop:
 - QA/evaluation: tests, build, browser/runtime checks, evidence quality, no fake proof.
 - Security/infra: secrets, destructive actions, external writes, deployment and cost approvals.
 
+
+## Execution authority model
+
+- Root `AGENTS.md` in the downstream implementation project is a scope governor, not the product brain. It keeps agents from broadening scope, skipping proof, or updating Buildprint state without assignment.
+- `.buildprint/next-agent.md` is the continuity handoff for fresh main sessions and must identify current phase, objective, recommended next action, and known blockers.
+- The current task prompt or bounded handoff is the only valid source of delegated role, scope, allowed edits, proof command, and evidence-row expectations. Do not rely on workers knowing whether they are subagents.
+- If no bounded assignment exists, an agent must stop after reading continuity and propose the next action instead of choosing its own phase.
+
+## Delegation and handoff protocol
+
+For each phase, the orchestrating main session must create bounded assignments before delegating work. Each assignment includes phase id, proof gate, files to read, allowed edit scope, non-goals, success criteria, verification command, evidence row requirements, and risks/blockers. Specialist workers return changed files, proof results, an evidence row draft, and risks. The orchestrator reviews and integrates their output, runs the phase proof gate, appends runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`, and updates `.buildprint/progress.md` plus `.buildprint/next-agent.md` before moving on. Vague global delegation is invalid.
+
 ## AGENTS.md plan
 
 The blueprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` after this setup is resolved.

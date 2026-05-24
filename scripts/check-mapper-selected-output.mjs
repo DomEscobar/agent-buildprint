@@ -43,6 +43,8 @@ const setupSections = [
   /## Source capability\/surface ledger/i,
   /## Architecture rules/i,
   /## Team operating model/i,
+  /## Execution authority model/i,
+  /## Delegation and handoff protocol/i,
   /## AGENTS\.md plan/i,
   /## Quality gates/i,
   /## Safety and permissions/i,
@@ -176,6 +178,8 @@ function validate(target, dir) {
   const setup = safeRead(path.join(dir, '02-project-setup.md'));
   for (const pattern of setupSections) if (!pattern.test(setup)) fail(target, `02-project-setup.md missing ${pattern.source.replace(/\\/g, '')}`);
   if (!/root\/local `AGENTS\.md`|local `AGENTS\.md`|Root `AGENTS\.md`/i.test(setup)) fail(target, '02-project-setup.md must define root/local AGENTS.md plan');
+  if (!/scope governor/i.test(setup) || !/next-agent\.md/i.test(setup) || !/handoff/i.test(setup)) fail(target, '02-project-setup.md must define execution authority: AGENTS.md as scope governor, .buildprint/next-agent.md continuity, and bounded handoffs');
+  if (!/bounded assignment|bounded handoff/i.test(setup) || !/proof command|verification command/i.test(setup) || !/evidence row/i.test(setup) || !/integrat/i.test(setup)) fail(target, '02-project-setup.md delegation protocol must include bounded assignments, verification/proof, evidence rows, and integration review');
   if (!/Do not start `03-phases\/\*`/i.test(setup)) fail(target, '02-project-setup.md must block phases until setup is explicit');
   for (const token of ['Target disposition', 'preserve | replace | merge | defer | drop', 'Compatibility impact', 'not route/function parity']) {
     if (!setup.includes(token)) fail(target, `02-project-setup.md source capability/surface ledger missing ${token}`);

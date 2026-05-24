@@ -9,12 +9,12 @@
 - [ ] Root `BUILDPRINT.md` is the only starting point and owns the canonical read order; downstream runners must read it before inventorying or enumerating packet files.
 - [ ] `generated/agent-prompt.md` declares `Generated from: blueprint.yaml` and states that it is not source of truth.
 - [ ] `01-questions.md` uses numbered questions and the exact AI-best-judgment default phrase; blank answers do not block ordinary engineering decisions.
-- [ ] `02-project-setup.md` records human preferences, inferred project shape, stack decisions, architecture rules, team operating model, root/local `AGENTS.md` plan, quality gates, safety/permissions, assumptions, and the phase start gate.
-- [ ] No phase starts until `02-project-setup.md` is explicit enough to create implementation-project root/local `AGENTS.md` without inventing architecture.
+- [ ] `02-project-setup.md` records human preferences, inferred project shape, stack decisions, architecture rules, team operating model, execution authority model, delegation/handoff protocol, root/local `AGENTS.md` plan, quality gates, safety/permissions, assumptions, and the phase start gate.
+- [ ] No phase starts until `02-project-setup.md` is explicit enough to create implementation-project root/local `AGENTS.md` and bounded handoffs without inventing architecture.
 - [ ] `03-phases/phase-index.yaml` is the dependency/continuation index and points to the active proof-gated phase using a full packet-relative `03-phases/<phase>.md` path for `active_phase` and phase `file` values.
 - [ ] Every phase file contains product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
 - [ ] Every phase is a vertical product slice, not a backend/frontend/test waterfall bucket.
-- [ ] Every phase requires the implementation loop: observe → plan → execute → verify → reflect → record.
+- [ ] Every phase requires the implementation loop: observe → plan → execute → verify → reflect → record. Multi-phase/full-suite execution requires orchestrator-managed bounded handoffs, integration review, phase proof gates, and continuity updates; a single phase-1 success cannot satisfy full-suite replay.
 - [ ] Error repair routes failed test/build/runtime/UI/proof checks back to the current phase, setup contradictions to `02-project-setup.md`, product-defining ambiguity to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.
 - [ ] Every proof gate writes implementation evidence or blockers to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` remains an immutable seed.
 - [ ] `claim_status` promotion is blocked unless evidence contains passing rows for required promotion proof.

@@ -10,6 +10,8 @@ const repoName = 'vas3k/TaxHacker';
 const mapperOs = 'buildprints/buildprint-mapper-os';
 const qualityDir = path.join(root, 'quality');
 fs.mkdirSync(qualityDir, { recursive: true });
+let artifactStem = 'taxhacker';
+function artifactPath(suffix) { return `quality/${artifactStem}${suffix}`; }
 
 function usage() {
   return [
@@ -26,7 +28,7 @@ function usage() {
     '',
     'Options:',
     '  --dry-run                 Validate harness mechanics without invoking Codex or network clone',
-    '  --full-replay             Also run eval-mapper-replay and outcome judge (expensive)',
+    '  --full-replay             Execute every mapped phase via eval-mapper-replay --all-phases and judge full-product outcome (expensive)',
     '  --resume-outcome          Reuse existing replay artifacts and run only outcome judge',
     '  --timeout-ms <n>          Timeout for each Codex role (default: 900000)',
     '  --help                    Show this help',
@@ -146,7 +148,7 @@ function dryRunPacket(outDir) {
   fs.writeFileSync(path.join(outDir, 'BUILDPRINT.md'), '# BUILDPRINT: Dry TaxHacker Eval Packet\n\n## Required read order\n1. BUILDPRINT.md\n2. 01-questions.md\n3. 02-project-setup.md\n4. blueprint.yaml\n5. 03-phases/phase-index.yaml\n6. active phase\n7. 04-evaluation.md\n8. 05-evidence/evidence-ledger.jsonl\n\n## Project setup gate\nComplete setup first.\n\n## Implementation loop\nobserve plan execute verify reflect record\n\n## Repair routing\nroute failures to current phase/setup/questions/prior phase/blocker ledger.\n');
   fs.writeFileSync(path.join(outDir, 'blueprint.yaml'), 'schema_version: mapper-os/executable-blueprint.v5\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\nsource:\n  input: vas3k/TaxHacker\n  checkout_path: external-source-checkout\n  commit: dry-run\nclaim_status: SELECTED_UNQUALIFIED\nsetup_gate:\n  questions: 01-questions.md\n  project_setup: 02-project-setup.md\nimplementation_loop:\n  steps: [observe, plan, execute, verify, reflect, record]\nrepair_loop:\n  on_failure:\n    proof_gate_failed: current_phase\n    architecture_contradiction: 02-project-setup.md\nphases:\n  - phase_id: document-ingestion-extraction\n    file: 03-phases/01-document-ingestion-extraction.md\ncontext:\n  phase_index: 03-phases/phase-index.yaml\ngenerated_artifacts:\n  agent_prompt: generated/agent-prompt.md\n');
   fs.writeFileSync(path.join(outDir, '01-questions.md'), '# Questions\n\nDefault for every unanswered question: Use AI best judgment to produce the highest-quality appropriate implementation. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.\n\n## 1. Product direction\n\n## 2. Tech stack preferences\n\n## 3. UX/UI preferences\n\n## 4. Architecture preferences\n\n## 5. Quality bar\n\n## 6. Constraints / things to avoid\n');
-  fs.writeFileSync(path.join(outDir, '02-project-setup.md'), '# Project Setup\n\n## Human preferences\n\n## Inferred project shape\nSelf-hosted AI accounting app with document ingestion, LLM extraction provider adapter, transaction review/editing, categories, projects, custom prompts, filters, export, provider config, and durable persistence.\n\n## Stack decisions\n\n## Source contract anchors\nSource path anchors include document upload/parsing, transaction ledger, category/project/custom prompt workflows, filters/export, provider configuration, and UI states.\n\n## Source capability/surface ledger\n- Surface id: SRC-DOCUMENT-INGESTION\n  - Source anchor: source path document ingestion/parsing surfaces.\n  - Source capability: upload receipt/invoice/PDF documents and extract structured accounting data.\n  - Target disposition: preserve | replace | merge | defer | drop. This dry-run preserves.\n  - Target contract: equivalent target behavior; route/function names may change.\n  - Compatibility impact: source path is an anchor only, not route/function parity.\n  - Phase(s): `03-phases/01-document-ingestion-extraction.md`.\n\n## Architecture rules\n\n## Team operating model\n\n## AGENTS.md plan\nThe implementation project must create Root `AGENTS.md` and local `AGENTS.md` files at real architectural boundaries after setup.\n\n## Quality gates\n\n## Safety and permissions\n\n## Open questions and assumptions\n\n## Phase start gate\nDo not start `03-phases/*` until this setup is explicit enough to generate root/local `AGENTS.md` without inventing architecture.\n');
+  fs.writeFileSync(path.join(outDir, '02-project-setup.md'), '# Project Setup\n\n## Human preferences\n\n## Inferred project shape\nSelf-hosted AI accounting app with document ingestion, LLM extraction provider adapter, transaction review/editing, categories, projects, custom prompts, filters, export, provider config, and durable persistence.\n\n## Stack decisions\n\n## Source contract anchors\nSource path anchors include document upload/parsing, transaction ledger, category/project/custom prompt workflows, filters/export, provider configuration, and UI states.\n\n## Source capability/surface ledger\n- Surface id: SRC-DOCUMENT-INGESTION\n  - Source anchor: source path document ingestion/parsing surfaces.\n  - Source capability: upload receipt/invoice/PDF documents and extract structured accounting data.\n  - Target disposition: preserve | replace | merge | defer | drop. This dry-run preserves.\n  - Target contract: equivalent target behavior; route/function names may change.\n  - Compatibility impact: source path is an anchor only, not route/function parity.\n  - Phase(s): `03-phases/01-document-ingestion-extraction.md`.\n\n## Architecture rules\n\n## Team operating model\n\n## Execution authority model\nRoot `AGENTS.md` is a scope governor, not a product brain. `.buildprint/next-agent.md` is continuity for fresh sessions. Bounded handoff text is the only valid source of delegated role, scope, allowed edits, proof command, and evidence row expectations.\n\n## Delegation and handoff protocol\nFor each phase, the orchestrator creates bounded assignments with files to read, allowed edits, non-goals, success criteria, verification command, and evidence row requirements; specialists return changed files, proof results, evidence row draft, and risks; the orchestrator integrates, verifies, records evidence, and updates continuity.\n\n## AGENTS.md plan\nThe implementation project must create Root `AGENTS.md` and local `AGENTS.md` files at real architectural boundaries after setup.\n\n## Quality gates\n\n## Safety and permissions\n\n## Open questions and assumptions\n\n## Phase start gate\nDo not start `03-phases/*` until this setup is explicit enough to generate root/local `AGENTS.md` without inventing architecture.\n');
   fs.writeFileSync(path.join(outDir, '03-phases/phase-index.yaml'), 'schema_version: mapper-os/phase-index.v1\nactive_phase: 03-phases/01-document-ingestion-extraction.md\nphases:\n  - phase_id: document-ingestion-extraction\n    file: 03-phases/01-document-ingestion-extraction.md\n    depends_on: []\n    proof_gate: proof-document-ingestion-extraction\n');
   fs.writeFileSync(path.join(outDir, '03-phases/01-document-ingestion-extraction.md'), '# Phase 01 — Document Ingestion and Extraction\n\n## Product outcome\nUsers can upload receipts/invoices/PDFs and receive extracted transaction candidates for review.\n\n## Source evidence\nTaxHacker source evidence anchors document ingestion, LLM extraction, transactions, categories, projects, custom prompts, filters, export, provider config, and persistence.\n\n## Source surface dispositions\n- Target disposition: preserve | replace | merge | defer | drop. This dry-run preserves.\n- Target contract: equivalent target behavior for source capability without forcing route/function parity.\n- Compatibility impact: source path is an anchor only, not route/function parity.\n\n## Implementation scope\n\n## Interfaces touched\nupload, parse, extraction adapter, transaction candidate API/UI, category/project prompt config.\n\n## State/runtime touched\ndocuments, extracted fields, transactions, categories, projects, prompts, provider config, export artifacts.\n\n## UX/UI requirements\nempty/loading/error/blocked/success states.\n\n## Safety/security constraints\nNo provider keys or private financial documents in logs/evidence.\n\n## Quality gates\n\n## Proof gate\nRuntime evidence ledger: runtime artifact `.buildprint/evidence/evidence-ledger.jsonl`; phase_id: document-ingestion-extraction.\n\n## Repair routing\nReturn to current phase on proof failure. Route architecture contradictions to `02-project-setup.md`, missing human choices to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.\n');
   fs.writeFileSync(path.join(outDir, '04-evaluation.md'), '# Evaluation\n\nprovider_live durable_persistence security_boundary no_fake\n\n## Loop completion rule\nProof gates plus evidence rows required.\n\n## Blocker honesty\nRecord unavailable live provider/export/parser blockers honestly.\n');
@@ -179,8 +181,8 @@ function runMapper(sourceDir, options) {
     files,
     missing_required_files: missing,
   };
-  fs.writeFileSync(path.join(root, 'quality/taxhacker-codex-map-transcript.txt'), transcript('TaxHacker Codex Mapper Transcript', result, `## Prompt\n\n${prompt}`));
-  writeJson('quality/taxhacker-codex-map-report.json', report);
+  fs.writeFileSync(path.join(root, artifactPath('-codex-map-transcript.txt')), transcript('TaxHacker Codex Mapper Transcript', result, `## Prompt\n\n${prompt}`));
+  writeJson(artifactPath('-codex-map-report.json'), report);
   return { packet: outDir, workspace: mapWorkspace, report };
 }
 
@@ -225,6 +227,7 @@ function codexJudge(kind, prompt, outFile, options) {
 }
 
 const options = parseArgs(process.argv.slice(2));
+artifactStem = options.dryRun ? 'taxhacker-dry-run' : 'taxhacker';
 if (!fs.existsSync(path.join(root, mapperOs))) throw new Error(`missing Mapper OS ${mapperOs}`);
 const stages = {};
 let source = null;
@@ -248,13 +251,13 @@ function writeFlowSummary() {
     mapper_os: mapperOs,
     stages,
   };
-  writeJson('quality/taxhacker-flow-report.json', summary);
+  writeJson(artifactPath('-flow-report.json'), summary);
   return summary;
 }
 
 if (options.resumeOutcome) {
-  const prior = safeJsonFile('quality/taxhacker-flow-report.json');
-  if (!prior?.generated_packet) throw new Error('--resume-outcome requires quality/taxhacker-flow-report.json with generated_packet');
+  const prior = safeJsonFile(artifactPath('-flow-report.json'));
+  if (!prior?.generated_packet) throw new Error('--resume-outcome requires prior flow report with generated_packet');
   packetPath = prior.generated_packet;
   source = prior.source;
   Object.assign(stages, prior.stages || {});
@@ -263,31 +266,31 @@ if (options.resumeOutcome) {
   writeFlowSummary();
   const mapping = runMapper(source, options);
   packetPath = mapping.packet;
-  stages.codex_mapping = { pass: mapping.report.pass, artifact: 'quality/taxhacker-codex-map-report.json', transcript: 'quality/taxhacker-codex-map-transcript.txt', workspace: mapping.workspace, packet: packetPath };
+  stages.codex_mapping = { pass: mapping.report.pass, artifact: artifactPath('-codex-map-report.json'), transcript: artifactPath('-codex-map-transcript.txt'), workspace: mapping.workspace, packet: packetPath };
   writeFlowSummary();
   const packetCheck = run(process.execPath, ['./bin/agb.js', 'packet', 'check', packetPath]);
-  fs.writeFileSync(path.join(root, 'quality/taxhacker-packet-check.txt'), `${packetCheck.stdout}\n${packetCheck.stderr}`);
-  stages.packet_check = { status: packetCheck.status, artifact: 'quality/taxhacker-packet-check.txt' };
+  fs.writeFileSync(path.join(root, artifactPath('-packet-check.txt')), `${packetCheck.stdout}\n${packetCheck.stderr}`);
+  stages.packet_check = { status: packetCheck.status, artifact: artifactPath('-packet-check.txt') };
   writeFlowSummary();
   const selectedCheck = run(process.execPath, ['scripts/check-mapper-selected-output.mjs', packetPath]);
-  fs.writeFileSync(path.join(root, 'quality/taxhacker-selected-output-check.txt'), `${selectedCheck.stdout}\n${selectedCheck.stderr}`);
-  stages.selected_output_check = { status: selectedCheck.status, artifact: 'quality/taxhacker-selected-output-check.txt' };
+  fs.writeFileSync(path.join(root, artifactPath('-selected-output-check.txt')), `${selectedCheck.stdout}\n${selectedCheck.stderr}`);
+  stages.selected_output_check = { status: selectedCheck.status, artifact: artifactPath('-selected-output-check.txt') };
   writeFlowSummary();
   const deterministic = deterministicMapChecks(packetPath);
-  writeJson('quality/taxhacker-map-deterministic-checks.json', deterministic);
-  stages.deterministic_map_checks = { pass: deterministic.pass, artifact: 'quality/taxhacker-map-deterministic-checks.json', failed: deterministic.checks.filter((check) => !check.ok).map((check) => check.id) };
+  writeJson(artifactPath('-map-deterministic-checks.json'), deterministic);
+  stages.deterministic_map_checks = { pass: deterministic.pass, artifact: artifactPath('-map-deterministic-checks.json'), failed: deterministic.checks.filter((check) => !check.ok).map((check) => check.id) };
   writeFlowSummary();
-  const mapJudgePrompt = `You are the map-judge-codex role in a Mapper OS eval.\n\nEvaluate the freshly mapped executable packet at ${packetPath} against TaxHacker source at ${source}.\n\nJudge map quality only, not downstream implementation. Authority inputs:\n- ${path.join(root, mapperOs, 'checks/acceptance.md')}\n- ${path.join(root, mapperOs, 'prompts/extract-selected.md')}\n- Packet check: ${path.join(root, 'quality/taxhacker-packet-check.txt')}\n- Selected-output check: ${path.join(root, 'quality/taxhacker-selected-output-check.txt')}\n- Deterministic checks: ${path.join(root, 'quality/taxhacker-map-deterministic-checks.json')}\n\nSpecifically judge whether the packet captures TaxHacker as a self-hosted AI accounting/document extraction app: receipt/invoice/PDF ingestion, extraction provider adapter, transaction ledger/review/editing, categories/projects/custom prompts, filters/search/export, provider/secret configuration, persistence/readback, UI states, security/no-fake gates. It must preserve source capabilities without forcing exact route/function parity.\n\nReturn ONLY valid JSON with this schema:\n{\n  "schema_version":"mapper-os/taxhacker-map-judge.v1",\n  "pass":boolean,\n  "score":number,\n  "rating":"poor|weak|adequate|good|excellent",\n  "completeness_score":number,\n  "content_score":number,\n  "required_elements_missing":[string],\n  "source_fidelity_gaps":[string],\n  "strengths":[string],\n  "risks":[string],\n  "missing_or_weak":[string],\n  "evidence":[{"claim":string,"files":[string]}],\n  "recommendation":"ship|ship-with-notes|needs-fix"\n}`;
-  const mapJudge = codexJudge('taxhacker-map', mapJudgePrompt, 'quality/taxhacker-map-judge.json', options);
-  stages.map_judge = { status: mapJudge.result.status, pass: mapJudge.report.pass, artifact: 'quality/taxhacker-map-judge.json', transcript: mapJudge.transcriptFile, score: mapJudge.report.score, recommendation: mapJudge.report.recommendation };
+  const mapJudgePrompt = `You are the map-judge-codex role in a Mapper OS eval.\n\nEvaluate the freshly mapped executable packet at ${packetPath} against TaxHacker source at ${source}.\n\nJudge map quality only, not downstream implementation. Authority inputs:\n- ${path.join(root, mapperOs, 'checks/acceptance.md')}\n- ${path.join(root, mapperOs, 'prompts/extract-selected.md')}\n- Packet check: ${path.join(root, artifactPath('-packet-check.txt'))}\n- Selected-output check: ${path.join(root, artifactPath('-selected-output-check.txt'))}\n- Deterministic checks: ${path.join(root, artifactPath('-map-deterministic-checks.json'))}\n\nSpecifically judge whether the packet captures TaxHacker as a self-hosted AI accounting/document extraction app: receipt/invoice/PDF ingestion, extraction provider adapter, transaction ledger/review/editing, categories/projects/custom prompts, filters/search/export, provider/secret configuration, persistence/readback, UI states, security/no-fake gates. It must preserve source capabilities without forcing exact route/function parity.\n\nReturn ONLY valid JSON with this schema:\n{\n  "schema_version":"mapper-os/taxhacker-map-judge.v1",\n  "pass":boolean,\n  "score":number,\n  "rating":"poor|weak|adequate|good|excellent",\n  "completeness_score":number,\n  "content_score":number,\n  "required_elements_missing":[string],\n  "source_fidelity_gaps":[string],\n  "strengths":[string],\n  "risks":[string],\n  "missing_or_weak":[string],\n  "evidence":[{"claim":string,"files":[string]}],\n  "recommendation":"ship|ship-with-notes|needs-fix"\n}`;
+  const mapJudge = codexJudge('taxhacker-map', mapJudgePrompt, artifactPath('-map-judge.json'), options);
+  stages.map_judge = { status: mapJudge.result.status, pass: mapJudge.report.pass, artifact: artifactPath('-map-judge.json'), transcript: mapJudge.transcriptFile, score: mapJudge.report.score, recommendation: mapJudge.report.recommendation };
   writeFlowSummary();
 }
 
 if (options.fullReplay || options.resumeOutcome) {
-  const replayReport = 'quality/taxhacker-codex-replay-report.json';
-  const replayTranscript = 'quality/taxhacker-codex-replay-transcript.txt';
+  const replayReport = artifactPath('-codex-replay-report.json');
+  const replayTranscript = artifactPath('-codex-replay-transcript.txt');
   if (!options.resumeOutcome) {
-    const replayArgs = ['scripts/eval-mapper-replay.mjs', '--packet', packetPath, '--report', replayReport, '--transcript', replayTranscript, '--timeout-ms', String(options.timeoutMs), '--keep-workspace'];
+    const replayArgs = ['scripts/eval-mapper-replay.mjs', '--packet', packetPath, '--report', replayReport, '--transcript', replayTranscript, '--timeout-ms', String(options.timeoutMs), '--keep-workspace', '--all-phases'];
     if (options.dryRun) replayArgs.push('--dry-run');
     const replay = run(process.execPath, replayArgs, { timeout: options.timeoutMs + 60 * 1000 });
     const replayJson = safeJsonFile(replayReport);
@@ -295,15 +298,15 @@ if (options.fullReplay || options.resumeOutcome) {
     writeFlowSummary();
   }
   const replayJson = safeJsonFile(replayReport);
-  const outcomePrompt = `You are the outcome-judge-codex role. Judge whether replay from TaxHacker packet ${packetPath} created meaningful first-phase implementation behavior without source leakage, fake completeness, or missing evidence. Use replay report ${path.join(root, replayReport)} and transcript ${path.join(root, replayTranscript)}. Return ONLY JSON {"schema_version":"mapper-os/taxhacker-outcome-judge.v1","pass":boolean,"score":number,"rating":"poor|weak|adequate|good|excellent","recommendation":"ship|ship-with-notes|needs-fix","strengths":[string],"risks":[string],"missing_or_weak":[string],"evidence":[{"claim":string,"files":[string]}]}.`;
-  const outcomeJudge = replayJson?.workspace ? codexJudge('taxhacker-outcome', outcomePrompt, 'quality/taxhacker-outcome-judge.json', options) : null;
-  stages.outcome_judge = outcomeJudge ? { status: outcomeJudge.result.status, pass: outcomeJudge.report.pass, artifact: 'quality/taxhacker-outcome-judge.json', transcript: outcomeJudge.transcriptFile, score: outcomeJudge.report.score, recommendation: outcomeJudge.report.recommendation } : { status: 'skipped', pass: false };
+  const outcomePrompt = `You are the outcome-judge-codex role. Judge whether replay from TaxHacker packet ${packetPath} created a meaningful full-suite implementation across every mapped phase, not just phase 1. Required product scope includes foundation/auth/persistence, document upload/unsorted queue, deterministic AI extraction/provider boundaries, transaction ledger/review/edit/filter/dedup/attachments, settings/custom fields/categories/projects/currencies/providers, CSV import/export, backup/restore/progress, file-serving authorization, and honest handling of deferred invoice/cloud surfaces. Fail if later phases are merely reserved, stubbed, or recorded as blockers while the report claims pass. Use replay report ${path.join(root, replayReport)} and transcript ${path.join(root, replayTranscript)}. Return ONLY JSON {"schema_version":"mapper-os/taxhacker-outcome-judge.v1","pass":boolean,"score":number,"rating":"poor|weak|adequate|good|excellent","recommendation":"ship|ship-with-notes|needs-fix","strengths":[string],"risks":[string],"missing_or_weak":[string],"evidence":[{"claim":string,"files":[string]}]}.`;
+  const outcomeJudge = replayJson?.workspace ? codexJudge('taxhacker-outcome', outcomePrompt, artifactPath('-outcome-judge.json'), options) : null;
+  stages.outcome_judge = outcomeJudge ? { status: outcomeJudge.result.status, pass: outcomeJudge.report.pass, artifact: artifactPath('-outcome-judge.json'), transcript: outcomeJudge.transcriptFile, score: outcomeJudge.report.score, recommendation: outcomeJudge.report.recommendation } : { status: 'skipped', pass: false };
 }
 
 const summary = writeFlowSummary();
 if (!summary.pass) {
-  console.error(`TaxHacker flow eval failed or needs review. Report: quality/taxhacker-flow-report.json`);
+  console.error(`TaxHacker flow eval failed or needs review. Report: ${artifactPath('-flow-report.json')}`);
   process.exitCode = 1;
 } else {
-  console.log(`TaxHacker flow eval passed. Report: quality/taxhacker-flow-report.json`);
+  console.log(`TaxHacker flow eval passed. Report: ${artifactPath('-flow-report.json')}`);
 }

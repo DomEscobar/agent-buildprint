@@ -21,6 +21,7 @@ function usage() {
     '  --codex <command>     Codex CLI command (default: CODEX_CLI or codex)',
     '  --timeout-ms <n>      Real Codex replay timeout in milliseconds (default: 1200000)',
     '  --keep-workspace      Keep the /tmp replay workspace after the run',
+    '  --all-phases         Replay every phase in phase-index.yaml, not only active_phase',
     '  --dry-run, --no-codex Validate copy/git/prompt/report/scoring mechanics without invoking Codex',
     '  --help                Show this help',
   ].join('\n');
@@ -35,6 +36,7 @@ function parseArgs(argv) {
     timeoutMs: 20 * 60 * 1000,
     dryRun: false,
     keepWorkspace: false,
+    allPhases: false,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -46,6 +48,8 @@ function parseArgs(argv) {
       options.dryRun = true;
     } else if (arg === '--keep-workspace') {
       options.keepWorkspace = true;
+    } else if (arg === '--all-phases') {
+      options.allPhases = true;
     } else if (['--packet', '--report', '--transcript', '--codex', '--timeout-ms'].includes(arg)) {
       const value = argv[index + 1];
       if (!value || value.startsWith('--')) throw new Error(`${arg} requires a value`);
@@ -166,42 +170,58 @@ function parsePhaseIndex(packetDir) {
   const indexPath = path.join(packetDir, '03-phases/phase-index.yaml');
   const text = safeReadText(indexPath);
   const activeFile = text.match(/^active_phase:\s*(.+)$/m)?.[1]?.trim() || '03-phases/01-ingest-record.md';
-  const activeBlock = text.split(/\n\s*-\s+phase_id:\s+/).find((block) => block.includes(`file: ${activeFile}`));
-  const phaseId = activeBlock?.match(/^([^\n]+)/)?.[1]?.trim()
-    || path.basename(activeFile, '.md').replace(/^\d+-/, '');
-  const proofGate = activeBlock?.match(/\n\s*proof_gate:\s*([^\n]+)/)?.[1]?.trim()
-    || `proof-${phaseId}`;
-  return { activeFile, phaseId, proofGate };
+  const phaseBlocks = text.split(/\n\s*-\s+phase_id:\s+/).slice(1);
+  const phases = phaseBlocks.map((block) => {
+    const phaseId = block.match(/^([^\n]+)/)?.[1]?.trim();
+    const file = block.match(/\n\s*file:\s*([^\n]+)/)?.[1]?.trim();
+    const proofGate = block.match(/\n\s*proof_gate:\s*([^\n]+)/)?.[1]?.trim() || (phaseId ? `proof-${phaseId}` : null);
+    return phaseId && file ? { activeFile: file, phaseId, proofGate } : null;
+  }).filter(Boolean);
+  const fallbackPhaseId = path.basename(activeFile, '.md').replace(/^\d+-/, '');
+  const active = phases.find((item) => item.activeFile === activeFile) || { activeFile, phaseId: fallbackPhaseId, proofGate: `proof-${fallbackPhaseId}` };
+  return { ...active, phases: phases.length ? phases : [active] };
 }
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function buildPrompt(phase) {
+function buildPrompt(phase, options = {}) {
+  const phasesToReplay = options.allPhases ? phase.phases : [phase];
+  const phaseList = phasesToReplay.map((item) => `- ${item.phaseId}: ${item.activeFile} (${item.proofGate})`).join('\n');
+  const taskLine = options.allPhases
+    ? 'Task: execute the full blueprint suite by implementing and verifying every phase in `03-phases/phase-index.yaml`, in dependency order. Do not stop after phase 1.'
+    : 'Task: perform a practical active-phase replay according to the packet.';
+  const proofLine = options.allPhases
+    ? '7. Write runtime proof rows to `.buildprint/evidence/evidence-ledger.jsonl` for every phase_id. If any phase is blocked, stubbed, or only reserved, the replay must be reported as incomplete, not passed.'
+    : '7. Write runtime proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` with the active `phase_id`.';
   return [
     'You are a fresh downstream implementation agent in an isolated temp workspace.',
     '',
     'Use only this workspace and the copied executable-blueprint packet at `selected-buildprint/`.',
     'Do not use any parent repository context, mapper implementation code, package fixtures, or network-only assumptions.',
     '',
-    'Task: perform a practical phase-1 replay according to the packet.',
+    taskLine,
+    '',
+    'Phases to replay:',
+    phaseList,
     '',
     'Required operating contract:',
     '1. Your first packet action must be reading `selected-buildprint/BUILDPRINT.md`. Do not run find/ls/tree/glob, enumerate packet files, or open any other packet file before reading it.',
-    `2. Follow its read order through \`01-questions.md\`, \`02-project-setup.md\`, \`blueprint.yaml\`, \`03-phases/phase-index.yaml\`, the active phase file \`${phase.activeFile}\`, \`04-evaluation.md\`, and the evidence ledger seed.`,
+    `2. Follow its read order through \`01-questions.md\`, \`02-project-setup.md\`, \`blueprint.yaml\`, \`03-phases/phase-index.yaml\`, ${options.allPhases ? 'each phase file in dependency order' : `the active phase file \`${phase.activeFile}\``}, \`04-evaluation.md\`, and the evidence ledger seed.`,
     '3. Treat blank ordinary questions as AI best-judgment defaults. Ask or stop only for irreversible, expensive, credentialed, destructive, or product-defining choices.',
     '4. Complete the project setup gate before phase work. Create implementation-project instructions only in the temp workspace, not inside the copied packet.',
-    '5. Implement the smallest real phase-1 vertical slice you can in this clean workspace. If the packet lacks enough source/product detail to prove a real behavior, record an honest blocker instead of inventing proof.',
-    '6. Run the smallest meaningful verification gate available for your changes.',
-    '7. Write runtime proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` with the active `phase_id`.',
-    '8. Do not create or route through legacy packet entrypoints or capability folders.',
+    '5. Treat AGENTS.md as a scope governor, not the product brain. The current assignment/handoff is the role and scope; do not infer extra global scope from unrelated files.',
+    '6. For multi-phase work, create bounded handoffs before implementation: each handoff states files to read, allowed edits, non-goals, success criteria, verification command, and evidence row requirements. Then integrate, verify, and update continuity.',
+    proofLine,
+    '8. Run meaningful verification gates for your changes, including tests/build/runtime checks where possible.',
+    '9. Do not create or route through legacy packet entrypoints or capability folders.',
     '',
-    'At the end, print a compact replay summary with files changed, setup gate handling, phase/proof-gate result, verification command/result, evidence-ledger action, and the read-order sequence you actually followed.',
+    'At the end, print a compact replay summary with files changed, setup gate handling, phase/proof-gate result for each replayed phase, verification command/result, evidence-ledger action, and the read-order sequence you actually followed.',
   ].join('\n');
 }
 
-function syntheticDryRun(workspace, phase) {
+function syntheticDryRun(workspace, phase, options = {}) {
   fs.writeFileSync(path.join(workspace, 'AGENTS.md'), [
     '# AGENTS.md',
     '',
@@ -209,25 +229,26 @@ function syntheticDryRun(workspace, phase) {
   ].join('\n'));
   const ledgerDir = path.join(workspace, '.buildprint/evidence');
   fs.mkdirSync(ledgerDir, { recursive: true });
-  fs.writeFileSync(path.join(ledgerDir, 'evidence-ledger.jsonl'), `${JSON.stringify({
-    artifact_id: 'dry-run-replay-blocker',
-    type: 'blocker',
-    phase_id: phase.phaseId,
-    status: 'blocked',
+  const phasesToReplay = options.allPhases ? phase.phases : [phase];
+  fs.writeFileSync(path.join(ledgerDir, 'evidence-ledger.jsonl'), phasesToReplay.map((item) => JSON.stringify({
+    artifact_id: `dry-run-replay-${item.phaseId}`,
+    type: options.allPhases ? 'runtime_proof' : 'blocker',
+    phase_id: item.phaseId,
+    status: options.allPhases ? 'passed' : 'blocked',
     source: 'dry-run harness',
     proves: 'Harness mechanics can create runtime evidence artifacts without invoking Codex.',
     proof_type: 'harness_dry_run',
     provider_mode: 'none',
     upgrades_claim: false,
-  })}\n`);
+  })).join('\n') + '\n');
 
   return [
     'DRY RUN: Codex was not invoked.',
     `Read order simulated: BUILDPRINT.md -> 01-questions.md -> 02-project-setup.md -> blueprint.yaml -> 03-phases/phase-index.yaml -> ${phase.activeFile} -> 04-evaluation.md -> evidence ledger seed.`,
     'Question gate simulated: blank ordinary answers became AI best judgment assumptions; no human question was required.',
     'Setup gate simulated: completed project setup and created root AGENTS.md in the temp implementation workspace.',
-    `Phase replay simulated: active phase ${phase.phaseId} reached proof gate ${phase.proofGate}.`,
-    `Evidence simulated: wrote .buildprint/evidence/evidence-ledger.jsonl with phase_id ${phase.phaseId}.`,
+    `Phase replay simulated: ${options.allPhases ? 'all phases' : `active phase ${phase.phaseId}`} reached requested proof gates.`,
+    `Evidence simulated: wrote .buildprint/evidence/evidence-ledger.jsonl for ${phasesToReplay.map((item) => item.phaseId).join(', ')}.`,
   ].join('\n');
 }
 
@@ -264,7 +285,7 @@ function includesAny(text, patterns) {
   return patterns.some((pattern) => pattern.test(text));
 }
 
-function scoreReplay(workspace, output, phase) {
+function scoreReplay(workspace, output, phase, options = {}) {
   const corpus = textCorpus(workspace, output);
   const combined = `${corpus.outputText}\n${corpus.fileText}`;
   const outputOnly = corpus.outputText;
@@ -278,17 +299,29 @@ function scoreReplay(workspace, output, phase) {
     /03-capabilities/,
   ];
 
+  const phasesToReplay = options.allPhases ? phase.phases : [phase];
   const readOrderTokens = [
     'BUILDPRINT.md',
     '01-questions.md',
     '02-project-setup.md',
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
-    phase.activeFile,
+    ...phasesToReplay.map((item) => item.activeFile),
   ];
   const readOrderIndexes = readOrderTokens.map((token) => outputOnly.indexOf(token));
   const readOrderMentioned = readOrderIndexes.every((index) => index >= 0);
   const readOrderOrdered = readOrderMentioned && readOrderIndexes.every((index, itemIndex, all) => itemIndex === 0 || index >= all[itemIndex - 1]);
+
+  const phaseEvidenceChecks = phasesToReplay.map((item) => ({
+    id: `runtime_evidence_ledger_behavior_${item.phaseId}`,
+    ok: fs.existsSync(ledgerPath) && new RegExp(`phase_id[\"':\\s]+${escapeRegex(item.phaseId)}`, 'i').test(ledgerText),
+    evidence: fs.existsSync(ledgerPath) ? `.buildprint/evidence/evidence-ledger.jsonl exists with phase_id ${item.phaseId} check.` : 'Runtime evidence ledger was not created.',
+  }));
+  const allPhaseNoBlockersCheck = {
+    id: 'all_phase_replay_no_blockers',
+    ok: !options.allPhases || !/(\"type\"\s*:\s*\"blocker\"|\"status\"\s*:\s*\"blocked\")/i.test(ledgerText),
+    evidence: options.allPhases ? 'Full-suite replay must not pass with blocker rows for requested phases.' : 'Not required for active-phase replay.',
+  };
 
   const checks = [
     {
@@ -303,14 +336,11 @@ function scoreReplay(workspace, output, phase) {
     },
     {
       id: 'phase_proof_gate_references',
-      ok: new RegExp(`${escapeRegex(phase.proofGate)}|proof gate`, 'i').test(combined) && new RegExp(`phase_id["':\\s]+${escapeRegex(phase.phaseId)}`, 'i').test(combined),
-      evidence: `Looks for active phase proof-gate language and phase_id ${phase.phaseId} evidence.`,
+      ok: phasesToReplay.every((item) => new RegExp(`${escapeRegex(item.proofGate)}|proof gate`, 'i').test(combined) && new RegExp(`phase_id["':\\s]+${escapeRegex(item.phaseId)}`, 'i').test(combined)),
+      evidence: `Looks for requested proof-gate language and phase_id evidence for ${phasesToReplay.map((item) => item.phaseId).join(', ')}.`,
     },
-    {
-      id: 'runtime_evidence_ledger_behavior',
-      ok: fs.existsSync(ledgerPath) && new RegExp(`phase_id["':\\s]+${escapeRegex(phase.phaseId)}`, 'i').test(ledgerText),
-      evidence: fs.existsSync(ledgerPath) ? `.buildprint/evidence/evidence-ledger.jsonl exists with phase_id ${phase.phaseId} check.` : 'Runtime evidence ledger was not created.',
-    },
+    ...phaseEvidenceChecks,
+    allPhaseNoBlockersCheck,
     {
       id: 'no_legacy_routing',
       ok: !includesAny(combined, forbidden) && !corpus.files.some((file) => includesAny(file, forbidden)),
@@ -363,11 +393,11 @@ let fatal = null;
 try {
   const packetTarget = copyPacket(packetSource, workspace);
   const phase = parsePhaseIndex(packetTarget);
-  prompt = buildPrompt(phase);
+  prompt = buildPrompt(phase, options);
   initGit(workspace);
 
   if (options.dryRun) {
-    output.stdout = syntheticDryRun(workspace, phase);
+    output.stdout = syntheticDryRun(workspace, phase, options);
   } else {
     const availability = codexAvailable(options.codex);
     if (!availability.ok) throw new Error(`${availability.detail}. Re-run with --dry-run to validate harness mechanics without Codex.`);
@@ -376,7 +406,7 @@ try {
     if (output.error && output.error.code === 'ENOENT') throw new Error(`${options.codex} was not found on PATH. Re-run with --dry-run to validate harness mechanics without Codex.`);
   }
 
-  const score = scoreReplay(workspace, output, phase);
+  const score = scoreReplay(workspace, output, phase, options);
   const report = {
     schema_version: 'mapper-os/replay-eval-report.v1',
     harness: 'fresh-agent-codex-replay',
@@ -388,6 +418,8 @@ try {
       source_hash: hashDir(packetSource),
       copied_to: rel(workspace, packetTarget),
       active_phase: phase,
+      replay_scope: options.allPhases ? 'all-phases' : 'active-phase',
+      phases_replayed: options.allPhases ? phase.phases : [phase],
     },
     workspace,
     command: options.dryRun ? null : { executable: options.codex, args: ['exec', '--full-auto', '<prompt>'], cwd: workspace, timeout_ms: options.timeoutMs },
