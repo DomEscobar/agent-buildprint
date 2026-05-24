@@ -2,7 +2,7 @@ schema_version: mapper-os/executable-blueprint.v5
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 source:
-input: /root/MiroFish
+  input: /root/MiroFish
   checkout_path: /root/MiroFish
   commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
   source_dependency_policy: evidence_only_do_not_require_for_implementation

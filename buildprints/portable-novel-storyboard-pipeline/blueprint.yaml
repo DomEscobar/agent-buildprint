@@ -2,7 +2,7 @@ schema_version: mapper-os/executable-blueprint.v5
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 source:
-input: https://github.com/HBAI-Ltd/Toonflow-app
+  input: https://github.com/HBAI-Ltd/Toonflow-app
   checkout_path: external-source-checkout
   commit: 122d2aa431d3240fea3eab491e6fbc690bb088cb
 generated_at: <iso-timestamp>

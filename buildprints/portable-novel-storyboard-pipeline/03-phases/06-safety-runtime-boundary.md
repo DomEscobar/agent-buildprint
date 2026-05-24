@@ -24,7 +24,7 @@ This packet is source-independent: use these observations to preserve product be
 2. Wire APIs/UI/runtime state to real implementation seams, not static fixtures or no-op controls.
 3. Add required negative/failure-state tests.
 4. Prove persistence/readback, provider/runtime boundaries, and browser/runtime behavior where claimed.
-5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `capability_id: safety-runtime-boundary`.
+5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: safety-runtime-boundary`.
 
 Inputs:
 - Inputs are defined by the product obligation and interface contracts.
@@ -58,7 +58,7 @@ Boundary requirements:
 
 ## UX/UI requirements
 
-Follow `02-context/ux-contract.md` and `02-context/design-quality-bar.md`. Any `browser_runtime_trace` proof must include `ux_design_gate` and `screenshot_state_set` coverage for the relevant empty/loading/error/blocked/success states, or an explicit blocker row.
+Use the inline UX/UI requirements in this phase. Any `browser_runtime_trace` proof must include `ux_design_gate` and `screenshot_state_set` coverage for the relevant empty/loading/error/blocked/success states, or an explicit blocker row.
 
 ## Safety/security constraints
 
