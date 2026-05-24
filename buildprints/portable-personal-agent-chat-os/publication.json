@@ -29,7 +29,7 @@
   "difficulty": "Advanced",
   "featured": true,
   "summary": "Clean-room, Emperor Agent-inspired personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP, memory, subagents, and token telemetry.",
-  "plainDescription": "A blueprint for building a self-hosted personal AI assistant that behaves like a small chatbot operating system: chat UI, model router, tool dispatcher, skill registry, MCP adapter, memory, delegation, and usage telemetry.",
+  "plainDescription": "A validated mapped-project blueprint for building a self-hosted personal AI assistant that behaves like a small chatbot operating system: chat UI, model router, tool dispatcher, skill registry, MCP adapter, memory, delegation, usage telemetry, and a fresh Mapper OS flow eval.",
   "promise": "A validated mapped-project Buildprint for rebuilding a portable personal agent chatbot OS without copying Emperor Agent source or claiming exact clone/provider/tool parity.",
   "whatYouGet": [
     "Personal agent chatbot OS architecture",
@@ -87,12 +87,18 @@
     "Skill selection and subagent delegation are traceable events",
     "MCP fake tool maps through same ToolSpec boundary",
     "Memory compacts under context pressure while retaining recent messages",
-    "Token telemetry is emitted and asserted"
+    "Token telemetry is emitted and asserted",
+    "Mapper OS personal-agent flow eval passed: map judge 91/100, deterministic checks passed, Codex replay passed, outcome judge 82/100; verdict ship-with-notes."
   ],
   "trustBadges": [
     {
       "label": "Mapped from a real small OS chatbot",
       "detail": "Primary architecture source is TheSyart/emperor-agent, with JARVIS/ToFu used only as comparison pressure.",
+      "tone": "success"
+    },
+    {
+      "label": "Mapper flow eval passed",
+      "detail": "Fresh Mapper OS eval against emperor-agent plus ToFu/JARVIS comparison pressure passed with map judge 91/100 and outcome judge 82/100 (ship-with-notes).",
       "tone": "success"
     },
     {
@@ -113,5 +119,9 @@
   ],
   "originGithubUrl": "https://github.com/TheSyart/emperor-agent",
   "originLabel": "TheSyart/emperor-agent",
-  "copyPrompt": "Use the Portable Personal Agent Chat OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a clean-room personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP adapter, memory/compaction, subagent delegation, token telemetry, and safety-gated tool policy. Use fake providers/tools by default. Do not claim Emperor Agent clone, exact UI parity, live provider parity, shell parity, or real MCP parity unless separately validated."
+  "copyPrompt": "Use the Portable Personal Agent Chat OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a clean-room personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP adapter, memory/compaction, subagent delegation, token telemetry, and safety-gated tool policy. Use fake providers/tools by default. Do not claim Emperor Agent clone, exact UI parity, live provider parity, shell parity, or real MCP parity unless separately validated.",
+  "publicStatus": {
+    "label": "Mapper eval passed",
+    "explanation": "Personal-agent Mapper OS flow passed deterministic checks, Codex replay, map judge 91/100, and outcome judge 82/100; verdict ship-with-notes."
+  }
 }
