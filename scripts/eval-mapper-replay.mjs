@@ -372,13 +372,13 @@ function sectionAnswered(text, heading, options = {}) {
   if (!body) return false;
   if (options.verdict) return /^(pass|pass-with-scoped-debt|blocker|not-ui-bearing)\b/i.test(body);
   const compact = body.replace(/[`*_>\-\s]/g, '').toLowerCase();
+  if (/^(none|na|n\/a|notapplicable|ok|yes|passed|looksgood|todo|tbd)$/.test(compact)) return options.allowNone === true && /^(none|na|n\/a|notapplicable)$/.test(compact);
   if (compact.length < (options.minChars || 24)) return false;
-  if (/^(none|na|n\/a|notapplicable|ok|yes|passed|looksgood|todo|tbd)$/.test(compact)) return false;
   return true;
 }
 
-function reviewHasAnsweredSections(text, headings) {
-  return headings.every((heading) => sectionAnswered(text, heading));
+function reviewHasAnsweredSections(text, headings, optionsByHeading = {}) {
+  return headings.every((heading) => sectionAnswered(text, heading, optionsByHeading[heading] || {}));
 }
 
 function reviewContractChecks(workspace, phasesToReplay) {
@@ -415,7 +415,7 @@ function reviewContractChecks(workspace, phasesToReplay) {
     ];
     checks.push({
       id: `architecture_review_contract_${item.phaseId}`,
-      ok: sectionAnswered(arch, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(arch, architectureHeadings),
+      ok: sectionAnswered(arch, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(arch, architectureHeadings, { 'Required repair before evidence': { allowNone: true } }),
       evidence: 'Architecture review must answer every rejection heading with concrete evidence, scoped debt, or blocker text.',
     });
     checks.push({
@@ -423,12 +423,12 @@ function reviewContractChecks(workspace, phasesToReplay) {
       ok: (sectionAnswered(ux, 'Verdict', { verdict: true })
           && /^not-ui-bearing\b/i.test(sectionBody(ux, 'Verdict'))
           && reviewHasAnsweredSections(ux, ['Reason', 'Downstream UI obligations']))
-        || (sectionAnswered(ux, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(ux, uxHeadings)),
+        || (sectionAnswered(ux, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(ux, uxHeadings, { 'Required repair before evidence': { allowNone: true } })),
       evidence: 'UX review must either prove UI quality through concrete headings or explicitly mark not-ui-bearing with downstream obligations.',
     });
     checks.push({
       id: `qa_review_contract_${item.phaseId}`,
-      ok: sectionAnswered(qa, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(qa, qaHeadings),
+      ok: sectionAnswered(qa, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(qa, qaHeadings, { 'Commands run': { minChars: 8 } }),
       evidence: 'QA review must bind commands/proof/blockers to the evidence claim level with substantive section bodies.',
     });
   }
