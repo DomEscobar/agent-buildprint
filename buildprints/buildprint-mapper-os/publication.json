@@ -14,10 +14,10 @@
   ],
   "stack": [
     "Repository census",
-    "Capability packs",
-    "Team-pack routing",
-    "UX gates",
-    "Verification rails"
+    "Phase-flow replay",
+    "Evidence ledger",
+    "Fresh-agent evals",
+    "Review contracts"
   ],
   "iconKeys": [
     "md",
@@ -26,18 +26,18 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Agent-session workflow for mapping an existing repo into evidence-backed, source-independent Agent Buildprint packets.",
-  "plainDescription": "Use Mapper OS when you already have a working repo and want an agent to turn it into a clean, reusable Buildprint: first map the source, then choose a scoped candidate, then extract an executable packet another agent can implement without reading the original code.",
-  "promise": "A practical repo-to-Buildprint workflow: evidence-backed discovery, scoped candidate selection, source-independent executable-packet extraction, team/UX/security proof gates, and an honest handover of what is proven, blocked, or intentionally out of scope.",
+  "summary": "Agent-session workflow for mapping an existing repo into an executable, source-independent Buildprint packet with phase-flow replay, schema-valid runtime evidence, and fresh-agent proof gates.",
+  "plainDescription": "Use Mapper OS when you already have a working repo and want an agent to turn it into a clean, reusable Buildprint: map the source, choose a scoped candidate, then extract a selected-buildprint packet that a fresh agent can implement through phase-flow, reviews, proof gates, and honest runtime evidence without reading the original code.",
+  "promise": "A repo-to-Buildprint workflow that preserves scope fidelity, generates executable phase files, enforces runtime evidence honesty, requires architecture/UX/QA review contracts, and proves the packet with fresh-agent replay instead of trusting a static spec.",
   "whatYouGet": [
     "Repo mapping prompt for Codex, Cursor, Claude Code, or another coding agent",
     "SYSTEM_MAP.md with architecture, flows, data, integrations, tests, side effects, and unknowns",
     "BUILDPRINT_CANDIDATES.md with scoped reusable Buildprint options",
-    "A selected executable-blueprint v5 when you pick a candidate",
-    "BUILDPRINT.md, blueprint.yaml, phase files, proof gates, and evidence ledger",
-    "Clean-room handoff so the implementation agent does not need original source access",
-    "No-fake rails: included capabilities must be real, wired, persistent where claimed, and testable",
-    "Final handover with evidence inspected, files generated, commands run, blockers, and next direction"
+    "A selected-buildprint/ executable packet with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, phase-index.yaml, phase-flow.md, phase files, 04-evaluation.md, and evidence schema",
+    "Phase-flow execution contract requiring .buildprint/phase-runs/<phase-id>/plan.md, team.md, bounded handoffs, returns, reviews, and proof.md",
+    "Runtime evidence schema and ledger separation: packaged seed ledger stays immutable; runtime rows go to .buildprint/evidence/evidence-ledger.jsonl",
+    "Review contracts for architecture, UX, and QA with concrete evidence instead of ceremonial approval",
+    "Fresh-agent replay scoring for read order, review quality, evidence validity, no-fake scans, no parent-context enumeration, and blocker honesty"
   ],
   "whatYouNeed": [
     "Nothing for public repos",
@@ -49,111 +49,87 @@
     "Repo",
     "System map",
     "Candidates",
-    "Selection",
-    "Teams",
-    "Package",
-    "Proof"
+    "Selected packet",
+    "Phase-flow",
+    "Runtime evidence",
+    "Replay proof"
   ],
   "includes": [
     "Safety and secrets boundary",
-    "Machine-readable buildprint/phases/acceptance/claims rails",
-    "Minimal preflight questions",
-    "Repo census",
-    "SYSTEM_MAP.md",
-    "BUILDPRINT_CANDIDATES.md",
-    "Human scope decision gate",
-    "Dynamic post-discovery questions.md",
-    "Executable-packet templates",
-    "02-project-setup.md/team-stack.yaml team-pack routing",
-    "02-project-setup.md UX/design contracts",
-    "capability proof gates and evidence-ledger rules",
-    "Clean-room REVERSAL_REPORT.md",
-    "QA_REPORT.md",
-    "Single Buildprint extraction",
-    "Hierarchical System Buildprint extraction",
-    "Submission checklist",
-    "Final chat handover",
-    "Fixture review guidance",
-    "BUILDPRINT.md canonical start",
-    "01-questions.md numbered alignment",
-    "02-project-setup.md architecture and AGENTS plan",
-    "03-phases proof-gated phase files",
-    "04-evaluation.md claim rules",
-    "05-evidence/evidence-ledger.jsonl proof/blocker ledger"
+    "Source census and source-independent distillation",
+    "Scoped candidate selection before extraction",
+    "Executable selected-buildprint packet spine",
+    "03-phases/phase-flow.md phase constitution",
+    "Per-phase implementation grammar: ## How to implement this phase",
+    "02-project-setup.md architecture, team model, root/local AGENTS plan, quality gates, safety, assumptions, and phase start gate",
+    "Runtime evidence schema: 05-evidence/evidence-ledger.schema.json",
+    "Seed-only packaged 05-evidence/evidence-ledger.jsonl",
+    ".buildprint/evidence/evidence-ledger.jsonl runtime proof ledger",
+    "Bounded specialist loop: product architecture, integration/runtime, persistence, UX/UI, security, test/verification",
+    "Architecture/UX/QA review contracts",
+    "Proof gates and repair routes per phase",
+    "No-fake scan requirements",
+    "Fresh-agent replay and outcome judge flow",
+    "Final chat handover with selected scope, evidence inspected, files generated, commands run, gaps, and next direction"
   ],
   "risks": [
     "Whole-repo sludge",
     "Secret leakage",
+    "Scope shrink",
     "Hallucinated intent",
     "Invented validation results",
-    "Missing scope",
-    "Vague marketplace submissions",
-    "Unclear capability boundaries",
-    "Generic QA plans",
     "Source-dependent implementation instructions",
-    "Missing verification evidence",
-    "Lazy architecture without product-architect gate",
-    "Ugly or static UI without ux-ui-craft and browser proof"
+    "Synthetic proof overclaimed",
+    "Provider/browser blockers hidden as success",
+    "Runtime evidence written into seed ledger",
+    "Ceremonial reviews without concrete evidence",
+    "Parent-directory/source-context leakage during replay",
+    "Fake no-fake scans"
   ],
   "checks": [
     "If no target repo URL/path/current repo is clear, the agent asks exactly: Which repo URL or local path should I map?",
-    "Mapper OS is an agent-session workflow; it does not advertise or require an agb map CLI",
     "Discovery happens before extraction unless the user already selected a scope",
-    "Large repos produce scoped candidates before a final package unless full-system mode is explicitly chosen",
     "Generated claims are labeled OBSERVED, INFERRED, QUESTION, or OUT_OF_SCOPE",
     "Secrets and source code are not copied into the generated implementation package",
-    "Selected output is source-independent enough for a fresh implementation agent",
-    "Selected output uses executable-blueprint v5: BUILDPRINT.md, blueprint.yaml, 02-project-setup.md, 03-phases, 04-evaluation, and 05-evidence",
-    "UI-bearing scopes include ux-contract.md, design-quality-bar.md, and ux-ui-craft routing in team-stack.yaml",
-    "Capability packets include product contracts, implementation workflow, source evidence, proof gates, negative tests, artifacts, and promotion blockers",
-    "Mocks/fixtures are not counted as shipped product behavior",
-    "Durability, providers, jobs, exports, auth, security, and browser/runtime behavior are real or explicitly blocked/out of scope",
-    "Final handover states selected scope, evidence inspected, files generated, commands run, known gaps, and recommended next direction"
+    "Selected output uses executable-blueprint v5 with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, phase files, 04-evaluation.md, and 05-evidence/evidence-ledger.schema.json",
+    "Every implementation phase starts with ## How to implement this phase",
+    "Agents read phase-flow and evidence-ledger.schema.json before appending runtime evidence",
+    "Runtime evidence is appended only to .buildprint/evidence/evidence-ledger.jsonl",
+    "Runtime evidence rows include artifact_id, type, phase_id, status, source, proves, proof_type, provider_mode, and upgrades_claim",
+    "Blocked, missing, synthetic, partial, sandbox-limited, network-limited, or credential-limited evidence cannot use upgrades_claim:true",
+    "no_fake_scan_pass requires a real no-fake scan command or artifact",
+    "Architecture, UX, and QA reviews answer required headings with concrete evidence",
+    "Fresh-agent replay and outcome judge pass or clearly name remaining gaps"
   ],
   "trustBadges": [
     {
-      "label": "Submission workflow",
-      "detail": "Defines the official reviewable path from existing repo to scoped Buildprint package.",
-      "tone": "info"
-    },
-    {
-      "label": "Safety-first extraction",
-      "detail": "Requires no app-code changes, no secret copying, and explicit unknowns.",
+      "label": "Phase-flow replay",
+      "detail": "Generated packets contain phase-flow.md and per-phase implementation grammar so a fresh agent can execute bounded slices.",
       "tone": "success"
     },
     {
-      "label": "Agent-session workflow",
-      "detail": "The mapper runs as coding-agent instructions from the Buildprint package; there is no agb map command.",
+      "label": "Evidence honesty",
+      "detail": "Runtime evidence must be schema-valid; blockers and synthetic checks cannot upgrade production claims.",
       "tone": "success"
     },
     {
-      "label": "Source-independent output",
-      "detail": "The generated package must be enough for a fresh implementing agent without original source access.",
+      "label": "Fresh-agent isolation",
+      "detail": "Selected packets must be enough for an isolated downstream agent without original source access or parent-directory scans.",
       "tone": "success"
     },
     {
-      "label": "Team-pack gates",
-      "detail": "Selected outputs route through product-architect, ux-ui-craft, integration/runtime, persistence, security, and verification lenses as applicable.",
+      "label": "Review contracts",
+      "detail": "Architecture, UX, and QA reviews must answer required headings with concrete proof and claim limits.",
       "tone": "success"
     },
     {
-      "label": "Traceable QA",
-      "detail": "Requires source evidence to capability contracts to reversal/QA checks instead of generic demo validation.",
-      "tone": "success"
-    },
-    {
-      "label": "No fake MVPs",
-      "detail": "Scope may be small, but included capabilities must be real, wired, persistent where relevant, and QA-tested.",
+      "label": "No fake scans",
+      "detail": "no_fake_scan_pass is accepted only when an actual scan command/artifact exists and ran.",
       "tone": "warning"
     },
     {
-      "label": "Fixture review guidance",
-      "detail": "Fixture projects remain for manual workflow review; they are not an agb map eval harness.",
-      "tone": "info"
-    },
-    {
-      "label": "Dogfood proof passed",
-      "detail": "Mapped Seanium/FeedMe with Codex, extracted a static RSS pipeline Buildprint, and passed reversal checks.",
+      "label": "MiroFish proof passed",
+      "detail": "Post-hardening MiroFish map/replay/outcome flow passed with ship-with-notes; replay workspace /tmp/mapper-replay-rDH0JF.",
       "tone": "success"
     }
   ],
@@ -182,12 +158,14 @@
   "resultChecklist": [
     "SYSTEM_MAP.md with source-backed architecture, flows, routes/services, data, integrations, side effects, tests, and unknowns",
     "BUILDPRINT_CANDIDATES.md with scoped candidates and clear included/excluded surfaces",
-    "A selected executable-blueprint v5, not legacy root CAPABILITY_INDEX/TEAM_STACK/UX_CONTRACT sludge",
-    "01-questions.md with only blocking questions and safe defaults",
-    "02-project-setup.md/context-map.yaml, team-stack.yaml, ux-contract.md, and design-quality-bar.md where relevant",
-    "03-phases/* capabilities with product obligation, source evidence, implementation path, stop rules, and proof gate",
-    "04-evaluation gates separated from 05-evidence/evidence-ledger.jsonl proof/blocker rows",
-    "Final handover with selected scope, evidence inspected, files generated, commands run, known gaps, and next recommended action"
+    "A selected-buildprint/ executable packet, not legacy START_HERE/PRE_IMPLEMENTATION_QUESTIONS/03-capabilities routing",
+    "01-questions.md with only blocking questions and AI-best-judgment defaults",
+    "02-project-setup.md with architecture, team operating model, execution authority, AGENTS plan, quality gates, safety/permissions, assumptions, and phase start gate",
+    "03-phases/phase-flow.md plus phase files that start with ## How to implement this phase",
+    "04-evaluation.md and 05-evidence/evidence-ledger.schema.json",
+    "Runtime proof plan that writes only to .buildprint/evidence/evidence-ledger.jsonl",
+    "Architecture/UX/QA review contracts and repair routing",
+    "Final handover with selected scope, evidence inspected, files generated, commands run, known gaps, and recommended next direction"
   ],
   "copyPrompt": "Use the Buildprint Mapper OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Use it to map a target repo in the current agent session. First resolve the target: if the user has not clearly provided a repository URL, local path, or already-opened current working repo, ask exactly one blocking question: 'Which repo URL or local path should I map?' Do not start discovery until the target is explicit. Do not run agb map; that CLI does not exist. After selection, extract only that scope into selected-buildprint/ as executable-blueprint v5 with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, phase Markdown files, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. BUILDPRINT.md is the only start point. Do not emit START_HERE.md, PRE_IMPLEMENTATION_QUESTIONS.md, 03-capabilities/, 04-interfaces/, 05-state-runtime/, 06-safety/, 08-evaluation/, 09-evidence/, or packet AGENTS.md. 01-questions.md must use numbered questions with AI-best-judgment defaults. 02-project-setup.md must define architecture, team operating model, execution authority through 03-phases/phase-flow.md, delegation/handoff protocol, root/local AGENTS.md plan, quality gates, safety/permissions, assumptions, and the phase start gate. Each implementation phase must start with ## How to implement this phase, require reading 03-phases/phase-flow.md, .buildprint/next-agent.md, and current project AGENTS.md, and remain a proof-gated vertical product slice with interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, proof gate, implementation loop, and repair routing. Runtime evidence belongs only in .buildprint/evidence/evidence-ledger.jsonl after phase-flow artifacts exist; packaged 05-evidence/evidence-ledger.jsonl is seed-only. The selected packet must be source-independent enough for a fresh coding agent to implement without original source access. Default to high-quality best-fit implementation, but ask for irreversible, expensive, credentialed, destructive, or product-defining forks. Do not copy secrets, do not invent validation results, and do not flatten the repo into one vague document. Finish with a chat handover containing outcome, selected scope, evidence inspected, files generated, commands run, known gaps, and recommended next direction."
 }
