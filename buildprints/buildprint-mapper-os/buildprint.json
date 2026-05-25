@@ -227,6 +227,10 @@
       "role": "source"
     },
     {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/03-phases/phase-flow.md",
+      "role": "source"
+    },
+    {
       "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/04-evaluation.md",
       "role": "source"
     },
@@ -328,6 +332,10 @@
     },
     {
       "path": "templates/executable-packet/03-phases/phase-index.yaml",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/phase-flow.md",
       "role": "source"
     },
     {

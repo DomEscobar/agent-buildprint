@@ -41,6 +41,7 @@ phases:
     status: INCLUDED_NEEDS_PROOF
 context:
   phase_index: 03-phases/phase-index.yaml
+  phase_flow: 03-phases/phase-flow.md
   active_phase: 03-phases/01-ingest-record.md
   evaluation: 04-evaluation.md
   evidence_schema: 05-evidence/evidence-ledger.schema.json

@@ -104,10 +104,11 @@ for (const slug of slugs) {
       ['executable blueprint questions template', fs.readFileSync(path.join(dir, 'templates/executable-packet/01-questions.md'), 'utf8'), /AI best judgment[\s\S]*highest-quality appropriate/i],
       ['executable blueprint project setup template', fs.readFileSync(path.join(dir, 'templates/executable-packet/02-project-setup.md'), 'utf8'), /## Architecture rules[\s\S]*## AGENTS\.md plan[\s\S]*## Phase start gate/i],
       ['phase index template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-phases/phase-index.yaml'), 'utf8'), /active_phase:\s*03-phases\/[\s\S]*proof_gate:/i],
-      ['phase markdown template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-phases/01-example-phase.md'), 'utf8'), /## Product outcome[\s\S]*## Interfaces touched[\s\S]*## State\/runtime touched[\s\S]*## Repair routing/i],
+      ['phase flow template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-phases/phase-flow.md'), 'utf8'), /Phase-entry protocol[\s\S]*Required phase artifacts[\s\S]*\.buildprint\/phase-runs\/<phase-id>\/plan\.md[\s\S]*\.buildprint\/evidence\/evidence-ledger\.jsonl/i],
+      ['phase markdown template', fs.readFileSync(path.join(dir, 'templates/executable-packet/03-phases/01-example-phase.md'), 'utf8'), /## How to implement this phase[\s\S]*03-phases\/phase-flow\.md[\s\S]*## Product outcome[\s\S]*## Interfaces touched[\s\S]*## State\/runtime touched[\s\S]*## Repair routing/i],
       ['evaluation template', fs.readFileSync(path.join(dir, 'templates/executable-packet/04-evaluation.md'), 'utf8'), /provider_live[\s\S]*durable_persistence[\s\S]*no_fake[\s\S]*Loop completion rule/i],
       ['evidence schema template', fs.readFileSync(path.join(dir, 'templates/executable-packet/05-evidence/evidence-ledger.schema.json'), 'utf8'), /phase_id[\s\S]*proof_type[\s\S]*provider_mode[\s\S]*upgrades_claim/i],
-      ['executable blueprint overview template', fs.readFileSync(path.join(dir, 'templates/executable-packet/BUILDPRINT.md'), 'utf8'), /Required read order[\s\S]*01-questions\.md[\s\S]*02-project-setup\.md[\s\S]*Implementation loop[\s\S]*Repair routing/i],
+      ['executable blueprint overview template', fs.readFileSync(path.join(dir, 'templates/executable-packet/BUILDPRINT.md'), 'utf8'), /Required read order[\s\S]*01-questions\.md[\s\S]*02-project-setup\.md[\s\S]*03-phases\/phase-flow\.md[\s\S]*Implementation loop[\s\S]*Repair routing/i],
       ['executable packet generated prompt template', fs.readFileSync(path.join(dir, 'templates/executable-packet/generated/agent-prompt.md'), 'utf8'), /Generated from:\s*blueprint\.yaml/i],
     ];
     for (const [label, text, pattern] of mapperRequired) {

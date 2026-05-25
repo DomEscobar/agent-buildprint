@@ -2979,7 +2979,7 @@ function packetCheckResults(dir) {
   const files = new Set(packetFiles(dir))
   const need = [
     'BUILDPRINT.md', 'blueprint.yaml', '01-questions.md', '02-project-setup.md',
-    '03-phases/phase-index.yaml', '04-evaluation.md',
+    '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md',
     '05-evidence/evidence-ledger.schema.json', '05-evidence/evidence-ledger.jsonl'
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
@@ -2992,12 +2992,16 @@ function packetCheckResults(dir) {
   ok('blueprint includes implementation loop', /observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint))
   ok('blueprint includes repair routing', /proof_gate_failed:\s*current_phase/i.test(blueprint) && /architecture_contradiction:\s*02-project-setup\.md/i.test(blueprint))
   const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
-  ok('BUILDPRINT owns read order', /01-questions\.md[\s\S]*02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml/i.test(buildprint))
-  ok('BUILDPRINT includes loop and repair protocol', /Implementation loop/i.test(buildprint) && /Repair routing/i.test(buildprint))
+  ok('BUILDPRINT owns read order', /01-questions\.md[\s\S]*02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md/i.test(buildprint))
+  ok('BUILDPRINT includes loop, phase-flow, and repair protocol', /Implementation loop/i.test(buildprint) && /phase-runs/i.test(buildprint) && /Repair routing/i.test(buildprint))
   const questions = safeReadText(path.join(dir, '01-questions.md'))
   ok('questions use numbered AI-default alignment', /## 1\./.test(questions) && /## 6\./.test(questions) && /AI best judgment/i.test(questions))
   const setup = safeReadText(path.join(dir, '02-project-setup.md'))
   ok('project setup defines architecture and AGENTS plan', /## Architecture rules/i.test(setup) && /## AGENTS\.md plan/i.test(setup) && /## Phase start gate/i.test(setup))
+  ok('project setup defines phase-flow execution authority', /## Execution authority model/i.test(setup) && /03-phases\/phase-flow\.md/i.test(setup) && /bounded handoff/i.test(setup))
+  const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
+  ok('phase flow defines phase-entry orchestration artifacts', /Phase-entry protocol/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/plan\.md/i.test(phaseFlow) && /handoffs\/<role>\.md/i.test(phaseFlow) && /returns\/<role>\.md/i.test(phaseFlow) && /reviews\/qa\.md/i.test(phaseFlow))
+  ok('phase flow blocks evidence until reviews/proof exist', /You may not append runtime evidence/i.test(phaseFlow) && /\.buildprint\/evidence\/evidence-ledger\.jsonl/i.test(phaseFlow))
   const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
   ok('phase index names active proof-gated phase', /active_phase:\s*03-phases\//i.test(phaseIndex) && /phase_id:/i.test(phaseIndex) && /proof_gate:/i.test(phaseIndex))
   const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
@@ -3007,8 +3011,9 @@ function packetCheckResults(dir) {
   const phases = exists(phaseDir) ? fs.readdirSync(phaseDir).filter((file) => file.endsWith('.md')).sort() : []
   ok('packet has at least one phase file', phases.length > 0)
   for (const file of phases) {
+    if (file === 'phase-flow.md') continue
     const text = safeReadText(path.join(phaseDir, file))
-    ok(`${file} includes inline interfaces/state/proof/repair`, /## Interfaces touched/i.test(text) && /## State\/runtime touched/i.test(text) && /## Proof gate/i.test(text) && /## Repair routing/i.test(text))
+    ok(`${file} includes phase-flow entry plus inline interfaces/state/proof/repair`, /## How to implement this phase/i.test(text) && /03-phases\/phase-flow\.md/i.test(text) && /phase-flow required artifacts/i.test(text) && /## Interfaces touched/i.test(text) && /## State\/runtime touched/i.test(text) && /## Proof gate/i.test(text) && /## Repair routing/i.test(text))
     ok(`${file} uses phase_id not capability_id for proof rows`, !/capability_id\s*:/i.test(text))
     ok(`${file} does not reference missing shared UX context`, !/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text))
   }
@@ -3144,7 +3149,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   const manifestReadOrder = Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length
     ? manifest.instructions.readOrder
     : (isExecutablePacket
-      ? ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
+      ? ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
       : ['BUILDPRINT.md'])
 
   const targetRoot = path.resolve(cwd, targetFolder)
@@ -3225,11 +3230,12 @@ This is a Mapper OS executable-blueprint v5. Local runtime state wins over stale
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work.
-4. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
-5. Execute the phase implementation loop: observe, plan, execute, verify, reflect, record.
-6. If verification fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
-7. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`.
-8. After proof, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
+4. Read \`.buildprint/snapshots/03-phases/phase-flow.md\` and create the required \`.buildprint/phase-runs/<phase-id>/\` plan/team/handoff/return/review/proof artifacts before evidence.
+5. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
+6. Execute the phase implementation loop through phase-flow: observe, plan, execute, verify, reflect, record.
+7. If verification fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
+8. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`, and only after phase-flow artifacts exist.
+9. After proof, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
 
 Rules:
 

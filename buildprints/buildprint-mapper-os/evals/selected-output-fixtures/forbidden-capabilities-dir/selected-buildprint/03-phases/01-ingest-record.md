@@ -1,5 +1,21 @@
 # Phase 01 — Upload and persist submitted records
 
+## How to implement this phase
+
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md`
+- current project `AGENTS.md`
+
+Then execute this phase through `03-phases/phase-flow.md`: declare phase objective, assemble required roles, dispatch bounded subagent tasks or simulate them explicitly, collect reviews, integrate, verify, and record evidence.
+
+You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+
+requires_roles:
+  - product-architect
+  - test-and-verification
+
 ## Product outcome
 
 Implement one real vertical ingest path: accept a submitted record, validate required fields, store it durably, and allow readback through a separate operation.

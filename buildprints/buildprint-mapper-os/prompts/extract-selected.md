@@ -119,18 +119,18 @@ Selected packets for multi-phase work must compile into orchestrator handoffs, n
 
 `02-project-setup.md` must include:
 
-- `## Execution authority model`: define `AGENTS.md` as a scope governor, `.buildprint/next-agent.md` as continuity, and explicit task/handoff text as the only valid source of delegated role/scope. Do not rely on agents knowing whether they are "subagents"; the task prompt/handoff must state authority and scope.
+- `## Execution authority model`: define `AGENTS.md` as a scope governor, `.buildprint/next-agent.md` as continuity, `03-phases/phase-flow.md` as the executable phase-entry constitution, and explicit task/handoff text as the only valid source of delegated role/scope. Do not rely on agents knowing whether they are "subagents"; the task prompt/handoff must state authority and scope.
 - `## Delegation and handoff protocol`: define how the main coding session plans each phase, creates bounded assignments, gives exact files/scope/success criteria/proof commands/evidence requirements, reviews worker output, integrates changes, updates `.buildprint/progress.md` and `.buildprint/next-agent.md`, and refuses vague/global delegation.
 - `## AGENTS.md plan`: specify that the downstream root `AGENTS.md` stays short and prevents drift: follow the current assignment, do not broaden scope, read only named Buildprint/phase files, do not update `.buildprint/state.json`, `.buildprint/progress.md`, or `.buildprint/next-agent.md` unless explicitly assigned, and return changed files/proof/evidence draft/risks.
 
 For long-running full-suite execution, the orchestrated phase-suite loop is mandatory:
 
-1. Orchestrator reads Buildprint state and active phase.
-2. Orchestrator writes bounded handoffs for specialist work.
-3. Specialists implement or review scoped slices from those handoffs.
+1. Orchestrator reads Buildprint state, `03-phases/phase-flow.md`, and active phase.
+2. Orchestrator writes `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team.md`, and bounded handoffs for specialist work.
+3. Specialists implement or review scoped slices from those handoffs, or the orchestrator explicitly simulates the role and writes a return artifact when subagents are unavailable.
 4. Orchestrator integrates results in one workspace.
-5. Proof gate runs for the phase.
-6. Runtime evidence rows are appended to `.buildprint/evidence/evidence-ledger.jsonl`.
+5. Proof gate runs for the phase after reviews are written under `.buildprint/phase-runs/<phase-id>/reviews/`.
+6. Runtime evidence rows are appended to `.buildprint/evidence/evidence-ledger.jsonl` only after required phase-run artifacts exist.
 7. Progress and next-agent continuity are updated before moving to the next phase.
 
 A full-suite replay must fail if later phases are merely reserved, stubbed, or blocked while the run claims pass.
@@ -143,6 +143,8 @@ A phase is **not** a waterfall time bucket. A phase is a proof-gated vertical pr
 
 `03-phases/phase-index.yaml` must include `active_phase`, `phase_id`, `file`, `status`, dependencies, and proof gate. `active_phase` and every `file` value must point to the full packet-relative phase file path under `03-phases/`.
 
+`03-phases/phase-flow.md` is required. It must define the phase-entry protocol, required phase-run artifacts, phase-derived team assembly, bounded handoff shape, review/integration expectations, simulation fallback when subagents are unavailable, explicit review contracts for architecture/UX/QA with rejection criteria, and the rule that runtime evidence cannot be appended until plan/team/handoffs/returns/reviews/proof artifacts exist.
+
 Phase identity rules:
 
 - Use one canonical `phase_id` per phase everywhere: `phase-index.yaml`, `blueprint.yaml`, phase files, proof gates, and seed evidence rows.
@@ -150,8 +152,10 @@ Phase identity rules:
 - Do not use `capability_id` for phase proof instructions. Runtime proof rows must use `phase_id`.
 - For stateful workflows, dependencies must model the source-backed execution order. Do not emit `depends_on: []` for every phase unless the packet explicitly justifies independent parallel phases.
 
-Every `03-phases/*.md` file must include:
+Every implementation phase file under `03-phases/*.md` must include:
 
+- `## How to implement this phase` with required pre-code reads: `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`; it must tell the agent to execute through phase-flow and block evidence until phase-flow artifacts exist.
+- `requires_roles:` seeded from phase needs, not a fixed always-on team.
 - `## Product outcome`
 - `## Source evidence`
 - `## Implementation scope`
@@ -169,7 +173,7 @@ UI-bearing phases must not reference non-existent shared files such as `02-conte
 
 ## Implementation loop
 
-`BUILDPRINT.md`, `blueprint.yaml`, and every phase must require:
+`BUILDPRINT.md`, `blueprint.yaml`, `03-phases/phase-flow.md`, and every phase must require:
 
 ```text
 Observe → Plan → Execute → Verify → Reflect → Record
@@ -185,8 +189,8 @@ If verification fails, route back before editing again:
 - architecture contradiction -> `02-project-setup.md`
 - missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
 - missing dependency -> required prior phase
-- external blocker -> `05-evidence/evidence-ledger.jsonl`
-- runtime proof/blocker row -> `.buildprint/evidence/evidence-ledger.jsonl` in the implementation workspace
+- packet seed-only blocker -> `05-evidence/evidence-ledger.jsonl`
+- runtime proof/blocker row, including external implementation blockers -> `.buildprint/evidence/evidence-ledger.jsonl` in the implementation workspace
 
 Do not mark a phase complete while its verification failure is unresolved.
 

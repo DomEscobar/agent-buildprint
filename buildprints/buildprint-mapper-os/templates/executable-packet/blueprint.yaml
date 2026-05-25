@@ -33,7 +33,7 @@ repair_loop:
     architecture_contradiction: 02-project-setup.md
     missing_human_preference: 01-questions.md
     missing_dependency_phase: required_prior_phase
-    external_blocker: 05-evidence/evidence-ledger.jsonl
+    external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
   - phase_id: example-phase
     title: 01-example-phase
@@ -41,6 +41,7 @@ phases:
     status: INCLUDED_NEEDS_PROOF
 context:
   phase_index: 03-phases/phase-index.yaml
+  phase_flow: 03-phases/phase-flow.md
   active_phase: 03-phases/01-example-phase.md
   evaluation: 04-evaluation.md
   evidence_schema: 05-evidence/evidence-ledger.schema.json

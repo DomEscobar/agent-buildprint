@@ -89,6 +89,10 @@ Use these review lenses during every implementation loop:
 - The current task prompt or bounded handoff is the only valid source of delegated role, scope, allowed edits, proof command, and evidence-row expectations. Do not rely on workers knowing whether they are subagents.
 - If no bounded assignment exists, an agent must stop after reading continuity and propose the next action instead of choosing its own phase.
 
+## Execution authority model
+
+Root/local `AGENTS.md` files are scope governors, `.buildprint/next-agent.md` is continuity, and `03-phases/phase-flow.md` is the phase-entry constitution for bounded handoffs.
+
 ## Delegation and handoff protocol
 
 For each phase, the orchestrating main session must create bounded assignments before delegating work. Each assignment includes phase id, proof gate, files to read, allowed edit scope, non-goals, success criteria, verification command, evidence row requirements, and risks/blockers. Specialist workers return changed files, proof results, an evidence row draft, and risks. The orchestrator reviews and integrates their output, runs the phase proof gate, appends runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`, and updates `.buildprint/progress.md` plus `.buildprint/next-agent.md` before moving on. Vague global delegation is invalid.

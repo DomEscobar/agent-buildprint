@@ -208,7 +208,7 @@ function buildPrompt(phase, options = {}) {
     '',
     'Required operating contract:',
     '1. Your first packet action must be reading `selected-buildprint/BUILDPRINT.md`. Do not run find/ls/tree/glob, enumerate packet files, or open any other packet file before reading it.',
-    `2. Follow its read order through \`01-questions.md\`, \`02-project-setup.md\`, \`blueprint.yaml\`, \`03-phases/phase-index.yaml\`, ${options.allPhases ? 'each phase file in dependency order' : `the active phase file \`${phase.activeFile}\``}, \`04-evaluation.md\`, and the evidence ledger seed.`,
+    `2. Follow its read order through \`01-questions.md\`, \`02-project-setup.md\`, \`blueprint.yaml\`, \`03-phases/phase-index.yaml\`, \`03-phases/phase-flow.md\`, ${options.allPhases ? 'each phase file in dependency order' : `the active phase file \`${phase.activeFile}\``}, \`04-evaluation.md\`, and the evidence ledger seed.`,
     '3. Treat blank ordinary questions as AI best-judgment defaults. Ask or stop only for irreversible, expensive, credentialed, destructive, or product-defining choices.',
     '4. Complete the project setup gate before phase work. Create implementation-project instructions only in the temp workspace, not inside the copied packet.',
     '5. Treat AGENTS.md as a scope governor, not the product brain. The current assignment/handoff is the role and scope; do not infer extra global scope from unrelated files.',
@@ -216,6 +216,7 @@ function buildPrompt(phase, options = {}) {
     proofLine,
     '8. Run meaningful verification gates for your changes, including tests/build/runtime checks where possible.',
     '9. Do not create or route through legacy packet entrypoints or capability folders.',
+    '10. Do not traverse outside the temp workspace. Never run `find ..`, `ls ..`, `rg ..`, `grep ..`, or equivalent parent-directory scans.',
     '',
     'At the end, print a compact replay summary with files changed, setup gate handling, phase/proof-gate result for each replayed phase, verification command/result, evidence-ledger action, and the read-order sequence you actually followed.',
   ].join('\n');
@@ -230,6 +231,81 @@ function syntheticDryRun(workspace, phase, options = {}) {
   const ledgerDir = path.join(workspace, '.buildprint/evidence');
   fs.mkdirSync(ledgerDir, { recursive: true });
   const phasesToReplay = options.allPhases ? phase.phases : [phase];
+  for (const item of phasesToReplay) {
+    const phaseRunDir = path.join(workspace, '.buildprint/phase-runs', item.phaseId);
+    fs.mkdirSync(path.join(phaseRunDir, 'reviews'), { recursive: true });
+    fs.writeFileSync(path.join(phaseRunDir, 'reviews/architecture.md'), [
+      '## Verdict',
+      '',
+      'pass-with-scoped-debt',
+      '',
+      '## Dependency direction',
+      '',
+      'Dry-run dependency direction is limited to harness-created artifacts; no generated implementation dependency is claimed.',
+      '',
+      '## Source capability preservation',
+      '',
+      'Dry-run preserves no product capability claim; it only exercises replay harness mechanics for the selected phase.',
+      '',
+      '## State and runtime ownership',
+      '',
+      'Harness owns the temporary `.buildprint` artifacts and does not claim product runtime state ownership.',
+      '',
+      '## Provider/live claim honesty',
+      '',
+      'No live provider, credential, network service, or deployment behavior is claimed by the dry run.',
+      '',
+      '## Scoped shortcuts',
+      '',
+      'Synthetic files are accepted only for dry-run harness validation and must not upgrade product claims.',
+      '',
+      '## Next-phase boundary',
+      '',
+      'Future phases cannot inherit product completion from this dry-run artifact.',
+      '',
+      '## Required repair before evidence',
+      '',
+      'None for harness mechanics; product evidence still requires a real Codex replay.',
+    ].join('\n'));
+    fs.writeFileSync(path.join(phaseRunDir, 'reviews/ux.md'), [
+      '## Verdict',
+      '',
+      'not-ui-bearing',
+      '',
+      '## Reason',
+      '',
+      'Dry-run mode does not implement a UI surface and therefore cannot provide visual quality proof.',
+      '',
+      '## Downstream UI obligations',
+      '',
+      'A real replay must produce UI review evidence whenever the selected phase is UI-bearing.',
+    ].join('\n'));
+    fs.writeFileSync(path.join(phaseRunDir, 'reviews/qa.md'), [
+      '## Verdict',
+      '',
+      'pass-with-scoped-debt',
+      '',
+      '## Commands run',
+      '',
+      '`--dry-run` harness path wrote synthetic artifacts only.',
+      '',
+      '## What passed',
+      '',
+      'Replay harness file creation, score plumbing, and evidence ledger mechanics were exercised.',
+      '',
+      '## What this does not prove',
+      '',
+      'It does not prove product implementation behavior, browser runtime, live providers, or full proof gates.',
+      '',
+      '## Blockers and claim limits',
+      '',
+      'Dry-run evidence cannot upgrade any product claim and must be replaced by real replay proof.',
+      '',
+      '## Evidence row check',
+      '',
+      '`upgrades_claim` remains false because this is synthetic harness evidence.',
+    ].join('\n'));
+  }
   fs.writeFileSync(path.join(ledgerDir, 'evidence-ledger.jsonl'), phasesToReplay.map((item) => JSON.stringify({
     artifact_id: `dry-run-replay-${item.phaseId}`,
     type: options.allPhases ? 'runtime_proof' : 'blocker',
@@ -244,7 +320,7 @@ function syntheticDryRun(workspace, phase, options = {}) {
 
   return [
     'DRY RUN: Codex was not invoked.',
-    `Read order simulated: BUILDPRINT.md -> 01-questions.md -> 02-project-setup.md -> blueprint.yaml -> 03-phases/phase-index.yaml -> ${phase.activeFile} -> 04-evaluation.md -> evidence ledger seed.`,
+    `Read order simulated: BUILDPRINT.md -> 01-questions.md -> 02-project-setup.md -> blueprint.yaml -> 03-phases/phase-index.yaml -> 03-phases/phase-flow.md -> ${phase.activeFile} -> 04-evaluation.md -> evidence ledger seed.`,
     'Question gate simulated: blank ordinary answers became AI best judgment assumptions; no human question was required.',
     'Setup gate simulated: completed project setup and created root AGENTS.md in the temp implementation workspace.',
     `Phase replay simulated: ${options.allPhases ? 'all phases' : `active phase ${phase.phaseId}`} reached requested proof gates.`,
@@ -285,6 +361,88 @@ function includesAny(text, patterns) {
   return patterns.some((pattern) => pattern.test(text));
 }
 
+function sectionBody(text, heading) {
+  const escaped = escapeRegex(heading);
+  const match = text.match(new RegExp(`^## ${escaped}\\s*\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'mi'));
+  return match ? match[1].trim() : '';
+}
+
+function sectionAnswered(text, heading, options = {}) {
+  const body = sectionBody(text, heading);
+  if (!body) return false;
+  if (options.verdict) return /^(pass|pass-with-scoped-debt|blocker|not-ui-bearing)\b/i.test(body);
+  const compact = body.replace(/[`*_>\-\s]/g, '').toLowerCase();
+  if (compact.length < (options.minChars || 24)) return false;
+  if (/^(none|na|n\/a|notapplicable|ok|yes|passed|looksgood|todo|tbd)$/.test(compact)) return false;
+  return true;
+}
+
+function reviewHasAnsweredSections(text, headings) {
+  return headings.every((heading) => sectionAnswered(text, heading));
+}
+
+function reviewContractChecks(workspace, phasesToReplay) {
+  const checks = [];
+  for (const item of phasesToReplay) {
+    const root = path.join(workspace, '.buildprint/phase-runs', item.phaseId);
+    const arch = safeReadText(path.join(root, 'reviews/architecture.md'));
+    const ux = safeReadText(path.join(root, 'reviews/ux.md'));
+    const qa = safeReadText(path.join(root, 'reviews/qa.md'));
+    const architectureHeadings = [
+      'Dependency direction',
+      'Source capability preservation',
+      'State and runtime ownership',
+      'Provider/live claim honesty',
+      'Scoped shortcuts',
+      'Next-phase boundary',
+      'Required repair before evidence',
+    ];
+    const uxHeadings = [
+      'Primary user job',
+      'Screen composition',
+      'State matrix',
+      'Responsive/accessibility proof',
+      'Destructive/sensitive actions',
+      'Screenshot or DOM evidence',
+      'Required repair before evidence',
+    ];
+    const qaHeadings = [
+      'Commands run',
+      'What passed',
+      'What this does not prove',
+      'Blockers and claim limits',
+      'Evidence row check',
+    ];
+    checks.push({
+      id: `architecture_review_contract_${item.phaseId}`,
+      ok: sectionAnswered(arch, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(arch, architectureHeadings),
+      evidence: 'Architecture review must answer every rejection heading with concrete evidence, scoped debt, or blocker text.',
+    });
+    checks.push({
+      id: `ux_review_contract_${item.phaseId}`,
+      ok: (sectionAnswered(ux, 'Verdict', { verdict: true })
+          && /^not-ui-bearing\b/i.test(sectionBody(ux, 'Verdict'))
+          && reviewHasAnsweredSections(ux, ['Reason', 'Downstream UI obligations']))
+        || (sectionAnswered(ux, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(ux, uxHeadings)),
+      evidence: 'UX review must either prove UI quality through concrete headings or explicitly mark not-ui-bearing with downstream obligations.',
+    });
+    checks.push({
+      id: `qa_review_contract_${item.phaseId}`,
+      ok: sectionAnswered(qa, 'Verdict', { verdict: true }) && reviewHasAnsweredSections(qa, qaHeadings),
+      evidence: 'QA review must bind commands/proof/blockers to the evidence claim level with substantive section bodies.',
+    });
+  }
+  return checks;
+}
+
+function parseJsonl(text) {
+  const rows = [];
+  for (const line of text.split('\n').filter(Boolean)) {
+    try { rows.push(JSON.parse(line)); } catch { /* scoring handles malformed rows elsewhere */ }
+  }
+  return rows;
+}
+
 function scoreReplay(workspace, output, phase, options = {}) {
   const corpus = textCorpus(workspace, output);
   const combined = `${corpus.outputText}\n${corpus.fileText}`;
@@ -298,6 +456,19 @@ function scoreReplay(workspace, output, phase, options = {}) {
     /PRE_IMPLEMENTATION_QUESTIONS/,
     /03-capabilities/,
   ];
+  const generatedFileText = corpus.fileText
+    .split('\n')
+    .filter((line) => !line.startsWith('selected-buildprint/'))
+    .filter((line) => !/do not|forbidden|avoid|obsolete|legacy_tokens_checked|tokens_checked/i.test(line))
+    .join('\n');
+  const legacyRoutingText = outputOnly
+    .split('\n')
+    .filter((line) => !/Required operating contract:|Do not create|forbidden|obsolete|legacy|tokens_checked|START_HERE.*PRE_IMPLEMENTATION_QUESTIONS/i.test(line))
+    .filter((line) => !/^\.\.\//.test(line.trim()))
+    .join('\n');
+  const parentTraversalLines = outputOnly
+    .split('\n')
+    .filter((line) => /(^|[\s"'`])(find|ls|cat|sed|rg|grep)\s+\.\.(\s|\/|$)/.test(line) || /^\.\.\//.test(line.trim()));
 
   const phasesToReplay = options.allPhases ? phase.phases : [phase];
   const readOrderTokens = [
@@ -306,6 +477,7 @@ function scoreReplay(workspace, output, phase, options = {}) {
     '02-project-setup.md',
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
+    '03-phases/phase-flow.md',
     ...phasesToReplay.map((item) => item.activeFile),
   ];
   const readOrderIndexes = readOrderTokens.map((token) => outputOnly.indexOf(token));
@@ -319,8 +491,21 @@ function scoreReplay(workspace, output, phase, options = {}) {
   }));
   const allPhaseNoBlockersCheck = {
     id: 'all_phase_replay_no_blockers',
-    ok: !options.allPhases || !/(\"type\"\s*:\s*\"blocker\"|\"status\"\s*:\s*\"blocked\")/i.test(ledgerText),
+    ok: !options.allPhases || !/("type"\s*:\s*"blocker"|"status"\s*:\s*"blocked")/i.test(ledgerText),
     evidence: options.allPhases ? 'Full-suite replay must not pass with blocker rows for requested phases.' : 'Not required for active-phase replay.',
+  };
+  const ledgerRows = parseJsonl(ledgerText);
+  const overUpgradedProviderLive = ledgerRows.some((row) => {
+    const body = JSON.stringify(row);
+    const proves = JSON.stringify(row.proves || []);
+    return row.upgrades_claim === true
+      && /missing_credentials|network_blocked|provider[_ -]?blocked/i.test(body)
+      && /provider_live|live provider|provider-live/i.test(proves);
+  });
+  const providerClaimCheck = {
+    id: 'no_provider_live_overupgrade',
+    ok: !overUpgradedProviderLive,
+    evidence: 'Evidence rows must not upgrade provider-live claims when live provider proof is blocked.',
   };
 
   const checks = [
@@ -340,11 +525,18 @@ function scoreReplay(workspace, output, phase, options = {}) {
       evidence: `Looks for requested proof-gate language and phase_id evidence for ${phasesToReplay.map((item) => item.phaseId).join(', ')}.`,
     },
     ...phaseEvidenceChecks,
+    ...reviewContractChecks(workspace, phasesToReplay),
     allPhaseNoBlockersCheck,
+    providerClaimCheck,
+    {
+      id: 'no_parent_context_enumeration',
+      ok: parentTraversalLines.length === 0,
+      evidence: parentTraversalLines.length ? `Replay enumerated parent/out-of-scope paths: ${parentTraversalLines.slice(0, 3).join(' | ')}` : 'Replay did not enumerate parent directories in transcript output.',
+    },
     {
       id: 'no_legacy_routing',
-      ok: !includesAny(combined, forbidden) && !corpus.files.some((file) => includesAny(file, forbidden)),
-      evidence: 'Checks agent output, workspace file contents, and workspace file paths for forbidden obsolete routing tokens.',
+      ok: !includesAny(legacyRoutingText, forbidden) && !includesAny(generatedFileText, forbidden) && !corpus.files.some((file) => !file.startsWith('selected-buildprint/') && includesAny(file, forbidden)),
+      evidence: 'Checks generated output/files/paths for actual obsolete routing, ignoring packet guardrails that mention forbidden legacy names negatively.',
     },
   ];
 

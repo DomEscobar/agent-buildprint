@@ -1,5 +1,29 @@
 # Phase 01 — <phase-name>
 
+## How to implement this phase
+
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md`
+- current project `AGENTS.md`
+
+Then execute this phase through `03-phases/phase-flow.md`:
+
+1. declare phase objective
+2. assemble required roles
+3. dispatch bounded subagent tasks or simulate them explicitly if subagents are unavailable
+4. collect reviews
+5. integrate
+6. verify
+7. record evidence
+
+You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+
+requires_roles:
+  - product-architect
+  - test-and-verification
+
 ## Product outcome
 
 Describe the working product slice this phase delivers.
@@ -53,8 +77,8 @@ Required proof types:
 - no_fake_scan_pass
 - evidence_ledger_entry
 
-Required evidence row must use `phase_id: <phase-id>` and write to `05-evidence/evidence-ledger.jsonl`.
+Required runtime evidence row must use `phase_id: <phase-id>` and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
 
 ## Repair routing
 
-If this phase fails verification, return here before editing again. Route architecture contradictions to `02-project-setup.md`, product-defining human ambiguity to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.
+If this phase fails verification, return here before editing again. Route architecture contradictions to `02-project-setup.md`, product-defining human ambiguity to `01-questions.md`, packet seed-only blockers to `05-evidence/evidence-ledger.jsonl`, and runtime proof/blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.

@@ -14,6 +14,7 @@ const requiredFiles = [
   '01-questions.md',
   '02-project-setup.md',
   '03-phases/phase-index.yaml',
+  '03-phases/phase-flow.md',
   '04-evaluation.md',
   '05-evidence/evidence-ledger.jsonl',
   '05-evidence/evidence-ledger.schema.json',
@@ -52,6 +53,7 @@ const setupSections = [
   /## Phase start gate/i,
 ];
 const phaseSections = [
+  /## How to implement this phase/i,
   /## Product outcome/i,
   /## Source evidence/i,
   /## Source surface dispositions/i,
@@ -164,10 +166,11 @@ function validate(target, dir) {
 
   const buildprint = safeRead(path.join(dir, 'BUILDPRINT.md'));
   if (!/^# BUILDPRINT:/m.test(buildprint)) fail(target, 'BUILDPRINT.md must be the canonical start file');
-  for (const token of ['01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
+  for (const token of ['01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
     if (!buildprint.includes(token)) fail(target, `BUILDPRINT.md read order missing ${token}`);
   }
   if (!/Implementation loop/i.test(buildprint) || !/Repair routing/i.test(buildprint)) fail(target, 'BUILDPRINT.md must include implementation loop and repair routing');
+  if (!/phase-flow\.md/i.test(buildprint) || !/phase-runs/i.test(buildprint)) fail(target, 'BUILDPRINT.md must require phase-flow phase-run orchestration before evidence');
   if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities/i.test(buildprint)) fail(target, 'BUILDPRINT.md contains obsolete pre-baseline entrypoint/capability wording');
 
   const questions = safeRead(path.join(dir, '01-questions.md'));
@@ -180,9 +183,36 @@ function validate(target, dir) {
   if (!/root\/local `AGENTS\.md`|local `AGENTS\.md`|Root `AGENTS\.md`/i.test(setup)) fail(target, '02-project-setup.md must define root/local AGENTS.md plan');
   if (!/scope governor/i.test(setup) || !/next-agent\.md/i.test(setup) || !/handoff/i.test(setup)) fail(target, '02-project-setup.md must define execution authority: AGENTS.md as scope governor, .buildprint/next-agent.md continuity, and bounded handoffs');
   if (!/bounded assignment|bounded handoff/i.test(setup) || !/proof command|verification command/i.test(setup) || !/evidence row/i.test(setup) || !/integrat/i.test(setup)) fail(target, '02-project-setup.md delegation protocol must include bounded assignments, verification/proof, evidence rows, and integration review');
+  if (!/03-phases\/phase-flow\.md/i.test(setup)) fail(target, '02-project-setup.md must route phase entry through 03-phases/phase-flow.md');
   if (!/Do not start `03-phases\/\*`/i.test(setup)) fail(target, '02-project-setup.md must block phases until setup is explicit');
   for (const token of ['Target disposition', 'preserve | replace | merge | defer | drop', 'Compatibility impact', 'not route/function parity']) {
     if (!setup.includes(token)) fail(target, `02-project-setup.md source capability/surface ledger missing ${token}`);
+  }
+
+  const phaseFlow = safeRead(path.join(dir, '03-phases/phase-flow.md'));
+  for (const token of ['Phase-entry protocol', 'Required phase artifacts', '.buildprint/phase-runs/<phase-id>/plan.md', '.buildprint/phase-runs/<phase-id>/team.md', 'handoffs/<role>.md', 'returns/<role>.md', 'reviews/architecture.md', 'reviews/ux.md', 'reviews/qa.md', '.buildprint/evidence/evidence-ledger.jsonl']) {
+    if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing ${token}`);
+  }
+  if (!/subagents are unavailable/i.test(phaseFlow) || !/simulate/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must define explicit simulation fallback when subagents are unavailable');
+  for (const token of [
+    'Review contracts',
+    'Architecture review contract',
+    'UX review contract',
+    'QA review contract',
+    '## Verdict',
+    '## Dependency direction',
+    '## Source capability preservation',
+    '## Provider/live claim honesty',
+    '## Next-phase boundary',
+    '## Primary user job',
+    '## Screen composition',
+    '## State matrix',
+    '## Screenshot or DOM evidence',
+    '## What this does not prove',
+    '## Blockers and claim limits',
+    '## Evidence row check',
+  ]) {
+    if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing review contract token: ${token}`);
   }
 
   const phaseIndex = safeRead(path.join(dir, '03-phases/phase-index.yaml'));
@@ -195,7 +225,7 @@ function validate(target, dir) {
 
   const phasesDir = path.join(dir, '03-phases');
   const phaseFiles = fs.existsSync(phasesDir)
-    ? fs.readdirSync(phasesDir, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith('.md')).map((entry) => entry.name).sort()
+    ? fs.readdirSync(phasesDir, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'phase-flow.md').map((entry) => entry.name).sort()
     : [];
   if (!phaseFiles.length) fail(target, '03-phases/ must contain at least one phase markdown file');
   for (const phaseFile of phaseFiles) {
@@ -208,6 +238,10 @@ function validate(target, dir) {
     if (/03-capabilities|09-evidence|08-evaluation|06-safety\/security-test-fixtures/i.test(text)) fail(target, `${rel} contains obsolete pre-baseline paths`);
     if (/capability_id\s*:/i.test(text)) fail(target, `${rel} must use phase_id, not capability_id, for proof rows`);
     if (/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text)) fail(target, `${rel} references missing shared UX/design context instead of inline UX contract`);
+    if (!/^# [^\n]+\n\n## How to implement this phase\n/i.test(text)) fail(target, `${rel} must start with ## How to implement this phase immediately after the title`);
+    if (!/Before writing code, read:[\s\S]*03-phases\/phase-flow\.md[\s\S]*\.buildprint\/next-agent\.md[\s\S]*AGENTS\.md/i.test(text)) fail(target, `${rel} must include phase-flow entry instructions before implementation`);
+    if (!/requires_roles:/i.test(text)) fail(target, `${rel} must declare or seed phase-derived required roles`);
+    if (!/phase-flow required artifacts/i.test(text)) fail(target, `${rel} must block evidence until phase-flow artifacts exist`);
     if (/Runtime evidence ledger:\s*`05-evidence\/evidence-ledger\.jsonl`/i.test(text)) fail(target, `${rel} must write runtime evidence to .buildprint/evidence/evidence-ledger.jsonl, not the packet seed ledger`);
     if (!/preserve|replace|merge|defer|drop/i.test(text)) fail(target, `${rel} source surface dispositions must include disposition language`);
     if (!/equivalent target behavior|compatibility impact/i.test(text)) fail(target, `${rel} source surface dispositions must preserve capability without forcing route/function parity`);
@@ -231,7 +265,7 @@ function validate(target, dir) {
   const prompt = safeRead(path.join(dir, 'generated/agent-prompt.md'));
   if (!/Generated from:\s*blueprint\.yaml/i.test(prompt)) fail(target, 'generated/agent-prompt.md must declare Generated from: blueprint.yaml');
   if (!/not source of truth|not authoritative/i.test(prompt)) fail(target, 'generated/agent-prompt.md must say it is not source of truth');
-  for (const token of ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', '03-phases/phase-index.yaml', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
+  for (const token of ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
     if (!prompt.includes(token)) fail(target, `generated/agent-prompt.md missing ${token}`);
   }
 }
