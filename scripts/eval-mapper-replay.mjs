@@ -208,15 +208,18 @@ function buildPrompt(phase, options = {}) {
     '',
     'Required operating contract:',
     '1. Your first packet action must be reading `selected-buildprint/BUILDPRINT.md`. Do not run find/ls/tree/glob, enumerate packet files, or open any other packet file before reading it.',
-    `2. Follow its read order through \`01-questions.md\`, \`02-project-setup.md\`, \`blueprint.yaml\`, \`03-phases/phase-index.yaml\`, \`03-phases/phase-flow.md\`, ${options.allPhases ? 'each phase file in dependency order' : `the active phase file \`${phase.activeFile}\``}, \`04-evaluation.md\`, and the evidence ledger seed.`,
+    `2. Follow its read order through \`01-questions.md\`, \`02-project-setup.md\`, \`blueprint.yaml\`, \`03-phases/phase-index.yaml\`, \`03-phases/phase-flow.md\`, ${options.allPhases ? 'each phase file in dependency order' : `the active phase file \`${phase.activeFile}\``}, \`04-evaluation.md\`, the evidence ledger seed, and \`05-evidence/evidence-ledger.schema.json\` before writing runtime evidence.`,
     '3. Treat blank ordinary questions as AI best-judgment defaults. Ask or stop only for irreversible, expensive, credentialed, destructive, or product-defining choices.',
     '4. Complete the project setup gate before phase work. Create implementation-project instructions only in the temp workspace, not inside the copied packet.',
     '5. Treat AGENTS.md as a scope governor, not the product brain. The current assignment/handoff is the role and scope; do not infer extra global scope from unrelated files.',
     '6. For multi-phase work, create bounded handoffs before implementation: each handoff states files to read, allowed edits, non-goals, success criteria, verification command, and evidence row requirements. Then integrate, verify, and update continuity.',
     proofLine,
-    '8. Run meaningful verification gates for your changes, including tests/build/runtime checks where possible.',
-    '9. Do not create or route through legacy packet entrypoints or capability folders.',
-    '10. Do not traverse outside the temp workspace. Never run `find ..`, `ls ..`, `rg ..`, `grep ..`, or equivalent parent-directory scans.',
+    '8. Runtime evidence rows must conform to `selected-buildprint/05-evidence/evidence-ledger.schema.json`: include `artifact_id`, `type`, `phase_id`, valid `status`, `source`, array `proves`, `proof_type`, `provider_mode`, and `upgrades_claim`.',
+    '9. Never set `upgrades_claim: true` on blocker-qualified evidence. If proof is blocked, synthetic, dependency-missing, or only partially verified, use a valid blocker/skipped status and `upgrades_claim: false`.',
+    '10. Do not claim `no_fake_scan_pass` unless you create and run an actual no-fake scan command/artifact; otherwise record a blocker or omit that proof claim.',
+    '11. Run meaningful verification gates for your changes, including tests/build/runtime checks where possible.',
+    '12. Do not create or route through legacy packet entrypoints or capability folders.',
+    '13. Do not traverse outside the temp workspace. Never run `find ..`, `ls ..`, `rg ..`, `grep ..`, or equivalent parent-directory scans.',
     '',
     'At the end, print a compact replay summary with files changed, setup gate handling, phase/proof-gate result for each replayed phase, verification command/result, evidence-ledger action, and the read-order sequence you actually followed.',
   ].join('\n');
@@ -312,7 +315,7 @@ function syntheticDryRun(workspace, phase, options = {}) {
     phase_id: item.phaseId,
     status: options.allPhases ? 'passed' : 'blocked',
     source: 'dry-run harness',
-    proves: 'Harness mechanics can create runtime evidence artifacts without invoking Codex.',
+    proves: ['harness_mechanics_only'],
     proof_type: 'harness_dry_run',
     provider_mode: 'none',
     upgrades_claim: false,
@@ -320,7 +323,7 @@ function syntheticDryRun(workspace, phase, options = {}) {
 
   return [
     'DRY RUN: Codex was not invoked.',
-    `Read order simulated: BUILDPRINT.md -> 01-questions.md -> 02-project-setup.md -> blueprint.yaml -> 03-phases/phase-index.yaml -> 03-phases/phase-flow.md -> ${phase.activeFile} -> 04-evaluation.md -> evidence ledger seed.`,
+    `Read order simulated: BUILDPRINT.md -> 01-questions.md -> 02-project-setup.md -> blueprint.yaml -> 03-phases/phase-index.yaml -> 03-phases/phase-flow.md -> ${phase.activeFile} -> 04-evaluation.md -> evidence ledger seed -> 05-evidence/evidence-ledger.schema.json.`,
     'Question gate simulated: blank ordinary answers became AI best judgment assumptions; no human question was required.',
     'Setup gate simulated: completed project setup and created root AGENTS.md in the temp implementation workspace.',
     `Phase replay simulated: ${options.allPhases ? 'all phases' : `active phase ${phase.phaseId}`} reached requested proof gates.`,
@@ -479,6 +482,7 @@ function scoreReplay(workspace, output, phase, options = {}) {
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
     ...phasesToReplay.map((item) => item.activeFile),
+    '05-evidence/evidence-ledger.schema.json',
   ];
   const readOrderIndexes = readOrderTokens.map((token) => outputOnly.indexOf(token));
   const readOrderMentioned = readOrderIndexes.every((index) => index >= 0);
@@ -495,6 +499,43 @@ function scoreReplay(workspace, output, phase, options = {}) {
     evidence: options.allPhases ? 'Full-suite replay must not pass with blocker rows for requested phases.' : 'Not required for active-phase replay.',
   };
   const ledgerRows = parseJsonl(ledgerText);
+  const ledgerLines = ledgerText.split('\n').filter(Boolean);
+  const validStatuses = new Set(['missing', 'passed', 'proven', 'blocked', 'failed', 'skipped']);
+  const requiredLedgerFields = ['artifact_id', 'type', 'phase_id', 'status', 'source', 'proves', 'proof_type', 'provider_mode', 'upgrades_claim'];
+  const malformedLedgerRows = ledgerLines.length - ledgerRows.length;
+  const invalidLedgerRows = ledgerRows.filter((row) => requiredLedgerFields.some((field) => !(field in row))
+    || typeof row.artifact_id !== 'string'
+    || typeof row.type !== 'string'
+    || typeof row.phase_id !== 'string'
+    || typeof row.status !== 'string'
+    || !validStatuses.has(row.status)
+    || typeof row.source !== 'string'
+    || !Array.isArray(row.proves)
+    || typeof row.proof_type !== 'string'
+    || typeof row.provider_mode !== 'string'
+    || typeof row.upgrades_claim !== 'boolean');
+  const blockerOverUpgrades = ledgerRows.filter((row) => row.upgrades_claim === true
+    && (/block|missing|unavailable|not_configured|not_executed|sandbox|network|credential|synthetic|partial/i.test(JSON.stringify(row))
+      || ['blocked', 'missing', 'skipped', 'failed'].includes(row.status)));
+  const noFakeClaims = ledgerRows.filter((row) => /no[-_ ]?fake/i.test(`${row.proof_type} ${JSON.stringify(row.proves || [])}`)
+    && (row.upgrades_claim === true || ['passed', 'proven'].includes(row.status)));
+  const hasNoFakeScanArtifact = corpus.files.some((file) => /no[-_]?fake.*\.(py|js|mjs|sh)$/i.test(file));
+  const overClaimedNoFake = noFakeClaims.length > 0 && !hasNoFakeScanArtifact;
+  const evidenceSchemaCheck = {
+    id: 'runtime_evidence_schema_validity',
+    ok: malformedLedgerRows === 0 && invalidLedgerRows.length === 0,
+    evidence: invalidLedgerRows.length || malformedLedgerRows ? 'Runtime evidence rows must conform to evidence-ledger.schema.json required fields/types/status enum.' : 'Runtime evidence rows conform to required schema fields/types/status enum.',
+  };
+  const blockerClaimCheck = {
+    id: 'no_blocker_evidence_overupgrade',
+    ok: blockerOverUpgrades.length === 0,
+    evidence: blockerOverUpgrades.length ? 'Blocker-qualified, missing, synthetic, or partial evidence rows must not set upgrades_claim true.' : 'No blocker-qualified evidence row upgrades claims.',
+  };
+  const noFakeClaimCheck = {
+    id: 'no_fake_claim_requires_scan_artifact',
+    ok: !overClaimedNoFake,
+    evidence: overClaimedNoFake ? 'no_fake_scan_pass claims require an actual no-fake scan script/artifact in the workspace.' : 'No-fake claims are either absent/blocker-only or backed by a scan artifact.',
+  };
   const overUpgradedProviderLive = ledgerRows.some((row) => {
     const body = JSON.stringify(row);
     const proves = JSON.stringify(row.proves || []);
@@ -527,7 +568,10 @@ function scoreReplay(workspace, output, phase, options = {}) {
     ...phaseEvidenceChecks,
     ...reviewContractChecks(workspace, phasesToReplay),
     allPhaseNoBlockersCheck,
+    evidenceSchemaCheck,
     providerClaimCheck,
+    blockerClaimCheck,
+    noFakeClaimCheck,
     {
       id: 'no_parent_context_enumeration',
       ok: parentTraversalLines.length === 0,

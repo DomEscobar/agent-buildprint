@@ -126,3 +126,12 @@ If any review verdict is `blocker`, do not append passing evidence. Append a blo
 ## Evidence gate
 
 Runtime proof/blocker rows go only to `.buildprint/evidence/evidence-ledger.jsonl`. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence and remains immutable after bootstrap.
+
+Before writing runtime evidence, read `05-evidence/evidence-ledger.schema.json` and conform to it. Every runtime row must include `artifact_id`, `type`, `phase_id`, valid `status` (`passed`, `proven`, `blocked`, `failed`, `skipped`, or `missing`), `source`, array `proves`, `proof_type`, `provider_mode`, and `upgrades_claim`.
+
+Evidence honesty rules:
+
+- Do not use informal statuses such as `passed_with_blocker`; use `passed` only for proof that actually passed, and add separate `blocked` rows for blocked proof types.
+- Do not set `upgrades_claim: true` on any row with a blocker, missing dependency, synthetic check, unavailable credentials, sandbox/network limitation, or partial proof.
+- Do not claim `no_fake_scan_pass` unless a real no-fake scan command/artifact exists and was run. If no scan exists, write a `blocked` row or omit the proof claim.
+- A frontend copy/string-check script is not a production build. If dependencies/browser/network are unavailable, record the real build/browser proof as `blocked` with `upgrades_claim: false`.
