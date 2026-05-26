@@ -1,21 +1,17 @@
-# Acceptance Checks
+# Acceptance Checklist
 
-- [ ] `BUILDPRINT.md` was read first and treated as the authority spine.
-- [ ] `buildprint.json`, `phases.yaml`, `acceptance.yaml`, and `claims.yaml` were read as machine-readable mirrors.
-- [ ] Alignment used `DEFAULT_PRESET.md` or exactly `questions.md`.
-- [ ] Full browser webapp proof exists; API-only proof is not accepted.
-- [ ] Primary UI is a usable AI shorts production studio, not a generic dashboard, raw JSON view, route list, report, or gallery-only page.
-- [ ] Rendered source input, script selection, actor/voice/video configuration, generation progress, review/player, gallery, and publish handoff controls work.
-- [ ] Browser happy path clicked rendered controls and recorded completed desktop/mobile screenshots.
-- [ ] Required negative paths were run or concrete blockers recorded.
-- [ ] Manual-description analysis works without URL.
-- [ ] URL analysis uses scrape/research/analyze/script adapter seams.
+- [ ] `BUILDPRINT.md` is the canonical start and the implementation followed Mapper OS phase-flow.
+- [ ] `02-project-setup.md` was completed before implementation phases.
+- [ ] Runtime evidence was written only to `.buildprint/evidence/evidence-ledger.jsonl`.
+- [ ] Manual description path returns product analysis and scripts without URL.
+- [ ] URL fixture path exercises scraper/research/analyze/script adapters without live network by default.
+- [ ] At least two scripts exist and each has exactly five timed segments with b-roll requirements.
 - [ ] Provider adapters are isolated and deterministic mock/no-network by default.
-- [ ] Missing live keys produce structured blocked states, not fake success.
-- [ ] Job lifecycle includes pending/running/success/failure/cancel/retry, logs, provider records, output manifest, and result/error.
-- [ ] Playable MP4 fixture exists, is nonblank, includes captions/b-roll timing evidence, and probes as 1080x1920.
-- [ ] Gallery API/pages show only explicitly consented metadata.
-- [ ] Publish handoff requires consent and records platforms, title/description, schedule, and timezone.
-- [ ] `VALIDATION_TEMPLATE.md` was filled with commands, evidence, screenshots, MP4 probe, provider mode, gaps, and final status.
-- [ ] No placeholder, no-op, skeleton, route-shaped, gallery-only, or mock-as-product implementation is claimed as complete.
-- [ ] No forbidden claims from `claims.yaml` or `PARITY_CLAIMS.md` appear in completion wording.
+- [ ] Job lifecycle supports pending, running, success, failure, blocked, canceled, and retry with logs and provider records.
+- [ ] A playable nonblank MP4 probes as 1080x1920 and includes captions and b-roll timing evidence.
+- [ ] Browser studio exposes source input, scripts, configuration, generation, review/player, gallery, and publish handoff.
+- [ ] Gallery is private by default and shows only consented metadata.
+- [ ] Publish handoff is blocked without consent and mock/manual by default.
+- [ ] Desktop and mobile screenshots show completed populated studio UI.
+- [ ] Validation report records commands, screenshots, MP4 probe, provider mode, gaps, and status.
+- [ ] Forbidden clone, parity, live provider, production durability, public gallery, and direct platform publishing claims are absent unless separately proven.
