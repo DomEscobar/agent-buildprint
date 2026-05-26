@@ -45,7 +45,7 @@ Default mode. It may produce discovery, evidence, and quality files only. It mus
 
 ### Selected Extraction
 
-Creates `selected-buildprint/` with a small or medium package for the chosen behavior set. It remains `SELECTED_UNQUALIFIED` until qualification proof exists.
+Creates `selected-buildprint/` with a small or medium package for the chosen behavior set. It requires proof until qualification proof exists.
 
 ### Full-Suite Extraction
 
@@ -77,7 +77,7 @@ generated/
 
 `generated/agent-prompt.md` is compiled output and must not be treated as source of truth.
 
-Qualification is evidence-derived. `claim_status: SELECTED_UNQUALIFIED` can be promoted only when runtime `.buildprint/evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable. The packaged `05-evidence/evidence-ledger.jsonl` is an immutable seed/template, not the write target.
+Qualification is evidence-derived. `claim_status: PROOF_REQUIRED` can be promoted only when runtime `.buildprint/evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable. The packaged `05-evidence/evidence-ledger.jsonl` is an immutable seed/template, not the write target.
 
 The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questions.md`, `02-project-setup.md`, `03-phases/phase-index.yaml`, at least one phase Markdown file, `04-evaluation.md`, or `05-evidence/evidence-ledger.jsonl` is invalid.
 

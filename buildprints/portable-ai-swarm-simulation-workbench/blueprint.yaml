@@ -7,7 +7,7 @@ source:
   commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
   source_dependency_policy: evidence_only_do_not_require_for_implementation
 generated_at: <iso-timestamp>
-claim_status: SELECTED_UNQUALIFIED
+claim_status: PROOF_REQUIRED
 setup_gate:
   questions: 01-questions.md
   project_setup: 02-project-setup.md

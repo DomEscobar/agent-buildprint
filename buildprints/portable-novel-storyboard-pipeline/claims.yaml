@@ -1,4 +1,4 @@
-claim_status: SELECTED_UNQUALIFIED
+claim_status: PROOF_REQUIRED
 allowed:
   - clean-room Toonflow-derived workflow Buildprint
   - portable novel-to-storyboard pipeline contract

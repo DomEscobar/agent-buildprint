@@ -4,7 +4,7 @@
   "title": "Portable AI Presentation Generation OS",
   "canonicalStart": "BUILDPRINT.md",
   "packet": "blueprint.yaml",
-  "status": "SELECTED_UNQUALIFIED",
+  "status": "PROOF_REQUIRED",
   "executionMode": "phase-gated",
   "defaultProviderMode": "deterministic-no-network",
   "readOrder": [

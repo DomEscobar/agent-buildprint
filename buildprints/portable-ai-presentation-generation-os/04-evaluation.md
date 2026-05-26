@@ -1,6 +1,6 @@
 # 04 — Evaluation and claim promotion
 
-This Buildprint starts as `SELECTED_UNQUALIFIED`. Promote claims only with source-independent implementation evidence, not because the source project had the behavior.
+This Buildprint starts as `PROOF_REQUIRED`. Promote claims only with source-independent implementation evidence, not because the source project had the behavior.
 
 ## Required promotion proofs
 

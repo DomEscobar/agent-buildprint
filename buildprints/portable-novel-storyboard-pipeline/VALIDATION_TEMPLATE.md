@@ -3,7 +3,7 @@
 ## Scope
 
 - Package: Portable Novel-to-Storyboard Pipeline.
-- Claim status before proof: `SELECTED_UNQUALIFIED`.
+- Claim status before proof: `PROOF_REQUIRED`.
 
 ## Commands Run
 

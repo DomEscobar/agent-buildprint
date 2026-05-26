@@ -1,4 +1,4 @@
-claim_status: SELECTED_UNQUALIFIED
+claim_status: PROOF_REQUIRED
 required_before_promotion:
   - browser_runtime_trace
   - provider_integration_proof_or_blocker

@@ -7,7 +7,7 @@
   "creator": "Agent Buildprint",
   "category": "Mapped Project",
   "tier": "agent-grade",
-  "status": "selected-unqualified",
+  "status": "proof-required",
   "runtime": [
     "Full-stack web runtime",
     "Provider adapters",
@@ -32,7 +32,7 @@
   "featured": true,
   "summary": "Executable packet Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history through proof-gated phase files.",
   "plainDescription": "A fresh Mapper OS selected packet remapped from MiroFish source evidence and scoped as the full portable AI swarm simulation workbench. It preserves broad product scope while keeping qualification honest until live provider, runtime, browser, persistence, and security proof passes.",
-  "promise": "Build a portable AI swarm simulation workbench without depending on the original source repo. Status remains SELECTED_UNQUALIFIED until all proof gates pass.",
+  "promise": "Build a portable AI swarm simulation workbench without depending on the original source repo. Status remains PROOF_REQUIRED until all proof gates pass.",
   "whatYouGet": [
     "Executable Buildprint BUILDPRINT start and machine contract",
     "Six consolidated phase files with source evidence, implementation paths, team gates, and proof gates",
@@ -80,7 +80,7 @@
   "checks": [
     "Executable packet file shape generated",
     "YAML/JSON/JSONL parse validation expected before publication",
-    "Qualification remains SELECTED_UNQUALIFIED until proof gates pass"
+    "Qualification remains PROOF_REQUIRED until proof gates pass"
   ],
   "trustBadges": [
     {
@@ -94,14 +94,14 @@
       "tone": "success"
     },
     {
-      "label": "Selected unqualified",
+      "label": "Proof required",
       "detail": "Live provider/runtime/browser/persistence/security proof remains pending.",
       "tone": "warning"
     }
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use this Mapper OS executable Buildprint. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims SELECTED_UNQUALIFIED until proof rows pass.",
+  "copyPrompt": "Use this Mapper OS executable Buildprint. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims proof-required until proof rows pass.",
   "publicStatus": {
     "label": "Mapped, proof pending",
     "explanation": "Source-independent packet exists; live implementation proof is not complete."

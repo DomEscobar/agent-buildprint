@@ -28,4 +28,4 @@ This file describes how to maintain Mapper OS itself.
 - Risk: legacy docs or templates reintroduce `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `TEST_MATRIX.md`, `TRACEABILITY_MATRIX.md`, `IMPLEMENTATION_COMPLETENESS.md`, or fragmented per-capability mini-files as defaults.
 - Risk: fixture review becomes informal and misses no-fake regressions.
 - Risk: agents over-read source and preserve internals instead of behavior.
-- Risk: selected packages look complete while remaining `SELECTED_UNQUALIFIED`.
+- Risk: selected packages look complete before proof exists.

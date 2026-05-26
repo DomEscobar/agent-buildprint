@@ -1,5 +1,5 @@
 schema_version: agent-buildprint/claims.v1
-status: SELECTED_UNQUALIFIED
+status: PROOF_REQUIRED
 claims:
 - claim: source-independent portable AI swarm simulation workbench packet generated
   status: mapped_unqualified

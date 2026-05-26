@@ -16,7 +16,7 @@ slice_statuses:
   - OUT_OF_SCOPE_BY_USER_ONLY
 qualification_labels:
   - DISCOVERY_ONLY
-  - SELECTED_UNQUALIFIED
+  - PROOF_REQUIRED
   - QUALIFIED_SOURCE_INDEPENDENT
 source_surface_dispositions:
   - OWNED_BY_SLICE

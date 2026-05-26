@@ -104,7 +104,7 @@ acceptance:
     - selected output has no typo alias files
     - selected output has exactly one canonical handoff artifact
     - no mocks or fixtures counted as product implementation
-    - qualification label is DISCOVERY_ONLY, SELECTED_UNQUALIFIED, or QUALIFIED_SOURCE_INDEPENDENT
+    - qualification label is DISCOVERY_ONLY, PROOF_REQUIRED, or QUALIFIED_SOURCE_INDEPENDENT
   required_reviews:
     - name: mapper_fixture_review
       command: manual or agent-based review of buildprints/buildprint-mapper-os/evals/golden-projects/

@@ -189,9 +189,9 @@ Implementation plans must stay source-independent. They may reference Buildprint
 - The selected package must not require the implementation agent to read every Markdown file or every capability packet before knowing the next action.
 - `02-context/context-map.yaml` must record the active capability, completed capability packets, blocked capability packets, and next pack to implement.
 - `07-execution/implementation-plan.yaml` must record milestones, current state, concrete next actions, team-pack gates, verification gates, and decision log pointers.
-- The handoff must clearly state whether the package is discovery-only, selected but unqualified, or qualified for source-independent implementation.
+- The handoff must clearly state whether the package is discovery-only, selected with proof pending, or qualified for source-independent implementation.
 - The handoff must state the reimplementation freedom explicitly: what the agent may change internally and which external/product behaviors must remain stable.
-- Qualification label must be exactly one of: `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, `QUALIFIED_SOURCE_INDEPENDENT`.
+- Qualification label must be exactly one of: `DISCOVERY_ONLY`, `PROOF_REQUIRED`, `QUALIFIED_SOURCE_INDEPENDENT`.
 - Public copy must not use `validated`, `production-ready`, `complete`, or `end-to-end` unless label is `QUALIFIED_SOURCE_INDEPENDENT` and linked evidence is present.
 
 ## Required Acceptance Criteria
@@ -374,7 +374,7 @@ Required posture:
 - Root remains discovery/evidence/quality.
 - `selected-buildprint/` contains the whole-repo implementation package.
 - Full-suite mode is user intent, not proof of completeness.
-- The package remains unqualified until exact contracts, traceability, and runtime/reversal proof exist.
+- The package remains proof-required until exact contracts, traceability, and runtime/reversal proof exist.
 
 ### Qualified Buildprint
 

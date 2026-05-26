@@ -22,7 +22,7 @@
 ## Qualification Labels
 
 - `DISCOVERY_ONLY`: no selected implementation package exists.
-- `SELECTED_UNQUALIFIED`: selected package exists but source-independent qualification proof is incomplete.
+- `PROOF_REQUIRED`: selected package exists but source-independent qualification proof is incomplete.
 - `QUALIFIED_SOURCE_INDEPENDENT`: selected package can be implemented without reopening source and has required evidence.
 
 ## Capability Depth States

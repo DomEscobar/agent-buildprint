@@ -212,7 +212,7 @@ Do not mark a phase complete while its verification failure is unresolved.
 - Preserve selected/requested behavior. Do not omit hard/risky/external/provider/stateful behavior; mark blockers honestly when proof is missing.
 - Include stable-vs-free boundaries inside relevant phase files.
 - Include source evidence refs inside each phase.
-- Mark selected output `SELECTED_UNQUALIFIED` until proof exists.
+- Mark selected output `PROOF_REQUIRED` until proof exists.
 - Public wording must avoid validated/production-ready/complete/end-to-end unless qualified evidence exists.
 
 ## Behavior loss review

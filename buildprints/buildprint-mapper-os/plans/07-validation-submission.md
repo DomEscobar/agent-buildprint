@@ -10,7 +10,7 @@ Prove what can be proven and block what cannot be proven.
 - Record commands run, commands not run, evidence, blockers, timestamps, environment, and artifacts.
 - Run fixture review using `evals/golden-projects/` when Mapper OS behavior or templates change.
 - Run selected-output shape validation for generated selected/full-suite executable-blueprint packets and regression fixtures.
-- Keep label `SELECTED_UNQUALIFIED` unless source-independent qualification proof is complete.
+- Keep label `PROOF_REQUIRED` unless source-independent qualification proof is complete.
 
 ## Exit Criteria
 

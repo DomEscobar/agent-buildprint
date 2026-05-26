@@ -90,7 +90,7 @@
     "02-project-setup.md/team-stack.yaml, ux-contract.md, and design-quality-bar.md gate UI-bearing phase files",
     "Each phase file has slice entry, active capability contract, active capability implementation path, source-evidence-index.yaml, and Proof gate in the active capability",
     "05-evidence/evidence-ledger.jsonl is the claim-promotion authority",
-    "Claim status remains SELECTED_UNQUALIFIED until browser, provider, persistence, security, and clean-room proof rows pass"
+    "Claim status remains PROOF_REQUIRED until browser, provider, persistence, security, and clean-room proof rows pass"
   ],
   "trustBadges": [
     {
@@ -109,12 +109,12 @@
       "tone": "info"
     },
     {
-      "label": "Selected-unqualified",
+      "label": "Proof required",
       "detail": "Runtime/provider/persistence/security/clean-room proof still gates any qualification claim.",
       "tone": "warning"
     }
   ],
   "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
   "originLabel": "HBAI-Ltd/Toonflow-app",
-  "copyPrompt": "Use this Mapper OS executable Buildprint. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims SELECTED_UNQUALIFIED until proof rows pass."
+  "copyPrompt": "Use this Mapper OS executable Buildprint. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims proof-required until proof rows pass."
 }

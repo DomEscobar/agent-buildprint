@@ -6,7 +6,7 @@ source:
   checkout_path: external-source-checkout
   commit: cd6b0ac1c7ea9fa8f385c766fb900a08e1c2299b
 generated_at: 2026-05-24T10:45:00Z
-claim_status: SELECTED_UNQUALIFIED
+claim_status: PROOF_REQUIRED
 setup_gate:
   questions: 01-questions.md
   project_setup: 02-project-setup.md

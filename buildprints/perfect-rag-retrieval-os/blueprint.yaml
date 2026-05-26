@@ -7,7 +7,7 @@ source:
   commit: unavailable-in-packet
   source_independent: true
 generated_at: 2026-05-26T00:00:00Z
-claim_status: SELECTED_UNQUALIFIED
+claim_status: PROOF_REQUIRED
 setup_gate:
   questions: 01-questions.md
   project_setup: 02-project-setup.md

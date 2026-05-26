@@ -1,5 +1,5 @@
 claims:
   - id: ai-presentation-os
-    status: selected_unqualified
+    status: proof_required
     source: https://github.com/presenton/presenton
     boundary: source-independent rebuild contract, not exact clone parity

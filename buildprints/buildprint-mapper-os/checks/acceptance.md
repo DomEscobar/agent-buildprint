@@ -25,7 +25,7 @@
 - [ ] Census hints never assert product behavior, absence, parity, provider completeness, persistence, or readiness.
 - [ ] Included/excluded/blocked/test-only phase statuses are complete.
 - [ ] No included phase is placeholder-backed, mock-backed, no-op, skeleton, deterministic-adapter-only, static-shell-only, or in-memory-only where persistence is claimed.
-- [ ] Qualification label is one of `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
+- [ ] Qualification label is one of `DISCOVERY_ONLY`, `PROOF_REQUIRED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
 - [ ] `04-evaluation.md` includes literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, and `no_fake`.
 - [ ] Before handoff, the selected packet passes `node /root/blueprint/bin/agb.js packet check <selected-buildprint-dir>` when that CLI is available; if running inside `/root/blueprint`, it also passes `node /root/blueprint/scripts/check-mapper-selected-output.mjs <selected-buildprint-dir>`.
 - [ ] Public wording avoids validated/production-ready/complete/end-to-end unless qualified evidence exists.

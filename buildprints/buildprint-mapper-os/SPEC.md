@@ -16,7 +16,7 @@
 - Emit selected implementation output only under `selected-buildprint/`.
 - Use executable Buildprint proof-gated phases for medium, large, and full-suite selected outputs.
 - Include downstream-agent execution planning in every source-independent selected package.
-- Keep qualification label exactly one of `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
+- Keep qualification label exactly one of `DISCOVERY_ONLY`, `PROOF_REQUIRED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
 
 ## Must Not
 

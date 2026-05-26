@@ -21,7 +21,7 @@
 | Execution planning | selected extraction | each included phase has a proof gate, repair loop, stop condition, and next-phase unlock policy |
 | No-fake | selected extraction | no included behavior is placeholder-backed, mock-backed, no-op, skeleton, or in-memory-only where persistence is claimed |
 | Hardening | sensitive surfaces | threat/data/observability/secret/abuse controls exist and are verified or the capability is blocked |
-| Qualification language | every output | public copy matches `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, or `QUALIFIED_SOURCE_INDEPENDENT` |
+| Qualification language | every output | public copy matches `DISCOVERY_ONLY`, `PROOF_REQUIRED`, or `QUALIFIED_SOURCE_INDEPENDENT` |
 
 ## Fixture Review
 
@@ -44,7 +44,7 @@ Use `evals/golden-projects/` as regression input for manual or agent-run review.
 - qualification label;
 - evidence gaps.
 
-Use `evals/selected-output-fixtures/` with `scripts/check-mapper-selected-output.mjs` for shape regression. The execution-packet-good fixture must pass while remaining `SELECTED_UNQUALIFIED`. The negative fixtures for legacy router files, missing setup, missing proof gates, missing repair routing, missing interfaces/state sections, skipped read order, and packet AGENTS.md must fail.
+Use `evals/selected-output-fixtures/` with `scripts/check-mapper-selected-output.mjs` for shape regression. The execution-packet-good fixture must pass while remaining proof-required. The negative fixtures for legacy router files, missing setup, missing proof gates, missing repair routing, missing interfaces/state sections, skipped read order, and packet AGENTS.md must fail.
 
 ## Fresh-Agent Replay Eval
 

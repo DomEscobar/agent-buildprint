@@ -216,7 +216,7 @@ function evaluateFixture(name, dir) {
   const afterHash = hashFixture(dir);
   check('source-read-only', 'fixture hash unchanged', beforeHash === afterHash);
 
-  const qualificationExpected = secretValues.length || injectionStrings.length ? 'SELECTED_UNQUALIFIED' : 'DISCOVERY_REVIEWED';
+  const qualificationExpected = secretValues.length || injectionStrings.length ? 'PROOF_REQUIRED' : 'DISCOVERY_REVIEWED';
 
   return {
     fixture: name,

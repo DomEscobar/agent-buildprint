@@ -32,7 +32,7 @@
   "featured": false,
   "summary": "Clean-room, Presenton-inspired Buildprint for a self-hosted AI presentation generator and API with prompt/document-to-deck generation, provider configuration, editable slides, assets, templates, export, webhooks, and desktop/MCP boundaries.",
   "plainDescription": "A mapped-project blueprint for building a source-independent AI presentation generation system: authenticated self-hosted app, configurable LLM/image providers, document and prompt ingestion, outline/slide generation, editor/chat iteration, PPTX/PDF export, and API/webhook integration.",
-  "promise": "A selected, unqualified execution packet for rebuilding the Presenton product shape without copying source or claiming exact clone/provider/export parity before proof.",
+  "promise": "A proof-required execution packet for rebuilding the Presenton product shape without copying source or claiming exact clone/provider/export parity before proof.",
   "whatYouGet": [
     "Phase-gated AI presentation generator architecture",
     "Provider and secret-safety boundaries",
@@ -82,7 +82,7 @@
     "Packet check passes",
     "Publication record validates",
     "Source evidence mapped from Presenton README, FastAPI routers, generation services, Next.js pages, export/webhook/MCP/desktop surfaces",
-    "Claim status remains SELECTED_UNQUALIFIED until target-app proof exists"
+    "Claim status remains PROOF_REQUIRED until target-app proof exists"
   ],
   "trustBadges": [
     {
