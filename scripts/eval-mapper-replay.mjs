@@ -462,9 +462,9 @@ function scoreReplay(workspace, output, phase, options = {}) {
   const generatedFileText = corpus.fileText
     .split('\n')
     .filter((line) => !line.startsWith('selected-buildprint/'))
-    .filter((line) => !/do not|forbidden|avoid|obsolete|legacy_tokens_checked|tokens_checked/i.test(line))
+    .filter((line) => !/do not|forbidden|avoid|obsolete|tokens_checked/i.test(line))
     .join('\n');
-  const legacyRoutingText = outputOnly
+  const obsoleteRoutingText = outputOnly
     .split('\n')
     .filter((line) => !/Required operating contract:|Do not create|forbidden|obsolete|tokens_checked|START_HERE.*PRE_IMPLEMENTATION_QUESTIONS/i.test(line))
     .filter((line) => !/^\.\.\//.test(line.trim()))
@@ -578,8 +578,8 @@ function scoreReplay(workspace, output, phase, options = {}) {
       evidence: parentTraversalLines.length ? `Replay enumerated parent/out-of-scope paths: ${parentTraversalLines.slice(0, 3).join(' | ')}` : 'Replay did not enumerate parent directories in transcript output.',
     },
     {
-      id: 'no_legacy_routing',
-      ok: !includesAny(legacyRoutingText, forbidden) && !includesAny(generatedFileText, forbidden) && !corpus.files.some((file) => !file.startsWith('selected-buildprint/') && includesAny(file, forbidden)),
+      id: 'no_obsolete_routing',
+      ok: !includesAny(obsoleteRoutingText, forbidden) && !includesAny(generatedFileText, forbidden) && !corpus.files.some((file) => !file.startsWith('selected-buildprint/') && includesAny(file, forbidden)),
       evidence: 'Checks generated output/files/paths for actual obsolete routing, ignoring packet guardrails that mention forbidden obsolete names negatively.',
     },
   ];

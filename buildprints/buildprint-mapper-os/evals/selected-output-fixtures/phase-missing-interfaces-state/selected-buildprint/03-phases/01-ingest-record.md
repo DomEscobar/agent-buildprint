@@ -1,4 +1,4 @@
-# Phase 01 — Upload and persist submitted records
+# Phase 01 â€” Upload and persist submitted records
 
 ## How to implement this phase
 
@@ -47,7 +47,7 @@ Outputs/downstream handoff:
 
 ## UX/UI requirements
 
-This capability is UI-bearing. Follow `02-context/ux-contract.md` and `02-context/design-quality-bar.md`; proof must include empty, loading, error, blocked, and success/ready screenshots or blocker rows.
+This phase is UI-bearing. Define the UX/UI contract inline in this phase; proof must include empty, loading, error, blocked, and success/ready screenshots or blocker rows.
 
 ## Safety/security constraints
 

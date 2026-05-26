@@ -68,7 +68,7 @@ The scorer checks that the fresh agent:
 - uses phase-flow artifacts before runtime evidence;
 - references active phase proof gates;
 - writes runtime proof only to `.buildprint/evidence/evidence-ledger.jsonl`;
-- avoids legacy routing files such as `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, and `03-capabilities/`;
+- avoids obsolete routing files such as `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, and `03-capabilities/`;
 - records blockers honestly instead of upgrading them to proof.
 
 ## Full Flow Evals
