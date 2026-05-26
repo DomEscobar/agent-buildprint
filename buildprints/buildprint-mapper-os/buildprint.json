@@ -47,6 +47,10 @@
       "role": "source"
     },
     {
+      "path": "HOW_TO_EVAL.md",
+      "role": "source"
+    },
+    {
       "path": "acceptance.yaml",
       "role": "source"
     },

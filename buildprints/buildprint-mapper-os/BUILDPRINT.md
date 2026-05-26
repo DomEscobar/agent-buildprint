@@ -2,13 +2,13 @@
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command and not a source-code clone plan.
 
-The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant behavior surface, classifies readiness honestly, distills source behavior into capability packets, emits a team-pack quality router for the downstream harness, and records qualification blockers honestly.
+The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant behavior surface, classifies readiness honestly, distills source behavior into phase packets with role gates, and records qualification blockers honestly.
 
 ## Authority
 
 - `mapper-os-requirement.md` is the root product requirement.
 - This package is the operating Buildprint for agents performing mapping.
-- Source files are evidence. Product obligations and capability packets are the rebuild contract.
+- Source files are evidence. Product obligations and phase packets are the rebuild contract.
 - Static scanning may guide discovery but must never become product authority.
 - A qualified Buildprint is an implementation input, not proof that a future implementation already works.
 
@@ -31,7 +31,7 @@ For generated selected packages, do not make the implementing agent read all Mar
 2. Safe census: collect file tree, manifests, dependency hints, framework hints, env var names, scripts, deploy hints, and test hints as `CENSUS_HINT` only.
 3. Behavior discovery: read source surfaces to discover product behavior and promote claims to `OBSERVED`, `INFERRED`, `QUESTION`, `BLOCKED`, or `OUT_OF_SCOPE`.
 4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection; never shrink selected scope without explicit user decision.
-5. Source distillation: convert source facts into source-independent obligations, capability packets, and verification oracles.
+5. Source distillation: convert source facts into source-independent obligations, phase packets, and verification oracles.
 6. Execution planning: give the downstream coding agent slice readiness, verification gates, implementation-team signals, repair loops, review rules, and handoff requirements. Multi-phase outputs must define an orchestrated execution model: the main coding session plans, writes bounded handoffs, delegates specialist work, integrates, verifies, and records evidence phase by phase.
 7. Qualification: keep output unqualified until required evidence, runtime/test proof, no-fake checks, hardening artifacts, and reversal evidence exist.
 

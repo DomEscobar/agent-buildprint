@@ -1,5 +1,7 @@
 # Mapper OS Verification
 
+For the shortest eval command guide, read `HOW_TO_EVAL.md`. This file keeps the detailed gate definitions.
+
 ## Required Checks
 
 | Gate | Applies when | Pass condition |
