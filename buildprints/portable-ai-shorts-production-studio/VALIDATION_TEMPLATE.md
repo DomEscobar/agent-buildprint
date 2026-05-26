@@ -1,82 +1,43 @@
-# Validation
+# Validation Template
 
-## Alignment choices
+## Scope
 
-- Stack:
-- Persistence:
+- Target: full browser AI shorts production studio proof.
 - Provider mode:
-- Sample product fixture:
-- Studio visual style:
-- Publishing handoff target:
-- Defaults used / changed:
-
-## What was built
-
-- Studio UI:
-- API/service layer:
-- Provider adapters:
-- Job runtime:
-- Media pipeline:
-- Gallery:
-- Publish handoff:
-- Reports/artifacts:
+- Persistence mode:
+- Gallery/publish mode:
+- Claims intentionally blocked:
 
 ## Commands run
 
-```txt
-# exact commands here
-```
+- Install/build:
+- Unit/contract tests:
+- Job/runtime tests:
+- Media/probe tests:
+- Browser tests:
+- Secret/no-fake/claim checks:
 
-## Test/build result
+## Evidence
 
-- Unit/contract:
-- Production build:
-- Media probe:
-- No-network gate:
-- Secret scan:
-- Claim wording check:
-
-## Browser evidence
-
-- Browser tool/manual method:
-- Happy path result:
-- Negative paths result:
-- Desktop screenshot:
-- Mobile screenshot:
-- Rendered UI evidence parsed/clicked:
-
-## MP4 probe
-
-- File path / URL:
-- ffprobe command:
-- Width:
-- Height:
-- Duration:
-- Nonblank/caption/b-roll evidence:
-
-## Provider mode
-
-- Default provider mode:
-- Live providers used: yes/no
-- If yes, provider/account/date/request IDs/sanitized responses/cost:
-
-## Acceptance checklist
-
-- [ ] `BUILDPRINT.md` binding scope and non-goals preserved.
-- [ ] Full browser webapp proof implemented; not API-only/gallery-only.
-- [ ] `SPEC.md` behavior requirements implemented or explicitly blocked.
-- [ ] `CONTRACTS.md` interfaces/data boundaries honored.
-- [ ] Provider adapters are mock/no-network by default.
-- [ ] Job lifecycle and media pipeline gates pass.
-- [ ] Browser happy path and required negative paths pass or blockers are recorded.
-- [ ] Safe/unsafe claims are visible in docs/UI.
-- [ ] No placeholders, no-op controls, skeleton adapters, fake success states, or mock-as-product behavior in included scope.
-- [ ] Known gaps are listed honestly.
+- Runtime artifact: validation report path:
+- Runtime artifact: desktop screenshot:
+- Runtime artifact: mobile screenshot:
+- Runtime artifact: MP4 path:
+- Runtime artifact: MP4 probe:
+- Runtime artifact: browser trace:
+- Runtime artifact: evidence ledger rows:
 
 ## Gaps / blockers
 
-- 
+- Live providers:
+- Durable production storage:
+- Public gallery:
+- Real platform publishing:
+- Hosted deployment:
+- Security/privacy:
 
 ## Result
 
-Status: PASS / BLOCKED / NEEDS HUMAN REVIEW
+- Phase proof gates passed:
+- Blockers recorded:
+- Ready for next phase or commit:

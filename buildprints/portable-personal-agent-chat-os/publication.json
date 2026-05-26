@@ -9,17 +9,18 @@
   "tier": "agent-grade",
   "status": "validated",
   "runtime": [
+    "Mapper OS executable-blueprint v5",
     "Any backend",
-    "TypeScript proof",
-    "Mock-first providers"
+    "Deterministic local proof first"
   ],
   "stack": [
     "Streaming chat",
     "Provider router",
     "Tools / Skills / MCP",
-    "Memory",
+    "Memory and compaction",
     "Subagents",
-    "Telemetry"
+    "Telemetry",
+    "WebUI/API workbench"
   ],
   "iconKeys": [
     "typescript",
@@ -28,100 +29,102 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Clean-room, Emperor Agent-inspired personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP, memory, subagents, and token telemetry.",
-  "plainDescription": "A validated mapped-project blueprint for building a self-hosted personal AI assistant that behaves like a small chatbot operating system: chat UI, model router, tool dispatcher, skill registry, MCP adapter, memory, delegation, usage telemetry, and a fresh Mapper OS flow eval.",
-  "promise": "A validated mapped-project Buildprint for rebuilding a portable personal agent chatbot OS without copying Emperor Agent source or claiming exact clone/provider/tool parity.",
+  "summary": "Mapper OS phase-flow packet for building a clean-room, self-hosted personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP, memory, subagents, telemetry, and WebUI/API workbench surfaces.",
+  "plainDescription": "An executable-blueprint v5 packet for implementing a local personal AI assistant through phase-flow artifacts, review contracts, and honest runtime evidence. It preserves the mapped Emperor Agent-inspired scope without claiming clone, live provider, real MCP, shell/browser/network, auth, billing, publishing, or hosted SaaS parity.",
+  "promise": "A phase-flow Buildprint that lets a downstream agent implement a portable personal agent chatbot OS while keeping deterministic proof separate from live/external claims.",
   "whatYouGet": [
-    "Personal agent chatbot OS architecture",
-    "Streaming runtime event contract",
-    "Provider router and fake-provider proof",
-    "Tool/skill/MCP policy boundaries",
-    "Three-tier memory and compaction model",
-    "Subagent/team delegation events",
-    "Token telemetry and head-to-foot QA"
+    "Canonical BUILDPRINT.md start file",
+    "Setup gate with architecture, operating model, safety, and AGENTS.md plan",
+    "Phase-flow orchestration contract",
+    "Six implementation phases",
+    "Evidence ledger schema for honest runtime proof",
+    "Evaluation gates for provider, persistence, security, UI/API, and claim boundaries"
   ],
   "whatYouNeed": [
-    "Nothing for local deterministic proof mode",
-    "Provider keys only for optional live model adapters",
-    "A workspace/tool safety policy",
-    "Persistence choice for memory/history",
-    "MCP servers only if you want real external tools"
+    "A local implementation workspace",
+    "No provider keys for deterministic proof mode",
+    "Provider keys only for optional live adapter smoke tests",
+    "A persistence choice for memory/history/checkpoints",
+    "Explicit approval for shell, browser, network, billing, publishing, or hosted deployment work"
   ],
   "architectureFlow": [
-    "Chat",
+    "Chat workbench",
+    "Session controller",
     "Context + memory",
     "Provider router",
     "Tools / skills / MCP",
-    "Subagents",
-    "Telemetry"
+    "Subagent team bus",
+    "Telemetry + persistence"
   ],
   "includes": [
-    "Clean-room source mapping",
-    "Streaming runtime contract",
-    "Provider router",
-    "Tool registry and safety policy",
-    "Skill registry",
-    "MCP adapter boundary",
-    "Memory/context compaction",
-    "Subagent/team bus",
-    "Token telemetry",
-    "Streaming WebUI map",
-    "Head-to-foot QA gate",
-    "Parity claims",
-    "Offline TypeScript proof"
+    "BUILDPRINT.md canonical entry",
+    "01-questions.md setup questions",
+    "02-project-setup.md architecture and operating contract",
+    "blueprint.yaml machine contract",
+    "03-phases/phase-index.yaml phase index",
+    "03-phases/phase-flow.md orchestration protocol",
+    "Phase files for storage, runtime, tools/MCP, memory/team/telemetry, safety, and WebUI/API",
+    "04-evaluation.md evidence honesty gates",
+    "05-evidence/evidence-ledger.schema.json",
+    "Seed-only evidence ledger"
   ],
   "risks": [
     "Overclaiming full Emperor Agent clone parity",
-    "Unsafe shell/filesystem/network tools",
+    "Unsafe shell/filesystem/network/browser tools",
     "Provider API drift",
     "Context truncation losing user instructions",
     "Skill injection bloat",
     "MCP timeout/security failures",
-    "Telemetry hidden from UI"
+    "In-memory state being mistaken for durable persistence",
+    "Telemetry hidden from UI",
+    "Hosted auth, billing, publishing, media, or retrieval claims without proof"
   ],
   "checks": [
-    "Clean-room mapped-project scope; not a full Emperor Agent clone",
-    "Offline TypeScript proof builds without live providers or network calls",
-    "Proof streams deltas before completion",
-    "Tool policy denies shell by default",
-    "Skill selection and subagent delegation are traceable events",
-    "MCP fake tool maps through same ToolSpec boundary",
-    "Memory compacts under context pressure while retaining recent messages",
-    "Token telemetry is emitted and asserted",
-    "Mapper OS personal-agent flow eval passed: map judge 91/100, deterministic checks passed, Codex replay passed, outcome judge 82/100; verdict ship-with-notes."
+    "Mapper selected-output structural check passes",
+    "Executable packet starts from BUILDPRINT.md",
+    "02-project-setup.md defines architecture, team model, execution authority, handoffs, AGENTS.md plan, quality gates, safety, assumptions, and phase start gate",
+    "Every phase starts with the required implementation heading and routes through phase-flow artifacts",
+    "Packaged evidence ledger is seed-only",
+    "Runtime evidence belongs only in .buildprint/evidence/evidence-ledger.jsonl",
+    "Evidence schema blocks blocked/missing/synthetic/partial rows from upgrading claims",
+    "Publication copy prompt names the executable read order",
+    "Legacy document sludge removed or reduced to compatibility spine files"
+  ],
+  "resultChecklist": [
+    "Complete 01-questions.md and 02-project-setup.md before implementation",
+    "Create root/local AGENTS.md in the implementation project",
+    "Run each phase through 03-phases/phase-flow.md",
+    "Create phase-run plan, team, handoff, return, review, proof, progress, state, and next-agent artifacts",
+    "Append runtime proof or blockers only to .buildprint/evidence/evidence-ledger.jsonl",
+    "Do not upgrade live provider, MCP, shell/browser/network, auth, billing, publishing, or clone claims without separate evidence"
   ],
   "trustBadges": [
     {
-      "label": "Mapped from a real small OS chatbot",
-      "detail": "Primary architecture source is TheSyart/emperor-agent, with JARVIS/ToFu used only as comparison pressure.",
+      "label": "Mapper OS phase-flow",
+      "detail": "Converted to executable-blueprint v5 with phase-run artifacts and review contracts.",
       "tone": "success"
     },
     {
-      "label": "Mapper flow eval passed",
-      "detail": "Fresh Mapper OS eval against emperor-agent plus ToFu/JARVIS comparison pressure passed with map judge 91/100 and outcome judge 82/100 (ship-with-notes).",
-      "tone": "success"
+      "label": "Clean-room scope",
+      "detail": "Preserves personal agent OS behavior without copying source implementation or claiming exact clone parity.",
+      "tone": "info"
     },
     {
-      "label": "Offline proof",
-      "detail": "Deterministic TypeScript proof validates runtime contracts without live model, MCP, shell, or network calls.",
+      "label": "Evidence honesty",
+      "detail": "Runtime evidence is separated from seed evidence and blocked proof cannot upgrade claims.",
       "tone": "success"
     },
     {
       "label": "Safety-gated tools",
-      "detail": "Shell/network/write risk is explicit; dangerous tools are denied unless policy allows them.",
-      "tone": "info"
-    },
-    {
-      "label": "Explicit parity boundary",
-      "detail": "Claims stop at clean-room workflow/contract/mock-runtime proof unless upgraded with live evidence.",
+      "detail": "Shell, browser, network, filesystem writes, live providers, and real MCP are explicit approval/proof boundaries.",
       "tone": "warning"
     }
   ],
   "originGithubUrl": "https://github.com/TheSyart/emperor-agent",
   "originLabel": "TheSyart/emperor-agent",
-  "copyPrompt": "Use the Portable Personal Agent Chat OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a clean-room personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP adapter, memory/compaction, subagent delegation, token telemetry, and safety-gated tool policy. Use fake providers/tools by default. Do not claim Emperor Agent clone, exact UI parity, live provider parity, shell parity, or real MCP parity unless separately validated.",
+  "copyPrompt": "Use the Portable Personal Agent Chat OS Mapper OS packet. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . Then read BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Treat BUILDPRINT.md as canonical. Run every phase through 03-phases/phase-flow.md, create .buildprint/phase-runs/<phase-id>/ artifacts, read .buildprint/next-agent.md and current project AGENTS.md before phase work, and append runtime proof only to .buildprint/evidence/evidence-ledger.jsonl. Build the clean-room personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP adapter, memory/compaction, subagent delegation, token telemetry, WebUI/API workbench, and safety-gated tool policy. Use deterministic providers/tools by default. Do not claim Emperor Agent clone, exact UI parity, live provider parity, real MCP parity, shell/browser/network safety, production auth, billing, publishing, or hosted SaaS unless separately validated.",
   "publicStatus": {
-    "label": "Mapper eval passed",
-    "explanation": "Personal-agent Mapper OS flow passed deterministic checks, Codex replay, map judge 91/100, and outcome judge 82/100; verdict ship-with-notes."
+    "label": "Mapper OS converted",
+    "explanation": "Converted to executable-blueprint v5 phase-flow methodology with seed-only packaged evidence and honest runtime evidence rules."
   }
 }

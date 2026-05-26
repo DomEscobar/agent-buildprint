@@ -1,9 +1,10 @@
-# Acceptance Checks
+# Acceptance Checklist
 
-- [ ] `BUILDPRINT.md` was read first and treated as the authority spine.
-- [ ] Included scope is implemented or mapped end-to-end; excluded scope is explicit.
-- [ ] `SPEC.md` behavior requirements are satisfied or blockers are listed.
-- [ ] `CONTRACTS.md` interfaces, data boundaries, and integration assumptions are honored.
-- [ ] `TEST_MATRIX.md` checks passed or every skipped check has a concrete blocker.
-- [ ] `VALIDATION_TEMPLATE.md` is filled with exact commands, evidence, gaps, and final status.
-- [ ] No placeholder, no-op, skeleton, route-shaped, or mock-as-product implementation is claimed as complete.
+- [ ] `BUILDPRINT.md` is the canonical entry point.
+- [ ] `02-project-setup.md` defines architecture, team model, execution authority, handoffs, `AGENTS.md` plan, quality gates, safety, assumptions, and phase start gate.
+- [ ] Every implementation phase starts through `03-phases/phase-flow.md`.
+- [ ] Every phase creates phase-run artifacts before runtime evidence.
+- [ ] Runtime evidence is appended only to `.buildprint/evidence/evidence-ledger.jsonl`.
+- [ ] `05-evidence/evidence-ledger.schema.json` validates honest evidence rows.
+- [ ] Deterministic provider, tool, skill, MCP, memory, team, telemetry, and WebUI/API proof gates pass or record blockers.
+- [ ] Live provider, real MCP, shell/browser/network, production auth, billing, publishing, hosted SaaS, and exact clone claims are not upgraded without separate proof.

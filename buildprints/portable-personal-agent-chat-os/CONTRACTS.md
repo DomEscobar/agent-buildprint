@@ -1,85 +1,14 @@
 # CONTRACTS
 
-## ProviderConfig
+This compatibility file summarizes the packet contracts. `BUILDPRINT.md`, `02-project-setup.md`, and the active files under `03-phases/` are authoritative.
 
-```ts
-type ProviderConfig = {
-  id: string;
-  kind: 'test' | 'openai-compatible' | 'anthropic' | 'bedrock' | 'local';
-  model: string;
-  contextWindowTokens: number;
-  maxOutputTokens: number;
-  supportsTools: boolean;
-  supportsStreaming: boolean;
-  env?: { apiKey?: string; baseUrl?: string };
-};
-```
+## Core contracts
 
-## RuntimeEvent
-
-```ts
-type RuntimeEvent =
-  | { type: 'turn.started'; sessionId: string; messageId: string }
-  | { type: 'model.delta'; text: string }
-  | { type: 'tool.requested'; tool: string; input: unknown }
-  | { type: 'tool.allowed' | 'tool.denied'; tool: string; reason?: string }
-  | { type: 'tool.result'; tool: string; output: unknown }
-  | { type: 'skill.selected'; skill: string }
-  | { type: 'mcp.tool_mapped'; serverId: string; tool: string }
-  | { type: 'team.task'; taskId: string; status: 'created' | 'started' | 'message' | 'completed' | 'failed'; text?: string }
-  | { type: 'memory.compacted'; episodeId: string; retainedMessages: number }
-  | { type: 'telemetry.usage'; input: number; output: number; total: number }
-  | { type: 'turn.completed'; sessionId: string; finalText: string }
-  | { type: 'turn.failed'; sessionId: string; error: string };
-```
-
-## ToolSpec
-
-```ts
-type ToolSpec = {
-  name: string;
-  description: string;
-  risk: 'safe' | 'read' | 'write' | 'network' | 'shell';
-  inputSchema: Record<string, unknown>;
-  handler: (input: unknown, ctx: ToolContext) => Promise<unknown>;
-};
-```
-
-## SkillSpec
-
-```ts
-type SkillSpec = {
-  name: string;
-  description: string;
-  triggers: string[];
-  instructions: string;
-  resources?: string[];
-  scripts?: string[];
-  enabled: boolean;
-};
-```
-
-## MemoryState
-
-```ts
-type MemoryState = {
-  longTerm: string;
-  todayEpisode: string;
-  history: Array<{ role: 'user' | 'assistant' | 'tool' | 'system'; content: string; at: string }>;
-  checkpoint?: unknown;
-  attachments: Array<{ id: string; name: string; sourceSpan?: string }>;
-};
-```
-
-## TeamTask
-
-```ts
-type TeamTask = {
-  id: string;
-  role: string;
-  input: string;
-  status: 'created' | 'started' | 'message' | 'completed' | 'failed';
-  result?: string;
-  events: RuntimeEvent[];
-};
-```
+- `AgentSession`: conversation/run with messages, checkpoints, active provider/model, events, and usage.
+- `ProviderConfig`: provider kind, model id, context window, generation defaults, capabilities, and env var names only.
+- `RuntimeEvent`: turn, model delta, tool, skill, MCP, team, memory, telemetry, completion, and failure events.
+- `ToolSpec`: name, description, input schema, risk label, and handler reference.
+- `SkillSpec`: name, triggers, instructions, optional resources/scripts, and enabled flag.
+- `McpServerSpec`: server id, transport, allowed tools, timeout, auth handle, and enabled flag.
+- `MemoryState`: raw history, daily episode, long-term memory, checkpoint, and attachment/source summaries.
+- `TeamTask`: bounded delegation with role, input, status, events, result, and usage.

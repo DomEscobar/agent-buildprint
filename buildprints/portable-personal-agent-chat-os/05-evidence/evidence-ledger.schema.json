@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Portable Personal Agent Chat OS Evidence Ledger Row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "type",
+    "phase_id",
+    "status",
+    "source",
+    "proves",
+    "proof_type",
+    "provider_mode",
+    "upgrades_claim"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "phase_id": {
+      "type": "string",
+      "enum": [
+        "contracts-storage",
+        "provider-streaming-runtime",
+        "tools-skills-mcp-policy",
+        "memory-subagents-telemetry",
+        "safety-claim-boundaries",
+        "webui-api-workbench"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "missing",
+        "passed",
+        "proven",
+        "blocked",
+        "failed",
+        "skipped"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proves": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "proof_type": {
+      "type": "string",
+      "enum": [
+        "seed_scope",
+        "unit_or_integration_test",
+        "runtime_trace",
+        "browser_trace",
+        "http_api_trace",
+        "persistence_roundtrip",
+        "security_boundary_review",
+        "provider_live_smoke",
+        "mcp_live_smoke",
+        "no_fake_scan_pass",
+        "blocker"
+      ]
+    },
+    "provider_mode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "deterministic",
+        "live",
+        "mock",
+        "blocked"
+      ]
+    },
+    "upgrades_claim": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "missing",
+              "blocked",
+              "failed",
+              "skipped"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "upgrades_claim": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "provider_mode": {
+            "enum": [
+              "none",
+              "mock",
+              "blocked"
+            ]
+          }
+        },
+        "required": [
+          "provider_mode"
+        ]
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "proof_type": {
+              "const": "provider_live_smoke"
+            },
+            "upgrades_claim": {
+              "const": true
+            }
+          },
+          "required": [
+            "proof_type",
+            "upgrades_claim"
+          ]
+        }
+      }
+    }
+  ]
+}

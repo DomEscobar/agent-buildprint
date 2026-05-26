@@ -9,15 +9,17 @@
   "tier": "agent-grade",
   "status": "validated",
   "runtime": [
-    "JavaScript",
-    "Clean-room web proof"
+    "Mapper OS executable-blueprint v5",
+    "Stack-flexible browser webapp proof",
+    "Deterministic mock/no-network provider mode"
   ],
   "stack": [
     "Product analysis",
     "UGC scripts",
-    "Actor / voice adapters",
-    "Video composition",
-    "Gallery SEO"
+    "Provider adapters",
+    "Async jobs",
+    "Media composition",
+    "Gallery and publish handoff"
   ],
   "iconKeys": [
     "typescript",
@@ -26,89 +28,99 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "OpenShorts-inspired AI shorts production Buildprint with product analysis, UGC script generation, actor/voice provider adapters, mocked media jobs, 9:16 composition, gallery SEO, and social handoff.",
-  "plainDescription": "A blueprint for an AI shorts production studio: start from a product, generate a UGC script, choose actor/voice options, queue media jobs, plan a 9:16 video, and hand off gallery/social assets.",
-  "promise": "A validated mapped-project Buildprint for rebuilding a portable AI shorts production pipeline from public OpenShorts architecture patterns without claiming OpenShorts clone, provider/API, rendering-quality, or social-platform parity.",
+  "summary": "Mapper OS phase-flow Buildprint for a portable AI shorts production studio with product URL/manual input, UGC scripts, deterministic provider adapters, pollable jobs, 1080x1920 MP4 fixture media, private gallery, consent-gated publish handoff, and evidence-honest validation.",
+  "plainDescription": "An executable Buildprint for building a browser AI shorts studio: analyze a product, generate selectable five-segment UGC scripts, configure actor/voice/video options, run a pollable media job, review a playable vertical MP4, and optionally prepare consent-gated gallery and social handoff artifacts.",
+  "promise": "A Mapper OS executable packet that preserves the full AI shorts production workflow while keeping provider, media, browser, persistence, gallery, publishing, and security claims tied to phase proof and runtime evidence.",
   "whatYouGet": [
-    "AI shorts production studio",
-    "Product input and product analysis flow",
-    "UGC script generator",
-    "Actor/avatar and voice selection flow",
-    "Mock talking-head, b-roll, and subtitle job pipeline",
-    "9:16 composition plus gallery/SEO/social handoff"
+    "Canonical Mapper OS start at BUILDPRINT.md",
+    "Question and project setup gates",
+    "Phase-flow orchestration with five proof-gated phases",
+    "Contracts for analysis, scripts, jobs, providers, media, gallery, and publish handoff",
+    "Evidence schema that prevents blocked, missing, synthetic, or partial proof from upgrading claims",
+    "Acceptance checklist for browser QA, media proof, no-network adapters, and claim safety"
   ],
   "whatYouNeed": [
-    "Nothing for local/mock proof mode",
-    "AI provider key for real product analysis and script generation",
-    "TTS provider key for real voiceover",
-    "Image/video provider keys for live media generation",
-    "Storage or social credentials only if you want real publishing"
+    "Nothing for deterministic local mock proof mode",
+    "Browser automation and media tooling such as FFmpeg or equivalent for full proof",
+    "Provider credentials only for optional live validation after mock proof passes",
+    "Storage or social credentials only for separately approved live gallery or handoff validation"
   ],
   "architectureFlow": [
-    "Product",
-    "Script",
-    "Voice/avatar",
-    "Media jobs",
-    "9:16 video",
-    "Gallery/social"
+    "Product input",
+    "Analysis and scripts",
+    "Actor/voice/video configuration",
+    "Pollable generation job",
+    "Fixture media composition",
+    "Review/player",
+    "Private gallery",
+    "Consent-gated handoff"
   ],
   "includes": [
-    "Pinned OpenShorts source trace",
-    "Repo facts and fork/license boundary notes",
-    "Product URL/manual-input analysis flow",
-    "Five-segment UGC script contract",
-    "Actor gallery/generated/uploaded selection model",
-    "Voiceover adapter contract",
-    "Talking-head/lipsync adapter contract",
-    "B-roll generation adapter contract",
-    "Subtitle and hook overlay composition plan",
-    "9:16 video manifest",
-    "Gallery SEO VideoObject manifest",
-    "Social publishing handoff manifest",
-    "Threat model for keys, likeness, scraping, and gallery exposure",
-    "Clean-room runnable proof with tests"
+    "BUILDPRINT.md canonical start",
+    "01-questions.md AI best-judgment alignment gate",
+    "02-project-setup.md with architecture, team model, AGENTS.md plan, safety, gates, and phase start gate",
+    "blueprint.yaml executable-blueprint v5 machine contract",
+    "03-phases/phase-flow.md orchestration protocol",
+    "Five implementation phase files",
+    "04-evaluation.md claim upgrade rules",
+    "05-evidence/evidence-ledger.schema.json honest evidence schema",
+    "Seed-only 05-evidence/evidence-ledger.jsonl",
+    "Compatibility docs for specification, contracts, plan, test matrix, validation, and acceptance"
   ],
   "risks": [
-    "Accidentally implying OpenShorts clone parity",
-    "Provider/API parity overclaiming",
-    "Video quality/rendering parity overclaiming",
+    "Accidentally implying OpenShorts clone or drop-in replacement parity",
+    "Provider/API/live media success overclaiming",
+    "Rendering-quality parity overclaiming",
     "Social platform publishing reliability overclaiming",
-    "User likeness/copyright/consent under-specification",
-    "Client-side API key handling scope creep"
+    "Public gallery exposure without consent and access controls",
+    "User likeness, uploaded media, URL egress, and copyright under-specification",
+    "In-memory proof storage being misreported as production durability"
   ],
   "checks": [
-    "Mapped source commit is recorded: fe87af6dd599b854e6eab2de0ca247ebafe13885",
-    "Required Mapper OS artifacts exist",
-    "Source trace cites concrete OpenShorts files/line ranges",
-    "Clean-room proof is built from Buildprint docs, not OpenShorts imports",
-    "npm run check passes in clean-room proof",
-    "7/7 proof tests pass",
-    "Claim boundary remains workflow-proof + contract-parity + mocked-provider proof",
-    "Full clone/provider/API/rendering/social-platform parity are explicitly out of scope"
+    "Mapper OS selected-output spine exists and starts from BUILDPRINT.md",
+    "Every phase starts with the required Mapper OS phase implementation heading",
+    "Every phase requires phase-flow, .buildprint/next-agent.md, and current project AGENTS.md",
+    "02-project-setup.md defines architecture, team operating model, execution authority, delegation, AGENTS.md plan, quality gates, safety, assumptions, and phase start gate",
+    "Packaged evidence ledger is seed-only and runtime evidence routes to .buildprint/evidence/evidence-ledger.jsonl",
+    "Evidence schema requires artifact_id, type, phase_id, status, source, proves, proof_type, provider_mode, and upgrades_claim",
+    "Blocked, missing, synthetic, partial, sandbox-limited, network-limited, credential-limited, or dry-run proof cannot upgrade claims",
+    "Browser, provider, media, persistence, billing-free publishing handoff, security, memory/retrieval-adjacent context, and operational boundaries are preserved as explicit contracts"
+  ],
+  "resultChecklist": [
+    "Full browser studio proof, not API-only",
+    "Manual description and URL fixture paths",
+    "At least two five-segment scripts",
+    "Mock/no-network adapters by default",
+    "Pollable job lifecycle with logs and provider records",
+    "Playable nonblank 1080x1920 MP4 fixture",
+    "Private-by-default gallery",
+    "Consent-gated publish handoff",
+    "Browser QA screenshots and validation report",
+    "Honest runtime evidence rows"
   ],
   "trustBadges": [
     {
-      "label": "Runnable proof passed",
-      "detail": "Clean-room JavaScript proof passes 7/7 tests and builds dist/.",
+      "label": "Mapper OS v5",
+      "detail": "Phase-flow executable packet with proof-gated implementation phases.",
       "tone": "success"
     },
     {
-      "label": "Visual product pipeline",
-      "detail": "Maps product analysis through script, actor, voice, media jobs, composition, gallery, and publishing handoff.",
+      "label": "Evidence honest",
+      "detail": "Seed evidence is separated from runtime proof and blockers cannot upgrade claims.",
       "tone": "info"
     },
     {
-      "label": "OpenShorts-inspired, not clone",
-      "detail": "Public boundary excludes clone, provider/API, rendering-quality, and social-platform parity.",
-      "tone": "warning"
+      "label": "Mock-first providers",
+      "detail": "Default proof uses deterministic no-network adapters; live providers are optional and gated.",
+      "tone": "neutral"
     },
     {
-      "label": "Mocked providers",
-      "detail": "External video, voice, storage, and social services are modeled as adapters/mocks.",
-      "tone": "neutral"
+      "label": "No clone parity claim",
+      "detail": "OpenShorts-inspired scope is preserved without claiming clone, provider, rendering, or publishing parity.",
+      "tone": "warning"
     }
   ],
   "originGithubUrl": "https://github.com/mutonby/openshorts",
   "originLabel": "mutonby/openshorts",
-  "copyPrompt": "Use the Portable AI Shorts Production Studio Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-shorts-production-studio/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-shorts-production-studio/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a clean-room AI shorts production proof from the Buildprint package. Keep claims scoped to workflow-proof + contract-parity + mocked-provider proof. Do not call it an OpenShorts clone, drop-in replacement, provider/API parity implementation, rendering-quality parity proof, or social-platform publishing parity proof."
+  "copyPrompt": "Use the Portable AI Shorts Production Studio Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-shorts-production-studio/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-shorts-production-studio/package.json . Then read BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Use Mapper OS phase-flow artifacts before implementation and write runtime evidence only to .buildprint/evidence/evidence-ledger.jsonl. Build the full browser AI shorts production studio proof with deterministic mock/no-network providers, pollable jobs, a playable 1080x1920 MP4 fixture, private gallery, consent-gated publish handoff, browser QA, and honest claim boundaries."
 }

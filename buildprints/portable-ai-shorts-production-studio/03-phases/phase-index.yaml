@@ -1,0 +1,35 @@
+schema_version: mapper-os/phase-index.v1
+active_phase: 03-phases/01-contracts-adapters.md
+phases:
+  - phase_id: contracts-adapters
+    file: 03-phases/01-contracts-adapters.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-contracts-adapters
+  - phase_id: job-runtime-state
+    file: 03-phases/02-job-runtime-state.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - contracts-adapters
+    proof_gate: proof-job-runtime-state
+  - phase_id: media-pipeline
+    file: 03-phases/03-media-pipeline.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - contracts-adapters
+      - job-runtime-state
+    proof_gate: proof-media-pipeline
+  - phase_id: browser-studio
+    file: 03-phases/04-browser-studio.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - contracts-adapters
+      - job-runtime-state
+      - media-pipeline
+    proof_gate: proof-browser-studio
+  - phase_id: gallery-publish-validation
+    file: 03-phases/05-gallery-publish-validation.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - browser-studio
+    proof_gate: proof-gallery-publish-validation

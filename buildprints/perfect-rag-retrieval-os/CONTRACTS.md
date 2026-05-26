@@ -1,75 +1,23 @@
-# Perfect RAG / Retrieval OS Contracts
+# Contracts
 
-```ts
-type AccessScope = { tenantId: string; visibility: 'public' | 'private'; allowedUserIds?: string[] };
+This file preserves the data contract summary for compatibility. Phase work must follow `03-phases/phase-flow.md` and the active phase file.
 
-type DocumentSource = {
-  id: string;
-  uri: string;
-  title: string;
-  checksum: string;
-  updatedAt: string;
-  metadata: Record<string, string>;
-  access: AccessScope;
-};
+## Core Records
 
-type Chunk = {
-  id: string;
-  sourceId: string;
-  text: string;
-  contextualText?: string;
-  metadata: Record<string, string>;
-  span: { start: number; end: number };
-  tokenEstimate: number;
-  access: AccessScope;
-};
+- Access scope: tenant id, public/private visibility, and optional allowed user ids.
+- Document source: stable id, URI, title, checksum, updated timestamp, metadata, and access scope.
+- Chunk: stable id, source id, text, optional contextual text, metadata, source span, token estimate, and access scope.
+- Query plan: query, rewritten queries, filters, tenant/user identity, and retrieval strategy.
+- Candidate: chunk id, retrieval channel, raw score, normalized score, and reason.
+- Reranked context: chunk, rank, score, citation, and quoted span.
+- RAG answer: answer text, citations, confidence, and optional refusal reason.
+- Eval case: query, tenant/user identity, expected chunks, expected answer assertions, and forbidden claims.
 
-type QueryPlan = {
-  query: string;
-  rewrittenQueries: string[];
-  filters: Record<string, string>;
-  user: { tenantId: string; userId: string };
-  strategy: 'lexical' | 'dense' | 'hybrid' | 'hybrid-rerank';
-};
+## Adapter Boundaries
 
-type Candidate = {
-  chunkId: string;
-  channel: 'lexical' | 'dense' | 'sparse' | 'hyde' | 'graph' | 'tree';
-  rawScore: number;
-  normalizedScore: number;
-  reason: string;
-};
-
-type RerankedContext = {
-  chunk: Chunk;
-  rank: number;
-  score: number;
-  citation: { sourceId: string; chunkId: string; title: string; uri: string };
-  quotedSpan: string;
-};
-
-type RagAnswer = {
-  answer: string;
-  citations: Array<{ sourceId: string; chunkId: string; title: string }>;
-  confidence: 'high' | 'medium' | 'low' | 'insufficient-evidence';
-  refusalReason?: string;
-};
-
-type EvalCase = {
-  id: string;
-  query: string;
-  user: { tenantId: string; userId: string };
-  expectedChunkIds: string[];
-  expectedAnswerContains: string[];
-  forbiddenClaims: string[];
-};
-```
-
-## Adapter contracts
-
-- `EmbeddingAdapter.embed(texts)` returns vectors or proof tokens.
-- `LexicalIndex.search(query, filters)` returns lexical candidates.
-- `DenseIndex.search(query, filters)` returns semantic candidates.
-- `Reranker.rerank(query, candidates)` returns ordered contexts.
-- `Generator.answer(query, contexts)` returns cited answer or refusal.
-- `Evaluator.run(cases)` returns machine-readable metrics.
+- Embedding adapter returns vectors or deterministic proof tokens.
+- Lexical/sparse index returns exact-term candidates.
+- Dense index returns semantic candidates.
+- Reranker orders candidate contexts.
+- Generator returns a cited answer or refusal.
+- Evaluator emits machine-readable metrics.
