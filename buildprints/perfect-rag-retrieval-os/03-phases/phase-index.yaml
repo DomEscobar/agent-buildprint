@@ -1,0 +1,29 @@
+schema_version: mapper-os/phase-index.v1
+active_phase: 03-phases/01-corpus-contracts.md
+phases:
+  - phase_id: corpus-contracts
+    title: Corpus, threat model, contracts, and fixtures
+    file: 03-phases/01-corpus-contracts.md
+    proof_gate: proof-corpus-contracts
+    status: included_needs_proof
+  - phase_id: ingestion-indexing
+    title: Ingestion, chunking, and index surfaces
+    file: 03-phases/02-ingestion-indexing.md
+    proof_gate: proof-ingestion-indexing
+    status: included_needs_proof
+    depends_on:
+      - corpus-contracts
+  - phase_id: retrieval-answering
+    title: Hybrid retrieval, permissions, rerank, and grounded answer
+    file: 03-phases/03-retrieval-answering.md
+    proof_gate: proof-retrieval-answering
+    status: included_needs_proof
+    depends_on:
+      - ingestion-indexing
+  - phase_id: evaluation-operations
+    title: Evaluation harness, traces, provider readiness, and optional modules
+    file: 03-phases/04-evaluation-operations.md
+    proof_gate: proof-evaluation-operations
+    status: included_needs_proof
+    depends_on:
+      - retrieval-answering

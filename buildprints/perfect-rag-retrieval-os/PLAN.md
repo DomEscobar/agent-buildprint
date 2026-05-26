@@ -1,18 +1,12 @@
-# Perfect RAG / Retrieval OS Buildprint Plan
+# Plan
 
-## Authority
+`BUILDPRINT.md` is the canonical source of truth. This file exists for repository spine compatibility and must not weaken the Mapper OS phase-flow packet.
 
-`BUILDPRINT.md` is the canonical source of truth. This file is the implementation phase index and must not weaken the binding scope, non-goals, phase gates, or acceptance gates in `BUILDPRINT.md`.
+## Execution Order
 
-## Phase routing
-
-- Run `proof/` as isolated reference validation when applicable.
-
-## Completion order
-
-1. Read `BUILDPRINT.md` first and confirm the binding scope/non-goals.
-2. Read `SPEC.md` and `CONTRACTS.md` before implementation.
-3. Execute the package-specific phase gates.
-4. Run the checks in `TEST_MATRIX.md`.
-5. Complete `VALIDATION_TEMPLATE.md` with commands, evidence, gaps, and blockers.
-6. Pass `checks/acceptance.md` before claiming completion.
+1. Read `BUILDPRINT.md`.
+2. Complete `01-questions.md` and `02-project-setup.md`.
+3. Follow `03-phases/phase-index.yaml` and enter each phase through `03-phases/phase-flow.md`.
+4. Run the proof gates in the active phase file.
+5. Apply `04-evaluation.md` claim-upgrade and blocker-honesty rules.
+6. Append runtime evidence only to `.buildprint/evidence/evidence-ledger.jsonl`.

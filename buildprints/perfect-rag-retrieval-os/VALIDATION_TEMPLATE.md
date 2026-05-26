@@ -1,4 +1,4 @@
-# Perfect RAG / Retrieval OS Buildprint Validation Report
+# Validation Template
 
 ## Scope
 
@@ -8,7 +8,7 @@
 - Explicitly excluded scope:
 - Production-grade selected scope statement:
 
-## Commands run
+## Commands Run
 
 ```txt
 # list exact commands here
@@ -21,18 +21,18 @@
 - Browser/API/manual proof, if applicable:
 - Proof/conformance/eval harness result, if applicable:
 
-## Acceptance checklist
+## Acceptance Checklist
 
 - [ ] `BUILDPRINT.md` binding scope and non-goals preserved.
-- [ ] `SPEC.md` requirements implemented or explicitly blocked.
-- [ ] `CONTRACTS.md` interfaces/data boundaries honored.
-- [ ] `TEST_MATRIX.md` checks run or blockers recorded.
-- [ ] No placeholders, no-op controls, skeleton adapters, fake success states, or mock-as-product behavior in included scope.
+- [ ] `01-questions.md` and `02-project-setup.md` completed before phase work.
+- [ ] Active phase entered through `03-phases/phase-flow.md`.
+- [ ] Runtime evidence appended only to `.buildprint/evidence/evidence-ledger.jsonl`.
+- [ ] No placeholder, no-op, skeleton adapter, vector-only shortcut, or mock-as-production behavior is claimed complete.
 - [ ] Known gaps are listed honestly.
 
-## Blockers / gaps
+## Blockers / Gaps
 
-- 
+-
 
 ## Result
 
