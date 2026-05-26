@@ -2,12 +2,12 @@
 
 ## Goal
 
-Create a source-independent selected Buildprint under `selected-buildprint/` as executable-blueprint v5.
+Create a source-independent selected Buildprint under `selected-buildprint/` as executable Buildprint.
 
 ## Steps
 
 - Distill source facts into product obligations and proof-gated phase packets.
-- Create required executable-blueprint v5 spine files.
+- Create required executable Buildprint spine files.
 - Create phase Markdown files for medium or larger scopes.
 - Include stable-vs-free boundaries inside the relevant slice.
 - Include proof gates, no-fake checks, stop conditions, and unlock rules.

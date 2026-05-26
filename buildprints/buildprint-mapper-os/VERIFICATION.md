@@ -44,7 +44,7 @@ Use `evals/golden-projects/` as regression input for manual or agent-run review.
 - qualification label;
 - evidence gaps.
 
-Use `evals/selected-output-fixtures/` with `scripts/check-mapper-selected-output.mjs` for shape regression. The execution-packet-good fixture must pass while remaining `SELECTED_UNQUALIFIED`. The v5 negative fixtures for old router files, missing setup, missing proof gates, missing repair routing, missing interfaces/state sections, skipped read order, and packet AGENTS.md must fail.
+Use `evals/selected-output-fixtures/` with `scripts/check-mapper-selected-output.mjs` for shape regression. The execution-packet-good fixture must pass while remaining `SELECTED_UNQUALIFIED`. The negative fixtures for legacy router files, missing setup, missing proof gates, missing repair routing, missing interfaces/state sections, skipped read order, and packet AGENTS.md must fail.
 
 ## Fresh-Agent Replay Eval
 

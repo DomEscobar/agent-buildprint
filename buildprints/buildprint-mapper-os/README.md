@@ -25,12 +25,12 @@ For generated selected packages, downstream implementers should not read all Mar
 - Treat scanner output as hints only.
 - Keep output discovery-only until scope is selected.
 - Preserve requested scope; sequence implementation into proof-gated phases, but do not hide broad/blocked/unproven behavior.
-- Produce executable-blueprint v5 packets for medium, large, and full-suite selected outputs.
+- Produce executable Buildprint packets for medium, large, and full-suite selected outputs.
 - Emit implementation signals so the downstream harness can choose an appropriate builder team/passes without Mapper OS prescribing architecture.
 
 ## Selected Output
 
-Selected output belongs under `selected-buildprint/`. Mapper OS output must be an executable-blueprint v5:
+Selected output belongs under `selected-buildprint/`. Mapper OS output must be an executable Buildprint:
 
 ```text
 BUILDPRINT.md

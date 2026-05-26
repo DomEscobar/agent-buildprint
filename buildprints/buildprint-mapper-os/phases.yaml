@@ -47,7 +47,7 @@ phases:
     title: Source Distillation
     inputs: [prompts/extract-selected.md, templates/]
     must_produce:
-      - source-independent selected-buildprint executable-blueprint v5
+      - source-independent selected-buildprint executable Buildprint
       - product obligations
       - proof-gated phase packets
       - stable-vs-free boundaries

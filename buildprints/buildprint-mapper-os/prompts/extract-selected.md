@@ -2,7 +2,7 @@
 
 Use Mapper OS to extract a selected candidate, explicit scope, or full-suite target into `selected-buildprint/`.
 
-## Primary Output: executable-blueprint v5
+## Primary Output: executable Buildprint
 
 Emit a clean executable blueprint. `BUILDPRINT.md` is the only start point and owns the read order. Do not emit a second router.
 
@@ -24,7 +24,7 @@ selected-buildprint/
     agent-prompt.md
 ```
 
-`schema_version` must be `mapper-os/executable-blueprint.v5`.
+`schema_version` must be `mapper-os/executable-blueprint`.
 
 ## Scaffold preservation contract
 

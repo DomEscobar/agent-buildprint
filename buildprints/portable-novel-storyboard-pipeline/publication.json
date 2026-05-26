@@ -9,7 +9,7 @@
   "tier": "agent-grade",
   "status": "validated",
   "runtime": [
-    "Capability-packet v4",
+    "Capability packet",
     "Mock-first AI providers",
     "Browser QA"
   ],
@@ -31,7 +31,7 @@
   "plainDescription": "A router-first Buildprint for a novel-to-storyboard workbench. Agents start at BUILDPRINT.md and blueprint.yaml, load one active capability at a time, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
   "promise": "A Mapper OS execution-packet for rebuilding the portable novel-to-storyboard workflow without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
   "whatYouGet": [
-    "Capability-packet v4 shape",
+    "Capability packet shape",
     "BUILDPRINT.md and blueprint.yaml router",
     "Context map that names the active capability",
     "Six phase files with consolidated contracts and proof gates",
@@ -94,7 +94,7 @@
   ],
   "trustBadges": [
     {
-      "label": "Capability-packet v4",
+      "label": "Capability packet",
       "detail": "Router, context map, phase files, acceptance gates, and evidence ledger are separated.",
       "tone": "success"
     },
@@ -116,5 +116,5 @@
   ],
   "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
   "originLabel": "HBAI-Ltd/Toonflow-app",
-  "copyPrompt": "Use this Mapper OS executable-blueprint v5. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims SELECTED_UNQUALIFIED until proof rows pass."
+  "copyPrompt": "Use this Mapper OS executable Buildprint. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims SELECTED_UNQUALIFIED until proof rows pass."
 }

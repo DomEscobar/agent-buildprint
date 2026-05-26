@@ -1,6 +1,6 @@
 # Portable Personal Agent Chat OS
 
-Mapper OS executable-blueprint v5 packet for a self-hosted personal agent chatbot OS.
+Mapper OS executable Buildprint packet for a self-hosted personal agent chatbot OS.
 
 Start from `BUILDPRINT.md`. It routes setup through `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, and `03-phases/phase-flow.md`.
 

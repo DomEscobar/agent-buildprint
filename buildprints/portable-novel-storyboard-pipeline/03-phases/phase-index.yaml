@@ -1,4 +1,4 @@
-schema_version: mapper-os/phase-index.v1
+schema_version: mapper-os/phase-index
 active_phase: 03-phases/01-project-workspace-auth.md
 phases:
   - phase_id: project-workspace-auth

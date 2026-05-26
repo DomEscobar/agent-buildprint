@@ -12,7 +12,7 @@
     "behavior discovery with source evidence promotion",
     "scope selection before selected extraction",
     "source-independent executable-blueprint distillation",
-    "selected-buildprint executable-blueprint v5 shape",
+    "selected-buildprint executable Buildprint shape",
     "downstream-agent execution planning",
     "qualification gates and no-fake blockers",
     "handoff without source dependency"
@@ -437,6 +437,6 @@
     "npm run check:mapper-output:negative",
     "npm run check:spine"
   ],
-  "schemaVersion": "mapper-os/executable-blueprint.v5",
+  "schemaVersion": "mapper-os/executable-blueprint",
   "keywords": []
 }

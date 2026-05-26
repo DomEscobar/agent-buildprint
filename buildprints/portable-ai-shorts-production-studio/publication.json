@@ -9,7 +9,7 @@
   "tier": "agent-grade",
   "status": "validated",
   "runtime": [
-    "Mapper OS executable-blueprint v5",
+    "Mapper OS executable Buildprint",
     "Stack-flexible browser webapp proof",
     "Deterministic mock/no-network provider mode"
   ],
@@ -59,7 +59,7 @@
     "BUILDPRINT.md canonical start",
     "01-questions.md AI best-judgment alignment gate",
     "02-project-setup.md with architecture, team model, AGENTS.md plan, safety, gates, and phase start gate",
-    "blueprint.yaml executable-blueprint v5 machine contract",
+    "blueprint.yaml executable Buildprint machine contract",
     "03-phases/phase-flow.md orchestration protocol",
     "Five implementation phase files",
     "04-evaluation.md claim upgrade rules",
@@ -100,7 +100,7 @@
   ],
   "trustBadges": [
     {
-      "label": "Mapper OS v5",
+      "label": "Mapper OS",
       "detail": "Phase-flow executable packet with proof-gated implementation phases.",
       "tone": "success"
     },

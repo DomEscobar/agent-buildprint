@@ -2984,9 +2984,9 @@ function packetCheckResults(dir) {
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
   ok('packet does not ship project AGENTS.md', !files.has('AGENTS.md') && !Array.from(files).some((file) => file.startsWith('docs/')))
-  ok('packet avoids legacy v4 router/files', !Array.from(files).some((file) => file === 'START_HERE.md' || file === 'PRE_IMPLEMENTATION_QUESTIONS.md' || file.startsWith('03-capabilities/') || file.startsWith('04-interfaces/') || file.startsWith('05-state-runtime/') || file.startsWith('06-safety/') || file.startsWith('08-evaluation/') || file.startsWith('09-evidence/')))
+  ok('packet avoids legacy router/files', !Array.from(files).some((file) => file === 'START_HERE.md' || file === 'PRE_IMPLEMENTATION_QUESTIONS.md' || file.startsWith('03-capabilities/') || file.startsWith('04-interfaces/') || file.startsWith('05-state-runtime/') || file.startsWith('06-safety/') || file.startsWith('08-evaluation/') || file.startsWith('09-evidence/')))
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
-  ok('blueprint declares executable-blueprint v5 authority', /schema_version:\s*mapper-os\/executable-blueprint\.v5/i.test(blueprint) && /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
+  ok('blueprint declares executable Buildprint authority', /schema_version:\s*mapper-os\/executable-blueprint\s*$/im.test(blueprint) && /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
   ok('blueprint includes project setup gate', /questions:\s*01-questions\.md/i.test(blueprint) && /project_setup:\s*02-project-setup\.md/i.test(blueprint))
   ok('blueprint source fields are nested under source', !/\nsource:\s*\ninput:/i.test(`\n${blueprint}`))
   ok('blueprint includes implementation loop', /observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint))
@@ -3225,7 +3225,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
 Start here.
 
-This is a Mapper OS executable-blueprint v5. Local runtime state wins over stale assumptions, but package snapshots remain read-only.
+This is a Mapper OS executable Buildprint. Local runtime state wins over stale assumptions, but package snapshots remain read-only.
 
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.

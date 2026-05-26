@@ -1,6 +1,6 @@
 # BUILDPRINT: Portable Personal Agent Chat OS
 
-This is the canonical starting point and execution contract for a Mapper OS executable-blueprint v5 packet. Build a self-hosted personal agent chatbot where chat is the control surface for a local agent runtime. The runtime routes model providers, streams responses as events, invokes policy-gated tools, loads selected skills, manages memory, delegates bounded subagent tasks, records token telemetry, and exposes a WebUI/API boundary.
+This is the canonical starting point and execution contract for a Mapper OS executable Buildprint packet. Build a self-hosted personal agent chatbot where chat is the control surface for a local agent runtime. The runtime routes model providers, streams responses as events, invokes policy-gated tools, loads selected skills, manages memory, delegates bounded subagent tasks, records token telemetry, and exposes a WebUI/API boundary.
 
 Do not start from generated prompts or secondary legacy documents. Your first action must be reading this file; do not inventory, glob, or enumerate packet files before this read order is established.
 

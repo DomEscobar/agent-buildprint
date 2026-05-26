@@ -156,7 +156,7 @@ function validate(target, dir) {
     'schema_version', 'execution_start', 'machine_contract', 'claim_status', 'setup_gate',
     'implementation_loop', 'repair_loop', 'phases', 'context', 'generated_artifacts',
   ]);
-  if (!/schema_version:\s*mapper-os\/executable-blueprint\.v5/i.test(blueprint)) fail(target, 'blueprint.yaml schema_version must be mapper-os/executable-blueprint.v5');
+  if (!/schema_version:\s*mapper-os\/executable-blueprint\s*$/im.test(blueprint)) fail(target, 'blueprint.yaml schema_version must be mapper-os/executable-blueprint');
   if (!/execution_start:\s*BUILDPRINT\.md/i.test(blueprint)) fail(target, 'blueprint.yaml execution_start must be BUILDPRINT.md');
   if (!/questions:\s*01-questions\.md/i.test(blueprint) || !/project_setup:\s*02-project-setup\.md/i.test(blueprint)) fail(target, 'blueprint.yaml setup_gate must route 01-questions.md and 02-project-setup.md');
   if (!/observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint)) fail(target, 'blueprint.yaml implementation_loop must include observe/plan/execute/verify/reflect/record');

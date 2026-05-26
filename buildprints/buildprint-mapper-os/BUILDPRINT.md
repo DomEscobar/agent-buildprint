@@ -57,7 +57,7 @@ Promoted only when the selected package is source-independent, behavior-complete
 
 ## Selected Package Shape
 
-Selected outputs must use executable-blueprint v5. `BUILDPRINT.md` is the only start point and read-order authority; `blueprint.yaml` is the machine contract; `01-questions.md` and `02-project-setup.md` gate alignment and setup; `03-phases/` owns proof-gated vertical implementation slices; `04-evaluation.md` defines promotion proofs; and `05-evidence/evidence-ledger.jsonl` seeds runtime evidence recording.
+Selected outputs must use executable Buildprint. `BUILDPRINT.md` is the only start point and read-order authority; `blueprint.yaml` is the machine contract; `01-questions.md` and `02-project-setup.md` gate alignment and setup; `03-phases/` owns proof-gated vertical implementation slices; `04-evaluation.md` defines promotion proofs; and `05-evidence/evidence-ledger.jsonl` seeds runtime evidence recording.
 
 ```text
 BUILDPRINT.md

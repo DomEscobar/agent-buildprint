@@ -46,7 +46,7 @@
   ],
   "executionStart": "BUILDPRINT.md",
   "machineContract": "blueprint.yaml",
-  "schemaVersion": "mapper-os/executable-blueprint.v5",
+  "schemaVersion": "mapper-os/executable-blueprint",
   "activePhase": "03-phases/01-ingestion-ontology.md",
   "authoritySpine": "BUILDPRINT.md",
   "mirrorFiles": [

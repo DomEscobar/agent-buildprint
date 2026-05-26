@@ -1,6 +1,6 @@
 # PLAN
 
-Follow the v5 phase index:
+Follow the phase index:
 
 1. Instance Auth, Config, and Provider Setup
 2. Content Ingestion and Outline Generation

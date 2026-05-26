@@ -1,4 +1,4 @@
-schema_version: mapper-os/executable-blueprint.v5
+schema_version: mapper-os/executable-blueprint
 name: portable-personal-agent-chat-os
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml

@@ -2,7 +2,7 @@
 
 - [ ] Default mapper run creates discovery/evidence/quality output only.
 - [ ] Selected extraction creates `selected-buildprint/`.
-- [ ] Selected extraction emits executable-blueprint v5 only; this is the current executable blueprint spine.
+- [ ] Selected extraction emits executable Buildprint only; this is the current executable blueprint spine.
 - [ ] Selected extraction preserves the executable-packet scaffold anchors exactly before adding source-specific content; mapper agents do not paraphrase validator-owned keys/headings/tokens.
 - [ ] `blueprint.yaml` includes `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure` routes including `proof_gate_failed: current_phase` and `architecture_contradiction: 02-project-setup.md`.
 - [ ] Execution blueprints include `BUILDPRINT.md`, `blueprint.yaml`, `01-questions.md`, `02-project-setup.md`, `03-phases/phase-index.yaml`, at least one phase Markdown file, `04-evaluation.md`, and `05-evidence/evidence-ledger.jsonl`.
@@ -18,7 +18,7 @@
 - [ ] Error repair routes failed test/build/runtime/UI/proof checks back to the current phase, setup contradictions to `02-project-setup.md`, product-defining ambiguity to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.
 - [ ] Every proof gate writes implementation evidence or blockers to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` remains an immutable seed.
 - [ ] `claim_status` promotion is blocked unless evidence contains passing rows for required promotion proof.
-- [ ] Legacy v4 files are absent: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, and packet `AGENTS.md`.
+- [ ] Legacy router files are absent: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, and packet `AGENTS.md`.
 - [ ] Typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, or `CAPABILTY_INDEX.md` are absent.
 - [ ] Canonical handoff is singular; both `HANDOFF.md` and `HANDOVER.md` do not appear as selected package spine files.
 - [ ] Every `OBSERVED` claim cites source path and line or section. Runtime artifact paths are explicitly labeled and not formatted as packet-file references unless the file exists in the packet; examples include `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, and `section_XX.md`.

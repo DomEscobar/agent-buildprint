@@ -14,7 +14,7 @@
     "Optional live providers"
   ],
   "stack": [
-    "Mapper OS v5",
+    "Mapper OS",
     "Hybrid retrieval",
     "Reranking",
     "Citations",
@@ -31,7 +31,7 @@
   "plainDescription": "A stack-adaptable phase-flow Buildprint for implementing production-grade RAG. It preserves deterministic local proof mode while separating live provider, persistence, security, and eval claims into explicit proof gates.",
   "promise": "A fresh agent can run the packet from BUILDPRINT.md through phase-flow to implement a permission-safe, citation-grounded retrieval system without reducing the product to vector search plus a prompt.",
   "whatYouGet": [
-    "Mapper OS v5 execution spine",
+    "Mapper OS execution spine",
     "Corpus and threat-model setup gate",
     "Document source and chunk contracts",
     "Ingestion, chunking, and index phase",
@@ -62,7 +62,7 @@
     "BUILDPRINT.md canonical start",
     "01-questions.md alignment gate",
     "02-project-setup.md architecture, team, authority, handoff, AGENTS.md, quality, safety, and phase-start contract",
-    "blueprint.yaml executable-blueprint v5 machine contract",
+    "blueprint.yaml executable Buildprint machine contract",
     "03-phases/phase-flow.md orchestration protocol",
     "Four implementation phases with proof gates",
     "04-evaluation.md retrieval, answer, operational, blocker, and claim-upgrade rules",
@@ -95,7 +95,7 @@
   ],
   "trustBadges": [
     {
-      "label": "Mapper OS v5",
+      "label": "Mapper OS",
       "detail": "Phase-flow packet with setup gate, role handoffs, proof gates, and evidence honesty.",
       "tone": "success"
     },

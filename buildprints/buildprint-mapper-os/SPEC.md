@@ -14,7 +14,7 @@
 - Emit implementation signals that help a downstream harness choose its implementation team/passes without turning the Buildprint into an architecture prescription.
 - Emit architecture topology and capability-depth gates for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy selected outputs.
 - Emit selected implementation output only under `selected-buildprint/`.
-- Use executable-blueprint v5 proof-gated phases for medium, large, and full-suite selected outputs.
+- Use executable Buildprint proof-gated phases for medium, large, and full-suite selected outputs.
 - Include downstream-agent execution planning in every source-independent selected package.
 - Keep qualification label exactly one of `DISCOVERY_ONLY`, `SELECTED_UNQUALIFIED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
 
@@ -27,7 +27,7 @@
 - Must not use broad architecture prose as a substitute for proof-gated phase packets.
 - Must not include placeholder-backed or mock-backed behavior in production scope, and must not hide unproven behavior by shrinking scope without user confirmation.
 - Must not call route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, or flat single-file prototypes “implemented” unless the applicable product behavior is proven; otherwise mark `CONTRACT_SEAM_ONLY` or `BLOCKED_WITH_REASON`.
-- Must not emit legacy selected-output v1-v4 shapes, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, packet `AGENTS.md`, root `manifest.json`, or fragmented per-capability mini-files.
+- Must not emit legacy selected-output shapes, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, packet `AGENTS.md`, root `manifest.json`, or fragmented per-capability mini-files.
 - Must not claim source-independent readiness while implementation order, verification gates, or stop conditions are missing.
 - Must not require downstream implementers to reopen the original source after qualification.
 

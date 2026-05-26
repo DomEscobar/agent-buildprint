@@ -61,7 +61,7 @@
   ],
   "includes": [
     "Clean-room source mapping",
-    "Executable-blueprint v5 packet",
+    "Executable Buildprint packet",
     "Pre-implementation questions",
     "Project setup gate",
     "Six proof-gated phases",
@@ -91,7 +91,7 @@
       "tone": "success"
     },
     {
-      "label": "Executable v5 packet",
+      "label": "Executable packet",
       "detail": "BUILDPRINT.md owns read order; setup, phase, evaluation, and evidence files are included.",
       "tone": "info"
     },
@@ -107,5 +107,5 @@
   },
   "originGithubUrl": "https://github.com/presenton/presenton",
   "originLabel": "presenton/presenton",
-  "copyPrompt": "Use the Portable AI Presentation Generation OS executable-blueprint v5. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . Then read .buildprint/next-agent.md and continue. Build a source-independent AI presentation generator/API with auth, provider config, prompt/document ingestion, outline and slide generation, media/templates/themes, editor/chat iteration, PPTX/PDF export, API/webhook/MCP boundaries, and strict provider/secret/upload/export safety. Do not claim exact Presenton clone or production-ready parity until evidence gates pass."
+  "copyPrompt": "Use the Portable AI Presentation Generation OS executable Buildprint. Start from BUILDPRINT.md, then follow 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . Then read .buildprint/next-agent.md and continue. Build a source-independent AI presentation generator/API with auth, provider config, prompt/document ingestion, outline and slide generation, media/templates/themes, editor/chat iteration, PPTX/PDF export, API/webhook/MCP boundaries, and strict provider/secret/upload/export safety. Do not claim exact Presenton clone or production-ready parity until evidence gates pass."
 }

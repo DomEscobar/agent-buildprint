@@ -9,8 +9,8 @@ This plan routes an agent through the Mapper OS workflow. It is decision-complet
 3. `plans/02-system-map.md`: promote source-evidenced behavior claims.
 4. `plans/03-candidate-buildprints.md`: propose selected-scope candidates from promoted evidence.
 5. `plans/04-scope-decision.md`: ask only blocking scope or risk decisions.
-6. `plans/05-single-extraction.md`: create a selected executable-blueprint v5 under `selected-buildprint/`.
-7. `plans/06-system-extraction.md`: create hierarchical full-suite executable-blueprint v5 output when explicitly requested.
+6. `plans/05-single-extraction.md`: create a selected executable Buildprint under `selected-buildprint/`.
+7. `plans/06-system-extraction.md`: create hierarchical full-suite executable Buildprint output when explicitly requested.
 8. `plans/07-validation-submission.md`: run verification, no-fake, hardening, and reversal gates or record blockers.
 
 ## Default Flow
@@ -36,6 +36,6 @@ source acquisition
 - Keep implementation scaffold out of the package root.
 - Use proof-gated phase packets for medium, large, and full-suite selected outputs.
 - Make selected outputs BUILDPRINT-first: `BUILDPRINT.md` owns read order, `blueprint.yaml` establishes the machine contract, `01-questions.md` and `02-project-setup.md` gate setup, and `03-phases/phase-index.yaml` names the active proof-gated phase.
-- Validate selected output shape before handoff: executable-blueprint v5 spine, evidence-ledger routing, no typo aliases, no legacy selected-output v1-v4 files, no packet AGENTS.md, and one canonical handoff artifact.
+- Validate selected output shape before handoff: executable Buildprint spine, evidence-ledger routing, no typo aliases, no legacy selected-output files, no packet AGENTS.md, and one canonical handoff artifact.
 - Record blockers instead of inventing behavior.
 - Treat full-suite as user intent, not proof.

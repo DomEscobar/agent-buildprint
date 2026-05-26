@@ -9,7 +9,7 @@
   "tier": "agent-grade",
   "status": "validated",
   "runtime": [
-    "Mapper OS executable-blueprint v5",
+    "Mapper OS executable Buildprint",
     "Any backend",
     "Deterministic local proof first"
   ],
@@ -30,7 +30,7 @@
   "difficulty": "Advanced",
   "featured": true,
   "summary": "Mapper OS phase-flow packet for building a clean-room, self-hosted personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP, memory, subagents, telemetry, and WebUI/API workbench surfaces.",
-  "plainDescription": "An executable-blueprint v5 packet for implementing a local personal AI assistant through phase-flow artifacts, review contracts, and honest runtime evidence. It preserves the mapped Emperor Agent-inspired scope without claiming clone, live provider, real MCP, shell/browser/network, auth, billing, publishing, or hosted SaaS parity.",
+  "plainDescription": "An executable Buildprint packet for implementing a local personal AI assistant through phase-flow artifacts, review contracts, and honest runtime evidence. It preserves the mapped Emperor Agent-inspired scope without claiming clone, live provider, real MCP, shell/browser/network, auth, billing, publishing, or hosted SaaS parity.",
   "promise": "A phase-flow Buildprint that lets a downstream agent implement a portable personal agent chatbot OS while keeping deterministic proof separate from live/external claims.",
   "whatYouGet": [
     "Canonical BUILDPRINT.md start file",
@@ -101,7 +101,7 @@
   "trustBadges": [
     {
       "label": "Mapper OS phase-flow",
-      "detail": "Converted to executable-blueprint v5 with phase-run artifacts and review contracts.",
+      "detail": "Converted to executable Buildprint with phase-run artifacts and review contracts.",
       "tone": "success"
     },
     {
@@ -125,6 +125,6 @@
   "copyPrompt": "Use the Portable Personal Agent Chat OS Mapper OS packet. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . Then read BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Treat BUILDPRINT.md as canonical. Run every phase through 03-phases/phase-flow.md, create .buildprint/phase-runs/<phase-id>/ artifacts, read .buildprint/next-agent.md and current project AGENTS.md before phase work, and append runtime proof only to .buildprint/evidence/evidence-ledger.jsonl. Build the clean-room personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP adapter, memory/compaction, subagent delegation, token telemetry, WebUI/API workbench, and safety-gated tool policy. Use deterministic providers/tools by default. Do not claim Emperor Agent clone, exact UI parity, live provider parity, real MCP parity, shell/browser/network safety, production auth, billing, publishing, or hosted SaaS unless separately validated.",
   "publicStatus": {
     "label": "Mapper OS converted",
-    "explanation": "Converted to executable-blueprint v5 phase-flow methodology with seed-only packaged evidence and honest runtime evidence rules."
+    "explanation": "Converted to executable Buildprint phase-flow methodology with seed-only packaged evidence and honest runtime evidence rules."
   }
 }

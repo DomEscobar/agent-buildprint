@@ -288,7 +288,7 @@ Stop or escalate when:
 
 ## Buildprint Package Shape
 
-Mapper OS selected output uses one capability-packet v4 shape for small, medium, large, and full-suite scopes. Scope size changes the number and depth of capability packets; it does not switch back to legacy routing.
+Mapper OS selected output uses one capability packet shape for small, medium, large, and full-suite scopes. Scope size changes the number and depth of capability packets; it does not switch back to legacy routing.
 
 Required selected package spine:
 

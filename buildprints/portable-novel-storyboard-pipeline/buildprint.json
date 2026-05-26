@@ -47,7 +47,7 @@
   ],
   "executionStart": "BUILDPRINT.md",
   "machineContract": "blueprint.yaml",
-  "schemaVersion": "mapper-os/executable-blueprint.v5",
+  "schemaVersion": "mapper-os/executable-blueprint",
   "activePhase": "03-phases/01-project-workspace-auth.md",
   "authoritySpine": "BUILDPRINT.md",
   "mirrorFiles": [
