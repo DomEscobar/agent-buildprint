@@ -132,6 +132,15 @@ for (const slug of packageSlugs()) {
 
   const isExecutable = fileSet.has('01-questions.md') && fileSet.has('02-project-setup.md') && fileSet.has('blueprint.yaml');
   if (isExecutable) {
+    const expectedBootstrap = `First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/${slug}/package.json .`;
+    if (!copyPrompt.includes(expectedBootstrap)) fail(slug, `executable packet copyPrompt must start from bootstrap command ${expectedBootstrap}`);
+    if (!copyPrompt.includes('Then read .buildprint/next-agent.md and continue.')) fail(slug, 'executable packet copyPrompt must route through .buildprint/next-agent.md after bootstrap');
+    if (!copyPrompt.includes('Do not write Buildprint snapshots manually.')) fail(slug, 'executable packet copyPrompt must forbid manual snapshot writing');
+    const firstBootstrap = copyPrompt.indexOf('First bootstrap exact snapshots:');
+    const firstBuildprintRead = copyPrompt.indexOf('BUILDPRINT.md');
+    if (firstBootstrap < 0 || firstBuildprintRead < 0 || firstBootstrap > firstBuildprintRead) {
+      fail(slug, 'executable packet copyPrompt must bootstrap exact snapshots before naming packet files/read order');
+    }
     for (const file of executableReadOrder) {
       if (!fileSet.has(file)) fail(slug, `executable packet missing ${file}`);
       if (!copyPrompt.includes(file)) fail(slug, `executable packet copyPrompt must mention ${file}`);
