@@ -21,9 +21,10 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 5. `EXECUTION_PROTOCOL.md`
 6. `IMPLEMENTATION_PLAN.md`
 7. `VERIFICATION.md`
-8. `questions.md`
-9. `policies/*.md`
-10. `prompts/*.md` and `templates/`
+8. `HOW_TO_EVAL.md`
+9. `questions.md`
+10. `policies/*.md`
+11. `prompts/*.md` and `templates/`
 
 For generated selected packages, do not make the implementing agent read all Markdown files or all capabilities before it knows the next action. `START_HERE.md` is the execution start, `blueprint.yaml` is the machine-readable contract, `02-context/context-map.yaml` is the active-context router, `02-context/team-stack.yaml` is the quality gate router, and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready slice.
 
