@@ -53,10 +53,14 @@ Outputs/downstream handoff:
 ## Interfaces touched
 
 - API/routes/adapters/frontend-backend contracts: identify and implement only those required by this phase.
-- Provider/tool contracts: disclose deterministic, sandbox, or live mode where provider behavior is claimed.
+- Provider/tool contracts: implement provider adapter/config/test seams before live proof; disclose deterministic, sandbox, or live mode where provider behavior is claimed.
 - None — reason: only if this phase truly touches no interface boundary.
 
 ## State/runtime touched
+
+Production runtime: define worker queue ownership, retry/cancel/failure recovery, progress persistence, restart behavior, and health/observability hooks when this phase touches async or runtime behavior.
+
+Data lifecycle: define migrations, retention/delete/export, backup/readback, upload limits, object/file storage, and sensitive data handling when this phase touches durable state or uploads.
 
 - Use a real API/service/storage seam; do not fake success in UI state only.
 - Validation must reject missing required fields.
@@ -65,11 +69,11 @@ Outputs/downstream handoff:
 
 ## UX/UI requirements
 
-This phase is UI-bearing. Keep the UX contract inline: proof must include empty, loading, error, blocked, and success/ready screenshots or blocker rows.
+This phase is UI-bearing. Keep the UX contract inline: proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for empty, loading, error, blocked, and success/ready states. Screenshots alone do not satisfy UI completion.
 
 ## Safety/security constraints
 
-- Preserve auth/privacy/tenant boundaries if present.
+- Define and preserve auth/session/tenant/privacy boundaries appropriate to the product; do not omit them because the source boundary is implicit or credentials are missing.
 - Never expose secrets in logs, UI, screenshots, reports, or evidence rows.
 - Ask before destructive actions, external writes, paid providers, deployments, or irreversible migrations.
 - Stop instead of claiming persistence if restart/readback cannot run.
@@ -80,19 +84,21 @@ This phase is UI-bearing. Keep the UX contract inline: proof must include empty,
 
 - Run the smallest meaningful typecheck/lint/test/build gate for changed files.
 - Add or update tests for changed behavior and failure states.
-- For UI-facing behavior, provide browser/screenshot proof or an honest blocker.
-- For persistence/provider behavior, prove readback/live mode or record a blocker.
+- For UI-facing behavior, provide repeatable browser/e2e proof plus screenshot or DOM evidence, or an honest blocker for unavailable browser tooling.
+- For persistence/provider behavior, prove readback and provider adapter/config/test behavior; record blockers only for unavailable live credentials, external services, or deployment authorization.
 
 ## Proof gate
 
-- Proof id: proof-ingest-record
-- Required proofs: browser_runtime_trace, ux_design_gate, screenshot_state_set, persistence_roundtrip, clean_room_implementation_trace, no_fake_scan_pass.
+- Proof id: proof-01-ingest-record
+- Required proofs: browser_runtime_trace, ux_design_gate, screenshot_state_set, persistence_roundtrip, clean_room_implementation_trace, no_fake_scan_pass., provider_adapter_config_test_required, live_provider_proof_blocker_only, worker_retry_cancel_recovery, migration_retention_backup_upload_limits, repeatable_browser_e2e
+Live credentials, paid services, or external deployment approval may block live proof only after adapter/config/test/runtime wiring exists. Do not satisfy this phase with deterministic-only providers, screenshots-only UI proof, in-memory-only state, route-shaped handlers, or local MVP shortcuts.
+
 - Negative tests: rejects missing required fields.
 - Runtime evidence ledger: `.buildprint/evidence/evidence-ledger.jsonl` in the implementation workspace
 - Immutable evidence seed: `05-evidence/evidence-ledger.jsonl`
 - Claim rules: `04-evaluation.md`
 
-Required runtime evidence row must use `phase_id: ingest-record` and write to `.buildprint/evidence/evidence-ledger.jsonl`.
+Required runtime evidence row must use `phase_id: 01-ingest-record` and write to `.buildprint/evidence/evidence-ledger.jsonl`.
 
 ## Repair routing
 

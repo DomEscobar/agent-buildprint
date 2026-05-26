@@ -4,7 +4,7 @@ Answer only what you care about. Leave anything blank and the implementation age
 
 Default for every unanswered question:
 
-> Use AI best judgment to produce the highest-quality appropriate implementation. Prefer clean architecture, excellent UX/UI, strong security, maintainable code, real persistence where needed, and proof-backed completion. Favor simplicity unless source evidence or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
+> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Favor simplicity unless source evidence or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
 
 ## 1. Product direction
 

@@ -35,7 +35,7 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: example-phase
+  - phase_id: 01-example-phase
     title: 01-example-phase
     file: 03-phases/01-example-phase.md
     status: INCLUDED_NEEDS_PROOF

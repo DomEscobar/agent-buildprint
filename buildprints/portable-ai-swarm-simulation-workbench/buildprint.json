@@ -13,6 +13,7 @@
     "02-project-setup.md",
     "blueprint.yaml",
     "03-phases/phase-index.yaml",
+    "03-phases/phase-flow.md",
     "03-phases/01-ingestion-ontology.md",
     "04-evaluation.md",
     "05-evidence/evidence-ledger.jsonl"
@@ -42,7 +43,8 @@
     "buildprint.json",
     "checks/acceptance.md",
     "claims.yaml",
-    "generated/agent-prompt.md"
+    "generated/agent-prompt.md",
+    "03-phases/phase-flow.md"
   ],
   "executionStart": "BUILDPRINT.md",
   "machineContract": "blueprint.yaml",
@@ -54,6 +56,7 @@
     "03-phases/phase-index.yaml",
     "acceptance.yaml",
     "claims.yaml",
-    "05-evidence/evidence-ledger.schema.json"
+    "05-evidence/evidence-ledger.schema.json",
+    "03-phases/phase-flow.md"
   ]
 }

@@ -12,6 +12,11 @@ const fixtures = [
   ['BUILDPRINT read order skipping questions/setup', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/buildprint-skips-questions-setup/selected-buildprint'],
   ['forbidden packet AGENTS.md', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/forbidden-packet-agents/selected-buildprint'],
   ['unclassified file reference', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/unclassified-file-reference/selected-buildprint'],
+  ['local MVP production missing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/local-mvp-production-missing/selected-buildprint'],
+  ['provider blocker without adapter path', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/provider-blocker-without-adapter-path/selected-buildprint'],
+  ['screenshots without repeatable e2e', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/screenshots-without-repeatable-e2e/selected-buildprint'],
+  ['phase id drift', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/phase-id-drift/selected-buildprint'],
+  ['all phases independent', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/all-phases-independent/selected-buildprint'],
 ];
 
 const expectations = new Map([
@@ -25,6 +30,11 @@ const expectations = new Map([
   ['BUILDPRINT read order skipping questions/setup', /BUILDPRINT\.md read order missing 01-questions\.md|BUILDPRINT\.md read order missing 02-project-setup\.md/i],
   ['forbidden packet AGENTS.md', /forbidden file in current executable packet baseline: AGENTS\.md/i],
   ['unclassified file reference', /unclassified file reference missing-contract\.md/i],
+  ['local MVP production missing', /02-project-setup\.md missing ## Production readiness contract/i],
+  ['provider blocker without adapter path', /production proof gate missing provider_adapter_config_test_required|must state missing live credentials block live proof only/i],
+  ['screenshots without repeatable e2e', /production proof gate missing repeatable_browser_e2e/i],
+  ['phase id drift', /phase_id ingest-record must match file basename 01-ingest-record/i],
+  ['all phases independent', /multi-phase packets must model dependencies/i],
 ]);
 
 let failures = 0;

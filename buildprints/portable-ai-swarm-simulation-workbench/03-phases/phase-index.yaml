@@ -1,33 +1,33 @@
 schema_version: mapper-os/phase-index
 active_phase: 03-phases/01-ingestion-ontology.md
 phases:
-  - phase_id: ingestion-ontology
+  - phase_id: 01-ingestion-ontology
     file: 03-phases/01-ingestion-ontology.md
     status: INCLUDED_NEEDS_PROOF
     depends_on: []
-    proof_gate: proof-ingestion-ontology
-  - phase_id: graph-builder
+    proof_gate: proof-01-ingestion-ontology
+  - phase_id: 02-graph-builder
     file: 03-phases/02-graph-builder.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: []
-    proof_gate: proof-graph-builder
-  - phase_id: simulation-setup
+    depends_on: [01-ingestion-ontology]
+    proof_gate: proof-02-graph-builder
+  - phase_id: 03-simulation-setup
     file: 03-phases/03-simulation-setup.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: []
-    proof_gate: proof-simulation-setup
-  - phase_id: simulation-runtime
+    depends_on: [02-graph-builder]
+    proof_gate: proof-03-simulation-setup
+  - phase_id: 04-simulation-runtime
     file: 03-phases/04-simulation-runtime.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: []
-    proof_gate: proof-simulation-runtime
-  - phase_id: report-interaction
+    depends_on: [03-simulation-setup]
+    proof_gate: proof-04-simulation-runtime
+  - phase_id: 05-report-interaction
     file: 03-phases/05-report-interaction.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: []
-    proof_gate: proof-report-interaction
-  - phase_id: data-lifecycle
+    depends_on: [04-simulation-runtime]
+    proof_gate: proof-05-report-interaction
+  - phase_id: 06-data-lifecycle
     file: 03-phases/06-data-lifecycle.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: []
-    proof_gate: proof-data-lifecycle
+    depends_on: [05-report-interaction]
+    proof_gate: proof-06-data-lifecycle

@@ -9,9 +9,10 @@ This is the canonical starting point and execution contract for the blueprint. D
 3. Read and complete `02-project-setup.md`.
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
-6. Read only the active phase file: `03-phases/01-ingestion-ontology.md`.
-7. Read `04-evaluation.md`.
-8. Append proof or blocker rows to `05-evidence/evidence-ledger.jsonl`.
+6. Read `03-phases/phase-flow.md`.
+7. Read only the active phase file: `03-phases/01-ingestion-ontology.md`.
+8. Read `04-evaluation.md`.
+9. Read seed evidence in `05-evidence/evidence-ledger.jsonl`; append runtime proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist.
 
 ## Project setup gate
 
@@ -30,7 +31,7 @@ Every phase must repeat this loop until the proof gate passes or a real blocker 
 5. Reflect: compare results against the phase proof gate.
 6. Record: append evidence or blocker rows before claiming progress.
 
-A phase cannot be marked done from code edits alone.
+A phase cannot be marked done from code edits alone. The phase-flow required artifacts under `.buildprint/phase-runs/<phase-id>/` must exist before runtime evidence is appended.
 
 ## Repair routing
 
@@ -40,7 +41,7 @@ If verification fails, route back before editing again:
 - architecture contradiction -> `02-project-setup.md`
 - missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
 - missing dependency -> required prior phase
-- external blocker -> `05-evidence/evidence-ledger.jsonl`
+- external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`
 
 Do not mark a phase complete while its verification failure is unresolved.
 

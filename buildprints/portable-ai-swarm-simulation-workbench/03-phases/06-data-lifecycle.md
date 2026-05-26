@@ -1,5 +1,25 @@
 # Phase 06 — History And Data Lifecycle
 
+## How to implement this phase
+
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md`
+- current project `AGENTS.md`
+
+Then execute this phase through `03-phases/phase-flow.md`: declare phase objective, assemble required roles, dispatch bounded subagent tasks or simulate them explicitly, collect reviews, integrate, verify, and record evidence.
+
+You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+
+requires_roles:
+  - product-architect
+  - ux-ui-craft
+  - integration-runtime
+  - data-persistence
+  - security-boundary
+  - test-and-verification
+
 ## Product outcome
 
 Persist projects, files, extracted text, simulations, run states, reports, and history views with safe reset/delete/export/readback behavior.
@@ -18,6 +38,13 @@ Source evidence refs:
 - /root/MiroFish/backend/app/services/simulation_runner.py:231-305 reloads run state from disk.
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
+
+## Source surface dispositions
+
+- Surface id: source-backed surfaces listed in Source evidence.
+  - Disposition: preserve capability, target route/function names may differ.
+  - Equivalent target behavior: preserve this phase's product outcome through cleaner target architecture where useful.
+  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; source route names are evidence, not mandatory parity.
 
 ## Implementation scope
 
@@ -46,10 +73,14 @@ Downstream slices may rely on persisted identifiers, state transitions, provider
 ## Interfaces touched
 
 - API/routes/adapters/frontend-backend contracts: identify and implement only those required by this phase.
-- Provider/tool contracts: disclose deterministic, sandbox, or live mode where provider behavior is claimed.
+- Provider/tool contracts: implement provider adapter/config/test seams before live proof; disclose deterministic, sandbox, or live mode where provider behavior is claimed.
 - None — reason: only if this phase truly touches no interface boundary.
 
 ## State/runtime touched
+
+Production runtime: define worker queue ownership, retry/cancel/failure recovery, progress persistence, restart behavior, and health/observability hooks when this phase touches async or runtime behavior.
+
+Data lifecycle: define migrations, retention/delete/export, backup/readback, upload limits, object/file storage, and sensitive data handling when this phase touches durable state or uploads.
 
 Stable obligations:
 - Persist projects, files, extracted text, simulations, run states, reports, and history views with safe reset/delete/export/readback behavior.
@@ -63,23 +94,23 @@ Provider-backed behavior must disclose whether it is deterministic-test-double, 
 
 ## UX/UI requirements
 
-Use the inline UX/UI requirements in this phase. Any `browser_runtime_trace` proof must include `ux_design_gate` and `screenshot_state_set` coverage for the relevant empty/loading/error/blocked/success states, or an explicit blocker row.
+Use the inline UX/UI requirements in this phase. Any UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for empty/loading/error/blocked/success states. Screenshots alone do not satisfy UI completion.
 
 ## Safety/security constraints
 
-- Preserve auth/privacy/tenant boundaries if present.
+- Define and preserve auth/session/tenant/privacy boundaries appropriate to the product; do not omit them because the source boundary is implicit or credentials are missing.
 - Never expose secrets in logs, UI, screenshots, reports, or evidence rows.
 - Ask before destructive actions, external writes, paid providers, deployments, or irreversible migrations.
 - Stop rather than claim implementation if proof depends only on mocks, placeholders, static UI, route-shaped stubs, or in-memory-only state where durability is claimed.
-- Stop rather than claim live provider/runtime behavior from deterministic adapters.
+- Stop rather than claim live provider/runtime behavior from deterministic adapters; live credentials block live proof only after adapter/config/test/runtime wiring exists.
 - Stop on secret exposure, destructive-action ambiguity, unreviewed upload/runtime surfaces, or missing browser/runtime evidence.
 
 ## Quality gates
 
 - Run the smallest meaningful typecheck/lint/test/build gate for changed files.
 - Add or update tests for changed behavior and failure states.
-- For UI-facing behavior, provide browser/screenshot proof or an honest blocker.
-- For persistence/provider behavior, prove readback/live mode or record a blocker.
+- For UI-facing behavior, provide repeatable browser/e2e proof plus screenshot or DOM evidence, or an honest blocker for unavailable browser tooling.
+- For persistence/provider behavior, prove readback and provider adapter/config/test behavior; record blockers only for unavailable live credentials, external services, or deployment authorization.
 
 ## Proof gate
 
@@ -88,23 +119,29 @@ Use the inline UX/UI requirements in this phase. Any `browser_runtime_trace` pro
   - unit_or_integration_test
   - negative_test
   - browser_trace_or_runtime_trace
-  - persistence_roundtrip_or_blocker
+  - persistence_roundtrip
   - evidence_ledger_entry
   - browser_runtime_trace
   - ux_design_gate
   - screenshot_state_set
-  - provider_integration_proof_or_blocker
-  - persistence_roundtrip_or_blocker
-  - security_boundary_review_or_blocker
+  - provider_adapter_config_test_required
+  - live_provider_proof_blocker_only
+  - worker_retry_cancel_recovery
+  - migration_retention_backup_upload_limits
+  - repeatable_browser_e2e
+  - persistence_roundtrip
+  - security_boundary_review
   - clean_room_implementation_trace
   - no_fake_scan_pass
+Live credentials, paid services, or external deployment approval may block live proof only after adapter/config/test/runtime wiring exists. Do not satisfy this phase with deterministic-only providers, screenshots-only UI proof, in-memory-only state, route-shaped handlers, or local MVP shortcuts.
+
 - Negative tests: validation failure, provider/runtime failure where applicable, persistence/readback failure, and phase safety/security constraints and negative fixtures listed above.
-- Runtime evidence ledger: `05-evidence/evidence-ledger.jsonl`
+- Runtime evidence ledger: `.buildprint/evidence/evidence-ledger.jsonl` in the implementation workspace
 - Immutable evidence seed: `05-evidence/evidence-ledger.jsonl`
 - Claim rules: `04-evaluation.md`
 - Evidence schema: `05-evidence/evidence-ledger.schema.json`
 
-Required evidence row must use `phase_id: 06-data-lifecycle` and write to `05-evidence/evidence-ledger.jsonl`.
+Required runtime evidence row must use `phase_id: 06-data-lifecycle` and write to `.buildprint/evidence/evidence-ledger.jsonl`.
 
 ## Repair routing
 
@@ -114,4 +151,4 @@ If this phase fails verification, return here before editing again. Re-read prod
 - architecture contradiction -> `02-project-setup.md`
 - missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
 - missing dependency -> required prior phase from `03-phases/phase-index.yaml`
-- external blocker -> `05-evidence/evidence-ledger.jsonl`
+- external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`

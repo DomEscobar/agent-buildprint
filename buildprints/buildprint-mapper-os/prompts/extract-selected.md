@@ -36,7 +36,7 @@ Required exact anchors include:
 - `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Required read order`, `## Project setup gate`, `## Implementation loop`, and `## Repair routing`.
 - `01-questions.md`: use headings `## 1.` through `## 6.` and include the exact AI-best-judgment default phrase below.
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
-- `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, and `no_fake`.
+- `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, `no_fake`, and `production_readiness`.
 
 `generated/agent-prompt.md` must declare `Generated from: blueprint.yaml` and state that it is not source of truth.
 
@@ -91,7 +91,7 @@ Use numbered questions, not a vague blob. Include exactly these question areas:
 
 Default rule:
 
-> Use AI best judgment to produce the highest-quality appropriate implementation. Prefer clean architecture, excellent UX/UI, strong security, maintainable code, real persistence where needed, and proof-backed completion. Favor simplicity unless source evidence or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
+> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Favor simplicity unless source evidence or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
 
 ## 02-project-setup.md
 
@@ -100,6 +100,7 @@ This is the pre-phase setup contract. Required sections:
 - `## Human preferences`
 - `## Inferred project shape`
 - `## Stack decisions`
+- `## Production readiness contract`
 - `## Architecture rules`
 - `## Team operating model`
 - `## Execution authority model`
@@ -110,7 +111,9 @@ This is the pre-phase setup contract. Required sections:
 - `## Open questions and assumptions`
 - `## Phase start gate`
 
-AI may decide ordinary engineering defaults, but each default must be appropriate, source/product-grounded, and not maximal for its own sake. Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks.
+AI may decide ordinary engineering defaults, but each default must be appropriate, source/product-grounded, and production-grade for the selected full-suite scope. Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials or paid-service approval can block live proof only after implementation includes provider adapters, config contracts, tests, and runtime wiring.
+
+`## Production readiness contract` must define auth/session/tenant boundaries, provider integration contracts, durable persistence, worker/runtime behavior, deployment/operations, observability, CI gates, and repeatable browser/e2e proof. A local MVP, static shell, deterministic-only provider, screenshots-only UI proof, or in-memory product state is invalid unless the selected scope is explicitly prototype-only.
 
 
 ## Execution authority and delegation
@@ -168,6 +171,8 @@ Every implementation phase file under `03-phases/*.md` must include:
 - `## Repair routing`
 
 Interfaces, state/runtime, UX, and safety live inline in each phase unless the project genuinely needs a larger shared contract.
+
+Every phase proof gate must split implementation obligations from live-proof blockers. Use these required labels where applicable: `provider_adapter_config_test_required`, `live_provider_proof_blocker_only`, `worker_retry_cancel_recovery`, `migration_retention_backup_upload_limits`, and `repeatable_browser_e2e`. Do not use soft labels such as `provider_integration_proof_or_blocker` that allow the implementation path itself to disappear.
 
 UI-bearing phases must not reference non-existent shared files such as `02-context/ux-contract.md` or `design-quality-bar.md`. Put the UX/UI contract inline in the phase or add an actual packet file and list it in the package.
 

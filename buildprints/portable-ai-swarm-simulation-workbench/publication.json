@@ -31,20 +31,20 @@
   "difficulty": "Advanced",
   "featured": true,
   "summary": "Executable packet Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history through proof-gated phase files.",
-  "plainDescription": "A fresh Mapper OS selected packet remapped from MiroFish source evidence and scoped as the full portable AI swarm simulation workbench. It preserves broad product scope while keeping qualification honest until live provider, runtime, browser, persistence, and security proof passes.",
-  "promise": "Build a portable AI swarm simulation workbench without depending on the original source repo. Status remains PROOF_REQUIRED until all proof gates pass.",
+  "plainDescription": "A Mapper OS executable packet remapped from MiroFish source evidence and scoped as the full portable AI swarm simulation workbench. It now requires production-grade architecture by default while keeping qualification honest until live provider, runtime, browser/e2e, persistence, security, and deployment proof passes.",
+  "promise": "Build a production-grade portable AI swarm simulation workbench without depending on the original source repo. Status remains PROOF_REQUIRED until all proof gates pass.",
   "whatYouGet": [
     "Executable Buildprint BUILDPRINT start and machine contract",
-    "Six consolidated phase files with source evidence, implementation paths, team gates, and proof gates",
-    "Team stack, UX contract, design quality bar, safety boundaries, and evaluation matrix",
-    "Evidence ledger seed and unresolved blocker list"
+    "Six production-grade phase files with source evidence, implementation paths, team gates, and proof gates",
+    "Production readiness contract for auth/session/tenant, providers, durable persistence, workers, deployment/ops, observability, CI, and browser/e2e",
+    "Phase-flow orchestration and evidence ledger seed with unresolved blocker rules"
   ],
   "whatYouNeed": [
     "A clean implementation workspace",
-    "LLM provider credentials for live ontology/report/profile proof",
-    "Zep-compatible graph-memory credentials for live graph proof",
-    "OASIS/CAMEL-compatible runtime or approved simulation worker",
-    "Persistence backend decision and browser test environment"
+    "LLM provider credentials for live ontology/report/profile proof, or acceptance that only live proof remains blocked",
+    "Zep-compatible graph-memory credentials for live graph proof, or a configured adapter/test-double path",
+    "OASIS/CAMEL-compatible runtime or approved simulation worker, plus deployment authorization for production proof",
+    "Persistence/backend and browser test environment capable of repeatable e2e proof"
   ],
   "architectureFlow": [
     "Upload",
@@ -64,44 +64,49 @@
     "History And Data Lifecycle",
     "BUILDPRINT.md canonical start",
     "01-questions.md numbered alignment",
-    "02-project-setup.md architecture and AGENTS plan",
+    "02-project-setup.md production readiness and AGENTS plan",
+    "03-phases/phase-flow.md orchestration contract",
     "03-phases proof-gated phase files",
     "04-evaluation.md claim rules",
-    "05-evidence/evidence-ledger.jsonl proof/blocker ledger"
+    "05-evidence/evidence-ledger.jsonl seed ledger with runtime writes to .buildprint/evidence/evidence-ledger.jsonl"
   ],
   "risks": [
     "Overclaiming MiroFish clone parity",
     "Counting deterministic adapters as live provider proof",
+    "Treating missing credentials as permission to omit provider adapters/config/tests",
     "Static graph/report data presented as real behavior",
     "No-op start/stop/chat/delete controls",
     "In-memory-only state counted as persistence",
+    "Screenshots without repeatable browser/e2e proof",
     "Secret leakage through logs, reports, screenshots, or ledger entries"
   ],
   "checks": [
     "Executable packet file shape generated",
-    "YAML/JSON/JSONL parse validation expected before publication",
+    "Production readiness contract required before phase work",
+    "Provider adapters/config/tests required before live-proof blockers",
+    "Repeatable browser/e2e proof required for UI phases",
     "Qualification remains PROOF_REQUIRED until proof gates pass"
   ],
   "trustBadges": [
     {
-      "label": "Capability packet",
-      "detail": "Capability packet selected packet shape.",
+      "label": "Executable packet",
+      "detail": "Current Mapper OS executable packet shape.",
       "tone": "success"
     },
     {
-      "label": "Source-independent",
-      "detail": "Implementation agents should not need the original source checkout.",
+      "label": "Production-grade default",
+      "detail": "Auth, providers, runtime, persistence, ops, and e2e gates are required by default.",
       "tone": "success"
     },
     {
       "label": "Proof required",
-      "detail": "Live provider/runtime/browser/persistence/security proof remains pending.",
+      "detail": "Live provider/runtime/browser/e2e/persistence/security/deployment proof remains pending.",
       "tone": "warning"
     }
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use the Portable AI Swarm Simulation Workbench Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-swarm-simulation-workbench/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-swarm-simulation-workbench/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims proof-required until proof rows pass. Build the portable AI swarm simulation workbench from the Buildprint package, not from the original source checkout.",
+  "copyPrompt": "Use the Portable AI Swarm Simulation Workbench Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-swarm-simulation-workbench/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-swarm-simulation-workbench/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Production-grade architecture is the default: implement auth/session/tenant boundaries, provider adapters/config/tests, durable persistence, worker/runtime ownership, deployment/ops shape, observability, security controls, and repeatable browser/e2e proof before accepting live-proof blockers. Missing credentials, paid services, or deployment authorization block live proof only after adapter/config/test/runtime wiring exists. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time through phase-flow with observe, plan, execute, verify, reflect, and record. Runtime evidence belongs in .buildprint/evidence/evidence-ledger.jsonl; packaged 05-evidence/evidence-ledger.jsonl is seed-only. Keep claims proof-required until proof rows pass. Build the portable AI swarm simulation workbench from the Buildprint package, not from the original source checkout.",
   "publicStatus": {
     "label": "Mapped, proof pending",
     "explanation": "Source-independent packet exists; live implementation proof is not complete."

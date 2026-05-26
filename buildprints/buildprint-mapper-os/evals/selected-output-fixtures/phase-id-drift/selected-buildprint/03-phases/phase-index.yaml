@@ -1,0 +1,8 @@
+schema_version: mapper-os/phase-index
+active_phase: 03-phases/01-ingest-record.md
+phases:
+  - phase_id: ingest-record
+    file: 03-phases/01-ingest-record.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-01-ingest-record

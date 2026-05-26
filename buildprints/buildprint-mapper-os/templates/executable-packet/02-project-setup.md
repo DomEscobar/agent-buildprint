@@ -30,7 +30,18 @@ Record decisions with short evidence, not bureaucracy:
   - Decision: real persistence where the product requires durable state.
   - Evidence: state/runtime requirements in phases.
 - Auth/providers/deployment:
-  - Decision: best-fit default unless credentials, cost, or irreversible deployment choices require human confirmation.
+  - Decision: production-grade architecture is the default for full-suite mapped packets. Missing credentials, paid-service approval, or deployment authorization may block live proof, but they do not remove auth/session/tenant design, provider adapters, config contracts, tests, deployment shape, or runtime wiring from scope.
+
+## Production readiness contract
+
+Complete these decisions before phase work. Do not downgrade to a local MVP unless the selected scope explicitly says prototype-only.
+
+- Auth/session/tenant boundary: define users/sessions, roles or ownership, tenant/privacy isolation, audit-relevant actions, and access-control behavior. If the source has no auth, define the minimum product-appropriate local/session boundary and the migration path to real auth.
+- Provider integration contract: define live provider adapters, env/config names, request/response/error contracts, deterministic test doubles, sandbox/live mode disclosure, and tests. Missing credentials block only live proof, not adapter/config/test implementation.
+- Durable persistence contract: define database or storage choice, schema ownership, migrations, restart/readback proof, backup/export/delete semantics, retention, quotas, and sensitive data handling.
+- Worker/runtime contract: define queue or job ownership, retries, cancellation, timeout behavior, failure recovery, progress persistence, idempotency, and dead-letter or repair handling for async/runtime work.
+- Deployment and operations contract: define local dev, production build/run command, container or hosting shape, health/readiness checks, structured logging, metrics/tracing, rate/request-size limits, and CI gates.
+- Browser/e2e contract: define repeatable Playwright or equivalent browser flows for major UI paths and states. Screenshots support evidence but do not replace automated e2e coverage for UI-bearing phases.
 
 ## Source contract anchors
 
@@ -115,6 +126,7 @@ Before claiming any phase done:
 - Run the smallest meaningful typecheck/lint/test/build gate for changed code.
 - For UI-facing work, verify user-visible behavior with browser/screenshot evidence when possible.
 - For backend/provider/state work, verify real request/path, persistence/readback, or record an honest blocker.
+- For production-grade work, implement auth/session/tenant, provider adapter/config/test, durable persistence, worker/runtime, deployment/ops, and repeatable e2e paths that are applicable to the phase before accepting live-proof blockers.
 - Do not skip tests, hide failures, or upgrade claims without proof.
 
 ## Safety and permissions

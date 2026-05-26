@@ -35,6 +35,11 @@ acceptance:
         - Proof gate
         - Repair routing
       generated_prompt_policy: generated_from_blueprint_not_authority
+      production_grade_default: required
+      production_readiness_contract: required
+      missing_credentials_block_live_proof_only: required
+      provider_adapter_config_test_required: required
+      repeatable_browser_e2e_required_for_ui: required
       promotion_source: runtime_evidence_ledger
       runtime_evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
       packaged_evidence_ledger: immutable_seed_only
@@ -104,6 +109,10 @@ acceptance:
     - selected output has no typo alias files
     - selected output has exactly one canonical handoff artifact
     - no mocks or fixtures counted as product implementation
+    - production architecture is default for full-suite executable packets
+    - missing credentials block live proof only after adapters config tests and runtime wiring exist
+    - phase ids match phase file basenames
+    - multi-phase dependencies model workflow order
     - qualification label is DISCOVERY_ONLY, PROOF_REQUIRED, or QUALIFIED_SOURCE_INDEPENDENT
   required_reviews:
     - name: mapper_fixture_review

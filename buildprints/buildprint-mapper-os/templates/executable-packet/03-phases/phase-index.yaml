@@ -1,8 +1,8 @@
 schema_version: mapper-os/phase-index
 active_phase: 03-phases/01-example-phase.md
 phases:
-  - phase_id: example-phase
+  - phase_id: 01-example-phase
     file: 03-phases/01-example-phase.md
     status: INCLUDED_NEEDS_PROOF
     depends_on: []
-    proof_gate: proof-example-phase
+    proof_gate: proof-01-example-phase

@@ -34,29 +34,29 @@ repair_loop:
     architecture_contradiction: 02-project-setup.md
     missing_human_preference: 01-questions.md
     missing_dependency_phase: required_prior_phase
-    external_blocker: 05-evidence/evidence-ledger.jsonl
+    external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: ingestion-ontology
+  - phase_id: 01-ingestion-ontology
     title: 01-ingestion-ontology
     file: 03-phases/01-ingestion-ontology.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: graph-builder
+  - phase_id: 02-graph-builder
     title: 02-graph-builder
     file: 03-phases/02-graph-builder.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: simulation-setup
+  - phase_id: 03-simulation-setup
     title: 03-simulation-setup
     file: 03-phases/03-simulation-setup.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: simulation-runtime
+  - phase_id: 04-simulation-runtime
     title: 04-simulation-runtime
     file: 03-phases/04-simulation-runtime.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: report-interaction
+  - phase_id: 05-report-interaction
     title: 05-report-interaction
     file: 03-phases/05-report-interaction.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: data-lifecycle
+  - phase_id: 06-data-lifecycle
     title: 06-data-lifecycle
     file: 03-phases/06-data-lifecycle.md
     status: INCLUDED_NEEDS_PROOF

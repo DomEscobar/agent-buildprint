@@ -40,6 +40,7 @@ const setupSections = [
   /## Human preferences/i,
   /## Inferred project shape/i,
   /## Stack decisions/i,
+  /## Production readiness contract/i,
   /## Source contract anchors/i,
   /## Source capability\/surface ledger/i,
   /## Architecture rules/i,
@@ -65,6 +66,21 @@ const phaseSections = [
   /## Quality gates/i,
   /## Proof gate/i,
   /## Repair routing/i,
+];
+const productionSetupTokens = [
+  'Auth/session/tenant boundary',
+  'Provider integration contract',
+  'Durable persistence contract',
+  'Worker/runtime contract',
+  'Deployment and operations contract',
+  'Browser/e2e contract',
+];
+const productionPhaseTokens = [
+  'provider_adapter_config_test_required',
+  'live_provider_proof_blocker_only',
+  'worker_retry_cancel_recovery',
+  'migration_retention_backup_upload_limits',
+  'repeatable_browser_e2e',
 ];
 
 function fail(target, message) {
@@ -176,6 +192,7 @@ function validate(target, dir) {
   const questions = safeRead(path.join(dir, '01-questions.md'));
   for (const n of [1, 2, 3, 4, 5, 6]) if (!new RegExp(`## ${n}\\.`, 'i').test(questions)) fail(target, `01-questions.md missing numbered question ${n}`);
   if (!/AI best judgment/i.test(questions) || !/highest-quality appropriate/i.test(questions)) fail(target, '01-questions.md must define AI best-judgment defaults');
+  if (!/production-grade architecture/i.test(questions) || !/Missing credentials block live proof only/i.test(questions)) fail(target, '01-questions.md must default full-suite packets to production-grade architecture and keep missing credentials scoped to live proof');
   if (!/Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks/i.test(questions)) fail(target, '01-questions.md must avoid blocking on ordinary engineering choices');
 
   const setup = safeRead(path.join(dir, '02-project-setup.md'));
@@ -185,6 +202,11 @@ function validate(target, dir) {
   if (!/bounded assignment|bounded handoff/i.test(setup) || !/proof command|verification command/i.test(setup) || !/evidence row/i.test(setup) || !/integrat/i.test(setup)) fail(target, '02-project-setup.md delegation protocol must include bounded assignments, verification/proof, evidence rows, and integration review');
   if (!/03-phases\/phase-flow\.md/i.test(setup)) fail(target, '02-project-setup.md must route phase entry through 03-phases/phase-flow.md');
   if (!/Do not start `03-phases\/\*`/i.test(setup)) fail(target, '02-project-setup.md must block phases until setup is explicit');
+  for (const token of productionSetupTokens) {
+    if (!setup.includes(token)) fail(target, `02-project-setup.md production readiness contract missing ${token}`);
+  }
+  if (/local MVP/i.test(setup) && !/Do not downgrade to a local MVP/i.test(setup)) fail(target, '02-project-setup.md must forbid local MVP downgrades unless explicitly scoped');
+  if (!/Missing credentials.*block only live proof/i.test(setup)) fail(target, '02-project-setup.md must keep missing credentials scoped to live proof, not implementation scope');
   for (const token of ['Target disposition', 'preserve | replace | merge | defer | drop', 'Compatibility impact', 'not route/function parity']) {
     if (!setup.includes(token)) fail(target, `02-project-setup.md source capability/surface ledger missing ${token}`);
   }
@@ -222,6 +244,15 @@ function validate(target, dir) {
   const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim());
   const uniquePhaseIds = new Set(phaseIds);
   if (phaseIds.length !== uniquePhaseIds.size) fail(target, '03-phases/phase-index.yaml contains duplicate phase_id values');
+  const phaseEntries = [...phaseIndex.matchAll(/phase_id:\s*([^\s#]+)[\s\S]*?file:\s*(03-phases\/[^\s#]+\.md)/gmi)].map((m) => ({ phaseId: m[1].trim(), file: m[2].trim() }));
+  for (const entry of phaseEntries) {
+    const expectedId = path.basename(entry.file, '.md');
+    if (entry.phaseId !== expectedId) fail(target, `03-phases/phase-index.yaml phase_id ${entry.phaseId} must match file basename ${expectedId}`);
+  }
+  if (phaseEntries.length > 1) {
+    const emptyDeps = (phaseIndex.match(/depends_on:\s*\[\]/g) || []).length;
+    if (emptyDeps === phaseEntries.length) fail(target, '03-phases/phase-index.yaml multi-phase packets must model dependencies; every phase cannot use depends_on: []');
+  }
 
   const phasesDir = path.join(dir, '03-phases');
   const phaseFiles = fs.existsSync(phasesDir)
@@ -236,6 +267,7 @@ function validate(target, dir) {
       if (!text.includes(token)) fail(target, `${rel} missing ${token}`);
     }
     if (/03-capabilities|09-evidence|08-evaluation|06-safety\/security-test-fixtures/i.test(text)) fail(target, `${rel} contains obsolete pre-baseline paths`);
+    if (/provider_integration_proof_or_blocker/i.test(text)) fail(target, `${rel} uses soft provider blocker label; split adapter/config/test implementation from live proof blockers`);
     if (/capability_id\s*:/i.test(text)) fail(target, `${rel} must use phase_id, not capability_id, for proof rows`);
     if (/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text)) fail(target, `${rel} references missing shared UX/design context instead of inline UX contract`);
     if (!/^# [^\r\n]+(?:\r?\n){2}## How to implement this phase\r?\n/i.test(text)) fail(target, `${rel} must start with ## How to implement this phase immediately after the title`);
@@ -245,10 +277,19 @@ function validate(target, dir) {
     if (/Runtime evidence ledger:\s*`05-evidence\/evidence-ledger\.jsonl`/i.test(text)) fail(target, `${rel} must write runtime evidence to .buildprint/evidence/evidence-ledger.jsonl, not the packet seed ledger`);
     if (!/preserve|replace|merge|defer|drop/i.test(text)) fail(target, `${rel} source surface dispositions must include disposition language`);
     if (!/equivalent target behavior|compatibility impact/i.test(text)) fail(target, `${rel} source surface dispositions must preserve capability without forcing route/function parity`);
+    for (const token of productionPhaseTokens) {
+      if (!text.includes(token)) fail(target, `${rel} production proof gate missing ${token}`);
+    }
+    if (!/adapter\/config\/test\/runtime wiring exists|adapter.*config.*test/i.test(text)) fail(target, `${rel} must state missing live credentials block live proof only after adapter/config/test/runtime wiring exists`);
+    const indexed = phaseEntries.find((entry) => entry.file === rel);
+    if (indexed) {
+      const evidencePattern = new RegExp(`phase_id:\\s*${indexed.phaseId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`);
+      if (!evidencePattern.test(text)) fail(target, `${rel} must use canonical phase_id ${indexed.phaseId} in evidence instructions`);
+    }
   }
 
   const evaluation = safeRead(path.join(dir, '04-evaluation.md'));
-  for (const token of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake', 'Loop completion rule', 'Blocker honesty']) {
+  for (const token of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake', 'production_readiness', 'Loop completion rule', 'Blocker honesty']) {
     if (!evaluation.includes(token)) fail(target, `04-evaluation.md missing ${token}`);
   }
 
