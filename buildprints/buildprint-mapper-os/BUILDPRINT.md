@@ -18,14 +18,12 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 2. `SPEC.md`
 3. `CONTRACTS.md`
 4. `PLAN.md`
-5. `EXECUTION_PROTOCOL.md`
-6. `IMPLEMENTATION_PLAN.md`
-7. `VERIFICATION.md`
-8. `questions.md`
-9. `policies/*.md`
-10. `prompts/*.md` and `templates/`
+5. `VERIFICATION.md`
+6. `questions.md`
+7. `policies/*.md`
+8. `prompts/*.md` and `templates/`
 
-For generated selected packages, do not make the implementing agent read all Markdown files or all capabilities before it knows the next action. `START_HERE.md` is the execution start, `blueprint.yaml` is the machine-readable contract, `02-context/context-map.yaml` is the active-context router, `02-context/team-stack.yaml` is the quality gate router, and `03-capabilities/capability-index.yaml` is consulted only after proof to choose the next dependency-ready slice.
+For generated selected packages, do not make the implementing agent read all Markdown files or all phases before it knows the next action. `BUILDPRINT.md` is the only execution start, `blueprint.yaml` is the machine-readable contract, `01-questions.md` and `02-project-setup.md` gate alignment/setup, `03-phases/phase-index.yaml` names the active phase, and `03-phases/phase-flow.md` owns phase-run orchestration before runtime evidence.
 
 ## Required Flow
 
@@ -81,7 +79,7 @@ Qualification is evidence-derived. `claim_status: PROOF_REQUIRED` can be promote
 
 The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questions.md`, `02-project-setup.md`, `03-phases/phase-index.yaml`, at least one phase Markdown file, `04-evaluation.md`, or `05-evidence/evidence-ledger.jsonl` is invalid.
 
-Legacy files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
+Obsolete packet files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
 `02-project-setup.md` is mandatory for selected output. It defines architecture rules, team operating model, execution authority model, delegation/handoff protocol, root/local AGENTS.md plan, quality gates, safety/permissions, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
 

@@ -16,5 +16,5 @@ Prove what can be proven and block what cannot be proven.
 
 - Qualification label is honest.
 - Missing gate results are blockers.
-- Selected output shape is valid: executable Buildprint spine, proof-gated phase packets, evidence-ledger routing, no legacy router/spine files, no packet AGENTS.md, no fragmented per-capability mini-files, no typo aliases, and no duplicate canonical handoff files.
+- Selected output shape is valid: executable Buildprint spine, proof-gated phase packets, evidence-ledger routing, no obsolete router/spine files, no packet AGENTS.md, no fragmented per-capability mini-files, no typo aliases, and no duplicate canonical handoff files.
 - Final handoff names active phase, completed phases, blocked phases, next phase, and residual risks.

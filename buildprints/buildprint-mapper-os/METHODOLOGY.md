@@ -191,7 +191,7 @@ The replay scorer checks that the downstream agent:
 - validates evidence schema;
 - does not over-upgrade blocker evidence;
 - does not fake no-fake scans;
-- does not route through legacy packet files;
+- does not route through obsolete packet files;
 - does not enumerate parent context or source directories;
 - produces meaningful architecture, UX, and QA reviews.
 

@@ -218,7 +218,7 @@ function buildPrompt(phase, options = {}) {
     '9. Never set `upgrades_claim: true` on blocker-qualified evidence. If proof is blocked, synthetic, dependency-missing, or only partially verified, use a valid blocker/skipped status and `upgrades_claim: false`.',
     '10. Do not claim `no_fake_scan_pass` unless you create and run an actual no-fake scan command/artifact; otherwise record a blocker or omit that proof claim.',
     '11. Run meaningful verification gates for your changes, including tests/build/runtime checks where possible.',
-    '12. Do not create or route through legacy packet entrypoints or capability folders.',
+    '12. Do not create or route through obsolete packet entrypoints or capability folders.',
     '13. Do not traverse outside the temp workspace. Never run `find ..`, `ls ..`, `rg ..`, `grep ..`, or equivalent parent-directory scans.',
     '',
     'At the end, print a compact replay summary with files changed, setup gate handling, phase/proof-gate result for each replayed phase, verification command/result, evidence-ledger action, and the read-order sequence you actually followed.',
@@ -466,7 +466,7 @@ function scoreReplay(workspace, output, phase, options = {}) {
     .join('\n');
   const legacyRoutingText = outputOnly
     .split('\n')
-    .filter((line) => !/Required operating contract:|Do not create|forbidden|obsolete|legacy|tokens_checked|START_HERE.*PRE_IMPLEMENTATION_QUESTIONS/i.test(line))
+    .filter((line) => !/Required operating contract:|Do not create|forbidden|obsolete|tokens_checked|START_HERE.*PRE_IMPLEMENTATION_QUESTIONS/i.test(line))
     .filter((line) => !/^\.\.\//.test(line.trim()))
     .join('\n');
   const parentTraversalLines = outputOnly
@@ -580,7 +580,7 @@ function scoreReplay(workspace, output, phase, options = {}) {
     {
       id: 'no_legacy_routing',
       ok: !includesAny(legacyRoutingText, forbidden) && !includesAny(generatedFileText, forbidden) && !corpus.files.some((file) => !file.startsWith('selected-buildprint/') && includesAny(file, forbidden)),
-      evidence: 'Checks generated output/files/paths for actual obsolete routing, ignoring packet guardrails that mention forbidden legacy names negatively.',
+      evidence: 'Checks generated output/files/paths for actual obsolete routing, ignoring packet guardrails that mention forbidden obsolete names negatively.',
     },
   ];
 
@@ -589,7 +589,7 @@ function scoreReplay(workspace, output, phase, options = {}) {
     checks,
     files: corpus.files,
     output_excerpt: outputOnly.slice(0, 12000),
-    legacy_tokens_checked: ['START_HERE', 'PRE_IMPLEMENTATION_QUESTIONS', '03-capabilities'],
+    obsolete_tokens_checked: ['START_HERE', 'PRE_IMPLEMENTATION_QUESTIONS', '03-capabilities'],
     notes: [
       lower.includes('blocked') ? 'Replay recorded or mentioned a blocker; inspect transcript to confirm honesty.' : 'No blocker language detected in replay output/files.',
       'Automated scoring is signal-based. Product quality, no-fake completeness, and UX proof still require human review.',

@@ -12,7 +12,7 @@ Create a hierarchical full-suite selected Buildprint only when explicitly reques
 - Treat `03-phases/phase-index.yaml` as the active-phase router and post-proof continuation index; full-suite output must not require a downstream agent to read every phase before the first action.
 - Preserve cross-slice contracts inside relevant phase sections and `04-evaluation.md`.
 - Add conditional security, data lifecycle, observability, provider, migration, QA, or reversal gates only when needed.
-- Validate package shape before handoff: no missing phase proof gates, no legacy router/spine files, no packet AGENTS.md, no fragmented per-capability mini-files, no typo aliases, and no duplicate canonical handoff files.
+- Validate package shape before handoff: no missing phase proof gates, no obsolete router/spine files, no packet AGENTS.md, no fragmented per-capability mini-files, no typo aliases, and no duplicate canonical handoff files.
 
 ## Exit Criteria
 

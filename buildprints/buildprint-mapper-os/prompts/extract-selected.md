@@ -42,7 +42,7 @@ Required exact anchors include:
 
 Do **not** place `AGENTS.md` in `selected-buildprint/` or inside the Buildprint packet. `AGENTS.md` belongs to the downstream implementation project. `02-project-setup.md` defines the root/local `AGENTS.md` plan.
 
-## Explicitly forbidden legacy/default files
+## Explicitly forbidden obsolete/default files
 
 Do not emit:
 

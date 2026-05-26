@@ -21,8 +21,6 @@ const packageRequired = {
     'CONTRACTS.md',
     'PLAN.md',
     'VERIFICATION.md',
-    'EXECUTION_PROTOCOL.md',
-    'IMPLEMENTATION_PLAN.md',
     'checks/acceptance.md',
   ]
 };
@@ -90,6 +88,12 @@ for (const slug of slugs) {
   }
 
   if (slug === 'buildprint-mapper-os') {
+    for (const forbiddenRootFile of ['CURRENT_STATE.md', 'EXECUTION_PROTOCOL.md', 'IMPLEMENTATION_PLAN.md', 'START_HERE.md', 'PRE_IMPLEMENTATION_QUESTIONS.md']) {
+      if (fs.existsSync(path.join(dir, forbiddenRootFile))) {
+        failures++;
+        console.error(`âœ— ${slug}: root contains obsolete selected-packet file ${forbiddenRootFile}`);
+      }
+    }
     const mapperRequired = [
       ['acceptance executable blueprint spine', acceptance, /executable blueprint|phase-gated|PROJECT_SETUP|project setup/i],
       ['acceptance proof ledger closure', acceptance, /evidence-ledger|proof/i],

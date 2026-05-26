@@ -239,6 +239,7 @@ if (!fs.existsSync(fixturesDir)) {
 const fixtureNames = fs.readdirSync(fixturesDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name)
+  .filter((name) => fs.existsSync(path.join(fixturesDir, name, 'expected-signals.json')))
   .sort();
 
 const fixtures = fixtureNames.map((name) => evaluateFixture(name, path.join(fixturesDir, name)));

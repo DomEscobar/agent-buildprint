@@ -23,7 +23,7 @@ Claims cannot exceed evidence:
 | Claim Type | Minimum Proof |
 |---|---|
 | UI workflow | browser automation or screenshots for empty/loading/error/blocked/success states |
-| Visual quality | screenshot set reviewed against `02-context/design-quality-bar.md` |
+| Visual quality | screenshot set reviewed against the phase-local design quality bar |
 | API behavior | route/API call with expected response and failure case |
 | Persistence | write, restart/readback, update/delete/export where applicable |
 | Provider/runtime | sandbox/live proof or explicit blocker; test fake only for tests |
@@ -32,10 +32,10 @@ Claims cannot exceed evidence:
 
 ### Required Output
 
-- Proof command and proof artifact for every included capability.
+- Proof command and proof artifact for every included phase.
 - Negative tests for risky, stateful, provider-backed, destructive, auth/admin, upload, export, UI workflow, and runtime/job behavior.
 - Visual/browser proof for every UI-bearing selected output.
-- Root and capability proof ledgers updated after each milestone.
+- Runtime evidence ledger updated after each milestone.
 - No-fake scan result before promotion or final handoff.
 
 ## Blocks
@@ -43,5 +43,5 @@ Claims cannot exceed evidence:
 - Import-only tests used as proof of behavior.
 - No-fake scans omitted for UI, provider, runtime, and persistence claims.
 - Screenshot-only proof used for persistence/provider/security claims.
-- Missing blocker text for unproven capabilities.
+- Missing blocker text for unproven phases.
 - Completion claims while proof ledger rows remain open.

@@ -36,6 +36,6 @@ source acquisition
 - Keep implementation scaffold out of the package root.
 - Use proof-gated phase packets for medium, large, and full-suite selected outputs.
 - Make selected outputs BUILDPRINT-first: `BUILDPRINT.md` owns read order, `blueprint.yaml` establishes the machine contract, `01-questions.md` and `02-project-setup.md` gate setup, and `03-phases/phase-index.yaml` names the active proof-gated phase.
-- Validate selected output shape before handoff: executable Buildprint spine, evidence-ledger routing, no typo aliases, no legacy selected-output files, no packet AGENTS.md, and one canonical handoff artifact.
+- Validate selected output shape before handoff: executable Buildprint spine, evidence-ledger routing, no typo aliases, no obsolete selected-output files, no packet AGENTS.md, and one canonical handoff artifact.
 - Record blockers instead of inventing behavior.
 - Treat full-suite as user intent, not proof.

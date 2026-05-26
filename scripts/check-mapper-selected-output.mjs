@@ -238,7 +238,7 @@ function validate(target, dir) {
     if (/03-capabilities|09-evidence|08-evaluation|06-safety\/security-test-fixtures/i.test(text)) fail(target, `${rel} contains obsolete pre-baseline paths`);
     if (/capability_id\s*:/i.test(text)) fail(target, `${rel} must use phase_id, not capability_id, for proof rows`);
     if (/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text)) fail(target, `${rel} references missing shared UX/design context instead of inline UX contract`);
-    if (!/^# [^\n]+\n\n## How to implement this phase\n/i.test(text)) fail(target, `${rel} must start with ## How to implement this phase immediately after the title`);
+    if (!/^# [^\r\n]+(?:\r?\n){2}## How to implement this phase\r?\n/i.test(text)) fail(target, `${rel} must start with ## How to implement this phase immediately after the title`);
     if (!/Before writing code, read:[\s\S]*03-phases\/phase-flow\.md[\s\S]*\.buildprint\/next-agent\.md[\s\S]*AGENTS\.md/i.test(text)) fail(target, `${rel} must include phase-flow entry instructions before implementation`);
     if (!/requires_roles:/i.test(text)) fail(target, `${rel} must declare or seed phase-derived required roles`);
     if (!/phase-flow required artifacts/i.test(text)) fail(target, `${rel} must block evidence until phase-flow artifacts exist`);

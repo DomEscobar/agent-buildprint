@@ -27,18 +27,6 @@
       "role": "source"
     },
     {
-      "path": "CURRENT_STATE.md",
-      "role": "source"
-    },
-    {
-      "path": "EXECUTION_PROTOCOL.md",
-      "role": "source"
-    },
-    {
-      "path": "IMPLEMENTATION_PLAN.md",
-      "role": "source"
-    },
-    {
       "path": "METHODOLOGY.md",
       "role": "source"
     },
@@ -399,7 +387,7 @@
     "scanner-authored product facts",
     "selected extraction without scope decision",
     "root implementation scaffold",
-    "legacy selected-output v1 template spine",
+    "obsolete selected-output template spine",
     "one giant execution file for medium/large/full-suite scopes",
     "mocks or fixtures counted as product implementation",
     "validation or parity claims without evidence",
@@ -409,8 +397,8 @@
     "typo alias files such as VERFICATION.md, IMPLEMENATION.md, or CAPABILTY_INDEX.md",
     "duplicate canonical handoff files such as both HANDOFF.md and HANDOVER.md",
     "downstream agent required to read all markdown files before first action",
-    "legacy selected-output v1/v2 files: CAPABILITY_INDEX.md, CONTEXT_PACKET.json, TEAM_STACK.md, UX_CONTRACT.md, DESIGN_QUALITY_BAR.md, CURRENT_STATE.md, EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md, manifest.json, 02-context/active-slice.yaml, 07-execution/phases/, capabilities/, generated/current-buildprint-compat/",
-    "legacy default selected files: AGENT_EXECUTION_BRIEF.md, agent-contract.xml, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, IMPLEMENTATION_COMPLETENESS.md",
+    "obsolete selected-output files: CAPABILITY_INDEX.md, CONTEXT_PACKET.json, TEAM_STACK.md, UX_CONTRACT.md, DESIGN_QUALITY_BAR.md, CURRENT_STATE.md, EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md, manifest.json, 02-context/active-slice.yaml, 07-execution/phases/, capabilities/, generated/current-buildprint-compat/",
+    "obsolete default selected files: AGENT_EXECUTION_BRIEF.md, agent-contract.xml, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, IMPLEMENTATION_COMPLETENESS.md",
     "fragmented per-capability mini-files such as capability.yaml, source-evidence.md, product-contract.md, implementation-workflow.md, or proof-contract.yaml"
   ],
   "authoritySpine": "BUILDPRINT.md",
@@ -421,8 +409,6 @@
     "claims.yaml"
   ],
   "requiredDetailFiles": [
-    "EXECUTION_PROTOCOL.md",
-    "IMPLEMENTATION_PLAN.md",
     "VERIFICATION.md",
     "questions.md",
     "policies/safety.md",

@@ -59,7 +59,7 @@ phases:
       - medium/large/full-suite output includes at least one phase markdown file
       - medium/large/full-suite output includes 05-evidence/evidence-ledger.jsonl and 05-evidence/evidence-ledger.schema.json
       - phase packets include proof gates, stop rules, implementation loop, repair routing, and unlock policy
-      - legacy selected-output v1/v2 spine files are absent
+      - obsolete selected-output spine files are absent
       - fragmented per-capability mini-files are absent
       - typo alias files such as VERFICATION.md are absent
 

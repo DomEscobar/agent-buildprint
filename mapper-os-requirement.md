@@ -113,14 +113,14 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
 - Remove `PENDING_AGENT_DISCOVERY` and unresolved `QUESTION` markers from files that claim implementation readiness.
 - Known source defects must be recorded with a preserve-vs-fix decision only when they affect user-visible behavior, integration compatibility, data semantics, operational behavior, or acceptance checks.
 
-### Stage 5.5: Capability Pack Completeness
+### Stage 5.5: Phase Packet Completeness
 
-- Every extraction output (`--candidate`, `--scope`, `--full-suite`) must classify each capability packet with one of these readiness states: `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `TEST_ONLY_MOCK`, or `OUT_OF_SCOPE_BY_USER_ONLY`.
+- Every extraction output (`--candidate`, `--scope`, `--full-suite`) must classify each phase packet with one of these readiness states: `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `TEST_ONLY_MOCK`, or `OUT_OF_SCOPE_BY_USER_ONLY`.
 - `OUT_OF_SCOPE_BY_USER_ONLY` requires an explicit user decision or selected target boundary; lack of proof alone is not an out-of-scope reason.
-- Completeness is recorded in `03-capabilities/capability-index.yaml`, each capability packet, and `VERIFICATION.md`.
-- `IMPLEMENTATION_COMPLETENESS.md` is optional legacy or expanded reporting, not the default final package shape.
-- Each included capability packet must include capability status, source evidence, required contracts, no-fake rules, verification gates, blockers, and qualification state.
-- Any missing capability classification, missing gate applicability declaration, missing evidence link, or missing per-capability verification oracle is a qualification blocker.
+- Completeness is recorded in `03-phases/phase-index.yaml`, each phase packet, and `04-evaluation.md`.
+- `IMPLEMENTATION_COMPLETENESS.md` is an obsolete default file and not part of the final package shape.
+- Each included phase packet must include phase status, source evidence, required contracts, no-fake rules, verification gates, blockers, and qualification state.
+- Any missing phase classification, missing gate applicability declaration, missing evidence link, or missing per-phase verification oracle is a qualification blocker.
 
 ### Stage 5.6: Downstream Agent Execution Planning
 
@@ -132,8 +132,8 @@ Distill at minimum:
 
 - task intake summary: requested scope, selected target boundary, full capability surface, readiness states, user-excluded capabilities, assumptions, risks, and success criteria;
 - implementation signals that help the downstream harness choose an implementation team, such as user-facing UI, uploads, external providers, long-running jobs, graph persistence, simulation/runtime execution, reporting, auth/admin paths, destructive controls, deployment surface, and required review specialties;
-- implementation order by capability, including dependencies and blocked prerequisites;
-- per-capability agent brief with goal, stable behavior, implementation freedom, first implementation step, first verification gate, no-fake checks, and stop conditions;
+- implementation order by phase, including dependencies and blocked prerequisites;
+- per-phase agent brief with goal, stable behavior, implementation freedom, first implementation step, first verification gate, no-fake checks, and stop conditions;
 - milestone plan with small vertical slices, not broad layer-first architecture;
 - baseline checks to run before implementation where applicable;
 - verification ladder applicability for static, unit/contract, integration, runtime/API/browser, persistence/restart, security/privacy, no-fake, and clean-room/reversal checks;
@@ -141,21 +141,21 @@ Distill at minimum:
 - fresh-context review instructions for security-sensitive, data-sensitive, persistence, auth, billing, admin, provider, upload, or large refactor surfaces;
 - decision log requirements for implementation choices that affect behavior, data semantics, provider compatibility, or verification;
 - risk register requirements for unresolved ambiguity, weak tests, unverified runtime behavior, missing provider access, or security concerns;
-- handoff requirements for changed behavior, verification evidence, skipped checks, residual risks, and next capability.
+- handoff requirements for changed behavior, verification evidence, skipped checks, residual risks, and next phase.
 
-The downstream-agent execution flow must follow this default loop unless a capability packet declares a narrower safe loop:
+The downstream-agent execution flow must follow this default loop unless a phase packet declares a narrower safe loop:
 
 ```text
-1. Intake: confirm requested scope, selected target boundary, capability readiness map, risks, and success criteria.
+1. Intake: confirm requested scope, selected target boundary, phase readiness map, risks, and success criteria.
 2. Team-pack routing: infer the builder quality lenses from Buildprint signals before coding. User-facing UI requires `ux-ui-craft`; broad or full-suite surfaces require `product-architect`; every selected output requires `test-and-verification`; provider/runtime surfaces require `integration-runtime`; sensitive surfaces require `security-boundary`; durable state requires `data-persistence`. Users choose scope/product intent, not quality tiers.
-3. Context load: read only the Buildprint spine and relevant capability packet.
+3. Context load: read only the Buildprint spine and relevant phase packet.
 4. Baseline: run declared preflight checks or record why they cannot run.
-5. Implement capability: build the next behaviorally complete vertical slice without erasing later capabilities from the plan.
-6. Verify capability: run the declared targeted checks and fix failures.
+5. Implement phase: build the next behaviorally complete vertical slice without erasing later phases from the plan.
+6. Verify phase: run the declared targeted checks and fix failures.
 7. Expand checks: add applicable integration, runtime, browser, persistence, security, and no-fake gates.
 8. Fresh review: use an independent review pass for high-risk, UI/product, architecture, data, provider, or broad changes.
 9. Repair loop: convert failures into focused next actions until gates pass or blockers are recorded.
-10. Handoff: update current state, decisions, risks, commands, evidence, capability readiness, team-pack gate notes, and next capability.
+10. Handoff: update current state, decisions, risks, commands, evidence, phase readiness, team-pack gate notes, and next phase.
 ```
 
 Implementation plans must stay source-independent. They may reference Buildprint files, contracts, fixtures, schemas, and acceptance gates, but must not require reopening the original source checkout.
@@ -184,11 +184,11 @@ Implementation plans must stay source-independent. They may reference Buildprint
 ### Stage 7: Handoff
 
 - Another Codex session or coding agent must be able to implement from the Buildprint alone.
-- The Buildprint must include a root spine, capability packets, and conditional shared files only when selected capability risk requires them.
-- Another agent should start at `BUILDPRINT.md`, then `03-capabilities/capability-index.yaml`, then `02-context/context-map.yaml`, then `02-context/team-stack.yaml`, then `START_HERE.md`, then exactly one active capability named by `02-context/context-map.yaml`. If `02-context/team-stack.yaml` selects `ux-ui-craft`, it should also read `02-context/ux-contract.md` before implementing the active UI slice.
-- The selected package must not require the implementation agent to read every Markdown file or every capability packet before knowing the next action.
-- `02-context/context-map.yaml` must record the active capability, completed capability packets, blocked capability packets, and next pack to implement.
-- `07-execution/implementation-plan.yaml` must record milestones, current state, concrete next actions, team-pack gates, verification gates, and decision log pointers.
+- The Buildprint must include a root spine, phase packets, and inline contracts sufficient for selected phase risk.
+- Another agent should start at `BUILDPRINT.md`, then `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, and exactly one active phase named by `03-phases/phase-index.yaml`.
+- The selected package must not require the implementation agent to read every Markdown file or every phase packet before knowing the next action.
+- `03-phases/phase-index.yaml` must record the active phase, completed phase packets, blocked phase packets, dependencies, and next dependency-ready phase.
+- `03-phases/phase-flow.md` must record phase-entry orchestration, team/review gates, verification gates, and evidence-ledger rules.
 - The handoff must clearly state whether the package is discovery-only, selected with proof pending, or qualified for source-independent implementation.
 - The handoff must state the reimplementation freedom explicitly: what the agent may change internally and which external/product behaviors must remain stable.
 - Qualification label must be exactly one of: `DISCOVERY_ONLY`, `PROOF_REQUIRED`, `QUALIFIED_SOURCE_INDEPENDENT`.
@@ -203,11 +203,11 @@ Implementation plans must stay source-independent. They may reference Buildprint
 - Every `OBSERVED` claim has source path and line or section evidence.
 - A qualified Buildprint does not require the original source repo for implementation.
 - A non-qualified Buildprint clearly states what source, runtime, test, provider, persistence, security, or reversal evidence is still missing.
-- Traceability is mandatory before qualification and lives per capability: capability requirement -> source evidence -> Buildprint contract -> implementation check -> QA or reversal check.
+- Traceability is mandatory before qualification and lives per phase: phase requirement -> source evidence -> Buildprint contract -> implementation check -> QA or reversal check.
 - The Buildprint must not require preservation of internal source structure unless the requirement explains why that structure is externally observable or qualification-relevant.
-- Capability completeness status and production completeness score must be present for extraction outputs.
-- Capability readiness states must be listed separately; no included capability may be placeholder-backed, and no capability may be excluded merely because it is hard to prove or implement.
-- Every included capability packet must have a production contract and at least one runtime or QA gate proving real side effects.
+- Phase completeness status and production completeness score must be present for extraction outputs.
+- Phase readiness states must be listed separately; no included phase may be placeholder-backed, and no phase may be excluded merely because it is hard to prove or implement.
+- Every included phase packet must have a production contract and at least one runtime or QA gate proving real side effects.
 - Qualification requires zero unresolved no-fake critical findings and a production completeness score that passes the declared threshold.
 - Production completeness score must have a declared rubric, denominator, threshold, blocker overrides, and per-capability contribution. Scores must never override hard blockers such as missing evidence, unresolved critical no-fake findings, unresolved high/critical security risks, missing required hardening artifacts, or secret leakage.
 - If selected scope includes auth, uploads, external providers, billing, admin actions, or user data, `THREAT_MODEL.md`, `DATA_LIFECYCLE.md`, `OBSERVABILITY.md`, limits/abuse controls, and secret-handling requirements are mandatory; absence blocks qualification.
@@ -232,24 +232,24 @@ Implementation plans must stay source-independent. They may reference Buildprint
   - fake success states with no durable side effects;
   - production-path mocks/skeleton adapters;
   - in-memory persistence claims where persistence is required;
-  - missing per-capability gate evidence bundles.
-- Fail selected output with one giant capability file for medium, large, or full-suite scopes.
-- Fail selected output with generic architecture modules instead of capability packets.
-- Fail capability packets without proof gates.
-- Fail full-suite output without `03-capabilities/capability-index.yaml` and `02-context/team-stack.yaml`.
-- Fail UI-bearing selected output without `02-context/ux-contract.md` and `ux-ui-craft` routing.
+- missing per-phase gate evidence bundles.
+- Fail selected output with one giant phase file for medium, large, or full-suite scopes.
+- Fail selected output with generic architecture modules instead of phase packets.
+- Fail phase packets without proof gates.
+- Fail full-suite output without `03-phases/phase-index.yaml` and phase Markdown files.
+- Fail UI-bearing selected output without inline UX/UI requirements and `ux-ui-craft` role routing in relevant phase packets.
 - Golden evals must test discovery quality, source-independent extraction readiness, and false-claim prevention.
 - Golden evals must reject source-code-clone output that preserves internals without explaining product relevance.
 - Golden evals must reject Buildprints that contain contracts but no concrete downstream-agent execution sequence.
 - Golden evals must reject one-pass implementation plans that lack verification after each meaningful slice.
 - Golden evals must reject over-broad context instructions that require the implementing agent to read every generated file before knowing the next action.
-- Golden evals must reject selected/full-suite package shape failures: missing `03-capabilities/capability-index.yaml`, missing `02-context/team-stack.yaml`, missing UI `02-context/ux-contract.md`, incomplete capability packets, blueprint drift, typo alias files, missing required team routing, and duplicate canonical handoff files.
+- Golden evals must reject selected/full-suite package shape failures: missing `03-phases/phase-index.yaml`, missing `03-phases/phase-flow.md`, missing inline UI obligations, incomplete phase packets, blueprint drift, typo alias files, missing required role routing, and duplicate canonical handoff files.
 
 ## Product Contract Model
 
-Mapper OS must model the selected scope as capabilities and behavior, not as source files.
+Mapper OS must model the selected scope as phases and behavior, not as source files.
 
-Each selected capability must answer:
+Each selected phase must answer:
 
 - What can the user or system do?
 - What inputs are accepted?
@@ -260,17 +260,17 @@ Each selected capability must answer:
 - What can the implementing agent change freely?
 - What acceptance check proves the behavior works?
 - What is the first implementation slice?
-- What verification gate must run immediately after that capability?
+- What verification gate must run immediately after that phase?
 - What failure should cause the implementing agent to stop, replan, or escalate?
 
 Boundary contracts are required at every behavior boundary where implementation could otherwise drift. They should capture externally meaningful behavior and operational guarantees, not internal source mechanics.
 
-Each capability must include a stable-vs-free table:
+Each phase must include a stable-vs-free table:
 
 - Stable: product behavior, public routes, API behavior, data semantics, auth and authorization rules, provider contracts, user-visible workflows, operational guarantees, and acceptance gates.
 - Free: internal architecture, module names, component hierarchy, local helper abstractions, folder layout, and library choices unless constrained by a stable contract.
 
-Each capability must include an agent brief:
+Each phase must include an agent brief:
 
 ```text
 Goal:
@@ -279,7 +279,7 @@ Dependencies:
 Stable behavior:
 Implementation freedom:
 Forbidden substitutions:
-First implementation capability:
+First implementation phase:
 First verification gate:
 Required evidence:
 No-fake checks:
@@ -288,59 +288,34 @@ Stop or escalate when:
 
 ## Buildprint Package Shape
 
-Mapper OS selected output uses one capability packet shape for small, medium, large, and full-suite scopes. Scope size changes the number and depth of capability packets; it does not switch back to legacy routing.
+Mapper OS selected output uses one current executable packet shape for small, medium, large, and full-suite scopes. Scope size changes the number and depth of phase packets; it does not switch back to obsolete routing.
 
 Required selected package spine:
 
 ```text
 BUILDPRINT.md
-START_HERE.md
+01-questions.md
+02-project-setup.md
 blueprint.yaml
-PRE_IMPLEMENTATION_QUESTIONS.md
-00-intent/mission.md
-00-intent/product-obligations.md
-00-intent/source-surface-map.md
-01-operating-model/workflow-vs-agentic.md
-01-operating-model/autonomy-levels.yaml
-01-operating-model/stop-rules.md
-01-operating-model/human-approval-policy.md
-02-context/context-map.yaml
-02-context/read-order.yaml
-02-context/team-stack.yaml
-02-context/source-evidence-index.yaml
-02-context/ux-contract.md  # required for UI-bearing scopes
-02-context/design-quality-bar.md  # required for UI-bearing scopes
-03-capabilities/capability-index.yaml
-03-capabilities/<capability>.md
-04-interfaces/api-contracts.yaml
-04-interfaces/tool-contracts.yaml
-04-interfaces/provider-contracts.yaml
-04-interfaces/schemas/
-05-state-runtime/state-model.yaml
-05-state-runtime/persistence.md
-05-state-runtime/runtime-topology.md
-06-safety/threat-model.md
-06-safety/secrets-policy.md
-06-safety/destructive-actions.md
-06-safety/security-test-fixtures.yaml
-07-execution/implementation-plan.yaml
-08-evaluation/acceptance.yaml
-08-evaluation/claim-upgrade-rules.yaml
-08-evaluation/test-matrix.yaml
-08-evaluation/quality-rubric.yaml
-09-evidence/evidence-ledger.jsonl
-09-evidence/evidence-ledger.schema.json
-09-evidence/unresolved-blockers.md
+03-phases/
+  phase-index.yaml
+  phase-flow.md
+  01-<phase-id>.md
+  02-<phase-id>.md
+04-evaluation.md
+05-evidence/
+  evidence-ledger.jsonl
+  evidence-ledger.schema.json
 generated/agent-prompt.md
 ```
 
-`START_HERE.md` and `blueprint.yaml` are the execution authority. `02-context/context-map.yaml` names the active capability. `03-capabilities/capability-index.yaml` is the post-proof continuation index. Runtime proof is appended to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `09-evidence/evidence-ledger.jsonl` is only the immutable seed.
+`BUILDPRINT.md` is the only execution start and read-order authority. `blueprint.yaml` is the machine contract. `01-questions.md` and `02-project-setup.md` gate alignment/setup. `03-phases/phase-index.yaml` names the active phase and post-proof continuation path. `03-phases/phase-flow.md` owns phase-run orchestration. Runtime proof is appended to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` is only the immutable seed.
 
-Each capability packet file must define build target, source evidence refs, required teams and gates, user-visible outcome, architecture obligations, UI obligations where applicable, inputs, outputs, implementation path, stop rules, proof gate, and unlocks.
+Each phase packet file must define build target, source evidence refs, required roles and gates, user-visible outcome, architecture obligations, UI obligations where applicable, inputs, outputs, implementation path, stop rules, proof gate, and unlocks.
 
-`02-context/team-stack.yaml` is mandatory for selected output. It records internal team packs selected from product signals, trigger reasons, owned gates, evidence paths, and review order. It must not ask the user to choose lazy/simple/quick quality. It must select `test-and-verification` for every selected output and route `product-architect`, `ux-ui-craft`, `integration-runtime`, `security-boundary`, and `data-persistence` whenever product signals require them.
+Team routing is embedded in `02-project-setup.md`, `03-phases/phase-flow.md`, and each phase `requires_roles:` field. It must not ask the user to choose lazy/simple/quick quality. It must select `test-and-verification` for every selected output and route `product-architect`, `ux-ui-craft`, `integration-runtime`, `security-boundary`, and `data-persistence` whenever product signals require them.
 
-Purged legacy selected-output files are invalid: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, `generated/current-buildprint-compat/`, and fragmented per-capability mini-files.
+Obsolete selected-output files are invalid: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, `generated/current-buildprint-compat/`, and fragmented per-capability mini-files.
 
 ## Output Modes
 

@@ -27,7 +27,7 @@
 - Must not use broad architecture prose as a substitute for proof-gated phase packets.
 - Must not include placeholder-backed or mock-backed behavior in production scope, and must not hide unproven behavior by shrinking scope without user confirmation.
 - Must not call route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, or flat single-file prototypes “implemented” unless the applicable product behavior is proven; otherwise mark `CONTRACT_SEAM_ONLY` or `BLOCKED_WITH_REASON`.
-- Must not emit legacy selected-output shapes, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, packet `AGENTS.md`, root `manifest.json`, or fragmented per-capability mini-files.
+- Must not emit obsolete selected-output shapes, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, packet `AGENTS.md`, root `manifest.json`, or fragmented per-capability mini-files.
 - Must not claim source-independent readiness while implementation order, verification gates, or stop conditions are missing.
 - Must not require downstream implementers to reopen the original source after qualification.
 
@@ -45,17 +45,17 @@ Each selected slice must answer:
 - implementation-team signals/passes required by product shape;
 - verification gate;
 - stop or escalation condition;
-- unlock/dependency relation to later capabilitys.
+- unlock/dependency relation to later phases.
 
 ## Qualification Contract
 
 Qualification requires:
 
-- source-independent capability packets for all included selected-scope behavior;
+- source-independent phase packets for all included selected-scope behavior;
 - traceability from requirement to source evidence to Buildprint slice to implementation check to QA/reversal check;
 - architecture topology proof and capability-depth matrix for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes;
 - runtime/test/reversal proof where behavior requires runtime evidence;
-- runtime evidence rows in `.buildprint/evidence/evidence-ledger.jsonl` using `capability_id`;
+- runtime evidence rows in `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id`;
 - zero unresolved critical no-fake findings;
 - required hardening artifacts for auth, uploads, external providers, billing, admin actions, or user-data operations;
 - no unresolved high/critical security risks;

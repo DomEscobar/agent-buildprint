@@ -18,7 +18,7 @@
 - [ ] Error repair routes failed test/build/runtime/UI/proof checks back to the current phase, setup contradictions to `02-project-setup.md`, product-defining ambiguity to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.
 - [ ] Every proof gate writes implementation evidence or blockers to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` remains an immutable seed.
 - [ ] `claim_status` promotion is blocked unless evidence contains passing rows for required promotion proof.
-- [ ] Legacy router files are absent: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, and packet `AGENTS.md`.
+- [ ] Obsolete router files are absent: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, and packet `AGENTS.md`.
 - [ ] Typo aliases such as `VERFICATION.md`, `IMPLEMENATION.md`, or `CAPABILTY_INDEX.md` are absent.
 - [ ] Canonical handoff is singular; both `HANDOFF.md` and `HANDOVER.md` do not appear as selected package spine files.
 - [ ] Every `OBSERVED` claim cites source path and line or section. Runtime artifact paths are explicitly labeled and not formatted as packet-file references unless the file exists in the packet; examples include `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, and `section_XX.md`.

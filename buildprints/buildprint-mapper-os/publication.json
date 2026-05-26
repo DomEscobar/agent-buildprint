@@ -158,7 +158,7 @@
   "resultChecklist": [
     "SYSTEM_MAP.md with source-backed architecture, flows, routes/services, data, integrations, side effects, tests, and unknowns",
     "BUILDPRINT_CANDIDATES.md with scoped candidates and clear included/excluded surfaces",
-    "A selected-buildprint/ executable packet, not legacy START_HERE/PRE_IMPLEMENTATION_QUESTIONS/03-capabilities routing",
+    "A selected-buildprint/ executable packet, not obsolete START_HERE/PRE_IMPLEMENTATION_QUESTIONS/03-capabilities routing",
     "01-questions.md with only blocking questions and AI-best-judgment defaults",
     "02-project-setup.md with architecture, team operating model, execution authority, AGENTS plan, quality gates, safety/permissions, assumptions, and phase start gate",
     "03-phases/phase-flow.md plus phase files that start with ## How to implement this phase",

@@ -12,7 +12,7 @@ Create a source-independent selected Buildprint under `selected-buildprint/` as 
 - Include stable-vs-free boundaries inside the relevant slice.
 - Include proof gates, no-fake checks, stop conditions, and unlock rules.
 - Make the output BUILDPRINT-first: `BUILDPRINT.md` owns read order, `blueprint.yaml` is the machine contract, and `03-phases/phase-index.yaml` routes the active phase and post-proof continuation.
-- Reject legacy v1/v2 spine files, fragmented per-capability mini-files, and typo aliases such as `VERFICATION.md`.
+- Reject obsolete selected-output spine files, fragmented per-capability mini-files, and typo aliases such as `VERFICATION.md`.
 - Keep qualification label `PROOF_REQUIRED` until runtime proof exists.
 
 ## Exit Criteria

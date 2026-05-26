@@ -12,8 +12,7 @@ Read:
 2. `SPEC.md`
 3. `CONTRACTS.md`
 4. `PLAN.md`
-5. `EXECUTION_PROTOCOL.md`
-6. `VERIFICATION.md`
+5. `VERIFICATION.md`
 
 For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read: `BUILDPRINT.md`, `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, then only the active phase named by the phase index.
 
@@ -21,7 +20,7 @@ For generated selected packages, downstream implementers should not read all Mar
 
 - Discover first.
 - Ask only blocking questions.
-- Selected output must include a pre-implementation question gate so downstream agents ask or safely default the few decisions that change quality/security.
+- Selected output must include `01-questions.md` so downstream agents ask or safely default the few decisions that change quality/security.
 - Treat scanner output as hints only.
 - Keep output discovery-only until scope is selected.
 - Preserve requested scope; sequence implementation into proof-gated phases, but do not hide broad/blocked/unproven behavior.
@@ -49,7 +48,7 @@ generated/
 
 `BUILDPRINT.md` is the execution start and read-order authority, `blueprint.yaml` is the machine contract, `01-questions.md` captures blocking/defaultable alignment, `02-project-setup.md` owns architecture/team/quality/AGENTS planning, `03-phases/` owns active vertical work packets, `04-evaluation.md` defines required proof, and `05-evidence/evidence-ledger.jsonl` seeds the writable runtime ledger at `.buildprint/evidence/evidence-ledger.jsonl`, where agents record proof or blockers.
 
-Purged legacy selected-output shapes are not accepted: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and per-capability mini-files.
+Obsolete selected-output shapes are not accepted: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and per-capability mini-files.
 
 ## Qualification
 

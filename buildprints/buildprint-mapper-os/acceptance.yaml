@@ -14,7 +14,7 @@ acceptance:
       - root implementation scaffold
       - selected-buildprint without scope decision
   selected_output:
-    executable_blueprint_v5:
+    current_executable_packet:
       required_root:
         - BUILDPRINT.md
         - 01-questions.md
@@ -41,9 +41,9 @@ acceptance:
       execution_authority_model: required
       delegation_handoff_protocol: required
       root_agents_md_policy: scope_governor_not_product_brain
-    legacy_selected_output_v1_v4:
+    obsolete_packet_shapes:
       status: forbidden
-      forbidden_paths:
+      forbidden_packet_paths:
         - START_HERE.md
         - PRE_IMPLEMENTATION_QUESTIONS.md
         - AGENTS.md
@@ -67,21 +67,21 @@ acceptance:
         - 07-execution/phases/
         - capabilities/
         - generated/current-buildprint-compat/
-      forbidden_fragmented_files:
+      forbidden_fragmented_capability_files:
         - capability.yaml
         - source-evidence.md
         - product-contract.md
         - implementation-workflow.md
         - proof-contract.yaml
-    forbidden_default_files:
-      - AGENT_EXECUTION_BRIEF.md
-      - agent-contract.xml
-      - TEST_MATRIX.md
-      - TRACEABILITY_MATRIX.md
-      - IMPLEMENTATION_COMPLETENESS.md
-      - PHASE_PLAN.md
-      - LOOP_GATES.md
-    forbidden_typo_files:
+      forbidden_root_files:
+        - AGENT_EXECUTION_BRIEF.md
+        - agent-contract.xml
+        - TEST_MATRIX.md
+        - TRACEABILITY_MATRIX.md
+        - IMPLEMENTATION_COMPLETENESS.md
+        - PHASE_PLAN.md
+        - LOOP_GATES.md
+    forbidden_typo_aliases:
       - VERFICATION.md
       - IMPLEMENATION.md
       - CAPABILTY_INDEX.md

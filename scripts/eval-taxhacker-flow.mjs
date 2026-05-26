@@ -210,7 +210,7 @@ function deterministicMapChecks(packetPath) {
   add('phase_dependencies_model_workflow', !(phaseCount > 1 && emptyDeps === phaseCount), `${emptyDeps}/${phaseCount} phases declare depends_on: [].`);
   const forbidden = ['03-capabilities/', '08-evaluation/', '09-evidence/', 'START_HERE.md', 'PRE_IMPLEMENTATION_QUESTIONS.md', 'AGENTS.md'];
   const badFiles = Array.from(files).filter((file) => forbidden.some((item) => file === item || file.startsWith(item)));
-  add('no_legacy_or_project_instruction_files', badFiles.length === 0, badFiles.length ? `Forbidden files found: ${badFiles.join(', ')}` : 'No forbidden legacy/project instruction files found.');
+  add('no_obsolete_or_project_instruction_files', badFiles.length === 0, badFiles.length ? `Forbidden files found: ${badFiles.join(', ')}` : 'No forbidden obsolete/project instruction files found.');
   return { schema_version: 'mapper-os/taxhacker-deterministic-map-checks.v1', pass: checks.every((check) => check.ok), packet: packetPath, checks };
 }
 
