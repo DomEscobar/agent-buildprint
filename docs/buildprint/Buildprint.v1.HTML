@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Buildprint v1 Execution Contract</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f7f8fb;
+        --surface: #ffffff;
+        --surface-2: #eef2f7;
+        --ink: #172033;
+        --muted: #5b6575;
+        --line: #d9e0ea;
+        --accent: #2563eb;
+        --accent-2: #0f766e;
+        --warn: #a15c07;
+        --danger: #b42318;
+        --code-bg: #111827;
+        --code-ink: #e5e7eb;
+        --shadow: 0 16px 48px rgba(23, 32, 51, 0.08);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        line-height: 1.55;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1117;
+          --surface: #141a24;
+          --surface-2: #1d2633;
+          --ink: #e8edf5;
+          --muted: #a7b0bf;
+          --line: #2c3646;
+          --accent: #7aa2ff;
+          --accent-2: #55c2b7;
+          --warn: #f0b45f;
+          --danger: #ff8f86;
+          --shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      code, pre {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      }
+
+      code {
+        padding: 0.12rem 0.28rem;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        background: var(--surface-2);
+        font-size: 0.92em;
+      }
+
+      pre {
+        overflow: auto;
+        margin: 0;
+        padding: 18px;
+        border-radius: 8px;
+        background: var(--code-bg);
+        color: var(--code-ink);
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+
+      pre code {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font-size: inherit;
+      }
+
+      h1, h2, h3 {
+        margin: 0;
+        line-height: 1.15;
+        letter-spacing: 0;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      ul, ol {
+        margin: 0;
+        padding-left: 1.2rem;
+      }
+
+      li + li {
+        margin-top: 0.45rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      th, td {
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--surface-2);
+        color: var(--ink);
+        font-size: 0.88rem;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        gap: 28px;
+        width: min(1440px, 100%);
+        margin: 0 auto;
+        padding: 28px;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 24px;
+        align-self: start;
+        max-height: calc(100vh - 48px);
+        overflow: auto;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .brand {
+        display: grid;
+        gap: 4px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand strong {
+        font-size: 1rem;
+      }
+
+      .brand span {
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .toc {
+        display: grid;
+        gap: 4px;
+        margin-top: 16px;
+      }
+
+      .toc a {
+        display: block;
+        padding: 7px 8px;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .toc a:hover {
+        background: var(--surface-2);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .content {
+        display: grid;
+        gap: 24px;
+        min-width: 0;
+      }
+
+      .hero {
+        display: grid;
+        gap: 20px;
+        padding: 30px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        color: var(--accent-2);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        max-width: 920px;
+        font-size: clamp(2rem, 4vw, 4.25rem);
+      }
+
+      .hero p {
+        max-width: 860px;
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .badge {
+        padding: 7px 10px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface-2);
+        color: var(--ink);
+        font-size: 0.86rem;
+        font-weight: 600;
+      }
+
+      .section {
+        display: grid;
+        gap: 18px;
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .section-header {
+        display: grid;
+        gap: 8px;
+        max-width: 900px;
+      }
+
+      .section-header p {
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .card {
+        display: grid;
+        gap: 8px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .card h3 {
+        font-size: 1rem;
+      }
+
+      .card p {
+        color: var(--muted);
+      }
+
+      .callout {
+        display: grid;
+        gap: 8px;
+        padding: 14px 16px;
+        border-left: 4px solid var(--accent);
+        border-radius: 6px;
+        background: var(--surface-2);
+      }
+
+      .callout.warning {
+        border-left-color: var(--warn);
+      }
+
+      .callout.danger {
+        border-left-color: var(--danger);
+      }
+
+      .callout strong {
+        color: var(--ink);
+      }
+
+      .callout p {
+        color: var(--muted);
+      }
+
+      .flow {
+        display: grid;
+        gap: 8px;
+      }
+
+      .flow-row {
+        display: grid;
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .flow-row strong {
+        color: var(--accent);
+      }
+
+      .flow-row p {
+        color: var(--muted);
+      }
+
+      .compact-list {
+        display: grid;
+        gap: 8px;
+        padding-left: 0;
+        list-style: none;
+      }
+
+      .compact-list li {
+        margin: 0;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: var(--surface);
+      }
+
+      .footer {
+        padding: 18px 4px 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 980px) {
+        .shell {
+          grid-template-columns: 1fr;
+          padding: 18px;
+        }
+
+        .sidebar {
+          position: static;
+          max-height: none;
+        }
+
+        .grid.two,
+        .grid.three {
+          grid-template-columns: 1fr;
+        }
+
+        .flow-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="Page navigation">
+        <div class="brand">
+          <strong>Buildprint v1</strong>
+          <span>Executable packet baseline</span>
+        </div>
+        <nav class="toc">
+          <a href="#overview">Overview</a>
+          <a href="#packet-shape">Packet Shape</a>
+          <a href="#read-order">Read Order</a>
+          <a href="#flow">Execution Flow</a>
+          <a href="#setup">Questions And Setup</a>
+          <a href="#phase-model">Phase Model</a>
+          <a href="#artifacts">Runtime Artifacts</a>
+          <a href="#evidence">Evidence Rules</a>
+          <a href="#continuation">Continuation</a>
+          <a href="#evals">Validation And Evals</a>
+          <a href="#anti-patterns">Anti-Patterns</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <header class="hero" id="overview">
+          <div class="eyebrow">Current state</div>
+          <h1>Buildprints are executable packets for coding agents, not markdown piles.</h1>
+          <p>
+            This page documents the current Agent Buildprint execution contract: how a mapped package is shaped,
+            how agents must read it, how phases advance, and how proof is recorded without fake completion.
+          </p>
+          <div class="badges" aria-label="Key properties">
+            <span class="badge">Router-first</span>
+            <span class="badge">One phase at a time</span>
+            <span class="badge">Evidence-ledger proof</span>
+            <span class="badge">Production-grade default</span>
+            <span class="badge">No broad upfront context load</span>
+          </div>
+          <div class="callout warning">
+            <strong>Authority rule</strong>
+            <p>
+              This is a human overview. The authoritative instructions are the snapshot files inside the Buildprint package
+              and the runtime handoff files under <code>.buildprint/</code> after <code>agb start</code>.
+            </p>
+          </div>
+        </header>
+
+        <section class="section" id="packet-shape">
+          <div class="section-header">
+            <h2>Packet Shape</h2>
+            <p>
+              The mapped baseline is compact and predictable. Root packet files define execution and proof;
+              phase files carry product-slice instructions.
+            </p>
+          </div>
+          <div class="grid two">
+            <div>
+              <pre><code>buildprint/
+  BUILDPRINT.md
+  01-questions.md
+  02-project-setup.md
+  blueprint.yaml
+  03-phases/
+    phase-index.yaml
+    phase-flow.md
+    01-...phase.md
+    02-...phase.md
+  04-evaluation.md
+  05-evidence/
+    evidence-ledger.jsonl
+    evidence-ledger.schema.json
+  generated/
+    agent-prompt.md
+  buildprint.json
+  publication.json</code></pre>
+            </div>
+            <div class="grid">
+              <div class="card">
+                <h3>Human router</h3>
+                <p><code>BUILDPRINT.md</code> is the canonical start file and read-order contract.</p>
+              </div>
+              <div class="card">
+                <h3>Machine mirror</h3>
+                <p><code>blueprint.yaml</code> mirrors execution metadata for validators and tooling.</p>
+              </div>
+              <div class="card">
+                <h3>Runtime truth</h3>
+                <p><code>.buildprint/</code> owns live progress, evidence, blockers, and handoff state after bootstrap.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="read-order">
+          <div class="section-header">
+            <h2>Required Read Order</h2>
+            <p>
+              Initial context reads must be sequential and observable. The agent must not inventory the packet,
+              glob all markdown, or read all phase files upfront.
+            </p>
+          </div>
+          <div class="flow">
+            <div class="flow-row"><strong>1. Start</strong><p><code>BUILDPRINT.md</code></p></div>
+            <div class="flow-row"><strong>2. Gate</strong><p><code>01-questions.md</code> then <code>02-project-setup.md</code></p></div>
+            <div class="flow-row"><strong>3. Mirror</strong><p><code>blueprint.yaml</code></p></div>
+            <div class="flow-row"><strong>4. Route</strong><p><code>03-phases/phase-index.yaml</code> then <code>03-phases/phase-flow.md</code></p></div>
+            <div class="flow-row"><strong>5. Execute</strong><p>Only the active phase file selected by phase index, assignment, or local <code>.buildprint</code> state.</p></div>
+            <div class="flow-row"><strong>6. Prove</strong><p><code>04-evaluation.md</code>, evidence seed, and evidence schema before runtime evidence.</p></div>
+          </div>
+          <div class="callout danger">
+            <strong>Forbidden read behavior</strong>
+            <p>
+              Do not read every phase upfront. Do not treat <code>generated/agent-prompt.md</code> as authority.
+              Do not edit snapshot files to record implementation progress.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="flow">
+          <div class="section-header">
+            <h2>Execution Flow</h2>
+            <p>
+              <code>agb start</code> creates exact snapshots and runtime state. The implementation agent then follows
+              the packet one phase at a time.
+            </p>
+          </div>
+          <pre><code>agb start package.json target/
+        |
+        v
+target/.buildprint/ exact snapshots + source/state/progress/next-agent
+        |
+        v
+agent reads .buildprint/next-agent.md
+        |
+        v
+BUILDPRINT -> questions -> setup -> blueprint -> phase-index -> phase-flow
+        |
+        v
+active phase only
+        |
+        v
+plan -> team gates -> vertical path -> reviews -> proof -> evidence
+        |
+        v
+update .buildprint/progress.md, state.json, next-agent.md
+        |
+        v
+continue to next dependency-ready phase or stop on a real blocker</code></pre>
+          <div class="grid three">
+            <div class="card">
+              <h3>Fresh run</h3>
+              <p>Use the packet read order and <code>active_phase</code> from <code>phase-index.yaml</code>.</p>
+            </div>
+            <div class="card">
+              <h3>Resumed run</h3>
+              <p>Use <code>.buildprint/next-agent.md</code> and runtime state before stale package defaults.</p>
+            </div>
+            <div class="card">
+              <h3>Targeted replay</h3>
+              <p>Use the assigned phase after confirming it exists in <code>phase-index.yaml</code>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="setup">
+          <div class="section-header">
+            <h2>Questions And Setup Gates</h2>
+            <p>
+              The setup gate prevents agents from inventing project structure or stopping on low-impact unknowns.
+            </p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3><code>01-questions.md</code></h3>
+              <p>
+                Ask only for high-impact unknowns: credentials, irreversible actions, paid services, destructive
+                operations, deployment authority, product-defining forks, or security-sensitive decisions.
+              </p>
+            </div>
+            <div class="card">
+              <h3><code>02-project-setup.md</code></h3>
+              <p>
+                Convert setup into implementation workspace alignment before phase work. Create local
+                <code>AGENTS.md</code> plus <code>.buildprint/setup.md</code>; <code>AGENTS.md</code> alone is not enough.
+              </p>
+            </div>
+          </div>
+          <div class="callout">
+            <strong>Default behavior</strong>
+            <p>
+              Blank ordinary answers authorize AI best-judgment defaults. Missing credentials block live proof only
+              after adapter/config/test/runtime wiring exists.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="phase-model">
+          <div class="section-header">
+            <h2>Phase Model</h2>
+            <p>
+              A phase is a proof-gated product slice. It must define product outcome, source evidence, implementation
+              scope, interfaces, state/runtime, UX/UI, safety, quality gates, proof gate, and repair routing.
+            </p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Meaning</th>
+                <th>What it does not prove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>checkpoint_recorded</code></td>
+                <td>At least one valid runtime evidence row exists for the phase.</td>
+                <td>Phase completion, UX quality, or production readiness.</td>
+              </tr>
+              <tr>
+                <td><code>phase_core_passed</code></td>
+                <td>The local vertical path works end to end with matching tests, reviews, and evidence.</td>
+                <td>Live-provider, browser, deployment, or broad production qualification.</td>
+              </tr>
+              <tr>
+                <td><code>claim_qualified</code></td>
+                <td>A specific claim has matching proof strong enough to upgrade.</td>
+                <td>Unrelated claims or full-suite completion.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout warning">
+            <strong>UI-bearing phase rule</strong>
+            <p>
+              <code>phase_core_passed</code> requires at least one user action path through a UI/controller boundary
+              into runtime behavior and back into visible state or readback. Static cards, dead buttons, generic
+              dashboards, screenshots-only proof, or review prose do not qualify.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="artifacts">
+          <div class="section-header">
+            <h2>Runtime Artifacts</h2>
+            <p>
+              Runtime artifacts are written in the implementation workspace. They are not edits to the packaged
+              Buildprint snapshots.
+            </p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Before code</h3>
+              <ul class="compact-list">
+                <li><code>.buildprint/phase-runs/&lt;phase-id&gt;/plan.md</code></li>
+                <li><code>.buildprint/phase-runs/&lt;phase-id&gt;/team-gates.md</code></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Before evidence</h3>
+              <ul class="compact-list">
+                <li><code>reviews/architecture.md</code></li>
+                <li><code>reviews/ux.md</code></li>
+                <li><code>reviews/qa.md</code></li>
+                <li><code>proof.md</code></li>
+              </ul>
+            </div>
+          </div>
+          <p>
+            Handoff and return files are optional and should appear only when real delegation to a subagent or
+            separate specialist session happens. Do not manufacture role paperwork when the main session performs the work.
+          </p>
+        </section>
+
+        <section class="section" id="evidence">
+          <div class="section-header">
+            <h2>Evidence Rules</h2>
+            <p>
+              Evidence is narrow by design. Rows must prove only what their command and artifact actually exercised.
+            </p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Runtime ledger</h3>
+              <p>Append rows to <code>.buildprint/evidence/evidence-ledger.jsonl</code>. Keep packaged seed evidence immutable.</p>
+            </div>
+            <div class="card">
+              <h3>Required row fields</h3>
+              <p><code>artifact_id</code>, <code>type</code>, <code>phase_id</code>, <code>status</code>, <code>source</code>, <code>proves</code>, <code>proof_type</code>, <code>provider_mode</code>, <code>upgrades_claim</code>.</p>
+            </div>
+          </div>
+          <ul>
+            <li>Do not set <code>upgrades_claim: true</code> on blockers, partial proof, missing credentials, unavailable tooling, or synthetic checks.</li>
+            <li>Review prose cannot upgrade implementation proof. Use separate executable proof rows.</li>
+            <li>Provider adapter/config tests prove seams, not live provider behavior.</li>
+            <li>Browser, screenshot, UX, worker, security, and data-lifecycle claims require matching proof or honest non-upgrading blocker rows.</li>
+            <li>One broad smoke test cannot upgrade every claim. Split evidence rows by the exact behavior exercised.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="continuation">
+          <div class="section-header">
+            <h2>Continuation Rules</h2>
+            <p>
+              Full-suite execution continues one dependency-ready phase at a time. Later phase files are not read upfront.
+            </p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Continue when</h3>
+              <p>
+                The core local vertical path passed, owned persistence is proven, required reviews/proof/evidence exist,
+                and remaining live/browser/deployment blockers are non-upgrading qualification blockers.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Stop when</h3>
+              <p>
+                Core implementation fails, persistence is missing, local runtime proof fails, destructive/security ambiguity
+                remains unresolved, or evidence would be fake.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="evals">
+          <div class="section-header">
+            <h2>Validation And Evals</h2>
+            <p>
+              Mapper OS confidence is layered. Static checks prove shape. Real replay proves downstream agent behavior.
+              Product confidence still requires reviewing the produced outcome.
+            </p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Gate</th>
+                <th>Command</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Packet shape</td>
+                <td><code>npm run check:mapper-output</code></td>
+                <td>Validates the known-good executable packet fixture.</td>
+              </tr>
+              <tr>
+                <td>Negative packet fixtures</td>
+                <td><code>npm run check:mapper-output:negative</code></td>
+                <td>Confirms obsolete or weak packet shapes fail.</td>
+              </tr>
+              <tr>
+                <td>Negative replay fixtures</td>
+                <td><code>npm run check:mapper-replay:negative</code></td>
+                <td>Rejects static UI shells, checkpoint-only evidence, UX overclaims, and browser blockers without local interaction proof.</td>
+              </tr>
+              <tr>
+                <td>Published audit</td>
+                <td><code>npm run check:mapper-published</code></td>
+                <td>Verifies published executable packets satisfy the current strict baseline.</td>
+              </tr>
+              <tr>
+                <td>Fast loop</td>
+                <td><code>npm run eval:mapper-fast</code></td>
+                <td>Combines static checks, fixture checks, golden signals, and dry-run replay.</td>
+              </tr>
+              <tr>
+                <td>Real agent UI smoke</td>
+                <td><code>npm run eval:agent-small</code></td>
+                <td>Uses interactive UI pressure against a tiny AI UI packet.</td>
+              </tr>
+              <tr>
+                <td>Real Local RAG</td>
+                <td><code>npm run eval:agent-local-rag</code> and <code>npm run eval:local-rag-phase2</code></td>
+                <td>Exercises provider/chat and RAG indexing phases before expensive Swarm/MicroFish regressions.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout warning">
+            <strong>Do not overread green checks</strong>
+            <p>
+              A green static check is not product confidence. A checkpoint-only replay is not phase completion.
+              Browser/live/deployment qualification needs matching runtime evidence.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="anti-patterns">
+          <div class="section-header">
+            <h2>Anti-Patterns This Baseline Rejects</h2>
+            <p>
+              These are common failure modes that produced weak downstream implementations.
+            </p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Reading everything upfront</h3>
+              <p>Burns context and lets later phases pollute the current implementation slice.</p>
+            </div>
+            <div class="card">
+              <h3>Checkpoint equals completion</h3>
+              <p>Evidence discipline is useful, but the phase core still needs an end-to-end vertical path.</p>
+            </div>
+            <div class="card">
+              <h3>Static UI shell</h3>
+              <p>Cards and labels without a user action path do not prove a product UI.</p>
+            </div>
+            <div class="card">
+              <h3>Provider blocker as implementation escape</h3>
+              <p>Missing credentials block live proof only; adapter seams, config, tests, and runtime wiring remain required.</p>
+            </div>
+            <div class="card">
+              <h3>Review prose as proof</h3>
+              <p>Reviews explain risk. Executable commands and artifacts prove behavior.</p>
+            </div>
+            <div class="card">
+              <h3>Generic MVP downgrade</h3>
+              <p>Full-suite mapped packets default to production-grade architecture unless scope is explicitly reduced.</p>
+            </div>
+          </div>
+        </section>
+
+        <p class="footer">
+          Last updated for the current executable packet baseline. Keep this page aligned with Mapper OS templates,
+          validators, package scripts, and real replay evidence.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>
