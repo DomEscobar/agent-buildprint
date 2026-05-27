@@ -9,7 +9,7 @@
 - [ ] Root `BUILDPRINT.md` is the only starting point and owns the canonical read order; downstream runners must read it before inventorying or enumerating packet files.
 - [ ] `generated/agent-prompt.md` declares `Generated from: blueprint.yaml` and states that it is not source of truth.
 - [ ] `01-questions.md` uses numbered questions and the exact AI-best-judgment default phrase; blank answers do not block ordinary engineering decisions.
-- [ ] `02-project-setup.md` records human preferences, inferred project shape, stack decisions, architecture rules, team operating model, execution authority model, delegation/handoff protocol, root/local `AGENTS.md` plan, quality gates, safety/permissions, assumptions, and the phase start gate.
+- [ ] `02-project-setup.md` records setup defaults, product shape, architecture decisions, production readiness, workbench UX contract, mapped contract anchors, product obligation/surface matrix, implementation setup, open assumptions, and the phase start gate.
 - [ ] No phase starts until `02-project-setup.md` is explicit enough to create implementation-project root/local `AGENTS.md` and bounded handoffs without inventing architecture.
 - [ ] `03-phases/phase-index.yaml` is the dependency/continuation index and points to the active proof-gated phase using a full packet-relative `03-phases/<phase>.md` path for `active_phase` and phase `file` values.
 - [ ] Every phase file contains product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.

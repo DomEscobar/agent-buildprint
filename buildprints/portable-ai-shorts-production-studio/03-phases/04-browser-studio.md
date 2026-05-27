@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this current phase through `03-phases/phase-flow.md`:
+Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this current phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -31,13 +33,13 @@ requires_roles:
 
 A browser-accessible studio workbench lets a user enter a product URL or manual description, receive product analysis and scripts, select/edit a script, configure voice/actor/video/narration/consent, start generation, observe pollable progress/logs, review a playable completed MP4, inspect limitations and provider details, and recover from visible negative states.
 
-## Source evidence
+## Mapped product obligations
 
 - Source path `dashboard/src/components/SaaShortsTab.jsx` showed setup, analysis, configuration, generation, and result steps.
 - Source path `dashboard/src/components/UGCGallery.jsx` showed gallery cards and video links.
 - Source path `app.py` supplied analyze, generate, status, gallery, video detail, and post surfaces.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - studio-wizard-ui: replace. Equivalent target behavior: production-studio workbench with source input, scripts, configuration, generation, review, gallery entry, publish entry, limitations, and secondary debug drawer. Compatibility impact: cleaner UX is allowed; no user workflow may disappear.
 - raw-debug-primary-ui: drop. Equivalent target behavior: logs/manifests/provider refs remain available in a secondary drawer. Compatibility impact: raw JSON cannot be the first useful screen.
@@ -63,6 +65,9 @@ Build the studio UI and connect it to the contracts/runtime/media outputs. Inclu
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Use a dense production-studio layout: top project/workflow/provider-mode area, primary work column, secondary preview/status column, compact limitations notice, and collapsible debug drawer. Required states: empty, loading/running, error, blocked, success/ready, canceled, retrying. Controls must be accessible, responsive, and non-overlapping on desktop and mobile. Every enabled button must perform a visible action; disabled controls must explain why.
 
 ## Safety/security constraints
@@ -78,6 +83,10 @@ Live provider controls must be opt-in and credential-gated. Consent controls mus
 - Production build.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-04-browser-studio
 Required proof types:

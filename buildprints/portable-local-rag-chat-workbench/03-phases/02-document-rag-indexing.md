@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, resolve every role in `requires_roles` to `06-contracts/<role>.md`, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, write bounded handoffs for every required role, use subagents/delegated workers when available or self-simulate when unavailable, write return artifacts for every required role, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -28,19 +28,19 @@ requires_roles:
 
 User can upload supported documents or add a URL, index content into chunks, store embeddings through a SQLite/libSQL-compatible vector path, run retrieval, and see grounded citations attached to chat answers.
 
-## Source evidence
+## Mapped product obligations
 
 Source surface IDs: SRC-RAG-003, SRC-RAG-004.
 
 Product obligations: document ingestion, chunking, vector search, citations, grounding confidence, and retrieval test/eval path.
 
-Source evidence refs:
+Mapped product obligation refs:
 - https://github.com/Maxkrvo/OllamaChat README describes upload of markdown, text, PDF, code, and URL indexing.
 - https://github.com/Maxkrvo/OllamaChat README describes SQLite/libSQL vector search, citations, grounding confidence, and grounding evals.
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Surface id: SRC-RAG-003 document ingestion.
   - Disposition: preserve capability, target route/function names may differ.
@@ -91,6 +91,9 @@ Provider-backed embeddings must disclose deterministic-test-double, sandbox live
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Document UI must include empty, upload/loading, indexing, indexed, failed, blocked-provider, search, citation, and delete/reindex states. It must expose at least one real action/control path for indexing and retrieval readback. UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for claim qualification. Screenshots alone do not satisfy UI completion.
 
 If browser tooling is unavailable, run a local UI interaction/state-transition proof against the UI/controller/runtime path and record a separate non-upgrading browser/UX blocker with `blocks_continuation: false`.
@@ -112,6 +115,10 @@ If browser tooling is unavailable, run a local UI interaction/state-transition p
 - Run no-fake scan for static citations and hardcoded retrieval rows.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 - Proof id: proof-02-document-rag-indexing
 - Required proof tracks:

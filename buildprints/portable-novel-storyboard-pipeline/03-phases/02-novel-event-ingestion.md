@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, resolve every role in `requires_roles` to `06-contracts/<role>.md`, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, write bounded handoffs for every required role, use subagents/delegated workers when available or self-simulate when unavailable, write return artifacts for every required role, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -19,13 +19,13 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 Novel Event Ingestion
 
-## Source evidence
+## Mapped product obligations
 
 Source surface IDs: SRC-EVENTS, SRC-NOVEL, SRC-TEXT-PROVIDER
 
 Product obligations: OBL-NOVEL.
 
-Source evidence refs:
+Mapped product obligation refs:
 - `src/routes/novel/addNovel.ts` accepts chapter data and creates stored novel rows.
 - `src/routes/novel/getNovel.ts` reads chapter/novel data.
 - `src/routes/novel/event/generateEvents.ts` triggers event generation.
@@ -33,7 +33,7 @@ Source evidence refs:
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Source surfaces named in this phase: preserve unless `02-project-setup.md` explicitly records replace, merge, defer, or drop. Equivalent target behavior must preserve the user-visible capability, state/runtime ownership, and provider/security boundary without forcing route/function parity. Compatibility impact: source paths are evidence anchors only; target architecture may improve structure while keeping behavior and proof obligations.
 
@@ -76,6 +76,9 @@ Boundary requirements:
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Use the inline UX/UI requirements in this phase. Any `browser_runtime_trace` proof must include `ux_design_gate` and `screenshot_state_set` coverage for the relevant empty/loading/error/blocked/success states, or an explicit blocker row.
 
 ## Safety/security constraints
@@ -95,6 +98,10 @@ Use the inline UX/UI requirements in this phase. Any `browser_runtime_trace` pro
 - For persistence/provider behavior, prove readback/live mode or record a blocker.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 - Proof id: proof-02-novel-event-ingestion
 - Required proof types:

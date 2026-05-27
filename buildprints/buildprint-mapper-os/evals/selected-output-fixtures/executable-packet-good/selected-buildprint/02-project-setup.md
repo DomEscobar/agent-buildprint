@@ -2,13 +2,13 @@
 
 This setup contract is completed before phase implementation. It turns short human alignment and mapped product obligations into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
 
-## Human preferences
+## Setup defaults
 
 - Human answers come from `01-questions.md`.
 - Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from mapped product obligations and product goals.
 - Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
-## Inferred project shape
+## Product shape
 
 - Product: executable packet good fixture
 - Frontend/UI surfaces: infer from phase UX/UI requirements and mapped product obligations.
@@ -16,7 +16,7 @@ This setup contract is completed before phase implementation. It turns short hum
 - State/runtime surfaces: infer from phase state/runtime touched and mapped product obligations.
 - Tests/evaluation: derive from `04-evaluation.md` and phase proof gates.
 
-## Stack decisions
+## Architecture decisions
 
 Record decisions with short evidence, not bureaucracy:
 
@@ -65,7 +65,7 @@ Promote compiled product observations into implementation contracts before start
 - Durable state, generated artifacts, retention, import/export, and delete/reset behavior: durable record storage and readback are required; optional exports must be labeled as runtime artifacts, e.g. runtime artifact `records.json`.
 - UI flow/state anchors including empty/loading/error/blocked/success states: ingest form/list states are UI-bearing if implemented.
 
-## Product obligation/surface ledger
+## Product obligation/surface matrix
 
 - Surface id: SRC-INGEST-API
   - Mapping note: mapped note api/records.ts:1-20.
@@ -83,87 +83,17 @@ Rules:
 - Future files produced by the implementation/product are runtime artifacts or generated outputs, not packet files. Label them inline, e.g. `runtime artifact: <name>` or `generated output: <name>`.
 - Unlabeled backticked `.md`, `.yaml`, `.json`, or `.jsonl` references are reserved for actual packet files that exist in `selected-buildprint/`.
 
-## Architecture rules
+## Implementation project setup
 
-- Preserve product behavior and mapped product obligations; frameworks are replaceable when behavior and proof remain intact.
-- Keep dependency direction explicit: UI -> application/service -> domain -> data/provider adapters.
-- Keep routes/controllers thin; put business rules in domain/service layers.
-- Put external API/provider/database access behind adapters or repositories.
-- Do not claim durable behavior from in-memory-only state unless explicitly scoped as a prototype blocker.
-- Generated code must be marked and regenerated through documented commands.
-- Defaults must be appropriate, evidence-grounded, and no more complex than the product needs.
+The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
-## Team operating model
+- Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
+- Creating only `AGENTS.md` is not enough to satisfy the setup gate.
+- Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
 
-Use these review lenses during every implementation loop:
-
-- Architecture: boundaries, dependency direction, maintainability, product-faithful behavior.
-- UX/UI: polished flows, empty/loading/error/success states, accessibility, responsive behavior.
-- Backend/API: validation, auth/tenant/privacy boundaries, provider contracts, error semantics.
-- State/runtime: persistence, migrations, env/config, workers/jobs, runtime observability.
-- QA/evaluation: tests, build, browser/runtime checks, evidence quality, no fake proof.
-- Security/infra: secrets, destructive actions, external writes, deployment and cost approvals.
-
-
-## Execution authority model
-
-- Root `AGENTS.md` in the downstream implementation project is a scope governor, not the product brain. It keeps agents from broadening scope, skipping proof, or updating Buildprint state without assignment.
-- `.buildprint/next-agent.md` is the continuity handoff for fresh main sessions and must identify current phase, objective, recommended next action, and known blockers.
-- The current task prompt or bounded handoff is the only valid source of delegated role, scope, allowed edits, proof command, and evidence-row expectations. Do not rely on workers knowing whether they are subagents.
-- If no bounded assignment exists, an agent must stop after reading continuity and propose the next action instead of choosing its own phase.
-
-## Execution authority model
-
-Root/local `AGENTS.md` files are scope governors, `.buildprint/next-agent.md` is continuity, and `03-phases/phase-flow.md` is the phase-entry constitution for bounded handoffs.
-
-## Delegation and handoff protocol
-
-For each phase, the orchestrating main session must create bounded assignments before delegating work. Each assignment includes phase id, proof gate, files to read, allowed edit scope, non-goals, success criteria, verification command, evidence row requirements, and risks/blockers. Specialist workers return changed files, proof results, an evidence row draft, and risks. The orchestrator reviews and integrates their output, runs the phase proof gate, appends runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`, and updates `.buildprint/progress.md` plus `.buildprint/next-agent.md` before moving on. Vague global delegation is invalid.
-
-## AGENTS.md plan
-
-The blueprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` after this setup is resolved.
-
-- Root `AGENTS.md`: project shape, architecture rules, quality gates, safety/permissions, workflow, and local instruction map.
-- Local `AGENTS.md` files: create only at real architectural boundaries such as frontend/app, backend/API, packages/ui, data/db, infra, or tests/e2e.
-- Local files may narrow rules for their subtree but must not weaken root safety, quality, or architecture invariants.
-
-## Runtime setup artifact
-
-Before starting any `03-phases/*` work, the implementation workspace must write `.buildprint/setup.md` or files under `.buildprint/setup/`. This is not packet content and must not be copied into `selected-buildprint/`.
-
-The setup artifact must record concrete decisions for:
-
-- auth/session/tenant or ownership boundary
-- provider adapters, env/config names, deterministic test doubles, live-proof blockers
-- durable persistence, schema/storage ownership, readback/restart behavior
-- worker/runtime model, queue/retry/cancel/recovery ownership, or explicit synchronous-phase limitation
-- deployment/operations shape, health/logging/metrics/CI expectations, and local dev command
-- browser/e2e and screenshot proof plan for UI-bearing phases
-- product-grade visual QA plan for UI-bearing phases, including anti-patterns that block `visual_quality_gate`
-- safety/permission rules for secrets, destructive actions, paid services, external writes, and deployments
-- verification commands required before evidence rows may upgrade claims
-
-Creating only `AGENTS.md` is not enough to satisfy the setup gate.
-
-## Quality gates
-
-Before claiming any phase done:
-
-- Run the smallest meaningful typecheck/lint/test/build gate for changed code.
-- For UI-facing work, verify user-visible behavior with browser/screenshot evidence when possible.
-- For UI-facing work, browser proof must include a visual-quality review against the workbench UX quality contract. Functional assertions alone do not prove acceptable product UI.
-- For backend/provider/state work, verify real request/path, persistence/readback, or record an honest blocker.
-- For production-grade work, implement auth/session/tenant, provider adapter/config/test, durable persistence, worker/runtime, deployment/ops, and repeatable e2e paths that are applicable to the phase before accepting live-proof blockers.
-- Do not skip tests, hide failures, or upgrade claims without proof.
-
-## Safety and permissions
-
-Ask before destructive actions, external writes/publishes/deploys, secret handling, paid services, irreversible migrations, or public data changes.
-
-Never commit secrets, private logs, credentials, or provider tokens.
-
-## Open questions and assumptions
+## Open assumptions
 
 For each unresolved choice, record:
 

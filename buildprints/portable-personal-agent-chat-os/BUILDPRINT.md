@@ -1,8 +1,14 @@
 # BUILDPRINT: Portable Personal Agent Chat OS
 
-This is the canonical starting point and execution contract for a Mapper OS executable Buildprint packet. Build a self-hosted personal agent chatbot where chat is the control surface for a local agent runtime. The runtime routes model providers, streams responses as events, invokes policy-gated tools, loads selected skills, manages memory, delegates bounded subagent tasks, records token telemetry, and exposes a WebUI/API boundary.
+This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files. Your first action must be reading this file; do not inventory, glob, or enumerate packet files before this read order is established.
 
-Do not start from generated prompts or secondary legacy documents. Your first action must be reading this file; do not inventory, glob, or enumerate packet files before this read order is established.
+## Product brief
+
+- Product: Portable Personal Agent Chat OS
+- Primary outcome: Mapper OS phase-flow packet for building a clean-room, self-hosted personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP, memory, subagents, telemetry, and WebUI/API workbench surfaces.
+- Primary users: operators or developers implementing the mapped product workflow.
+- Main surfaces: BUILDPRINT.md canonical entry; 01-questions.md setup questions; 02-project-setup.md architecture and operating contract; blueprint.yaml machine contract
+- What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
 
 ## Required read order
 
@@ -12,29 +18,18 @@ Do not start from generated prompts or secondary legacy documents. Your first ac
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
 6. Read `03-phases/phase-flow.md`.
-7. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
-8. Read `04-evaluation.md`.
-9. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl` after phase-run artifacts exist.
+7. Read only the role contracts under `06-contracts/` required by the active phase `requires_roles`.
+8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
+9. Read `04-evaluation.md`.
+10. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 
-## Product contract
+Read these files sequentially. Do not batch, parallelize, or reorder the initial context reads, even when using multi-command tooling.
 
-The implementation target is a clean-room, portable personal agent OS inspired by source-observed architecture signals from TheSyart/emperor-agent at commit d9761740bf82b9d5a91e5d8cda44ab5643bab59d, with JARVIS and ToFu used only as comparison pressure. Preserve the product scope without copying source implementation, source UI style, source assets, prompts, or branding.
+## Project setup gate
 
-The binding product slice includes:
+Do not start `03-phases/*` until `02-project-setup.md` has enough explicit architecture, team rules, quality gates, safety rules, and `AGENTS.md` plan to prevent agents from inventing project structure.
 
-- `AgentSession`: one conversation/run with messages, checkpoints, active provider/model, runtime events, and usage.
-- `ProviderRouter`: config-driven provider registry with deterministic test provider support and no live API requirement for proof.
-- `StreamingAgentLoop`: turn lifecycle that emits deltas, tool events, memory events, team events, telemetry, completion, and failure.
-- `ToolRegistry`: schema-described tools with risk labels and policy mediation before execution.
-- `SkillRegistry`: discoverable skill records with metadata, triggers, instructions, optional resources/scripts, and explicit enablement.
-- `McpAdapter`: adapter boundary that maps enabled external tools into the same `ToolSpec` policy path; proof uses deterministic local test servers.
-- `MemoryStore`: raw history, daily/episodic notes, curated long-term memory, checkpoints, and attachment/source summaries.
-- `ContextBuilder`: ordered assembly of runtime instructions, memory, selected skills, task/team context, recent messages, attachments, and tool results.
-- `TeamBus`: evented subagent delegation with bounded task contracts and summarized results.
-- `Telemetry`: normalized input/output/cache/total token counters and compaction markers visible to runtime state and UI/tests.
-- `WebUI/API`: chat stream, model/provider settings, tool/skill/MCP workbench, memory editor/viewer, team view, token view, and config diagnostics.
-
-Proof mode is local, deterministic, and no-network by default. Live model providers, real MCP servers, shell/browser/network execution, production multi-user auth, billing, hosted deployment, and exact source-project parity require separate adapter work and separate evidence.
+Blank answers in `01-questions.md` are not blockers. They authorize AI best-fit decisions unless the choice is irreversible, expensive, credentialed, destructive, or product-defining.
 
 ## Implementation loop
 
@@ -56,26 +51,13 @@ If verification fails, route back before editing again:
 - test/build/runtime/UI/proof failure -> current phase file
 - architecture contradiction -> `02-project-setup.md`
 - missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
-- missing dependency -> required prior phase in `03-phases/phase-index.yaml`
-- packet seed-only blocker -> `05-evidence/evidence-ledger.jsonl`
-- external/runtime blocker -> `.buildprint/evidence/evidence-ledger.jsonl`
+- missing dependency -> required prior phase
+- external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`
 
 Do not mark a phase complete while its verification failure is unresolved.
 
 ## Phase discipline
 
-Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md` and `.buildprint/phase-runs/<phase-id>/team-gates.md`, dispatch or explicitly simulate bounded role work, collect returns/reviews/proof, and only then append runtime evidence.
+Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, bounded handoffs for every role in `requires_roles`, and return files for every role. Use subagents or delegated workers when available; when unavailable, self-simulate each role through the same handoff/return artifacts. Collect returns/reviews/proof, and only then append runtime evidence.
 
-A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
-
-## Non-goals and unsafe claims
-
-- Full Emperor Agent clone behavior.
-- Exact Vue UI, visual style, copy, assets, or product metaphor matching.
-- Live OpenAI, Anthropic, Bedrock, Ollama, or OpenAI-compatible provider behavior without env-gated smoke tests.
-- Real shell, browser, network, or filesystem safety beyond implemented policy gates and tests.
-- Real MCP server interoperability without configured server tests.
-- Production multi-user auth, tenant isolation, billing, or hosted SaaS operation.
-- JARVIS or ToFu feature completeness.
-- Tool, route, view, or success states that are displayed but not wired end to end.
-- Temporary in-memory storage as production durability.
+A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.

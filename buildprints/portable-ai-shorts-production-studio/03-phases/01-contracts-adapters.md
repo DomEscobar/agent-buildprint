@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this current phase through `03-phases/phase-flow.md`:
+Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this current phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -30,14 +32,14 @@ requires_roles:
 
 The implementation has canonical domain contracts and deterministic mock/no-network adapters for product analysis, script generation, actor options/upload validation, voices, media providers, gallery storage, scraper/downloader boundaries, and Upload-Post-style publish handoff. Manual description analysis works without a URL. URL mode exercises scraper/research adapter seams without live network calls by default.
 
-## Source evidence
+## Mapped product obligations
 
 - Source path `app.py` analyzed product URL/manual input and returned analysis/scripts through the analyze handler.
 - Source path `saasshorts.py` handled scrape, web research, product analysis, five-segment script generation, actor/media/voice operations, and composition helpers.
 - Source path `dashboard/src/components/SaaShortsTab.jsx` required visible script, actor, voice, video, and narration controls.
 - Source path `s3_uploader.py` and Upload-Post handler showed storage and social handoff as adapters rather than core business logic.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - product-analysis-and-scripts: preserve. Equivalent target behavior: validated analysis plus at least two five-segment UGC scripts from manual or URL fixture input. Compatibility impact: not route/function parity; target services may differ.
 - provider-adapters: preserve. Equivalent target behavior: Gemini/research, ElevenLabs, fal.ai/Flux/Hailuo/Kling/VEED, scraper, yt-dlp/downloader, S3/gallery, composer, and Upload-Post boundaries all expose deterministic mock mode and structured live blockers. Compatibility impact: raw provider responses stay in provider request records/debug views.
@@ -64,6 +66,9 @@ Define schemas/types and validation for analysis, script, provider request recor
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 None - reason: this phase is contract and adapter foundation. Downstream UI obligations: show analysis/scripts, provider mode, blocked live-key reasons, consent state, limitations, and provider records in secondary debug surfaces.
 
 ## Safety/security constraints
@@ -78,6 +83,10 @@ Default tests must not call live providers or network. Scraped content is untrus
 - Secret/claim wording scan if available.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-01-contracts-adapters
 Required proof types:

@@ -66,7 +66,8 @@
     "Phase files for storage, runtime, tools/MCP, memory/team/telemetry, safety, and WebUI/API",
     "04-evaluation.md evidence honesty gates",
     "05-evidence/evidence-ledger.schema.json",
-    "Seed-only evidence ledger"
+    "Seed-only evidence ledger",
+    "06-contracts/*.md role contracts for delegated architecture, UX/UI, integration/runtime, security, data persistence, and verification"
   ],
   "risks": [
     "Overclaiming full Emperor Agent clone parity",
@@ -82,7 +83,7 @@
   "checks": [
     "Mapper selected-output structural check passes",
     "Executable packet starts from BUILDPRINT.md",
-    "02-project-setup.md defines architecture, team model, execution authority, handoffs, AGENTS.md plan, quality gates, safety, assumptions, and phase start gate",
+    "02-project-setup.md defines product shape, architecture decisions, production readiness, implementation setup, assumptions, and phase start gate",
     "Every phase starts with the required implementation heading and routes through phase-flow artifacts",
     "Packaged evidence ledger is seed-only",
     "Runtime evidence belongs only in .buildprint/evidence/evidence-ledger.jsonl",
@@ -122,7 +123,7 @@
   ],
   "originGithubUrl": "https://github.com/TheSyart/emperor-agent",
   "originLabel": "TheSyart/emperor-agent",
-  "copyPrompt": "Use the Portable Personal Agent Chat OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Run every phase through 03-phases/phase-flow.md, create .buildprint/phase-runs/<phase-id>/ artifacts, read current project AGENTS.md before phase work, and append runtime proof only to .buildprint/evidence/evidence-ledger.jsonl. Build the clean-room personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP adapter, memory/compaction, subagent delegation, token telemetry, WebUI/API workbench, and safety-gated tool policy. Use deterministic providers/tools by default. Do not claim Emperor Agent clone, exact UI parity, live provider parity, real MCP parity, shell/browser/network safety, production auth, billing, publishing, or hosted SaaS unless separately validated.",
+  "copyPrompt": "Use the Portable Personal Agent Chat OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-personal-agent-chat-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the required 06-contracts/<role>.md files for the active phase, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Run every phase through 03-phases/phase-flow.md, create .buildprint/phase-runs/<phase-id>/ artifacts, read current project AGENTS.md before phase work, and append runtime proof only to .buildprint/evidence/evidence-ledger.jsonl. Build the clean-room personal agent chatbot OS with streaming chat, provider routing, tools, skills, MCP adapter, memory/compaction, subagent delegation, token telemetry, WebUI/API workbench, and safety-gated tool policy. Use deterministic providers/tools by default. Do not claim Emperor Agent clone, exact UI parity, live provider parity, real MCP parity, shell/browser/network safety, production auth, billing, publishing, or hosted SaaS unless separately validated. Use subagents/delegated workers when supported; when unavailable, self-simulate each required role through the same handoff/return artifacts before phase_core_passed.",
   "publicStatus": {
     "label": "Mapper OS converted",
     "explanation": "Converted to executable Buildprint phase-flow methodology with seed-only packaged evidence and honest runtime evidence rules."

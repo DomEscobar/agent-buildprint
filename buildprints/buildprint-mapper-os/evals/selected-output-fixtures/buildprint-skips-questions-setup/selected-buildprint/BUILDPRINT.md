@@ -2,6 +2,14 @@
 
 This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files.
 
+## Product brief
+
+- Product: Buildprint Mapper OS
+- Primary outcome: Agent-session workflow for mapping an existing repo into an executable, source-independent Buildprint packet with phase-flow replay, schema-valid runtime evidence, and fresh-agent proof gates.
+- Primary users: operators or developers implementing the mapped product workflow.
+- Main surfaces: Safety and secrets boundary; Source census and source-independent distillation; Scoped candidate selection before extraction; Executable selected-buildprint packet spine
+- What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md`.

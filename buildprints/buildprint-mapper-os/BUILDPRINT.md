@@ -81,7 +81,7 @@ The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questi
 
 Obsolete packet files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
-`02-project-setup.md` is mandatory for selected output. It defines architecture rules, team operating model, execution authority model, delegation/handoff protocol, root/local AGENTS.md plan, quality gates, safety/permissions, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
+`02-project-setup.md` is mandatory for selected output. It defines product shape, architecture decisions, production readiness, mapped contract anchors, implementation setup, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
 
 ## Non-Negotiables
 

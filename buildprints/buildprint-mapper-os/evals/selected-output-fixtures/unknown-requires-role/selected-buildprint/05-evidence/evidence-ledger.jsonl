@@ -1,0 +1,1 @@
+{"artifact_id": "mapping-seed-01-ingest-record", "type": "mapping_seed", "phase_id": "01-ingest-record", "status": "blocked", "source": "Mapper OS mapped product obligations was distilled; implementation/runtime proof has not run.", "proves": ["source_surface_mapping"], "proof_type": "mapping_seed", "provider_mode": "not_executed", "upgrades_claim": false}

@@ -2,6 +2,14 @@
 
 This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files.
 
+## Product brief
+
+- Product: Portable AI Swarm Simulation Workbench
+- Primary outcome: Executable packet Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history through proof-gated phase files.
+- Primary users: operators or developers implementing the mapped product workflow.
+- Main surfaces: Seed Ingestion And Ontology; Graph Build And Visualization; Simulation Setup; Simulation Runtime Monitoring
+- What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md`.
@@ -10,9 +18,10 @@ This is the canonical starting point and execution contract for the blueprint. D
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
 6. Read `03-phases/phase-flow.md`.
-7. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
-8. Read `04-evaluation.md`.
-9. Read seed evidence in `05-evidence/evidence-ledger.jsonl`; append runtime proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist.
+7. Read only the role contracts under `06-contracts/` required by the active phase `requires_roles`.
+8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
+9. Read `04-evaluation.md`.
+10. Read seed evidence in `05-evidence/evidence-ledger.jsonl`; append runtime proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist.
 
 ## Project setup gate
 
@@ -46,5 +55,7 @@ If verification fails, route back before editing again:
 Do not mark a phase complete while its verification failure is unresolved.
 
 ## Phase discipline
+
+Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, bounded handoffs for every role in `requires_roles`, and return files for every role. Use subagents or delegated workers when available; when unavailable, self-simulate each role through the same handoff/return artifacts. Collect returns/reviews/proof, and only then append runtime evidence.
 
 A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.

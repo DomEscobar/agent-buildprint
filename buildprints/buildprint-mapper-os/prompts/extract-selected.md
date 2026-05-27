@@ -14,12 +14,20 @@ selected-buildprint/
   02-project-setup.md
   03-phases/
     phase-index.yaml
+    phase-flow.md
     01-<phase-id>.md
     02-<phase-id>.md
   04-evaluation.md
   05-evidence/
     evidence-ledger.jsonl
     evidence-ledger.schema.json
+  06-contracts/
+    product-architect.md
+    ux-ui-craft.md
+    test-and-verification.md
+    integration-runtime.md
+    security-boundary.md
+    data-persistence.md
   generated/
     agent-prompt.md
 ```
@@ -33,10 +41,11 @@ Start from `templates/executable-packet/` as the structural authority. Preserve 
 Required exact anchors include:
 
 - `blueprint.yaml`: `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure.proof_gate_failed: current_phase`, `repair_loop.on_failure.architecture_contradiction: 02-project-setup.md`.
-- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Required read order`, `## Project setup gate`, `## Implementation loop`, and `## Repair routing`.
+- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, and `## Repair routing`.
 - `01-questions.md`: use headings `## 1.` through `## 6.` and include the exact AI-best-judgment default phrase below.
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
 - `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, `no_fake`, and `production_readiness`.
+- `06-contracts/`: include one role contract file for each allowed `requires_roles` value: `product-architect`, `ux-ui-craft`, `test-and-verification`, `integration-runtime`, `security-boundary`, and `data-persistence`.
 
 `generated/agent-prompt.md` must declare `Generated from: blueprint.yaml` and state that it is not source of truth.
 
@@ -72,11 +81,23 @@ Do not emit:
 3. `02-project-setup.md`
 4. `blueprint.yaml`
 5. `03-phases/phase-index.yaml`
-6. active phase file only
-7. `04-evaluation.md`
-8. `05-evidence/evidence-ledger.jsonl`
+6. `03-phases/phase-flow.md`
+7. required `06-contracts/<role>.md` files for the active phase only
+8. active phase file only
+9. `04-evaluation.md`
+10. `05-evidence/evidence-ledger.jsonl`
 
 No phase may start until `02-project-setup.md` is explicit enough to create project root/local `AGENTS.md` without inventing architecture.
+
+Before the read order, `BUILDPRINT.md` must include a compact `## Product brief` with:
+
+- `Product`
+- `Primary outcome`
+- `Primary users`
+- `Main surfaces`
+- `What this packet must not become`
+
+Keep this brief to orientation only. Do not copy phase details, source evidence, setup matrices, role contract text, or implementation plans into `BUILDPRINT.md`.
 
 ## 01-questions.md
 
@@ -97,44 +118,40 @@ Default rule:
 
 This is the pre-phase setup contract. Required sections:
 
-- `## Human preferences`
-- `## Inferred project shape`
-- `## Stack decisions`
+- `## Setup defaults`
+- `## Product shape`
+- `## Architecture decisions`
 - `## Production readiness contract`
-- `## Architecture rules`
-- `## Team operating model`
-- `## Execution authority model`
-- `## Delegation and handoff protocol`
-- `## AGENTS.md plan`
-- `## Quality gates`
-- `## Safety and permissions`
-- `## Open questions and assumptions`
+- `## Workbench UX quality contract`
+- `## Mapped contract anchors`
+- `## Product obligation/surface matrix`
+- `## Implementation project setup`
+- `## Open assumptions`
 - `## Phase start gate`
 
 AI may decide ordinary engineering defaults, but each default must be appropriate, product-obligation-grounded, and production-grade for the selected full-suite scope. Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials or paid-service approval can block live proof only after implementation includes provider adapters, config contracts, tests, and runtime wiring.
 
 `## Production readiness contract` must define auth/session/tenant boundaries, provider integration contracts, durable persistence, worker/runtime behavior, deployment/operations, observability, CI gates, and repeatable browser/e2e proof. A local MVP, static shell, deterministic-only provider, screenshots-only UI proof, or in-memory product state is invalid unless the selected scope is explicitly prototype-only.
 
+`## Product obligation/surface matrix` should be compact. Use a table or dense list, not pages of source evidence. Detailed behavior belongs in the owning phase files; this setup file only prevents surfaces from disappearing.
+
 
 ## Execution authority and delegation
 
 Selected packets for multi-phase work must compile into orchestrator handoffs, not only implementation instructions.
 
-`02-project-setup.md` must include:
-
-- `## Execution authority model`: define `AGENTS.md` as a scope governor, `.buildprint/next-agent.md` as continuity, `03-phases/phase-flow.md` as the executable phase-entry constitution, and explicit task/handoff text as the only valid source of delegated role/scope. Do not rely on agents knowing whether they are "subagents"; the task prompt/handoff must state authority and scope.
-- `## Delegation and handoff protocol`: define how the main coding session plans each phase, creates bounded assignments, gives exact files/scope/success criteria/proof commands/evidence requirements, reviews worker output, integrates changes, updates `.buildprint/progress.md` and `.buildprint/next-agent.md`, and refuses vague/global delegation.
-- `## AGENTS.md plan`: specify that the downstream root `AGENTS.md` stays short and prevents drift: follow the current assignment, do not broaden scope, read only named Buildprint/phase files, do not update `.buildprint/state.json`, `.buildprint/progress.md`, or `.buildprint/next-agent.md` unless explicitly assigned, and return changed files/proof/evidence draft/risks.
+Do not repeat the full phase/delegation protocol inside `02-project-setup.md`. That file should only contain implementation-project setup instructions: root/local `AGENTS.md` plan, `.buildprint/setup.md` requirement, and the statement that phase entry remains governed by `03-phases/phase-flow.md` plus `06-contracts/*`.
 
 For long-running full-suite execution, the orchestrated phase-suite loop is mandatory:
 
 1. Orchestrator reads Buildprint state, `03-phases/phase-flow.md`, and active phase.
-2. Orchestrator writes `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team.md`, and bounded handoffs for specialist work.
-3. Specialists implement or review scoped slices from those handoffs, or the orchestrator explicitly simulates the role and writes a return artifact when subagents are unavailable.
-4. Orchestrator integrates results in one workspace.
-5. Proof gate runs for the phase after reviews are written under `.buildprint/phase-runs/<phase-id>/reviews/`.
-6. Runtime evidence rows are appended to `.buildprint/evidence/evidence-ledger.jsonl` only after required phase-run artifacts exist.
-7. Progress and next-agent continuity are updated before moving to the next phase.
+2. Orchestrator resolves every phase `requires_roles` value to `06-contracts/<role>.md`.
+3. Orchestrator writes `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, and bounded handoffs for every required role.
+4. Specialists implement or review scoped slices from those handoffs, or the orchestrator explicitly simulates the role and writes the same return artifact when subagents are unavailable.
+5. Orchestrator integrates results in one workspace.
+6. Proof gate runs for the phase after reviews are written under `.buildprint/phase-runs/<phase-id>/reviews/`.
+7. Runtime evidence rows are appended to `.buildprint/evidence/evidence-ledger.jsonl` only after required phase-run artifacts exist.
+8. Progress and next-agent continuity are updated before moving to the next phase.
 
 A full-suite replay must fail if later phases are merely reserved, stubbed, or blocked while the run claims pass.
 
@@ -146,9 +163,9 @@ A phase is **not** a waterfall time bucket. A phase is a proof-gated vertical pr
 
 `03-phases/phase-index.yaml` must include `active_phase`, `phase_id`, `file`, `status`, dependencies, and proof gate. `active_phase` and every `file` value must point to the full packet-relative phase file path under `03-phases/`.
 
-`03-phases/phase-flow.md` is required. It must define the phase-entry protocol, required phase-run artifacts, phase-derived team assembly, bounded handoff shape, review/integration expectations, simulation fallback when subagents are unavailable, explicit review contracts for architecture/UX/QA with rejection criteria, and the rule that runtime evidence cannot be appended until plan/team/handoffs/returns/reviews/proof artifacts exist.
+`03-phases/phase-flow.md` is required. It must be a compact delegation router, not the storage location for role expertise. It must define the phase-entry protocol, role-contract resolution through `06-contracts/<role>.md`, required phase-run artifacts, bounded handoff shape, subagent permission, self-simulation fallback when subagents are unavailable, integration/review/proof flow, and the rule that runtime evidence cannot be appended until plan/team-gates/handoffs/returns/reviews/proof artifacts exist.
 
-Team skill capsules under Mapper OS `templates/teams/*` are mapper-local source material, not files inherited by downstream selected packets. Compile their enforceable obligations into `03-phases/phase-flow.md` under `## Compiled team skill gates` and into phase-local `## UX/UI requirements`, `## Interfaces touched`, `## State/runtime touched`, `## Safety/security constraints`, and `## Proof gate` sections as applicable. A selected packet that only lists role names such as `ux-ui-craft` or `product-architect` without the capsule gates is incomplete.
+`06-contracts/*.md` files are first-class packet files. Convert Mapper OS team skill capsules into concise role contracts with `## When Active`, `## Handoff Scope`, `## Reject If`, `## Required Return Headings`, and `## Proof/Evidence Expectations`. Do not copy the entire mapper-local `templates/teams/*` files verbatim into selected packets. A selected packet that only lists role names such as `ux-ui-craft` or `product-architect` without matching `06-contracts/<role>.md` files is incomplete.
 
 Phase identity rules:
 
@@ -160,7 +177,7 @@ Phase identity rules:
 Every implementation phase file under `03-phases/*.md` must include:
 
 - `## How to implement this phase` with required pre-code reads: `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`; it must tell the agent to execute through phase-flow and block evidence until phase-flow artifacts exist.
-- `requires_roles:` seeded from phase needs, not a fixed always-on team.
+- `requires_roles:` seeded from phase needs, not a fixed always-on team. Every listed role must have a matching `06-contracts/<role>.md` file.
 - `## Product outcome`
 - `## Mapped product obligations`
 - `## Behavior compatibility contract`
@@ -213,7 +230,7 @@ Do not mark a phase complete while its verification failure is unresolved.
 ## Extraction rules
 
 - Convert source facts into source-independent product obligations inside setup and phase files. Do not expose `## Source evidence` as an implementation-agent section.
-- Include a `## Product obligation/surface ledger` in `02-project-setup.md`. It must account for high-signal mapped surfaces (routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime) with: mapped source note, product obligation, target disposition (`preserve`, `replace`, `merge`, `defer`, or `drop`), target contract, compatibility impact, and owning phase/blocker destination.
+- Include a compact `## Product obligation/surface matrix` in `02-project-setup.md`. It must account for high-signal mapped surfaces (routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime) with: surface id, product obligation, target disposition (`preserve`, `replace`, `merge`, `defer`, or `drop`), target contract, and owning phase/blocker destination.
 - Treat route/function/file names as evidence anchors and compatibility signals, not mandatory clone targets. Do not require 1:1 route/function parity unless the source route/function is the real product boundary. The target may improve, rename, merge, or redesign surfaces when the equivalent capability and compatibility impact are explicit.
 - Clearly distinguish file-reference roles. A backticked file-ish reference ending in `.md`, `.yaml`, `.json`, or `.jsonl` must either be an actual packet file in `selected-buildprint/` or be role-labeled in the same sentence/line as a source path/source anchor, runtime artifact/generated output, or downstream implementation project file. Do not leave naked ambiguous refs such as “writes `report.md`”. Write “writes runtime artifact `report.md`” instead.
 - Only actual packet files are packet links. Source repository files such as package manifests/lockfiles/route files must be labeled as source paths, not ambiguous packet-file references. Runtime artifacts such as `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, `section_XX.md`, upload paths, report files, provider output files, or `<id>` paths must be labeled as runtime artifact paths and should not be written as ambiguous packet-file references.

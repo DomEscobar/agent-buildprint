@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -32,14 +34,14 @@ requires_roles:
 
 Users or API consumers can submit a query and receive either a citation-grounded answer from selected permission-safe context or a clear insufficient-evidence refusal. The retrieval path uses hybrid lexical/sparse and dense channels, score normalization/fusion, dedupe, permission filtering before context packing, reranking or late interaction, token-budgeted context packing, and trace output.
 
-## Source evidence
+## Mapped product obligations
 
 - Legacy acceptance required contexts with source/citation metadata, permission and tenant filters before context packing, hybrid retrieval, reranking, citation-grounded answers, unsupported refusals, and private/tenant mismatch exclusion.
 - Legacy contracts defined query plans, candidates, reranked contexts, citations, answers with confidence/refusal reason, and eval cases.
 - Legacy proof compared lexical, dense-like, hybrid, and reranked paths and generated cited answers/refusals without live providers.
 - Legacy non-goals disallowed uncited generated answers, vector-only completion, and live provider claims from untested adapters.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Query planning and filters: preserve. Equivalent target behavior accepts query, filters, tenant/user identity, and strategy or provider mode. Compatibility impact: query strategy names may adapt but semantics must be testable.
 - Hybrid retrieval: preserve. Equivalent target behavior combines lexical/sparse and dense candidates. Compatibility impact: provider scoring can differ, but targeted exact and semantic cases must pass.
@@ -76,6 +78,9 @@ Implement the full query vertical slice:
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 If UI exists, implement query input, loading state, cited answer state, insufficient-evidence/refusal state, provider blocked state, error state, trace/evidence details for admins/developers, and no-overlap responsive rendering. Citations must be visibly tied to selected chunks or sources. Private/blocked content must not be hinted through titles or traces visible to unauthorized users.
 
 ## Safety/security constraints
@@ -93,6 +98,10 @@ Permission filtering must happen server-side before context packing, generation,
 - Browser/API trace if UI or route exists.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-03-retrieval-answering
 Required proof types:

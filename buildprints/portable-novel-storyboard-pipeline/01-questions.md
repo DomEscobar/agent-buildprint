@@ -1,10 +1,10 @@
 # Questions
 
-Answer only what you care about. Leave anything blank and the implementation agent must choose the best-fit option from source evidence, product goals, architecture quality, UX quality, security, maintainability, and long-term scalability.
+Answer only what you care about. Leave anything blank and the implementation agent must choose the best-fit option from mapped observations, product goals, architecture quality, UX quality, security, maintainability, and long-term scalability.
 
 Default for every unanswered question:
 
-> Use AI best judgment to produce the highest-quality appropriate implementation. Prefer clean architecture, excellent UX/UI, strong security, maintainable code, real persistence where needed, and proof-backed completion. Favor simplicity unless source evidence or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
+> Use AI best judgment to produce the highest-quality appropriate implementation. Prefer clean architecture, excellent UX/UI, strong security, maintainable code, real persistence where needed, and proof-backed completion. Favor simplicity unless mapped observations or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
 Default execution standard: production-grade architecture. Do not offer or choose an MVP quality tier. Missing credentials block live proof only; they do not remove the requirement to implement provider adapter seams, config contracts, deterministic tests, durable state paths, security boundaries, worker/runtime ownership, browser/e2e proof plans, media/export seams, and runtime evidence.
 
@@ -18,7 +18,7 @@ Default: AI chooses the product direction that best fits the mapped source and u
 
 Do you require or prefer any stack, framework, package manager, database, auth, payments, AI provider, hosting, or deployment target?
 
-Default: AI chooses the strongest practical stack from source evidence and target product needs.
+Default: AI chooses the strongest practical stack from mapped observations and target product needs.
 
 ## 3. UX/UI preferences
 

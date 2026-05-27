@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, resolve every role in `requires_roles` to `06-contracts/<role>.md`, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, write bounded handoffs for every required role, use subagents/delegated workers when available or self-simulate when unavailable, write return artifacts for every required role, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -28,19 +28,19 @@ requires_roles:
 
 User can create or open a conversation, configure an Ollama-compatible model, send a chat message, receive streamed assistant output, and read the persisted conversation back after restart.
 
-## Source evidence
+## Mapped product obligations
 
 Source surface IDs: SRC-RAG-001, SRC-RAG-002.
 
 Product obligations: local-first chat, no cloud key required by default, streaming responses, configurable models, and persisted conversations.
 
-Source evidence refs:
+Mapped product obligation refs:
 - https://github.com/Maxkrvo/OllamaChat README describes self-hosted Ollama chat, streaming responses, configurable models, persistent history, and SQLite setup.
 - https://github.com/Maxkrvo/OllamaChat README architecture lists chat pipeline, model router, Ollama wrapper, config, and database modules.
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Surface id: SRC-RAG-001 provider/chat runtime.
   - Disposition: preserve capability, target route/function names may differ.
@@ -94,6 +94,9 @@ Provider-backed behavior must disclose deterministic-test-double, sandbox live, 
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Chat UI must include empty, loading/streaming, provider-blocked, error, and success states. It must expose at least one real action/control path for message submission and readback. UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for claim qualification. Screenshots alone do not satisfy UI completion.
 
 If browser tooling is unavailable, run a local UI interaction/state-transition proof against the UI/controller/runtime path and record a separate non-upgrading browser/UX blocker with `blocks_continuation: false`. Do not leave the runtime evidence ledger missing because browser tooling is unavailable.
@@ -114,6 +117,10 @@ If browser tooling is unavailable, run a local UI interaction/state-transition p
 - Run no-fake scan for static assistant responses and no-op controls.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 - Proof id: proof-01-provider-chat-runtime
 - Required proof tracks:

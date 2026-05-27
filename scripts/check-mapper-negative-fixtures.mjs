@@ -16,7 +16,9 @@ const fixtures = [
   ['provider blocker without adapter path', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/provider-blocker-without-adapter-path/selected-buildprint'],
   ['screenshots without repeatable e2e', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/screenshots-without-repeatable-e2e/selected-buildprint'],
   ['visual quality gate missing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/visual-quality-gate-missing/selected-buildprint'],
-  ['team capsules not compiled', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/team-capsules-not-compiled/selected-buildprint'],
+  ['missing role contracts', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/team-capsules-not-compiled/selected-buildprint'],
+  ['unknown requires_roles value', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/unknown-requires-role/selected-buildprint'],
+  ['phase-flow missing subagent fallback', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint'],
   ['phase id drift', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/phase-id-drift/selected-buildprint'],
   ['all phases independent', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/all-phases-independent/selected-buildprint'],
 ];
@@ -36,7 +38,9 @@ const expectations = new Map([
   ['provider blocker without adapter path', /production proof gate missing provider_adapter_config_test_required|must state missing live credentials block live proof only/i],
   ['screenshots without repeatable e2e', /production proof gate missing repeatable_browser_e2e/i],
   ['visual quality gate missing', /04-evaluation\.md missing visual_quality_gate/i],
-  ['team capsules not compiled', /03-phases\/phase-flow\.md missing compiled team skill gate token: Compiled team skill gates/i],
+  ['missing role contracts', /missing executable blueprint file 06-contracts\/product-architect\.md|BUILDPRINT\.md read order missing 06-contracts\//i],
+  ['unknown requires_roles value', /declares unknown requires_roles value design-wizard/i],
+  ['phase-flow missing subagent fallback', /03-phases\/phase-flow\.md must include subagent permission plus self-simulation fallback/i],
   ['phase id drift', /phase_id ingest-record must match file basename 01-ingest-record/i],
   ['all phases independent', /multi-phase packets must model dependencies/i],
 ]);

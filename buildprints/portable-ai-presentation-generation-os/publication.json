@@ -67,7 +67,8 @@
     "Six proof-gated phases",
     "Evidence ledger schema",
     "No-fake and promotion gates",
-    "Source parity boundaries"
+    "Source parity boundaries",
+    "06-contracts/*.md role contracts for delegated architecture, UX/UI, integration/runtime, security, data persistence, and verification"
   ],
   "risks": [
     "Overclaiming exact Presenton clone parity",
@@ -107,5 +108,5 @@
   },
   "originGithubUrl": "https://github.com/presenton/presenton",
   "originLabel": "presenton/presenton",
-  "copyPrompt": "Use the Portable AI Presentation Generation OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Build a source-independent AI presentation generator/API with auth, provider config, prompt/document ingestion, outline and slide generation, media/templates/themes, editor/chat iteration, PPTX/PDF export, API/webhook/MCP boundaries, and strict provider/secret/upload/export safety. Do not claim exact Presenton clone or production-ready parity until evidence gates pass."
+  "copyPrompt": "Use the Portable AI Presentation Generation OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/portable-ai-presentation-generation-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the required 06-contracts/<role>.md files for the active phase, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Build a source-independent AI presentation generator/API with auth, provider config, prompt/document ingestion, outline and slide generation, media/templates/themes, editor/chat iteration, PPTX/PDF export, API/webhook/MCP boundaries, and strict provider/secret/upload/export safety. Do not claim exact Presenton clone or production-ready parity until evidence gates pass. Use subagents/delegated workers when supported; when unavailable, self-simulate each required role through the same handoff/return artifacts before phase_core_passed."
 }

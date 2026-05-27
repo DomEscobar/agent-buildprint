@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -30,13 +32,13 @@ requires_roles:
 
 Wire policy-gated tools, selective skills, and MCP-style external tool adapters into the agent loop without allowing raw model text to execute. Deterministic fixtures prove allowed and denied paths.
 
-## Source evidence
+## Mapped product obligations
 
 - Source paths agent/tools/schema.py, registry.py, dispatch.py, filesystem, shell, web/search, task-list, and skills tools show schema-driven tool dispatch and risk surfaces.
 - Source paths agent/skills.py and source path skills/*/SKILL.md show discoverable skills with instructions, triggers, scripts, and resources.
 - Source paths agent/mcp/client.py, config.py, connection.py, and adapter.py show MCP server config and tool mapping.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Tool registry and dispatcher: preserve through `ToolSpec`, schema validation, risk labels, audit events, and dispatcher.
 - Dangerous filesystem/shell/network/browser tools: preserve as policy boundaries; default disposition is deny unless explicitly enabled. Compatibility impact: denied-by-default behavior intentionally differs from any permissive source setup.
@@ -61,6 +63,9 @@ Add tool request parsing only for structured provider output, not arbitrary text
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Runtime state must support UI rows for registered tools with risk labels, selected skills with enabled/disabled state, MCP servers/tools with health/timeout/blocked state, and clear denial reasons. Full workbench rendering is later.
 
 ## Safety/security constraints
@@ -77,6 +82,10 @@ No tool may execute from raw model text. Default policy allows only `safe` and b
 - MCP fixture test proving namespaced mapped tool uses the same policy path.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-03-tools-skills-mcp-policy
 Required proof types:

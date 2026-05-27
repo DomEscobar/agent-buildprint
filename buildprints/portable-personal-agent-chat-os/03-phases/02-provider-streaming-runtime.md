@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -30,13 +32,13 @@ requires_roles:
 
 Deliver the evented chat turn engine: provider registry, deterministic test provider, streaming runtime loop, context-builder skeleton, checkpoint persistence, failure events, and normalized usage events.
 
-## Source evidence
+## Mapped product obligations
 
 - Source path agent/runner.py shows streaming turn lifecycle, checkpoints, tool loop integration, token tracking, and compaction trigger.
 - Source paths agent/providers/base.py, registry.py, openai_compat.py, anthropic_provider.py, and bedrock_provider.py show provider families and registry capabilities.
 - Source path agent/webui.py shows WebSocket/HTTP streaming boundary.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Provider registry and adapter families: preserve with equivalent target behavior. Compatibility impact: live provider behavior is deferred; deterministic test provider is required now.
 - Streaming lifecycle events: preserve event semantics including `turn.started`, `model.delta`, telemetry, `turn.completed`, and `turn.failed`.
@@ -62,6 +64,9 @@ Implement a runnable local chat turn using persisted session state and determini
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 No full UI required yet. Runtime events must be shaped so a UI can show empty chat, streaming/loading, provider blocked/error, and success states without parsing logs.
 
 ## Safety/security constraints
@@ -76,6 +81,10 @@ No live network calls by default. Unknown provider must fail with actionable dia
 - Persistence test for checkpoint or failure trace readback.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-02-provider-streaming-runtime
 Required proof types:

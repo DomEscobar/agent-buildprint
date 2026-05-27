@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -32,14 +34,14 @@ requires_roles:
 
 The RAG system has a repeatable evaluation harness, machine-readable reports, trace and operational metrics, CI or release gates, and honest provider/live-readiness boundaries. Optional advanced retrieval modules are evaluated as measured upgrades, not enabled by default hype.
 
-## Source evidence
+## Mapped product obligations
 
 - Legacy eval harness required retrieval metrics, answer metrics, operational metrics, and fixture cases for exact identifiers, semantic paraphrase, contextualized chunks, private mismatch, unsupported refusal, and rerank distractors.
 - Legacy test matrix covered vector-only misses, lexical-only misses, bad ordering, hallucinated answers, citation laundering, tenant leaks, chunk context loss, eval-free drift, and live-provider dependence.
 - Legacy operational requirements included latency by stage, candidate counts, token budget used, provider cost fields labeled measured/estimated/unavailable, and permission filter drops.
 - Legacy advanced guidance said HyDE, query rewriting, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG/CRAG, contextual retrieval, cross-encoder, and BGE rerankers should be added only when evals justify complexity.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Retrieval eval harness: preserve. Equivalent target behavior emits recall@k, MRR, and nDCG-like or ordering metric where available. Compatibility impact: metric names can adapt but must be machine-readable.
 - Answer eval harness: preserve. Equivalent target behavior checks faithfulness, answer correctness, refusal quality, citation precision, and noise sensitivity. Compatibility impact: LLM-as-judge may be blocked unless provider use is approved; deterministic checks still required.
@@ -75,6 +77,9 @@ Implement the evaluation and operations layer:
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 If UI exists, expose eval status, last run, pass/fail/blocker states, metric deltas, provider readiness, and trace inspection without leaking private content to unauthorized users. Reports must distinguish deterministic proof, sandbox, blocked, and live evidence. If no UI exists, document CLI/API output and downstream UI obligations in the UX review.
 
 ## Safety/security constraints
@@ -91,6 +96,10 @@ Eval fixtures must not contain real private data unless storage, access, and ret
 - Optional module decision log shows baseline gap, measured improvement, cost/latency impact, and safety review before enabling.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-04-evaluation-operations
 Required proof types:

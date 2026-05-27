@@ -1,14 +1,14 @@
 # Project Setup
 
-This setup contract is completed before phase implementation. It turns short human alignment and mapped source evidence into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
+This setup contract is completed before phase implementation. It turns short human alignment and mapped mapped observations into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
 
-## Human preferences
+## Setup defaults
 
 - Human answers come from `01-questions.md`.
-- Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from source evidence and product goals.
+- Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from mapped observations and product goals.
 - Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
-## Inferred project shape
+## Product shape
 
 - Product: source-independent AI presentation generation OS inspired by Presenton.
 - Frontend/UI surfaces: dashboard, login/settings/provider config, upload/decompose, outline generation, generation progress, presentation editor, template/theme/media asset pages, export/download states.
@@ -17,12 +17,12 @@ This setup contract is completed before phase implementation. It turns short hum
 - State/runtime surfaces: user/session config, provider configuration, uploaded files, parsed chunks, presentations, slides, themes/templates, media assets, chat history, async task status, export artifacts, webhook subscriptions/events.
 - Tests/evaluation: derive from `04-evaluation.md` and phase proof gates.
 
-## Stack decisions
+## Architecture decisions
 
 Record decisions with short evidence, not bureaucracy:
 
 - Framework/runtime:
-  - Decision: AI best-fit unless human constrained it; source evidence suggests a web frontend plus API/worker/export backend split.
+  - Decision: AI best-fit unless human constrained it; mapped observations suggests a web frontend plus API/worker/export backend split.
   - Evidence: Presenton has Next.js UI, FastAPI API/services, Electron scripts, Docker, MCP server, export runtime, and provider adapters.
 - Package manager:
   - Decision: choose source-faithful or ecosystem-standard default.
@@ -46,7 +46,15 @@ Production-grade architecture is the default for the selected full-suite packet.
 
 Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
 
-## Source contract anchors
+## Workbench UX quality contract
+
+- UI architecture: define a real UI boundary, component/state ownership, controller/API integration, and browser proof path for any user-facing phase.
+- Product composition: start from the primary workflow surface, not a generic dashboard, default form, or marketing shell.
+- Domain-specific affordances: represent domain objects with appropriate workbench affordances instead of raw text-list substitutes.
+- Visual system: define hierarchy, density, typography, spacing, color, focus, disabled, loading, error, blocked, and success states.
+- Screenshot critique: browser or screenshot evidence must critique visual hierarchy, responsive behavior, accessibility, and local-MVP risk before UX proof can upgrade.
+
+## Mapped contract anchors
 
 Promote concrete source observations into implementation contracts before starting phases:
 
@@ -56,7 +64,7 @@ Promote concrete source observations into implementation contracts before starti
 - Durable state, generated artifacts, retention, import/export, and delete/reset behavior: source SQL models, app data, generated presentations, assets, and export task services anchor persistence/readback requirements.
 - UI flow/state anchors including empty/loading/error/blocked/success states: source Next.js dashboard/upload/outline/presentation/settings/templates/theme pages anchor browser-visible flows.
 
-## Source capability/surface ledger
+## Product obligation/surface matrix
 
 - Surface id: SRC-AUTH-CONFIG-PROVIDERS
   - Source anchor: source paths `servers/fastapi/api/v1/auth/router.py`, `servers/fastapi/utils/simple_auth.py`, provider config components/utilities.
@@ -109,63 +117,17 @@ Rules:
 - Future files produced by the implementation/product are runtime artifacts or generated outputs, not packet files. Label them inline, e.g. `runtime artifact: <name>` or `generated output: <name>`.
 - Unlabeled backticked `.md`, `.yaml`, `.json`, or `.jsonl` references are reserved for actual packet files that exist in this packet.
 
-## Architecture rules
+## Implementation project setup
 
-- Build a source-independent AI presentation system, not a clone of Presenton internals.
-- Preserve the observable product contract: authenticated self-hosted web/API, configurable LLM/image providers, document/prompt-to-deck generation, editable slide workflow, PPTX/PDF export, templates/themes/assets, async status, and webhook/API surfaces.
-- Keep frontend, backend, worker/export runtime, persistence, provider adapters, and file storage boundaries explicit even if implemented in one deployable service.
-- Use fake providers only in deterministic proof mode. Any live-provider claim requires live-mode evidence or a blocker row.
-- Never store raw API keys in logs, exported decks, screenshots, or evidence rows.
-- Do not claim durable behavior from in-memory-only state unless explicitly scoped as a prototype blocker.
-- Generated code must be marked and regenerated through documented commands.
+The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
-## Team operating model
+- Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
+- Creating only `AGENTS.md` is not enough to satisfy the setup gate.
+- Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
 
-Use these review lenses during every implementation loop:
-
-- Architecture: boundaries, dependency direction, maintainability, source-faithful behavior.
-- UX/UI: polished flows, empty/loading/error/success states, accessibility, responsive behavior.
-- Backend/API: validation, auth/privacy boundaries, provider contracts, error semantics.
-- State/runtime: persistence, migrations, env/config, workers/jobs, runtime observability.
-- QA/evaluation: tests, build, browser/runtime checks, evidence quality, no fake proof.
-- Security/infra: secrets, destructive actions, external writes, deployment and cost approvals.
-
-## Execution authority model
-
-- Root/local `AGENTS.md` files in the implementation project are scope governors, not product brains. They preserve architecture, safety, quality gates, and local workflow; they do not broaden the current phase.
-- `.buildprint/next-agent.md` is continuity for fresh sessions. It must identify current phase, objective, recommended next action, known blockers, and which phase-run artifacts already exist.
-- `03-phases/phase-flow.md` is the executable phase-entry constitution. It controls how each phase begins, how roles are assembled, how bounded handoffs are created, and when evidence may be appended.
-- Explicit task or handoff text is the only valid source of delegated role, allowed scope, proof command, and evidence requirements.
-
-## Delegation and handoff protocol
-
-For each phase, the orchestrating main session must create bounded assignments only when real delegation happens. Each assignment includes phase id, proof gate, files to read, allowed edit scope, non-goals, success criteria, proof command or verification command, evidence row requirements, and risks/blockers. Specialist workers return changed files, proof results, an evidence row draft, and risks. The orchestrator reviews and integrates their output, runs the phase proof gate, appends runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`, and updates `.buildprint/progress.md` plus `.buildprint/next-agent.md` before moving on. If no real delegation happens, write compact team-gates instead of fake handoff paperwork.
-
-## AGENTS.md plan
-
-The blueprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` after this setup is resolved.
-
-- Root `AGENTS.md`: project shape, architecture rules, provider/secret safety policy, quality gates, safety/permissions, workflow, proof loop, evidence ledger path, and local instruction map.
-- Local `AGENTS.md` files: create only at real architectural boundaries such as frontend/app, backend/API, worker/export, provider-adapters, data/storage, infra, or tests/e2e.
-- Local files may narrow rules for their subtree but must not weaken root safety, quality, or architecture invariants.
-
-## Quality gates
-
-Before claiming any phase done:
-
-- Run the smallest meaningful typecheck/lint/test/build gate for changed code.
-- For UI-facing work, verify user-visible behavior with browser/screenshot evidence when possible.
-- For backend/provider/state work, verify real request/path, persistence/readback, or record an honest blocker.
-- Do not skip tests, hide failures, or upgrade claims without proof.
-- Add negative tests for auth, validation, provider failure, upload failure, export failure, or webhook failure where applicable.
-
-## Safety and permissions
-
-Ask before destructive actions, external writes/publishes/deploys, secret handling, paid services, irreversible migrations, public data changes, desktop signing, or provider calls that may incur cost.
-
-Never commit secrets, private logs, credentials, provider tokens, uploaded private documents, or raw customer content.
-
-## Open questions and assumptions
+## Open assumptions
 
 For each unresolved choice, record:
 

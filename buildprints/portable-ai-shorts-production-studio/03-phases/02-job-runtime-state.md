@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this current phase through `03-phases/phase-flow.md`:
+Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this current phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -31,13 +33,13 @@ requires_roles:
 
 Generation starts as a pollable job, exposes ordered logs and provider request records, supports pending/running/success/failure/blocked/canceled/retry semantics, persists or honestly scopes runtime state, and never reports fake completion before output artifacts exist.
 
-## Source evidence
+## Mapped product obligations
 
 - Source path `app.py` used in-memory job/status maps, background tasks, status endpoints, output directories, retry behavior, and generation result/error fields.
 - Source path `dashboard/src/components/SaaShortsTab.jsx` polled status, showed logs/progress, and recovered existing job state.
 - Source path `saasshorts.py` orchestration produced staged provider work and output manifests.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - async-jobs-and-runtime: preserve. Equivalent target behavior: pending/running/success/failure/blocked/canceled/retry lifecycle with logs, provider records, result/error, output manifest, and visible status polling. Compatibility impact: target may replace in-memory maps with local durable storage.
 - local-output-state: preserve. Equivalent target behavior: app-controlled output area and generated manifest refs. Compatibility impact: path/URL conversion may be cleaner than source.
@@ -63,6 +65,9 @@ Implement job creation, status transitions, cancel, retry, logs, provider reques
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 None - reason: this phase is runtime-facing. Downstream UI obligations: expose empty, queued, running, success, failure, blocked, canceled, retrying, and completed states from real job status, not local-only fake state.
 
 ## Safety/security constraints
@@ -78,6 +83,10 @@ Do not run live providers by default. Do not leak provider tokens in logs or rec
 - Evidence that a completed job is not possible without real generated output or an explicit downstream dependency.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-02-job-runtime-state
 Required proof types:

@@ -2,13 +2,13 @@
 
 This setup contract is completed before phase implementation. It turns human alignment and mapped RAG obligations into concrete architecture, team rules, quality gates, and the future project `AGENTS.md` plan.
 
-## Human preferences
+## Setup defaults
 
 - Human answers come from `01-questions.md`.
 - Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from the target project and product goals.
 - Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks such as paid live providers, public deployment, destructive re-indexing, or legal/compliance answer policy.
 
-## Inferred project shape
+## Product shape
 
 - Product: Perfect RAG / Retrieval OS, a portable retrieval and grounded-answer system with deterministic proof mode and production adapter boundaries.
 - Frontend/UI surfaces: corpus/source management if the host app has admin UI; query/answer screen or API client surface; citation display; insufficient-evidence/refusal state; blocked provider/credential state; trace/eval report views for admins or developers.
@@ -16,7 +16,7 @@ This setup contract is completed before phase implementation. It turns human ali
 - State/runtime surfaces: durable document sources, chunk records, access scopes, lexical/sparse index, dense/vector index, query traces, eval cases, eval run results, generated report outputs, job state, provider config, and runtime artifacts for proof reports.
 - Tests/evaluation: deterministic fixture tests plus production corpus evals from `04-evaluation.md` and phase proof gates.
 
-## Stack decisions
+## Architecture decisions
 
 - Framework/runtime:
   - Decision: use the host project's existing backend and frontend conventions; if starting fresh, TypeScript/Node or Python/FastAPI are appropriate defaults for provider ecosystems.
@@ -44,7 +44,15 @@ Production-grade architecture is the default for the selected full-suite packet.
 
 Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
 
-## Source contract anchors
+## Workbench UX quality contract
+
+- UI architecture: define a real UI boundary, component/state ownership, controller/API integration, and browser proof path for any user-facing phase.
+- Product composition: start from the primary workflow surface, not a generic dashboard, default form, or marketing shell.
+- Domain-specific affordances: represent domain objects with appropriate workbench affordances instead of raw text-list substitutes.
+- Visual system: define hierarchy, density, typography, spacing, color, focus, disabled, loading, error, blocked, and success states.
+- Screenshot critique: browser or screenshot evidence must critique visual hierarchy, responsive behavior, accessibility, and local-MVP risk before UX proof can upgrade.
+
+## Mapped contract anchors
 
 Promote these observations into implementation contracts before starting phases:
 
@@ -54,10 +62,10 @@ Promote these observations into implementation contracts before starting phases:
 - Durable state, generated artifacts, retention, import/export, and delete/reset behavior: production stores documents/chunks/index metadata/traces/eval runs durably; generated output: eval reports; runtime artifact: query traces; runtime artifact: provider latency/cost logs; destructive reset/re-index needs confirmation.
 - UI flow/state anchors including empty/loading/error/blocked/success states: query UI or API client must distinguish no corpus, indexing, provider blocked, insufficient evidence, cited answer, permission-filtered result, and eval failure.
 
-## Source capability/surface ledger
+## Product obligation/surface matrix
 
 - Surface id: corpus-alignment-threat-model
-  - Source anchor: source evidence from legacy Buildprint phase gate for corpus, tenants, permissions, freshness, answer risk, citations, refusal policy, latency, cost, target stack, and search infrastructure.
+  - Source anchor: mapped observations from legacy Buildprint phase gate for corpus, tenants, permissions, freshness, answer risk, citations, refusal policy, latency, cost, target stack, and search infrastructure.
   - Source capability: prevents unsafe generic RAG implementation and establishes product constraints.
   - Target disposition: preserve
   - Target contract: capture the choices in setup, project config, eval cases, and safety rules before retrieval implementation.
@@ -65,7 +73,7 @@ Promote these observations into implementation contracts before starting phases:
   - Phase(s): `03-phases/01-corpus-contracts.md`
 
 - Surface id: data-contracts-fixtures
-  - Source anchor: source evidence from legacy contracts for source, chunk, query, candidate, reranked context, answer, trace, and eval case records.
+  - Source anchor: mapped observations from legacy contracts for source, chunk, query, candidate, reranked context, answer, trace, and eval case records.
   - Source capability: makes RAG behavior typed, testable, citeable, and permission-aware.
   - Target disposition: preserve
   - Target contract: implement equivalent domain contracts in the host stack with deterministic public/private fixtures.
@@ -73,7 +81,7 @@ Promote these observations into implementation contracts before starting phases:
   - Phase(s): `03-phases/01-corpus-contracts.md`
 
 - Surface id: ingestion-chunking-indexing
-  - Source anchor: source evidence from legacy spec requiring normalization, checksum, updated timestamp, stable chunk ids, spans, token estimates, contextual text, lexical/sparse and dense index surfaces.
+  - Source anchor: mapped observations from legacy spec requiring normalization, checksum, updated timestamp, stable chunk ids, spans, token estimates, contextual text, lexical/sparse and dense index surfaces.
   - Source capability: turns corpus material into retrievable, citeable, updateable evidence.
   - Target disposition: preserve
   - Target contract: add ingestion/update/delete or rebuild path with stable chunks and both retrieval channels; proof mode may use deterministic in-memory fixtures only as proof-mode evidence.
@@ -81,7 +89,7 @@ Promote these observations into implementation contracts before starting phases:
   - Phase(s): `03-phases/02-ingestion-indexing.md`
 
 - Surface id: hybrid-retrieval-fusion-permissions-rerank
-  - Source anchor: source evidence from legacy acceptance gates for lexical/dense retrieval, fusion, dedupe, permission filtering before context packing, and reranking or late interaction.
+  - Source anchor: mapped observations from legacy acceptance gates for lexical/dense retrieval, fusion, dedupe, permission filtering before context packing, and reranking or late interaction.
   - Source capability: returns high-quality, permission-safe contexts instead of vector-only false confidence.
   - Target disposition: preserve
   - Target contract: implement lexical/sparse and dense channels, score normalization/fusion, dedupe, access filtering, reranking, and permission-drop trace fields.
@@ -89,7 +97,7 @@ Promote these observations into implementation contracts before starting phases:
   - Phase(s): `03-phases/03-retrieval-answering.md`
 
 - Surface id: grounded-answer-refusal-context-pack
-  - Source anchor: source evidence from legacy answer requirements and acceptance gates for citations, insufficient-evidence refusal, token budget, and answer behavior.
+  - Source anchor: mapped observations from legacy answer requirements and acceptance gates for citations, insufficient-evidence refusal, token budget, and answer behavior.
   - Source capability: prevents hallucinated uncited answers and citation laundering.
   - Target disposition: preserve
   - Target contract: pack selected context within a token budget, answer only from selected evidence, cite selected chunks, and refuse unsupported queries.
@@ -97,7 +105,7 @@ Promote these observations into implementation contracts before starting phases:
   - Phase(s): `03-phases/03-retrieval-answering.md`
 
 - Surface id: eval-harness-traces-operations
-  - Source anchor: source evidence from legacy eval harness and test matrix for recall@k, MRR/nDCG-like ordering, faithfulness, answer correctness, refusal, citation precision, noise sensitivity, latency, cost, token budget, permission drops, and fixture cases.
+  - Source anchor: mapped observations from legacy eval harness and test matrix for recall@k, MRR/nDCG-like ordering, faithfulness, answer correctness, refusal, citation precision, noise sensitivity, latency, cost, token budget, permission drops, and fixture cases.
   - Source capability: makes retrieval quality measurable and regressions visible.
   - Target disposition: preserve
   - Target contract: add machine-readable eval output, trace fields, CI checks, and production corpus launch thresholds.
@@ -105,7 +113,7 @@ Promote these observations into implementation contracts before starting phases:
   - Phase(s): `03-phases/04-evaluation-operations.md`
 
 - Surface id: advanced-retrieval-modules
-  - Source anchor: source evidence from legacy advanced guidance for HyDE, query rewriting, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG/CRAG, contextual retrieval, cross-encoder or BGE reranking.
+  - Source anchor: mapped observations from legacy advanced guidance for HyDE, query rewriting, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG/CRAG, contextual retrieval, cross-encoder or BGE reranking.
   - Source capability: offers quality upgrades without default hype or unnecessary complexity.
   - Target disposition: defer
   - Target contract: optional modules are implemented only after baseline evals identify a gap and prove improvement; trace generated queries/summaries/graphs.
@@ -123,68 +131,17 @@ Rules:
 
 If a source-backed contract cannot be made self-contained, record the blocker before phase work instead of relying on any original source checkout.
 
-## Architecture rules
+## Implementation project setup
 
-- Preserve product behavior and source-derived obligations; frameworks are replaceable when behavior and proof remain intact.
-- Keep dependency direction explicit: UI/API -> application service -> retrieval domain -> data/search/provider adapters.
-- Keep routes/controllers thin; put chunking, retrieval, fusion, permission, rerank, context packing, answer, and eval rules in service/domain layers.
-- Put external API/provider/database/search access behind adapters or repositories.
-- Do not claim durable behavior from in-memory-only state unless explicitly scoped as proof-mode evidence.
-- Generated code and generated eval outputs must be marked and regenerated through documented commands.
-- Defaults must be evidence-grounded and no more complex than the target corpus needs.
-- Permission filters must run before context packing and answer generation, not as a UI-only or post-answer filter.
-- Provider adapters must expose deterministic test doubles and live-mode evidence separately.
+The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
-## Team operating model
+- Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
+- Creating only `AGENTS.md` is not enough to satisfy the setup gate.
+- Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
 
-Use these review lenses during every implementation loop:
-
-- Architecture: boundaries, dependency direction, maintainability, source-faithful behavior.
-- UX/UI: polished flows, empty/loading/error/blocked/success states, accessibility, responsive behavior.
-- Backend/API: validation, auth/tenant/privacy boundaries, provider contracts, error semantics.
-- State/runtime: persistence, migrations, indexing jobs, env/config, workers, runtime observability.
-- QA/evaluation: tests, build, retrieval metrics, answer metrics, evidence quality, no fake proof.
-- Security/infra: secrets, destructive re-index/delete, external writes, live providers, deployment and cost approvals.
-
-## Execution authority model
-
-- Root/local `AGENTS.md` files in the implementation project are scope governors, not product brains. They preserve architecture, safety, quality gates, and local workflow; they do not broaden the current phase.
-- `.buildprint/next-agent.md` is continuity for fresh sessions. It must identify current phase, objective, recommended next action, known blockers, and which phase-run artifacts already exist.
-- `03-phases/phase-flow.md` is the executable phase-entry constitution. It controls how each phase begins, how roles are assembled, how bounded handoffs are created, and when evidence may be appended.
-- Explicit task or handoff text is the only valid source of delegated role, allowed scope, proof command, and evidence requirements. Do not rely on workers guessing their authority.
-
-## Delegation and handoff protocol
-
-For each phase, the orchestrating main session must create bounded assignments before delegating or simulating specialist work. Each assignment includes phase id, proof gate, files to read, allowed edit scope, non-goals, success criteria, verification command, evidence row requirements, and risks/blockers. Specialist workers return changed files, proof results, an evidence row draft, and risks. The orchestrator reviews and integrates their output, runs the phase proof gate, appends runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`, and updates `.buildprint/progress.md` plus `.buildprint/next-agent.md` before moving on. Vague global delegation is invalid.
-
-## AGENTS.md plan
-
-The blueprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` after this setup is resolved.
-
-- Root `AGENTS.md`: product scope, RAG architecture rules, provider modes, quality gates, safety/permissions, workflow, and local instruction map.
-- Local `AGENTS.md` files: create only at real architectural boundaries such as frontend/app, backend/API, retrieval/domain, data/db/search, jobs/workers, providers, or tests/eval.
-- Local files may narrow rules for their subtree but must not weaken root safety, quality, evidence, or architecture invariants.
-
-## Quality gates
-
-Before claiming any phase done:
-
-- Run the smallest meaningful typecheck/lint/test/build gate for changed code.
-- Run deterministic fixture retrieval/answer/eval checks without live credentials.
-- For UI-facing work, verify user-visible behavior with browser/screenshot evidence when possible.
-- For backend/provider/state work, verify real request/path, persistence/readback, index update/readback, or record an honest blocker.
-- For live providers, record credentials/config availability, provider mode, latency/cost labels, and whether evidence is live or deterministic proof.
-- Do not skip tests, hide failures, or upgrade claims without proof.
-
-## Safety and permissions
-
-Ask before destructive actions, external writes/publishes/deploys, secret handling, paid services, irreversible migrations, public data changes, or corpus deletion/re-indexing that could lose data.
-
-Never commit secrets, private logs, credentials, raw private corpus data, provider tokens, or traces that reveal unauthorized content.
-
-Permission and tenant filters must be server-side and must run before context packing, answer generation, citation exposure, and user-visible traces.
-
-## Open questions and assumptions
+## Open assumptions
 
 For each unresolved choice, record:
 

@@ -1,22 +1,22 @@
 # Project Setup
 
-This setup contract is completed before phase implementation. It turns short human alignment and mapped source evidence into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
+This setup contract is completed before phase implementation. It turns short human alignment and mapped mapped observations into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
 
-## Human preferences
+## Setup defaults
 
 - Human answers come from `01-questions.md`.
-- Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from source evidence and product goals.
+- Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from mapped observations and product goals.
 - Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
-## Inferred project shape
+## Product shape
 
 - Product: Portable Novel-to-Storyboard Pipeline
-- Frontend/UI surfaces: infer from phase UX/UI requirements and source evidence.
-- Backend/API surfaces: infer from phase interfaces touched and source evidence.
-- State/runtime surfaces: infer from phase state/runtime touched and source evidence.
+- Frontend/UI surfaces: infer from phase UX/UI requirements and mapped observations.
+- Backend/API surfaces: infer from phase interfaces touched and mapped observations.
+- State/runtime surfaces: infer from phase state/runtime touched and mapped observations.
 - Tests/evaluation: derive from `04-evaluation.md` and phase proof gates.
 
-## Stack decisions
+## Architecture decisions
 
 Record decisions with short evidence, not bureaucracy:
 
@@ -45,7 +45,15 @@ Production-grade architecture is the default for the selected full-suite packet.
 
 Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
 
-## Source contract anchors
+## Workbench UX quality contract
+
+- UI architecture: define a real UI boundary, component/state ownership, controller/API integration, and browser proof path for any user-facing phase.
+- Product composition: start from the primary workflow surface, not a generic dashboard, default form, or marketing shell.
+- Domain-specific affordances: represent domain objects with appropriate workbench affordances instead of raw text-list substitutes.
+- Visual system: define hierarchy, density, typography, spacing, color, focus, disabled, loading, error, blocked, and success states.
+- Screenshot critique: browser or screenshot evidence must critique visual hierarchy, responsive behavior, accessibility, and local-MVP risk before UX proof can upgrade.
+
+## Mapped contract anchors
 
 Promote concrete source observations into implementation contracts before starting phases:
 
@@ -55,7 +63,7 @@ Promote concrete source observations into implementation contracts before starti
 - Durable state, generated artifacts, retention, import/export, and delete/reset behavior: generated output: scripts/storyboards/media previews/exports; runtime artifact: evidence reports and browser screenshots.
 - UI flow/state anchors including empty/loading/error/blocked/success states: project setup, ingestion, script workspace, storyboard board, media task states, export manifest, and provider-blocked states must be visible.
 
-## Source capability/surface ledger
+## Product obligation/surface matrix
 
 - Surface id: SRC-AUTH-PROJECT
   - Source anchor: local login, project metadata, settings, and DB initialization surfaces.
@@ -108,62 +116,17 @@ Rules:
 - Source repository filenames are source anchors, not packet file references.
 - Future files produced by the implementation/product are runtime artifacts or generated outputs, not packet files.
 
-## Architecture rules
+## Implementation project setup
 
-- Preserve product behavior and source-derived obligations; frameworks are replaceable when behavior and proof remain intact.
-- Keep dependency direction explicit: UI -> application/service -> domain -> data/provider adapters.
-- Keep routes/controllers thin; put business rules in domain/service layers.
-- Put external API/provider/database access behind adapters or repositories.
-- Do not claim durable behavior from in-memory-only state unless explicitly scoped as a prototype blocker.
-- Generated code must be marked and regenerated through documented commands.
-- Defaults must be appropriate, evidence-grounded, and no more complex than the product needs.
+The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
-## Team operating model
+- Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
+- Creating only `AGENTS.md` is not enough to satisfy the setup gate.
+- Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
 
-Use these review lenses during every implementation loop:
-
-- Architecture: boundaries, dependency direction, maintainability, source-faithful behavior.
-- UX/UI: polished flows, empty/loading/error/success states, accessibility, responsive behavior.
-- Backend/API: validation, auth/tenant/privacy boundaries, provider contracts, error semantics.
-- State/runtime: persistence, migrations, env/config, workers/jobs, runtime observability.
-- QA/evaluation: tests, build, browser/runtime checks, evidence quality, no fake proof.
-- Security/infra: secrets, destructive actions, external writes, deployment and cost approvals.
-
-## Execution authority model
-
-- Root/local `AGENTS.md` files in the implementation project are scope governors, not product brains. They preserve architecture, safety, quality gates, and local workflow; they do not broaden the current phase.
-- `.buildprint/next-agent.md` is continuity for fresh sessions. It must identify current phase, objective, recommended next action, known blockers, and which phase-run artifacts already exist.
-- `03-phases/phase-flow.md` is the executable phase-entry constitution. It controls how each phase begins, how roles are assembled, how bounded handoffs are created, and when evidence may be appended.
-- Explicit task or handoff text is the only valid source of delegated role, allowed scope, proof command, and evidence requirements.
-
-## Delegation and handoff protocol
-
-For each phase, the orchestrating main session must create bounded assignments only when real delegation happens. Each assignment includes phase id, proof gate, files to read, allowed edit scope, non-goals, success criteria, proof command or verification command, evidence row requirements, and risks/blockers. Specialist workers return changed files, proof results, an evidence row draft, and risks. The orchestrator reviews and integrates their output, runs the phase proof gate, appends runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`, and updates `.buildprint/progress.md` plus `.buildprint/next-agent.md` before moving on. If no real delegation happens, write compact team-gates instead of fake handoff paperwork.
-
-## AGENTS.md plan
-
-The blueprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` after this setup is resolved.
-
-- Root `AGENTS.md`: project shape, architecture rules, quality gates, safety/permissions, workflow, and local instruction map.
-- Local `AGENTS.md` files: create only at real architectural boundaries such as frontend/app, backend/API, packages/ui, data/db, infra, or tests/e2e.
-- Local files may narrow rules for their subtree but must not weaken root safety, quality, or architecture invariants.
-
-## Quality gates
-
-Before claiming any phase done:
-
-- Run the smallest meaningful typecheck/lint/test/build gate for changed code.
-- For UI-facing work, verify user-visible behavior with browser/screenshot evidence when possible.
-- For backend/provider/state work, verify real request/path, persistence/readback, or record an honest blocker.
-- Do not skip tests, hide failures, or upgrade claims without proof.
-
-## Safety and permissions
-
-Ask before destructive actions, external writes/publishes/deploys, secret handling, paid services, irreversible migrations, or public data changes.
-
-Never commit secrets, private logs, credentials, or provider tokens.
-
-## Open questions and assumptions
+## Open assumptions
 
 For each unresolved choice, record:
 

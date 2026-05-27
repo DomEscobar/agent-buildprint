@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -31,14 +33,14 @@ requires_roles:
 
 The implementation project has a concrete RAG scope decision, threat model, typed domain contracts, fixture corpus, and deterministic proof path for public/private retrieval cases. It is clear which backend, auth identity, storage, search, and provider modes are baseline, live, blocked, or deferred.
 
-## Source evidence
+## Mapped product obligations
 
 - Legacy source required corpus and threat-model alignment before implementation: document types, tenants, permissions, freshness, answer-risk level, citations, refusal policy, latency/cost budget, target stack, and search infrastructure.
 - Legacy contracts defined access scope, document source, chunk, query plan, candidate, reranked context, RAG answer, and eval case records.
 - Legacy proof used public and private fixture chunks, deterministic lexical/dense-like scoring, citations, unsupported refusal, and unauthorized private filtering.
 - Legacy non-goals disallowed production claims from local proof, vector-only completion, uncited answers, provider credential requirements for tests, and live-provider claims from adapter interfaces.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Corpus and threat model: preserve. Equivalent target behavior is a setup/config document or implementation artifact that records corpus, tenant, permission, freshness, risk, citation, refusal, latency, cost, stack, and provider decisions. Compatibility impact: none unless the human selects a live paid provider or destructive index path.
 - Type/domain contracts: preserve. Equivalent target behavior may use local language/framework types but must keep stable ids, source metadata, access scopes, spans, citations, traces, eval cases, and refusal fields. Compatibility impact: field names may adapt; semantics cannot disappear.
@@ -73,6 +75,9 @@ Do not implement full indexing, retrieval ranking, or answer generation beyond c
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 If the project has UI, add or plan visible states for no corpus, setup blocked, private/unauthorized content unavailable, and insufficient-evidence/refusal copy. If not user-facing, write `None — reason:` in the UX review and record downstream UI obligations for the query/eval phases.
 
 ## Safety/security constraints
@@ -87,6 +92,10 @@ No live provider calls, paid services, corpus export, public deployment, or dest
 - Static check or review that no live provider is required for tests.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-01-corpus-contracts
 Required proof types:

@@ -4,11 +4,13 @@ Generated from: blueprint.yaml
 
 This generated prompt is convenience copy only. It is not source of truth and not authoritative.
 
-Start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, the active phase file, `04-evaluation.md`, `05-evidence/evidence-ledger.jsonl`, and `05-evidence/evidence-ledger.schema.json`.
+Start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, the required `06-contracts/<role>.md` files for the active phase, the active phase file, `04-evaluation.md`, `05-evidence/evidence-ledger.jsonl`, and `05-evidence/evidence-ledger.schema.json`.
 
 Do not start phase work until project setup is explicit enough to create root/local project `AGENTS.md` alignment.
 
-Use the implementation loop and repair routing before claiming done.
+Use the phase-flow orchestration protocol, implementation loop, and repair routing before claiming done.
+
+You are the orchestrator. When your environment supports subagents, delegated workers, or parallel specialist sessions, use them for the required role gates. Keep each delegation bounded to the active phase, matching `06-contracts/<role>.md`, relevant project files, allowed edit scope, proof expectations, and evidence row requirements. If subagents are unavailable, self-simulate each role and write the same `.buildprint/phase-runs/<phase-id>/returns/<role>.md` artifact.
 
 Production-grade architecture is the default: implement auth/session/tenant boundaries, provider adapters/config/tests, durable persistence, worker/runtime ownership, deployment/ops shape, observability, security controls, and repeatable browser/e2e proof before accepting live-proof blockers.
 

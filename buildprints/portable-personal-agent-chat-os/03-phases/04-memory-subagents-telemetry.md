@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -31,13 +33,13 @@ requires_roles:
 
 Complete the runtime intelligence layer: memory tiers, context assembly, compaction, checkpoint inspection, bounded subagent/team tasks, summarized team returns, and normalized token telemetry.
 
-## Source evidence
+## Mapped product obligations
 
 - Source paths agent/memory.py and agent/compactor.py show long-term memory, raw history, daily episodes, checkpoint handling, and compaction.
 - Source paths agent/subagents/* and agent/team/* show delegated tasks, team bus/events/store/tools.
 - Source path agent/telemetry.py and UI token view signals show usage telemetry visible outside the runtime loop.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Raw history, daily episodes, curated long-term memory, checkpoints, and attachment/source summaries: preserve with equivalent target behavior and durable storage.
 - Context builder order: preserve ordering of runtime instructions, long-term memory, selected skills, team context, recent messages, attachments, and tool results.
@@ -62,6 +64,9 @@ Implement compaction threshold behavior with deterministic compactor output, ret
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Runtime state must support memory viewer/editor, checkpoint viewer, team task statuses (`created`, `started`, `message`, `completed`, `failed`), token usage current turn/session/provider totals, and clear blocked states for compaction or delegation failures.
 
 ## Safety/security constraints
@@ -77,6 +82,10 @@ Do not silently drop user instructions during compaction. Curated long-term memo
 - Telemetry test for normalized counters, compaction count, context-window percent, and per-provider aggregate.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-04-memory-subagents-telemetry
 Required proof types:

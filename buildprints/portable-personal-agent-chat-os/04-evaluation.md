@@ -44,3 +44,7 @@ A blocker preserves scope. Do not silently downgrade the product, hide missing p
 Some blockers prevent claim qualification without blocking later implementation. Missing live credentials, unavailable browser/e2e tooling, screenshot tooling, deployment authorization, or external services should be recorded as non-upgrading blocker rows and may set `blocks_continuation: false` when the phase's core local implementation path, persistence, safety checks, and runtime/API proof passed.
 
 Do not use `blocks_continuation: false` for failed core implementation, failed owned persistence, failed local runtime/API proof, unresolved destructive/security ambiguity, missing required project structure, or any condition that makes downstream phases unsafe or invalid.
+
+## Visual quality gate
+
+- visual_quality_gate upgrades only after browser/screenshot evidence is reviewed against the active UX contract and no blocking local-MVP, default-control, generic dashboard, or raw text-list defect remains.

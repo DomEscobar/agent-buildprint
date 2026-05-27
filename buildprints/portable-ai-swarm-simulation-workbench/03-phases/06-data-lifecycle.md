@@ -1,4 +1,4 @@
-# Phase 06 â€” History And Data Lifecycle
+# Phase 06 Ã¢â‚¬â€ History And Data Lifecycle
 
 ## How to implement this phase
 
@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, resolve every role in `requires_roles` to `06-contracts/<role>.md`, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, write bounded handoffs for every required role, use subagents/delegated workers when available or self-simulate when unavailable, write return artifacts for every required role, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -74,7 +74,7 @@ Downstream slices may rely on persisted identifiers, state transitions, provider
 
 - API/routes/adapters/frontend-backend contracts: identify and implement only those required by this phase.
 - Provider/tool contracts: implement provider adapter/config/test seams before live proof; disclose deterministic, sandbox, or live mode where provider behavior is claimed.
-- None â€” reason: only if this phase truly touches no interface boundary.
+- None Ã¢â‚¬â€ reason: only if this phase truly touches no interface boundary.
 
 ## State/runtime touched
 

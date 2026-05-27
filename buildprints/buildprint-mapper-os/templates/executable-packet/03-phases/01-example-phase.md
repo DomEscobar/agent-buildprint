@@ -1,4 +1,4 @@
-# Phase 01 — <phase-name>
+# Phase 01 â€” <phase-name>
 
 ## How to implement this phase
 
@@ -11,14 +11,18 @@ Before writing code, read:
 Then execute this phase through `03-phases/phase-flow.md`:
 
 1. declare phase objective
-2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`
-3. implement the first real vertical path
-4. review architecture/UX/QA
-5. verify
-6. write proof
-7. record evidence
+2. resolve every role in `requires_roles` to `06-contracts/<role>.md`
+3. write runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`
+4. write bounded handoffs for every required role
+5. use subagents/delegated workers when available, otherwise self-simulate the role
+6. write return artifacts for every required role
+7. implement the first real vertical path
+8. review architecture/UX/QA
+9. verify
+10. write proof
+11. record evidence
 
-Create handoff/return files only when real delegation happens.
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -46,7 +50,7 @@ Describe the smallest real vertical implementation path.
 
 - API/routes/adapters/frontend-backend contracts:
 - Provider/tool contracts:
-- None — reason:
+- None â€” reason:
 
 ## State/runtime touched
 
@@ -56,11 +60,11 @@ Describe the smallest real vertical implementation path.
 - Production runtime: define worker queue ownership, retry/cancel/failure recovery, progress persistence, restart behavior, and health/observability hooks when this phase touches async or runtime behavior.
 - Data lifecycle: define migrations, retention/delete/export, backup/readback, upload limits, object/file storage, and sensitive data handling when this phase touches durable state or uploads.
 - Runtime artifacts/generated outputs: label future product files explicitly as runtime artifacts or generated outputs; do not use naked ambiguous file refs.
-- None — reason:
+- None reason:
 
 ## UX/UI requirements
 
-Describe user-facing states: empty, loading, error, blocked, success/ready, responsive, accessible. If not user-facing, write `None — reason:`.
+Describe user-facing states: empty, loading, error, blocked, success/ready, responsive, accessible. If not user-facing, write `None â€” reason:`.
 
 For UI-bearing phases, also define the product-grade visual contract: screen composition, domain-specific interaction model, visual hierarchy, typography/spacing/color/density, focus/disabled states, mobile/desktop expectations, and screenshot critique requirements. A generic card/form shell, raw text-list substitute, default-control page, dead control, or single embedded HTML/CSS/JS file for a full-suite browser product must be a UX blocker, not a pass.
 

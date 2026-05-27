@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this current phase through `03-phases/phase-flow.md`:
+Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this current phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -32,14 +34,14 @@ requires_roles:
 
 The completed studio has private-by-default gallery and video detail behavior, consent-gated mock/manual publish handoff payloads, final validation report, claim wording controls, and evidence that the full product scope is implemented or honestly blocked without shrinking the product.
 
-## Source evidence
+## Mapped product obligations
 
 - Source path `app.py` rendered gallery and video detail pages with metadata and served output videos.
 - Source path `app.py` Upload-Post handler built platform-specific social handoff payloads.
 - Source path `s3_uploader.py` showed optional public storage and gallery metadata behavior.
 - Source validation docs required browser QA, MP4 probe, provider mode, screenshots, and safe claim wording.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - gallery-and-video-pages: preserve. Equivalent target behavior: gallery API/page and video detail render only consented metadata and playable local video refs. Compatibility impact: public SEO exposure is blocked by default until privacy/access controls are proven.
 - social-publish-handoff: preserve. Equivalent target behavior: selected platforms, title, description, schedule, timezone, consent, mock/manual handoff result, provider request record. Compatibility impact: no direct official platform publishing claim.
@@ -65,6 +67,9 @@ Implement gallery metadata persistence, consent checks, gallery and video detail
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Gallery must communicate private-by-default behavior and show only consented videos. Video detail must show metadata and player only when consent allows it. Publish handoff must use platform checkboxes, title/description fields, schedule/timezone inputs, consent gate, blocked reason without consent, and mock/manual prepared result with limitations. Final UI must not bury limitations or make publishing appear automatic.
 
 ## Safety/security constraints
@@ -81,6 +86,10 @@ No public gallery exposure without explicit consent. No live publish or storage 
 - Production build and relevant full test suite.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-05-gallery-publish-validation
 Required proof types:

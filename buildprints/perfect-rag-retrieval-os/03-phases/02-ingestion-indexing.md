@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -31,14 +33,14 @@ requires_roles:
 
 The implementation project can ingest or update document sources, normalize text, produce stable citeable chunks with access scopes and token estimates, and write/read the retrieval index surfaces required for lexical/sparse and dense retrieval. Production durability is either proven by readback or blocked honestly; deterministic proof mode remains available.
 
-## Source evidence
+## Mapped product obligations
 
 - Legacy requirements included stable source ids, checksums, updated timestamps, metadata, access scopes, chunk ids, source spans, token estimates, and contextualized chunk text.
 - Legacy architecture required normalize -> chunk -> optional contextualized text -> lexical/sparse index plus dense index.
 - Legacy acceptance required fixture ingestion/update path can add or update documents before retrieval.
 - Legacy evidence boundary said offline proof is not evidence of durable ingestion, live vector search, or production index updates.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Source ingestion/update path: preserve. Equivalent target behavior is a service, job, command, or API route that adds/updates sources by stable id and checksum. Compatibility impact: route shape may vary, but update semantics and validation must exist.
 - Chunking with spans and token estimates: preserve. Equivalent target behavior can use project-local tokenizer estimates but must keep citeable source spans and stable chunk ids. Compatibility impact: token counts may be estimates if labeled.
@@ -75,6 +77,9 @@ Do not implement final answer generation in this phase except as a smoke path fo
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 If UI exists, show corpus empty state, upload/import or source connection state, indexing progress, failed source validation, blocked provider credentials, successful update, and destructive re-index/delete confirmation. If no UI exists, record downstream UI obligations in the UX review.
 
 ## Safety/security constraints
@@ -90,6 +95,10 @@ Validate tenant and permission metadata at ingestion. Do not ingest raw private 
 - Security test or review proving private access metadata survives chunking and indexing.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-02-ingestion-indexing
 Required proof types:

@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -31,13 +33,13 @@ requires_roles:
 
 Expose the personal agent OS as a usable local workbench: bootstrap state, streamed chat, traces, provider diagnostics, tools, skills, MCP, memory, team, tokens, config diagnostics, accessible error states, and no-credential deterministic operation.
 
-## Source evidence
+## Mapped product obligations
 
 - Source path agent/webui.py shows WebSocket/HTTP boundary and bootstrap/config/memory/tokens/model routes.
 - Source paths webui/src/views show chat, model, tools, skills, MCP, memory, team, tokens, and config workbench tabs.
 - Runtime source signals require trace, memory, token, provider, skill, tool, and team state to be observable.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Workbench UI breadth: preserve with equivalent target behavior. Compatibility impact: exact Vue UI, visual style, copy, assets, and metaphor are dropped.
 - Chat stream and trace view: preserve. Compatibility impact: transport may be SSE, WebSocket, fetch stream, or equivalent if event contract is maintained.
@@ -62,6 +64,9 @@ Implement local UI/API paths that exercise the deterministic runtime: bootstrap,
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Design a dense, utilitarian local workbench rather than a landing page. Required states: empty chat, streaming/loading, tool denied/blocked, provider error, MCP disabled/timeout, memory empty/edited, team task created/completed/failed, token totals ready, config diagnostics blocked/ready, responsive desktop/mobile layout, keyboard-accessible controls, no incoherent overlap.
 
 ## Safety/security constraints
@@ -77,6 +82,10 @@ Do not display or store secret values. Dangerous actions need clear blocked/appr
 - Claim-boundary review for unsupported live/external/hosted features.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-06-webui-api-workbench
 Required proof types:

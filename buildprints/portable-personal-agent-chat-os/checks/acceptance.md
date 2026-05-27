@@ -1,7 +1,7 @@
 # Acceptance Checklist
 
 - [ ] `BUILDPRINT.md` is the canonical entry point.
-- [ ] `02-project-setup.md` defines architecture, team model, execution authority, handoffs, `AGENTS.md` plan, quality gates, safety, assumptions, and phase start gate.
+- [ ] `02-project-setup.md` defines product shape, architecture decisions, production readiness, implementation setup, assumptions, and phase start gate.
 - [ ] Every implementation phase starts through `03-phases/phase-flow.md`.
 - [ ] Every phase creates phase-run artifacts before runtime evidence.
 - [ ] Runtime evidence is appended only to `.buildprint/evidence/evidence-ledger.jsonl`.

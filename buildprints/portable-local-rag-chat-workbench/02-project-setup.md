@@ -1,14 +1,14 @@
 # Project Setup
 
-## Human preferences
+## Setup defaults
 
 No blocking preference is required for the first implementation. Use AI best judgment and highest-quality appropriate defaults from `01-questions.md`.
 
-## Inferred project shape
+## Product shape
 
-Build a source-independent local-first RAG chat workbench inspired by Maxkrvo/OllamaChat source evidence: streaming chat, Ollama-compatible provider configuration, persisted conversations, document ingestion, SQLite/libSQL vector search, citations, memory, settings, and browser workbench states.
+Build a source-independent local-first RAG chat workbench inspired by Maxkrvo/OllamaChat mapped observations: streaming chat, Ollama-compatible provider configuration, persisted conversations, document ingestion, SQLite/libSQL vector search, citations, memory, settings, and browser workbench states.
 
-## Stack decisions
+## Architecture decisions
 
 - Frontend/runtime: Next.js or equivalent full-stack TypeScript web runtime.
 - Provider: Ollama-compatible adapter with deterministic no-network test double and live runtime mode.
@@ -31,7 +31,15 @@ Fast replay ordering: for phases 01 and 02, create the first valid runtime evide
 
 The early ledger is only `checkpoint_recorded`. It is not `phase_core_passed`. UI-bearing phases must still prove a local user action path through a UI/controller boundary into provider/runtime/data behavior and back into visible state/readback before the phase core is considered passed. Static state cards, generic dashboards, or dead buttons are not enough.
 
-## Source contract anchors
+## Workbench UX quality contract
+
+- UI architecture: define a real UI boundary, component/state ownership, controller/API integration, and browser proof path for any user-facing phase.
+- Product composition: start from the primary workflow surface, not a generic dashboard, default form, or marketing shell.
+- Domain-specific affordances: represent domain objects with appropriate workbench affordances instead of raw text-list substitutes.
+- Visual system: define hierarchy, density, typography, spacing, color, focus, disabled, loading, error, blocked, and success states.
+- Screenshot critique: browser or screenshot evidence must critique visual hierarchy, responsive behavior, accessibility, and local-MVP risk before UX proof can upgrade.
+
+## Mapped contract anchors
 
 Source repo: https://github.com/Maxkrvo/OllamaChat.
 
@@ -43,7 +51,7 @@ Observed source anchors:
 
 Use these observations to preserve product behavior. Do not require the implementation agent to clone or depend on the source repo.
 
-## Source capability/surface ledger
+## Product obligation/surface matrix
 
 Target disposition values: preserve | replace | merge | defer | drop.
 
@@ -54,41 +62,19 @@ Target disposition values: preserve | replace | merge | defer | drop.
 | Memory/settings workbench | preserve | User can review/configure memory and model/RAG settings | UI composition may differ if states and proof pass |
 | Voice sidecar | defer | Optional self-hosted speech provider remains out of compact packet scope | Must not be claimed unless implemented and proven |
 
-## Architecture rules
+Required fields: Product obligation, Target disposition, preserve | replace | merge | defer | drop, Target contract, owning phase.
 
-Implement vertical slices, not route-shaped shells. Provider adapters, persistence, ingestion/indexing, UI state, and evidence commands must connect through real code paths. Deterministic test doubles may support local proof but cannot satisfy live provider claims.
+## Implementation project setup
 
-## Team operating model
+The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
-Required roles for all phases: product-architect, ux-ui-craft, integration-runtime, data-persistence, security-boundary, and test-and-verification. The main session may perform these roles directly, but it must record compact gates in `.buildprint/phase-runs/<phase-id>/team-gates.md`.
+- Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
+- Creating only `AGENTS.md` is not enough to satisfy the setup gate.
+- Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
 
-## Execution authority model
-
-The Buildprint packet controls scope. The implementation project may have a root/local `AGENTS.md` as a scope governor only. `.buildprint/next-agent.md` controls continuity and handoff state between sessions.
-
-## Delegation and handoff protocol
-
-Use bounded assignment when real delegation happens. Each assignment must name the phase, files or surfaces allowed, proof command or verification command, expected return, evidence row requirements, and integration review owner. If no real delegation happens, write compact team-gates instead of fake handoff paperwork.
-
-## AGENTS.md plan
-
-Create implementation-project `AGENTS.md` only after this setup is understood. It must state: follow this Buildprint, execute one phase at a time, do not edit packet snapshots, write runtime proof to `.buildprint/evidence/evidence-ledger.jsonl`, preserve provider/persistence/browser proof honesty, and route failures through `03-phases/phase-flow.md`.
-
-## Runtime setup artifact
-
-Before starting any `03-phases/*` work, write `.buildprint/setup.md` or files under `.buildprint/setup/` in the implementation workspace. This is runtime state, not packet content.
-
-The setup artifact must record concrete decisions for auth/session/tenant ownership, provider adapters/env/config/test doubles, durable persistence and readback/restart behavior, worker/runtime limitations or queue ownership, deployment/ops/local dev shape, browser/e2e proof plan, safety/permission rules, and verification commands. Creating only `AGENTS.md` is not enough to satisfy the setup gate.
-
-## Quality gates
-
-Minimum gates: dependency install/build or typecheck, unit/integration tests for provider and persistence, negative tests for provider/indexing failures, repeatable browser/e2e for UI flows, no-fake scan, and evidence ledger validation.
-
-## Safety and permissions
-
-Ask before external writes, paid providers, deployments, secrets, irreversible migrations, or destructive actions beyond local test data. Never expose secrets in logs, screenshots, UI, reports, or evidence rows.
-
-## Open questions and assumptions
+## Open assumptions
 
 Assume local deterministic provider mode until Ollama runtime is supplied. Assume SQLite/libSQL persistence. Assume local dev plus Docker-ready production shape. Assume single-user local mode unless user asks for multi-user auth.
 

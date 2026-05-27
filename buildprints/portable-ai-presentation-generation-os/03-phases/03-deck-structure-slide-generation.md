@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, resolve every role in `requires_roles` to `06-contracts/<role>.md`, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, write bounded handoffs for every required role, use subagents/delegated workers when available or self-simulate when unavailable, write return artifacts for every required role, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -19,7 +19,7 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 A validated outline becomes a persisted editable presentation with slide records, selected layouts, generated content, and table-of-contents/title-slide rules.
 
-## Source evidence
+## Mapped product obligations
 
 - `api/v1/ppt/endpoints/presentation.py` implements create, prepare, stream, generate, edit, derive, get, list, update, and delete presentation routes.
 - `utils/llm_calls/generate_presentation_structure.py` generates slide layout structure.
@@ -29,7 +29,11 @@ A validated outline becomes a persisted editable presentation with slide records
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
+
+- Disposition language: preserve | replace | merge | defer | drop.
+- Equivalent target behavior: preserve the phase product outcome through source-independent implementation.
+- Compatibility impact: mapped route/function names are observations, not mandatory parity.
 
 - Source surface: `SRC-DECK-SLIDES` from `02-project-setup.md`.
 - Target disposition: preserve unless `02-project-setup.md` explicitly says merge/defer/drop for a sub-surface.
@@ -71,6 +75,9 @@ Boundary requirements:
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Use the inline UX/UI requirements in this phase. Any `browser_runtime_trace` proof must include `ux_design_gate` and `screenshot_state_set` coverage for the relevant empty/loading/error/blocked/success states, or an explicit blocker row.
 
 ## Safety/security constraints
@@ -90,6 +97,10 @@ Use the inline UX/UI requirements in this phase. Any `browser_runtime_trace` pro
 - For persistence/provider/export behavior, prove readback/live mode or record a blocker.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 - Proof id: proof-03-deck-structure-slide-generation
 - Required proof types:

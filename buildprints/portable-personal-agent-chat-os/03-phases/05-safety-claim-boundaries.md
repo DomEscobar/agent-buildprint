@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -30,13 +32,13 @@ requires_roles:
 
 Make the operational boundary explicit and executable: dangerous tools are denied by default, secrets are never stored, provider/MCP/live claims are gated, persistence limitations are labeled, and unsupported clone/auth/billing/publishing/browser/network claims are rejected by tests or documentation checks.
 
-## Source evidence
+## Mapped product obligations
 
 - Source tool families include filesystem, shell, web/search, skills scripts, MCP, and subagent paths that can cross local security boundaries.
 - Original packet non-goals explicitly excluded live provider parity, real MCP interoperability, production auth, hosted SaaS, billing, and exact source clone behavior.
 - Comparative JARVIS/ToFu references introduced broader capabilities that must remain optional and non-claimed unless separately implemented.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Shell/filesystem/network/browser/media/retrieval operations: preserve as policy-gated boundaries; default disposition is deny for high-risk classes. Compatibility impact: capability may be blocked until explicitly configured and tested.
 - Secrets and provider credentials: preserve env-handle boundary; source or generated files must not contain secret values.
@@ -61,6 +63,9 @@ Add policy configuration, denied-event tests, no-secret checks, claim-boundary c
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Diagnostics and workbench state must make blocked or unproven behavior visible. UI must not show live provider, real MCP, shell/browser/network, billing, publishing, retrieval, media, or production auth as ready unless evidence exists.
 
 ## Safety/security constraints
@@ -76,6 +81,10 @@ No destructive actions, external writes, paid services, secret handling, browser
 - Audit event test for request, denial, execution, MCP mapping, and subagent delegation.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-05-safety-claim-boundaries
 Required proof types:

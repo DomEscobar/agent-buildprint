@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`:
+Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
 
 1. declare phase objective
 2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
@@ -17,6 +17,8 @@ Then execute this phase through `03-phases/phase-flow.md`:
 5. integrate
 6. verify
 7. record evidence
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -30,14 +32,14 @@ requires_roles:
 
 Create the implementation foundation for a personal agent OS: core domain contracts, config model, durable local stores for sessions/messages/checkpoints/memory/traces/telemetry, and a bootstrap service that can expose current runtime state without live providers or network.
 
-## Source evidence
+## Mapped product obligations
 
 - Source path agent/runner.py implies sessions, checkpoints, stream traces, token tracking, and compaction triggers.
 - Source path agent/webui.py implies bootstrap/config/memory/tokens/model routes.
 - Source path agent/memory.py and compactor signals imply raw history, daily episodes, long-term memory, checkpoints, and attachment summaries.
 - Source path agent/telemetry.py implies normalized usage counters persisted or queryable for UI.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Streaming session and checkpoint state: preserve through equivalent target behavior in `AgentSession`, message store, trace store, and checkpoint store. Compatibility impact: storage shape may differ; session recovery behavior must remain.
 - Provider/tool/skill/MCP config records: preserve through typed config contracts. Compatibility impact: exact source config file formats may be replaced by a cleaner target format.
@@ -63,6 +65,9 @@ Implement the smallest real foundation that later phases can build on: domain ty
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 No full UI implementation yet. Downstream UI obligations: bootstrap must expose enough state for chat/model/tools/skills/MCP/memory/team/tokens/config views to render empty, blocked, and ready states.
 
 ## Safety/security constraints
@@ -77,6 +82,10 @@ Secrets must be represented by env var name or secret handle only. Local storage
 - Security scan or manual assertion that no secrets are committed.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 Proof id: proof-01-contracts-storage
 Required proof types:

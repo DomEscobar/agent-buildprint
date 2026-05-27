@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, resolve every role in `requires_roles` to `06-contracts/<role>.md`, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, write bounded handoffs for every required role, use subagents/delegated workers when available or self-simulate when unavailable, write return artifacts for every required role, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -24,19 +24,19 @@ requires_roles:
 
 User can review, edit, archive, restore, export, and delete memory/settings/conversation/document state while the app keeps model, RAG, memory, and lifecycle controls durable and auditable.
 
-## Source evidence
+## Mapped product obligations
 
 Source surface IDs: SRC-RAG-005, SRC-RAG-006.
 
 Product obligations: automatic memory capture, memory review controls, settings page, export/delete/reindex lifecycle, and grounding eval path.
 
-Source evidence refs:
+Mapped product obligation refs:
 - https://github.com/Maxkrvo/OllamaChat README describes automatic memory capture, memory review page, settings controls, and model/RAG configuration.
 - https://github.com/Maxkrvo/OllamaChat README describes document management, reindex/delete, grounding evals, and database-backed state.
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
 - Surface id: SRC-RAG-005 memory/settings.
   - Disposition: preserve capability, target route/function names may differ.
@@ -85,6 +85,9 @@ Provider-backed behavior must disclose deterministic-test-double, sandbox live, 
 
 ## UX/UI requirements
 
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
+
+
 Memory/settings UI must include empty, populated, editing, archived, restored, delete-confirmation, blocked-provider, export-success, and error states. UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence. Screenshots alone do not satisfy UI completion.
 
 ## Safety/security constraints
@@ -103,6 +106,10 @@ Memory/settings UI must include empty, populated, editing, archived, restored, d
 - Run no-fake scan for no-op buttons and static exports.
 
 ## Proof gate
+
+Additional production proof tracks:
+- visual_quality_gate
+
 
 - Proof id: proof-03-memory-settings-lifecycle
 - Required proof tracks:

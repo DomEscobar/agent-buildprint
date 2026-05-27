@@ -19,43 +19,15 @@
   ],
   "files": [
     {
-      "path": "BUILDPRINT.md",
-      "role": "source"
-    },
-    {
-      "path": "CONTRACTS.md",
-      "role": "source"
-    },
-    {
-      "path": "METHODOLOGY.md",
-      "role": "source"
-    },
-    {
-      "path": "PLAN.md",
-      "role": "source"
-    },
-    {
-      "path": "README.md",
-      "role": "source"
-    },
-    {
-      "path": "SPEC.md",
-      "role": "source"
-    },
-    {
-      "path": "VERIFICATION.md",
-      "role": "source"
-    },
-    {
-      "path": "HOW_TO_EVAL.md",
-      "role": "source"
-    },
-    {
       "path": "acceptance.yaml",
       "role": "source"
     },
     {
       "path": "buildprint.json",
+      "role": "source"
+    },
+    {
+      "path": "BUILDPRINT.md",
       "role": "source"
     },
     {
@@ -67,7 +39,7 @@
       "role": "source"
     },
     {
-      "path": "evals/README.md",
+      "path": "CONTRACTS.md",
       "role": "source"
     },
     {
@@ -135,31 +107,7 @@
       "role": "source"
     },
     {
-      "path": "evals/golden-projects/malicious-secrets/.env.example",
-      "role": "source"
-    },
-    {
-      "path": "evals/golden-projects/malicious-secrets/README.md",
-      "role": "source"
-    },
-    {
-      "path": "evals/golden-projects/malicious-secrets/expected-signals.json",
-      "role": "source"
-    },
-    {
-      "path": "evals/golden-projects/malicious-secrets/package.json",
-      "role": "source"
-    },
-    {
-      "path": "evals/golden-projects/malicious-secrets/src/agent.ts",
-      "role": "source"
-    },
-    {
       "path": "evals/golden-projects/local-rag-chat/.env.example",
-      "role": "source"
-    },
-    {
-      "path": "evals/golden-projects/local-rag-chat/README.md",
       "role": "source"
     },
     {
@@ -172,6 +120,10 @@
     },
     {
       "path": "evals/golden-projects/local-rag-chat/prisma/schema.prisma",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/README.md",
       "role": "source"
     },
     {
@@ -196,6 +148,26 @@
     },
     {
       "path": "evals/golden-projects/local-rag-chat/src/lib/rag/ingest.ts",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/malicious-secrets/.env.example",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/malicious-secrets/expected-signals.json",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/malicious-secrets/package.json",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/malicious-secrets/README.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/malicious-secrets/src/agent.ts",
       "role": "source"
     },
     {
@@ -251,6 +223,10 @@
       "role": "source"
     },
     {
+      "path": "evals/README.md",
+      "role": "source"
+    },
+    {
       "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/01-questions.md",
       "role": "source"
     },
@@ -263,11 +239,11 @@
       "role": "source"
     },
     {
-      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/03-phases/phase-index.yaml",
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/03-phases/phase-flow.md",
       "role": "source"
     },
     {
-      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/03-phases/phase-flow.md",
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/03-phases/phase-index.yaml",
       "role": "source"
     },
     {
@@ -283,7 +259,27 @@
       "role": "source"
     },
     {
-      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/BUILDPRINT.md",
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/06-contracts/data-persistence.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/06-contracts/integration-runtime.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/06-contracts/product-architect.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/06-contracts/security-boundary.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/06-contracts/test-and-verification.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/06-contracts/ux-ui-craft.md",
       "role": "source"
     },
     {
@@ -291,11 +287,163 @@
       "role": "source"
     },
     {
+      "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/BUILDPRINT.md",
+      "role": "source"
+    },
+    {
       "path": "evals/selected-output-fixtures/executable-packet-good/selected-buildprint/generated/agent-prompt.md",
       "role": "source"
     },
     {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/01-questions.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/02-project-setup.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/03-phases/01-ingest-record.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/03-phases/phase-flow.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/03-phases/phase-index.yaml",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/04-evaluation.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/05-evidence/evidence-ledger.jsonl",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/05-evidence/evidence-ledger.schema.json",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/06-contracts/data-persistence.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/06-contracts/integration-runtime.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/06-contracts/product-architect.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/06-contracts/security-boundary.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/06-contracts/test-and-verification.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/06-contracts/ux-ui-craft.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/blueprint.yaml",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/BUILDPRINT.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint/generated/agent-prompt.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/01-questions.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/02-project-setup.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/03-phases/01-ingest-record.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/03-phases/phase-flow.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/03-phases/phase-index.yaml",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/04-evaluation.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/05-evidence/evidence-ledger.jsonl",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/05-evidence/evidence-ledger.schema.json",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/06-contracts/data-persistence.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/06-contracts/integration-runtime.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/06-contracts/product-architect.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/06-contracts/security-boundary.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/06-contracts/test-and-verification.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/06-contracts/ux-ui-craft.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/blueprint.yaml",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/BUILDPRINT.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/selected-output-fixtures/unknown-requires-role/selected-buildprint/generated/agent-prompt.md",
+      "role": "source"
+    },
+    {
+      "path": "HOW_TO_EVAL.md",
+      "role": "source"
+    },
+    {
+      "path": "METHODOLOGY.md",
+      "role": "source"
+    },
+    {
       "path": "phases.yaml",
+      "role": "source"
+    },
+    {
+      "path": "PLAN.md",
       "role": "source"
     },
     {
@@ -355,7 +503,15 @@
       "role": "source"
     },
     {
+      "path": "README.md",
+      "role": "source"
+    },
+    {
       "path": "schemas/candidate.schema.json",
+      "role": "source"
+    },
+    {
+      "path": "SPEC.md",
       "role": "source"
     },
     {
@@ -371,11 +527,11 @@
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/03-phases/phase-index.yaml",
+      "path": "templates/executable-packet/03-phases/phase-flow.md",
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/03-phases/phase-flow.md",
+      "path": "templates/executable-packet/03-phases/phase-index.yaml",
       "role": "source"
     },
     {
@@ -391,11 +547,35 @@
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/BUILDPRINT.md",
+      "path": "templates/executable-packet/06-contracts/data-persistence.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/06-contracts/integration-runtime.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/06-contracts/product-architect.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/06-contracts/security-boundary.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/06-contracts/test-and-verification.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/06-contracts/ux-ui-craft.md",
       "role": "source"
     },
     {
       "path": "templates/executable-packet/blueprint.yaml",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/BUILDPRINT.md",
       "role": "source"
     },
     {
@@ -424,6 +604,10 @@
     },
     {
       "path": "templates/teams/ux-ui-craft.md",
+      "role": "source"
+    },
+    {
+      "path": "VERIFICATION.md",
       "role": "source"
     }
   ],
