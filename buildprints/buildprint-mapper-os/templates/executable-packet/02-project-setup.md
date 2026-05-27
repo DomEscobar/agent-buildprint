@@ -8,6 +8,7 @@ This file is the project constitution for implementation. Keep it compact. It sh
 - Blank answers authorize AI best-fit decisions grounded in mapped product obligations.
 - Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 - Full-suite packets default to production-grade architecture, not a local MVP.
+- Do not downgrade to a local MVP unless the selected scope explicitly says prototype-only.
 
 ## Product shape
 
@@ -41,7 +42,7 @@ Record concrete decisions the implementation project must follow:
 
 ## Production readiness contract
 
-Complete these decisions before phase work. Missing credentials, paid-service approval, or deployment authorization can block live proof only after implementation includes adapters, config contracts, tests, and runtime wiring.
+Complete these decisions before phase work. Missing credentials block only live proof after implementation includes adapters, config contracts, tests, and runtime wiring. Paid-service approval or deployment authorization can also block only the matching live/deployment proof track after the local boundary exists.
 
 - Auth/session/tenant boundary: define users/sessions, roles or ownership, tenant/privacy isolation, audit-relevant actions, and denied-path tests. If the mapped product has no auth, define the minimum local/session boundary plus migration path.
 - Provider integration contract: define live provider adapters, env/config names, request/response/error contracts, deterministic test doubles, sandbox/live mode disclosure, and tests.
@@ -84,6 +85,7 @@ Use this compact format:
 
 Rules:
 
+- Product obligation entries must use Target disposition values: preserve | replace | merge | defer | drop.
 - This is not route/function parity. Prefer cleaner target architecture when it preserves or intentionally improves the capability.
 - No mapped surface may disappear silently.
 - Source repo filenames are mapping notes, not packet-file references.

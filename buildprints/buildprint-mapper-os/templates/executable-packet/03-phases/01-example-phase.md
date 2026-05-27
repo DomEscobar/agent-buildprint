@@ -1,6 +1,4 @@
-# Phase 01 - Document ingestion and ontology generation
-
-This file is a prime example of a phase that is small enough for an agent to implement honestly, but strict enough to prevent a fake MVP pass. Adapt the names and product details when generating a selected packet.
+# Phase 01 - Few-Shot: Ingestion to Durable Readback
 
 ## How to implement this phase
 
@@ -15,7 +13,7 @@ Then execute this phase through `03-phases/phase-flow.md`:
 1. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`.
 2. Resolve every role in `requires_roles` to `06-contracts/<role>.md`.
 3. Write `.buildprint/phase-runs/<phase-id>/team-gates.md`.
-4. Write bounded handoffs and returns for every required role, unless the phase-flow in this packet explicitly allows compact self-simulation.
+4. Write bounded handoffs and returns for every required role, unless the active packet's phase-flow explicitly allows compact self-simulation.
 5. Implement the first real vertical path.
 6. Review architecture, UX, and QA.
 7. Verify with commands and browser/runtime artifacts.
@@ -32,24 +30,84 @@ requires_roles:
   - security-boundary
   - test-and-verification
 
+## Few-shot target
+
+This is not a generic phase placeholder. It is a few-shot reference for Mapper OS phase generation: copy the pattern, not the product nouns.
+
+Target agent: Codex/GPT-style coding agent executing a Mapper OS selected Buildprint.
+
+Optimization goal: produce phase Markdown that prevents fake MVP completion by showing a small real vertical slice, explicit proof ceilings, role gates, repair routing, and narrow evidence rows.
+
+## Context to preserve
+
+- Mapper OS phases are not wish lists. Each phase must define one coherent product slice that can be implemented, verified, reviewed, and recorded.
+- A phase may be production-grade in architecture without fully qualifying every production claim in one run.
+- `phase_core_passed` means the owned local path works end to end with real persistence and proof.
+- `claim_qualified` means a specific live-provider, browser, worker, security, deployment, or lifecycle claim has direct matching evidence.
+- Missing credentials, paid services, deployment approval, unavailable browser tooling, or unavailable worker infrastructure may create non-upgrading blocker rows only after the adapter/config/test/runtime boundary exists.
+- Do not upgrade claims from review prose, route-shaped handlers, static screenshots, string checks, deterministic mocks alone, or in-memory state.
+
+## Few-shot pattern to copy
+
+When generating a selected phase, use this sequence:
+
+1. Name the user-visible product outcome.
+2. List mapped obligations as product capabilities, not source route parity.
+3. Define the smallest real vertical path.
+4. Split `Core-pass required` from `Claim-upgrade or blocker tracks`.
+5. Name interfaces, state, runtime, UX, and safety boundaries.
+6. Require tests and browser/runtime proof that match the slice.
+7. Give evidence rows that prove only what the command or artifact actually proves.
+8. Route failures back to the current phase, setup, questions, prior dependency, or runtime evidence ledger.
+
+## Negative few-shot - bad phase slice
+
+Do not generate phases like this:
+
+```md
+## Product outcome
+Users can upload files and get AI insights.
+
+## Implementation scope
+Create an upload route, call the LLM, show a dashboard, and save results.
+
+## Quality gates
+Run tests.
+
+## Proof gate
+Screenshots and deterministic provider prove the phase.
+```
+
+Why this fails:
+
+- "AI insights" is not a product contract.
+- It does not define owner/session behavior, file validation, extraction semantics, persistence, provider modes, blocked states, or readback.
+- It lets route-shaped handlers pass without a service/domain/storage boundary.
+- It treats screenshots and deterministic output as proof for broader production claims.
+- It gives no evidence ceiling, no repair routing, and no distinction between core completion and claim qualification.
+
+## Positive few-shot - prime phase slice
+
+The following example shows the expected level of specificity.
+
 ## Product outcome
 
-A user can create an owned project by uploading text or Markdown seed documents plus a natural-language prediction requirement. The system validates the files, extracts text, generates a deterministic ontology preview with entity and relationship types, stores project metadata, upload records, extracted text, and ontology data durably, then shows the project in the workbench with usable empty, loading, validation-error, provider-blocked, success, retry, reset, and deleted states.
+A user can create an owned project by uploading text or Markdown seed documents plus a natural-language prediction requirement. The system validates the files, extracts text, generates a deterministic ontology preview with entity and relationship types, stores project metadata, upload records, extracted text, and ontology data durably, then shows the result in the workbench with empty, loading, validation-error, provider-blocked, success, retry, reset, and deleted states.
 
 PDF support is not required for `phase_core_passed` unless the selected product explicitly makes PDF the first required upload format. If PDF extraction is not implemented, the UI and API must reject PDF with a clear non-upgrading blocker or unsupported-file response.
 
 ## Mapped product obligations
 
 - Preserve the mapped upload plus ontology-generation product boundary.
-- Preserve allowed seed-document intake, text extraction, preprocessing, project metadata, total text length, prediction requirement, ontology entity definitions, relationship definitions, and analysis summary.
-- Preserve project get/list/delete/reset behavior, but harden it with owner/session checks and destructive-action confirmation.
+- Preserve seed-document intake, text extraction, preprocessing, project metadata, total text length, prediction requirement, ontology entity definitions, relationship definitions, and analysis summary.
+- Preserve project get/list/delete/reset behavior, hardened with owner/session checks and destructive-action confirmation.
 - Preserve the LLM provider boundary through an adapter. Deterministic mode is required for tests; missing `LLM_API_KEY` blocks only live-provider proof.
 
 ## Behavior compatibility contract
 
 - Upload and ontology endpoint: preserve the user-visible boundary. Route names may change only if the frontend adapter and API docs are updated together.
-- Project metadata store: may replace source-shaped file storage with database or object storage only if durable readback, ownership, delete/reset, and migration semantics are implemented.
-- LLM ontology generator: preserve behavior through `OntologyProvider` or equivalent adapter with deterministic and live modes.
+- Project metadata store: may replace source-shaped file storage with database or object storage only if durable readback, ownership, delete/reset, and migration semantics are implemented; the equivalent target behavior and compatibility impact must be explicit.
+- LLM ontology generator: preserve behavior through `OntologyProvider` or an equivalent adapter with deterministic and live modes.
 - Error envelope: preserve clear success/data/error semantics for missing requirement, missing files, unsupported type, extraction failure, provider blocked, denied owner access, and project not found.
 
 ## Implementation scope
@@ -58,7 +116,7 @@ Implement the smallest real vertical path:
 
 - local-owner or authenticated project creation
 - multipart upload for `.txt`, `.md`, and `.markdown`
-- file size, extension, MIME, and safe-name validation
+- file size, extension, MIME, safe-name, and path traversal validation
 - text extraction and normalization for text/Markdown
 - deterministic ontology generation test double
 - live LLM adapter seam with fail-closed missing-config behavior
@@ -166,7 +224,7 @@ Claim-upgrade gates:
 
 ## Proof gate
 
-Proof id: proof-01-ingestion-ontology
+Proof id: proof-01-example-phase
 
 Core-pass proof tracks:
 
@@ -182,7 +240,7 @@ Core-pass proof tracks:
 
 Claim-upgrade or non-upgrading blocker tracks:
 
-- live_provider_proof
+- live_provider_proof_blocker_only
 - pdf_extraction_proof
 - worker_retry_cancel_recovery
 - migration_retention_backup_upload_limits
@@ -193,9 +251,9 @@ Do not copy all proof tracks into one evidence row. Each runtime row must list o
 
 Live credentials, paid services, external deployment approval, unavailable browser tooling, or missing worker infrastructure may block claim qualification only after the core adapter/config/test/runtime wiring exists. Do not satisfy this phase with deterministic-only providers, screenshots-only UI proof, in-memory-only state, route-shaped handlers, or local MVP shortcuts.
 
-Required runtime evidence rows must use `phase_id: 01-ingestion-ontology` and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
+Required runtime evidence rows must use `phase_id: 01-example-phase` and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
 
-## Evidence row examples
+## Evidence row few-shot
 
 Passing core API row:
 
@@ -203,9 +261,9 @@ Passing core API row:
 {
   "artifact_id": "proof-01-api-upload-readback",
   "type": "runtime_trace",
-  "phase_id": "01-ingestion-ontology",
+  "phase_id": "01-example-phase",
   "status": "passed",
-  "source": ".buildprint/phase-runs/01-ingestion-ontology/proof.md#api-upload-readback",
+  "source": ".buildprint/phase-runs/01-example-phase/proof.md#api-upload-readback",
   "proves": ["unit_or_integration_test", "runtime_or_browser_trace", "persistence_roundtrip"],
   "proof_type": "api_integration_test",
   "provider_mode": "deterministic",
@@ -219,16 +277,39 @@ Non-upgrading live-provider blocker row:
 {
   "artifact_id": "proof-01-live-llm-blocked",
   "type": "provider_blocker",
-  "phase_id": "01-ingestion-ontology",
+  "phase_id": "01-example-phase",
   "status": "blocked",
-  "source": ".buildprint/phase-runs/01-ingestion-ontology/proof.md#live-provider-blocker",
-  "proves": ["live_provider_proof"],
+  "source": ".buildprint/phase-runs/01-example-phase/proof.md#live-provider-blocker",
+  "proves": ["live_provider_proof_blocker_only"],
   "proof_type": "provider_config_blocker",
   "provider_mode": "missing_live_credentials",
   "upgrades_claim": false,
   "blocks_continuation": false
 }
 ```
+
+Bad overclaim row:
+
+```json
+{
+  "artifact_id": "proof-01-everything",
+  "type": "review_artifact",
+  "phase_id": "01-example-phase",
+  "status": "passed",
+  "source": ".buildprint/phase-runs/01-example-phase/reviews/qa.md",
+  "proves": ["live_provider_proof_blocker_only", "worker_retry_cancel_recovery", "visual_quality_gate_for_core_path"],
+  "proof_type": "review",
+  "provider_mode": "deterministic",
+  "upgrades_claim": true
+}
+```
+
+Why the bad row fails:
+
+- Review prose cannot upgrade implementation proof.
+- Deterministic provider mode cannot prove live provider behavior.
+- Worker recovery and visual quality require separate executable proof or screenshot/browser artifacts.
+- The `proves` array is broader than the source artifact.
 
 ## Implementation loop
 
@@ -246,3 +327,30 @@ If this phase fails verification, return here before editing again.
 - Packet seed-only issue -> `05-evidence/evidence-ledger.jsonl`
 
 Do not continue to the next phase if the core path does not persist state, cannot be read back, has unresolved security/destructive ambiguity, fails tests, or only proves static UI.
+
+## Output skeleton for generated phases
+
+Generated selected phases should keep this heading set unless the phase is explicitly non-UI or non-provider:
+
+```md
+# Phase NN - <phase title>
+
+## How to implement this phase
+## Product outcome
+## Mapped product obligations
+## Behavior compatibility contract
+## Implementation scope
+## Core-pass required
+## Claim-upgrade or blocker tracks
+## Interfaces touched
+## State/runtime touched
+## UX/UI requirements
+## Safety/security constraints
+## Quality gates
+## Proof gate
+## Evidence row few-shot
+## Implementation loop
+## Repair routing
+```
+
+For a non-UI phase, keep `## UX/UI requirements` and write `None - reason:` plus downstream UI obligations. For a non-provider phase, keep provider sections only when an adapter, tool, external service, or runtime boundary exists.

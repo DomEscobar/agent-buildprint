@@ -161,6 +161,8 @@ Replace capabilities with phases, but keep capability discipline inside them.
 
 A phase is **not** a waterfall time bucket. A phase is a proof-gated vertical product slice.
 
+Use `templates/executable-packet/03-phases/01-example-phase.md` as the few-shot pattern for selected phase generation. Copy its distinction between bad slice, prime slice, `phase_core_passed`, `claim_qualified`, non-upgrading blockers, and narrow evidence rows. Do not copy its MiroFish/product nouns unless the selected product actually has that ingestion/ontology surface.
+
 `03-phases/phase-index.yaml` must include `active_phase`, `phase_id`, `file`, `status`, dependencies, and proof gate. `active_phase` and every `file` value must point to the full packet-relative phase file path under `03-phases/`.
 
 `03-phases/phase-flow.md` is required. It must be a compact delegation router, not the storage location for role expertise. It must define the phase-entry protocol, role-contract resolution through `06-contracts/<role>.md`, required phase-run artifacts, bounded handoff shape, subagent permission, self-simulation fallback when subagents are unavailable, integration/review/proof flow, and the rule that runtime evidence cannot be appended until plan/team-gates/handoffs/returns/reviews/proof artifacts exist.
