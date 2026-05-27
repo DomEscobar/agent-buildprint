@@ -36,32 +36,32 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: corpus-contracts
+  - phase_id: 01-corpus-contracts
     title: 01-corpus-contracts
     file: 03-phases/01-corpus-contracts.md
     status: INCLUDED_NEEDS_PROOF
-    proof_gate: proof-corpus-contracts
-  - phase_id: ingestion-indexing
+    proof_gate: proof-01-corpus-contracts
+  - phase_id: 02-ingestion-indexing
     title: 02-ingestion-indexing
     file: 03-phases/02-ingestion-indexing.md
     status: INCLUDED_NEEDS_PROOF
-    proof_gate: proof-ingestion-indexing
+    proof_gate: proof-02-ingestion-indexing
     depends_on:
-      - corpus-contracts
-  - phase_id: retrieval-answering
+      - 01-corpus-contracts
+  - phase_id: 03-retrieval-answering
     title: 03-retrieval-answering
     file: 03-phases/03-retrieval-answering.md
     status: INCLUDED_NEEDS_PROOF
-    proof_gate: proof-retrieval-answering
+    proof_gate: proof-03-retrieval-answering
     depends_on:
-      - ingestion-indexing
-  - phase_id: evaluation-operations
+      - 02-ingestion-indexing
+  - phase_id: 04-evaluation-operations
     title: 04-evaluation-operations
     file: 03-phases/04-evaluation-operations.md
     status: INCLUDED_NEEDS_PROOF
-    proof_gate: proof-evaluation-operations
+    proof_gate: proof-04-evaluation-operations
     depends_on:
-      - retrieval-answering
+      - 03-retrieval-answering
 context:
   phase_index: 03-phases/phase-index.yaml
   phase_flow: 03-phases/phase-flow.md

@@ -6,25 +6,12 @@ Claims upgrade only after the relevant phase proof gate passes and evidence is r
 
 Required proof concepts:
 
-- provider_live: real provider/API behavior is proven, or a blocker records why only deterministic/sandbox proof exists.
+- provider_live: real provider/API behavior is proven. If credentials or paid-service approval are missing, the blocker may apply only to live proof after provider adapters, config contracts, deterministic test doubles, error handling, and integration tests exist.
 - durable_persistence: state survives readback/reload where durability is claimed.
-- security_boundary: auth, privacy, secrets, consent, uploads, URL egress, public gallery, publishing, and unsafe media/text paths are reviewed.
-- no_fake: no static shell, fake green test, placeholder provider, no-op control, blank MP4, route-shaped mock, in-memory-only demo, or debug-first UI is claimed as production behavior.
+- security_boundary: auth, tenant/privacy, secrets, destructive actions, and unsafe input paths are reviewed.
+- no_fake: no static shell, fake green test, placeholder provider, no-op control, or in-memory-only demo is claimed as production behavior.
 - clean_room_implementation_trace: implementation does not depend on opening the original source repo as implementation input.
-
-## Product acceptance checks
-
-- Full browser studio proof with source input, analysis/scripts, configuration, generation, review/player, gallery, and publish handoff.
-- Manual description path works without URL.
-- URL fixture path exercises scraper/research/analyze/script adapters in mock/no-network mode.
-- At least two selectable scripts exist, each with exactly five timed segments and b-roll requirements.
-- Provider seams exist for Gemini/research, ElevenLabs, fal.ai/media providers, Upload-Post, S3/gallery, scraper, downloader, and composer.
-- Job lifecycle includes polling, logs, provider records, output manifest, result/error, cancel, retry, blocked, and failure states.
-- Media output is playable, probes as 1080x1920, is nonblank, includes captions, and records b-roll timing evidence.
-- Gallery is private by default and shows only consented metadata.
-- Publish handoff is blocked without consent and mock/manual by default.
-- Browser QA captures completed desktop/mobile screenshots and critical negative states.
-- Validation report records commands, screenshots, MP4 probe, provider mode, gaps, and status.
+- production_readiness: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e gates, and security controls are implemented or explicitly blocked without downgrading scope.
 
 ## Loop completion rule
 
@@ -32,9 +19,17 @@ A phase is complete only when:
 
 - observe/plan/execute/verify/reflect/record loop completed at least once
 - verification evidence exists
-- phase proof gate passes, or an honest blocker is recorded
+- phase proof gate passes, or an honest blocker is recorded only for unavailable live credentials, external services, paid-service approval, or deployment authorization
 - blocker/unknowns are not hidden
 - failed gates are repaired or routed correctly
+
+## Phase state model
+
+- `checkpoint_recorded`: at least one valid runtime evidence row exists for the phase. This proves evidence discipline only.
+- `phase_core_passed`: the phase-owned local vertical path works end to end with matching tests/proof, including UI action/state-transition proof for UI-bearing phases.
+- `claim_qualified`: the specific live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle claim has matching executable proof and may upgrade.
+
+Do not treat `checkpoint_recorded` as `phase_core_passed`. Do not treat `phase_core_passed` as `claim_qualified`.
 
 ## Evidence requirements
 
@@ -43,3 +38,9 @@ Each evidence row must include phase id, proof type, provider mode, status, sour
 ## Blocker honesty
 
 A blocker preserves scope. Do not silently downgrade the product, hide missing proof, skip required UI states, or call deterministic adapters live providers.
+
+## Continuation versus qualification
+
+Some blockers prevent claim qualification without blocking later implementation. Missing live credentials, unavailable browser/e2e tooling, screenshot tooling, deployment authorization, or external services should be recorded as non-upgrading blocker rows and may set `blocks_continuation: false` when the phase's core local implementation path, persistence, safety checks, and runtime/API proof passed.
+
+Do not use `blocks_continuation: false` for failed core implementation, failed owned persistence, failed local runtime/API proof, unresolved destructive/security ambiguity, missing required project structure, or any condition that makes downstream phases unsafe or invalid.

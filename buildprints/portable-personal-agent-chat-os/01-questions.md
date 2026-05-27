@@ -2,6 +2,8 @@
 
 Blank answers are not blockers. Blank answers authorize AI best judgment using the highest-quality appropriate default for a local, deterministic, self-hosted personal agent OS. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
+Default execution standard: production-grade architecture. Do not offer or choose an MVP quality tier. Missing credentials block live proof only; they do not remove the requirement to implement provider adapter seams, config contracts, deterministic tests, durable state paths, security boundaries, worker/runtime ownership, browser/e2e proof plans, and runtime evidence.
+
 ## 1. Preferred implementation stack
 
 If unspecified, choose a stack that can deliver a streaming WebUI/API, durable local persistence, provider adapters, contract tests, and browser/API proof without unnecessary infrastructure.

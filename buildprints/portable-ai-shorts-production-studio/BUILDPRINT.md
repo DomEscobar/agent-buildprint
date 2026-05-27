@@ -12,7 +12,7 @@ Build a stack-flexible, product-grade browser studio that turns a product URL or
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
 6. Read `03-phases/phase-flow.md`.
-7. Read only the active phase file from `03-phases/phase-index.yaml`.
+7. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
 8. Read `04-evaluation.md`.
 9. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 10. Read `05-evidence/evidence-ledger.schema.json` before writing any runtime evidence.
@@ -73,7 +73,7 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 ## Phase discipline
 
-Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md` and `.buildprint/phase-runs/<phase-id>/team.md`, dispatch or explicitly simulate bounded role work, collect returns/reviews/proof, and only then append runtime evidence.
+Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md` and `.buildprint/phase-runs/<phase-id>/team-gates.md`, dispatch or explicitly simulate bounded role work, collect returns/reviews/proof, and only then append runtime evidence.
 
 A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
 

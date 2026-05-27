@@ -2,6 +2,8 @@
 
 Answer what you know. Blank answers mean AI best judgment: choose the highest-quality appropriate default from the product goals, existing project conventions, and phase evidence. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
+Default execution standard: production-grade architecture. Do not offer or choose an MVP quality tier. Missing credentials block live proof only; they do not remove the requirement to implement provider adapter seams, config contracts, deterministic tests, durable state paths, security boundaries, and runtime wiring.
+
 ## 1. Corpus and update model
 
 What document sources must be retrieved: docs, support tickets, PDFs, code/docs, compliance content, customer records, media transcripts, or another corpus? How often do they change, and are deletes or re-indexing required?

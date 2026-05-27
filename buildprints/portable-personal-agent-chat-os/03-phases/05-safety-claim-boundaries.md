@@ -11,8 +11,8 @@ Before writing code, read:
 Then execute this phase through `03-phases/phase-flow.md`:
 
 1. declare phase objective
-2. assemble required roles
-3. dispatch bounded subagent tasks or simulate them explicitly if subagents are unavailable
+2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
+3. create handoff/return files only for real delegation
 4. collect reviews
 5. integrate
 6. verify
@@ -77,7 +77,7 @@ No destructive actions, external writes, paid services, secret handling, browser
 
 ## Proof gate
 
-Proof id: proof-safety-claim-boundaries
+Proof id: proof-05-safety-claim-boundaries
 Required proof types:
 - unit_or_integration_test
 - runtime_or_browser_trace_or_blocker
@@ -86,7 +86,16 @@ Required proof types:
 - no_fake_scan_pass
 - evidence_ledger_entry
 
-Required runtime evidence row must use `phase_id: safety-claim-boundaries` and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
+
+Production-grade proof split:
+- provider_adapter_config_test_required
+- live_provider_proof_blocker_only
+- worker_retry_cancel_recovery
+- repeatable_browser_e2e
+
+Missing live credentials block live proof only after adapter/config/test/runtime wiring exists for provider, streaming, tools, MCP, memory, team, telemetry, security, and WebUI/API paths.
+
+Required runtime evidence row must use `phase_id: 05-safety-claim-boundaries` and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
 
 ## Repair routing
 

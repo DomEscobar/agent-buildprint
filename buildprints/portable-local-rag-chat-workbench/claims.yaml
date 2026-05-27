@@ -1,0 +1,9 @@
+schema_version: mapper-os/claims
+claim_status: PROOF_REQUIRED
+claims:
+  provider_live: pending_proof
+  durable_persistence: pending_proof
+  rag_vector_search: pending_proof
+  browser_e2e: pending_proof
+  security_boundary: pending_proof
+  no_fake: pending_proof

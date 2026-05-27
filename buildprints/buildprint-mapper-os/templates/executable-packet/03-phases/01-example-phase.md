@@ -11,12 +11,14 @@ Before writing code, read:
 Then execute this phase through `03-phases/phase-flow.md`:
 
 1. declare phase objective
-2. assemble required roles
-3. dispatch bounded subagent tasks or simulate them explicitly if subagents are unavailable
-4. collect reviews
-5. integrate
-6. verify
+2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`
+3. implement the first real vertical path
+4. review architecture/UX/QA
+5. verify
+6. write proof
 7. record evidence
+
+Create handoff/return files only when real delegation happens.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -73,7 +75,7 @@ Commands/checks required for this phase.
 ## Proof gate
 
 Proof id: proof-<phase-id>
-Required proof types:
+Required proof tracks:
 - unit_or_integration_test
 - provider_adapter_config_test_required
 - live_provider_proof_blocker_only
@@ -85,6 +87,8 @@ Required proof types:
 - security_boundary_review
 - no_fake_scan_pass
 - evidence_ledger_entry
+
+Do not copy all proof tracks into one evidence row. Each runtime row must list only the proof labels backed by its commands and artifacts. Browser/e2e/screenshot, worker, data-lifecycle, security, and live-provider claims require separate matching proof rows or non-upgrading blocker rows.
 
 Live credentials, paid services, or external deployment approval may block live proof only after adapter/config/test/runtime wiring exists. Do not satisfy this phase with deterministic-only providers, screenshots-only UI proof, in-memory-only state, route-shaped handlers, or local MVP shortcuts.
 

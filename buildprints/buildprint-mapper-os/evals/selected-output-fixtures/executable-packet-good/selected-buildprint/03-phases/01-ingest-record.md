@@ -1,4 +1,4 @@
-# Phase 01 — Upload and persist submitted records
+# Phase 01 â€” Upload and persist submitted records
 
 ## How to implement this phase
 
@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare phase objective, assemble required roles, dispatch bounded subagent tasks or simulate them explicitly, collect reviews, integrate, verify, and record evidence.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -54,7 +54,7 @@ Outputs/downstream handoff:
 
 - API/routes/adapters/frontend-backend contracts: identify and implement only those required by this phase.
 - Provider/tool contracts: implement provider adapter/config/test seams before live proof; disclose deterministic, sandbox, or live mode where provider behavior is claimed.
-- None — reason: only if this phase truly touches no interface boundary.
+- None â€” reason: only if this phase truly touches no interface boundary.
 
 ## State/runtime touched
 

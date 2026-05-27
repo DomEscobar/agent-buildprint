@@ -11,8 +11,9 @@ This setup contract is completed before phase implementation. It turns short hum
 ## Inferred project shape
 
 - Product: Portable AI Swarm Simulation Workbench
-- Frontend/UI surfaces: infer from phase UX/UI requirements and source evidence.
-- Backend/API surfaces: infer from phase interfaces touched and source evidence.
+- Source stack anchors: MiroFish-style Flask API, Vue/Vite browser workbench, Docker-ready local/runtime packaging, OpenAI-compatible LLM adapters, Zep-compatible graph memory, OASIS/CAMEL-compatible simulation runtime, env-driven provider modes, and file-backed/object-storage persistence seams.
+- Frontend/UI surfaces: infer from phase UX/UI requirements and source evidence; preserve the Vue/Vite workbench behavior as a source signal even if the implementation chooses a different browser framework.
+- Backend/API surfaces: infer from phase interfaces touched and source evidence; preserve the Flask-style route/task semantics as source contract anchors even if the implementation chooses a different server framework.
 - State/runtime surfaces: infer from phase state/runtime touched and source evidence.
 - Tests/evaluation: derive from `04-evaluation.md` and phase proof gates.
 
@@ -22,7 +23,7 @@ Record decisions with short evidence, not bureaucracy:
 
 - Framework/runtime:
   - Decision: AI best-fit unless human constrained it.
-  - Evidence: mapped source, product requirements, and phase proof gates.
+  - Evidence: mapped Flask/Vue/Vite source shape, Docker/runtime expectations, product requirements, and phase proof gates.
 - Package manager:
   - Decision: choose source-faithful or ecosystem-standard default.
   - Evidence: lockfiles/workspace evidence if available.
@@ -108,6 +109,23 @@ The blueprint packet must not contain `AGENTS.md`. The implementation project sh
 - Root `AGENTS.md`: project shape, architecture rules, quality gates, safety/permissions, workflow, and local instruction map.
 - Local `AGENTS.md` files: create only at real architectural boundaries such as frontend/app, backend/API, packages/ui, data/db, infra, or tests/e2e.
 - Local files may narrow rules for their subtree but must not weaken root safety, quality, or architecture invariants.
+
+## Runtime setup artifact
+
+Before starting any `03-phases/*` work, the implementation workspace must write `.buildprint/setup.md` or files under `.buildprint/setup/`. This is not packet content and must not be copied into `selected-buildprint/`.
+
+The setup artifact must record concrete decisions for:
+
+- auth/session/tenant or ownership boundary
+- provider adapters, env/config names, deterministic test doubles, live-proof blockers
+- durable persistence, schema/storage ownership, readback/restart behavior
+- worker/runtime model, queue/retry/cancel/recovery ownership, or explicit synchronous-phase limitation
+- deployment/operations shape, health/logging/metrics/CI expectations, and local dev command
+- browser/e2e and screenshot proof plan for UI-bearing phases
+- safety/permission rules for secrets, destructive actions, paid services, external writes, and deployments
+- verification commands required before evidence rows may upgrade claims
+
+Creating only `AGENTS.md` is not enough to satisfy the setup gate.
 
 ## Quality gates
 

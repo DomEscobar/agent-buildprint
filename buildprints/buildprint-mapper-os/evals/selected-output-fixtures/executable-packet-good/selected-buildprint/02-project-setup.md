@@ -116,6 +116,23 @@ The blueprint packet must not contain `AGENTS.md`. The implementation project sh
 - Local `AGENTS.md` files: create only at real architectural boundaries such as frontend/app, backend/API, packages/ui, data/db, infra, or tests/e2e.
 - Local files may narrow rules for their subtree but must not weaken root safety, quality, or architecture invariants.
 
+## Runtime setup artifact
+
+Before starting any `03-phases/*` work, the implementation workspace must write `.buildprint/setup.md` or files under `.buildprint/setup/`. This is not packet content and must not be copied into `selected-buildprint/`.
+
+The setup artifact must record concrete decisions for:
+
+- auth/session/tenant or ownership boundary
+- provider adapters, env/config names, deterministic test doubles, live-proof blockers
+- durable persistence, schema/storage ownership, readback/restart behavior
+- worker/runtime model, queue/retry/cancel/recovery ownership, or explicit synchronous-phase limitation
+- deployment/operations shape, health/logging/metrics/CI expectations, and local dev command
+- browser/e2e and screenshot proof plan for UI-bearing phases
+- safety/permission rules for secrets, destructive actions, paid services, external writes, and deployments
+- verification commands required before evidence rows may upgrade claims
+
+Creating only `AGENTS.md` is not enough to satisfy the setup gate.
+
 ## Quality gates
 
 Before claiming any phase done:

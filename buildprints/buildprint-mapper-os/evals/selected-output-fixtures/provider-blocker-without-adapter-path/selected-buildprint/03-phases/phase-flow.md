@@ -2,31 +2,41 @@
 
 You are the orchestrator for this phase only.
 
-Your job is not to implement everything yourself first. Your job is to produce a phase plan, assemble the right review lenses, dispatch bounded work or explicitly simulate bounded specialist passes when subagents are unavailable, review returns, integrate, verify, and record proof.
+Your job is to run a compact, proof-gated phase loop: plan the slice, activate the needed team gates, implement the smallest real vertical path, review it, verify it, and record honest evidence. Do not spend the session manufacturing delegation paperwork before code can move.
 
 ## Phase-entry protocol
 
 Before writing code for any phase:
 
 1. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`.
-2. Assemble the required roles in `.buildprint/phase-runs/<phase-id>/team.md` from the phase signals; do not use a fixed team when the phase does not need it.
-3. Create bounded handoffs before implementation in `.buildprint/phase-runs/<phase-id>/handoffs/<role>.md`.
-4. Dispatch specialist work when subagents are available, or simulate each role explicitly and write the simulated return.
-5. Collect returns in `.buildprint/phase-runs/<phase-id>/returns/<role>.md`.
-6. Integrate only after reviewing role returns against the phase proof gate.
-7. Verify with the phase quality gates.
-8. Write proof/review artifacts before appending runtime evidence.
+2. Write `.buildprint/phase-runs/<phase-id>/team-gates.md` with the active roles, blocking gates, and proof expectations from the phase signals.
+3. Create per-role handoff and return files only when real subagents or separate specialist sessions are actually used.
+4. Implement the first real vertical path for the phase.
+5. Verify with the phase quality gates.
+6. Write review and proof artifacts before appending runtime evidence.
 
 You may not append runtime evidence or mark this phase passed until the required phase-run artifacts exist.
+
+## Phase state model
+
+Every phase must distinguish three states:
+
+- `checkpoint_recorded`: the runtime evidence ledger has at least one valid proof or blocker row for this phase.
+- `phase_core_passed`: the phase's first real local vertical path is implemented, verified, reviewed, and recorded without core blockers.
+- `claim_qualified`: live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle proof has enough matching evidence to upgrade the corresponding claim.
+
+An early checkpoint is not phase completion. A phase may continue after `checkpoint_recorded`, but it is not `phase_core_passed` until the owned implementation path works end to end. Browser, screenshot, live-provider, deployment, and external-service blockers can prevent `claim_qualified` without preventing `phase_core_passed` when the local core path is honestly proven.
+
+For UI-bearing phases, `phase_core_passed` requires at least one user action path through a UI/controller boundary into runtime behavior and back into a visible state or readback result. Static state cards, dead buttons, generic dashboard panels, or review prose do not satisfy the UI action path.
 
 ## Required phase artifacts
 
 Before code:
 
 - `.buildprint/phase-runs/<phase-id>/plan.md`
-- `.buildprint/phase-runs/<phase-id>/team.md`
+- `.buildprint/phase-runs/<phase-id>/team-gates.md`
 
-During work:
+Optional when real delegation happens:
 
 - `.buildprint/phase-runs/<phase-id>/handoffs/<role>.md`
 - `.buildprint/phase-runs/<phase-id>/returns/<role>.md`
@@ -43,9 +53,9 @@ Only then:
 - append `.buildprint/evidence/evidence-ledger.jsonl`
 - update `.buildprint/progress.md`, `.buildprint/state.json`, and `.buildprint/next-agent.md`
 
-## Team assembly
+## Team gates
 
-Team assembly is phase-derived. Use `requires_roles` from the phase file when present. If absent, infer the smallest useful team from the phase content:
+Team gates are phase-derived. Use `requires_roles` from the phase file when present. If absent, infer the smallest useful team from the phase content:
 
 - `product-architect`: source surface dispositions, capability preservation, dependency direction, project structure.
 - `ux-ui-craft`: UI-bearing work, empty/loading/error/blocked/success states, accessibility, responsive behavior.
@@ -54,11 +64,17 @@ Team assembly is phase-derived. Use `requires_roles` from the phase file when pr
 - `security-boundary`: auth, tenant/privacy, secrets, destructive actions, uploads, external writes.
 - `test-and-verification`: test/build/browser/runtime proof, no-fake scan, evidence quality.
 
-Do not create busywork roles. Every role must have a bounded assignment, success criteria, proof expectation, and return artifact.
+Do not create busywork roles. Every active role in runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` must have:
 
-## Bounded handoff shape
+- role/lens
+- blocking gate
+- implementation obligation
+- verification/proof expectation
+- blocker routing rule
 
-Each handoff must include:
+## Optional bounded handoff shape
+
+Use handoff files only for actual delegation to subagents or separate specialist sessions. Each handoff must include:
 
 - phase id and phase file
 - role/lens
@@ -70,9 +86,11 @@ Each handoff must include:
 - evidence row requirements
 - risks/blockers to report
 
+If the main session handles the role itself, record the role's gate result in runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` and the relevant review file instead of writing fake handoff/return paperwork.
+
 ## Review and integration
 
-The orchestrator integrates returns, but cannot silently discard dissent. If a role reports a blocker or quality gap, either fix it, route it to setup/questions/prior phase/external blocker, or record why it is out of scope.
+The orchestrator cannot silently discard dissent. If a team gate reports a blocker or quality gap, either fix it, route it to setup/questions/prior phase/external blocker, or record why it is out of scope.
 
 ## Review contracts
 
@@ -115,7 +133,7 @@ If the phase is not UI-bearing, `.buildprint/phase-runs/<phase-id>/reviews/ux.md
 Write `.buildprint/phase-runs/<phase-id>/reviews/qa.md` with these headings:
 
 - `## Verdict`: pass | pass-with-scoped-debt | blocker
-- `## Commands run`
+- `## Commands run`: exact commands plus relevant output artifact or subtest section; a bare aggregate such as `npm test` is not enough in full-suite runs.
 - `## What passed`
 - `## What this does not prove`
 - `## Blockers and claim limits`
@@ -135,3 +153,30 @@ Evidence honesty rules:
 - Do not set `upgrades_claim: true` on any row with a blocker, missing dependency, synthetic check, unavailable credentials, sandbox/network limitation, or partial proof.
 - Do not claim `no_fake_scan_pass` unless a real no-fake scan command/artifact exists and was run. If no scan exists, write a `blocked` row or omit the proof claim.
 - A frontend copy/string-check script is not a production build. If dependencies/browser/network are unavailable, record the real build/browser proof as `blocked` with `upgrades_claim: false`.
+- Do not copy every required proof label into every evidence row. `proves` must list only the claims directly proven by the row's `source`, `commands`, and artifacts.
+- HTTP/API runtime traces prove API/runtime behavior, not browser behavior. Claims such as `browser_runtime_trace`, `repeatable_browser_e2e`, `screenshot_state_set`, and `ux_design_gate` require a real browser/e2e run, screenshot/DOM-state artifact, or an explicit blocker row with `upgrades_claim: false`.
+- Static markup checks, string checks, and non-browser DOM-state scripts do not upgrade `ux_design_gate`. If Playwright, Chrome, or equivalent browser tooling is unavailable, write a non-upgrading browser/UX blocker row instead of upgrading UI quality.
+- Claims such as `worker_retry_cancel_recovery`, `migration_retention_backup_upload_limits`, and `security_boundary_review` require matching implementation and proof artifacts. If the phase did not exercise those paths, omit the claim or write a non-upgrading blocker row.
+- Do not upgrade `worker_retry_cancel_recovery`, `migration_retention_backup_upload_limits`, or `security_boundary_review` from a generic `runtime_trace`, `local_http_runtime_trace`, API smoke test, or broad end-to-end script row. These labels need separate evidence rows whose `proof_type`, `source`, and command/artifact names explicitly identify the worker retry/cancel/recovery path, the migration/retention/backup/upload-limit lifecycle path, or the security/destructive-action/secret-boundary path.
+- If one command exercises multiple broad production paths, split its output into narrow rows and give each row the exact artifact section or command assertion that proves only that claim. Do not put worker, data-lifecycle, and security labels into one upgrading row.
+- Provider adapter/config tests can prove adapter seams and fail-closed configuration. They cannot prove live provider behavior; live credentials and external service authorization may block only the live-provider proof row.
+- If a combined production proof track contains work you did not implement end to end, do not partially upgrade the combined label. Split the evidence into narrower passing labels and a blocker row for the missing production track.
+- The QA review must explicitly audit every `upgrades_claim: true` row and reject rows whose `proves` array is broader than the command/artifact named in `source`.
+- Review prose cannot upgrade implementation proof by itself. `review_artifact` rows default to `upgrades_claim: false`.
+- Do not put `ux_design_gate`, `security_boundary_review`, `migration_retention_backup_upload_limits`, `worker_retry_cancel_recovery`, browser/e2e labels, or live-provider labels in an upgrading `review_artifact` row. To upgrade one of those labels, write a separate executable proof row whose command/artifact actually exercised that path.
+- Upgrading rows for `security_boundary_review`, `worker_retry_cancel_recovery`, `migration_retention_backup_upload_limits`, browser/e2e labels, or `ux_design_gate` must not use `type`, `proof_type`, or `source` wording that relies on "review" as proof. If review notes are useful context, write a separate non-upgrading `review_artifact` row and keep the executable proof row focused on the command/assertion that exercised the path.
+
+## Continuation gate
+
+Full-suite execution must distinguish claim blockers from implementation blockers.
+
+Continue to the next dependency-ready phase when this phase has:
+
+- core implementation/API/domain/persistence tests passing for the phase's first real vertical path
+- for UI-bearing phases, a local user action path and state transition proof through the UI/controller/runtime boundary
+- phase-run plan, team gates, reviews, proof, and evidence rows written
+- non-upgrading blocker rows for live-provider, browser/e2e/screenshot, deployment, or external-service proof that could not run in the current environment
+
+Do not continue when the blocker means the current phase did not implement its core product path, did not persist state it owns, failed required tests, has unresolved destructive/security ambiguity, or cannot provide an honest local runtime/API proof.
+
+Every blocker row should set `blocks_continuation: false` only when the blocker limits claim qualification but does not prevent later phase implementation. Omit it or set `blocks_continuation: true` for blockers that make downstream phases unsafe or invalid.

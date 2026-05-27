@@ -1,0 +1,18 @@
+schema_version: mapper-os/phase-index
+active_phase: 03-phases/01-provider-chat-runtime.md
+phases:
+  - phase_id: 01-provider-chat-runtime
+    file: 03-phases/01-provider-chat-runtime.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-01-provider-chat-runtime
+  - phase_id: 02-document-rag-indexing
+    file: 03-phases/02-document-rag-indexing.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: [01-provider-chat-runtime]
+    proof_gate: proof-02-document-rag-indexing
+  - phase_id: 03-memory-settings-lifecycle
+    file: 03-phases/03-memory-settings-lifecycle.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: [02-document-rag-indexing]
+    proof_gate: proof-03-memory-settings-lifecycle

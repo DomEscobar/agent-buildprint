@@ -155,6 +155,50 @@
       "role": "source"
     },
     {
+      "path": "evals/golden-projects/local-rag-chat/.env.example",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/README.md",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/expected-signals.json",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/package.json",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/prisma/schema.prisma",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/src/app/api/chat/route.ts",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/src/app/api/documents/route.ts",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/src/lib/memory/index.ts",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/src/lib/ollama-provider.ts",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/src/lib/rag/context.ts",
+      "role": "source"
+    },
+    {
+      "path": "evals/golden-projects/local-rag-chat/src/lib/rag/ingest.ts",
+      "role": "source"
+    },
+    {
       "path": "evals/golden-projects/route-patterns/.env.example",
       "role": "source"
     },

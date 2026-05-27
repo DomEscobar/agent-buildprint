@@ -31,6 +31,19 @@ This setup contract is completed before phase implementation. It turns human ali
   - Decision: integrate with existing auth and deployment; live embeddings, vector search, reranker, and LLM generation require explicit env config and human approval for paid/external writes.
   - Evidence: provider-live behavior cannot be claimed from mocks or adapter shapes.
 
+## Production readiness contract
+
+Production-grade architecture is the default for the selected full-suite packet. Do not downgrade to a local MVP unless the user explicitly reduces selected scope. Missing credentials block only live proof; they do not block implementation of provider adapters, config contracts, deterministic tests, durable state paths, security boundaries, worker/runtime ownership, deployment/ops shape, or browser/e2e proof plans.
+
+- Auth/session/tenant boundary: define tenant id, user id, public/private access scope, deny-by-default behavior, and permission filtering before context packing, answer generation, citations, traces, and eval answers.
+- Provider integration contract: implement embedding/search/reranker/generator adapter interfaces, deterministic proof adapters, live config validation, fail-closed missing-credential behavior, latency/cost labels, and tests proving adapters do not masquerade as live providers.
+- Durable persistence contract: define source, chunk, index metadata, access scopes, trace, eval run, report, import/export, delete/reset, retention, migration, and restart/readback ownership before claiming production durability.
+- Worker/runtime contract: define ingestion, update, re-index, eval, report, retry, cancel, failure recovery, progress state, and restart behavior; synchronous proof paths are allowed only when labeled as proof mode.
+- Deployment and operations contract: document local dev, production target, env/config, health/readiness, structured logs, metrics/traces, rate/request limits, CI/eval gates, and release blockers.
+- Browser/e2e contract: UI-bearing work must have repeatable browser/e2e proof plans for corpus setup, query/refusal/citation states, provider-blocked states, traces, eval reports, responsive behavior, and accessibility.
+
+Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
+
 ## Source contract anchors
 
 Promote these observations into implementation contracts before starting phases:

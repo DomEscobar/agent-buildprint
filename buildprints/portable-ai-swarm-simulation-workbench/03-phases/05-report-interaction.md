@@ -1,4 +1,4 @@
-# Phase 05 — Report And Deep Interaction
+# Phase 05 â€” Report And Deep Interaction
 
 ## How to implement this phase
 
@@ -8,7 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare phase objective, assemble required roles, dispatch bounded subagent tasks or simulate them explicitly, collect reviews, integrate, verify, and record evidence.
+Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md`, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Create handoff/return files only when real delegation happens.
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
@@ -75,7 +75,7 @@ Downstream slices may rely on persisted identifiers, state transitions, provider
 
 - API/routes/adapters/frontend-backend contracts: identify and implement only those required by this phase.
 - Provider/tool contracts: implement provider adapter/config/test seams before live proof; disclose deterministic, sandbox, or live mode where provider behavior is claimed.
-- None — reason: only if this phase truly touches no interface boundary.
+- None â€” reason: only if this phase truly touches no interface boundary.
 
 ## State/runtime touched
 
@@ -104,7 +104,7 @@ Use the inline UX/UI requirements in this phase. Any UI-bearing proof must inclu
 - Ask before destructive actions, external writes, paid providers, deployments, or irreversible migrations.
 - Stop rather than claim implementation if proof depends only on mocks, placeholders, static UI, route-shaped stubs, or in-memory-only state where durability is claimed.
 - Stop rather than claim live provider/runtime behavior from deterministic adapters; live credentials block live proof only after adapter/config/test/runtime wiring exists.
-- Stop on secret exposure, destructive-action ambiguity, unreviewed upload/runtime surfaces, or missing browser/runtime evidence.
+- Stop on secret exposure, destructive-action ambiguity, unreviewed upload/runtime surfaces, failed core local runtime/API proof, or missing persistence proof for state this phase owns. Missing live-provider, browser/e2e, screenshot, deployment, or external-service proof limits claim qualification; record a non-upgrading blocker with blocks_continuation: false and continue if the core phase path is implemented and locally proven.
 
 ## Quality gates
 
@@ -116,7 +116,7 @@ Use the inline UX/UI requirements in this phase. Any UI-bearing proof must inclu
 ## Proof gate
 
 - Proof id: proof-05-report-interaction
-- Required proof types:
+- Required proof tracks:
   - unit_or_integration_test
   - negative_test
   - browser_trace_or_runtime_trace
@@ -128,12 +128,13 @@ Use the inline UX/UI requirements in this phase. Any UI-bearing proof must inclu
   - provider_adapter_config_test_required
   - live_provider_proof_blocker_only
   - worker_retry_cancel_recovery
-  - migration_retention_backup_upload_limits
   - repeatable_browser_e2e
   - persistence_roundtrip
   - security_boundary_review
   - clean_room_implementation_trace
   - no_fake_scan_pass
+Do not copy all proof tracks into one evidence row. Each runtime row must list only the proof labels backed by its commands and artifacts. Browser/e2e/screenshot, worker, data-lifecycle, security, and live-provider claims require separate matching proof rows or non-upgrading blocker rows.
+
 Live credentials, paid services, or external deployment approval may block live proof only after adapter/config/test/runtime wiring exists. Do not satisfy this phase with deterministic-only providers, screenshots-only UI proof, in-memory-only state, route-shaped handlers, or local MVP shortcuts.
 
 - Negative tests: validation failure, provider/runtime failure where applicable, persistence/readback failure, and phase safety/security constraints and negative fixtures listed above.

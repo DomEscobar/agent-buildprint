@@ -27,27 +27,27 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: 05-evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: instance-auth-config-provider-setup
+  - phase_id: 01-instance-auth-config-provider-setup
     title: 01-instance-auth-config-provider-setup
     file: 03-phases/01-instance-auth-config-provider-setup.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: content-ingestion-outline-generation
+  - phase_id: 02-content-ingestion-outline-generation
     title: 02-content-ingestion-outline-generation
     file: 03-phases/02-content-ingestion-outline-generation.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: deck-structure-slide-generation
+  - phase_id: 03-deck-structure-slide-generation
     title: 03-deck-structure-slide-generation
     file: 03-phases/03-deck-structure-slide-generation.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: media-template-theme-assets
+  - phase_id: 04-media-template-theme-assets
     title: 04-media-template-theme-assets
     file: 03-phases/04-media-template-theme-assets.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: editor-chat-iteration-workflow
+  - phase_id: 05-editor-chat-iteration-workflow
     title: 05-editor-chat-iteration-workflow
     file: 03-phases/05-editor-chat-iteration-workflow.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: export-api-webhooks-mcp-desktop
+  - phase_id: 06-export-api-webhooks-mcp-desktop
     title: 06-export-api-webhooks-mcp-desktop
     file: 03-phases/06-export-api-webhooks-mcp-desktop.md
     status: INCLUDED_NEEDS_PROOF

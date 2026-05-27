@@ -33,6 +33,19 @@ Record decisions with short evidence, not bureaucracy:
 - Auth/providers/deployment:
   - Decision: best-fit default unless credentials, cost, or irreversible deployment choices require human confirmation.
 
+## Production readiness contract
+
+Production-grade architecture is the default for the selected full-suite packet. Do not downgrade to a local MVP unless the user explicitly reduces selected scope. Missing credentials block only live proof; they do not block implementation of provider adapters, config contracts, deterministic tests, durable state paths, security boundaries, worker/runtime ownership, export/webhook/MCP seams, deployment/ops shape, or browser/e2e proof plans.
+
+- Auth/session/tenant boundary: define instance/admin auth, session ownership, provider-key safety, uploaded document ownership, presentation access, webhook/API permissions, and hosted auth blockers before exposing claims.
+- Provider integration contract: implement text/image/search/provider adapter seams, deterministic proof adapters, live config validation, fail-closed missing-credential behavior, cost/latency labels, and tests that do not upgrade fake providers to live providers.
+- Durable persistence contract: define user/session config, provider config, uploaded files, parsed chunks, presentations, slides, themes/templates, media assets, chat history, async tasks, export artifacts, webhook subscriptions/events, import/export, delete/reset, retention, migration, and restart/readback ownership before claiming production durability.
+- Worker/runtime contract: define generation queue ownership, outline/deck/media/export jobs, status/progress, cancellation, retry/failure recovery, webhook delivery retry, and restart behavior.
+- Deployment and operations contract: document local dev, production target, env/config, health/readiness, structured logs, metrics/traces, file/upload limits, export limits, CI/browser/export gates, and release blockers.
+- Browser/e2e contract: UI-bearing work must have repeatable browser/e2e proof plans for auth/config, upload/decompose, outline generation, deck generation, editor/chat, media/template/theme assets, export/download, blocked provider states, desktop/mobile screenshots, accessibility, and no-overlap responsive behavior.
+
+Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
+
 ## Source contract anchors
 
 Promote concrete source observations into implementation contracts before starting phases:
@@ -116,6 +129,17 @@ Use these review lenses during every implementation loop:
 - State/runtime: persistence, migrations, env/config, workers/jobs, runtime observability.
 - QA/evaluation: tests, build, browser/runtime checks, evidence quality, no fake proof.
 - Security/infra: secrets, destructive actions, external writes, deployment and cost approvals.
+
+## Execution authority model
+
+- Root/local `AGENTS.md` files in the implementation project are scope governors, not product brains. They preserve architecture, safety, quality gates, and local workflow; they do not broaden the current phase.
+- `.buildprint/next-agent.md` is continuity for fresh sessions. It must identify current phase, objective, recommended next action, known blockers, and which phase-run artifacts already exist.
+- `03-phases/phase-flow.md` is the executable phase-entry constitution. It controls how each phase begins, how roles are assembled, how bounded handoffs are created, and when evidence may be appended.
+- Explicit task or handoff text is the only valid source of delegated role, allowed scope, proof command, and evidence requirements.
+
+## Delegation and handoff protocol
+
+For each phase, the orchestrating main session must create bounded assignments only when real delegation happens. Each assignment includes phase id, proof gate, files to read, allowed edit scope, non-goals, success criteria, proof command or verification command, evidence row requirements, and risks/blockers. Specialist workers return changed files, proof results, an evidence row draft, and risks. The orchestrator reviews and integrates their output, runs the phase proof gate, appends runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`, and updates `.buildprint/progress.md` plus `.buildprint/next-agent.md` before moving on. If no real delegation happens, write compact team-gates instead of fake handoff paperwork.
 
 ## AGENTS.md plan
 

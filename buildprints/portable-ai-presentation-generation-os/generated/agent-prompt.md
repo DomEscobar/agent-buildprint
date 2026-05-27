@@ -11,8 +11,12 @@ Required read order:
 3. `02-project-setup.md`
 4. `blueprint.yaml`
 5. `03-phases/phase-index.yaml`
-6. active phase file from the phase index
-7. `04-evaluation.md`
-8. `05-evidence/evidence-ledger.jsonl`
+6. `03-phases/phase-flow.md`
+7. active phase file from the phase index
+8. `04-evaluation.md`
+9. `05-evidence/evidence-ledger.jsonl`
+10. `05-evidence/evidence-ledger.schema.json`
 
 Use the Portable AI Presentation Generation OS Buildprint. Implement only the active proof-gated phase first. Do not copy Presenton source; preserve source-observed product behavior as source-independent obligations. Runtime proof or blockers belong in runtime artifact `.buildprint/evidence/evidence-ledger.jsonl` before claiming progress.
+
+Evidence rows must be narrow. Do not upgrade browser/e2e, live-provider, security, worker, export, webhook, MCP, data-lifecycle, or UX claims from generic traces or review prose. Qualification blockers do not automatically block downstream implementation when the local product path, adapter/config tests, persistence/readback, and honest blocker rows exist.

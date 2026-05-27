@@ -33,6 +33,19 @@ Record decisions with short evidence, not bureaucracy:
 - Auth/providers/deployment:
   - Decision: mock/no-network providers by default. Live keys, public storage, real publishing, and hosted deployment require explicit human approval and evidence.
 
+## Production readiness contract
+
+Production-grade architecture is the default for the selected full-suite packet. Do not downgrade to a local MVP unless the user explicitly reduces selected scope. Missing credentials block only live proof; they do not block implementation of provider adapters, config contracts, deterministic tests, durable state paths, security boundaries, worker/runtime ownership, media pipeline seams, deployment/ops shape, or browser/e2e proof plans.
+
+- Auth/session/tenant boundary: define local project/session ownership, private-by-default gallery state, consent flags, upload ownership, publish authorization, and access-control seams before exposing gallery, video details, or publish handoffs.
+- Provider integration contract: implement analysis/research, voice, actor/upload, image/video, composer, storage, scraper/downloader, and social handoff adapters with deterministic mock/no-network mode, live config validation, fail-closed missing-credential behavior, and tests that do not upgrade mocks to live providers.
+- Durable persistence contract: define project state, scripts, actor/voice/video config, jobs, logs, provider records, output manifests, media artifact paths, gallery metadata, publish handoff payloads, validation reports, import/export, delete/reset, retention, migration, and restart/readback ownership before claiming production durability.
+- Worker/runtime contract: define generation queue ownership, pending/running/success/failure/blocked/canceled/retry states, ordered logs, progress persistence, retry/cancel/failure recovery, and restart behavior.
+- Deployment and operations contract: document local dev, production target, env/config, health/readiness, structured logs, media/output limits, URL egress policy, upload limits, CI/browser/media gates, and release blockers.
+- Browser/e2e contract: UI-bearing work must have repeatable browser/e2e proof plans for source input, analysis/scripts, configuration, generation progress, review/player, gallery, publish handoff, blocked provider states, desktop/mobile screenshots, accessibility, and no-overlap responsive behavior.
+
+Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
+
 ## Source contract anchors
 
 Promote concrete source observations into implementation contracts before starting phases:

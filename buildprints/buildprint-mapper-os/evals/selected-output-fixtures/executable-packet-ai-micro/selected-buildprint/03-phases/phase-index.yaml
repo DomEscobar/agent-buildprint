@@ -1,0 +1,8 @@
+schema_version: mapper-os/phase-index
+active_phase: 03-phases/01-micro-chat-runtime.md
+phases:
+  - phase_id: 01-micro-chat-runtime
+    file: 03-phases/01-micro-chat-runtime.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-01-micro-chat-runtime

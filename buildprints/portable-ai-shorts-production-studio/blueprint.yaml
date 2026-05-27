@@ -35,23 +35,23 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: contracts-adapters
+  - phase_id: 01-contracts-adapters
     title: Contracts and deterministic adapters
     file: 03-phases/01-contracts-adapters.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: job-runtime-state
+  - phase_id: 02-job-runtime-state
     title: Job runtime and persistence honesty
     file: 03-phases/02-job-runtime-state.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: media-pipeline
+  - phase_id: 03-media-pipeline
     title: Fixture media pipeline
     file: 03-phases/03-media-pipeline.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: browser-studio
+  - phase_id: 04-browser-studio
     title: Browser production studio
     file: 03-phases/04-browser-studio.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: gallery-publish-validation
+  - phase_id: 05-gallery-publish-validation
     title: Gallery publish handoff and validation
     file: 03-phases/05-gallery-publish-validation.md
     status: INCLUDED_NEEDS_PROOF

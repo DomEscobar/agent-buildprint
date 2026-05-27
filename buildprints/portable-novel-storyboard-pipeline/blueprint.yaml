@@ -35,27 +35,27 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: 05-evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: project-workspace-auth
+  - phase_id: 01-project-workspace-auth
     title: 01-project-workspace-auth
     file: 03-phases/01-project-workspace-auth.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: novel-event-ingestion
+  - phase_id: 02-novel-event-ingestion
     title: 02-novel-event-ingestion
     file: 03-phases/02-novel-event-ingestion.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: script-agent-assets
+  - phase_id: 03-script-agent-assets
     title: 03-script-agent-assets
     file: 03-phases/03-script-agent-assets.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: production-storyboard-flow
+  - phase_id: 04-production-storyboard-flow
     title: 04-production-storyboard-flow
     file: 03-phases/04-production-storyboard-flow.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: media-preview-export
+  - phase_id: 05-media-preview-export
     title: 05-media-preview-export
     file: 03-phases/05-media-preview-export.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: safety-runtime-boundary
+  - phase_id: 06-safety-runtime-boundary
     title: 06-safety-runtime-boundary
     file: 03-phases/06-safety-runtime-boundary.md
     status: INCLUDED_NEEDS_PROOF

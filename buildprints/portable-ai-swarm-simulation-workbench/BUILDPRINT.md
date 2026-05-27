@@ -10,7 +10,7 @@ This is the canonical starting point and execution contract for the blueprint. D
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
 6. Read `03-phases/phase-flow.md`.
-7. Read only the active phase file: `03-phases/01-ingestion-ontology.md`.
+7. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
 8. Read `04-evaluation.md`.
 9. Read seed evidence in `05-evidence/evidence-ledger.jsonl`; append runtime proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist.
 

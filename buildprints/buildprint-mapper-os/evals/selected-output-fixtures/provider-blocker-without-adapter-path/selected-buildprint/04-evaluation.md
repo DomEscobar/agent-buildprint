@@ -23,6 +23,14 @@ A phase is complete only when:
 - blocker/unknowns are not hidden
 - failed gates are repaired or routed correctly
 
+## Phase state model
+
+- `checkpoint_recorded`: at least one valid runtime evidence row exists for the phase. This proves evidence discipline only.
+- `phase_core_passed`: the phase-owned local vertical path works end to end with matching tests/proof, including UI action/state-transition proof for UI-bearing phases.
+- `claim_qualified`: the specific live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle claim has matching executable proof and may upgrade.
+
+Do not treat `checkpoint_recorded` as `phase_core_passed`. Do not treat `phase_core_passed` as `claim_qualified`.
+
 ## Evidence requirements
 
 Each evidence row must include phase id, proof type, provider mode, status, source/command summary, claim proven or blocker, and whether it upgrades a claim.
@@ -30,3 +38,9 @@ Each evidence row must include phase id, proof type, provider mode, status, sour
 ## Blocker honesty
 
 A blocker preserves scope. Do not silently downgrade the product, hide missing proof, skip required UI states, or call deterministic adapters live providers.
+
+## Continuation versus qualification
+
+Some blockers prevent claim qualification without blocking later implementation. Missing live credentials, unavailable browser/e2e tooling, screenshot tooling, deployment authorization, or external services should be recorded as non-upgrading blocker rows and may set `blocks_continuation: false` when the phase's core local implementation path, persistence, safety checks, and runtime/API proof passed.
+
+Do not use `blocks_continuation: false` for failed core implementation, failed owned persistence, failed local runtime/API proof, unresolved destructive/security ambiguity, missing required project structure, or any condition that makes downstream phases unsafe or invalid.

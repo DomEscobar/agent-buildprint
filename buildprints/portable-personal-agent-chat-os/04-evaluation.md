@@ -1,37 +1,46 @@
 # Evaluation
 
-Use this file after each phase proof gate and before making any public or implementation claim.
+## Claim upgrade rules
 
-## Required evaluation dimensions
+Claims upgrade only after the relevant phase proof gate passes and evidence is recorded.
 
-- provider_live: deterministic test provider proof is required for baseline; live OpenAI/Anthropic/Bedrock/Ollama-compatible behavior remains blocked until env-gated smoke tests run with real credentials and network.
-- durable_persistence: sessions, messages, checkpoints, memory, traces, team tasks, and telemetry require persistence/readback proof; in-memory-only stores are prototype blockers.
-- security_boundary: tool/schema policy, denied shell/write/network/browser actions, secret handling, MCP timeouts, and audit events must be proven or recorded as blockers.
-- no_fake: no fake provider/live/MCP/browser/security/build claim may pass from copy checks, static text, or synthetic evidence alone.
-- ui_api_workbench: chat stream, provider diagnostics, tools, skills, MCP, memory, team, tokens, and config views must be wired to runtime state or explicitly blocked.
-- memory_context: compaction must retain recent messages and not silently drop user instructions.
-- team_delegation: subagent tasks must be bounded, evented, summarized, and policy-constrained.
-- claim_boundaries: exact Emperor Agent clone parity, source UI parity, production auth, billing, hosted SaaS, publishing, browser/network/shell safety, media/retrieval integrations, and JARVIS/ToFu completeness are unsafe unless separately proven.
+Required proof concepts:
+
+- provider_live: real provider/API behavior is proven. If credentials or paid-service approval are missing, the blocker may apply only to live proof after provider adapters, config contracts, deterministic test doubles, error handling, and integration tests exist.
+- durable_persistence: state survives readback/reload where durability is claimed.
+- security_boundary: auth, tenant/privacy, secrets, destructive actions, and unsafe input paths are reviewed.
+- no_fake: no static shell, fake green test, placeholder provider, no-op control, or in-memory-only demo is claimed as production behavior.
+- clean_room_implementation_trace: implementation does not depend on opening the original source repo as implementation input.
+- production_readiness: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e gates, and security controls are implemented or explicitly blocked without downgrading scope.
 
 ## Loop completion rule
 
 A phase is complete only when:
 
-1. Required phase-run artifacts exist under `.buildprint/phase-runs/<phase-id>/`.
-2. Quality gates in the phase file ran or produced an honest blocker.
-3. Architecture, UX, and QA reviews answer the review contracts from `03-phases/phase-flow.md`.
-4. Runtime evidence or blocker rows are appended to `.buildprint/evidence/evidence-ledger.jsonl`, not to the packet seed ledger.
-5. The evidence row conforms to `05-evidence/evidence-ledger.schema.json` and does not over-upgrade blocked, missing, synthetic, partial, sandbox-limited, network-limited, credential-limited, or dry-run-only proof.
+- observe/plan/execute/verify/reflect/record loop completed at least once
+- verification evidence exists
+- phase proof gate passes, or an honest blocker is recorded only for unavailable live credentials, external services, paid-service approval, or deployment authorization
+- blocker/unknowns are not hidden
+- failed gates are repaired or routed correctly
+
+## Phase state model
+
+- `checkpoint_recorded`: at least one valid runtime evidence row exists for the phase. This proves evidence discipline only.
+- `phase_core_passed`: the phase-owned local vertical path works end to end with matching tests/proof, including UI action/state-transition proof for UI-bearing phases.
+- `claim_qualified`: the specific live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle claim has matching executable proof and may upgrade.
+
+Do not treat `checkpoint_recorded` as `phase_core_passed`. Do not treat `phase_core_passed` as `claim_qualified`.
+
+## Evidence requirements
+
+Each evidence row must include phase id, proof type, provider mode, status, source/command summary, claim proven or blocker, and whether it upgrades a claim.
 
 ## Blocker honesty
 
-Blocked proof is acceptable when the blocker is scoped and does not inflate the claim. Examples:
+A blocker preserves scope. Do not silently downgrade the product, hide missing proof, skip required UI states, or call deterministic adapters live providers.
 
-- missing live provider credentials blocks `provider_live`;
-- no configured MCP server blocks real MCP interoperability;
-- unavailable browser automation blocks browser screenshot proof but not local HTTP proof;
-- network restriction blocks external retrieval/media/provider smoke tests;
-- absent production auth or billing implementation blocks hosted/multi-user/billing claims;
-- in-memory-only persistence blocks durable_persistence.
+## Continuation versus qualification
 
-Blocked, missing, synthetic, partial, sandbox-limited, network-limited, credential-limited, and dry-run-only evidence must set `upgrades_claim: false`.
+Some blockers prevent claim qualification without blocking later implementation. Missing live credentials, unavailable browser/e2e tooling, screenshot tooling, deployment authorization, or external services should be recorded as non-upgrading blocker rows and may set `blocks_continuation: false` when the phase's core local implementation path, persistence, safety checks, and runtime/API proof passed.
+
+Do not use `blocks_continuation: false` for failed core implementation, failed owned persistence, failed local runtime/API proof, unresolved destructive/security ambiguity, missing required project structure, or any condition that makes downstream phases unsafe or invalid.

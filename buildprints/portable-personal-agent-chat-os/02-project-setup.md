@@ -31,6 +31,19 @@ This setup contract is completed before phase implementation. It turns human ali
 - Auth/providers/deployment:
   - Decision: single-user local app by default. Provider credentials, paid services, hosted deployment, and production auth require explicit human confirmation and separate proof.
 
+## Production readiness contract
+
+Production-grade architecture is the default for the selected full-suite packet. Do not downgrade to a local MVP unless the user explicitly reduces selected scope. Missing credentials block only live proof; they do not block implementation of provider adapters, config contracts, deterministic tests, durable state paths, security boundaries, worker/runtime ownership, tool/MCP safety seams, deployment/ops shape, or browser/e2e proof plans.
+
+- Auth/session/tenant boundary: define local owner/session boundaries, single-user versus multi-user posture, memory privacy, attachment/source ownership, token telemetry visibility, and hosted auth/tenant blockers before exposing claims.
+- Provider integration contract: implement deterministic provider, OpenAI-compatible/Anthropic/Bedrock/local adapter seams, config validation, fail-closed missing-credential behavior, streaming event contracts, latency/token labels, and tests that do not upgrade deterministic providers to live providers.
+- Durable persistence contract: define sessions, messages, checkpoints, memory, traces, enabled tools/skills/MCP servers, team tasks, telemetry, import/export, delete/reset, retention, migration, and restart/readback ownership before claiming production durability.
+- Worker/runtime contract: define streaming turn lifecycle, cancellation, retry/failure recovery, compaction, team task events, MCP/tool timeouts, progress state, and restart behavior.
+- Deployment and operations contract: document local dev, production target, env/config, health/readiness, structured logs, metrics/traces, bounded roots, tool limits, CI/browser/API gates, and release blockers.
+- Browser/e2e contract: UI-bearing work must have repeatable browser/e2e proof plans for chat streaming, provider diagnostics, tools, skills, MCP, memory, team, token telemetry, config diagnostics, blocked states, responsive behavior, accessibility, and no-overlap rendering.
+
+Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
+
 ## Source contract anchors
 
 - Route/API/job prefixes and handlers: source path anchors include agent/webui bootstrap/config/memory/tokens/model routes and streaming WebSocket/HTTP chat boundary; target may use cleaner routes as long as equivalent bootstrap, stream, diagnostics, memory, token, and trace capabilities exist.

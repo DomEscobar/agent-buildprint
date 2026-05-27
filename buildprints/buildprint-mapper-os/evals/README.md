@@ -9,12 +9,14 @@ These fixtures make the Mapper OS non-illustrative. They are reviewed by an agen
 - `admin-dashboard` - admin surface, auth/session, destructive action, and audit-risk detection.
 - `large-monorepo` - mixed integrations and scope/candidate pressure.
 - `route-patterns` - Next/Fastify-style route and upload/cache/auth/AI detection.
+- `local-rag-chat` - compact local-first AI app signals inspired by Maxkrvo/OllamaChat: Ollama provider seam, RAG upload/indexing, SQLite/libSQL persistence, memory/settings, and browser proof pressure.
 
 ## Selected Output Fixtures
 
 These fixtures define the current executable packet baseline. They are not a version-migration archive.
 
 - `selected-output-fixtures/executable-packet-good` - positive baseline fixture with `BUILDPRINT.md`, setup gates, phase routing, proof gates, evaluation rules, and seed evidence.
+- `selected-output-fixtures/executable-packet-ai-micro` - tiny one-phase AI replay packet for the fastest downstream-agent loop: provider seam, persistence, read order, no-fake scan, and evidence honesty.
 - `selected-output-fixtures/forbidden-start-here` - negative regression for obsolete `START_HERE.md` routing.
 - `selected-output-fixtures/forbidden-pre-implementation-questions` - negative regression for obsolete `PRE_IMPLEMENTATION_QUESTIONS.md` routing.
 - `selected-output-fixtures/forbidden-capabilities-dir` - negative regression for obsolete `03-capabilities/` packets.
@@ -46,6 +48,18 @@ Use it to keep the golden expectations honest before running slower agent replay
 
 The replay eval tests downstream packet consumption quality. It copies one selected executable-blueprint packet into a new `/tmp/mapper-replay-*` workspace, initializes git there so Codex treats it as a normal project, and asks a fresh Codex CLI agent to perform a phase-1 implementation/replay using only the copied packet. Real replay invokes `codex exec --full-auto <prompt>` so the downstream agent can create setup, implementation, verification, and runtime evidence files inside the temp workspace.
 
+## Replay Ladder
+
+Use the smallest replay that can expose the regression:
+
+1. `npm run eval:mapper-fast` - static packet checks, negative fixtures, golden source signals, and replay dry-run. No Codex call.
+2. `npm run eval:agent-smoke` - tiny one-phase AI micro packet. Default real-agent watchdog, capped at 5 minutes.
+3. `npm run eval:agent-small` - compact local RAG app replay. Use before expensive mapped-project replay.
+4. `npm run eval:swarm-phase2` - named hard-regression phase for the portable Swarm/MicroFish packet. Do not run this as the default inner loop.
+5. Full Swarm/MicroFish replay - final/manual regression only.
+
+If a Swarm run takes roughly 15 minutes, that is expected hard-regression cost. Fix prompt, setup, proof, and evidence failures through the micro and local-RAG loops first.
+
 Deterministic dry-run for CI and harness mechanics:
 
 ```bash
@@ -62,6 +76,34 @@ Real Codex replay, intentionally not wired into `npm test` because it invokes an
 
 ```bash
 npm run eval:mapper-replay
+```
+
+For manual review, prefer named scripts or pass `--archive quality/<name>-workspace`. The archive is copied before temp workspace cleanup and preserves `.buildprint/setup.md`, `.buildprint/evidence/evidence-ledger.jsonl`, phase-run proof artifacts, and generated implementation files.
+
+Fastest AI micro replay target:
+
+```bash
+npm run eval:ai-micro-replay
+```
+
+This is the inner-loop watchdog. It uses a 5-minute cap and scores the workspace artifacts even if Codex is still running when the cap hits. If every required artifact and evidence check already passes, the eval passes with a timeout note; larger replays still require clean process exit unless explicitly configured.
+
+Dry-run the same packet without invoking Codex:
+
+```bash
+npm run eval:ai-micro-replay:dry-run
+```
+
+Fast local-RAG AI replay target:
+
+```bash
+npm run eval:local-rag-replay
+```
+
+Dry-run the same packet without invoking Codex:
+
+```bash
+npm run eval:local-rag-replay:dry-run
 ```
 
 The default packet is:
