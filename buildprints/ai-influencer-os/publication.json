@@ -25,21 +25,22 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "OpenClaw AI creator system with configurable persona, memory, life continuity, Wavespeed images, social drafts, QA, and publishing handoff.",
-  "plainDescription": "A blueprint for building an AI creator/influencer system with persona memory, image generation, content planning, draft queues, QA, and controlled publishing handoff.",
+  "summary": "OpenClaw AI creator system with configurable persona, memory, life continuity, Wavespeed images, social drafts, QA, and approval-gated Instagram posting automation.",
+  "plainDescription": "A blueprint for building an AI creator/influencer system with persona memory, image generation, content planning, draft queues, QA, and controlled Instagram publishing automation through browser/noVNC handoff.",
   "promise": "An agent-grade Buildprint package for a full AI influencer system. The architecture is fixed; persona, voice, channels, content lanes, and approval policy stay configurable.",
   "whatYouGet": [
     "AI creator/influencer operating system",
     "Configurable persona and memory model",
     "Image generation workflow",
     "Social draft and media queue",
-    "Approval-gated publishing handoff",
+    "Approval-gated Instagram posting automation",
+    "Browser/noVNC handoff for logged-in social publishing sessions",
     "Manager audit and safety checks"
   ],
   "whatYouNeed": [
     "Nothing for local/mock mode",
     "Image provider key, such as Wavespeed, for real image generation",
-    "Social account/browser access if you want real publishing",
+    "Instagram account/browser access if you want real Instagram posting",
     "Brand/persona decisions and media policy from the human"
   ],
   "architectureFlow": [
@@ -57,6 +58,7 @@
     "Life state and journal",
     "Wavespeed image skill",
     "Social drafts and media queue",
+    "Instagram publish queue, auth check, dry-run, and handoff commands",
     "Manager audit",
     "Browser/noVNC publishing handoff"
   ],
@@ -66,6 +68,7 @@
     "Ungrounded public claims",
     "Unsafe media requests",
     "Image provider drift",
+    "Treating gated Instagram automation as unsupervised bot publishing",
     "Auto-publishing by default"
   ],
   "checks": [
@@ -75,6 +78,7 @@
     "Tests use mock image mode without external APIs",
     "User memory and self-state are separate",
     "noVNC handoff service shape exists",
+    "Instagram posting automation requires approved drafts plus browser/session/auth checks",
     "Publishing is mock/manual-gated by default"
   ],
   "trustBadges": [
@@ -95,9 +99,9 @@
     },
     {
       "label": "Gated publishing",
-      "detail": "Publishing is manual/mock/approval-gated by default, never raw auto-publish.",
+      "detail": "Instagram posting automation is supported through approved drafts, dry-run checks, and browser/noVNC handoff; it is never raw auto-publish by default.",
       "tone": "info"
     }
   ],
-  "copyPrompt": "Use the AI Influencer OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Do not auto-publish by default."
+  "copyPrompt": "Use the AI Influencer OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Implement the Instagram posting automation path through queue, auth check, dry-run, approved draft, and browser/noVNC handoff. Do not auto-publish by default."
 }
