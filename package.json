@@ -32,7 +32,7 @@
     "eval:local-rag-phase2": "node scripts/eval-mapper-replay.mjs --packet buildprints/portable-local-rag-chat-workbench --phase 02-document-rag-indexing --require-interactive-ui --timeout-ms 600000 --allow-timeout-after-pass --report quality/local-rag-phase2-replay-report.json --transcript quality/local-rag-phase2-replay-transcript.txt --archive quality/local-rag-phase2-replay-workspace",
     "eval:local-rag-replay": "node scripts/eval-mapper-replay.mjs --packet buildprints/portable-local-rag-chat-workbench --timeout-ms 600000 --report quality/local-rag-replay-report.json --transcript quality/local-rag-replay-transcript.txt --archive quality/local-rag-replay-workspace",
     "eval:local-rag-replay:dry-run": "node scripts/eval-mapper-replay.mjs --packet buildprints/portable-local-rag-chat-workbench --timeout-ms 600000 --dry-run",
-    "eval:swarm-phase2": "node scripts/eval-mapper-replay.mjs --packet buildprints/portable-ai-swarm-simulation-workbench --phase 02-graph-builder --timeout-ms 900000 --report quality/swarm-phase2-replay-report.json --transcript quality/swarm-phase2-replay-transcript.txt --archive quality/swarm-phase2-replay-workspace",
+    "eval:swarm-phase2": "node scripts/eval-mapper-replay.mjs --packet buildprints/portable-ai-swarm-simulation-workbench --phase 02-graph-builder --require-interactive-ui --timeout-ms 900000 --report quality/swarm-phase2-replay-report.json --transcript quality/swarm-phase2-replay-transcript.txt --archive quality/swarm-phase2-replay-workspace",
     "eval:mirofish-flow": "node scripts/eval-mirofish-flow.mjs",
     "eval:personal-agent-flow": "node scripts/eval-personal-agent-flow.mjs",
     "eval:taxhacker-flow": "node scripts/eval-taxhacker-flow.mjs"

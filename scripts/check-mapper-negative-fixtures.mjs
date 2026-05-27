@@ -15,6 +15,8 @@ const fixtures = [
   ['local MVP production missing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/local-mvp-production-missing/selected-buildprint'],
   ['provider blocker without adapter path', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/provider-blocker-without-adapter-path/selected-buildprint'],
   ['screenshots without repeatable e2e', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/screenshots-without-repeatable-e2e/selected-buildprint'],
+  ['visual quality gate missing', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/visual-quality-gate-missing/selected-buildprint'],
+  ['team capsules not compiled', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/team-capsules-not-compiled/selected-buildprint'],
   ['phase id drift', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/phase-id-drift/selected-buildprint'],
   ['all phases independent', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/all-phases-independent/selected-buildprint'],
 ];
@@ -33,6 +35,8 @@ const expectations = new Map([
   ['local MVP production missing', /02-project-setup\.md missing ## Production readiness contract/i],
   ['provider blocker without adapter path', /production proof gate missing provider_adapter_config_test_required|must state missing live credentials block live proof only/i],
   ['screenshots without repeatable e2e', /production proof gate missing repeatable_browser_e2e/i],
+  ['visual quality gate missing', /04-evaluation\.md missing visual_quality_gate/i],
+  ['team capsules not compiled', /03-phases\/phase-flow\.md missing compiled team skill gate token: Compiled team skill gates/i],
   ['phase id drift', /phase_id ingest-record must match file basename 01-ingest-record/i],
   ['all phases independent', /multi-phase packets must model dependencies/i],
 ]);

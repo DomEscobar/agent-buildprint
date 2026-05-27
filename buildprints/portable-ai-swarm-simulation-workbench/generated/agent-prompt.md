@@ -12,11 +12,13 @@ Use the implementation loop and repair routing before claiming done.
 
 Production-grade architecture is the default: implement auth/session/tenant boundaries, provider adapters/config/tests, durable persistence, worker/runtime ownership, deployment/ops shape, observability, security controls, and repeatable browser/e2e proof before accepting live-proof blockers.
 
+Product-grade UI is also default for this browser workbench. A single embedded HTML/CSS/JS file, default browser controls, stacked forms, generic cards, raw node/action/report text lists, or screenshots that look like a local MVP must be treated as a UX blocker even when functional Playwright assertions pass. The implementation must define a real UI boundary, domain-specific graph/simulation/report interactions, visual hierarchy, responsive behavior, focus/disabled states, and screenshot critique before upgrading `ux_design_gate` or `visual_quality_gate`.
+
 Evidence rows must be narrow: list only proof labels backed by the row's commands/artifacts. Do not claim browser/e2e/screenshot/security/data-lifecycle/worker proofs from generic HTTP traces or static files.
 
 Do not upgrade worker, data-lifecycle, or security labels from a generic `runtime_trace`, `local_http_runtime_trace`, API smoke test, or review row. Use separate rows with proof types and artifacts that explicitly name the worker recovery, migration/retention/backup/upload-limit, or security/destructive-action/secret-boundary path.
 
-Do not upgrade `ux_design_gate` from static markup, string checks, or non-browser DOM-state scripts. If Playwright/Chrome/browser tooling is unavailable, write a non-upgrading UX/browser blocker row instead.
+Do not upgrade `ux_design_gate` or `visual_quality_gate` from static markup, string checks, non-browser DOM-state scripts, or browser assertions that only prove elements exist. If Playwright/Chrome/browser tooling is unavailable, write a non-upgrading UX/browser blocker row instead.
 
 Continue through the full suite when a phase has core local implementation/runtime proof and only live-provider/browser/e2e/deployment/external-service claim blockers. Those blockers limit qualification; they do not automatically block downstream implementation.
 

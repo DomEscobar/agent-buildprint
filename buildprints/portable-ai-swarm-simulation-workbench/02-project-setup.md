@@ -1,20 +1,20 @@
 # Project Setup
 
-This setup contract is completed before phase implementation. It turns short human alignment and mapped source evidence into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
+This setup contract is completed before phase implementation. It turns short human alignment and mapped product obligations into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
 
 ## Human preferences
 
 - Human answers come from `01-questions.md`.
-- Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from source evidence and product goals.
+- Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from mapped product obligations and product goals.
 - Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
 ## Inferred project shape
 
 - Product: Portable AI Swarm Simulation Workbench
-- Source stack anchors: MiroFish-style Flask API, Vue/Vite browser workbench, Docker-ready local/runtime packaging, OpenAI-compatible LLM adapters, Zep-compatible graph memory, OASIS/CAMEL-compatible simulation runtime, env-driven provider modes, and file-backed/object-storage persistence seams.
-- Frontend/UI surfaces: infer from phase UX/UI requirements and source evidence; preserve the Vue/Vite workbench behavior as a source signal even if the implementation chooses a different browser framework.
-- Backend/API surfaces: infer from phase interfaces touched and source evidence; preserve the Flask-style route/task semantics as source contract anchors even if the implementation chooses a different server framework.
-- State/runtime surfaces: infer from phase state/runtime touched and source evidence.
+- Mapped stack hints: MiroFish-style Flask API, Vue/Vite browser workbench, Docker-ready local/runtime packaging, OpenAI-compatible LLM adapters, Zep-compatible graph memory, OASIS/CAMEL-compatible simulation runtime, env-driven provider modes, and file-backed/object-storage persistence seams.
+- Frontend/UI surfaces: infer from phase UX/UI requirements and mapped product obligations; preserve the Vue/Vite workbench behavior as a mapping note even if the implementation chooses a different browser framework.
+- Backend/API surfaces: infer from phase interfaces touched and mapped product obligations; preserve the Flask-style route/task semantics as mapped contract anchors even if the implementation chooses a different server framework.
+- State/runtime surfaces: infer from phase state/runtime touched and mapped product obligations.
 - Tests/evaluation: derive from `04-evaluation.md` and phase proof gates.
 
 ## Stack decisions
@@ -23,9 +23,9 @@ Record decisions with short evidence, not bureaucracy:
 
 - Framework/runtime:
   - Decision: AI best-fit unless human constrained it.
-  - Evidence: mapped Flask/Vue/Vite source shape, Docker/runtime expectations, product requirements, and phase proof gates.
+  - Evidence: mapped Flask/Vue/Vite mapped stack shape, Docker/runtime expectations, product requirements, and phase proof gates.
 - Package manager:
-  - Decision: choose source-faithful or ecosystem-standard default.
+  - Decision: choose product-faithful or ecosystem-standard default.
   - Evidence: lockfiles/workspace evidence if available.
 - Data/storage:
   - Decision: real persistence where the product requires durable state.
@@ -44,9 +44,21 @@ Complete these decisions before phase work. Do not downgrade to a local MVP unle
 - Deployment and operations contract: define local dev and production build/run commands, container or hosting shape, health/readiness probes, structured logging, metrics/tracing, rate limits, upload/request-size limits, and CI gates.
 - Browser/e2e contract: define repeatable Playwright or equivalent browser flows for upload-to-ontology, graph build, simulation setup/run, report/chat interaction, history/export/delete, and blocked-provider states. Screenshots support evidence but do not replace automated e2e coverage.
 
-## Source contract anchors
+## Workbench UX quality contract
 
-Promote concrete source observations into implementation contracts before starting phases:
+This product is a browser workbench, not an API demo. The implementation must define a product-grade UI architecture before phase work:
+
+- UI architecture: use a real frontend boundary for user-facing surfaces. For a full-suite browser workbench, a single Python/Node server file with embedded HTML/CSS/JS is a scoped prototype only and must not pass `ux_design_gate` or `visual_quality_gate`.
+- Product composition: expose the product as a staged workflow with persistent project context, phase/status navigation, graph/simulation/report areas, and clear next actions. Do not stack every phase as unrelated forms on one long page.
+- Domain-specific affordances: graph output must be visually inspectable as graph/network or structured relationship workbench, not only as raw node/edge text lists. Simulation runtime must show timeline/progress/action activity, not only rows of status text. Reports and chat must read like an analysis workspace, not a textarea bolted under a form.
+- Visual system: define tokens for typography, spacing, color, surface hierarchy, focus states, disabled states, alerts, and responsive layout. Default browser controls, unstyled file inputs, generic dashboard cards, and one-note pale panels fail the UX gate.
+- State quality: every major workflow area must show intentional empty, loading, error, blocked-provider, success, and recovery states with useful copy and stable layout.
+- Responsive/accessibility: prove at least desktop and mobile widths, keyboard-reachable primary actions, visible focus, no text overlap, and adequate contrast.
+- Screenshot critique: after browser proof, inspect the screenshot as a product artifact. If the screenshot looks like a quick local MVP, plain admin form, generic card stack, or developer test harness, the UX review must be `blocker` even when Playwright assertions pass.
+
+## Mapped contract anchors
+
+Promote compiled product observations into implementation contracts before starting phases:
 
 - Route/API/job prefixes and handlers: graph upload/ontology, graph build, simulation configuration/runtime, reports/interactions, project history, reset/delete/export.
 - Request/response payloads and validation errors: upload type/size validation, project/task IDs, ontology/graph/report payloads, task status/error payloads, export manifests, and blocked-provider responses.
@@ -54,11 +66,11 @@ Promote concrete source observations into implementation contracts before starti
 - Durable state, generated artifacts, retention, import/export, and delete/reset behavior: uploads, parsed source text, ontology, graph nodes/edges, task state, reports, interactions, exports, reset/delete history, and generated runtime artifacts.
 - UI flow/state anchors including empty/loading/error/blocked/success states: upload workbench, graph explorer, simulation setup/run monitor, report/chat view, history/export/delete screens.
 
-## Source capability/surface ledger
+## Product obligation/surface ledger
 
 - Surface id: SRC-SWARM-WORKBENCH
-  - Source anchor: source paths and mapped evidence for MiroFish upload, graph, simulation, report, interaction, history, and data lifecycle surfaces.
-  - Source capability: source-independent AI swarm simulation workbench from seed upload through report interaction and lifecycle management.
+  - Mapping note: mapped notes and mapped evidence for MiroFish upload, graph, simulation, report, interaction, history, and data lifecycle surfaces.
+  - Product obligation: source-independent AI swarm simulation workbench from seed upload through report interaction and lifecycle management.
   - Target disposition: preserve | replace | merge | defer | drop. Preserve the product capability while allowing cleaner target architecture.
   - Target contract: equivalent target behavior for upload-to-ontology, graph build, simulation setup/run, report/chat interaction, history/export/delete, provider mode disclosure, and durable state.
   - Compatibility impact: route/function names may change; API/UX/data/provider behavior changes must be explicit in the owning phase. This is not route/function parity.
@@ -67,12 +79,12 @@ Promote concrete source observations into implementation contracts before starti
 Rules:
 
 - This is not route/function parity. Prefer cleaner target architecture when it preserves or intentionally improves the capability.
-- No source-backed surface may disappear silently. If it is merged, replaced, deferred, or dropped, record why and where the equivalent obligation or blocker lives.
+- No mapped surface may disappear silently. If it is merged, replaced, deferred, or dropped, record why and where the equivalent obligation or blocker lives.
 - Future files produced by the implementation/product are runtime artifacts or generated outputs, not packet files. Label them inline.
 
 ## Architecture rules
 
-- Preserve product behavior and source-derived obligations; frameworks are replaceable when behavior and proof remain intact.
+- Preserve product behavior and mapped product obligations; frameworks are replaceable when behavior and proof remain intact.
 - Keep dependency direction explicit: UI -> application/service -> domain -> data/provider adapters.
 - Keep routes/controllers thin; put business rules in domain/service layers.
 - Put external API/provider/database access behind adapters or repositories.
@@ -84,7 +96,7 @@ Rules:
 
 Use these review lenses during every implementation loop:
 
-- Architecture: boundaries, dependency direction, maintainability, source-faithful behavior.
+- Architecture: boundaries, dependency direction, maintainability, product-faithful behavior.
 - UX/UI: polished flows, empty/loading/error/success states, accessibility, responsive behavior.
 - Backend/API: validation, auth/tenant/privacy boundaries, provider contracts, error semantics.
 - State/runtime: persistence, migrations, env/config, workers/jobs, runtime observability.
@@ -122,6 +134,7 @@ The setup artifact must record concrete decisions for:
 - worker/runtime model, queue/retry/cancel/recovery ownership, or explicit synchronous-phase limitation
 - deployment/operations shape, health/logging/metrics/CI expectations, and local dev command
 - browser/e2e and screenshot proof plan for UI-bearing phases
+- product-grade visual QA plan for UI-bearing phases, including anti-patterns that block `ux_design_gate`
 - safety/permission rules for secrets, destructive actions, paid services, external writes, and deployments
 - verification commands required before evidence rows may upgrade claims
 
@@ -133,6 +146,7 @@ Before claiming any phase done:
 
 - Run the smallest meaningful typecheck/lint/test/build gate for changed code.
 - For UI-facing work, verify user-visible behavior with browser/screenshot evidence when possible.
+- For UI-facing work, browser proof must include a visual-quality review against the workbench UX quality contract. Functional Playwright assertions alone do not prove acceptable product UI.
 - For backend/provider/state work, verify real request/path, persistence/readback, or record an honest blocker.
 - For production-grade work, implement auth/session/tenant, provider adapter/config/test, durable persistence, worker/runtime, deployment/ops, and repeatable e2e paths that are applicable to the phase before accepting live-proof blockers.
 - Do not skip tests, hide failures, or upgrade claims without proof.

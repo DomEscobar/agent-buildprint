@@ -24,13 +24,13 @@ requires_roles:
 
 Start, stop, monitor, and recover a Twitter/Reddit/parallel multi-agent simulation runtime, including action logs, round progress, process safety, and optional graph-memory updates.
 
-## Source evidence
+## Mapped product obligations
 
-Source surface IDs: SRC-006
+Mapped surface IDs: SRC-006
 
 Product obligations: OBL-004.
 
-Source evidence refs:
+Mapped product obligations refs:
 - /root/MiroFish/README.md:86-93 describes dual-platform parallel simulation and dynamic temporal memory updates.
 - /root/MiroFish/backend/app/api/simulation.py:1451-1641 starts simulations with platform, max rounds, graph-memory update, force restart, and readiness checks.
 - /root/MiroFish/backend/app/api/simulation.py:1644-1700 stops simulations and persists paused state.
@@ -38,12 +38,12 @@ Source evidence refs:
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
-- Surface id: source-backed surfaces listed in Source evidence.
+- Surface id: mapped surfaces listed in Mapped product obligations.
   - Disposition: preserve capability, target route/function names may differ.
   - Equivalent target behavior: preserve this phase's product outcome through cleaner target architecture where useful.
-  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; source route names are evidence, not mandatory parity.
+  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; mapped route names are evidence, not mandatory parity.
 
 ## Implementation scope
 
@@ -94,7 +94,13 @@ Provider-backed behavior must disclose whether it is deterministic-test-double, 
 
 ## UX/UI requirements
 
-Use the inline UX/UI requirements in this phase. Any UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for empty/loading/error/blocked/success states. Screenshots alone do not satisfy UI completion.
+This phase must expose runtime monitoring as a simulation control room, not status text plus buttons.
+
+- Show run state, platform, rounds, progress/timeline, recent actions, stop/recover controls, process/runtime mode, and graph-memory update state with clear hierarchy.
+- Action logs should read as a timeline/activity feed with scannable agent, round, platform, and action type. Raw pale text rows are a visual-quality blocker.
+- Preserve empty/no-simulation, loading/running, stopped, recovered, blocked-runtime, error, and success/completed states.
+- Stop/recover must be clear, reversible, and safe.
+- Screenshot critique: browser proof must include visual critique against the workbench UX quality contract in `02-project-setup.md`.
 
 ## Safety/security constraints
 
@@ -123,6 +129,7 @@ Use the inline UX/UI requirements in this phase. Any UI-bearing proof must inclu
   - evidence_ledger_entry
   - browser_runtime_trace
   - ux_design_gate
+  - visual_quality_gate
   - screenshot_state_set
   - provider_adapter_config_test_required
   - live_provider_proof_blocker_only

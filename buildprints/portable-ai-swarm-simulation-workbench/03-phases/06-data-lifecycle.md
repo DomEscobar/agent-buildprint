@@ -24,13 +24,13 @@ requires_roles:
 
 Persist projects, files, extracted text, simulations, run states, reports, and history views with safe reset/delete/export/readback behavior.
 
-## Source evidence
+## Mapped product obligations
 
-Source surface IDs: SRC-008
+Mapped surface IDs: SRC-008
 
 Product obligations: OBL-006.
 
-Source evidence refs:
+Mapped product obligations refs:
 - /root/MiroFish/backend/app/models/project.py:101-280 persists project metadata, files, and extracted text under upload storage.
 - /root/MiroFish/backend/app/api/graph.py:36-117 lists, gets, resets, and deletes projects.
 - /root/MiroFish/backend/app/api/simulation.py:788-987 lists simulations and builds enriched history records.
@@ -39,12 +39,12 @@ Source evidence refs:
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
-- Surface id: source-backed surfaces listed in Source evidence.
+- Surface id: mapped surfaces listed in Mapped product obligations.
   - Disposition: preserve capability, target route/function names may differ.
   - Equivalent target behavior: preserve this phase's product outcome through cleaner target architecture where useful.
-  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; source route names are evidence, not mandatory parity.
+  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; mapped route names are evidence, not mandatory parity.
 
 ## Implementation scope
 
@@ -94,7 +94,13 @@ Provider-backed behavior must disclose whether it is deterministic-test-double, 
 
 ## UX/UI requirements
 
-Use the inline UX/UI requirements in this phase. Any UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for empty/loading/error/blocked/success states. Screenshots alone do not satisfy UI completion.
+This phase must provide lifecycle management as a safe project/history workspace, not hidden API endpoints.
+
+- Show project/history list, persisted metadata, reports/exports, reset/delete controls, readback/restart status, and provider/runtime state.
+- Destructive actions require confirmation copy, visible consequences, and recovery/empty states where applicable.
+- Export/download affordances must be discoverable and tied to the selected project/simulation/report.
+- Preserve empty history, loading, export success, delete/reset confirmation, deleted/reset state, readback error, and success states.
+- Screenshot critique: browser proof must include visual critique against the workbench UX quality contract in `02-project-setup.md`.
 
 ## Safety/security constraints
 
@@ -123,6 +129,7 @@ Use the inline UX/UI requirements in this phase. Any UI-bearing proof must inclu
   - evidence_ledger_entry
   - browser_runtime_trace
   - ux_design_gate
+  - visual_quality_gate
   - screenshot_state_set
   - provider_adapter_config_test_required
   - live_provider_proof_blocker_only

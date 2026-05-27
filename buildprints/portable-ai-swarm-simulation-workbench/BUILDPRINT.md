@@ -47,4 +47,4 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 ## Phase discipline
 
-A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
+A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.

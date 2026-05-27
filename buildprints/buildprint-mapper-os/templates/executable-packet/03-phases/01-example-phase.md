@@ -30,13 +30,13 @@ requires_roles:
 
 Describe the working product slice this phase delivers.
 
-## Source evidence
+## Mapped product obligations
 
-List source surfaces and product obligations this phase preserves.
+List mapped surfaces and product obligations this phase preserves.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
-For each source-backed surface this phase owns, state disposition as preserve, replace, merge, defer, or drop. If not preserved exactly, name the equivalent target behavior and compatibility impact. Do not require route/function parity unless it is the product boundary.
+For each mapped surface this phase owns, state disposition as preserve, replace, merge, defer, or drop. If not preserved exactly, name the equivalent target behavior and compatibility impact. Do not require route/function parity unless it is the product boundary.
 
 ## Implementation scope
 
@@ -62,6 +62,8 @@ Describe the smallest real vertical implementation path.
 
 Describe user-facing states: empty, loading, error, blocked, success/ready, responsive, accessible. If not user-facing, write `None — reason:`.
 
+For UI-bearing phases, also define the product-grade visual contract: screen composition, domain-specific interaction model, visual hierarchy, typography/spacing/color/density, focus/disabled states, mobile/desktop expectations, and screenshot critique requirements. A generic card/form shell, raw text-list substitute, default-control page, dead control, or single embedded HTML/CSS/JS file for a full-suite browser product must be a UX blocker, not a pass.
+
 ## Safety/security constraints
 
 Secrets, auth, tenant/privacy, destructive actions, uploads, external writes, provider modes.
@@ -82,6 +84,7 @@ Required proof tracks:
 - worker_retry_cancel_recovery
 - migration_retention_backup_upload_limits
 - repeatable_browser_e2e
+- visual_quality_gate
 - runtime_or_browser_trace
 - persistence_roundtrip
 - security_boundary_review

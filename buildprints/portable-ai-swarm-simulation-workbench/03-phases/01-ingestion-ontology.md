@@ -1,4 +1,4 @@
-# Phase 01 â€” Source Ingestion And Ontology
+# Phase 01 â€” Seed Ingestion And Ontology
 
 ## How to implement this phase
 
@@ -24,13 +24,13 @@ requires_roles:
 
 Upload PDF/Markdown/text seed material with a natural-language prediction requirement, extract text, persist a project, and generate an ontology suitable for downstream graph and agent simulation.
 
-## Source evidence
+## Mapped product obligations
 
-Source surface IDs: SRC-003
+Mapped surface IDs: SRC-003
 
 Product obligations: OBL-001.
 
-Source evidence refs:
+Mapped product obligations refs:
 - /root/MiroFish/README.md:27-32 describes upload of seed materials, prediction requirements, report output, and interactive digital world..
 - /root/MiroFish/backend/app/api/graph.py:122-248 implements multipart upload, project creation, text extraction, ontology generation, and response payload.
 - /root/MiroFish/backend/app/utils/file_parser.py:61-94 limits parsing to PDF, Markdown, and text.
@@ -38,12 +38,12 @@ Source evidence refs:
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
-- Surface id: source-backed surfaces listed in Source evidence.
+- Surface id: mapped surfaces listed in Mapped product obligations.
   - Disposition: preserve capability, target route/function names may differ.
   - Equivalent target behavior: preserve this phase's product outcome through cleaner target architecture where useful.
-  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; source route names are evidence, not mandatory parity.
+  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; mapped route names are evidence, not mandatory parity.
 
 ## Implementation scope
 
@@ -93,7 +93,13 @@ Provider-backed behavior must disclose whether it is deterministic-test-double, 
 
 ## UX/UI requirements
 
-Use the inline UX/UI requirements in this phase. Any UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for empty/loading/error/blocked/success states. Screenshots alone do not satisfy UI completion.
+This phase must contribute to a product-grade swarm workbench, not a standalone upload form.
+
+- Show the upload/ontology step inside a staged workbench shell with persistent project context and clear next action toward graph build.
+- Use intentional visual hierarchy for project setup, upload status, extracted source summary, provider mode, generated ontology, and blocked-provider state.
+- Avoid default file-input/admin-form presentation as the final UI. Default controls are acceptable only if wrapped in a polished, accessible product flow.
+- Empty, loading, validation-error, blocked-provider, and success states must be visible and useful.
+- Screenshot critique: browser proof must include visual critique against the workbench UX quality contract in `02-project-setup.md`.
 
 ## Safety/security constraints
 
@@ -122,6 +128,7 @@ Use the inline UX/UI requirements in this phase. Any UI-bearing proof must inclu
   - evidence_ledger_entry
   - browser_runtime_trace
   - ux_design_gate
+  - visual_quality_gate
   - screenshot_state_set
   - provider_adapter_config_test_required
   - live_provider_proof_blocker_only

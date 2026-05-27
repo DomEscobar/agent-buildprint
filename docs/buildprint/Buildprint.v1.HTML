@@ -10,11 +10,14 @@
         --bg: #f7f8fb;
         --surface: #ffffff;
         --surface-2: #eef2f7;
+        --surface-3: #f8fafc;
         --ink: #172033;
         --muted: #5b6575;
+        --soft: #7a8494;
         --line: #d9e0ea;
         --accent: #2563eb;
         --accent-2: #0f766e;
+        --accent-3: #7c3aed;
         --warn: #a15c07;
         --danger: #b42318;
         --code-bg: #111827;
@@ -29,11 +32,14 @@
           --bg: #0d1117;
           --surface: #141a24;
           --surface-2: #1d2633;
+          --surface-3: #101720;
           --ink: #e8edf5;
           --muted: #a7b0bf;
+          --soft: #8893a5;
           --line: #2c3646;
           --accent: #7aa2ff;
           --accent-2: #55c2b7;
+          --accent-3: #b69cff;
           --warn: #f0b45f;
           --danger: #ff8f86;
           --shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
@@ -52,6 +58,17 @@
         margin: 0;
         background: var(--bg);
         color: var(--ink);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 300px),
+          radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 360px);
+        pointer-events: none;
       }
 
       a {
@@ -160,6 +177,16 @@
         box-shadow: var(--shadow);
       }
 
+      .sidebar-note {
+        margin-top: 16px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-3);
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
       .brand {
         display: grid;
         gap: 4px;
@@ -205,11 +232,61 @@
       .hero {
         display: grid;
         gap: 20px;
-        padding: 30px;
+        padding: 34px;
         border: 1px solid var(--line);
         border-radius: 8px;
         background: var(--surface);
         box-shadow: var(--shadow);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .hero-copy {
+        display: grid;
+        gap: 18px;
+      }
+
+      .quick-panel {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-3);
+      }
+
+      .quick-panel strong {
+        font-size: 0.92rem;
+      }
+
+      .quick-panel dl {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+      }
+
+      .quick-panel div {
+        display: grid;
+        gap: 2px;
+      }
+
+      .quick-panel dt {
+        color: var(--soft);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .quick-panel dd {
+        margin: 0;
+        color: var(--ink);
+        font-size: 0.9rem;
       }
 
       .eyebrow {
@@ -245,6 +322,33 @@
         color: var(--ink);
         font-size: 0.86rem;
         font-weight: 600;
+      }
+
+      .metric-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        display: grid;
+        gap: 4px;
+        min-height: 92px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-3);
+      }
+
+      .metric strong {
+        color: var(--accent);
+        font-size: 1.45rem;
+        line-height: 1;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 0.86rem;
       }
 
       .section {
@@ -288,6 +392,11 @@
         background: var(--surface);
       }
 
+      .card.emphasis {
+        border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+        background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 7%, var(--surface)), var(--surface));
+      }
+
       .card h3 {
         font-size: 1rem;
       }
@@ -303,6 +412,62 @@
         border-left: 4px solid var(--accent);
         border-radius: 6px;
         background: var(--surface-2);
+      }
+
+      .rule {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-3);
+      }
+
+      .rule-number {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+        color: var(--accent);
+        font-weight: 800;
+      }
+
+      .rule p {
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .authority-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 14px;
+      }
+
+      .authority-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .authority-item {
+        display: grid;
+        grid-template-columns: 160px minmax(0, 1fr);
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .authority-item strong {
+        color: var(--accent-3);
+      }
+
+      .authority-item p {
+        color: var(--muted);
       }
 
       .callout.warning {
@@ -378,12 +543,35 @@
         }
 
         .grid.two,
-        .grid.three {
+        .grid.three,
+        .metric-strip,
+        .hero-grid,
+        .authority-grid {
           grid-template-columns: 1fr;
         }
 
-        .flow-row {
+        .flow-row,
+        .authority-item {
           grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          padding: 12px;
+        }
+
+        .hero,
+        .section {
+          padding: 18px;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        th, td {
+          padding: 10px;
         }
       }
     </style>
@@ -397,33 +585,72 @@
         </div>
         <nav class="toc">
           <a href="#overview">Overview</a>
+          <a href="#purpose">Purpose</a>
           <a href="#packet-shape">Packet Shape</a>
           <a href="#read-order">Read Order</a>
+          <a href="#authority">Authority Map</a>
           <a href="#flow">Execution Flow</a>
           <a href="#setup">Questions And Setup</a>
           <a href="#phase-model">Phase Model</a>
+          <a href="#ux-quality">UI Quality</a>
           <a href="#artifacts">Runtime Artifacts</a>
           <a href="#evidence">Evidence Rules</a>
           <a href="#continuation">Continuation</a>
           <a href="#evals">Validation And Evals</a>
           <a href="#anti-patterns">Anti-Patterns</a>
         </nav>
+        <p class="sidebar-note">
+          Read this as the reference shape. During implementation, the snapshot files and local
+          <code>.buildprint/</code> state are the source of truth.
+        </p>
       </aside>
 
       <main class="content">
         <header class="hero" id="overview">
-          <div class="eyebrow">Current state</div>
-          <h1>Buildprints are executable packets for coding agents, not markdown piles.</h1>
-          <p>
-            This page documents the current Agent Buildprint execution contract: how a mapped package is shaped,
-            how agents must read it, how phases advance, and how proof is recorded without fake completion.
-          </p>
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <div class="eyebrow">Current state</div>
+              <h1>Buildprints are executable packets for coding agents, not markdown piles.</h1>
+              <p>
+                This page documents the current Agent Buildprint execution contract: packet shape, read order,
+                phase flow, runtime artifacts, evidence rules, production-grade defaults, and the eval loop that
+                catches lazy implementation behavior.
+              </p>
+            </div>
+            <aside class="quick-panel" aria-label="Current contract summary">
+              <strong>Contract summary</strong>
+              <dl>
+                <div>
+                  <dt>Start file</dt>
+                  <dd><code>BUILDPRINT.md</code></dd>
+                </div>
+                <div>
+                  <dt>Runtime state</dt>
+                  <dd><code>.buildprint/next-agent.md</code></dd>
+                </div>
+                <div>
+                  <dt>Execution unit</dt>
+                  <dd>One dependency-ready phase</dd>
+                </div>
+                <div>
+                  <dt>Proof target</dt>
+                  <dd><code>.buildprint/evidence/evidence-ledger.jsonl</code></dd>
+                </div>
+              </dl>
+            </aside>
+          </div>
           <div class="badges" aria-label="Key properties">
             <span class="badge">Router-first</span>
             <span class="badge">One phase at a time</span>
             <span class="badge">Evidence-ledger proof</span>
             <span class="badge">Production-grade default</span>
             <span class="badge">No broad upfront context load</span>
+          </div>
+          <div class="metric-strip" aria-label="Execution model summary">
+            <div class="metric"><strong>1</strong><span>active phase loaded at a time</span></div>
+            <div class="metric"><strong>3</strong><span>phase states: checkpoint, core passed, qualified</span></div>
+            <div class="metric"><strong>0</strong><span>snapshot edits for runtime progress</span></div>
+            <div class="metric"><strong>all</strong><span>claim upgrades tied to evidence rows</span></div>
           </div>
           <div class="callout warning">
             <strong>Authority rule</strong>
@@ -433,6 +660,30 @@
             </p>
           </div>
         </header>
+
+        <section class="section" id="purpose">
+          <div class="section-header">
+            <h2>What This Contract Solves</h2>
+            <p>
+              The baseline exists because generic agent instructions fail in repeatable ways: agents over-read,
+              stop after a checkpoint, build local MVP shells, or upgrade claims from weak evidence.
+            </p>
+          </div>
+          <div class="grid three">
+            <div class="card emphasis">
+              <h3>Context control</h3>
+              <p>Agents get enough context for the current phase without inhaling the whole packet.</p>
+            </div>
+            <div class="card emphasis">
+              <h3>Execution pressure</h3>
+              <p>Every phase needs a real vertical path, not only a plan, review note, or static screen.</p>
+            </div>
+            <div class="card emphasis">
+              <h3>Evidence honesty</h3>
+              <p>Claims upgrade only when a specific command or artifact proves the matching behavior.</p>
+            </div>
+          </div>
+        </section>
 
         <section class="section" id="packet-shape">
           <div class="section-header">
@@ -502,6 +753,47 @@
               Do not read every phase upfront. Do not treat <code>generated/agent-prompt.md</code> as authority.
               Do not edit snapshot files to record implementation progress.
             </p>
+          </div>
+        </section>
+
+        <section class="section" id="authority">
+          <div class="section-header">
+            <h2>Authority Map</h2>
+            <p>
+              Buildprints deliberately separate human-readable routing, machine-readable mirrors, runtime state,
+              and publication metadata. Mixing these layers is how packets become brittle.
+            </p>
+          </div>
+          <div class="authority-grid">
+            <div class="authority-list">
+              <div class="authority-item">
+                <strong>Package router</strong>
+                <p><code>BUILDPRINT.md</code> defines the canonical packet start and invariant read order.</p>
+              </div>
+              <div class="authority-item">
+                <strong>Setup contract</strong>
+                <p><code>01-questions.md</code> and <code>02-project-setup.md</code> turn unknowns into defaults, blockers, or architecture decisions.</p>
+              </div>
+              <div class="authority-item">
+                <strong>Phase routing</strong>
+                <p><code>03-phases/phase-index.yaml</code> selects the active and next dependency-ready phases.</p>
+              </div>
+              <div class="authority-item">
+                <strong>Phase execution</strong>
+                <p><code>03-phases/phase-flow.md</code> controls plan, team gates, reviews, proof, and evidence.</p>
+              </div>
+              <div class="authority-item">
+                <strong>Runtime truth</strong>
+                <p><code>.buildprint/state.json</code>, <code>progress.md</code>, <code>blockers.md</code>, and <code>next-agent.md</code> override stale package defaults on resumed runs.</p>
+              </div>
+            </div>
+            <div class="callout danger">
+              <strong>Generated prompt is not authority</strong>
+              <p>
+                <code>generated/agent-prompt.md</code> is copy convenience for websites and UIs. It must point back
+                to the packet files, and it must not become a second contract that drifts from the Buildprint.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -624,6 +916,54 @@ continue to next dependency-ready phase or stop on a real blocker</code></pre>
               into runtime behavior and back into visible state or readback. Static cards, dead buttons, generic
               dashboards, screenshots-only proof, or review prose do not qualify.
             </p>
+          </div>
+          <div class="grid two">
+            <div class="rule">
+              <span class="rule-number">A</span>
+              <div>
+                <strong>Checkpoint is not completion</strong>
+                <p>A ledger row proves evidence discipline. It does not prove the product slice is done.</p>
+              </div>
+            </div>
+            <div class="rule">
+              <span class="rule-number">B</span>
+              <div>
+                <strong>Core pass is not qualification</strong>
+                <p>A local deterministic path may pass while live provider, browser, deployment, or security claims remain blocked.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="ux-quality">
+          <div class="section-header">
+            <h2>UI And Product Quality Gate</h2>
+            <p>
+              Browser proof cannot be only "the button exists." UI-bearing phases must prove a real user action path
+              and reject local-MVP visuals before upgrading UX claims.
+            </p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Required for UI phases</h3>
+              <ul>
+                <li>User action path through UI, controller, runtime behavior, and visible readback.</li>
+                <li>Empty, loading, error, blocked, success, and recovery states.</li>
+                <li>Desktop and mobile screenshot or browser evidence when tooling is available.</li>
+                <li>Keyboard path, focus states, disabled states, no text overlap, and adequate contrast.</li>
+                <li>Screenshot critique against the product's visual quality bar.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Blocking UI anti-patterns</h3>
+              <ul>
+                <li>Default browser controls as the final product surface.</li>
+                <li>Stacked forms with no workflow composition.</li>
+                <li>Generic cards where the domain needs graph, timeline, editor, or analysis affordances.</li>
+                <li>Dead buttons, no-op controls, or state cards without interaction.</li>
+                <li>Screenshot-only proof without repeatable user-flow evidence.</li>
+              </ul>
+            </div>
           </div>
         </section>
 

@@ -41,8 +41,9 @@ const setupSections = [
   /## Inferred project shape/i,
   /## Stack decisions/i,
   /## Production readiness contract/i,
-  /## Source contract anchors/i,
-  /## Source capability\/surface ledger/i,
+  /## Workbench UX quality contract/i,
+  /## Mapped contract anchors/i,
+  /## Product obligation\/surface ledger/i,
   /## Architecture rules/i,
   /## Team operating model/i,
   /## Execution authority model/i,
@@ -56,8 +57,8 @@ const setupSections = [
 const phaseSections = [
   /## How to implement this phase/i,
   /## Product outcome/i,
-  /## Source evidence/i,
-  /## Source surface dispositions/i,
+  /## Mapped product obligations/i,
+  /## Behavior compatibility contract/i,
   /## Implementation scope/i,
   /## Interfaces touched/i,
   /## State\/runtime touched/i,
@@ -74,14 +75,15 @@ const productionSetupTokens = [
   'Worker/runtime contract',
   'Deployment and operations contract',
   'Browser/e2e contract',
+  'Screenshot critique',
 ];
 const productionPhaseTokens = [
   'provider_adapter_config_test_required',
   'live_provider_proof_blocker_only',
   'worker_retry_cancel_recovery',
   'repeatable_browser_e2e',
+  'visual_quality_gate',
 ];
-
 function fail(target, message) {
   failures += 1;
   console.error(`x ${target}: ${message}`);
@@ -121,7 +123,7 @@ function jsonlRows(target, file, label) {
 }
 
 function isReferenceRoleLabeled(line) {
-  return /\b(?:packet file|packet authority|source path|source anchor|source evidence|source repo|source repository|source file|runtime artifact|runtime output|product artifact|generated artifact|generated output|implementation artifact|implementation output|storage artifact|report output|downstream implementation|implementation project|root\/local)\b/i.test(line);
+  return /\b(?:packet file|packet authority|source path|source anchor|source repo|source repository|source file|mapping note|mapped product obligation|runtime artifact|runtime output|product artifact|generated artifact|generated output|implementation artifact|implementation output|storage artifact|report output|downstream implementation|implementation project|root\/local)\b/i.test(line);
 }
 
 function isIgnoredReference(ref) {
@@ -206,6 +208,7 @@ function validate(target, dir) {
 
   const setup = safeRead(path.join(dir, '02-project-setup.md'));
   for (const pattern of setupSections) if (!pattern.test(setup)) fail(target, `02-project-setup.md missing ${pattern.source.replace(/\\/g, '')}`);
+  if (/## Source contract anchors|## Source capability\/surface ledger|source evidence/i.test(setup)) fail(target, '02-project-setup.md must compile source facts into mapped product obligations, not expose source evidence sections');
   if (!/root\/local `AGENTS\.md`|local `AGENTS\.md`|Root `AGENTS\.md`/i.test(setup)) fail(target, '02-project-setup.md must define root/local AGENTS.md plan');
   if (!/Runtime setup artifact/i.test(setup) || !/\.buildprint\/setup\.md|\.buildprint\/setup\//i.test(setup) || !/Creating only `AGENTS\.md` is not enough/i.test(setup)) fail(target, '02-project-setup.md must require a runtime .buildprint/setup artifact; AGENTS.md alone is not enough');
   if (!/scope governor/i.test(setup) || !/next-agent\.md/i.test(setup) || !/handoff/i.test(setup)) fail(target, '02-project-setup.md must define execution authority: AGENTS.md as scope governor, .buildprint/next-agent.md continuity, and bounded handoffs');
@@ -215,10 +218,13 @@ function validate(target, dir) {
   for (const token of productionSetupTokens) {
     if (!setup.includes(token)) fail(target, `02-project-setup.md production readiness contract missing ${token}`);
   }
+  for (const token of ['UI architecture', 'Product composition', 'Domain-specific affordances', 'Visual system', 'Screenshot critique']) {
+    if (!setup.includes(token)) fail(target, `02-project-setup.md workbench UX quality contract missing ${token}`);
+  }
   if (/local MVP/i.test(setup) && !/Do not downgrade to a local MVP/i.test(setup)) fail(target, '02-project-setup.md must forbid local MVP downgrades unless explicitly scoped');
   if (!/Missing credentials.*block only live proof/i.test(setup)) fail(target, '02-project-setup.md must keep missing credentials scoped to live proof, not implementation scope');
-  for (const token of ['Target disposition', 'preserve | replace | merge | defer | drop', 'Compatibility impact', 'not route/function parity']) {
-    if (!setup.includes(token)) fail(target, `02-project-setup.md source capability/surface ledger missing ${token}`);
+  for (const token of ['Product obligation', 'Target disposition', 'preserve | replace | merge | defer | drop', 'Compatibility impact', 'not route/function parity']) {
+    if (!setup.includes(token)) fail(target, `02-project-setup.md product obligation/surface ledger missing ${token}`);
   }
 
   const phaseFlow = safeRead(path.join(dir, '03-phases/phase-flow.md'));
@@ -226,6 +232,26 @@ function validate(target, dir) {
     if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing ${token}`);
   }
   if (!/If the main session handles the role itself/i.test(phaseFlow) || !/instead of writing fake handoff\/return paperwork/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must make compact team gates the default and avoid fake delegation paperwork');
+  for (const token of [
+    'Compiled team skill gates',
+    'templates/teams/*',
+    'product-architect',
+    'classify product shape',
+    'ADR-lite tradeoffs',
+    'ux-ui-craft',
+    'taste variables',
+    'domain-fit rubric',
+    'integration-runtime',
+    'provider/API/runtime boundaries',
+    'data-persistence',
+    'state/schema ownership',
+    'security-boundary',
+    'denied-path tests',
+    'test-and-verification',
+    'evidence ceiling rule',
+  ]) {
+    if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing compiled team skill gate token: ${token}`);
+  }
   for (const token of [
     'Do not copy every required proof label into every evidence row',
     'HTTP/API runtime traces prove API/runtime behavior, not browser behavior',
@@ -239,6 +265,9 @@ function validate(target, dir) {
     'phase_core_passed',
     'claim_qualified',
     'UI/controller boundary',
+    'visual_quality_gate',
+    'default-control shells',
+    'raw text-list substitutes',
   ]) {
     if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing evidence honesty rule: ${token}`);
   }
@@ -249,13 +278,16 @@ function validate(target, dir) {
     'QA review contract',
     '## Verdict',
     '## Dependency direction',
-    '## Source capability preservation',
+    '## Product obligation preservation',
     '## Provider/live claim honesty',
     '## Next-phase boundary',
     '## Primary user job',
     '## Screen composition',
+    '## Visual quality bar',
+    '## Domain interaction model',
     '## State matrix',
     '## Screenshot or DOM evidence',
+    '## Screenshot critique',
     '## What this does not prove',
     '## Blockers and claim limits',
     '## Evidence row check',
@@ -289,6 +321,7 @@ function validate(target, dir) {
     const rel = `03-phases/${phaseFile}`;
     const text = safeRead(path.join(phasesDir, phaseFile));
     for (const pattern of phaseSections) if (!pattern.test(text)) fail(target, `${rel} missing ${pattern.source.replace(/\\/g, '')}`);
+    if (/## Source evidence|## Source surface dispositions|Source evidence|source evidence/i.test(text)) fail(target, `${rel} must compile source evidence into mapped product obligations and behavior compatibility contract`);
     for (const token of ['05-evidence/evidence-ledger.jsonl', 'phase_id:', 'current phase', '02-project-setup.md', '01-questions.md']) {
       if (!text.includes(token)) fail(target, `${rel} missing ${token}`);
     }
@@ -301,10 +334,17 @@ function validate(target, dir) {
     if (!/requires_roles:/i.test(text)) fail(target, `${rel} must declare or seed phase-derived required roles`);
     if (!/phase-flow required artifacts/i.test(text)) fail(target, `${rel} must block evidence until phase-flow artifacts exist`);
     if (/Runtime evidence ledger:\s*`05-evidence\/evidence-ledger\.jsonl`/i.test(text)) fail(target, `${rel} must write runtime evidence to .buildprint/evidence/evidence-ledger.jsonl, not the packet seed ledger`);
-    if (!/preserve|replace|merge|defer|drop/i.test(text)) fail(target, `${rel} source surface dispositions must include disposition language`);
-    if (!/equivalent target behavior|compatibility impact/i.test(text)) fail(target, `${rel} source surface dispositions must preserve capability without forcing route/function parity`);
+    if (!/preserve|replace|merge|defer|drop/i.test(text)) fail(target, `${rel} behavior compatibility contract must include disposition language`);
+    if (!/equivalent target behavior|compatibility impact/i.test(text)) fail(target, `${rel} behavior compatibility contract must preserve product obligations without forcing route/function parity`);
     for (const token of productionPhaseTokens) {
       if (!text.includes(token)) fail(target, `${rel} production proof gate missing ${token}`);
+    }
+    if (/ux-ui-craft/i.test(text) || /## UX\/UI requirements/i.test(text)) {
+      for (const token of ['visual', 'Screenshot critique', '02-project-setup.md']) {
+        if (!new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(text)) {
+          fail(target, `${rel} UX/UI requirements missing ${token}`);
+        }
+      }
     }
     if (/06-data-lifecycle\.md$/i.test(rel) && !text.includes('migration_retention_backup_upload_limits')) fail(target, `${rel} production proof gate missing migration_retention_backup_upload_limits`);
     if (!/adapter\/config\/test\/runtime wiring exists|adapter.*config.*test/i.test(text)) fail(target, `${rel} must state missing live credentials block live proof only after adapter/config/test/runtime wiring exists`);
@@ -316,7 +356,7 @@ function validate(target, dir) {
   }
 
   const evaluation = safeRead(path.join(dir, '04-evaluation.md'));
-  for (const token of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake', 'production_readiness', 'Loop completion rule', 'Phase state model', 'checkpoint_recorded', 'phase_core_passed', 'claim_qualified', 'Blocker honesty', 'Continuation versus qualification', 'blocks_continuation: false']) {
+  for (const token of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake', 'production_readiness', 'visual_quality_gate', 'Loop completion rule', 'Phase state model', 'checkpoint_recorded', 'phase_core_passed', 'claim_qualified', 'Blocker honesty', 'Continuation versus qualification', 'blocks_continuation: false']) {
     if (!evaluation.includes(token)) fail(target, `04-evaluation.md missing ${token}`);
   }
 
@@ -338,6 +378,9 @@ function validate(target, dir) {
   }
   if (!/Evidence rows must be narrow/i.test(prompt)) fail(target, 'generated/agent-prompt.md must warn against broad evidence overclaims');
   if (!/do not automatically block downstream implementation/i.test(prompt)) fail(target, 'generated/agent-prompt.md must distinguish qualification blockers from continuation blockers');
+  for (const token of ['visual_quality_gate', 'default browser controls', 'local MVP']) {
+    if (!prompt.includes(token)) fail(target, `generated/agent-prompt.md missing UX quality warning token ${token}`);
+  }
 }
 
 for (const target of targets) {

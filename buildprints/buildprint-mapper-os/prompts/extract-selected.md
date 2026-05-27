@@ -91,7 +91,7 @@ Use numbered questions, not a vague blob. Include exactly these question areas:
 
 Default rule:
 
-> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Favor simplicity unless source evidence or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
+> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Favor simplicity unless mapped product obligations or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
 
 ## 02-project-setup.md
 
@@ -111,7 +111,7 @@ This is the pre-phase setup contract. Required sections:
 - `## Open questions and assumptions`
 - `## Phase start gate`
 
-AI may decide ordinary engineering defaults, but each default must be appropriate, source/product-grounded, and production-grade for the selected full-suite scope. Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials or paid-service approval can block live proof only after implementation includes provider adapters, config contracts, tests, and runtime wiring.
+AI may decide ordinary engineering defaults, but each default must be appropriate, product-obligation-grounded, and production-grade for the selected full-suite scope. Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials or paid-service approval can block live proof only after implementation includes provider adapters, config contracts, tests, and runtime wiring.
 
 `## Production readiness contract` must define auth/session/tenant boundaries, provider integration contracts, durable persistence, worker/runtime behavior, deployment/operations, observability, CI gates, and repeatable browser/e2e proof. A local MVP, static shell, deterministic-only provider, screenshots-only UI proof, or in-memory product state is invalid unless the selected scope is explicitly prototype-only.
 
@@ -148,19 +148,22 @@ A phase is **not** a waterfall time bucket. A phase is a proof-gated vertical pr
 
 `03-phases/phase-flow.md` is required. It must define the phase-entry protocol, required phase-run artifacts, phase-derived team assembly, bounded handoff shape, review/integration expectations, simulation fallback when subagents are unavailable, explicit review contracts for architecture/UX/QA with rejection criteria, and the rule that runtime evidence cannot be appended until plan/team/handoffs/returns/reviews/proof artifacts exist.
 
+Team skill capsules under Mapper OS `templates/teams/*` are mapper-local source material, not files inherited by downstream selected packets. Compile their enforceable obligations into `03-phases/phase-flow.md` under `## Compiled team skill gates` and into phase-local `## UX/UI requirements`, `## Interfaces touched`, `## State/runtime touched`, `## Safety/security constraints`, and `## Proof gate` sections as applicable. A selected packet that only lists role names such as `ux-ui-craft` or `product-architect` without the capsule gates is incomplete.
+
 Phase identity rules:
 
 - Use one canonical `phase_id` per phase everywhere: `phase-index.yaml`, `blueprint.yaml`, phase files, proof gates, and seed evidence rows.
 - Prefer stable numbered IDs that match the phase filename, e.g. `01-ingestion-ontology`, not both `ingestion-ontology` and `01-ingestion-ontology`.
 - Do not use `capability_id` for phase proof instructions. Runtime proof rows must use `phase_id`.
-- For stateful workflows, dependencies must model the source-backed execution order. Do not emit `depends_on: []` for every phase unless the packet explicitly justifies independent parallel phases.
+- For stateful workflows, dependencies must model the mapped product workflow order. Do not emit `depends_on: []` for every phase unless the packet explicitly justifies independent parallel phases.
 
 Every implementation phase file under `03-phases/*.md` must include:
 
 - `## How to implement this phase` with required pre-code reads: `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`; it must tell the agent to execute through phase-flow and block evidence until phase-flow artifacts exist.
 - `requires_roles:` seeded from phase needs, not a fixed always-on team.
 - `## Product outcome`
-- `## Source evidence`
+- `## Mapped product obligations`
+- `## Behavior compatibility contract`
 - `## Implementation scope`
 - `## Interfaces touched`
 - `## State/runtime touched`
@@ -209,14 +212,14 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 ## Extraction rules
 
-- Convert source facts into source-independent product obligations inside setup and phase files.
-- Include a `## Source capability/surface ledger` in `02-project-setup.md`. It must account for high-signal source surfaces (routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime) with: source anchor, source capability, target disposition (`preserve`, `replace`, `merge`, `defer`, or `drop`), target contract, compatibility impact, and owning phase/blocker destination.
+- Convert source facts into source-independent product obligations inside setup and phase files. Do not expose `## Source evidence` as an implementation-agent section.
+- Include a `## Product obligation/surface ledger` in `02-project-setup.md`. It must account for high-signal mapped surfaces (routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime) with: mapped source note, product obligation, target disposition (`preserve`, `replace`, `merge`, `defer`, or `drop`), target contract, compatibility impact, and owning phase/blocker destination.
 - Treat route/function/file names as evidence anchors and compatibility signals, not mandatory clone targets. Do not require 1:1 route/function parity unless the source route/function is the real product boundary. The target may improve, rename, merge, or redesign surfaces when the equivalent capability and compatibility impact are explicit.
 - Clearly distinguish file-reference roles. A backticked file-ish reference ending in `.md`, `.yaml`, `.json`, or `.jsonl` must either be an actual packet file in `selected-buildprint/` or be role-labeled in the same sentence/line as a source path/source anchor, runtime artifact/generated output, or downstream implementation project file. Do not leave naked ambiguous refs such as “writes `report.md`”. Write “writes runtime artifact `report.md`” instead.
 - Only actual packet files are packet links. Source repository files such as package manifests/lockfiles/route files must be labeled as source paths, not ambiguous packet-file references. Runtime artifacts such as `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, `section_XX.md`, upload paths, report files, provider output files, or `<id>` paths must be labeled as runtime artifact paths and should not be written as ambiguous packet-file references.
 - Preserve selected/requested behavior. Do not omit hard/risky/external/provider/stateful behavior; mark blockers honestly when proof is missing.
 - Include stable-vs-free boundaries inside relevant phase files.
-- Include source evidence refs inside each phase.
+- Include mapped product obligations inside each phase. Source references may appear only as compact mapped source notes; the implementation contract must be self-contained.
 - Mark selected output `PROOF_REQUIRED` until proof exists.
 - Public wording must avoid validated/production-ready/complete/end-to-end unless qualified evidence exists.
 
@@ -224,7 +227,7 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 Before handoff, ask:
 
-> What source-backed product behavior, workflow, integration boundary, persistence behavior, auth/security rule, job/runtime behavior, import/export, or operational requirement would be impossible to rebuild from this Buildprint?
+> What mapped product behavior, workflow, integration boundary, persistence behavior, auth/security rule, job/runtime behavior, import/export, or operational requirement would be impossible to rebuild from this Buildprint?
 
 Any identified loss must become a phase, a blocker, an explicit user-approved exclusion, or a documented merge into another phase.
 

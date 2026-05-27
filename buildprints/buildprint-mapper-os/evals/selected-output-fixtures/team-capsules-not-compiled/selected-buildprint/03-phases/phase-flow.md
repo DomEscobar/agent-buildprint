@@ -66,17 +66,6 @@ Team gates are phase-derived. Use `requires_roles` from the phase file when pres
 - `security-boundary`: auth, tenant/privacy, secrets, destructive actions, uploads, external writes.
 - `test-and-verification`: test/build/browser/runtime proof, no-fake scan, evidence quality.
 
-## Compiled team skill gates
-
-The detailed Mapper OS team skill capsules are compiled into this phase-flow file because downstream selected packets must not depend on mapper-local `templates/teams/*` files. Use the active `requires_roles` list to activate only the relevant gates:
-
-- `product-architect`: classify product shape, architecture style, context boundaries, component boundaries, data flow, and ADR-lite tradeoffs before coding. Block single-file full-suite architecture, UI-only shells, route-shaped handlers without service/domain/storage/provider boundaries, diagram-only topology, and in-memory-only state when durability is claimed.
-- `ux-ui-craft`: set phase-local taste variables, domain-fit rubric, composition rules, visual hierarchy, typography/color/spacing, interaction polish, accessibility, responsive behavior, and screenshot requirements. Block static markup, generic dashboards/cards, stacked forms, dead controls, missing state matrix, default browser controls, text overlap, weak contrast, and screenshots that read as local MVPs.
-- `integration-runtime`: define provider/API/runtime boundaries with config, side effects, retries, error behavior, status/progress/logs/cancel/failure semantics, and secret-name-only handling. Block fake provider success, unowned external writes, jobs without recovery semantics, and runtime claims without proof or non-upgrading blockers.
-- `data-persistence`: define state/schema ownership plus create/read/update/delete/import/export/reporting lifecycle, migrations, cleanup, retention, backup/export, restart/readback, and recovery expectations. Block in-memory product state, durability claims without restart/readback proof, and graph/model/project data without ownership or recovery.
-- `security-boundary`: define auth/session/tenant, permissions, secrets, destructive confirmations, abuse controls, data exposure boundaries, denied-path tests, invalid-input tests, unsafe-side-effect handling, and secret redaction. Block plaintext secrets, admin/destructive actions without permission/confirmation, and public deployment posture without threat model.
-- `test-and-verification`: enforce the evidence ceiling rule. Static text proves copy only; build/import proves syntax only; mocks prove contract shape only; screenshots prove rendering only. Require proof commands, artifacts, negative cases, no-fake scans, browser/runtime proof, and narrow evidence rows before promotion.
-
 Do not create busywork roles. Every active role in runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` must have:
 
 - role/lens

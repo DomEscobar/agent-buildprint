@@ -51,4 +51,4 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md` and `.buildprint/phase-runs/<phase-id>/team-gates.md`, dispatch or explicitly simulate bounded role work, collect returns/reviews/proof, and only then append runtime evidence.
 
-A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
+A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.

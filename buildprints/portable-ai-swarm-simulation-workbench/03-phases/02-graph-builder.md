@@ -24,13 +24,13 @@ requires_roles:
 
 Build a provider-backed graph from extracted text and ontology, expose async task progress, retrieve graph nodes/edges, and visualize graph structure with inspectable node/edge details.
 
-## Source evidence
+## Mapped product obligations
 
-Source surface IDs: SRC-004
+Mapped surface IDs: SRC-004
 
 Product obligations: OBL-002.
 
-Source evidence refs:
+Mapped product obligations refs:
 - /root/MiroFish/README.md:86-93 lists graph building, memory injection, and GraphRAG construction.
 - /root/MiroFish/backend/app/api/graph.py:260-522 starts asynchronous graph building, chunking, Zep graph creation, ontology setting, episode processing, and task completion.
 - /root/MiroFish/backend/app/api/graph.py:534-622 exposes task status, graph data retrieval, and graph deletion.
@@ -38,12 +38,12 @@ Source evidence refs:
 
 This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
 
-## Source surface dispositions
+## Behavior compatibility contract
 
-- Surface id: source-backed surfaces listed in Source evidence.
+- Surface id: mapped surfaces listed in Mapped product obligations.
   - Disposition: preserve capability, target route/function names may differ.
   - Equivalent target behavior: preserve this phase's product outcome through cleaner target architecture where useful.
-  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; source route names are evidence, not mandatory parity.
+  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; mapped route names are evidence, not mandatory parity.
 
 ## Implementation scope
 
@@ -93,7 +93,13 @@ Provider-backed behavior must disclose whether it is deterministic-test-double, 
 
 ## UX/UI requirements
 
-Use the inline UX/UI requirements in this phase. Any UI-bearing proof must include repeatable browser/e2e coverage plus screenshot or DOM evidence for empty/loading/error/blocked/success states. Screenshots alone do not satisfy UI completion.
+This phase must make graph construction inspectable as a graph workbench, not a raw node/edge list.
+
+- Provide a graph-focused surface with relationship overview, node/edge inspection, build progress, provider mode, and next action into simulation setup.
+- Use a domain visualization or structured relationship explorer appropriate to graph memory. A plain list of buttons is a fallback blocker, not `visual_quality_gate` proof.
+- Preserve empty, loading, invalid chunk settings, blocked-provider, success, and graph-detail states.
+- Keep controls grouped by user job: build graph, inspect graph, continue to simulation.
+- Screenshot critique: browser proof must include visual critique against the workbench UX quality contract in `02-project-setup.md`.
 
 ## Safety/security constraints
 
@@ -122,6 +128,7 @@ Use the inline UX/UI requirements in this phase. Any UI-bearing proof must inclu
   - evidence_ledger_entry
   - browser_runtime_trace
   - ux_design_gate
+  - visual_quality_gate
   - screenshot_state_set
   - provider_adapter_config_test_required
   - live_provider_proof_blocker_only
