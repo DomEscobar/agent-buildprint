@@ -22,8 +22,8 @@ This setup contract is completed before phase implementation. It turns short hum
 Record decisions with short evidence, not bureaucracy:
 
 - Framework/runtime:
-  - Decision: AI best-fit unless human constrained it; React/server API/FFmpeg-compatible tooling is source-faithful.
-  - Evidence: mapped source had a React dashboard, FastAPI routes, job workers, FFmpeg composition, provider adapters, gallery pages, and optional Remotion render service.
+  - Decision: AI best-fit unless human constrained it; browser UI, server API, media composition tooling, job workers, provider adapters, gallery pages, and optional render-service boundaries are the capability contract.
+  - Evidence: mapped source had those product surfaces, but concrete source frameworks are replaceable implementation details unless the human requires them.
 - Package manager:
   - Decision: choose ecosystem-standard default for the selected stack.
   - Evidence: proof gates require repeatable install, tests, production build, browser automation, and media checks.

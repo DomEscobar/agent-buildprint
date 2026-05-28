@@ -18,7 +18,7 @@ Default: a compact SaaS/UGC production workbench for creating draft vertical mar
 
 Do you require or prefer any stack, framework, package manager, database, auth, providers, hosting, or deployment target?
 
-Default: choose the fastest maintainable full-webapp stack that can prove browser workflow, API/service contracts, local media generation, tests, and screenshots. React plus a server API and FFmpeg-compatible media tooling is a strong default but not mandatory.
+Default: choose the fastest maintainable full-webapp stack that can prove browser workflow, API/service contracts, local media generation, tests, and screenshots. Use generic capability needs as the default; do not assume the source repository's concrete frameworks are desired.
 
 ## 3. UX/UI preferences
 

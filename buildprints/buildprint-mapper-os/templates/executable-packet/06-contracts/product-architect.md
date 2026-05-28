@@ -29,7 +29,7 @@ Do not ask this role to read the whole packet, all phases, or the original sourc
 
 The return must complete this workflow before implementation is treated as ready:
 
-1. Product shape: classify the active phase as UI workflow, API service, data pipeline, worker/runtime, provider integration, report/export, admin/security surface, generated artifact pipeline, or mixed.
+1. Product / capability shape: classify the active phase as UI workflow, API service, data pipeline, worker/runtime, provider integration, report/export, admin/security surface, generated artifact pipeline, or mixed.
 2. Architecture style: choose the smallest style that fits the selected scope: modular monolith, layered app, hexagonal ports/adapters, worker queue, workflow engine, local-first desktop/web workbench, serverless adapter, or tiny single-surface. State why the choice fits.
 3. Context boundary: name users, local runtime, external providers, storage, worker/job systems, deployment surface, and security boundary touched by this phase.
 4. Component boundary: name UI/controller, API/route, service/domain, repository/store, provider adapter, worker/runtime, security middleware, and test modules. If a boundary is intentionally absent, say why.
@@ -67,7 +67,7 @@ The returned topology must be specific enough that an implementer can create fil
 The return file `.buildprint/phase-runs/<phase-id>/returns/product-architect.md` must use:
 
 - `## Verdict`: pass | pass-with-scoped-debt | blocker
-- `## Product shape`
+- `## Product / capability shape`
 - `## Topology and boundaries`
 - `## Dependency direction`
 - `## Product obligation preservation`

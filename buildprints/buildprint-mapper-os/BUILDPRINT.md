@@ -2,7 +2,7 @@
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command and not a source-code clone plan.
 
-The mapper agent reads source, promotes only evidence-backed claims, preserves the requested product scope, maps the full relevant behavior surface, classifies readiness honestly, distills source behavior into phase packets with role gates, and records qualification blockers honestly.
+The mapper agent reads source, promotes only evidence-backed claims, preserves the requested scope, maps the full relevant behavior surface, classifies the selected blueprint mode honestly, distills source behavior into mode-aware phase packets with role gates, and records qualification blockers honestly.
 
 ## Authority
 
@@ -81,7 +81,21 @@ The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questi
 
 Obsolete packet files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
-`02-project-setup.md` is mandatory for selected output. It defines product shape, architecture decisions, production readiness, mapped contract anchors, implementation setup, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
+`02-project-setup.md` is mandatory for selected output. It defines blueprint mode/phase style, product/framework/integration/automation/data/infra shape, architecture decisions, production readiness, mapped contract anchors, implementation setup, assumptions, and the phase start gate. UI-bearing output must include UX/UI requirements inside the relevant phase packets; framework/library output must include primitive/composition maps; integration output must include boundary transaction contracts; automation output must include task-loop/evidence/exit contracts; data-pipeline output must include dataflow contracts; infrastructure output must include operations/health/rollback contracts; provider-backed/stateful output must include interface and state/runtime sections inside the relevant phase packets.
+
+
+## Blueprint Mode Discipline
+
+Selected outputs must classify the dominant blueprint mode before writing phases:
+
+- `product`: outcome-first user/operator flows.
+- `framework` or `library`: primitive/composition maps with invariants, extension points, reference patterns, invalid states, compatibility surfaces, and proof examples.
+- `integration`: external boundary transaction contracts with config/secrets, request/response, webhook/callback, idempotency, retry/error mapping, sandbox/live split, persistence/audit, and fake-provider proof.
+- `automation`: task-loop contracts with tool/action boundaries, evidence requirements, stop conditions, approval points, recovery/escalation, and trace proof.
+- `data-pipeline`: dataflow contracts with input/output schemas, transforms, validation, lineage, backfill/idempotency, and data quality proof.
+- `infrastructure`: operations contracts with deploy/apply, resources changed, health/readiness, rollback, drift detection, observability, permissions, and environment proof.
+
+The shared proof spine remains mandatory for every mode: preconditions/inputs, entrypoint or use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals. Do not write product user stories for frameworks, and do not write integrations as generic product flows.
 
 ## Non-Negotiables
 

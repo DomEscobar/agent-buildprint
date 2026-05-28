@@ -7,6 +7,7 @@ Use Mapper OS to perform lean discovery on a source project.
 - Treat source as read-only.
 - Collect safe census hints only.
 - Create a mechanical source-surface census before semantic capability mapping.
+- Promote the census into a source feature coverage map before proposing phases; do not collapse many source surfaces into broad buckets.
 - Do not copy secret values.
 - Do not assert product behavior from filenames, manifests, dependencies, or route patterns.
 - Create `CENSUS_HINT` or `PENDING_AGENT_DISCOVERY` claims only until source reading promotes evidence.
@@ -49,5 +50,22 @@ Each entry must include:
 Use stable IDs with prefixes such as `routes.*`, `api.*`, `tables.*`, `models.*`, `jobs.*`, `queues.*`, `sockets.*`, `providerAdapters.*`, `auth.*`, `admin.*`, `uploads.*`, `exports.*`, `imports.*`, `fileStores.*`, `env.*`, `deployment.*`, and `docs.*`.
 
 High-signal examples include user-facing routes, API handlers, persistence models/tables, provider adapters, auth/admin paths, jobs, uploads, imports/exports, file stores, sockets, deployment/runtime config, and source docs that define product workflows.
+
+## Source Feature Coverage Map
+
+Before creating candidate Buildprints, promote high-signal census findings into `discovery/SOURCE_FEATURE_COVERAGE_MAP.md`.
+
+Use this compact table:
+
+| Source surface | Source evidence | Mapped obligation/capability | Target disposition | Owning candidate/phase | Required proof |
+|---|---|---|---|---|---|
+
+Rules:
+
+- Enumerate meaningful source surfaces before semantic phase planning: product flows, framework primitives, integration transactions, task loops, dataflows, infrastructure operations, routes/screens, API handlers, jobs/workers, provider adapters, auth/admin boundaries, persistence models/stores, uploads/imports/exports, generated artifacts, destructive lifecycle actions, and deployment/runtime requirements.
+- Generic buckets like “simulation”, “dashboard”, “memory”, “reports”, “runtime”, or “core app” are invalid unless decomposed into sub-surfaces with distinct obligations.
+- Every high-signal surface must be assigned exactly one owning candidate/phase, or marked `Dropped`, `Blocked`, or `Needs clarification` with rationale.
+- If a surface needs supporting phases, name one primary owner plus supporting phases; do not create ambiguous shared ownership.
+- Required proof must reference the specific surface, not only “tests pass”, “app builds”, or “feature preserved”.
 
 Discovery output must use qualification label `DISCOVERY_ONLY`.

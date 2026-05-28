@@ -51,14 +51,15 @@ Optimization goal: produce phase Markdown that prevents fake MVP completion by s
 
 When generating a selected phase, use this sequence:
 
-1. Name the user-visible product outcome.
-2. List mapped obligations as product capabilities, not source route parity.
-3. Define the smallest real vertical path.
-4. Split `Core-pass required` from `Claim-upgrade or blocker tracks`.
-5. Name interfaces, state, runtime, UX, and safety boundaries.
-6. Require tests and browser/runtime proof that match the slice.
-7. Give evidence rows that prove only what the command or artifact actually proves.
-8. Route failures back to the current phase, setup, questions, prior dependency, or runtime evidence ledger.
+1. Classify the blueprint mode and phase style before choosing language.
+2. Name the meaningful capability in the right lens: `## Product outcome` for product mode, `## Capability outcome` for framework/library/integration/automation/data phases, or `## Operation outcome` for infrastructure/operations phases.
+3. List mapped obligations as capabilities/primitives/boundaries/tasks/dataflows/operations, not source route parity.
+4. Define the smallest real proof path: preconditions/inputs, entrypoint/use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals.
+5. Split `Core-pass required` from `Claim-upgrade or blocker tracks`.
+6. Name interfaces, state, runtime, UX/DX/operator experience, and safety boundaries.
+7. Require tests and browser/runtime/import/CLI/provider/data/deployment proof that match the mode and slice.
+8. Give evidence rows that prove only what the command or artifact actually proves.
+9. Route failures back to the current phase, setup, questions, prior dependency, or runtime evidence ledger.
 
 ## Negative few-shot - bad phase slice
 
@@ -80,6 +81,7 @@ Screenshots and deterministic provider prove the phase.
 
 Why this fails:
 
+- It assumes product-app language and would be even worse for a framework, integration, automation, data pipeline, or infrastructure packet.
 - "AI insights" is not a product contract.
 - It does not define owner/session behavior, file validation, extraction semantics, persistence, provider modes, blocked states, or readback.
 - It lets route-shaped handlers pass without a service/domain/storage boundary.
@@ -90,11 +92,30 @@ Why this fails:
 
 The following example shows the expected level of specificity.
 
+For non-product selected packets, rename the outcome heading to `## Capability outcome` or `## Operation outcome`, and rename mapped obligations to `## Mapped capability obligations` or `## Mapped operation obligations`. Keep the same proof spine.
+
 ## Product outcome
 
 A user can create an owned project by uploading text or Markdown seed documents plus a natural-language prediction requirement. The system validates the files, extracts text, generates a deterministic ontology preview with entity and relationship types, stores project metadata, upload records, extracted text, and ontology data durably, then shows the result in the workbench with empty, loading, validation-error, provider-blocked, success, retry, reset, and deleted states.
 
 PDF support is not required for `phase_core_passed` unless the selected product explicitly makes PDF the first required upload format. If PDF extraction is not implemented, the UI and API must reject PDF with a clear non-upgrading blocker or unsupported-file response.
+
+## Phase mode contract
+
+- blueprint_mode: product
+- phase_style: outcome_flow
+- Lens: this example is a UI-bearing product workbench phase, so it is written as a user/operator outcome flow.
+- Shared proof spine:
+  - Preconditions/inputs: project owner/session exists; text or Markdown files and prediction requirement are available.
+  - Entrypoint/use site: user submits the upload/ontology form or equivalent API/controller action.
+  - Execution behavior: validate files, extract text, call deterministic/live ontology adapter, persist project and ontology.
+  - State/artifact effects: owner, project, upload records, extracted text, ontology JSON, status, errors, timestamps.
+  - Observable proof: API readback, UI success preview, restart/readback, validation and denied-path tests.
+  - Failure/recovery: missing requirement/files, unsupported file, extraction failure, provider blocked, cross-owner denial, reset/delete recovery.
+  - Non-goals: graph memory, simulation setup, report generation, agent chat, deployment, and live provider calls beyond blocked/live-proof tracks.
+- Framework/library adaptation: if this were a framework packet, replace this product flow with primitive, invariants, composition rules, reference patterns, extension points, invalid states, compatibility surface, and proof examples.
+- Integration adaptation: if this were a provider/plugin packet, replace this product flow with boundary transaction, config/secrets, request/response, webhook/callback, idempotency, retry/error mapping, sandbox/live split, persistence/audit, and fake-provider proof.
+- Automation adaptation: if this were an agent packet, replace this product flow with task objective, tool/action boundaries, plan/execute/observe loop, evidence requirements, stop conditions, approval points, recovery/escalation, and trace proof.
 
 ## Mapped product obligations
 
@@ -139,6 +160,7 @@ Do not implement graph memory, simulation setup, report generation, agent chat, 
 - Owner/session checks prevent cross-owner read/delete/reset.
 - Delete/reset requires confirmation and is verified.
 - Runtime evidence rows are narrow and match the commands or artifacts that produced them.
+- The phase mode contract is reflected in implementation proof; product UI proof, framework import/API proof, integration fake/sandbox proof, automation trace proof, data validation proof, or infrastructure health/rollback proof must match the selected mode.
 
 ## Claim-upgrade or blocker tracks
 

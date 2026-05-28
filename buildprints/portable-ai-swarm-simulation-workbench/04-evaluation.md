@@ -12,7 +12,7 @@ Required proof concepts:
 - no_fake: no static shell, fake green test, placeholder provider, no-op control, or in-memory-only demo is claimed as production behavior.
 - clean_room_implementation_trace: implementation does not depend on opening the original source repo as implementation input.
 - production_readiness: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e gates, and security controls are implemented or explicitly blocked without downgrading scope.
-- visual_quality_gate: UI-bearing phases look and behave like a product-grade domain workbench. Passing Playwright assertions is insufficient if screenshots show default browser controls, stacked forms, generic cards, weak hierarchy, raw text-list substitutes for graph/simulation/report interactions, or missing responsive/focus/blocked-state polish.
+- visual_quality_gate: UI-bearing phases look and behave like product-grade domain software. Passing browser assertions is insufficient if screenshots show default browser controls, stacked forms, generic cards, weak hierarchy, raw text-list substitutes for domain interactions, or missing responsive/focus/blocked-state polish.
 
 ## Loop completion rule
 

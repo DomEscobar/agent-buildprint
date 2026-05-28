@@ -1,0 +1,53 @@
+schema_version: mapper-os/executable-blueprint
+execution_start: BUILDPRINT.md
+machine_contract: blueprint.yaml
+source:
+  input: fixtures/executable-packet-framework-good
+  checkout_path: unavailable-fixture
+  commit: unavailable-fixture
+generated_at: <iso-timestamp>
+claim_status: PROOF_REQUIRED
+blueprint_mode:
+  primary: framework
+  secondary: [sdk, cli, api]
+  phase_style: primitive_composition_map
+setup_gate:
+  questions: 01-questions.md
+  project_setup: 02-project-setup.md
+  required_before_phases: true
+implementation_loop:
+  required: true
+  steps:
+    - observe
+    - plan
+    - execute
+    - verify
+    - reflect
+    - record
+  completion_requires:
+    - proof_gate_passed
+    - evidence_recorded
+repair_loop:
+  on_failure:
+    test_failed: current_phase
+    build_failed: current_phase
+    runtime_error: current_phase
+    ui_quality_failed: current_phase
+    proof_gate_failed: current_phase
+    architecture_contradiction: 02-project-setup.md
+    missing_human_preference: 01-questions.md
+    missing_dependency_phase: required_prior_phase
+    external_blocker: .buildprint/evidence/evidence-ledger.jsonl
+phases:
+  - phase_id: 01-ingest-record
+    title: 01-ingest-record
+    file: 03-phases/01-ingest-record.md
+    status: INCLUDED_NEEDS_PROOF
+context:
+  phase_index: 03-phases/phase-index.yaml
+  phase_flow: 03-phases/phase-flow.md
+  active_phase: 03-phases/01-ingest-record.md
+  evaluation: 04-evaluation.md
+  evidence_schema: 05-evidence/evidence-ledger.schema.json
+generated_artifacts:
+  agent_prompt: generated/agent-prompt.md

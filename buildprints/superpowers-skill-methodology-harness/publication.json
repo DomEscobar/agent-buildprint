@@ -30,7 +30,7 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Validated Superpowers-inspired skill-methodology harness: bootstrap skill use before action, route to process skills, enforce design/planning/TDD, execute via subagents, and validate with transcripts.",
+  "summary": "Superpowers-inspired skill-methodology harness: bootstrap skill use before action, route to process skills, enforce design/planning/TDD, execute via subagents, and validate with transcripts.",
   "plainDescription": "A blueprint for building an actual coding-agent skill setup harness, not a manager: startup bootstrap, skill activation, methodology gates, subagent execution, code review, branch finishing, and transcript tests.",
   "promise": "A source-backed Buildprint for reconstructing the architecture and behavior contracts behind obra/superpowers as a portable skill-methodology harness.",
   "whatYouGet": [
@@ -97,7 +97,7 @@
     },
     {
       "label": "Actual skill harness",
-      "detail": "Focuses on bootstrap, activation, methodology gates, subagents, and transcripts—not dashboards or managers.",
+      "detail": "Focuses on bootstrap, activation, methodology gates, subagents, and transcripts\u2014not dashboards or managers.",
       "tone": "info"
     },
     {

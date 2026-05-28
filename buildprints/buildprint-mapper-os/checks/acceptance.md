@@ -2,6 +2,7 @@
 
 - [ ] Default mapper run creates discovery/evidence/quality output only.
 - [ ] Selected extraction creates `selected-buildprint/`.
+- [ ] Selected extraction classifies `blueprint_mode.primary`, `blueprint_mode.secondary`, and `blueprint_mode.phase_style`; framework/library packets are not reduced to product user stories.
 - [ ] Selected extraction emits executable Buildprint only; this is the current executable blueprint spine.
 - [ ] Selected extraction preserves the executable-packet scaffold anchors exactly before adding source-specific content; mapper agents do not paraphrase validator-owned keys/headings/tokens.
 - [ ] `blueprint.yaml` includes `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure` routes including `proof_gate_failed: current_phase` and `architecture_contradiction: 02-project-setup.md`.
@@ -9,11 +10,11 @@
 - [ ] Root `BUILDPRINT.md` is the only starting point and owns the canonical read order; downstream runners must read it before inventorying or enumerating packet files.
 - [ ] `generated/agent-prompt.md` declares `Generated from: blueprint.yaml` and states that it is not source of truth.
 - [ ] `01-questions.md` uses numbered questions and the exact AI-best-judgment default phrase; blank answers do not block ordinary engineering decisions.
-- [ ] `02-project-setup.md` records setup defaults, product shape, architecture decisions, production readiness, workbench UX contract, mapped contract anchors, product obligation/surface matrix, implementation setup, open assumptions, and the phase start gate.
+- [ ] `02-project-setup.md` records setup defaults, blueprint mode/phase style, product/framework/integration/automation/data/infra shape, architecture decisions, production readiness, relevant UX/DX/operator contract, mapped contract anchors, a source-evidenced obligation/surface matrix with exactly-one owning phase and surface-specific proof for every high-signal mapped surface, implementation setup, open assumptions, and the phase start gate.
 - [ ] No phase starts until `02-project-setup.md` is explicit enough to create implementation-project root/local `AGENTS.md` and bounded handoffs without inventing architecture.
 - [ ] `03-phases/phase-index.yaml` is the dependency/continuation index and points to the active proof-gated phase using a full packet-relative `03-phases/<phase>.md` path for `active_phase` and phase `file` values.
-- [ ] Every phase file contains product outcome, source evidence, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
-- [ ] Every phase is a vertical product slice, not a backend/frontend/test waterfall bucket.
+- [ ] Every phase file contains product/capability/operation outcome, phase mode contract, mapped obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI/DX/operator requirements as applicable, safety/security constraints, quality gates, proof gate, and repair routing.
+- [ ] Every phase is a mode-aware proof-gated slice, not a backend/frontend/test waterfall bucket or component worklist: product=outcome flow, framework/library=primitive composition map, integration=boundary transaction, automation=task loop, data=dataflow, infrastructure=operations contract.
 - [ ] Every phase requires the implementation loop: observe → plan → execute → verify → reflect → record. Multi-phase/full-suite execution requires orchestrator-managed bounded handoffs, integration review, phase proof gates, and continuity updates; a single phase-1 success cannot satisfy full-suite replay.
 - [ ] Error repair routes failed test/build/runtime/UI/proof checks back to the current phase, setup contradictions to `02-project-setup.md`, product-defining ambiguity to `01-questions.md`, and external blockers to `05-evidence/evidence-ledger.jsonl`.
 - [ ] Every proof gate writes implementation evidence or blockers to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` remains an immutable seed.

@@ -11,7 +11,7 @@ A Buildprint is not a summary and not a vibe spec. It is a source-independent ex
 A valid Mapper OS output must preserve:
 
 1. **Scope fidelity** — do not silently shrink the requested product or feature set.
-2. **Phase executability** — each phase has a concrete entry point, files to read, outputs to create, proof gate, repair route, and handoff rule.
+2. **Mode-aware phase executability** — each phase uses the selected blueprint mode (product, framework/library, integration, automation, data-pipeline, infrastructure, or mixed) and has a concrete entry point or use site, files to read, outputs/artifacts to create, proof gate, repair route, and handoff rule.
 3. **Evidence honesty** — runtime claims are only upgraded when proof exists; blockers stay blockers.
 4. **Review discipline** — architecture, UX, and QA reviews must answer their required headings with concrete evidence, not generic approval.
 5. **Fresh-agent isolation** — the generated packet must be enough for a clean downstream agent; it must not require source-repo access or parent-directory spelunking.
@@ -23,6 +23,20 @@ A valid Mapper OS output must preserve:
 Mapper OS first inspects the source safely enough to identify product surfaces, data flows, UI/API boundaries, external providers, runtime constraints, and risk areas.
 
 The census can inform extraction, but it must not become the final product contract by itself. Claims need evidence.
+
+The census must promote high-signal source findings into a **source feature coverage map** before phases are proposed. This is a mapping invariant, not an optional appendix: the mapper must enumerate meaningful source surfaces at product/capability granularity, attach source evidence, and decide whether each surface is preserved, replaced, merged, deferred, dropped, or blocked. Broad buckets such as “simulation”, “dashboard”, “memory”, “reports”, “runtime”, or “core app” are invalid unless decomposed into the sub-surfaces that users, providers, workers, storage, or evaluators actually touch.
+
+Each mapped surface needs:
+
+- stable surface id;
+- source evidence or an honest `Needs clarification`/`Blocked` marker;
+- mapped obligation/capability;
+- target disposition: `preserve`, `replace`, `merge`, `defer`, `drop`, or `blocked`;
+- target contract;
+- exactly one owning phase, with supporting phases named only when needed;
+- required proof gate tied to that surface.
+
+Mapping is incomplete until every high-signal surface is owned or explicitly marked as dropped/blocked with rationale. A downstream packet may not rely on a generic “preserve X” statement to carry feature completeness.
 
 ### 2. Scope selection
 
@@ -39,7 +53,8 @@ The selected scope must keep the real product shape. If the source has multiple 
 
 The mapper converts source facts into implementation contracts:
 
-- product jobs and user outcomes;
+- blueprint mode and phase style;
+- product jobs, framework primitives/composition rules, integration boundaries, automation task loops, dataflows, infrastructure operations, or mixed-mode equivalents;
 - state and data ownership;
 - API, UI, worker, provider, and persistence contracts;
 - verification gates;
@@ -47,7 +62,24 @@ The mapper converts source facts into implementation contracts:
 - external-provider modes;
 - deferred phases and handoff dependencies.
 
+The source feature coverage map becomes the `02-project-setup.md` mapped obligation/surface matrix and must be referenced by phase obligations and proof gates. If setup mentions a feature, provider, workflow, artifact, lifecycle action, or runtime surface that no phase owns, the packet is incomplete. If a phase owns a broad area, its phase file must list the specific mapped surfaces it owns and the proof gate must prove those surfaces, not only that “the app builds”.
+
 The downstream packet must not rely on the original repo path, private files, or hidden context.
+
+
+### 3a. Blueprint mode selection
+
+Before phase generation, classify the selected packet:
+
+- **Product** packets use outcome flows.
+- **Framework/library** packets use primitive/composition maps; they are Anleitung/Map artifacts for building many downstream patterns, not one product user story.
+- **Integration/plugin** packets use boundary transaction contracts.
+- **Automation/agent** packets use task-loop contracts with evidence and exit conditions.
+- **Data-pipeline** packets use dataflow contracts.
+- **Infrastructure** packets use operations contracts.
+- **Mixed** packets must identify which phases use which lens.
+
+This classification protects general frameworks like LangGraph from being flattened into one example app, and protects provider integrations like Stripe from being flattened into a generic upgrade button without webhook/idempotency/security semantics.
 
 ### 4. Executable packet generation
 

@@ -13,7 +13,7 @@ If the phase intentionally owns no durable state, the return must state why and 
 The handoff must include:
 
 - active phase state/runtime requirements;
-- `02-project-setup.md` durable persistence contract and product obligation/surface matrix;
+- `02-project-setup.md` durable persistence contract and mapped obligation/surface matrix;
 - relevant schemas, repositories, stores, storage adapters, runtime artifacts, generated outputs, migrations, fixture/test data, and data tests;
 - security-sensitive data boundaries from the security role when present.
 

@@ -21,6 +21,10 @@ const fixtures = [
   ['phase-flow missing subagent fallback', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/phase-flow-no-subagent-fallback/selected-buildprint'],
   ['phase id drift', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/phase-id-drift/selected-buildprint'],
   ['all phases independent', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/all-phases-independent/selected-buildprint'],
+  ['invalid blueprint mode', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/blueprint-mode-invalid/selected-buildprint'],
+  ['blueprint mode/style mismatch', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/blueprint-mode-style-mismatch/selected-buildprint'],
+  ['phase mode contract mismatch', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/phase-mode-contract-mismatch/selected-buildprint'],
+  ['fixture placeholder leak', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/fixture-placeholder-leak/selected-buildprint', ['--forbid-fixture-placeholders']],
 ];
 
 const expectations = new Map([
@@ -36,18 +40,22 @@ const expectations = new Map([
   ['unclassified file reference', /unclassified file reference missing-contract\.md/i],
   ['local MVP production missing', /02-project-setup\.md missing ## Production readiness contract/i],
   ['provider blocker without adapter path', /production proof gate missing provider_adapter_config_test_required|must state missing live credentials block live proof only/i],
-  ['screenshots without repeatable e2e', /production proof gate missing repeatable_browser_e2e/i],
+  ['screenshots without repeatable e2e', /UI proof gate missing repeatable_browser_e2e/i],
   ['visual quality gate missing', /04-evaluation\.md missing visual_quality_gate/i],
   ['missing role contracts', /missing executable blueprint file 06-contracts\/product-architect\.md|BUILDPRINT\.md read order missing 06-contracts\//i],
   ['unknown requires_roles value', /declares unknown requires_roles value design-wizard/i],
   ['phase-flow missing subagent fallback', /03-phases\/phase-flow\.md must include subagent permission plus self-simulation fallback/i],
   ['phase id drift', /phase_id ingest-record must match file basename 01-ingest-record/i],
   ['all phases independent', /multi-phase packets must model dependencies/i],
+  ['invalid blueprint mode', /blueprint\.yaml blueprint_mode\.primary must be one of/i],
+  ['blueprint mode/style mismatch', /phase_style boundary_transaction_contract does not match primary mode product/i],
+  ['phase mode contract mismatch', /Phase mode contract phase_style task_loop_contract must match blueprint\.yaml phase_style outcome_flow/i],
+  ['fixture placeholder leak', /selected-output fixture placeholder text/i],
 ]);
 
 let failures = 0;
-for (const [label, fixture] of fixtures) {
-  const result = spawnSync(process.execPath, ['scripts/check-mapper-selected-output.mjs', fixture], {
+for (const [label, fixture, extraArgs = []] of fixtures) {
+  const result = spawnSync(process.execPath, ['scripts/check-mapper-selected-output.mjs', ...extraArgs, fixture], {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
   });

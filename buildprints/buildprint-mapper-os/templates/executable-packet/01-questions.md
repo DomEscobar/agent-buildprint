@@ -14,7 +14,7 @@ Default: AI chooses the product direction that best fits the mapping and user va
 
 ## 2. Tech stack preferences
 
-Do you require or prefer any stack, framework, package manager, database, auth, payments, AI provider, hosting, or deployment target?
+Do you require or prefer any frontend/backend/runtime stack, package manager, database, auth, payments, AI provider, hosting, or deployment target? Do not assume the source repository's frameworks are desired defaults.
 
 Default: AI chooses the strongest practical stack from mapped product obligations and target product needs.
 

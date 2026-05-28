@@ -8,8 +8,13 @@ This setup contract is completed before phase implementation. It turns short hum
 - Blank answers are not blockers. The implementation agent chooses best-fit, high-quality defaults from mapped product obligations and product goals.
 - Ask the human only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 
-## Product shape
+## Product / capability shape
 
+- Blueprint mode:
+  - Primary: product
+  - Secondary: api, ui, data
+  - Phase style: outcome_flow
+  - Why this mode fits: fixture maps an end-to-end ingest/readback product operation with UI/API/state surfaces.
 - Product: executable packet good fixture
 - Frontend/UI surfaces: infer from phase UX/UI requirements and mapped product obligations.
 - Backend/API surfaces: infer from phase interfaces touched and mapped product obligations.
@@ -44,13 +49,13 @@ Complete these decisions before phase work. Do not downgrade to a local MVP unle
 - Browser/e2e contract: define repeatable Playwright or equivalent browser flows for major UI paths and states. Screenshots support evidence but do not replace automated e2e coverage for UI-bearing phases.
 - Screenshot critique: browser proof must inspect screenshots as product artifacts, not only as assertion attachments.
 
-## Workbench UX quality contract
+## Experience quality contract
 
-UI-bearing work must define product-grade interaction and visual quality before phase work:
+UI-bearing work must define product-grade interaction and visual quality before phase work; non-UI phases must define equivalent developer/operator experience proof instead of fake UI.
 
 - UI architecture: use a real UI boundary and state model instead of embedded static markup or server-rendered test harness pages.
 - Product composition: expose the workflow as a coherent product surface with navigation, primary actions, state regions, and recovery paths instead of unrelated stacked forms.
-- Domain-specific affordances: represent the source product's core objects with domain-appropriate controls and visualization; raw text lists or generic dashboard cards are blockers when the domain needs richer inspection.
+- Domain-specific affordances: represent the mapped product's core objects with domain-appropriate controls and visualization; raw text lists or generic dashboard cards are blockers when the domain needs richer inspection.
 - Visual system: define typography, spacing, color, hierarchy, focus, disabled, alert, and responsive behavior. Default browser controls, pale status panels, and unstyled file inputs do not pass.
 - State quality: empty, loading, error, blocked, success, and recovery states must be intentional and stable.
 - Screenshot critique: screenshot review must reject local MVP visuals, plain admin forms, generic card stacks, raw text-list substitutes, unreadable density, missing focus/disabled states, and mobile/desktop overlap.
@@ -65,20 +70,26 @@ Promote compiled product observations into implementation contracts before start
 - Durable state, generated artifacts, retention, import/export, and delete/reset behavior: durable record storage and readback are required; optional exports must be labeled as runtime artifacts, e.g. runtime artifact `records.json`.
 - UI flow/state anchors including empty/loading/error/blocked/success states: ingest form/list states are UI-bearing if implemented.
 
-## Product obligation/surface matrix
+## Mapped obligation/surface matrix
 
 - Surface id: SRC-INGEST-API
+  - Source evidence: mapped note api/records.ts:1-20.
   - Mapping note: mapped note api/records.ts:1-20.
   - Product obligation: accept user-submitted records, validate required fields, persist results, and expose readback.
-  - Target disposition: preserve | replace | merge | defer | drop. This fixture uses preserve.
+  - Target disposition: preserve | replace | merge | defer | drop | blocked. This fixture uses preserve.
   - Target contract: equivalent ingest and readback behavior; route/function names may change.
   - Compatibility impact: mapped route name is an anchor only, not route/function parity.
+  - Owning phase: `03-phases/01-ingest-record.md`.
   - Phase(s): `03-phases/01-ingest-record.md`.
+  - Required proof: ingest fixture validates required fields, persists a record, and reads the same record back after restart/reload.
 
 Rules:
 
+- Every high-signal mapped surface must appear exactly once with one owning phase, or be marked dropped/blocked with rationale.
+- If a surface is split, name one primary owning phase and supporting phases in the target contract; do not leave ambiguous shared ownership.
+- Required proof must reference the owned surface specifically, not only “tests pass”, “app builds”, or “feature preserved”.
 - This is not route/function parity. Prefer cleaner target architecture when it preserves or intentionally improves the capability.
-- No mapped surface may disappear silently. If it is merged, replaced, deferred, or dropped, record why and where the equivalent obligation or blocker lives.
+- No mapped surface may disappear silently. If it is merged, replaced, deferred, dropped, or blocked, record why and where the equivalent obligation or blocker lives.
 - Origin repository filenames such as package manifests, lockfiles, or route files are mapping notes, not packet file references. Label them as mapped notes instead of ambiguous packet links.
 - Future files produced by the implementation/product are runtime artifacts or generated outputs, not packet files. Label them inline, e.g. `runtime artifact: <name>` or `generated output: <name>`.
 - Unlabeled backticked `.md`, `.yaml`, `.json`, or `.jsonl` references are reserved for actual packet files that exist in `selected-buildprint/`.

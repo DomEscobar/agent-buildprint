@@ -1,33 +1,33 @@
 schema_version: mapper-os/phase-index
-active_phase: 03-phases/01-ingestion-ontology.md
+active_phase: 03-phases/01-intake-ontology.md
 phases:
-  - phase_id: 01-ingestion-ontology
-    file: 03-phases/01-ingestion-ontology.md
+  - phase_id: 01-intake-ontology
+    file: 03-phases/01-intake-ontology.md
     status: INCLUDED_NEEDS_PROOF
     depends_on: []
-    proof_gate: proof-01-ingestion-ontology
-  - phase_id: 02-graph-builder
-    file: 03-phases/02-graph-builder.md
+    proof_gate: proof-01-intake-ontology
+  - phase_id: 02-graph-memory
+    file: 03-phases/02-graph-memory.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [01-ingestion-ontology]
-    proof_gate: proof-02-graph-builder
-  - phase_id: 03-simulation-setup
-    file: 03-phases/03-simulation-setup.md
+    depends_on: [01-intake-ontology]
+    proof_gate: proof-02-graph-memory
+  - phase_id: 03-simulation-prep
+    file: 03-phases/03-simulation-prep.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [02-graph-builder]
-    proof_gate: proof-03-simulation-setup
+    depends_on: [02-graph-memory]
+    proof_gate: proof-03-simulation-prep
   - phase_id: 04-simulation-runtime
     file: 03-phases/04-simulation-runtime.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [03-simulation-setup]
+    depends_on: [03-simulation-prep]
     proof_gate: proof-04-simulation-runtime
-  - phase_id: 05-report-interaction
-    file: 03-phases/05-report-interaction.md
+  - phase_id: 05-report-agent
+    file: 03-phases/05-report-agent.md
     status: INCLUDED_NEEDS_PROOF
     depends_on: [04-simulation-runtime]
-    proof_gate: proof-05-report-interaction
-  - phase_id: 06-data-lifecycle
-    file: 03-phases/06-data-lifecycle.md
-    status: INCLUDED_NEEDS_PROOF
-    depends_on: [05-report-interaction]
-    proof_gate: proof-06-data-lifecycle
+    proof_gate: proof-05-report-agent
+  - phase_id: 06-interaction-history-admin
+    file: 03-phases/06-interaction-history-admin.md
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+    depends_on: [05-report-agent]
+    proof_gate: proof-06-interaction-history-admin

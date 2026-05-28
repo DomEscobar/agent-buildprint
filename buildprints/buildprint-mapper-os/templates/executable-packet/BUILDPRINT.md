@@ -7,7 +7,7 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Product: <mapped-app>
 - Primary outcome: <one-sentence user-visible result>
 - Primary users: <who uses it>
-- Main surfaces: <browser UI, API, worker/runtime, provider, persistence, export/report surfaces>
+- Main surfaces: <capability surfaces, e.g. browser workbench, API service, worker/runtime boundary, provider adapters, persistence, export/report surfaces; avoid concrete source framework names unless the framework itself is the mapped product>
 - What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
 
 ## Required read order

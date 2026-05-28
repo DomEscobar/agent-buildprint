@@ -1,4 +1,4 @@
-# Phase 04 Ã¢â‚¬â€ Simulation Runtime Monitoring
+# Phase 04 - OASIS Runtime and Action Memory
 
 ## How to implement this phase
 
@@ -8,9 +8,7 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this phase through `03-phases/phase-flow.md`: declare the phase objective, resolve every role in `requires_roles` to `06-contracts/<role>.md`, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, write bounded handoffs for every required role, use subagents/delegated workers when available or self-simulate when unavailable, write return artifacts for every required role, implement the first real vertical path, review architecture/UX/QA, verify, write proof, and record evidence. Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
-
-You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+Then execute this phase through `03-phases/phase-flow.md`: create the phase-flow required artifacts, resolve every role through `06-contracts/<role>.md`, write handoff and return artifacts for every role, implement, verify, review, write proof, and only then append runtime evidence to `.buildprint/evidence/evidence-ledger.jsonl`. The packet seed ledger `05-evidence/evidence-ledger.jsonl` is read-only context.
 
 requires_roles:
   - product-architect
@@ -22,141 +20,247 @@ requires_roles:
 
 ## Product outcome
 
-Start, stop, monitor, and recover a Twitter/Reddit/parallel multi-agent simulation runtime, including action logs, round progress, process safety, and optional graph-memory updates.
+A user can start, monitor, stop, and close a prepared Twitter/Reddit/parallel OASIS simulation, inspect durable run state, action timelines, posts, comments, and optional graph-memory updates, then return to later report and interaction phases with trustworthy runtime history.
+
+## Phase mode contract
+
+- blueprint_mode: mixed
+- phase_style: mixed_contract
+- Lens: subprocess/runtime boundary, durable state, parser/data API, optional provider writeback, and UI runtime control.
+- Shared proof spine: prepared simulation -> runtime start -> progress/log parsing -> persisted run state/actions/posts/comments -> stop/close -> UI/API readback.
 
 ## Mapped product obligations
 
-Mapped surface IDs: SRC-006
-
-Product obligations: OBL-004.
-
-Mapped product obligations refs:
-- /root/MiroFish/README.md:86-93 describes dual-platform parallel simulation and dynamic temporal memory updates.
-- /root/MiroFish/backend/app/api/simulation.py:1451-1641 starts simulations with platform, max rounds, graph-memory update, force restart, and readiness checks.
-- /root/MiroFish/backend/app/api/simulation.py:1644-1700 stops simulations and persists paused state.
-- /root/MiroFish/backend/app/services/simulation_runner.py:196-205 states responsibilities for background OASIS runs, action parsing, realtime status, and stop/resume operations.
-
-This packet is source-independent: use these observations to preserve product behavior, not to depend on the original repository at implementation time.
+- Own `runtime.oasis-start`: Twitter/Reddit/parallel subprocess, max rounds, logs, optional memory update.
+- Own `runtime.oasis-stop-close`: process-tree stop and graceful IPC close with status.
+- Own `data.run-state-progress`: current rounds, platform state, counts, failure/completion, recent actions.
+- Own `data.action-logs`: parse actions, timeline, per-round and per-agent stats.
+- Own `data.posts-comments`: read OASIS platform DB posts/comments with filters.
+- Own `provider.graph-memory-update`: optional action-to-Zep memory queue/batch/retry.
+- Own `ui.simulation-run`: Step 3 runtime UI for start/progress/stop/back/refresh.
 
 ## Behavior compatibility contract
 
-- Surface id: mapped surfaces listed in Mapped product obligations.
-  - Disposition: preserve capability, target route/function names may differ.
-  - Equivalent target behavior: preserve this phase's product outcome through cleaner target architecture where useful.
-  - Compatibility impact: API/UX/data/provider behavior changes must be explicit; mapped route names are evidence, not mandatory parity.
+- Target disposition values are preserve for runtime start/stop/close, run state, actions, posts/comments, optional memory update, and UI.
+- Equivalent target behavior preserves OASIS execution and observability without route/function parity.
+- Compatibility impact: live OASIS execution can be blocked only after subprocess contracts, command construction, status, logs, and local tests exist.
+
+
+## Source-derived runtime compatibility details
+
+Preserve these source-derived runtime behaviors unless a later architecture decision explicitly replaces them with an equivalent, safer contract:
+
+- Start request supports:
+  - `simulation_id` required
+  - `platform`: `twitter | reddit | parallel`
+  - `max_rounds`: optional positive integer
+  - `enable_graph_memory_update`: optional boolean
+  - `force`: optional restart flag
+- `max_rounds` must be validated and, when lower than configured total rounds, truncate runtime execution rather than mutate the saved simulation config.
+- `force` restart must:
+  - detect whether a run is truly active
+  - stop the active process when needed
+  - clean runtime logs/state such as run state, action logs, and simulation log
+  - preserve prepared config/profile artifacts
+- Platform selection must map to distinct runner modes:
+  - Twitter-only
+  - Reddit-only
+  - parallel Twitter + Reddit
+- Runtime logs/artifacts must preserve equivalent semantics to:
+  - `simulation.log`
+  - `twitter/actions.jsonl`
+  - `reddit/actions.jsonl`
+  - platform simulation DBs for posts/comments
+- Stop must terminate the process tree/process group, not only mark state as stopped.
+- Close-env must be modeled separately from stop: it is an IPC/environment lifecycle action and must report status/timeouts.
+- Missing posts/comments DBs are valid empty runtime states, not hard failures.
+- Graph memory update requires a valid graph id. If enabled without one, fail before starting runtime.
+- Live OASIS execution may be blocked, but command construction, process lifecycle, log parsing, state persistence, and failure handling must still be implemented and tested.
 
 ## Implementation scope
 
-1. Implement the smallest real source-independent vertical path for this capability.
-2. Wire APIs/UI/runtime state to real implementation seams, not static fixtures or no-op controls.
-3. Add required negative/failure-state tests.
-4. Prove persistence/readback, provider/runtime boundaries, and browser/runtime behavior where claimed.
-5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 04-simulation-runtime`.
-
-Inputs:
-- `simulation_id`
-- `platform: twitter|reddit|parallel`
-- `max_rounds`
-- `enable_graph_memory_update`
-- `force`
-
-Outputs/downstream handoff:
-- `runner_status`
-- `current_round`
-- `total_rounds`
-- `actions counts`
-- `recent actions`
-- `process pid`
-
-Downstream slices may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
+- Implement runtime start API/controller behavior for:
+  - required `simulation_id`
+  - platform validation: `twitter | reddit | parallel`
+  - positive integer `max_rounds`
+  - `enable_graph_memory_update`
+  - `force` restart
+- Implement runner command construction without shell interpolation:
+  - Twitter mode uses the Twitter runner contract
+  - Reddit mode uses the Reddit runner contract
+  - parallel mode starts the parallel runner contract
+  - all commands receive the prepared simulation config path
+  - `max_rounds` is passed as a bounded runtime argument when present
+- Implement force restart semantics:
+  - detect active run
+  - stop/cleanup active process
+  - clean runtime-only artifacts/logs
+  - preserve prepared config and profile artifacts
+  - return whether force restart occurred
+- Persist durable run state:
+  - status: starting/running/stopping/stopped/completed/failed
+  - platform running flags
+  - process/runtime handle
+  - started/completed timestamps
+  - total/current rounds
+  - counts and recent actions
+  - error/failure state
+- Implement process lifecycle:
+  - start process with isolated working directory
+  - redirect stdout/stderr into runtime log artifact
+  - monitor action logs while running
+  - terminate full process tree/process group on stop
+  - handle timeout and forced kill
+  - close file handles/resources
+- Implement close-env as an IPC/environment lifecycle operation separate from process stop.
+- Parse runtime artifacts:
+  - platform action JSONL logs
+  - per-platform action timelines
+  - per-round/per-agent statistics
+  - posts from platform DBs
+  - comments from Reddit DB
+- Missing platform DBs must return empty posts/comments with an explanatory empty state.
+- Queue optional graph-memory updates:
+  - require graph id before enabling
+  - batch meaningful actions
+  - retry/fail safely
+  - record live Zep blocker without removing implementation scope
+- Build runtime UI:
+  - start controls
+  - force restart affordance
+  - max rounds input/validation
+  - graph-memory toggle with graph-id blocked state
+  - platform progress
+  - current/total rounds
+  - action timeline filters
+  - posts/comments tabs
+  - stop and close-env controls
+  - back navigation that respects running-state safety
+  - missing DB empty states
+  - blocked OASIS/Zep states
 
 ## Interfaces touched
 
-- API/routes/adapters/frontend-backend contracts: identify and implement only those required by this phase.
-- Provider/tool contracts: implement provider adapter/config/test seams before live proof; disclose deterministic, sandbox, or live mode where provider behavior is claimed.
-- None Ã¢â‚¬â€ reason: only if this phase truly touches no interface boundary.
+- Runtime API/controllers, subprocess runner, IPC client, log parsers, platform DB readers, graph-memory updater, run-state repository, runtime UI, owner/session guard.
 
 ## State/runtime touched
 
-Production runtime: define worker queue ownership, retry/cancel/failure recovery, progress persistence, restart behavior, and health/observability hooks when this phase touches async or runtime behavior.
-
-Data lifecycle: define migrations, retention/delete/export, backup/readback, upload limits, object/file storage, and sensitive data handling when this phase touches durable state or uploads.
-
-Stable obligations:
-- Start, stop, monitor, and recover a Twitter/Reddit/parallel multi-agent simulation runtime, including action logs, round progress, process safety, and optional graph-memory updates.
-- Inputs, outputs, failure states, persistence expectations, and proof gates are mandatory.
-
-Free choices:
-- Frameworks, database choices, graph provider, queue/worker implementation, and UI component libraries may vary if contracts and proofs pass.
-
-Boundary requirements:
-Provider-backed behavior must disclose whether it is deterministic-test-double, sandbox live, or production live. Secrets must remain in environment variables or secret stores and must never appear in logs, screenshots, reports, or ledger entries.
+- Durable simulation run state, action logs, timeline stats, posts/comments read models, process metadata, IPC status, graph-memory update queue. Missing OASIS/Zep runtime blocks live proof only after adapter/config/test/runtime wiring exists.
 
 ## UX/UI requirements
 
-This phase must expose runtime monitoring as a simulation control room, not status text plus buttons.
-
-- Show run state, platform, rounds, progress/timeline, recent actions, stop/recover controls, process/runtime mode, and graph-memory update state with clear hierarchy.
-- Action logs should read as a timeline/activity feed with scannable agent, round, platform, and action type. Raw pale text rows are a visual-quality blocker.
-- Preserve empty/no-simulation, loading/running, stopped, recovered, blocked-runtime, error, and success/completed states.
-- Stop/recover must be clear, reversible, and safe.
-- Screenshot critique: browser proof must include visual critique against the workbench UX quality contract in `02-project-setup.md`.
+- UI must provide start/stop/close controls, platform and round progress, action timeline filters, posts/comments views, blocked-runtime state, error recovery, responsive layout, and Screenshot critique against `02-project-setup.md`.
 
 ## Safety/security constraints
 
-- Define and preserve auth/session/tenant/privacy boundaries appropriate to the product; do not omit them because the source boundary is implicit or credentials are missing.
-- Never expose secrets in logs, UI, screenshots, reports, or evidence rows.
-- Ask before destructive actions, external writes, paid providers, deployments, or irreversible migrations.
-- Stop rather than claim implementation if proof depends only on mocks, placeholders, static UI, route-shaped stubs, or in-memory-only state where durability is claimed.
-- Stop rather than claim live provider/runtime behavior from deterministic adapters; live credentials block live proof only after adapter/config/test/runtime wiring exists.
-- Stop on secret exposure, destructive-action ambiguity, unreviewed upload/runtime surfaces, failed core local runtime/API proof, or missing persistence proof for state this phase owns. Missing live-provider, browser/e2e, screenshot, deployment, or external-service proof limits claim qualification; record a non-upgrading blocker with blocks_continuation: false and continue if the core phase path is implemented and locally proven.
+- Runtime commands must use explicit allowlisted runner modes; never build shell strings from user input.
+- `platform`, `max_rounds`, `simulation_id`, and file paths must be validated before process start.
+- Runtime working directories must be confined to the owning simulation/project scope.
+- Stop/close/delete/force-restart actions require owner/session checks and safe confirmation or disabled states.
+- Process termination must target only the owned runtime process group/tree.
+- Logs must redact secrets and avoid exposing provider credentials, env values, or raw filesystem internals.
+- Graph-memory update must fail closed when graph id or Zep config is missing.
+- Public/local source posture does not authorize production exposure; denied-path tests are required before production readiness.
 
 ## Quality gates
 
-- Run the smallest meaningful typecheck/lint/test/build gate for changed files.
-- Add or update tests for changed behavior and failure states.
-- For UI-facing behavior, provide repeatable browser/e2e proof plus screenshot or DOM evidence, or an honest blocker for unavailable browser tooling.
-- For persistence/provider behavior, prove readback and provider adapter/config/test behavior; record blockers only for unavailable live credentials, external services, or deployment authorization.
+- Runtime API tests:
+  - missing `simulation_id`
+  - invalid platform
+  - invalid/negative/non-numeric `max_rounds`
+  - start when not prepared
+  - start when already running with and without `force`
+  - graph-memory enabled without graph id
+- Subprocess contract tests:
+  - Twitter command construction
+  - Reddit command construction
+  - parallel command construction
+  - config path passed correctly
+  - max rounds passed only when valid
+  - no shell interpolation
+- Force restart tests:
+  - active process stopped
+  - runtime-only logs/state cleaned
+  - prepared config/profile artifacts preserved
+  - response records `force_restarted`
+- Lifecycle tests:
+  - start -> running state
+  - monitor -> progress update
+  - stop -> process tree cleanup
+  - close-env -> IPC status/timeout handling
+  - failure -> failed state with error
+- Parser/data tests:
+  - `twitter/actions.jsonl`
+  - `reddit/actions.jsonl`
+  - malformed JSONL line handling
+  - timeline filters
+  - per-agent/per-round stats
+  - missing posts DB returns empty state
+  - missing comments DB returns empty state
+- Persistence tests:
+  - restart/readback of run state
+  - progress survives service restart where target architecture supports it
+  - completed/failed/stopped states are durable
+- Graph-memory tests:
+  - queue/batch/retry behavior
+  - meaningful-action filtering
+  - live Zep proof blocker when credentials/runtime unavailable
+- Browser e2e:
+  - start with platform + max rounds
+  - progress counts update
+  - timeline renders actions
+  - posts/comments empty and populated states
+  - stop/close controls
+  - blocked OASIS state
+  - graph-memory blocked state
+  - responsive screenshot critique
 
 ## Proof gate
 
-- Proof id: proof-04-simulation-runtime
-- Required proof tracks:
-  - unit_or_integration_test
-  - negative_test
-  - browser_trace_or_runtime_trace
-  - persistence_roundtrip
-  - evidence_ledger_entry
-  - browser_runtime_trace
-  - ux_design_gate
-  - visual_quality_gate
-  - screenshot_state_set
-  - provider_adapter_config_test_required
-  - live_provider_proof_blocker_only
-  - worker_retry_cancel_recovery
-  - repeatable_browser_e2e
-  - persistence_roundtrip
-  - security_boundary_review
-  - clean_room_implementation_trace
-  - no_fake_scan_pass
-Do not copy all proof tracks into one evidence row. Each runtime row must list only the proof labels backed by its commands and artifacts. Browser/e2e/screenshot, worker, data-lifecycle, security, and live-provider claims require separate matching proof rows or non-upgrading blocker rows.
+Proof id: proof-04-simulation-runtime
 
-Live credentials, paid services, or external deployment approval may block live proof only after adapter/config/test/runtime wiring exists. Do not satisfy this phase with deterministic-only providers, screenshots-only UI proof, in-memory-only state, route-shaped handlers, or local MVP shortcuts.
+This phase passes only when evidence proves the owned surfaces individually:
 
-- Negative tests: validation failure, provider/runtime failure where applicable, persistence/readback failure, and phase safety/security constraints and negative fixtures listed above.
-- Runtime evidence ledger: `.buildprint/evidence/evidence-ledger.jsonl` in the implementation workspace
-- Immutable evidence seed: `05-evidence/evidence-ledger.jsonl`
-- Claim rules: `04-evaluation.md`
-- Evidence schema: `05-evidence/evidence-ledger.schema.json`
+- `runtime.oasis-start`
+  - API validation tests pass
+  - command construction tests pass for Twitter, Reddit, and parallel
+  - max-round truncation behavior is proven
+  - force restart behavior is proven
+- `runtime.oasis-stop-close`
+  - stop terminates the owned process tree/group
+  - close-env IPC success/timeout/failure paths are tested
+- `data.run-state-progress`
+  - run state persists status, timestamps, rounds, counts, errors, and recent actions
+  - restart/readback proof exists
+- `data.action-logs`
+  - Twitter and Reddit JSONL parsers are tested
+  - malformed/empty logs do not crash the runtime surface
+- `data.posts-comments`
+  - posts/comments DB readers are tested
+  - missing DB returns empty state rather than unhandled failure
+- `provider.graph-memory-update`
+  - graph id is required before enablement
+  - queue/batch/retry is tested
+  - live Zep proof blocker is recorded without removing adapter implementation
+- `ui.simulation-run`
+  - browser e2e covers start, progress, timeline, posts/comments, stop, close/back, blocked states, and visual quality
 
-Required runtime evidence row must use `phase_id: 04-simulation-runtime` and write to `.buildprint/evidence/evidence-ledger.jsonl`.
+Required evidence labels:
+
+- phase_id: 04-simulation-runtime
+- provider_adapter_config_test_required
+- live_provider_proof_blocker_only
+- worker_retry_cancel_recovery
+- repeatable_browser_e2e
+- visual_quality_gate
+- runtime_subprocess_contract
+- persistence_roundtrip
+- security_denied_path_test
+- no_fake_scan_pass
 
 ## Repair routing
 
-If this phase fails verification, return here before editing again. Re-read product outcome, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, and proof gate.
-
-- test/build/runtime/UI/proof failure -> current phase
-- architecture contradiction -> `02-project-setup.md`
-- missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
-- missing dependency -> required prior phase from `03-phases/phase-index.yaml`
-- external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`
+- current phase: failed OASIS runner, stop/close, run-state persistence, parsers, graph-memory update, runtime UI, or proof.
+- `02-project-setup.md`: runtime/process/security contradiction.
+- `01-questions.md`: external runtime/deployment/destructive fork.
+- `.buildprint/evidence/evidence-ledger.jsonl`: non-upgrading OASIS/Zep/browser/deployment blockers.

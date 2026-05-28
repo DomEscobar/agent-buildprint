@@ -7,6 +7,10 @@ source:
   commit: <source-commit-or-unavailable>
 generated_at: <iso-timestamp>
 claim_status: PROOF_REQUIRED
+blueprint_mode:
+  primary: <product|framework|integration|automation|library|data-pipeline|infrastructure|mixed>
+  secondary: []
+  phase_style: <outcome_flow|primitive_composition_map|boundary_transaction_contract|task_loop_contract|callable_contract|dataflow_contract|operations_contract|mixed_contract>
 setup_gate:
   questions: 01-questions.md
   project_setup: 02-project-setup.md

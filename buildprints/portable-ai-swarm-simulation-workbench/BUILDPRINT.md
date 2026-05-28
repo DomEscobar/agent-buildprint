@@ -1,18 +1,16 @@
-# BUILDPRINT: Portable AI Swarm Simulation Workbench
-
-This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files.
+# BUILDPRINT: MiroFish Full-Suite Prediction Workbench
 
 ## Product brief
 
-- Product: Portable AI Swarm Simulation Workbench
-- Primary outcome: Executable packet Buildprint for a source-independent AI swarm simulation workbench: upload seed material, generate ontology, build graph context, prepare and run simulations, generate reports, chat with agents, and manage history through proof-gated phase files.
-- Primary users: operators or developers implementing the mapped product workflow.
-- Main surfaces: Seed Ingestion And Ontology; Graph Build And Visualization; Simulation Setup; Simulation Runtime Monitoring
-- What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
+- Product: MiroFish
+- Primary outcome: users turn seed materials and a prediction requirement into a graph-backed multi-agent social simulation, then inspect actions, reports, and agent interactions.
+- Primary users: analysts, researchers, decision makers, and creative scenario authors.
+- Main surfaces: browser workbench, API service, worker/runtime, LLM provider adapter, Zep graph adapter, OASIS simulation runtime, persistence, report and export artifacts.
+- What this packet must not become: a static dashboard, a local-only toy, a deterministic-only demo, or a graph/report shell that omits simulation runtime and interaction surfaces.
 
 ## Required read order
 
-1. Read this `BUILDPRINT.md`.
+1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.
 2. Read `01-questions.md`.
 3. Read and complete `02-project-setup.md`.
 4. Read `blueprint.yaml` as the machine-readable mirror.
@@ -21,13 +19,13 @@ This is the canonical starting point and execution contract for the blueprint. D
 7. Read only the role contracts under `06-contracts/` required by the active phase `requires_roles`.
 8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
 9. Read `04-evaluation.md`.
-10. Read seed evidence in `05-evidence/evidence-ledger.jsonl`; append runtime proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist.
+10. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
+
+Read these files sequentially. Do not batch, parallelize, or reorder the initial context reads, even when using multi-command tooling.
 
 ## Project setup gate
 
-Do not start `03-phases/*` until `02-project-setup.md` has enough explicit architecture, team rules, quality gates, safety rules, and `AGENTS.md` plan to prevent agents from inventing project structure.
-
-Blank answers in `01-questions.md` are not blockers. They authorize AI best-fit decisions unless the choice is irreversible, expensive, credentialed, destructive, or product-defining.
+Resolve `01-questions.md` and `02-project-setup.md` before coding. Ordinary engineering choices default to AI best judgment; irreversible, expensive, credentialed, destructive, or product-defining forks require a human answer.
 
 ## Implementation loop
 
@@ -40,11 +38,9 @@ Every phase must repeat this loop until the proof gate passes or a real blocker 
 5. Reflect: compare results against the phase proof gate.
 6. Record: append evidence or blocker rows before claiming progress.
 
-A phase cannot be marked done from code edits alone. The phase-flow required artifacts under `.buildprint/phase-runs/<phase-id>/` must exist before runtime evidence is appended.
+A phase cannot be marked done from code edits alone.
 
 ## Repair routing
-
-If verification fails, route back before editing again:
 
 - test/build/runtime/UI/proof failure -> current phase file
 - architecture contradiction -> `02-project-setup.md`

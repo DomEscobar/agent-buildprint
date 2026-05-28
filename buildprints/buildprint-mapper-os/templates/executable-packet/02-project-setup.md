@@ -10,8 +10,13 @@ This file is the project constitution for implementation. Keep it compact. It sh
 - Full-suite packets default to production-grade architecture, not a local MVP.
 - Do not downgrade to a local MVP unless the selected scope explicitly says prototype-only.
 
-## Product shape
+## Product / capability shape
 
+- Blueprint mode:
+  - Primary: <product|framework|integration|automation|library|data-pipeline|infrastructure|mixed>
+  - Secondary: <ui/api/worker/provider/sdk/cli/agent/data/deployment as applicable>
+  - Phase style: <outcome_flow|primitive_composition_map|boundary_transaction_contract|task_loop_contract|callable_contract|dataflow_contract|operations_contract|mixed_contract>
+  - Why this mode fits: <source-grounded reason; do not force framework/integration/infra into product-app language>
 - Product: <mapped-app>
 - Primary user jobs:
 - Frontend/UI surfaces:
@@ -52,16 +57,16 @@ Complete these decisions before phase work. Missing credentials block only live 
 - Browser/e2e contract: define repeatable browser flows for major UI paths and states. Screenshots support evidence but do not replace automated e2e coverage for UI-bearing phases.
 - Screenshot critique: UI/browser proof must inspect visual hierarchy, responsive behavior, accessibility, and local-MVP risk.
 
-## Workbench UX quality contract
+## Experience quality contract
 
-Use this only when the selected output has UI:
+Adapt this to the selected mode. UI-bearing outputs need product-grade UX; non-UI frameworks, libraries, CLIs, integrations, data pipelines, and infrastructure need product-grade developer/operator experience instead of fake UI requirements.
 
-- UI architecture: define the frontend/UI boundary. A full-suite browser product cannot pass as a single server file with embedded HTML/CSS/JS.
-- Product composition: define screens, navigation/workflow structure, primary jobs, status surfaces, and next-action model.
-- Domain-specific affordances: use domain controls and visualizations where the product calls for graph, timeline, media, document, report, chat, or simulation interactions.
-- Visual system: define typography, spacing, color, density, surface hierarchy, focus/disabled states, alerts, and responsive behavior.
-- State quality: every major surface needs empty, loading, error, blocked-provider, success, and recovery states with stable layout.
-- Screenshot critique: if a screenshot reads as a quick local MVP, admin form, generic dashboard, or test harness, UX review is a blocker even when tests pass.
+- UI architecture: for UI-bearing outputs, define the frontend/UI boundary. A full-suite browser product cannot pass as a single server file with embedded HTML/CSS/JS. For non-UI outputs, state `not UI-bearing` and define the callable/import/CLI/operator surface instead.
+- Product composition: for products, define screens, navigation/workflow structure, primary jobs, status surfaces, and next-action model. For non-products, define primitive/API composition, command flow, provider boundary, task loop, dataflow, or operation sequence.
+- Domain-specific affordances: use domain controls and visualizations where the product calls for graph, timeline, media, document, report, chat, or simulation interactions; otherwise define domain-specific DX/operator affordances such as typed examples, error messages, trace output, dry-run, rollback, or reference patterns.
+- Visual system: for UI, define typography, spacing, color, density, surface hierarchy, focus/disabled states, alerts, and responsive behavior. For non-UI, define documentation/readability, API ergonomics, output format stability, logging, and discoverability.
+- State quality: every major surface needs empty, loading, error, blocked-provider, success, and recovery states with stable layout or mode-equivalent states.
+- Screenshot critique: if UI/browser proof is used, screenshots must reject quick local MVP, admin form, generic dashboard, or test harness visuals. For non-UI outputs, replace screenshots with import/API/CLI/provider/data/deployment proof and critique the consumer/operator experience.
 
 ## Mapped contract anchors
 
@@ -73,19 +78,23 @@ Promote compiled product observations into implementation contracts before start
 - Durable state, generated artifacts, retention, import/export, and delete/reset behavior:
 - UI flow/state anchors:
 
-## Product obligation/surface matrix
+## Mapped obligation/surface matrix
 
-Account for every high-signal mapped surface: user-facing routes/screens, API handlers, jobs/workers, provider adapters, auth/admin boundaries, persistence models/stores, uploads/imports/exports, generated artifacts, destructive lifecycle actions, and deployment/runtime requirements.
+Account for every high-signal mapped surface according to blueprint mode: product flows, framework primitives/composition rules, integration boundary transactions, automation task loops, dataflow contracts, infrastructure operations, user-facing routes/screens, API handlers, jobs/workers, provider adapters, auth/admin boundaries, persistence models/stores, uploads/imports/exports, generated artifacts, destructive lifecycle actions, and deployment/runtime requirements.
 
 Use this compact format:
 
-| Surface id | Product obligation | Target disposition | Target contract | Owning phase |
-|---|---|---|---|---|
-|  |  | preserve \| replace \| merge \| defer \| drop |  | `03-phases/<phase>.md` |
+| Surface id | Source evidence | Product obligation | Target disposition | Target contract | Owning phase | Required proof |
+|---|---|---|---|---|---|---|
+|  | mapped note: <source evidence or Needs clarification/Blocked> |  | preserve \| replace \| merge \| defer \| drop \| blocked |  | `03-phases/<phase>.md` | <surface-specific proof gate> |
 
 Rules:
 
-- Product obligation entries must use Target disposition values: preserve | replace | merge | defer | drop.
+- Product obligation entries must use Target disposition values: preserve | replace | merge | defer | drop | blocked.
+- Every high-signal mapped surface must appear exactly once with one owning phase, or be marked dropped/blocked with rationale.
+- If a surface is split, name one primary owning phase and supporting phases in the target contract; do not leave ambiguous shared ownership.
+- Required proof must reference the owned surface specifically, not only “tests pass”, “app builds”, or “feature preserved”.
+- Generic buckets like “simulation”, “dashboard”, “memory”, “reports”, “runtime”, or “core app” are invalid unless decomposed into sub-surfaces.
 - This is not route/function parity. Prefer cleaner target architecture when it preserves or intentionally improves the capability.
 - No mapped surface may disappear silently.
 - Source repo filenames are mapping notes, not packet-file references.
