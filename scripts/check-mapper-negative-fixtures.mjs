@@ -2,6 +2,12 @@
 import { spawnSync } from 'node:child_process';
 
 const fixtures = [
+  ['mixed mode collapsed to product', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/mixed-mode-collapsed-to-product/selected-buildprint'],
+  ['framework phase using product language', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/framework-phase-using-product-language/selected-buildprint'],
+  ['integration phase missing webhook idempotency', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/integration-phase-missing-webhook-idempotency/selected-buildprint'],
+  ['automation phase missing stop conditions', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/automation-phase-missing-stop-conditions/selected-buildprint'],
+  ['data-pipeline missing lineage', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/data-pipeline-missing-lineage/selected-buildprint'],
+  ['infrastructure missing rollback', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/infrastructure-missing-rollback/selected-buildprint'],
   ['forbidden START_HERE.md', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/forbidden-start-here/selected-buildprint'],
   ['forbidden PRE_IMPLEMENTATION_QUESTIONS.md', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/forbidden-pre-implementation-questions/selected-buildprint'],
   ['forbidden 03-capabilities directory', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/forbidden-capabilities-dir/selected-buildprint'],
@@ -28,6 +34,12 @@ const fixtures = [
 ];
 
 const expectations = new Map([
+  ['mixed mode collapsed to product', /is in a mixed packet but declares blueprint_mode mixed|mixed blueprint_mode packet must have at least 2 distinct per-phase/i],
+  ['framework phase using product language', /uses ## Mapped product obligations for non-product blueprint_mode framework|uses wrong mapped-obligations heading for blueprint_mode framework/i],
+  ['integration phase missing webhook idempotency', /phase mode integration requires at least/i],
+  ['automation phase missing stop conditions', /phase mode automation requires at least/i],
+  ['data-pipeline missing lineage', /phase mode data-pipeline requires at least/i],
+  ['infrastructure missing rollback', /phase mode infrastructure requires at least/i],
   ['forbidden START_HERE.md', /forbidden file in current executable packet baseline: START_HERE\.md/i],
   ['forbidden PRE_IMPLEMENTATION_QUESTIONS.md', /forbidden file in current executable packet baseline: PRE_IMPLEMENTATION_QUESTIONS\.md/i],
   ['forbidden 03-capabilities directory', /forbidden file in current executable packet baseline: 03-capabilities\//i],

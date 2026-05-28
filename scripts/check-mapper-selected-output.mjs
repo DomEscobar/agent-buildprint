@@ -162,6 +162,15 @@ const modeObligationHeading = {
   infrastructure: /## Mapped operation obligations/i,
   mixed: /## (Mapped product obligations|Mapped capability obligations|Mapped operation obligations)/i,
 };
+// Per-mode minimum vocabulary: each phase must contain at least 'require' of the listed patterns
+const modeMinVocab = {
+  framework: { terms: [/\bprimitive\b/i, /\bcomposition\b/i, /\bextension point\b/i, /\bmisuse\b/i], require: 2, label: 'primitive, composition, extension point, misuse' },
+  library: { terms: [/\bcallable\b/i, /\bpublic API\b/i, /\bsemver\b/i, /\bcompat\b/i], require: 1, label: 'callable, public API, semver, or compat' },
+  integration: { terms: [/\bwebhook\b|\bcallback\b/i, /\bidempotent\b|\bidempotency\b/i, /\bsandbox\b|\blive split\b/i, /\bretry\b|\berror mapping\b/i], require: 2, label: 'webhook/callback, idempotency, sandbox/live-split, retry/error-mapping' },
+  automation: { terms: [/task loop|plan.execute.observe/i, /\bstop condition\b/i, /\bapproval\b/i, /\btrace\b/i], require: 3, label: 'task loop/plan-execute-observe, stop condition, approval, trace' },
+  'data-pipeline': { terms: [/\bschema\b/i, /\btransform\b/i, /\blineage\b/i, /\bbackfill\b|\bidempotent\b|\bidempotency\b/i, /data quality/i], require: 3, label: 'schema, transform, lineage, backfill/idempotency, data quality' },
+  infrastructure: { terms: [/\bdeploy\b|\bapply\b/i, /\brollback\b/i, /\bhealth\b|\breadiness\b/i, /\bdrift\b/i, /observabilit/i], require: 3, label: 'deploy/apply, rollback, health/readiness, drift, observability' },
+};
 const concreteFrameworkPattern = /\b(Vue|React|Next(?:\.js)?|Nuxt|Svelte|Angular|Flask|Django|FastAPI|Express|NestJS|Rails|Laravel|Spring|Astro)\b/i;
 function fail(target, message) {
   failures += 1;
@@ -457,6 +466,7 @@ function validate(target, dir) {
     if (emptyDeps === phaseEntries.length) fail(target, '03-phases/phase-index.yaml multi-phase packets must model dependencies; every phase cannot use depends_on: []');
   }
 
+  const perPhaseModesInMixed = new Set();
   const phasesDir = path.join(dir, '03-phases');
   const phaseFiles = fs.existsSync(phasesDir)
     ? fs.readdirSync(phasesDir, { withFileTypes: true }).filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'phase-flow.md').map((entry) => entry.name).sort()
@@ -473,12 +483,44 @@ function validate(target, dir) {
       }
       const phaseMode = text.match(/blueprint_mode:\s*([^\s#]+)/i)?.[1]?.trim() || '';
       const phaseStyle = text.match(/phase_style:\s*([^\s#]+)/i)?.[1]?.trim() || '';
-      if (blueprintPrimary && phaseMode !== blueprintPrimary) fail(target, `${rel} Phase mode contract blueprint_mode ${phaseMode || '(missing)'} must match blueprint.yaml primary ${blueprintPrimary}`);
-      if (blueprintPhaseStyle && phaseStyle !== blueprintPhaseStyle) fail(target, `${rel} Phase mode contract phase_style ${phaseStyle || '(missing)'} must match blueprint.yaml phase_style ${blueprintPhaseStyle}`);
-      const expectedOutcomeHeading = modeOutcomeHeading[blueprintPrimary];
-      const expectedObligationHeading = modeObligationHeading[blueprintPrimary];
-      if (expectedOutcomeHeading && !expectedOutcomeHeading.test(text)) fail(target, `${rel} uses wrong outcome heading for blueprint_mode ${blueprintPrimary}`);
-      if (expectedObligationHeading && !expectedObligationHeading.test(text)) fail(target, `${rel} uses wrong mapped-obligations heading for blueprint_mode ${blueprintPrimary}`);
+      if (blueprintPrimary === 'mixed') {
+        if (!phaseMode || phaseMode === 'mixed') {
+          fail(target, `${rel} is in a mixed packet but declares blueprint_mode ${phaseMode || '(missing)'}; each phase in a mixed packet must declare a specific non-mixed blueprint_mode`);
+        }
+        if (phaseMode && !allowedBlueprintModes.includes(phaseMode)) {
+          fail(target, `${rel} per-phase blueprint_mode ${phaseMode} is not a valid blueprint mode`);
+        }
+        if (phaseMode && phaseStyle) {
+          const allowedForPhaseMode = modeStyleRules[phaseMode] || [];
+          if (allowedForPhaseMode.length && !allowedForPhaseMode.includes(phaseStyle)) {
+            fail(target, `${rel} Phase mode contract phase_style ${phaseStyle} does not match per-phase blueprint_mode ${phaseMode}; expected ${allowedForPhaseMode.join(' or ')}`);
+          }
+        }
+        if (phaseMode) perPhaseModesInMixed.add(phaseMode);
+        const perPhaseOutcome = modeOutcomeHeading[phaseMode] || modeOutcomeHeading.mixed;
+        const perPhaseObligation = modeObligationHeading[phaseMode] || modeObligationHeading.mixed;
+        if (!perPhaseOutcome.test(text)) fail(target, `${rel} uses wrong outcome heading for per-phase blueprint_mode ${phaseMode}`);
+        if (!perPhaseObligation.test(text)) fail(target, `${rel} uses wrong mapped-obligations heading for per-phase blueprint_mode ${phaseMode}`);
+      } else {
+        if (blueprintPrimary && phaseMode !== blueprintPrimary) fail(target, `${rel} Phase mode contract blueprint_mode ${phaseMode || '(missing)'} must match blueprint.yaml primary ${blueprintPrimary}`);
+        if (blueprintPhaseStyle && phaseStyle !== blueprintPhaseStyle) fail(target, `${rel} Phase mode contract phase_style ${phaseStyle || '(missing)'} must match blueprint.yaml phase_style ${blueprintPhaseStyle}`);
+        const expectedOutcomeHeading = modeOutcomeHeading[blueprintPrimary];
+        const expectedObligationHeading = modeObligationHeading[blueprintPrimary];
+        if (expectedOutcomeHeading && !expectedOutcomeHeading.test(text)) fail(target, `${rel} uses wrong outcome heading for blueprint_mode ${blueprintPrimary}`);
+        if (expectedObligationHeading && !expectedObligationHeading.test(text)) fail(target, `${rel} uses wrong mapped-obligations heading for blueprint_mode ${blueprintPrimary}`);
+        if (blueprintPrimary && blueprintPrimary !== 'product' && /## Mapped product obligations/i.test(text)) {
+          fail(target, `${rel} uses ## Mapped product obligations for non-product blueprint_mode ${blueprintPrimary}; use ## Mapped capability obligations or ## Mapped operation obligations`);
+        }
+      }
+      // Per-phase minimum vocabulary check
+      const effectiveVocabMode = blueprintPrimary === 'mixed' ? phaseMode : blueprintPrimary;
+      const vocabReq = modeMinVocab[effectiveVocabMode];
+      if (vocabReq) {
+        const vocabMatches = vocabReq.terms.filter((t) => t.test(text)).length;
+        if (vocabMatches < vocabReq.require) {
+          fail(target, `${rel} phase mode ${effectiveVocabMode} requires at least ${vocabReq.require} of: ${vocabReq.label}; found ${vocabMatches}`);
+        }
+      }
     }
     if (/## Source evidence|## Source surface dispositions|Source evidence|source evidence/i.test(text)) fail(target, `${rel} must compile source evidence into mapped product obligations and behavior compatibility contract`);
     for (const token of ['05-evidence/evidence-ledger.jsonl', 'phase_id:', 'current phase', '02-project-setup.md', '01-questions.md']) {
@@ -506,7 +548,8 @@ function validate(target, dir) {
     for (const token of productionPhaseTokens) {
       if (!text.includes(token)) fail(target, `${rel} production proof gate missing ${token}`);
     }
-    const uiBearingPhase = blueprintPrimary === 'product' || /\bThis phase is UI-bearing\b|ux-ui-craft/i.test(text);
+    const effectivePhaseModeFinal = blueprintPrimary === 'mixed' ? (text.match(/blueprint_mode:\s*([^\s#]+)/i)?.[1]?.trim() || '') : blueprintPrimary;
+    const uiBearingPhase = effectivePhaseModeFinal === 'product' || /\bThis phase is UI-bearing\b|ux-ui-craft/i.test(text);
     if (uiBearingPhase) {
       for (const token of uiPhaseProofTokens) {
         if (!text.includes(token)) fail(target, `${rel} UI proof gate missing ${token}`);
@@ -526,6 +569,11 @@ function validate(target, dir) {
       const evidencePattern = new RegExp(`phase_id:\\s*${indexed.phaseId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`);
       if (!evidencePattern.test(text)) fail(target, `${rel} must use canonical phase_id ${indexed.phaseId} in evidence instructions`);
     }
+  }
+
+  // Mixed mode: require at least 2 distinct per-phase modes
+  if (blueprintPrimary === 'mixed' && perPhaseModesInMixed.size < 2) {
+    fail(target, 'mixed blueprint_mode packet must have at least 2 distinct per-phase blueprint_mode values; if all phases use the same mode, reclassify the packet under that single mode instead of mixed');
   }
 
   const evaluation = safeRead(path.join(dir, '04-evaluation.md'));

@@ -1,0 +1,1390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buildprint v3 — Executable Agent Contract</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #faf8f5;
+      --bg-2:      #f2ede6;
+      --bg-3:      #ebe5db;
+      --panel:     #ffffff;
+      --panel-2:   #f7f4ef;
+      --line:      #e5ddd3;
+      --line-s:    #c9bfb4;
+      --ink:       #1a1510;
+      --ink-2:     #2e2820;
+      --muted:     #6b6259;
+      --soft:      #9c9188;
+
+      --a:         #d97706;  /* amber */
+      --a-light:   #fef3c7;
+      --a-mid:     #f59e0b;
+      --ok:        #059669;
+      --ok-light:  #d1fae5;
+      --danger:    #dc2626;
+      --danger-l:  #fee2e2;
+      --info:      #4f46e5;
+      --info-l:    #ede9fe;
+
+      --code-bg:   #1a1510;
+      --code-ink:  #e8dfd4;
+      --code-k:    #fbbf24;  /* amber key */
+      --code-v:    #86efac;  /* green value */
+      --code-s:    #93c5fd;  /* blue string */
+      --code-c:    #78716c;  /* comment */
+      --code-t:    #f9a8d4;  /* type */
+
+      --font: "Sora", ui-sans-serif, system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:        #110f0b;
+        --bg-2:      #1a1712;
+        --bg-3:      #221f19;
+        --panel:     #1e1b16;
+        --panel-2:   #252118;
+        --line:      #332e25;
+        --line-s:    #4a4337;
+        --ink:       #f0e8db;
+        --ink-2:     #d6cfc7;
+        --muted:     #8c8075;
+        --soft:      #665e55;
+
+        --a:         #fbbf24;
+        --a-light:   #2a200a;
+        --a-mid:     #f59e0b;
+        --ok:        #34d399;
+        --ok-light:  #052e1c;
+        --danger:    #f87171;
+        --danger-l:  #2a0a0a;
+        --info:      #818cf8;
+        --info-l:    #1a1840;
+
+        --code-bg:   #0d0b08;
+        --code-ink:  #e8dfd4;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    a { color: var(--a); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h1, h2, h3, h4, h5 { margin: 0; font-family: var(--font); line-height: 1.2; }
+    p { margin: 0; }
+    ul, ol { margin: 0; padding-left: 1.2rem; }
+    li + li { margin-top: 0.3rem; }
+    code {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0.06em 0.3em;
+    }
+    pre {
+      margin: 0;
+      padding: 18px 20px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.83rem;
+      line-height: 1.65;
+    }
+    pre code {
+      padding: 0; border: 0; background: transparent;
+      font-size: inherit; color: inherit;
+    }
+    pre .k  { color: var(--code-k); }
+    pre .v  { color: var(--code-v); }
+    pre .s  { color: var(--code-s); }
+    pre .c  { color: var(--code-c); font-style: italic; }
+    pre .t  { color: var(--code-t); }
+    pre .p  { color: var(--code-ink); opacity: 0.5; }
+    pre .a  { color: var(--a-mid); }
+
+    /* Shell */
+    .shell {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 32px;
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 28px 28px 60px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+    .brand {
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+    .brand-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--a);
+    }
+    .brand-tagline {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .toc { display: grid; gap: 1px; }
+    .toc a {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 5px 6px;
+      border-radius: 5px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      transition: color 0.1s;
+    }
+    .toc a:hover { color: var(--ink); background: var(--bg-2); text-decoration: none; }
+    .toc .n {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--soft);
+      min-width: 18px;
+    }
+    .sidebar-note {
+      margin-top: 18px;
+      padding: 10px 12px;
+      background: var(--a-light);
+      border: 1px solid color-mix(in srgb, var(--a) 25%, transparent);
+      border-radius: 6px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .sidebar-note strong { color: var(--a); }
+
+    /* Main */
+    main { display: grid; gap: 0; }
+
+    /* Section */
+    .sec {
+      padding: 36px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .sec:last-child { border-bottom: 0; }
+    .sec-head { margin-bottom: 22px; }
+    .sec-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--a);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .sec-head h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .sec-head p {
+      margin-top: 8px;
+      color: var(--muted);
+      max-width: 720px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--a);
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      max-width: 800px;
+      line-height: 1.1;
+    }
+    .hero-sub {
+      margin-top: 16px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.65;
+    }
+    .hero-three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 32px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .hero-cell {
+      padding: 20px;
+      border-right: 1px solid var(--line);
+    }
+    .hero-cell:last-child { border-right: 0; }
+    .hero-cell-n {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--a);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .hero-cell h3 {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .hero-cell p {
+      font-size: 0.87rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 22px;
+    }
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 0.73rem;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .pill.ok  { background: var(--ok-light); border-color: color-mix(in srgb, var(--ok) 30%, transparent); color: var(--ok); }
+    .pill.bye { background: var(--danger-l); border-color: color-mix(in srgb, var(--danger) 30%, transparent); color: var(--danger); }
+
+    /* Grid layouts */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+    /* Cards */
+    .card {
+      padding: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .card h4 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .card p { font-size: 0.88rem; color: var(--muted); }
+
+    /* Callout */
+    .call {
+      padding: 14px 16px;
+      border-radius: 6px;
+      border-left: 3px solid var(--a);
+      background: var(--a-light);
+    }
+    .call.ok    { border-left-color: var(--ok);     background: var(--ok-light); }
+    .call.bad   { border-left-color: var(--danger);  background: var(--danger-l); }
+    .call.info  { border-left-color: var(--info);    background: var(--info-l); }
+    .call strong { font-size: 0.88rem; color: var(--ink); }
+    .call p { margin-top: 4px; font-size: 0.88rem; color: var(--muted); }
+
+    /* Phase node */
+    .phase-block {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.88rem;
+    }
+    .phase-sidebar {
+      padding: 14px;
+      background: var(--panel-2);
+      border-right: 1px solid var(--line);
+    }
+    .phase-sidebar .phase-id {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--a);
+    }
+    .phase-sidebar .phase-meta {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .phase-main {
+      padding: 14px;
+      background: var(--panel);
+      display: grid;
+      gap: 10px;
+    }
+    .phase-field { display: grid; gap: 3px; }
+    .phase-field dt {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+    .phase-field dd {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--ink-2);
+    }
+
+    /* Table */
+    table.t {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.88rem;
+    }
+    table.t th {
+      background: var(--bg-2);
+      padding: 9px 12px;
+      text-align: left;
+      font-size: 0.72rem;
+      font-family: var(--mono);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+    table.t td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    table.t tr:last-child td { border-bottom: 0; }
+    table.t td code { font-size: 0.82rem; }
+
+    /* Log output style */
+    .log-stream {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--code-ink);
+    }
+    .log-stream .log-t  { color: var(--code-c); }
+    .log-stream .log-ev { color: var(--code-k); }
+    .log-stream .log-ok { color: var(--code-v); }
+    .log-stream .log-bl { color: var(--danger); }
+    .log-stream .log-id { color: var(--code-s); }
+    .log-stream .log-hu { color: var(--code-t); }
+
+    /* CLI block */
+    .cli {
+      display: grid;
+      gap: 14px;
+    }
+    .cli-cmd {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 12px 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .cli-cmd .prompt {
+      font-family: var(--mono);
+      font-size: 0.86rem;
+      color: var(--a);
+      font-weight: 600;
+    }
+    .cli-cmd .body {}
+    .cli-cmd .body code {
+      display: block;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      font-size: 0.86rem;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .cli-cmd .body p {
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    /* Diff table (v2 → v3) */
+    .diff-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .diff-row:first-child { border-top: 1px solid var(--line); }
+    .diff-col {
+      padding: 10px 12px;
+      font-size: 0.86rem;
+    }
+    .diff-col + .diff-col { border-left: 1px solid var(--line); }
+    .diff-col.old { color: var(--danger); background: var(--danger-l); }
+    .diff-col.new { color: var(--ok); background: var(--ok-light); }
+    .diff-col .label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    /* Constraint type chip */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      border: 1px solid currentColor;
+      background: color-mix(in srgb, currentColor 10%, transparent);
+    }
+    .chip.lint  { color: var(--info); }
+    .chip.test  { color: var(--ok); }
+    .chip.cov   { color: var(--a); }
+    .chip.exec  { color: var(--muted); }
+
+    /* Gate node */
+    .gate {
+      display: flex;
+      align-items: start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--info-l);
+      border: 1px solid color-mix(in srgb, var(--info) 30%, transparent);
+      border-radius: 8px;
+    }
+    .gate-icon {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      background: color-mix(in srgb, var(--info) 15%, transparent);
+      border-radius: 6px;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .gate h4 {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--info);
+      margin-bottom: 4px;
+    }
+    .gate p { font-size: 0.87rem; color: var(--muted); }
+
+    /* Mode type badge */
+    .mode {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .mode.product      { color: #2563eb; background: #eff6ff; border-color: #bfdbfe; }
+    .mode.framework    { color: #7c3aed; background: #f5f3ff; border-color: #ddd6fe; }
+    .mode.library      { color: #5b21b6; background: #f5f3ff; border-color: #c4b5fd; }
+    .mode.integration  { color: #0d9488; background: #f0fdfa; border-color: #99f6e4; }
+    .mode.automation   { color: #b45309; background: #fffbeb; border-color: #fde68a; }
+    .mode.data         { color: #047857; background: #ecfdf5; border-color: #a7f3d0; }
+    .mode.infra        { color: #be123c; background: #fff1f2; border-color: #fecdd3; }
+    .mode.mixed        { color: #475569; background: #f8fafc; border-color: #cbd5e1; }
+
+    @media (prefers-color-scheme: dark) {
+      .mode.product      { color: #93c5fd; background: #1e3a5f; border-color: #3b5f8a; }
+      .mode.framework    { color: #c4b5fd; background: #2e1a5e; border-color: #5b3fa0; }
+      .mode.library      { color: #a78bfa; background: #281a5c; border-color: #5230a0; }
+      .mode.integration  { color: #5eead4; background: #0c3a35; border-color: #1e6b64; }
+      .mode.automation   { color: #fcd34d; background: #3a2200; border-color: #7a4500; }
+      .mode.data         { color: #6ee7b7; background: #053a22; border-color: #136b3e; }
+      .mode.infra        { color: #fca5a5; background: #3a0c0c; border-color: #7a2020; }
+      .mode.mixed        { color: #94a3b8; background: #1e2530; border-color: #3a4555; }
+    }
+
+    .stack { display: grid; gap: 10px; }
+    .gap-sm { display: grid; gap: 8px; }
+    .gap-md { display: grid; gap: 14px; }
+    .gap-lg { display: grid; gap: 22px; }
+
+    hr.div { border: 0; border-top: 1px solid var(--line); margin: 0; }
+    .label-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+
+    footer {
+      padding: 24px 0 0;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--soft);
+    }
+
+    @media (max-width: 960px) {
+      .shell { grid-template-columns: 1fr; padding: 16px; }
+      .sidebar { position: static; max-height: none; }
+      .hero-three, .g2, .g3, .g4 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .shell { padding: 12px; }
+      .hero h1 { font-size: 1.6rem; }
+      .phase-block { grid-template-columns: 1fr; }
+      .phase-sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+      .diff-row { grid-template-columns: 1fr; }
+      .diff-col + .diff-col { border-left: 0; border-top: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-name">Buildprint v3</div>
+      <div class="brand-tagline">Executable agent contract</div>
+    </div>
+    <nav class="toc">
+      <a href="#hero"><span class="n">00</span> Why v3</a>
+      <a href="#format"><span class="n">01</span> The file format</a>
+      <a href="#phase"><span class="n">02</span> Phase anatomy</a>
+      <a href="#donewhen"><span class="n">03</span> done_when</a>
+      <a href="#constraints"><span class="n">04</span> Constraints</a>
+      <a href="#gates"><span class="n">05</span> Human gates</a>
+      <a href="#log"><span class="n">06</span> Event log</a>
+      <a href="#mode"><span class="n">07</span> Mode &amp; lens</a>
+      <a href="#cli"><span class="n">08</span> CLI</a>
+      <a href="#diff"><span class="n">09</span> v2 → v3 diff</a>
+    </nav>
+    <div class="sidebar-note">
+      <strong>Ground truth</strong> at runtime is the event log at <code>.buildprint/run.jsonl</code> plus the test results. No markdown file is authoritative.
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-eyebrow">Buildprint v3 / executable contract</div>
+      <h1>The buildprint is code.<br>Proof is test results.</h1>
+      <p class="hero-sub">
+        v2 describes what should happen in markdown. v3 makes it executable.
+        Mode, constraints, done-when conditions, and human gates are all typed, machine-readable declarations.
+        State is an append-only event log. Evidence is test output, not prose.
+      </p>
+      <div class="hero-three">
+        <div class="hero-cell">
+          <div class="hero-cell-n">principle 01</div>
+          <h3>Done-when = failing tests</h3>
+          <p>Each phase declares a test file. The phase isn't done until those tests pass. No separate evidence ledger. No prose proof gate. The CI run is the ledger.</p>
+        </div>
+        <div class="hero-cell">
+          <div class="hero-cell-n">principle 02</div>
+          <h3>Constraints = automated checks</h3>
+          <p>Obligations from v2 role contracts become lint rules, coverage gates, or test assertions. Violation is a hard stop, not a review note.</p>
+        </div>
+        <div class="hero-cell">
+          <div class="hero-cell-n">principle 03</div>
+          <h3>State = event log</h3>
+          <p>No <code>state.json</code> to edit, no <code>next-agent.md</code> to go stale. Every agent action appends a row. Any agent replays the log to resume work.</p>
+        </div>
+      </div>
+      <div class="pills">
+        <span class="pill ok">typed DAG phases</span>
+        <span class="pill ok">tests-as-proof</span>
+        <span class="pill ok">event-log state</span>
+        <span class="pill ok">constraint-as-code</span>
+        <span class="pill ok">human gates first-class</span>
+        <span class="pill bye">~~evidence-ledger.jsonl prose~~</span>
+        <span class="pill bye">~~role contract markdown~~</span>
+        <span class="pill bye">~~next-agent.md~~</span>
+        <span class="pill bye">~~sequential read-order~~</span>
+      </div>
+    </section>
+
+    <!-- FORMAT -->
+    <section class="sec" id="format">
+      <div class="sec-head">
+        <div class="sec-label">01 / the file</div>
+        <h2>One <code>buildprint.ts</code>, one truth</h2>
+        <p>
+          The buildprint is a typed TypeScript module exported as a default. It replaces
+          <code>BUILDPRINT.md</code>, <code>blueprint.yaml</code>, every phase file, and all role contracts.
+          The schema is the spec; the type checker is the validator.
+        </p>
+      </div>
+      <div class="gap-lg">
+        <pre><code><span class="c">// buildprint.ts</span>
+<span class="k">import</span> { b } <span class="k">from</span> <span class="s">"@buildprint/v3"</span>;
+
+<span class="k">export default</span> b.<span class="a">project</span>({
+  <span class="k">name</span>:    <span class="s">"acme-auth"</span>,
+  <span class="k">mode</span>:    <span class="s">"integration"</span>,         <span class="c">// still mode-aware — narrows type checking</span>
+  <span class="k">version</span>: <span class="s">"3.0.0"</span>,
+
+  <span class="c">// ── Phases as a typed dependency graph ──────────────────────────────</span>
+  <span class="k">phases</span>: {
+
+    <span class="s">"schema"</span>: b.<span class="a">phase</span>({
+      <span class="k">lens</span>:       <span class="s">"data-persistence"</span>,
+      <span class="k">outputs</span>:    [<span class="s">"users table"</span>, <span class="s">"oauth_tokens table"</span>, <span class="s">"sessions table"</span>],
+      <span class="k">done_when</span>:  <span class="s">"./done-when/schema.test.ts"</span>,
+      <span class="k">constraints</span>: [<span class="s">"migration-idempotent"</span>, <span class="s">"no-raw-sql-in-handlers"</span>],
+    }),
+
+    <span class="s">"adapter"</span>: b.<span class="a">phase</span>({
+      <span class="k">depends_on</span>: [<span class="s">"schema"</span>],
+      <span class="k">lens</span>:       <span class="s">"integration-boundary"</span>,
+      <span class="k">outputs</span>:    [<span class="s">"ProviderAdapter interface"</span>, <span class="s">"GoogleOAuthAdapter"</span>, <span class="s">"MockAdapter"</span>],
+      <span class="k">done_when</span>:  <span class="s">"./done-when/adapter.test.ts"</span>,
+      <span class="k">constraints</span>: [<span class="s">"all-external-through-adapter"</span>, <span class="s">"adapter-mockable-without-network"</span>],
+    }),
+
+    <span class="s">"human:prod-keys"</span>: b.<span class="a">humanGate</span>({  <span class="c">// ← first-class node type</span>
+      <span class="k">depends_on</span>: [<span class="s">"adapter"</span>],
+      <span class="k">prompt</span>:    <span class="s">"Provide Google OAuth credentials for live testing."</span>,
+      <span class="k">skip_if</span>:   { <span class="k">env</span>: <span class="s">"GOOGLE_CLIENT_ID"</span> },
+      <span class="k">blocks_only</span>: [<span class="s">"live-proof"</span>],       <span class="c">// ← doesn't block continuation</span>
+    }),
+
+    <span class="s">"auth-flow"</span>: b.<span class="a">phase</span>({
+      <span class="k">depends_on</span>: [<span class="s">"adapter"</span>],           <span class="c">// ← not gated by human:prod-keys</span>
+      <span class="k">lens</span>:       <span class="s">"integration-boundary"</span>,
+      <span class="k">outputs</span>:    [<span class="s">"POST /auth/google"</span>, <span class="s">"GET /auth/callback"</span>, <span class="s">"session middleware"</span>],
+      <span class="k">done_when</span>:  <span class="s">"./done-when/auth-flow.test.ts"</span>,
+      <span class="k">constraints</span>: [<span class="s">"session-persists-restart"</span>, <span class="s">"wrong-token-returns-401"</span>],
+    }),
+
+    <span class="s">"live-proof"</span>: b.<span class="a">phase</span>({
+      <span class="k">depends_on</span>: [<span class="s">"auth-flow"</span>, <span class="s">"human:prod-keys"</span>],  <span class="c">// ← needs both</span>
+      <span class="k">lens</span>:       <span class="s">"integration-boundary"</span>,
+      <span class="k">outputs</span>:    [<span class="s">"live OAuth round-trip passing"</span>],
+      <span class="k">done_when</span>:  <span class="s">"./done-when/live-proof.test.ts"</span>,
+      <span class="k">constraints</span>: [],
+    }),
+
+  },
+
+  <span class="c">// ── Constraint definitions ────────────────────────────────────────────</span>
+  <span class="k">constraints</span>: {
+    <span class="s">"migration-idempotent"</span>:          b.<span class="a">test</span>(<span class="s">"./constraints/migration-idempotent.test.ts"</span>),
+    <span class="s">"no-raw-sql-in-handlers"</span>:         b.<span class="a">eslint</span>(<span class="s">"no-restricted-imports"</span>, { <span class="k">patterns</span>: [<span class="s">"db/*"</span>] }),
+    <span class="s">"all-external-through-adapter"</span>:   b.<span class="a">coverage</span>({ <span class="k">path</span>: <span class="s">"adapters/**"</span>, <span class="k">threshold</span>: 90 }),
+    <span class="s">"adapter-mockable-without-network"</span>: b.<span class="a">test</span>(<span class="s">"./constraints/adapter-mock.test.ts"</span>),
+    <span class="s">"session-persists-restart"</span>:        b.<span class="a">test</span>(<span class="s">"./constraints/session-persist.test.ts"</span>),
+    <span class="s">"wrong-token-returns-401"</span>:         b.<span class="a">test</span>(<span class="s">"./constraints/auth-denied.test.ts"</span>),
+  },
+
+});</code></pre>
+
+        <div class="g2">
+          <div class="card">
+            <h4>Packet shape (v3)</h4>
+            <pre style="font-size:0.78rem"><code><span class="k">project-root/</span>
+  <span class="k">buildprint.ts</span>          <span class="c"># the whole contract</span>
+  done-when/             <span class="c"># one test file per phase</span>
+    schema.test.ts
+    adapter.test.ts
+    auth-flow.test.ts
+    live-proof.test.ts
+  constraints/           <span class="c"># constraint test files</span>
+    migration-idempotent.test.ts
+    adapter-mock.test.ts
+    session-persist.test.ts
+    auth-denied.test.ts
+  .buildprint/
+    <span class="k">run.jsonl</span>            <span class="c"># append-only event log</span></code></pre>
+          </div>
+          <div class="card">
+            <h4>What the type checker enforces</h4>
+            <ul style="font-size:0.87rem; color:var(--muted); display:grid; gap:6px;">
+              <li><code>mode</code> must be one of the eight modes.</li>
+              <li><code>lens</code> on each phase must match the project mode's allowed lenses.</li>
+              <li><code>depends_on</code> references must name real phase keys.</li>
+              <li><code>constraints</code> array entries must name declared constraint keys.</li>
+              <li><code>done_when</code> paths must resolve at build time (type-only check; runtime runs the tests).</li>
+              <li><code>humanGate</code> nodes may appear in <code>depends_on</code> of other phases.</li>
+              <li><code>blocks_only</code> must reference phase keys in the same graph.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE ANATOMY -->
+    <section class="sec" id="phase">
+      <div class="sec-head">
+        <div class="sec-label">02 / phase anatomy</div>
+        <h2>What a phase declares</h2>
+        <p>A phase is a dependency-ready unit of work with machine-verifiable entry conditions, outputs, done-when tests, and constraint references. No prose headings, no role-contract sections.</p>
+      </div>
+      <div class="gap-md">
+        <div class="phase-block">
+          <div class="phase-sidebar">
+            <div class="phase-id">"adapter"</div>
+            <div class="phase-meta">
+              <div style="margin-top:8px;"><span class="mode integration">integration</span></div>
+              <div style="margin-top:6px; font-size:0.75rem;">lens: integration-boundary</div>
+            </div>
+          </div>
+          <div class="phase-main">
+            <dl class="phase-field">
+              <dt>depends_on</dt>
+              <dd><code>"schema"</code> — must reach <code>done</code> before this phase is eligible.</dd>
+            </dl>
+            <dl class="phase-field">
+              <dt>outputs</dt>
+              <dd>Human-readable list of artifacts the phase is responsible for producing. Not executable — serves as context for the agent and for the log.</dd>
+            </dl>
+            <dl class="phase-field">
+              <dt>done_when</dt>
+              <dd>Path to a test file. Phase state is <code>done</code> when the file passes with no skipped tests. The runner is configured in <code>package.json</code> or <code>buildprint.config.ts</code>.</dd>
+            </dl>
+            <dl class="phase-field">
+              <dt>constraints</dt>
+              <dd>Keys from the project's <code>constraints</code> map. Each runs before the phase's <code>done_when</code> test. Failure blocks the phase — not just flags it.</dd>
+            </dl>
+          </div>
+        </div>
+
+        <table class="t">
+          <thead>
+            <tr>
+              <th>Phase state</th>
+              <th>Meaning</th>
+              <th>Proof</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>pending</code></td>
+              <td>Dependencies not yet <code>done</code>.</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><code>eligible</code></td>
+              <td>All <code>depends_on</code> phases are <code>done</code>. Agent may start.</td>
+              <td>Event log shows all deps passed.</td>
+            </tr>
+            <tr>
+              <td><code>running</code></td>
+              <td>Agent has emitted <code>phase_started</code>.</td>
+              <td>Log row.</td>
+            </tr>
+            <tr>
+              <td><code>done</code></td>
+              <td>All constraints passed <em>and</em> <code>done_when</code> tests pass with zero skips.</td>
+              <td>Test runner output + log row.</td>
+            </tr>
+            <tr>
+              <td><code>blocked</code></td>
+              <td>A <code>humanGate</code> dependency is unresolved and <code>blocks_only</code> includes this phase.</td>
+              <td>Log row with gate reference.</td>
+            </tr>
+            <tr>
+              <td><code>failed</code></td>
+              <td>Constraint or done_when test failed.</td>
+              <td>Test output. Agent must repair before retrying.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="call">
+          <strong>Five states, no ambiguity.</strong>
+          <p>There is no <code>checkpoint_recorded</code>-vs-<code>phase_core_passed</code>-vs-<code>claim_qualified</code> distinction. A phase is either <code>done</code> (tests pass, constraints pass, no skips) or it isn't. Partial progress lives in the event log; it never becomes a named state.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DONE-WHEN -->
+    <section class="sec" id="donewhen">
+      <div class="sec-head">
+        <div class="sec-label">03 / done_when</div>
+        <h2>Tests are the proof gate</h2>
+        <p>
+          The <code>done_when</code> file is the only thing that upgrades a phase to <code>done</code>.
+          The file must pass completely — no skips — on a real execution path.
+          This is where v2's evidence ceiling, proof tracks, and <code>upgrades_claim</code> logic collapse into one rule.
+        </p>
+      </div>
+      <div class="gap-lg">
+        <div class="g2">
+          <div>
+            <div class="label-row"><span style="font-size:0.78rem; font-family:var(--mono); color:var(--muted);">done-when/adapter.test.ts</span></div>
+            <pre><code><span class="c">// done-when/adapter.test.ts</span>
+<span class="c">// This file IS the proof gate for the "adapter" phase.</span>
+<span class="c">// It must pass with no skips — no describe.skip, no it.todo.</span>
+
+<span class="k">import</span> { GoogleOAuthAdapter } <span class="k">from</span> <span class="s">"../adapters/google"</span>;
+<span class="k">import</span> { MockAdapter }        <span class="k">from</span> <span class="s">"../adapters/mock"</span>;
+<span class="k">import</span> { ProviderAdapter }    <span class="k">from</span> <span class="s">"../adapters/types"</span>;
+
+<span class="a">describe</span>(<span class="s">"adapter seam"</span>, () => {
+
+  <span class="a">it</span>(<span class="s">"MockAdapter satisfies ProviderAdapter"</span>, () => {
+    <span class="k">const</span> adapter: <span class="t">ProviderAdapter</span> = <span class="k">new</span> <span class="a">MockAdapter</span>();
+    <span class="c">// type check is the assertion</span>
+  });
+
+  <span class="a">it</span>(<span class="s">"MockAdapter resolves token without network"</span>, <span class="k">async</span> () => {
+    <span class="k">const</span> adapter = <span class="k">new</span> <span class="a">MockAdapter</span>({ token: <span class="s">"test-tok"</span> });
+    <span class="k">const</span> result  = <span class="k">await</span> adapter.<span class="a">exchange</span>(<span class="s">"code-123"</span>);
+    <span class="a">expect</span>(result.token).<span class="a">toBe</span>(<span class="s">"test-tok"</span>);
+  });
+
+  <span class="a">it</span>(<span class="s">"GoogleOAuthAdapter is injectable as ProviderAdapter"</span>, () => {
+    <span class="k">const</span> adapter: <span class="t">ProviderAdapter</span> = <span class="k">new</span> <span class="a">GoogleOAuthAdapter</span>({
+      clientId: <span class="s">"x"</span>, clientSecret: <span class="s">"y"</span>, redirectUri: <span class="s">"http://localhost"</span>,
+    });
+    <span class="a">expect</span>(adapter.<span class="a">exchange</span>).<span class="a">toBeInstanceOf</span>(Function);
+  });
+
+  <span class="c">// No .skip allowed — this would block the phase from reaching `done`.</span>
+
+});</code></pre>
+          </div>
+          <div class="gap-md">
+            <div class="card">
+              <h4>Hard rules for done_when files</h4>
+              <ul style="font-size:0.86rem; color:var(--muted); display:grid; gap:5px;">
+                <li>Zero <code>describe.skip</code>, <code>it.skip</code>, <code>test.todo</code>. Any skip = phase stays <code>running</code>.</li>
+                <li>No mocked network calls for things that must be tested via real paths. Live-provider tests go in a separate phase with a <code>humanGate</code> dependency.</li>
+                <li>The file exercises the exact behavior named in the phase's <code>outputs</code>. If an output isn't tested, the phase isn't done.</li>
+                <li>Runtime imports must work in CI without manual setup beyond what <code>02-project-setup</code> describes.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>What replaces v2 proof tracks</h4>
+              <p>v2 had named tracks: <code>live_provider_proof_blocker_only</code>, <code>repeatable_browser_e2e</code>, etc. In v3:</p>
+              <ul style="font-size:0.86rem; color:var(--muted); margin-top:8px; display:grid; gap:5px;">
+                <li>Adapter/mock tests → <code>done_when</code> of the adapter phase.</li>
+                <li>Live-provider tests → <code>done_when</code> of a phase that <code>depends_on</code> a <code>humanGate</code>.</li>
+                <li>Browser e2e → <code>done_when</code> of a dedicated e2e phase, configured via Playwright.</li>
+                <li>Security denied-path → a named constraint test.</li>
+                <li>Persistence roundtrip → <code>done_when</code> of the schema/persistence phase.</li>
+              </ul>
+            </div>
+            <div class="call bad">
+              <strong>Never write a done_when test that can't fail.</strong>
+              <p>A test file that only checks types, or only runs mocks for what should be real behavior, allows the phase to reach <code>done</code> without the work being complete. Write tests that would catch a broken implementation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONSTRAINTS -->
+    <section class="sec" id="constraints">
+      <div class="sec-head">
+        <div class="sec-label">04 / constraints</div>
+        <h2>Obligations become automated checks</h2>
+        <p>
+          v2's role contracts contained obligations written in prose. In v3, each obligation is a named constraint with a machine-executable runner. Constraints run before every <code>done_when</code> test. Failure is a hard block.
+        </p>
+      </div>
+      <div class="gap-lg">
+        <table class="t">
+          <thead>
+            <tr><th>Constraint type</th><th>Runner</th><th>What it enforces</th><th>v2 equivalent</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="chip lint">b.eslint()</span></td>
+              <td>ESLint rule + config</td>
+              <td>Architectural invariants: no direct DB imports in handlers, no inline HTTP calls, restricted patterns.</td>
+              <td>product-architect / integration-runtime prose obligations</td>
+            </tr>
+            <tr>
+              <td><span class="chip test">b.test()</span></td>
+              <td>Test runner (Vitest / Jest)</td>
+              <td>Behavioral invariants: migration idempotency, session persistence, denied-path 401, adapter mockability.</td>
+              <td>security-boundary / data-persistence / test-and-verification returns</td>
+            </tr>
+            <tr>
+              <td><span class="chip cov">b.coverage()</span></td>
+              <td>Coverage reporter</td>
+              <td>Surface coverage gates: all external calls go through <code>adapters/</code>, threshold enforced.</td>
+              <td>integration-runtime seam requirements</td>
+            </tr>
+            <tr>
+              <td><span class="chip exec">b.exec()</span></td>
+              <td>Shell command</td>
+              <td>Any automated check that doesn't fit the above: Lighthouse scores, bundle size, schema diff.</td>
+              <td>quality gates (various)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="g2">
+          <pre><code><span class="c">// constraints/auth-denied.test.ts</span>
+<span class="c">// Enforces: wrong-token-returns-401</span>
+<span class="c">// Replaces: security-boundary role contract prose</span>
+
+<span class="k">import</span> { createTestApp } <span class="k">from</span> <span class="s">"../test/helpers"</span>;
+
+<span class="a">describe</span>(<span class="s">"security boundary — auth denied paths"</span>, () => {
+
+  <span class="a">it</span>(<span class="s">"expired token → 401, not 500"</span>, <span class="k">async</span> () => {
+    <span class="k">const</span> app = <span class="k">await</span> <span class="a">createTestApp</span>();
+    <span class="k">const</span> res = <span class="k">await</span> app.<span class="a">inject</span>({
+      method: <span class="s">"GET"</span>, url: <span class="s">"/api/me"</span>,
+      headers: { authorization: <span class="s">"Bearer expired-token"</span> },
+    });
+    <span class="a">expect</span>(res.statusCode).<span class="a">toBe</span>(401);
+    <span class="a">expect</span>(res.statusCode).<span class="k">not</span>.<span class="a">toBe</span>(500);
+  });
+
+  <span class="a">it</span>(<span class="s">"missing token → 401"</span>, <span class="k">async</span> () => {
+    <span class="k">const</span> app = <span class="k">await</span> <span class="a">createTestApp</span>();
+    <span class="k">const</span> res = <span class="k">await</span> app.<span class="a">inject</span>({ method: <span class="s">"GET"</span>, url: <span class="s">"/api/me"</span> });
+    <span class="a">expect</span>(res.statusCode).<span class="a">toBe</span>(401);
+  });
+
+  <span class="a">it</span>(<span class="s">"token of another tenant → 403"</span>, <span class="k">async</span> () => {
+    <span class="k">const</span> app = <span class="k">await</span> <span class="a">createTestApp</span>();
+    <span class="k">const</span> res = <span class="k">await</span> app.<span class="a">inject</span>({
+      method: <span class="s">"GET"</span>, url: <span class="s">"/api/me"</span>,
+      headers: { authorization: <span class="s">"Bearer tenant-b-token"</span> },
+      <span class="c">// app configured for tenant-a</span>
+    });
+    <span class="a">expect</span>(res.statusCode).<span class="a">toBe</span>(403);
+  });
+
+});</code></pre>
+
+          <div class="gap-md">
+            <pre><code><span class="c">// buildprint.config.ts — runner config</span>
+<span class="k">export default</span> {
+  <span class="k">runner</span>: <span class="s">"vitest"</span>,
+  <span class="k">coverage</span>: {
+    <span class="k">provider</span>: <span class="s">"v8"</span>,
+    <span class="k">reporter</span>: [<span class="s">"text"</span>, <span class="s">"json"</span>],
+  },
+  <span class="k">eslint</span>: {
+    <span class="k">config</span>: <span class="s">"./eslint.config.js"</span>,
+  },
+  <span class="k">env</span>: {
+    <span class="k">test</span>: <span class="s">".env.test"</span>,  <span class="c">// injected for all runs</span>
+  },
+};</code></pre>
+            <div class="call ok">
+              <strong>Constraints run in dependency order.</strong>
+              <p>A constraint that references the database only runs after the schema phase is <code>done</code>. The runner resolves this from the phase graph automatically — no manual ordering.</p>
+            </div>
+            <div class="call bad">
+              <strong>Constraints are not advisory.</strong>
+              <p>In v2, role-contract obligations could be acknowledged with a prose return note. In v3, a failing constraint stops the phase. There is no "noted, continuing anyway."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HUMAN GATES -->
+    <section class="sec" id="gates">
+      <div class="sec-head">
+        <div class="sec-label">05 / human gates</div>
+        <h2>Human input is a typed graph node</h2>
+        <p>
+          v2 used <code>01-questions.md</code> and repair routing for human decisions. In v3, human gates
+          are declared in the phase graph. They have dependencies, skip conditions, and explicit scope of what they block.
+        </p>
+      </div>
+      <div class="gap-md">
+        <pre><code><span class="s">"human:prod-keys"</span>: b.<span class="a">humanGate</span>({
+  <span class="k">depends_on</span>: [<span class="s">"adapter"</span>],         <span class="c">// waits until adapter phase is done</span>
+  <span class="k">prompt</span>:    <span class="s">"Provide Google OAuth credentials for live testing."</span>,
+  <span class="k">skip_if</span>:   { <span class="k">env</span>: <span class="s">"GOOGLE_CLIENT_ID"</span> },   <span class="c">// auto-resolves in CI</span>
+  <span class="k">blocks_only</span>: [<span class="s">"live-proof"</span>],              <span class="c">// only this phase waits</span>
+                                              <span class="c">// "auth-flow" can proceed</span>
+}),
+
+<span class="s">"human:schema-drop"</span>: b.<span class="a">humanGate</span>({
+  <span class="k">depends_on</span>: [<span class="s">"auth-flow"</span>],
+  <span class="k">prompt</span>:    <span class="s">"You are about to DROP the legacy sessions table. Confirm? [yes/no]"</span>,
+  <span class="k">skip_if</span>:   { <span class="k">env</span>: <span class="s">"BUILDPRINT_AUTO_CONFIRM_SCHEMA_DROP"</span> },
+  <span class="k">blocks_only</span>: [<span class="s">"migration-cleanup"</span>],
+}),</code></pre>
+
+        <div class="g3">
+          <div class="gate">
+            <div class="gate-icon">🔑</div>
+            <div>
+              <h4>human:prod-keys</h4>
+              <p>External credentials gate. <code>skip_if</code> resolves automatically from env. Only blocks phases that need live provider behavior.</p>
+            </div>
+          </div>
+          <div class="gate">
+            <div class="gate-icon">⚠️</div>
+            <div>
+              <h4>human:schema-drop</h4>
+              <p>Destructive action gate. Requires explicit confirmation. Can be pre-authorized via env in staging pipelines.</p>
+            </div>
+          </div>
+          <div class="gate">
+            <div class="gate-icon">💳</div>
+            <div>
+              <h4>human:billing-model</h4>
+              <p>Product-defining fork. Agent cannot choose between per-seat vs usage pricing. Blocks the billing phase until answered.</p>
+            </div>
+          </div>
+        </div>
+
+        <table class="t">
+          <thead><tr><th>Gate field</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>depends_on</code></td><td>The gate won't surface to the human until these phases are done — no point asking for credentials before the adapter is built.</td></tr>
+            <tr><td><code>prompt</code></td><td>Shown to the human verbatim. Should name exactly what's needed and why. Not a place for AI best-judgment.</td></tr>
+            <tr><td><code>skip_if.env</code></td><td>If this env var exists and is non-empty, the gate auto-resolves. Enables CI pipelines to inject known values.</td></tr>
+            <tr><td><code>blocks_only</code></td><td>Only these phase keys wait on this gate. Other phases that don't need the gated information continue. The gate does not stall the whole build.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="call">
+          <strong>When to use a human gate (same rule as v2 01-questions).</strong>
+          <p>Use only for decisions that are: irreversible, expensive, credentialed, destructive, or product-defining in a way the agent cannot default on. Everything else the agent decides using the mode and lens context.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENT LOG -->
+    <section class="sec" id="log">
+      <div class="sec-head">
+        <div class="sec-label">06 / event log</div>
+        <h2>One append-only log. Derived state only.</h2>
+        <p>
+          All runtime state is derived from <code>.buildprint/run.jsonl</code>.
+          No <code>state.json</code>, no <code>progress.md</code>, no <code>next-agent.md</code> that can go stale.
+          Any agent, in any session, replays the log to know where to continue.
+        </p>
+      </div>
+      <div class="gap-lg">
+        <div class="log-stream"><span class="log-t">2025-03-14T09:00:01Z</span>  <span class="log-ev">run_started</span>        <span class="log-id">agent=claude-sonnet-4  run_id=r-82f3a</span>
+<span class="log-t">2025-03-14T09:00:03Z</span>  <span class="log-ev">phase_started</span>      <span class="log-id">phase=schema</span>
+<span class="log-t">2025-03-14T09:02:41Z</span>  <span class="log-ev">constraint_pass</span>    <span class="log-id">phase=schema  constraint=migration-idempotent</span>
+<span class="log-t">2025-03-14T09:02:51Z</span>  <span class="log-ev">constraint_pass</span>    <span class="log-id">phase=schema  constraint=no-raw-sql-in-handlers</span>
+<span class="log-t">2025-03-14T09:03:10Z</span>  <span class="log-ev">phase_done</span>         <span class="log-ok">phase=schema  tests=4/4 passed  skips=0</span>
+<span class="log-t">2025-03-14T09:03:11Z</span>  <span class="log-ev">phase_eligible</span>     <span class="log-id">phase=adapter</span>
+<span class="log-t">2025-03-14T09:03:11Z</span>  <span class="log-ev">phase_started</span>      <span class="log-id">phase=adapter</span>
+<span class="log-t">2025-03-14T09:05:30Z</span>  <span class="log-ev">constraint_pass</span>    <span class="log-id">phase=adapter  constraint=all-external-through-adapter</span>
+<span class="log-t">2025-03-14T09:05:55Z</span>  <span class="log-ev">constraint_fail</span>    <span class="log-bl">phase=adapter  constraint=adapter-mockable-without-network</span>
+<span class="log-t">2025-03-14T09:05:55Z</span>  <span class="log-ev">phase_failed</span>       <span class="log-bl">phase=adapter  reason=constraint:adapter-mockable-without-network</span>
+<span class="log-t">2025-03-14T09:18:42Z</span>  <span class="log-ev">phase_started</span>      <span class="log-id">phase=adapter  attempt=2</span>
+<span class="log-t">2025-03-14T09:21:00Z</span>  <span class="log-ev">constraint_pass</span>    <span class="log-id">phase=adapter  constraint=adapter-mockable-without-network</span>
+<span class="log-t">2025-03-14T09:21:18Z</span>  <span class="log-ev">phase_done</span>         <span class="log-ok">phase=adapter  tests=3/3 passed  skips=0</span>
+<span class="log-t">2025-03-14T09:21:19Z</span>  <span class="log-ev">gate_surface</span>       <span class="log-hu">gate=human:prod-keys  skip_check=env:GOOGLE_CLIENT_ID  result=not_found</span>
+<span class="log-t">2025-03-14T09:21:19Z</span>  <span class="log-ev">gate_waiting</span>       <span class="log-hu">gate=human:prod-keys</span>
+<span class="log-t">2025-03-14T09:21:19Z</span>  <span class="log-ev">phase_eligible</span>     <span class="log-id">phase=auth-flow  (gate not in depends_on)</span>
+<span class="log-t">2025-03-14T09:21:20Z</span>  <span class="log-ev">phase_started</span>      <span class="log-id">phase=auth-flow</span></div>
+
+        <div class="g2">
+          <div class="card">
+            <h4>Event types</h4>
+            <ul style="font-family:var(--mono); font-size:0.82rem; color:var(--muted); display:grid; gap:4px;">
+              <li><code>run_started</code></li>
+              <li><code>phase_eligible</code></li>
+              <li><code>phase_started</code></li>
+              <li><code>constraint_pass</code></li>
+              <li><code>constraint_fail</code></li>
+              <li><code>phase_done</code></li>
+              <li><code>phase_failed</code></li>
+              <li><code>gate_surface</code></li>
+              <li><code>gate_waiting</code></li>
+              <li><code>gate_resolved</code></li>
+              <li><code>gate_skipped</code></li>
+              <li><code>agent_note</code></li>
+              <li><code>run_complete</code></li>
+            </ul>
+          </div>
+          <div class="gap-md">
+            <div class="card">
+              <h4>Resuming from a new session</h4>
+              <p style="font-size:0.87rem; color:var(--muted);">Agent runs <code>agb status</code>. The CLI replays the log, derives current state per phase, and prints which phases are <code>eligible</code>. Agent picks one and continues. No stale file to read.</p>
+            </div>
+            <div class="card">
+              <h4>Repair routing via the log</h4>
+              <p style="font-size:0.87rem; color:var(--muted);">When a phase enters <code>failed</code>, the log shows the exact constraint or test that failed. Agent reads the constraint definition, fixes the code, emits <code>phase_started attempt=N</code>, reruns. No routing table to consult.</p>
+            </div>
+            <div class="call ok">
+              <strong>The log is append-only. Never edit it.</strong>
+              <p>A <code>phase_failed</code> row is not removed when the phase later succeeds — it stays in the log as audit history. The derived status is computed from the latest event for each phase.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODE & LENS -->
+    <section class="sec" id="mode">
+      <div class="sec-head">
+        <div class="sec-label">07 / mode &amp; lens</div>
+        <h2>Mode narrows the type system. Lens focuses each phase.</h2>
+        <p>
+          Mode-awareness from v2 survives — it still decides what kind of project this is and what obligations apply.
+          But mode is now a TypeScript union type, and the lens is a per-phase string that the type checker validates
+          against the project mode's allowed values.
+        </p>
+      </div>
+      <div class="gap-md">
+        <table class="t">
+          <thead>
+            <tr>
+              <th>Mode</th>
+              <th>Allowed lenses</th>
+              <th>done_when emphasis</th>
+              <th>Dominant constraint types</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mode product">product</span></td>
+              <td><code>user-flow</code> · <code>data-persistence</code> · <code>ui-craft</code></td>
+              <td>User action → controller → state → readback path passes end-to-end.</td>
+              <td>No dead UI, no state-only success, real action path required.</td>
+            </tr>
+            <tr>
+              <td><span class="mode framework">framework</span></td>
+              <td><code>primitive</code> · <code>composition</code> · <code>extension-point</code></td>
+              <td>Primitive composes correctly; misuse states are tested.</td>
+              <td>Invariant stability, no coupling to one app story.</td>
+            </tr>
+            <tr>
+              <td><span class="mode library">library</span></td>
+              <td><code>callable-surface</code> · <code>error-shape</code> · <code>primitive</code></td>
+              <td>Public API surface stable; error types tested; tree-shaking safe.</td>
+              <td>No breaking changes to exported signatures.</td>
+            </tr>
+            <tr>
+              <td><span class="mode integration">integration</span></td>
+              <td><code>integration-boundary</code> · <code>webhook</code> · <code>idempotency</code></td>
+              <td>Adapter + mock tests pass; live-provider test in separate gated phase.</td>
+              <td>All external calls through adapter; sandbox/live split.</td>
+            </tr>
+            <tr>
+              <td><span class="mode automation">automation</span></td>
+              <td><code>task-loop</code> · <code>approval-point</code> · <code>trace</code></td>
+              <td>Plan/execute/observe loop terminates; stop conditions tested; trace emitted.</td>
+              <td>Exit conditions required; no infinite loops; approval gates declared.</td>
+            </tr>
+            <tr>
+              <td><span class="mode data">data-pipeline</span></td>
+              <td><code>dataflow</code> · <code>lineage</code> · <code>backfill</code></td>
+              <td>Input→transform→output chain tested on sample data; lineage provenance verifiable.</td>
+              <td>Idempotent backfills; schema validation; quality thresholds.</td>
+            </tr>
+            <tr>
+              <td><span class="mode infra">infrastructure</span></td>
+              <td><code>operations</code> · <code>rollback</code> · <code>drift</code></td>
+              <td>Deploy applies cleanly; health check passes; rollback path tested in dry-run.</td>
+              <td>No undeclared resources; drift detection enabled; permissions minimal.</td>
+            </tr>
+            <tr>
+              <td><span class="mode mixed">mixed</span></td>
+              <td>Any combination of above</td>
+              <td>Each phase declares its own lens; done_when must match that lens's emphasis.</td>
+              <td>Per-phase constraint sets; not a blanket permission to be vague.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="call">
+          <strong>If the type checker rejects your lens, your mode is wrong.</strong>
+          <p>A phase in an <code>integration</code> project cannot use lens <code>user-flow</code>. If you need that, the project is <code>product</code> or <code>mixed</code>. The type error is the mode-classification invariant from v2, now enforced by the compiler rather than a validator script.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLI -->
+    <section class="sec" id="cli">
+      <div class="sec-head">
+        <div class="sec-label">08 / cli</div>
+        <h2>agb — the buildprint runner</h2>
+        <p>The CLI is the only interface between the agent and the buildprint. It reads <code>buildprint.ts</code>, maintains <code>.buildprint/run.jsonl</code>, and executes tests and constraints.</p>
+      </div>
+      <div class="cli">
+        <div class="cli-cmd">
+          <span class="prompt">$</span>
+          <div class="body">
+            <code>agb status</code>
+            <p>Replay the event log. Print phase state table: pending / eligible / running / done / failed / blocked. Print next eligible phases. Use this at the start of every resumed session.</p>
+          </div>
+        </div>
+        <div class="cli-cmd">
+          <span class="prompt">$</span>
+          <div class="body">
+            <code>agb run [phase-id]</code>
+            <p>Start or resume a phase. Runs all constraints for the phase in dependency order, then executes the <code>done_when</code> test file. Appends events to the log. Errors are surfaced with constraint name and test output — not routed to a separate file.</p>
+          </div>
+        </div>
+        <div class="cli-cmd">
+          <span class="prompt">$</span>
+          <div class="body">
+            <code>agb check [constraint-id]</code>
+            <p>Run a single constraint in isolation. Useful during development to verify a specific invariant without running the full phase.</p>
+          </div>
+        </div>
+        <div class="cli-cmd">
+          <span class="prompt">$</span>
+          <div class="body">
+            <code>agb gate resolve [gate-id] [value]</code>
+            <p>Provide human input for a waiting gate. Appends <code>gate_resolved</code> to the log. Immediately unblocks any phase whose only pending dependency was this gate.</p>
+          </div>
+        </div>
+        <div class="cli-cmd">
+          <span class="prompt">$</span>
+          <div class="body">
+            <code>agb graph</code>
+            <p>Print the phase dependency graph as ASCII or export as <code>graph.dot</code>. Shows current state per node. Useful for verifying that <code>depends_on</code> edges match intent.</p>
+          </div>
+        </div>
+        <div class="cli-cmd">
+          <span class="prompt">$</span>
+          <div class="body">
+            <code>agb replay [--from phase-id] [--to phase-id]</code>
+            <p>Re-derive state from the log for a range of phases. Does not re-execute tests — reads the log only. Use for audit, debugging, or hand-off documentation.</p>
+          </div>
+        </div>
+        <div class="cli-cmd">
+          <span class="prompt">$</span>
+          <div class="body">
+            <code>agb typecheck</code>
+            <p>Run the TypeScript compiler over <code>buildprint.ts</code>. Validates mode, lenses, depends_on references, constraint keys, and done_when paths without executing anything. Run this in CI before any phase.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFF -->
+    <section class="sec" id="diff">
+      <div class="sec-head">
+        <div class="sec-label">09 / v2 → v3</div>
+        <h2>What changed, what stayed, what dropped</h2>
+        <p>v3 keeps the properties that matter — mode awareness, evidence discipline, human gates, repair — and replaces the mechanisms with executable equivalents.</p>
+      </div>
+      <div class="gap-lg">
+        <div class="gap-md">
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div>Sequential read-order gate over 7 markdown files.</div>
+            <div class="diff-col new"><div class="label">v3 instead</div"><code>agb typecheck</code> validates the whole graph in one pass. Agent reads <code>buildprint.ts</code> once.</div>
+          </div>
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div>Six role contracts (product-architect, ux-ui-craft, …) as prose markdown under <code>06-contracts/</code>.</div>
+            <div class="diff-col new"><div class="label">v3 instead</div>Each obligation is a named constraint with a typed runner. Violation is a hard block, not a review note.</div>
+          </div>
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div>Handoff / return / review artifact files per phase (<code>plan.md</code>, <code>handoffs/</code>, <code>returns/</code>, <code>reviews/</code>).</div>
+            <div class="diff-col new"><div class="label">v3 instead</div>Constraint test files and <code>done_when</code> test files. If subagents are used, they run tests — not write prose returns.</div>
+          </div>
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div><code>evidence-ledger.jsonl</code> with <code>upgrades_claim: true/false</code>, <code>proof_type</code>, <code>provider_mode</code>.</div>
+            <div class="diff-col new"><div class="label">v3 instead</div>Test results are evidence. <code>agb run</code> writes <code>phase_done tests=N/N</code> to the event log. No manual row authoring.</div>
+          </div>
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div>Three-tier phase state: <code>checkpoint_recorded</code> / <code>phase_core_passed</code> / <code>claim_qualified</code>.</div>
+            <div class="diff-col new"><div class="label">v3 instead</div>Five unambiguous states: pending / eligible / running / done / failed. Derived from the log.</div>
+          </div>
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div><code>state.json</code>, <code>progress.md</code>, <code>next-agent.md</code>, <code>blockers.md</code>.</div>
+            <div class="diff-col new"><div class="label">v3 instead</div>One event log. <code>agb status</code> derives everything. No stale files to mislead a resumed agent.</div>
+          </div>
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div><code>01-questions.md</code> as a flat pre-implementation Q&amp;A file.</div>
+            <div class="diff-col new"><div class="label">v3 instead</div><code>humanGate</code> nodes in the phase graph: depend on prior phases, auto-resolve via env, block only what they need to block.</div>
+          </div>
+          <div class="diff-row">
+            <div class="diff-col old"><div class="label">v2 dropped</div>Validator script <code>check-mapper-selected-output.mjs</code> checking file shapes and heading tokens.</div>
+            <div class="diff-col new"><div class="label">v3 instead</div>TypeScript compiler + <code>agb typecheck</code>. Mode/lens pairing, dep refs, constraint keys — all type-checked.</div>
+          </div>
+        </div>
+
+        <hr class="div">
+
+        <div class="label-row">
+          <span style="font-size:0.78rem; font-family:var(--mono); color:var(--soft); letter-spacing:0.08em; text-transform:uppercase;">What stays from v2</span>
+        </div>
+        <div class="g3">
+          <div class="card">
+            <h4>Mode awareness</h4>
+            <p>Eight modes still exist. Mode decides lens options, done_when emphasis, and dominant constraint types. Collapsing everything into product-app language is still wrong.</p>
+          </div>
+          <div class="card">
+            <h4>Evidence cannot be faked</h4>
+            <p>In v2 the rule was "don't mark upgrades_claim: true on a mock". In v3 the test file either passes or it doesn't. The invariant is the same — enforcement is automatic.</p>
+          </div>
+          <div class="card">
+            <h4>Continuation ≠ qualification</h4>
+            <p>A humanGate with <code>blocks_only: ["live-proof"]</code> still allows other phases to proceed. The live-proof phase is <code>blocked</code>, not failed. Other work continues.</p>
+          </div>
+          <div class="card">
+            <h4>Repair before retry</h4>
+            <p>A <code>phase_failed</code> event means the agent fixes the code, not retries with looser tests. The constraint definition tells the agent exactly what's wrong.</p>
+          </div>
+          <div class="card">
+            <h4>One phase at a time per agent</h4>
+            <p>An agent picks one <code>eligible</code> phase and works it to <code>done</code>. The graph may show multiple eligible phases — that's an opportunity for parallel agents, not a signal to batch.</p>
+          </div>
+          <div class="card">
+            <h4>Human gates for real forks only</h4>
+            <p>Credentials, destructive actions, irreversible product decisions. Everything the agent can default on using mode + lens context, it defaults on. No gate for cosmetic choices.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Buildprint v3 · executable agent contract · the log at <code>.buildprint/run.jsonl</code> is ground truth at runtime.
+    </footer>
+  </main>
+
+</div>
+</body>
+</html>

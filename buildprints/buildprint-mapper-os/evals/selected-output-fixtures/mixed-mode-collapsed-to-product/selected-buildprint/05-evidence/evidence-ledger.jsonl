@@ -1,0 +1,2 @@
+{"artifact_id":"mapping-seed-01-product-ingest","type":"mapping_seed","phase_id":"01-product-ingest","status":"missing","source":"mapper-os generation","proves":["clean_room_implementation_trace"],"proof_type":"mapping_seed","provider_mode":"n/a","upgrades_claim":false}
+{"artifact_id":"mapping-seed-02-payment-integration","type":"mapping_seed","phase_id":"02-payment-integration","status":"missing","source":"mapper-os generation","proves":["clean_room_implementation_trace"],"proof_type":"mapping_seed","provider_mode":"n/a","upgrades_claim":false}

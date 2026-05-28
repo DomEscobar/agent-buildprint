@@ -33,19 +33,21 @@
 
 ## Execution Slice Contract
 
-Each selected slice must answer:
+Each selected slice must answer questions appropriate to its `blueprint_mode`:
 
-- what the user or system can do;
+- what the user, system, consumer, or operator can do;
 - accepted inputs and observable outputs;
 - important state and transitions;
 - failure, loading, empty, and blocked states;
 - provider, persistence, runtime, operational, or security boundaries;
 - stable behavior vs free implementation choices;
-- required implementation depth across UI/UX, API, domain logic, persistence/state, provider/runtime, failure states, tests, and proof;
-- implementation-team signals/passes required by product shape;
-- verification gate;
-- stop or escalation condition;
+- required implementation depth matching the mode: UI/UX/domain/persistence/provider for product; primitive/composition/extension/misuse for framework/library; config/webhook/idempotency/sandbox/live for integration; loop/tool/stop/approval/trace for automation; schema/transform/lineage/backfill/quality for data-pipeline; deploy/health/rollback/drift/observability for infrastructure;
+- implementation-team signals/passes required by product/capability shape;
+- verification gate and the mode-appropriate proof type;
+- stop or escalation condition (mandatory for automation; applicable for all modes);
 - unlock/dependency relation to later phases.
+
+For **mixed** packets, each phase must clearly state which mode lens it uses and include mode-appropriate proof.
 
 ## Qualification Contract
 

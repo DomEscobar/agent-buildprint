@@ -352,14 +352,19 @@ Do not continue to the next phase if the core path does not persist state, canno
 
 ## Output skeleton for generated phases
 
-Generated selected phases should keep this heading set unless the phase is explicitly non-UI or non-provider:
+Generated selected phases must use this heading set. The outcome and obligations headings shift with the declared mode; all other headings are constant.
 
 ```md
 # Phase NN - <phase title>
 
 ## How to implement this phase
-## Product outcome
-## Mapped product obligations
+## Product outcome          (product mode)
+## Capability outcome       (framework / library / integration / automation / data-pipeline)
+## Operation outcome        (infrastructure)
+## Phase mode contract      (blueprint_mode + phase_style + lens + shared proof spine)
+## Mapped product obligations       (product mode)
+## Mapped capability obligations    (framework / library / integration / automation / data-pipeline)
+## Mapped operation obligations     (infrastructure)
 ## Behavior compatibility contract
 ## Implementation scope
 ## Core-pass required
@@ -376,3 +381,335 @@ Generated selected phases should keep this heading set unless the phase is expli
 ```
 
 For a non-UI phase, keep `## UX/UI requirements` and write `None - reason:` plus downstream UI obligations. For a non-provider phase, keep provider sections only when an adapter, tool, external service, or runtime boundary exists.
+
+---
+
+## Per-mode positive few-shot examples
+
+Use the right example as the structural pattern for each mode. Do not copy product nouns into non-product phases.
+
+---
+
+### Framework positive few-shot — primitive/composition map phase
+
+```md
+# Phase 01 — Record validator primitive and composition contract
+
+## How to implement this phase
+
+Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
+
+requires_roles:
+  - product-architect
+  - test-and-verification
+
+## Capability outcome
+
+Define and prove the reusable record-validation primitive: accept a record object, enforce required-field invariants, expose composition rules for downstream adapters, document extension points, and provide misuse cases with typed errors.
+
+## Phase mode contract
+
+- blueprint_mode: framework
+- phase_style: primitive_composition_map
+- Lens: this phase maps the primitive, invariants, composition rules, extension points, invalid states, and compatibility surface — not one downstream app story.
+- Shared proof spine:
+  - Preconditions/inputs: consumer imports or calls the validation primitive with record fields.
+  - Entrypoint/use site: SDK import or callable API.
+  - Execution behavior: enforce invariants, validate required fields, surface typed errors.
+  - State/artifact effects: validation result, typed error contract, adapter write/read proof.
+  - Observable proof: import/API/CLI tests prove primitive usage, invalid states, and adapter behavior.
+  - Failure/recovery: missing fields, adapter failure, and idempotent writes fail clearly.
+  - Non-goals: downstream UI product flow, live providers, worker lifecycle claims.
+
+## Mapped capability obligations
+
+- Obligation: PRIMITIVE-VALIDATE-RECORD
+- Preserve: record input acceptance, required-field enforcement, typed error contract, and readback.
+- Composition rules: validators can be composed with adapters; adapters must not bypass field invariants.
+- Extension points: custom field validators may be registered; primitive core invariants must not be overridable.
+- Misuse cases: null record, missing required field, unknown field types, empty string as required value.
+
+## Behavior compatibility contract
+
+- Disposition: preserve primitive capability; target callable API may differ from source route.
+- Equivalent target behavior: primitive, invariants, composition, typed errors, and readback.
+- Compatibility impact: mapped route name is evidence, not a mandatory clone target.
+
+## UX/UI requirements
+
+None — this phase is not UI-bearing. Consumer experience proof must include import/API/CLI usage examples for empty, validation error, success/readback, and recovery states. Screenshot critique applies only if an optional UI demo is added.
+
+## Proof gate
+
+- Proof id: proof-01-record-validator
+- Required proofs: import_api_contract_trace, cli_or_reference_example_trace, persistence_roundtrip, no_fake_scan_pass, provider_adapter_config_test_required, live_provider_proof_blocker_only
+- Negative tests: rejects missing required fields, rejects misuse cases.
+```
+
+---
+
+### Library positive few-shot — callable-contract phase
+
+```md
+# Phase 01 — HTTP client callable contract and semver surface
+
+## How to implement this phase
+
+Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
+
+requires_roles:
+  - product-architect
+  - integration-runtime
+  - test-and-verification
+
+## Capability outcome
+
+Define and prove the public HTTP client callable surface: typed request/response, error contract, semver/compat surface, and consumer import patterns.
+
+## Phase mode contract
+
+- blueprint_mode: library
+- phase_style: callable_contract
+- Lens: this phase defines the public API consumers import and call — typed contracts, semver boundaries, compat surface, and reference patterns.
+- Shared proof spine:
+  - Preconditions/inputs: consumer imports the library and calls the HTTP client with typed request options.
+  - Entrypoint/use site: import/require call in consumer code.
+  - Execution behavior: resolve typed request, execute against a fake/sandbox server, return typed response or typed error.
+  - State/artifact effects: response object, error type, idempotency behavior.
+  - Observable proof: import/API tests prove callable surface, response types, and error contract.
+  - Failure/recovery: network error, timeout, invalid response, and semver-breaking change detect clearly.
+  - Non-goals: downstream product UI, live third-party calls, worker queue.
+
+## Mapped capability obligations
+
+- Public API surface: named exports, TypeScript types, and JSDoc.
+- Semver contract: patch: bug fixes only; minor: additive; major: breaking type or behavior change.
+- Compat surface: consumers must import without knowing internal implementation.
+- Reference patterns: at least one complete usage example per public method.
+
+## UX/UI requirements
+
+None — this phase is a library with no UI. Consumer experience proof must include at least one import/usage example, typed error demonstration, and semver compat validation test.
+
+## Proof gate
+
+- Proof id: proof-01-http-client
+- Required proofs: import_api_contract_trace, fake_provider_proof, no_fake_scan_pass, provider_adapter_config_test_required, live_provider_proof_blocker_only
+```
+
+---
+
+### Integration positive few-shot — boundary transaction contract phase
+
+```md
+# Phase 01 — Stripe payment intent boundary transaction
+
+## How to implement this phase
+
+Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
+
+requires_roles:
+  - product-architect
+  - integration-runtime
+  - security-boundary
+  - test-and-verification
+
+## Capability outcome
+
+Implement and prove the Stripe payment intent boundary: config/secrets, request/response contract, webhook/callback dispatch, idempotency, retry/error mapping, sandbox/live split, and fake-provider tests.
+
+## Phase mode contract
+
+- blueprint_mode: integration
+- phase_style: boundary_transaction_contract
+- Lens: this phase defines the external boundary transaction — config, request/response, webhook dispatch, idempotency, sandbox/live split, and fake-provider behavior — not a generic product feature.
+- Shared proof spine:
+  - Preconditions/inputs: Stripe API key in env; idempotency key per request.
+  - Entrypoint/use site: service calls the payment adapter with a typed payment request.
+  - Execution behavior: validate config, build request, call fake/sandbox Stripe API, parse response, map errors.
+  - State/artifact effects: payment intent record, idempotency key stored, webhook event dispatched.
+  - Observable proof: fake-provider tests prove request shape, response mapping, idempotency, error mapping, and webhook dispatch.
+  - Failure/recovery: invalid key, rate limit, card decline, webhook signature mismatch, duplicate idempotency key fail with typed errors.
+  - Non-goals: billing UI, product checkout flow, deployment.
+
+## Mapped capability obligations
+
+- Config/secrets: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`; fail-closed when missing.
+- Request/response: typed `PaymentIntentRequest` and `PaymentIntentResult`; error envelope for decline/network/rate-limit.
+- Webhook/callback: verify signature, dispatch typed event, record audit row.
+- Idempotency: per-request idempotency key required; duplicate key returns stored result.
+- Sandbox/live split: sandbox mode for tests; live mode requires credentials and integration approval.
+
+## UX/UI requirements
+
+None — this is a provider integration with no UI. Operator experience proof includes config status endpoint, webhook dispatch log, and error map reference.
+
+## Proof gate
+
+- Proof id: proof-01-stripe-payment
+- Required proofs: fake_provider_proof, provider_adapter_config_test_required, live_provider_proof_blocker_only, no_fake_scan_pass, security_denied_path_test
+- Negative tests: missing config fails closed; duplicate idempotency key returns cached result; invalid webhook signature is rejected.
+```
+
+---
+
+### Automation positive few-shot — task loop contract phase
+
+```md
+# Phase 01 — Document summarization agent task loop
+
+## How to implement this phase
+
+Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
+
+requires_roles:
+  - product-architect
+  - integration-runtime
+  - test-and-verification
+
+## Capability outcome
+
+Define and prove the document summarization agent task loop: task objective, tool/action inventory, plan/execute/observe loop, stop conditions, human approval points, recovery/escalation, and trace proof.
+
+## Phase mode contract
+
+- blueprint_mode: automation
+- phase_style: task_loop_contract
+- Lens: this phase defines the task loop contract — objective, tool boundaries, plan/execute/observe loop, stop conditions, approval points, and trace proof — not a checklist of features.
+- Shared proof spine:
+  - Preconditions/inputs: input document path, max iterations, approval-required flag.
+  - Entrypoint/use site: agent runner receives task descriptor and executes the loop.
+  - Execution behavior: plan action, select tool, call tool, observe result, reflect, repeat until stop condition met.
+  - State/artifact effects: task trace log, summary artifact, intermediate observations, approval checkpoint records.
+  - Observable proof: trace proves loop execution, tool calls, stop condition trigger, and at least one approval point.
+  - Failure/recovery: tool failure, token limit, max iterations reached, human rejection at approval point.
+  - Non-goals: multi-agent coordination, deployment, UI.
+
+## Mapped capability obligations
+
+- Task objective: summarize input document into structured sections.
+- Tool/action inventory: read_file, chunk_text, call_llm_summarize, write_output.
+- Plan/execute/observe loop: agent plans next action, executes tool, observes output, reflects.
+- Stop conditions: all sections summarized; max_iterations reached; human rejection at approval point.
+- Approval points: before writing final output when approval_required is true.
+- Recovery/escalation: on tool failure, retry once; on max retries, escalate with trace artifact.
+
+## UX/UI requirements
+
+None — this phase has no browser UI. Operator experience proof includes the trace log artifact, approval checkpoint file, and readable summary output.
+
+## Proof gate
+
+- Proof id: proof-01-doc-summarization
+- Required proofs: automation_trace_proof, provider_adapter_config_test_required, live_provider_proof_blocker_only, no_fake_scan_pass
+- Negative tests: max_iterations stop condition halts the loop; tool failure triggers escalation; human rejection at approval point halts execution.
+```
+
+---
+
+### Data-pipeline positive few-shot — dataflow contract phase
+
+```md
+# Phase 01 — Event ingestion and enrichment dataflow
+
+## How to implement this phase
+
+Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
+
+requires_roles:
+  - product-architect
+  - data-persistence
+  - test-and-verification
+
+## Capability outcome
+
+Define and prove the event ingestion and enrichment dataflow: input schema, transform semantics, output schema, lineage, backfill/idempotency, and data quality proof.
+
+## Phase mode contract
+
+- blueprint_mode: data-pipeline
+- phase_style: dataflow_contract
+- Lens: this phase defines the dataflow contract — input datasets/schemas, transform semantics, output artifacts, lineage, backfill/idempotency, and quality proof — not a UI or API product feature.
+- Shared proof spine:
+  - Preconditions/inputs: raw events in `events` table or source JSONL.
+  - Entrypoint/use site: pipeline runner reads input schema and executes the transform DAG.
+  - Execution behavior: validate input schema, apply enrichment transform, write to `enriched_events`, record lineage row.
+  - State/artifact effects: `enriched_events` table, lineage record, quality assertion results.
+  - Observable proof: schema validation test, transform proof with sample data, lineage assertion, at least one data quality check.
+  - Failure/recovery: invalid schema, missing event fields, duplicate idempotency key, quality threshold failure.
+  - Non-goals: serving API, UI, downstream ML training.
+
+## Mapped capability obligations
+
+- Input schema: `events(id, type, payload, created_at)`.
+- Transform: enrich `type` field with category lookup; add `enriched_at` timestamp.
+- Output schema: `enriched_events(id, type, category, payload, created_at, enriched_at)`.
+- Lineage: append one lineage row per pipeline run recording source version, transform version, row counts.
+- Backfill/idempotency: re-running the same run_id produces the same output rows; duplicate rows are deduplicated.
+- Data quality: row count matches input; no null `category` for known types; latency within SLA.
+
+## UX/UI requirements
+
+None — this phase is a data-pipeline with no browser UI. Operator experience proof includes lineage record, quality assertion output, and schema-validation report.
+
+## Proof gate
+
+- Proof id: proof-01-event-enrichment
+- Required proofs: dataflow_quality_proof, durable_persistence, no_fake_scan_pass, provider_adapter_config_test_required, live_provider_proof_blocker_only
+- Negative tests: invalid input schema rejects the batch; duplicate run_id is idempotent; quality threshold breach fails the gate.
+```
+
+---
+
+### Infrastructure positive few-shot — operations contract phase
+
+```md
+# Phase 01 — Kubernetes API service deploy and health operations
+
+## How to implement this phase
+
+Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
+
+requires_roles:
+  - product-architect
+  - security-boundary
+  - test-and-verification
+
+## Operation outcome
+
+Define and prove the API service Kubernetes deployment operations: deploy/apply entrypoint, resources changed, health/readiness, rollback, drift detection, observability, and environment proof.
+
+## Phase mode contract
+
+- blueprint_mode: infrastructure
+- phase_style: operations_contract
+- Lens: this phase defines the operations contract — deploy/apply, resources changed, health/readiness, rollback, drift detection, observability, and permissions — not a UI or API product feature.
+- Shared proof spine:
+  - Preconditions/inputs: Kubernetes cluster access; image tag; target namespace.
+  - Entrypoint/use site: `kubectl apply -f manifests/` or Helm install.
+  - Execution behavior: apply Deployment, Service, ConfigMap; wait for rollout; assert health/readiness.
+  - State/artifact effects: Deployment revision bumped; readiness probe passes; rollback available.
+  - Observable proof: health/readiness probe response, rollout status, and at least one drift-detection assertion.
+  - Failure/recovery: rollout failure triggers automatic rollback; drift from declared state is detected and reported.
+  - Non-goals: application feature development, product UI, CI pipeline design.
+
+## Mapped operation obligations
+
+- Deploy/apply entrypoint: `kubectl apply -f manifests/api-service/`.
+- Resources changed: Deployment `api-service`, Service `api-service`, ConfigMap `api-config`.
+- Health/readiness: `/healthz` returns 200 within 30 s; `/readyz` returns 200 when DB migrations complete.
+- Rollback: previous Deployment revision is retained; rollback command is documented.
+- Drift detection: `kubectl diff` detects undeclared changes; CI gate fails on drift.
+- Observability: structured logs to stdout; Prometheus metrics at `/metrics`; liveness/readiness exposed.
+- Permissions: deploy service account has namespace-scoped `create/update/patch` only.
+
+## UX/UI requirements
+
+None — this phase is infrastructure with no browser UI. Operator experience proof includes health/readiness endpoint response, rollout status output, and drift-detection CI report.
+
+## Proof gate
+
+- Proof id: proof-01-k8s-api-deploy
+- Required proofs: operations_health_rollback_proof, no_fake_scan_pass, security_denied_path_test
+- Negative tests: invalid image tag fails rollout and triggers rollback; drift from declared state is detected by `kubectl diff`.
+```

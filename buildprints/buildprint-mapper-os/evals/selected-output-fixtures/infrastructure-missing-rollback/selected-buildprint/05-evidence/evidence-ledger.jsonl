@@ -1,0 +1,1 @@
+{"artifact_id":"mapping-seed-01-service-deploy","type":"mapping_seed","phase_id":"01-service-deploy","status":"missing","source":"mapper-os generation","proves":["clean_room_implementation_trace"],"proof_type":"mapping_seed","provider_mode":"n/a","upgrades_claim":false}

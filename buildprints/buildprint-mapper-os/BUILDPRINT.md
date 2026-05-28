@@ -86,16 +86,31 @@ Obsolete packet files are forbidden in selected output: `START_HERE.md`, `PRE_IM
 
 ## Blueprint Mode Discipline
 
-Selected outputs must classify the dominant blueprint mode before writing phases:
+Selected outputs must classify the dominant blueprint mode before writing `02-project-setup.md`, `blueprint.yaml`, or any phase. This is a generation invariant. Use one of eight `blueprint_mode.primary` values and the matching `phase_style`:
 
-- `product`: outcome-first user/operator flows.
-- `framework` or `library`: primitive/composition maps with invariants, extension points, reference patterns, invalid states, compatibility surfaces, and proof examples.
-- `integration`: external boundary transaction contracts with config/secrets, request/response, webhook/callback, idempotency, retry/error mapping, sandbox/live split, persistence/audit, and fake-provider proof.
-- `automation`: task-loop contracts with tool/action boundaries, evidence requirements, stop conditions, approval points, recovery/escalation, and trace proof.
-- `data-pipeline`: dataflow contracts with input/output schemas, transforms, validation, lineage, backfill/idempotency, and data quality proof.
-- `infrastructure`: operations contracts with deploy/apply, resources changed, health/readiness, rollback, drift detection, observability, permissions, and environment proof.
+| Mode | `blueprint_mode.primary` | `phase_style` |
+|---|---|---|
+| Product | `product` | `outcome_flow` |
+| Framework | `framework` | `primitive_composition_map` or `callable_contract` |
+| Library | `library` | `callable_contract` or `primitive_composition_map` |
+| Integration | `integration` | `boundary_transaction_contract` |
+| Automation | `automation` | `task_loop_contract` |
+| Data-pipeline | `data-pipeline` | `dataflow_contract` |
+| Infrastructure | `infrastructure` | `operations_contract` |
+| Mixed | `mixed` | `mixed_contract` |
 
-The shared proof spine remains mandatory for every mode: preconditions/inputs, entrypoint or use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals. Do not write product user stories for frameworks, and do not write integrations as generic product flows.
+Each mode requires phase-specific vocabulary (`blueprint_mode` token and `phase_style` token are required in every `## Phase mode contract`):
+
+- `product`: outcome flows; shared proof spine.
+- `framework` / `library`: primitive, composition, extension point, misuse; callable surface, semver, compat.
+- `integration`: webhook/callback, idempotency, sandbox/live split, retry/error mapping, fake-provider proof.
+- `automation`: task loop / plan-execute-observe, stop condition, approval point, trace.
+- `data-pipeline`: schema, transform, lineage, backfill/idempotency, data quality.
+- `infrastructure`: deploy/apply, rollback, health/readiness, drift, observability.
+
+For `mixed` packets: every phase must declare a specific non-mixed `blueprint_mode` and matching `phase_style`. At least two distinct per-phase modes must appear. Do not use `mixed` to avoid classifying.
+
+The shared proof spine is mandatory for every mode: preconditions/inputs, entrypoint or use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals. The mode decides the language and emphasis.
 
 ## Non-Negotiables
 

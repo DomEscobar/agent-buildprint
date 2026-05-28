@@ -78,6 +78,14 @@ The following never count as production behavior:
 - static UI labels counted as browser/user-flow proof;
 - mostly single-file/flat architecture counted as product architecture for medium, large, UI-bearing, provider-backed, stateful, or full-suite scope without explicit justification.
 
+Mode-specific no-fake equivalents:
+
+- Framework/library: a single downstream app story counted as the primitive/composition map; a demo that exercises only one use case counted as a complete callable surface without invariants, extension points, or misuse coverage.
+- Integration: fake-provider test passing counted as live provider proof; missing webhook/callback, idempotency key, or sandbox/live split counted as a complete boundary transaction.
+- Automation: a feature checklist without a task loop counted as an agent; missing stop conditions, approval points, or trace artifacts counted as completed automation proof.
+- Data-pipeline: a pipeline without lineage rows or quality assertions counted as production dataflow proof; non-idempotent re-runs counted as backfill-safe.
+- Infrastructure: deployment scripts without health/readiness checks, rollback capability, or drift detection counted as operations-ready proof.
+
 ## Source-Independence Contract
 
 Source is allowed during mapping, distillation, and qualification. A `QUALIFIED_SOURCE_INDEPENDENT` package must be implementable from generated Buildprint files alone.

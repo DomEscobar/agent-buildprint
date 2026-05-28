@@ -1,6 +1,6 @@
 # Questions
 
-Answer only what you care about. Leave anything blank and the implementation agent must choose the best-fit option from mapped product obligations, product goals, architecture quality, UX quality, security, maintainability, and long-term scalability.
+Answer only what you care about. Leave anything blank and the implementation agent must choose the best-fit option from mapped obligations, architecture quality, experience quality, security, maintainability, and long-term scalability.
 
 Default for every unanswered question:
 
@@ -8,36 +8,36 @@ Default for every unanswered question:
 
 ## 1. Product direction
 
-What should the final product feel like or optimize for?
+For product / mixed packets: what should the final product feel like or optimize for? For framework / library packets: what is the target primitive surface, semver policy, or API design principle? For integration packets: which provider/service boundary is the integration target? For automation packets: what is the task objective and stop policy? For data-pipeline packets: what input sources and output artifacts define this pipeline? For infrastructure packets: which environment and resource scope is the target?
 
-Default: AI chooses the product direction that best fits the mapping and user value.
+Default: AI chooses the direction that best fits the mapping, blueprint mode, and user value.
 
 ## 2. Tech stack preferences
 
-Do you require or prefer any frontend/backend/runtime stack, package manager, database, auth, payments, AI provider, hosting, or deployment target? Do not assume the source repository's frameworks are desired defaults.
+Do you require or prefer any specific stack, package manager, database, runtime, auth, AI provider, hosting, or deployment target? Do not assume the source repository's frameworks are desired defaults.
 
-Default: AI chooses the strongest practical stack from mapped product obligations and target product needs.
+Default: AI chooses the strongest practical stack matching the selected blueprint mode and mapped obligations.
 
 ## 3. UX/UI preferences
 
-Do you want a specific visual style, design system, interaction quality, accessibility level, or responsive behavior?
+For product / mixed packets: do you want a specific visual style, design system, interaction quality, accessibility level, or responsive behavior? For framework / library / integration / automation / data-pipeline / infrastructure packets: what are your developer/operator experience preferences — docs format, API ergonomics, trace output style, approval UI, lineage view, runbook format?
 
-Default: AI creates a polished, modern, accessible UI appropriate for the product category.
+Default: AI creates a polished experience appropriate for the blueprint mode — product-grade UI for product mode, high-quality DX/operator experience for non-UI modes.
 
 ## 4. Architecture preferences
 
 Do you require a specific architecture style or project organization?
 
-Default: AI chooses clean, maintainable project architecture with clear frontend/backend/domain boundaries and local `AGENTS.md` alignment.
+Default: AI chooses clean, maintainable architecture appropriate to the blueprint mode: clear frontend/backend/domain boundaries for product; adapter/plugin architecture for framework/library; idempotency strategy and sandbox/live separation for integration; tool/action boundary for automation; transform isolation and backfill strategy for data-pipeline; IaC modular layout for infrastructure.
 
 ## 5. Quality bar
 
 What must be true before work is considered done?
 
-Default: AI defines and enforces strong gates: typecheck, lint, tests, build, relevant UI checks, no fake data, no skipped proof.
+Default: AI defines and enforces strong gates appropriate to the mode — typecheck/lint/test/build/browser/e2e for product; import/API/CLI contract tests and semver compat for framework/library; fake-provider tests and webhook replay for integration; trace-based proof and stop-condition verification for automation; schema validation, lineage tests, and quality gates for data-pipeline; health/readiness, rollback proof, and drift detection for infrastructure.
 
 ## 6. Constraints / things to avoid
 
 Anything forbidden, unwanted, expensive, risky, or out of scope?
 
-Default: avoid unsafe, overcomplicated, brittle, fake, insecure, unmaintainable, or unproven implementation choices.
+Default: avoid unsafe, overcomplicated, brittle, fake, insecure, unmaintainable, or unproven implementation choices. For integration: do not exceed credential/auth scope or rate limits. For automation: do not execute dangerous actions without explicit approval points. For data-pipeline: do not process PII without declared retention/deletion policy. For infrastructure: do not modify immutable resources or exceed the declared permission scope.

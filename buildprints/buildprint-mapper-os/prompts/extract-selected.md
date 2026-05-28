@@ -117,6 +117,17 @@ Default rule:
 `01-questions.md` may ask for stack preferences, but it must not bias the human toward the source repository's concrete frameworks. Ask generically for frontend/backend/runtime/storage/deployment preferences; do not say “if different from Vue/Flask/etc.” Framework choices are implementation decisions unless the human names them or the framework itself is the product being mapped.
 
 
+Adapt the question wording to match the selected lueprint_mode. The six numbered areas are fixed; only the wording within each area shifts by mode:
+
+- Area 1 (direction): product/mixed → what the product optimizes for; framework/library → target primitive/API/semver policy; integration → which provider/service boundary; automation → task objective and stop policy; data-pipeline → input sources and output artifacts; infrastructure → target resources and environment.
+- Area 2 (tech stack): product → frontend/backend/runtime/storage/deployment; framework/library → language/package manager/registry/test harness; integration → auth/SDK/transport/retry library; automation → orchestration runtime/agent framework/tools; data-pipeline → engine/storage/scheduler/validation library; infrastructure → IaC/provisioner/cloud/container/secrets manager.
+- Area 3 (UX/UI): product/mixed → visual style/interaction quality/accessibility; framework/library → DX: docs format/API ergonomics/example style; integration → operator experience/webhook dashboard; automation → run log/approval UI/trace format; data-pipeline → lineage view/quality dashboard; infrastructure → deployment log/health dashboard/runbook format.
+- Area 4 (architecture): product → frontend/backend/domain boundaries; framework/library → adapter/plugin/extension architecture; integration → auth boundary/idempotency strategy/sandbox setup; automation → tool/action boundary/loop topology; data-pipeline → DAG vs linear/transform isolation/backfill strategy; infrastructure → IaC modular layout/environment separation.
+- Area 5 (quality): product → typecheck/lint/test/build/browser/e2e; framework/library → import/API/CLI contract tests/semver compat; integration → fake-provider tests/webhook replay/sandbox-live split; automation → trace-based proof/stop-condition verification; data-pipeline → schema validation/lineage tests/quality gate; infrastructure → health/readiness/rollback proof/drift detection.
+- Area 6 (constraints): product → forbidden patterns/out-of-scope surfaces; framework/library → breaking changes policy/max dependency additions; integration → secret/auth scope/rate-quota limits; automation → tool scope/dangerous-action approvals; data-pipeline → PII handling/retention policy; infrastructure → permission scope/immutable resources/blast radius.
+
+Do not add a seventh question. Do not split any area into multiple numbered sections.
+
 ## Blueprint mode and phase style
 
 Before writing `02-project-setup.md`, `blueprint.yaml`, or any phase, classify the selected output by blueprint mode. This is a generation invariant, not branding. Do not force every repository into product-app language.
@@ -133,20 +144,51 @@ blueprint_mode:
 Mode guidance:
 
 - `product`: phases are outcome-first flows. A user/operator can do a meaningful product operation end to end.
-- `framework` / `library`: phases are primitive/composition maps. Describe the primitive, invariants, composition rules, extension points, reference patterns, misuse cases, compatibility surface, and proof examples. Do not collapse a general framework into one downstream app story.
+- `framework`: phases are primitive/composition maps. Describe the primitive, invariants, composition rules, extension points, reference patterns, misuse cases, compatibility surface, and proof examples. Do not collapse a general framework into one downstream app story.
+- `library`: phases are callable-surface contracts. Define the public API, callable entry points, invariants, type/error contracts, semver/compatibility surface, reference patterns, and misuse cases. Focus on what a consumer imports and calls, not one downstream app story.
 - `integration`: phases are external boundary transaction contracts. Describe config/secrets, request/response, webhook/callback, idempotency, retry/error mapping, sandbox/live split, persistence/audit, fake-provider tests, and live-proof blockers.
 - `automation`: phases are task-loop contracts. Describe task objective, tool/action boundaries, plan/execute/observe loop, evidence requirements, stop conditions, human approval points, recovery/escalation, and trace proof.
 - `data-pipeline`: phases are dataflow contracts. Describe input datasets/schemas, transform semantics, output artifacts/tables, validation, lineage, backfills, idempotency, and data quality proof.
 - `infrastructure`: phases are operations contracts. Describe deploy/apply entrypoint, resources changed, health/readiness, rollback, drift detection, observability, permissions, and environment proof.
+- `mixed`: the source spans multiple mode families. Each phase must declare its own `blueprint_mode` (a non-`mixed` primary) and matching `phase_style`. The packet-level `blueprint_mode.phase_style` is `mixed_contract`. Across all phases, at least two distinct per-phase `blueprint_mode` values must appear; if every phase would be the same mode, reclassify the packet under that single mode instead.
+
+Phase-style definitions:
+
+- `outcome_flow`: product mode. Phases describe what a user/operator can do end to end.
+- `primitive_composition_map`: framework mode. Phases describe primitives, invariants, composition rules, extension points, and misuse cases.
+- `callable_contract`: library mode. Phases describe callable API surfaces, public contracts, semver/compatibility boundaries, and consumer patterns.
+- `boundary_transaction_contract`: integration mode. Phases describe external boundary, config, request/response, webhook/callback, idempotency, sandbox/live split, and fake-provider proof.
+- `task_loop_contract`: automation mode. Phases describe task objective, plan/execute/observe loop, stop conditions, approval points, trace proof, and escalation.
+- `dataflow_contract`: data-pipeline mode. Phases describe input datasets/schemas, transform semantics, output artifacts, lineage, backfills, idempotency, and quality proof.
+- `operations_contract`: infrastructure mode. Phases describe deploy/apply, resources changed, health, rollback, drift detection, observability, and environment proof.
+- `mixed_contract`: mixed-mode packet-level style only. Individual phases must use one of the above seven styles matching their per-phase `blueprint_mode`.
 
 Every phase still needs the shared proof spine: preconditions/inputs, entrypoint or callable/use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals. The mode decides the language and emphasis.
+
+## Per-mode minimum vocabulary
+
+Every generated phase file must contain the minimum vocabulary for its declared mode. These are not headings — they are required terms that must appear at least once in the phase body:
+
+- `product`: terms are covered by the shared proof spine; no additional required terms beyond those already mandated by phase structure.
+- `framework`: at least one of `primitive`, `composition`, `extension point`, `misuse`. All four are strongly preferred.
+- `library`: at least one of `callable`, `public API`, `semver`, `compat`. Also required: `consumer` or `import`.
+- `integration`: `webhook` or `callback`; `idempotency`; `sandbox` or `live split`; `retry` or `error mapping`.
+- `automation`: `task loop` or `plan/execute/observe`; `stop condition`; `approval` or `approval point`; `trace`.
+- `data-pipeline`: `schema`; `transform`; `lineage`; `backfill` or `idempotency`; `data quality`.
+- `infrastructure`: `deploy` or `apply`; `rollback`; `health` or `readiness`; `drift`; `observability`.
+- `mixed`: each phase's minimum vocabulary follows its declared per-phase `blueprint_mode` above.
+
+The `## Phase mode contract` section is the natural place to introduce these terms, but they may appear anywhere in the phase body.
 
 Anti-patterns:
 
 - Do not write product user stories for frameworks that should be maps of primitives and composition rules.
+- Do not write libraries as one downstream app story; the consumer-callable API surface, semver contract, and compat surface must be explicit.
 - Do not write provider integrations as generic product flows without webhook/idempotency/secret/error contracts.
-- Do not write automation agents as feature checklists without evidence and exit conditions.
+- Do not write automation agents as feature checklists without task loop, evidence, stop conditions, and exit criteria.
 - Do not write infrastructure as UI or API work when the meaningful operation is deployment, health, rollback, or drift control.
+- Do not write data-pipeline phases without schema, transform, lineage, and quality proof.
+- Do not use `mixed` as the primary mode to avoid classifying. If every phase would use the same per-phase mode, the packet should use that mode as primary instead of `mixed`.
 
 ## 02-project-setup.md
 
@@ -284,7 +326,7 @@ Do not mark a phase complete while its verification failure is unresolved.
 ## Extraction rules
 
 - Convert source facts into source-independent mapped obligations inside setup and phase files. Do not expose `## Source evidence` as an implementation-agent section.
-- Include a compact `## Mapped obligation/surface matrix` in `02-project-setup.md`. It must account for high-signal mapped surfaces according to mode: product flows, framework primitives/composition rules, integration boundary transactions, automation task loops, dataflows, infrastructure operations, routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime. Include surface id, source evidence, mapped obligation, target disposition (`preserve`, `replace`, `merge`, `defer`, `drop`, or `blocked`), target contract, exactly one owning phase/blocker destination, and required proof. Broad buckets are invalid unless decomposed into sub-surfaces.
+- Include a compact `## Mapped obligation/surface matrix` in `02-project-setup.md`. It must account for high-signal mapped surfaces according to mode: product flows, framework primitives/composition rules, integration boundary transactions, automation task loops, dataflows, infrastructure operations, routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime. Include surface id, source evidence, mapped obligation (use “Mapped obligation” as the column label, not “Product obligation”), target disposition (`preserve`, `replace`, `merge`, `defer`, `drop`, or `blocked`), target contract, exactly one owning phase/blocker destination, and required proof. Broad buckets are invalid unless decomposed into sub-surfaces.
 - Treat route/function/file names as evidence anchors and compatibility signals, not mandatory clone targets. Do not require 1:1 route/function parity unless the source route/function is the real product boundary. The target may improve, rename, merge, or redesign surfaces when the equivalent capability and compatibility impact are explicit.
 - Clearly distinguish file-reference roles. A backticked file-ish reference ending in `.md`, `.yaml`, `.json`, or `.jsonl` must either be an actual packet file in `selected-buildprint/` or be role-labeled in the same sentence/line as a source path/source anchor, runtime artifact/generated output, or downstream implementation project file. Do not leave naked ambiguous refs such as “writes `report.md`”. Write “writes runtime artifact `report.md`” instead.
 - Only actual packet files are packet links. Source repository files such as package manifests/lockfiles/route files must be labeled as source paths, not ambiguous packet-file references. Runtime artifacts such as `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, `section_XX.md`, upload paths, report files, provider output files, or `<id>` paths must be labeled as runtime artifact paths and should not be written as ambiguous packet-file references.

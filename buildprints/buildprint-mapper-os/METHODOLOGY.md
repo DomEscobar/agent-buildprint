@@ -69,17 +69,31 @@ The downstream packet must not rely on the original repo path, private files, or
 
 ### 3a. Blueprint mode selection
 
-Before phase generation, classify the selected packet:
+Before phase generation, classify the selected packet. This classification must happen before writing `02-project-setup.md`, `blueprint.yaml`, or any phase. It is a generation invariant, not branding.
 
-- **Product** packets use outcome flows.
-- **Framework/library** packets use primitive/composition maps; they are Anleitung/Map artifacts for building many downstream patterns, not one product user story.
-- **Integration/plugin** packets use boundary transaction contracts.
-- **Automation/agent** packets use task-loop contracts with evidence and exit conditions.
-- **Data-pipeline** packets use dataflow contracts.
-- **Infrastructure** packets use operations contracts.
-- **Mixed** packets must identify which phases use which lens.
+| Mode | `blueprint_mode.primary` | `phase_style` | Phase lens |
+|---|---|---|---|
+| Product | `product` | `outcome_flow` | User/operator outcome flows |
+| Framework | `framework` | `primitive_composition_map` or `callable_contract` | Primitive, invariants, composition rules, extension points, misuse |
+| Library | `library` | `callable_contract` or `primitive_composition_map` | Callable API surface, semver/compat surface, consumer patterns |
+| Integration | `integration` | `boundary_transaction_contract` | Config, request/response, webhook/callback, idempotency, sandbox/live split |
+| Automation | `automation` | `task_loop_contract` | Task loop, plan/execute/observe, stop conditions, approval points, trace |
+| Data-pipeline | `data-pipeline` | `dataflow_contract` | Input schema, transform, output artifacts, lineage, backfill/idempotency, quality proof |
+| Infrastructure | `infrastructure` | `operations_contract` | Deploy/apply, health/readiness, rollback, drift detection, observability |
+| Mixed | `mixed` | `mixed_contract` | Packet spans lenses; each phase declares its own non-mixed `blueprint_mode` and `phase_style` |
 
-This classification protects general frameworks like LangGraph from being flattened into one example app, and protects provider integrations like Stripe from being flattened into a generic upgrade button without webhook/idempotency/security semantics.
+For **mixed** packets: every individual phase must declare a specific non-mixed `blueprint_mode` and a matching `phase_style`. At least two distinct per-phase modes must appear across the phase set; if all phases would use the same mode, reclassify the packet under that single mode instead of `mixed`.
+
+This classification protects general frameworks like LangGraph from being flattened into one example app, protects provider integrations from being flattened into a generic button without webhook/idempotency/security semantics, and prevents automation agents from becoming feature checklists without stop conditions.
+
+Per-mode minimum vocabulary: each generated phase must contain at least the following terms for its declared mode (validator-enforced):
+
+- `framework`: at least 2 of: `primitive`, `composition`, `extension point`, `misuse`
+- `library`: at least 1 of: `callable`, `public API`, `semver`, `compat`
+- `integration`: at least 2 of: `webhook`/`callback`, `idempotency`, `sandbox`/`live split`, `retry`/`error mapping`
+- `automation`: at least 3 of: `task loop`/`plan/execute/observe`, `stop condition`, `approval`, `trace`
+- `data-pipeline`: at least 3 of: `schema`, `transform`, `lineage`, `backfill`/`idempotency`, `data quality`
+- `infrastructure`: at least 3 of: `deploy`/`apply`, `rollback`, `health`/`readiness`, `drift`, `observability`
 
 ### 4. Executable packet generation
 
@@ -276,5 +290,15 @@ Do not:
 - mark blocked or synthetic evidence as `upgrades_claim: true`;
 - allow review files to become ceremonial approvals;
 - silently shrink scope to make a green gate easier.
+
+Per-mode anti-patterns (the validator now enforces these):
+
+- Do not write product user stories for a framework that should map primitives and composition rules.
+- Do not write a library as one downstream app; expose the callable API surface, semver contract, and compat surface explicitly.
+- Do not write a provider integration as a generic product flow without webhook/idempotency/secret/error contracts.
+- Do not write an automation agent as a feature checklist without a task loop, stop conditions, approval points, and trace proof.
+- Do not write infrastructure as UI or API work; the meaningful operation is deploy/apply, health, rollback, and drift control.
+- Do not write a data-pipeline phase without schema, transform, lineage, idempotency, and quality proof.
+- Do not use `mixed` as primary mode to avoid classifying; if all phases use the same lens, reclassify under that single mode.
 
 The methodology is intentionally strict because Mapper OS is training future agents how to work. A green check that teaches weaker behavior is a regression.

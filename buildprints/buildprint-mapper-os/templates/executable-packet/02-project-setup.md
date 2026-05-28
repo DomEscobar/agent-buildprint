@@ -1,11 +1,11 @@
 # Project Setup
 
-This file is the project constitution for implementation. Keep it compact. It should contain product-specific decisions an agent needs before phase work, not repeat the global execution protocol from `BUILDPRINT.md`, `03-phases/phase-flow.md`, `04-evaluation.md`, or `06-contracts/*`.
+This file is the project constitution for implementation. Keep it compact. It should contain mode-specific decisions an agent needs before phase work, not repeat the global execution protocol from `BUILDPRINT.md`, `03-phases/phase-flow.md`, `04-evaluation.md`, or `06-contracts/*`.
 
 ## Setup defaults
 
 - Human answers come from `01-questions.md`.
-- Blank answers authorize AI best-fit decisions grounded in mapped product obligations.
+- Blank answers authorize AI best-fit decisions grounded in mapped obligations.
 - Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 - Full-suite packets default to production-grade architecture, not a local MVP.
 - Do not downgrade to a local MVP unless the selected scope explicitly says prototype-only.
@@ -15,13 +15,15 @@ This file is the project constitution for implementation. Keep it compact. It sh
 - Blueprint mode:
   - Primary: <product|framework|integration|automation|library|data-pipeline|infrastructure|mixed>
   - Secondary: <ui/api/worker/provider/sdk/cli/agent/data/deployment as applicable>
-  - Phase style: <outcome_flow|primitive_composition_map|boundary_transaction_contract|task_loop_contract|callable_contract|dataflow_contract|operations_contract|mixed_contract>
+  - Phase style: <outcome_flow|primitive_composition_map|callable_contract|boundary_transaction_contract|task_loop_contract|dataflow_contract|operations_contract|mixed_contract>
   - Why this mode fits: <source-grounded reason; do not force framework/integration/infra into product-app language>
-- Product: <mapped-app>
-- Primary user jobs:
-- Frontend/UI surfaces:
-- Backend/API surfaces:
-- State/runtime surfaces:
+- Product / capability: <mapped-app or framework/integration/automation/pipeline/infra name>
+- For product / mixed: Primary user jobs, Frontend/UI surfaces, Backend/API surfaces, State/runtime surfaces.
+- For framework / library: Public API surfaces, callable entry points, primitives, extension points, consumer patterns.
+- For integration: External provider/service, boundary type, config/secrets, sandbox vs live split.
+- For automation: Task scope, tool/action inventory, plan-execute-observe loop, stop conditions.
+- For data-pipeline: Input datasets/schemas, transform stages, output artifacts, quality gates.
+- For infrastructure: Target environment, resources managed, deploy/apply entrypoint, health/readiness shape.
 - External providers/runtime:
 - Tests/evaluation source: derive from `04-evaluation.md` and phase proof gates.
 
@@ -84,13 +86,14 @@ Account for every high-signal mapped surface according to blueprint mode: produc
 
 Use this compact format:
 
-| Surface id | Source evidence | Product obligation | Target disposition | Target contract | Owning phase | Required proof |
+| Surface id | Source evidence | Mapped obligation | Target disposition | Target contract | Owning phase | Required proof |
 |---|---|---|---|---|---|---|
 |  | mapped note: <source evidence or Needs clarification/Blocked> |  | preserve \| replace \| merge \| defer \| drop \| blocked |  | `03-phases/<phase>.md` | <surface-specific proof gate> |
 
+The "Mapped obligation" column label is required regardless of mode. "Product obligation", "Capability obligation", and "Operation obligation" are accepted aliases but "Mapped obligation" is the canonical label.
 Rules:
 
-- Product obligation entries must use Target disposition values: preserve | replace | merge | defer | drop | blocked.
+- Mapped obligation entries must use Target disposition values: preserve | replace | merge | defer | drop | blocked.
 - Every high-signal mapped surface must appear exactly once with one owning phase, or be marked dropped/blocked with rationale.
 - If a surface is split, name one primary owning phase and supporting phases in the target contract; do not leave ambiguous shared ownership.
 - Required proof must reference the owned surface specifically, not only “tests pass”, “app builds”, or “feature preserved”.
