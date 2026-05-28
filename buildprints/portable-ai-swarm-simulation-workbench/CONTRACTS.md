@@ -1,11 +1,11 @@
 # Contracts
 
-Authoritative role contracts live in `06-contracts/*.md` and are resolved per phase through `03-phases/phase-flow.md`.
+Authoritative contracts live in `06-contracts/*.md` and are resolved by phase through `03-phases/phase-flow.md`.
 
-Core contracts:
+Core contract themes:
 
-- Product architecture preserves mapped MiroFish obligations without freezing replaceable source frameworks.
-- Integration/runtime preserves OASIS, Zep, LLM, IPC, and provider-boundary semantics with fake/live separation.
-- Data persistence preserves durable upload, graph, simulation, action, report, history, and lifecycle state.
-- Security boundaries require secret redaction, denied-path tests, destructive confirmations, and public-deployment blockers where needed.
-- UX/UI phases require repeatable browser/e2e and visual quality proof, not screenshots-only claims.
+- Product workflow preserves the MiroFish user outcome without requiring route/function parity.
+- Backend services own API, provider, worker/runtime, persistence, and configuration boundaries.
+- Frontend workbench owns product-specific UI, state transitions, graph/report/simulation surfaces, responsive behavior, and visual quality.
+- QA/security owns no-fake claims, secret redaction, deterministic blocker exit behavior, e2e proof, and evidence ceilings.
+- Foundation scaffold must create implementation-project `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` before Phase 01 code.

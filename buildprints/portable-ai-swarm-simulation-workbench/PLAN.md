@@ -4,12 +4,10 @@ Read order starts at `BUILDPRINT.md`.
 
 Phase roadmap:
 
-1. Intake, ontology, and Zep graph workbench
-2. Simulation preparation dataflow
-3. OASIS runtime task loop
-4. Simulated world observability reads
-5. Report agent task loop
-6. Interaction and interview IPC integration
-7. Lifecycle operations and hardening
+1. Seed intake and ontology workbench
+2. Graph memory build and explorer
+3. Simulation environment preparation
+4. Simulation run and observability
+5. Report generation and deep interaction
 
-Each phase must run through `03-phases/phase-flow.md`: observe, plan, role handoffs/returns, execute, verify, reflect, write proof, then append runtime evidence only under `.buildprint/evidence/evidence-ledger.jsonl`.
+Before Phase 01, complete the Foundation scaffold gate in `02-project-setup.md`. Each phase must run through `03-phases/phase-flow.md`, resolve required `06-contracts/*.md`, write handoff/return/review/proof artifacts, and append runtime evidence only after proof exists.

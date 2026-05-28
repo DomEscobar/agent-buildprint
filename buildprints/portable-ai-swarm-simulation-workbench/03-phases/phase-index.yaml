@@ -1,38 +1,33 @@
-schema_version: mapper-os/phase-index
-active_phase: 03-phases/01-intake-ontology-graph-workbench.md
+schema_version: mapper-os/phase-index.v1
+active_phase: 03-phases/01-seed-ontology-workbench.md
 phases:
-  - phase_id: 01-intake-ontology-graph-workbench
-    file: 03-phases/01-intake-ontology-graph-workbench.md
+  - phase_id: 01-seed-ontology-workbench
+    title: Seed Intake And Ontology Workbench
+    file: 03-phases/01-seed-ontology-workbench.md
     status: INCLUDED_NEEDS_PROOF
     depends_on: []
-    proof_gate: upload_ontology_graph_browser_and_adapter_proof
-  - phase_id: 02-simulation-preparation-dataflow
-    file: 03-phases/02-simulation-preparation-dataflow.md
+    proof_gate: proof-01-seed-ontology-workbench
+  - phase_id: 02-graph-memory-build
+    title: Graph Memory Build And Explorer
+    file: 03-phases/02-graph-memory-build.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [01-intake-ontology-graph-workbench]
-    proof_gate: profile_config_schema_lineage_quality_proof
-  - phase_id: 03-oasis-runtime-task-loop
-    file: 03-phases/03-oasis-runtime-task-loop.md
+    depends_on: [01-seed-ontology-workbench]
+    proof_gate: proof-02-graph-memory-build
+  - phase_id: 03-simulation-environment
+    title: Simulation Environment Preparation
+    file: 03-phases/03-simulation-environment.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [02-simulation-preparation-dataflow]
-    proof_gate: oasis_runtime_trace_stop_force_memory_proof
-  - phase_id: 04-world-observability-reads
-    file: 03-phases/04-world-observability-reads.md
+    depends_on: [02-graph-memory-build]
+    proof_gate: proof-03-simulation-environment
+  - phase_id: 04-simulation-run-observability
+    title: Simulation Run And Observability
+    file: 03-phases/04-simulation-run-observability.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [03-oasis-runtime-task-loop]
-    proof_gate: action_post_comment_timeline_readback_browser_proof
-  - phase_id: 05-report-agent-task-loop
-    file: 03-phases/05-report-agent-task-loop.md
+    depends_on: [03-simulation-environment]
+    proof_gate: proof-04-simulation-run-observability
+  - phase_id: 05-report-and-interaction
+    title: Report Generation And Deep Interaction
+    file: 03-phases/05-report-and-interaction.md
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [04-world-observability-reads]
-    proof_gate: report_agent_trace_sections_logs_chat_seed_proof
-  - phase_id: 06-interaction-ipc-integration
-    file: 03-phases/06-interaction-ipc-integration.md
-    status: INCLUDED_NEEDS_PROOF
-    depends_on: [03-oasis-runtime-task-loop, 05-report-agent-task-loop]
-    proof_gate: interview_ipc_chat_boundary_transaction_proof
-  - phase_id: 07-lifecycle-operations-hardening
-    file: 03-phases/07-lifecycle-operations-hardening.md
-    status: INCLUDED_NEEDS_PROOF
-    depends_on: [01-intake-ontology-graph-workbench, 02-simulation-preparation-dataflow, 03-oasis-runtime-task-loop, 05-report-agent-task-loop]
-    proof_gate: lifecycle_deploy_health_rollback_security_proof
+    depends_on: [04-simulation-run-observability]
+    proof_gate: proof-05-report-and-interaction

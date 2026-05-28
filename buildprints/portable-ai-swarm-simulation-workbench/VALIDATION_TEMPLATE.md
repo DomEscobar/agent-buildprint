@@ -2,16 +2,16 @@
 
 ## Scope
 
-State the phase or packet scope validated and the exact files changed.
+State phase/surface validated and files changed.
 
 ## Commands run
 
-List every command run, including mapper checks, tests, build, browser/e2e, provider adapter tests, and any skipped command with reason.
+List tests, build, browser/e2e, provider adapter checks, security checks, and any skipped command with reason.
 
-## Evidence / proof
+## Evidence
 
-Link phase proof files, screenshots, logs, traces, runtime artifacts, and `.buildprint/evidence/evidence-ledger.jsonl` rows. Do not use packaged `05-evidence/evidence-ledger.jsonl` for runtime proof.
+Link phase proof files, logs, screenshots, traces, runtime artifacts, and `.buildprint/evidence/evidence-ledger.jsonl` rows. Packaged `05-evidence/evidence-ledger.jsonl` is seed-only.
 
-## Blockers / gaps
+## Claim status
 
-Record missing credentials, unavailable providers, deployment authorization, browser proof gaps, security blockers, or any claim that remains `PROOF_REQUIRED`.
+Record what is proven, what remains `PROOF_REQUIRED`, and whether blockers are continuation blockers or qualification blockers.

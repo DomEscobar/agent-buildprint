@@ -5,12 +5,12 @@ source:
   input: /root/MiroFish
   checkout_path: /root/MiroFish
   commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-generated_at: 2026-05-28T00:00:00+02:00
+generated_at: 2026-05-28T17:30:00+02:00
 claim_status: PROOF_REQUIRED
 blueprint_mode:
-  primary: mixed
-  secondary: [ui, api, worker, provider, agent, data, deployment]
-  phase_style: mixed_contract
+  primary: product
+  secondary: [ui, api, worker, provider, data, deployment]
+  phase_style: outcome_flow
 setup_gate:
   questions: 01-questions.md
   project_setup: 02-project-setup.md
@@ -39,38 +39,30 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: 01-intake-ontology-graph-workbench
-    title: Intake, ontology, and Zep graph workbench
-    file: 03-phases/01-intake-ontology-graph-workbench.md
+  - phase_id: 01-seed-ontology-workbench
+    title: Seed Intake And Ontology Workbench
+    file: 03-phases/01-seed-ontology-workbench.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 02-simulation-preparation-dataflow
-    title: Simulation preparation dataflow
-    file: 03-phases/02-simulation-preparation-dataflow.md
+  - phase_id: 02-graph-memory-build
+    title: Graph Memory Build And Explorer
+    file: 03-phases/02-graph-memory-build.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 03-oasis-runtime-task-loop
-    title: OASIS runtime task loop
-    file: 03-phases/03-oasis-runtime-task-loop.md
+  - phase_id: 03-simulation-environment
+    title: Simulation Environment Preparation
+    file: 03-phases/03-simulation-environment.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 04-world-observability-reads
-    title: Simulated world observability reads
-    file: 03-phases/04-world-observability-reads.md
+  - phase_id: 04-simulation-run-observability
+    title: Simulation Run And Observability
+    file: 03-phases/04-simulation-run-observability.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 05-report-agent-task-loop
-    title: Report agent task loop
-    file: 03-phases/05-report-agent-task-loop.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 06-interaction-ipc-integration
-    title: Interaction and interview IPC integration
-    file: 03-phases/06-interaction-ipc-integration.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 07-lifecycle-operations-hardening
-    title: Lifecycle operations and hardening
-    file: 03-phases/07-lifecycle-operations-hardening.md
+  - phase_id: 05-report-and-interaction
+    title: Report Generation And Deep Interaction
+    file: 03-phases/05-report-and-interaction.md
     status: INCLUDED_NEEDS_PROOF
 context:
   phase_index: 03-phases/phase-index.yaml
   phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-intake-ontology-graph-workbench.md
+  active_phase: 03-phases/01-seed-ontology-workbench.md
   evaluation: 04-evaluation.md
   evidence_schema: 05-evidence/evidence-ledger.schema.json
 generated_artifacts:

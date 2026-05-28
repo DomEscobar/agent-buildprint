@@ -30,15 +30,15 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Executable mixed-mode Mapper OS packet remapped from MiroFish: intake and ontology, Zep graph memory, simulation preparation dataflow, OASIS runtime automation, world observability, report agent, IPC interaction, and lifecycle operations with proof-gated phases.",
-  "plainDescription": "A source-independent Mapper OS executable packet remapped from MiroFish as a mixed-mode portable AI swarm simulation workbench. It preserves product, dataflow, automation, integration, infrastructure, provider, persistence, UI, and lifecycle obligations while keeping qualification honest until live provider, runtime, browser/e2e, security, and deployment proof passes.",
+  "summary": "Executable Mapper OS packet remapped from MiroFish with Foundation scaffold rules: seed intake, ontology, Zep graph memory, simulation prep/run, observability, reports, and interaction as a proof-gated AI swarm prediction workbench.",
+  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish as a product/outcome-flow AI swarm simulation workbench. It now requires a real implementation-project foundation before Phase 01: AGENTS.md, architecture.md, engineering-standards.md, test-strategy.md, ui-identity.md, and a base project structure that coding agents must follow.",
   "promise": "Build a production-grade portable AI swarm simulation workbench without depending on the original source repo. Status remains PROOF_REQUIRED until all proof gates pass.",
   "whatYouGet": [
-    "Executable Buildprint BUILDPRINT start and machine contract",
-    "Seven mode-aware phase files with mapped obligations, implementation paths, role gates, and proof gates",
-    "Mixed-mode blueprint contract: product, data-pipeline, automation, integration, and infrastructure phase lenses",
-    "Production readiness contract for auth/session/tenant, providers, durable persistence, workers, deployment/ops, observability, CI, and browser/e2e",
-    "Phase-flow orchestration and evidence ledger seed with unresolved blocker rules"
+    "Executable Buildprint packet with BUILDPRINT.md canonical start",
+    "Foundation scaffold gate requiring AGENTS.md, architecture.md, engineering-standards.md, test-strategy.md, and ui-identity.md",
+    "Five outcome-flow phases covering seed/ontology, graph memory, simulation environment, simulation run observability, and report interaction",
+    "Role contracts for product architecture, backend services, frontend workbench, and QA/security",
+    "Generated agent prompt and seed evidence ledger with claim status kept PROOF_REQUIRED"
   ],
   "whatYouNeed": [
     "A clean implementation workspace",
@@ -57,21 +57,21 @@
     "History"
   ],
   "includes": [
-    "Intake, ontology, and Zep graph workbench",
-    "Simulation preparation dataflow",
-    "OASIS runtime task loop",
-    "Simulated world observability reads",
-    "Report agent task loop",
-    "Interaction and interview IPC integration",
-    "Lifecycle operations and hardening",
+    "MiroFish seed intake and ontology workbench",
+    "Zep graph memory build and explorer",
+    "Simulation environment preparation",
+    "Simulation run and observability",
+    "Report generation and deep interaction",
+    "Foundation scaffold gate",
     "BUILDPRINT.md canonical start",
-    "01-questions.md numbered alignment",
-    "02-project-setup.md production readiness and surface matrix",
+    "01-questions.md alignment defaults",
+    "02-project-setup.md setup and surface matrix",
     "03-phases/phase-flow.md orchestration contract",
     "03-phases proof-gated phase files",
     "04-evaluation.md claim rules",
-    "05-evidence/evidence-ledger.jsonl seed ledger with runtime writes to .buildprint/evidence/evidence-ledger.jsonl",
-    "06-contracts/*.md role contracts for architecture, UX/UI, integration/runtime, security, data persistence, and verification"
+    "05-evidence seed ledger/schema",
+    "06-contracts/*.md role contracts",
+    "generated/agent-prompt.md"
   ],
   "risks": [
     "Overclaiming MiroFish clone parity",
@@ -87,32 +87,30 @@
   ],
   "checks": [
     "Mapper selected-output validator passes with fixture placeholders forbidden and /root/MiroFish source grounding required",
-    "Mixed blueprint_mode has distinct per-phase mode contracts",
-    "Production readiness contract required before phase work",
-    "Provider adapters/config/tests required before live-proof blockers",
-    "Repeatable browser/e2e proof required for UI phases",
-    "Qualification remains PROOF_REQUIRED until proof gates pass",
-    "Phase execution resolves requires_roles through 06-contracts and writes handoff/return artifacts before phase_core_passed"
+    "Foundation scaffold gate present in 02-project-setup.md",
+    "Root AGENTS.md mandatory-read requirement present for architecture.md, engineering-standards.md, test-strategy.md, and ui-identity.md",
+    "Generated agent prompt includes scaffold and clean-code instructions",
+    "Provider/runtime/browser proof remains PROOF_REQUIRED until downstream evidence passes"
   ],
   "trustBadges": [
     {
       "label": "Executable packet",
-      "detail": "Current Mapper OS executable packet shape.",
+      "detail": "Current Mapper OS selected-output validator passes for the remapped packet.",
       "tone": "success"
     },
     {
-      "label": "Mixed-mode mapping",
-      "detail": "Phases use product, data-pipeline, automation, integration, and infrastructure contracts instead of a flattened app story.",
+      "label": "Foundation scaffold required",
+      "detail": "Root AGENTS.md must route coding agents to architecture, engineering, test, and UI identity files before code edits.",
       "tone": "success"
     },
     {
-      "label": "Production-grade default",
-      "detail": "Auth, providers, runtime, persistence, ops, and e2e gates are required by default.",
+      "label": "Product outcome flow",
+      "detail": "Five proof-gated phases preserve the MiroFish workbench outcome from seed intake to report interaction.",
       "tone": "success"
     },
     {
       "label": "Proof required",
-      "detail": "Live provider/runtime/browser/e2e/persistence/security/deployment proof remains pending.",
+      "detail": "Live provider/runtime/browser proof remains pending until downstream implementation evidence is recorded.",
       "tone": "warning"
     }
   ],

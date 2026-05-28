@@ -1,5 +1,7 @@
 # Portable AI Swarm Simulation Workbench
 
-This package is an executable Mapper OS Buildprint remapped from MiroFish. Agents must start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, the active phase file, the required `06-contracts/*.md`, `04-evaluation.md`, and the evidence ledger rules.
+Executable Mapper OS Buildprint remapped from MiroFish. Start at `BUILDPRINT.md`; do not start from this README.
 
-The packet is source-independent implementation guidance. It is not a completed implementation and must remain `PROOF_REQUIRED` until downstream phase proof is recorded.
+The packet describes a product/outcome-flow AI swarm prediction workbench from seed intake through ontology, graph memory, simulation preparation, simulation run/observability, report generation, and deep interaction.
+
+Before implementation phase work, the packet requires a Foundation scaffold gate: the target implementation project must create a real base project structure plus `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` so coding agents have explicit architecture and clean-code guidance before editing code.

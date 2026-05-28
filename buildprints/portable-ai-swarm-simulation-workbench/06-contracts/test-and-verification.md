@@ -15,6 +15,7 @@ The handoff must include:
 - `05-evidence/evidence-ledger.schema.json`;
 - role returns from product architecture, UX, integration/runtime, security, and data persistence when present;
 - commands/tests/build/browser/runtime artifacts created for this phase;
+- implementation-project `engineering-standards.md`, `test-strategy.md`, and root `AGENTS.md` mandatory-read instructions;
 - draft runtime evidence rows before they are appended.
 
 Do not ask this role to design the product. It audits whether the work can be honestly recorded and whether the phase may move from `checkpoint_recorded` to `phase_core_passed` or `claim_qualified`.
@@ -62,6 +63,8 @@ The return must explicitly say which of these states is supported and why.
 - UI-bearing phase proof lacks a user action path through UI/controller/runtime and visible/readback state.
 - Provider-backed phase proof lacks adapter/config/error tests before claiming live-proof blocker.
 - A broad test command is cited without naming the relevant subtest, artifact section, or assertion.
+- `engineering-standards.md` or `test-strategy.md` is missing, lacks Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, or Test standards, or defines blocker/e2e paths that can hang instead of exiting deterministically.
+- Root `AGENTS.md` does not require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing.
 
 ## Required Return Headings
 
@@ -69,6 +72,7 @@ The return file `.buildprint/phase-runs/<phase-id>/returns/test-and-verification
 
 - `## Verdict`: pass | pass-with-scoped-debt | blocker
 - `## Phase state supported`
+- `## Setup/standards verdict`
 - `## Commands run`
 - `## What passed`
 - `## Negative cases`

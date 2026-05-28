@@ -2,12 +2,18 @@
 
 ## Scope
 
-Build a portable AI swarm simulation workbench with source intake, ontology generation, Zep graph memory, simulation preparation dataflow, OASIS runtime automation, simulated-world observability, report-agent workflows, IPC interaction/interviews, and lifecycle operations.
+Build the MiroFish-inspired AI swarm prediction workbench core:
+
+1. seed document intake and ontology generation;
+2. Zep graph memory build and explorer;
+3. simulation environment preparation;
+4. simulation run and observability;
+5. report generation and deep interaction.
 
 ## Mode
 
-The packet is `mixed / mixed_contract`. Phase files define their own mode contracts: product, data-pipeline, automation, integration, and infrastructure.
+`blueprint_mode.primary: product` with `phase_style: outcome_flow`.
 
-## Non-goals
+## Proof status
 
-Do not claim original-source clone parity, live provider proof, browser proof, deployment proof, or completed implementation from this packet alone.
+This packet is source-independent implementation guidance. It remains `PROOF_REQUIRED` until downstream implementation, provider, runtime, browser/e2e, persistence, security, and deployment evidence is recorded.

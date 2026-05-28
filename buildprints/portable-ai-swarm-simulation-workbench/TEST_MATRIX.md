@@ -2,12 +2,11 @@
 
 | Area | Required proof |
 |---|---|
-| Intake / ontology | Upload, invalid file, durable readback, deterministic LLM adapter, live LLM blocker/proof |
-| Zep graph | Graph create/read/stat/delete adapter tests, fake/live split, live Zep blocker/proof |
-| Simulation prep | Dataflow lineage, profile/config artifacts, force regeneration, partial/final readback |
-| OASIS runtime | Start/stop/force, max_rounds, process lifecycle, action JSONL monitoring, graph memory update |
-| Observability | Action timeline, stats, posts/comments, filters, pagination, missing DB empty states |
-| Report / chat | Async report sections, download/readback, report chat, tool/debug search, redaction |
-| IPC / interviews | Command/response lifecycle, timeout/cancel/retry, batch/all interviews, blocked env states |
-| Lifecycle / ops | Reset/delete/download, denied paths, cleanup, health/readiness, rollback, drift, observability |
-| UI | Repeatable browser/e2e, visual quality gate, responsive workbench states |
+| Foundation scaffold | Project root has `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md`; AGENTS.md names them as mandatory reads. |
+| Intake / ontology | Valid/invalid uploads, extracted text durability, ontology adapter behavior, provider-blocked state. |
+| Graph memory | Zep adapter config, fake/sandbox tests, live blocker/proof split, graph readback and stats. |
+| Simulation prep | Config/profile/environment artifacts, validation, lineage, durable readback. |
+| Simulation run | Start/stop/status, OASIS provider/runtime boundary, logs, observability, retry/cancel recovery. |
+| Reports / interaction | Report generation, progress, retrieval, interaction/search/stat tools, redaction. |
+| UI | Repeatable browser/e2e, visual quality, empty/loading/error/blocked/success states, responsive workbench. |
+| Security / persistence | Denied paths, secret redaction, durable state, no fake success, deterministic blocker exits. |
