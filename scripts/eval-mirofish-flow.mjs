@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 const root = process.cwd();
-const checkedInPacket = 'buildprints/portable-ai-swarm-simulation-workbench';
+const checkedInPacket = 'buildprints/ai-swarm-simulator';
 const defaultLocalSource = 'buildprints/buildprint-mapper-os/evals/golden-projects/mirofish-guided';
 let source = fs.existsSync(path.join(root, defaultLocalSource)) ? path.join(root, defaultLocalSource) : '/root/MiroFish';
 const mapperOs = 'buildprints/buildprint-mapper-os';
@@ -26,7 +26,7 @@ function usage() {
     '',
     'Options:',
     `  --source <path>            Source repo/fixture to map (default: ${source})`,
-    '  --use-checked-in-packet   Skip Codex mapping and evaluate buildprints/portable-ai-swarm-simulation-workbench',
+    '  --use-checked-in-packet   Skip Codex mapping and evaluate buildprints/ai-swarm-simulator',
     '  --full-replay             Execute every mapped phase via eval-mapper-replay --all-phases and judge full-product outcome',
     '  --resume-outcome          Reuse latest flow report + replay artifacts and run only the outcome judge',
     '  --dry-run                 Validate harness mechanics without invoking Codex mapper/judges/runner',

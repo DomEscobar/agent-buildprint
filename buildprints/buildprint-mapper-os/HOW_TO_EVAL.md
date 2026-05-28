@@ -25,7 +25,7 @@ Use the smallest gate that can expose the risk you are changing. Do not make Swa
 | Small UI AI replay | `npm run eval:agent-small` | UI-bearing AI-app behavior pressure before Local RAG or Swarm. Target cap: 5 minutes. Uses a tiny chat UI packet with interactive-UI pressure, so a UI-bearing phase cannot pass from API-only/runtime-only evidence, static state cards, generic dashboard panels, or dead controls. |
 | Local RAG phase replay | `npm run eval:agent-local-rag` | More realistic AI-app pressure before touching Swarm. Target cap: 8 minutes. Uses Local RAG phase 1 with interactive-UI pressure; expect more variability than the micro packet. |
 | Local RAG indexing replay | `npm run eval:local-rag-phase2` | Fast RAG/vector regression before Swarm. Target cap: 8-10 minutes. Checks upload/index/retrieval/citation shape without running the full Swarm suite. |
-| Targeted Swarm regression | `npm run eval:swarm-phase2` or `npm run eval:mapper-replay -- --packet buildprints/portable-ai-swarm-simulation-workbench --phase <phase-id>` | Hard production-grade packet checks. Run one phase at a time. |
+| Targeted Swarm regression | `npm run eval:swarm-phase2` or `npm run eval:mapper-replay -- --packet buildprints/ai-swarm-simulator --phase <phase-id>` | Hard production-grade packet checks. Run one phase at a time. |
 | Full mapped-project replay | `npm run eval:mirofish-flow -- --full-replay` or full Swarm replay | Final/manual regression only, not the normal edit loop. |
 
 If a targeted Swarm run takes 15 minutes, treat that as a hard-regression cost, not the baseline feedback loop. First reproduce and fix mapper issues with `eval:mapper-fast`, then `eval:agent-smoke`, then `eval:agent-small`, then `eval:agent-local-rag`.

@@ -94,8 +94,8 @@ agb check <blueprint-folder> [--code <generated-code-folder>]
 Examples:
 
 ```bash
-agb packet check ./buildprints/portable-ai-swarm-simulation-workbench
-agb packet next ./buildprints/portable-ai-swarm-simulation-workbench
+agb packet check ./buildprints/ai-swarm-simulator
+agb packet next ./buildprints/ai-swarm-simulator
 agb evidence check .buildprint/evidence/evidence-ledger.jsonl
 agb check ./my-buildprint --code ./generated-code
 ```

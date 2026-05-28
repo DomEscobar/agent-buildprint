@@ -1,4 +1,4 @@
-# Portable AI Swarm Simulation Workbench
+# AI Swarm Simulator
 
 Executable Mapper OS Buildprint remapped from MiroFish. Start at `BUILDPRINT.md`; do not start from this README.
 

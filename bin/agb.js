@@ -37,8 +37,8 @@ Examples:
   agb check ./my-buildprint
   agb check ./my-buildprint --code ./my-agent
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json ./my-build
-  agb packet check ./buildprints/portable-ai-swarm-simulation-workbench
-  agb packet next ./buildprints/portable-ai-swarm-simulation-workbench
+  agb packet check ./buildprints/ai-swarm-simulator
+  agb packet next ./buildprints/ai-swarm-simulator
   agb evidence check .buildprint/evidence/evidence-ledger.jsonl
 
 Mapper note:
