@@ -1,3 +1,13 @@
-# Spec
+# Specification
 
-The executable Buildprint spec is organized around phase-gated product slices. Interfaces, state/runtime, UX/UI, safety, quality gates, proof gates, and repair routing live inline in each `03-phases/*.md` file. Global setup and AGENTS alignment live in `02-project-setup.md`; evaluation and claim rules live in `04-evaluation.md`; proof/blockers live in `05-evidence/`.
+## Scope
+
+Build a portable AI swarm simulation workbench with source intake, ontology generation, Zep graph memory, simulation preparation dataflow, OASIS runtime automation, simulated-world observability, report-agent workflows, IPC interaction/interviews, and lifecycle operations.
+
+## Mode
+
+The packet is `mixed / mixed_contract`. Phase files define their own mode contracts: product, data-pipeline, automation, integration, and infrastructure.
+
+## Non-goals
+
+Do not claim original-source clone parity, live provider proof, browser proof, deployment proof, or completed implementation from this packet alone.

@@ -1,7 +1,5 @@
-# portable-ai-swarm-simulation-workbench
+# Portable AI Swarm Simulation Workbench
 
-This README is only a package overview. The canonical execution authority is `BUILDPRINT.md`; structured files such as `blueprint.yaml`, `03-phases/phase-index.yaml`, and `05-evidence/evidence-ledger.schema.json` are machine-readable mirrors or routers, not competing instructions.
+This package is an executable Mapper OS Buildprint remapped from MiroFish. Agents must start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, the active phase file, the required `06-contracts/*.md`, `04-evaluation.md`, and the evidence ledger rules.
 
-This is a Mapper OS executable Buildprint. Start at `BUILDPRINT.md`; it routes through `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, the active phase, `04-evaluation.md`, and `05-evidence/evidence-ledger.jsonl`.
-
-The original origin repository is evidence only; implementation must be source-independent.
+The packet is source-independent implementation guidance. It is not a completed implementation and must remain `PROOF_REQUIRED` until downstream phase proof is recorded.

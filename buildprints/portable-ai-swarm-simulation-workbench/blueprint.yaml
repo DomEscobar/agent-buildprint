@@ -2,10 +2,10 @@ schema_version: mapper-os/executable-blueprint
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 source:
-  input: MiroFish
-  checkout_path: source-MiroFish
+  input: /root/MiroFish
+  checkout_path: /root/MiroFish
   commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-generated_at: 2026-05-28T06:32:52+02:00
+generated_at: 2026-05-28T00:00:00+02:00
 claim_status: PROOF_REQUIRED
 blueprint_mode:
   primary: mixed
@@ -17,8 +17,16 @@ setup_gate:
   required_before_phases: true
 implementation_loop:
   required: true
-  steps: [observe, plan, execute, verify, reflect, record]
-  completion_requires: [proof_gate_passed, evidence_recorded]
+  steps:
+    - observe
+    - plan
+    - execute
+    - verify
+    - reflect
+    - record
+  completion_requires:
+    - proof_gate_passed
+    - evidence_recorded
 repair_loop:
   on_failure:
     test_failed: current_phase
@@ -31,34 +39,38 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
-  - phase_id: 01-intake-ontology
-    title: Intake, Ontology, and Project State
-    file: 03-phases/01-intake-ontology.md
+  - phase_id: 01-intake-ontology-graph-workbench
+    title: Intake, ontology, and Zep graph workbench
+    file: 03-phases/01-intake-ontology-graph-workbench.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 02-graph-memory
-    title: Zep Graph Build and Visualization
-    file: 03-phases/02-graph-memory.md
+  - phase_id: 02-simulation-preparation-dataflow
+    title: Simulation preparation dataflow
+    file: 03-phases/02-simulation-preparation-dataflow.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 03-simulation-prep
-    title: Entity Filtering, Profiles, and Simulation Config
-    file: 03-phases/03-simulation-prep.md
+  - phase_id: 03-oasis-runtime-task-loop
+    title: OASIS runtime task loop
+    file: 03-phases/03-oasis-runtime-task-loop.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 04-simulation-runtime
-    title: OASIS Runtime and Action Memory
-    file: 03-phases/04-simulation-runtime.md
+  - phase_id: 04-world-observability-reads
+    title: Simulated world observability reads
+    file: 03-phases/04-world-observability-reads.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 05-report-agent
-    title: Report Generation, Export, and Report Chat
-    file: 03-phases/05-report-agent.md
+  - phase_id: 05-report-agent-task-loop
+    title: Report agent task loop
+    file: 03-phases/05-report-agent-task-loop.md
     status: INCLUDED_NEEDS_PROOF
-  - phase_id: 06-interaction-history-admin
-    title: Deep Interaction, History, Security, and Operations
-    file: 03-phases/06-interaction-history-admin.md
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
+  - phase_id: 06-interaction-ipc-integration
+    title: Interaction and interview IPC integration
+    file: 03-phases/06-interaction-ipc-integration.md
+    status: INCLUDED_NEEDS_PROOF
+  - phase_id: 07-lifecycle-operations-hardening
+    title: Lifecycle operations and hardening
+    file: 03-phases/07-lifecycle-operations-hardening.md
+    status: INCLUDED_NEEDS_PROOF
 context:
   phase_index: 03-phases/phase-index.yaml
   phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-intake-ontology.md
+  active_phase: 03-phases/01-intake-ontology-graph-workbench.md
   evaluation: 04-evaluation.md
   evidence_schema: 05-evidence/evidence-ledger.schema.json
 generated_artifacts:

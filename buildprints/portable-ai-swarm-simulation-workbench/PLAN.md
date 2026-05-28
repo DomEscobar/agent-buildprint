@@ -1,8 +1,15 @@
-# Plan
+# Implementation Plan
 
-1. Read `BUILDPRINT.md`.
-2. Resolve `01-questions.md` with human answers or AI best-fit defaults.
-3. Complete `02-project-setup.md` before implementation.
-4. Execute one proof-gated phase at a time from `03-phases/phase-index.yaml`.
-5. Use the implementation loop and repair routing.
-6. Record proof/blockers in `05-evidence/evidence-ledger.jsonl`.
+Read order starts at `BUILDPRINT.md`.
+
+Phase roadmap:
+
+1. Intake, ontology, and Zep graph workbench
+2. Simulation preparation dataflow
+3. OASIS runtime task loop
+4. Simulated world observability reads
+5. Report agent task loop
+6. Interaction and interview IPC integration
+7. Lifecycle operations and hardening
+
+Each phase must run through `03-phases/phase-flow.md`: observe, plan, role handoffs/returns, execute, verify, reflect, write proof, then append runtime evidence only under `.buildprint/evidence/evidence-ledger.jsonl`.

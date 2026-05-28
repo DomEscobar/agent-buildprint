@@ -1,12 +1,10 @@
-# Acceptance
+# Acceptance Checklist
 
-- [ ] `BUILDPRINT.md` is the only start point.
-- [ ] `01-questions.md` and `02-project-setup.md` are resolved before phase work.
-- [ ] `03-phases/phase-index.yaml` identifies the active phase.
-- [ ] `02-project-setup.md` defines production readiness: auth/session/tenant, provider adapters/config/tests, durable persistence, worker/runtime, deployment/ops, observability, CI, and repeatable browser/e2e.
-- [ ] Missing credentials or paid services block live proof only after implementation includes adapter/config/test/runtime wiring.
-- [ ] `03-phases/phase-flow.md` phase-run artifacts exist before runtime evidence is appended.
-- [ ] Phase IDs match phase file basenames and multi-phase dependencies model workflow order.
-- [ ] Each phase uses observe/plan/execute/verify/reflect/record.
-- [ ] Failed verification routes back to the current phase or responsible setup/question/prior-phase blocker.
-- [ ] Runtime proof/blockers are recorded in `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` remains seed-only.
+- [ ] `BUILDPRINT.md` is the only start point and routes through the executable packet read order.
+- [ ] `02-project-setup.md` defines blueprint mode, production readiness, setup gate, and mapped obligation/surface matrix.
+- [ ] Every high-signal MiroFish source surface has an owning phase and required proof path.
+- [ ] Mixed-mode phases declare mode-specific contracts and do not collapse OASIS/Zep/provider/runtime semantics into generic product screens.
+- [ ] Provider adapters/config/tests exist before live-proof blockers are accepted.
+- [ ] UI-bearing phases pass repeatable browser/e2e and visual quality gates.
+- [ ] Runtime evidence is appended only to `.buildprint/evidence/evidence-ledger.jsonl` after phase proof artifacts exist.
+- [ ] No fake/static/local-MVP path upgrades claims without durable persistence, runtime, security, and provider-boundary proof.

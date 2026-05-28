@@ -1,17 +1,17 @@
-# VALIDATION_TEMPLATE.md
+# Validation Template
 
 ## Scope
 
-Validate the portable AI swarm simulation workbench capability-by-capability against this source-independent executable packet.
+State the phase or packet scope validated and the exact files changed.
 
-## Commands Run
+## Commands run
 
-Record exact commands, browser traces, provider/runtime proof commands, persistence restart/readback commands, and no-fake scans.
+List every command run, including mapper checks, tests, build, browser/e2e, provider adapter tests, and any skipped command with reason.
 
-## Evidence
+## Evidence / proof
 
-Append proof rows to `.buildprint/evidence/evidence-ledger.jsonl` and summarize accepted proof here with file paths, screenshots, logs, and test output.
+Link phase proof files, screenshots, logs, traces, runtime artifacts, and `.buildprint/evidence/evidence-ledger.jsonl` rows. Do not use packaged `05-evidence/evidence-ledger.jsonl` for runtime proof.
 
-## Blockers / Gaps
+## Blockers / gaps
 
-Record unresolved provider credentials, runtime gaps, browser failures, security issues, or fake/static behavior. Do not upgrade claims while blockers remain.
+Record missing credentials, unavailable providers, deployment authorization, browser proof gaps, security blockers, or any claim that remains `PROOF_REQUIRED`.
