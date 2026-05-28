@@ -6,17 +6,20 @@ You are the orchestrator for this phase only. Keep the active context small: rou
 
 Before writing code for any phase:
 
-1. Read the active phase file named by `03-phases/phase-index.yaml`.
+0. Verify the implementation project foundation exists: root `AGENTS.md`, `.buildprint/setup.md` or `.buildprint/setup/`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` for UI-bearing products. Root `AGENTS.md` must explicitly require coding agents to read those files before code edits. If the Foundation scaffold gate is missing, incomplete, or inconsistent, stop phase work and create/repair the scaffold first.
+1. Read root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing; then read the active phase file named by `03-phases/phase-index.yaml`.
 2. Resolve every `requires_roles` entry to `06-contracts/<role>.md`.
 3. Read only the role contracts required by the active phase.
-4. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`.
+4. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`, including how this phase extends the base project structure and local standards rather than bypassing them.
 5. Write `.buildprint/phase-runs/<phase-id>/team-gates.md` with active roles, contract files, blocking gates, and proof expectations.
 6. Write bounded `.buildprint/phase-runs/<phase-id>/handoffs/<role>.md` for every required role.
 7. Use subagents, delegated workers, or parallel specialist sessions when the environment supports them.
 8. If subagents are unavailable, self-simulate each required role and write `.buildprint/phase-runs/<phase-id>/returns/<role>.md`.
-9. Integrate role returns, implement the first real vertical path, verify, review, write proof, then record evidence.
+9. Integrate role returns, implement the first real vertical path inside the scaffold, verify, review, write proof, then record evidence.
 
 Subagents are optional tooling. Role-gated delegation artifacts are mandatory. Do not mark `phase_core_passed` until every required role has a handoff and a return file, or an explicit blocker routed through the evidence ledger.
+
+A phase cannot reach `phase_core_passed` if it violates `architecture.md`, `engineering-standards.md`, `test-strategy.md`, or `ui-identity.md`; implements a standalone demo outside the agreed base project structure; bypasses provider/persistence/worker/schema boundaries; or uses a browser/e2e/runtime blocker that hangs or exits ambiguously instead of writing a blocker artifact and exiting deterministically.
 
 ## Required Phase Artifacts
 

@@ -77,6 +77,7 @@ const setupSections = [
   /## Mapped contract anchors/i,
   /## (Product obligation\/surface matrix|Mapped obligation\/surface matrix)/i,
   /## Implementation project setup/i,
+  /## Foundation scaffold gate/i,
   /## Open assumptions/i,
   /## Phase start gate/i,
 ];
@@ -211,7 +212,7 @@ function jsonlRows(target, file, label) {
 }
 
 function isReferenceRoleLabeled(line) {
-  return /\b(?:packet file|packet authority|source path|source anchor|source repo|source repository|source file|mapping note|mapped product obligation|runtime artifact|runtime output|product artifact|generated artifact|generated output|implementation artifact|implementation output|storage artifact|report output|downstream implementation|implementation project|root\/local)\b/i.test(line);
+  return /\b(?:packet file|packet authority|source path|source anchor|source repo|source repository|source file|mapping note|mapped product obligation|runtime artifact|runtime output|product artifact|generated artifact|generated output|implementation artifact|implementation output|storage artifact|report output|downstream implementation|implementation project|implementation-project|root\/local)\b/i.test(line);
 }
 
 function isIgnoredReference(ref) {
@@ -278,6 +279,7 @@ function validateClassifiedFileReferences(target, dir, files) {
         const ref = match[1];
         if (isIgnoredReference(ref)) continue;
         if (ref === 'AGENTS.md') continue;
+        if (['architecture.md', 'engineering-standards.md', 'test-strategy.md', 'ui-identity.md'].includes(ref)) continue;
         if (files.includes(ref)) continue;
         if (isReferenceRoleLabeled(line)) continue;
         fail(target, `${file}:${index + 1} has unclassified file reference ${ref}; label it as packet file, source path, runtime artifact, or implementation project file`);
@@ -390,6 +392,10 @@ function validate(target, dir) {
     }
   }
   if (!/Runtime setup artifact/i.test(setup) || !/\.buildprint\/setup\.md|\.buildprint\/setup\//i.test(setup) || !/Creating only `AGENTS\.md` is not enough/i.test(setup)) fail(target, '02-project-setup.md must require a runtime .buildprint/setup artifact; AGENTS.md alone is not enough');
+  for (const token of ['Foundation scaffold gate', 'base project structure', 'architecture.md', 'engineering-standards.md', 'test-strategy.md', 'AGENTS.md', 'mandatory reads', 'Architecture principles', 'Base project structure', 'Boundary map', 'Dependency rules', 'Architecture decisions', 'Downstream phase extension map', 'Clean code rules', 'Validation and schemas', 'Persistence standards', 'Provider standards', 'Worker/runtime standards', 'Test standards']) {
+    if (!setup.includes(token)) fail(target, `02-project-setup.md foundation scaffold gate missing ${token}`);
+  }
+  if (/UI-bearing/i.test(setup) && !/ui-identity\.md/i.test(setup)) fail(target, '02-project-setup.md UI-bearing setup must require ui-identity.md');
   if (!/03-phases\/phase-flow\.md/i.test(setup)) fail(target, '02-project-setup.md must route phase entry through 03-phases/phase-flow.md');
   if (!/Do not start `03-phases\/\*`/i.test(setup)) fail(target, '02-project-setup.md must block phases until setup is explicit');
   for (const token of productionSetupTokens) {
@@ -414,6 +420,9 @@ function validate(target, dir) {
   }
   if (!/Use subagents, delegated workers, or parallel specialist sessions/i.test(phaseFlow) || !/self-simulate/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must include subagent permission plus self-simulation fallback');
   if (!/Subagents are optional tooling\. Role-gated delegation artifacts are mandatory/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must make role-gated delegation artifacts mandatory');
+  for (const token of ['Foundation scaffold gate', 'architecture.md', 'engineering-standards.md', 'test-strategy.md', 'mandatory', 'base project structure', 'phase_core_passed', 'exiting deterministically']) {
+    if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing foundation scaffold rule: ${token}`);
+  }
   if (/Compiled team skill gates|templates\/teams\/\*|taste variables|domain-fit rubric|ADR-lite tradeoffs before coding/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must route role expertise to 06-contracts instead of carrying copied team capsule bodies');
   for (const token of [
     'Do not copy every required proof label into every evidence row',
@@ -435,9 +444,9 @@ function validate(target, dir) {
   }
 
   const contractChecks = {
-    'product-architect': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'ADR-lite', 'First vertical slice'],
+    'product-architect': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'ADR-lite', 'First vertical slice', 'Foundation scaffold verdict', 'architecture.md', 'Boundary map'],
     'ux-ui-craft': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'Visual quality bar', 'Screenshot critique'],
-    'test-and-verification': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'evidence ceiling rule', 'no_fake_scan_pass'],
+    'test-and-verification': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'evidence ceiling rule', 'no_fake_scan_pass', 'Setup/standards verdict', 'engineering-standards.md', 'Test standards'],
     'integration-runtime': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'Missing credentials block live proof only'],
     'security-boundary': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'Denied-path'],
     'data-persistence': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'restart/readback'],
@@ -447,6 +456,11 @@ function validate(target, dir) {
     for (const token of tokens) {
       if (!contract.toLowerCase().includes(token.toLowerCase())) fail(target, `06-contracts/${role}.md missing ${token}`);
     }
+  }
+
+  const generatedPrompt = safeRead(path.join(dir, 'generated/agent-prompt.md'));
+  for (const token of ['base project structure', 'AGENTS.md', 'architecture.md', 'engineering-standards.md', 'test-strategy.md', 'mandatory reads', 'clean code rules']) {
+    if (!generatedPrompt.includes(token)) fail(target, `generated/agent-prompt.md missing setup scaffold token ${token}`);
   }
 
   const phaseIndex = safeRead(path.join(dir, '03-phases/phase-index.yaml'));

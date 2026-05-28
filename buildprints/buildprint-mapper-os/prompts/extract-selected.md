@@ -202,6 +202,7 @@ This is the pre-phase setup contract. Required sections:
 - `## Mapped contract anchors`
 - `## Mapped obligation/surface matrix`
 - `## Implementation project setup`
+- `## Foundation scaffold gate`
 - `## Open assumptions`
 - `## Phase start gate`
 
@@ -220,7 +221,9 @@ The matrix must include source evidence, target disposition, owning phase, and r
 
 Selected packets for multi-phase work must compile into orchestrator handoffs, not only implementation instructions.
 
-Do not repeat the full phase/delegation protocol inside `02-project-setup.md`. That file should only contain implementation-project setup instructions: root/local `AGENTS.md` plan, `.buildprint/setup.md` requirement, and the statement that phase entry remains governed by `03-phases/phase-flow.md` plus `06-contracts/*`.
+Do not repeat the full phase/delegation protocol inside `02-project-setup.md`. That file should only contain implementation-project setup instructions: root/local `AGENTS.md` plan, `.buildprint/setup.md` requirement, Foundation scaffold gate, and the statement that phase entry remains governed by `03-phases/phase-flow.md` plus `06-contracts/*`.
+
+For implementation packets, `02-project-setup.md` must require the implementation agent to create the selected stack's real base project structure before Phase 01. The scaffold must include root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents before editing code; otherwise coding agents will avoid them. `architecture.md` must contain architecture best practices with `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. `engineering-standards.md` must contain clean coding standards with `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`, including deterministic timeout/exit behavior for blocked e2e/runtime proof.
 
 For long-running full-suite execution, the orchestrated phase-suite loop is mandatory:
 

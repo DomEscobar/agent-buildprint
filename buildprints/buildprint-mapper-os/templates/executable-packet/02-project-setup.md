@@ -105,12 +105,26 @@ Rules:
 
 ## Implementation project setup
 
-The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
+The Buildprint packet must not contain implementation-project files such as `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `ui-identity.md`, or `test-strategy.md`. The implementation project must create them inside the real project root after this file is resolved and before Phase 01 starts.
 
-- Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
-- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
-- Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
-- Creating only `AGENTS.md` is not enough to satisfy the setup gate.
+## Foundation scaffold gate
+
+Before any `03-phases/*` implementation starts, create the selected stack's real base project structure and local guidance files. This is a required setup gate, not optional documentation. The scaffold must be concrete enough that Phase 01 adds the first vertical slice inside long-lived boundaries instead of inventing a standalone mini-app.
+
+Required implementation-project files:
+
+- Root `AGENTS.md`: short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing before editing code. If these files are missing or contradicted, agents must stop and repair setup rather than continue.
+- `architecture.md`: architecture best practices for this project, including `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. It must name the UI, API/controller, domain/use-case, schema/validation, config/env, provider adapter, persistence/repository, worker/runtime, observability, deployment, and test boundaries that apply to the selected stack.
+- `engineering-standards.md`: clean coding and implementation standards, including `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`. It must define deterministic timeout/exit behavior for blocked browser/e2e/runtime proof.
+- `ui-identity.md`: required for UI-bearing products. It defines product-specific visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, and what would count as a generic dashboard/form/raw-list failure for this product.
+- `test-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface.
+- Base project directories/files for the chosen stack, including app/source directories, tests, scripts, config/env boundary, provider adapter boundary, persistence/repository boundary, worker/runtime boundary when later phases require it, observability/logging, and e2e/browser proof boundary when UI-bearing.
+
+Simple/custom primitives are allowed only when `architecture.md` and `engineering-standards.md` document the reason, bound the blast radius, define tests, and name the production replacement path. Handrolled HTTP, upload parsing, storage, runtime workers, or UI shells must not become hidden production defaults.
+
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e. Each local file must point back to the root `AGENTS.md` and the relevant sections of `architecture.md`, `engineering-standards.md`, `ui-identity.md`, and `test-strategy.md`.
+- Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording the scaffold, selected stack, architecture decisions, auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
+- Creating only `AGENTS.md` is not enough to satisfy the setup gate. The base project structure and local guidance files above must exist and be internally consistent.
 - Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
 
 ## Open assumptions
@@ -130,4 +144,4 @@ Do not start `03-phases/*` until this file is explicit enough to create implemen
 
 Initial phase set:
 
-- `03-phases/01-example-phase.md`
+- Packet file `03-phases/01-example-phase.md`
