@@ -3140,17 +3140,81 @@ function qualifiedProductScopeMd(records) {
   return ['# PRODUCT_SCOPE', '', 'This product scope is derived from qualification records. Preserve validated behavior; do not claim parity for blocked unknowns.', '', '## Must preserve', '', ...(records.filter((r) => r.status === 'validated_feature').map((r) => `- ${r.title}`) || []), '', '## Unknown / blocked', '', ...(records.filter((r) => r.status !== 'validated_feature').map((r) => `- ${r.title}: ${r.blockers.join('; ')}`) || ['- none']), '', '## Can replace', '', '- Internal framework/library choices unless product behavior, data semantics, privacy, or integration contracts depend on them.', '- File/folder layout unless it is part of a public package/API contract.', '', '## Explicitly excluded', '', '- Features without source evidence.', '- Full production parity for blocked unknowns.', '- Runtime/security/privacy guarantees without tests or source proof.', ''].join('\n')
 }
 
+function uniqueStrings(values) {
+  return [...new Set(values.filter(Boolean))]
+}
+
+function readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile) {
+  if (Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length) return manifest.instructions.readOrder
+  if (Array.isArray(manifest.readOrder) && manifest.readOrder.length) return manifest.readOrder
+  return isExecutablePacket
+    ? ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
+    : ['BUILDPRINT.md'].filter(hasManifestFile)
+}
+
+function phaseIndexActiveInfo(phaseIndexText) {
+  const activePhase = phaseIndexText.match(/active_phase:\s*([^\s#]+)/)?.[1] || null
+  if (!activePhase) return { activePhase: null, activePhaseId: null }
+  const blocks = phaseIndexText.split(/\n\s*-\s+phase_id:\s*/).slice(1)
+  for (const block of blocks) {
+    const firstLine = block.split(/\r?\n/, 1)[0] || ''
+    const phaseId = firstLine.trim().split(/\s+/)[0]
+    const file = block.match(/\n\s*file:\s*([^\s#]+)/)?.[1]
+    if (file === activePhase) return { activePhase, activePhaseId: phaseId || null }
+  }
+  const fallbackId = path.basename(activePhase, path.extname(activePhase))
+  return { activePhase, activePhaseId: fallbackId || null }
+}
+
+function roleContractsFromPhaseText(activePhaseText, hasManifestFile) {
+  const inline = activePhaseText.match(/^requires_roles:\s*\[([^\]]+)\]\s*$/im)
+  if (inline) {
+    return inline[1]
+      .split(',')
+      .map((role) => role.trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean)
+      .map((role) => `06-contracts/${role}.md`)
+      .filter(hasManifestFile)
+  }
+
+  const lines = activePhaseText.split(/\r?\n/)
+  const start = lines.findIndex((line) => /^requires_roles:\s*$/i.test(line.trim()))
+  if (start < 0) return []
+  const roles = []
+  for (let i = start + 1; i < lines.length; i += 1) {
+    const line = lines[i]
+    if (!line.trim()) continue
+    const m = line.match(/^\s*-\s*([a-z0-9-]+)\s*$/i)
+    if (!m) break
+    roles.push(m[1])
+  }
+  return roles.map((role) => `06-contracts/${role}.md`).filter(hasManifestFile)
+}
+
+function executableReadOrder(baseReadOrder, hasManifestFile, activePhase, roleContracts) {
+  const canonical = [
+    'BUILDPRINT.md',
+    '01-questions.md',
+    '02-project-setup.md',
+    'blueprint.yaml',
+    '03-phases/phase-index.yaml',
+    '03-phases/phase-flow.md',
+    ...roleContracts,
+    activePhase,
+    '04-evaluation.md',
+    '05-evidence/evidence-ledger.jsonl'
+  ].filter((file) => file && hasManifestFile(file))
+  const extras = baseReadOrder.filter((file) => hasManifestFile(file) && !canonical.includes(file))
+  return uniqueStrings([...canonical, ...extras])
+}
+
 async function startBuildprint(manifestRef, targetFolder = cwd) {
   const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
   const manifestFilePaths = manifest.files.map((file) => file.path).filter(Boolean)
   const hasManifestFile = (filePath) => manifestFilePaths.includes(filePath)
   const isExecutablePacket = hasManifestFile('01-questions.md') && hasManifestFile('02-project-setup.md') && hasManifestFile('blueprint.yaml')
-  const manifestReadOrder = Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length
-    ? manifest.instructions.readOrder
-    : (isExecutablePacket
-      ? ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
-      : ['BUILDPRINT.md'])
+  const baseReadOrder = readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile)
 
   const targetRoot = path.resolve(cwd, targetFolder)
   fs.mkdirSync(targetRoot, { recursive: true })
@@ -3174,8 +3238,12 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   const now = new Date().toISOString()
   const phaseIndexPath = path.join(snapshotDir, '03-phases', 'phase-index.yaml')
   const phaseIndexText = fs.existsSync(phaseIndexPath) ? fs.readFileSync(phaseIndexPath, 'utf8') : ''
-  const activePhase = phaseIndexText.match(/active_phase:\s*([^\s#]+)/)?.[1] || null
-  const activePhaseId = activePhase ? path.basename(activePhase, path.extname(activePhase)).replace(/^\d+-/, '') : null
+  const { activePhase, activePhaseId } = phaseIndexActiveInfo(phaseIndexText)
+  const activePhaseText = activePhase ? safeReadText(path.join(snapshotDir, activePhase)) : ''
+  const activeRoleContracts = isExecutablePacket ? roleContractsFromPhaseText(activePhaseText, hasManifestFile) : []
+  const manifestReadOrder = isExecutablePacket
+    ? executableReadOrder(baseReadOrder, hasManifestFile, activePhase, activeRoleContracts)
+    : uniqueStrings(baseReadOrder.filter(hasManifestFile))
   const evidenceDir = path.join(stateDir, 'evidence')
   const runtimeEvidencePath = path.join(evidenceDir, 'evidence-ledger.jsonl')
   const snapshotEvidencePath = path.join(snapshotDir, '05-evidence', 'evidence-ledger.jsonl')
@@ -3230,12 +3298,13 @@ This is a Mapper OS executable Buildprint. Local runtime state wins over stale a
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work.
-4. Read \`.buildprint/snapshots/03-phases/phase-flow.md\` and create the required \`.buildprint/phase-runs/<phase-id>/\` plan/team/handoff/return/review/proof artifacts before evidence.
-5. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
-6. Execute the phase implementation loop through phase-flow: observe, plan, execute, verify, reflect, record.
-7. If verification fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
-8. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`, and only after phase-flow artifacts exist.
-9. After proof, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
+4. Read \`.buildprint/snapshots/03-phases/phase-flow.md\` and the active phase role contracts: ${activeRoleContracts.length ? activeRoleContracts.map((file) => `\`.buildprint/snapshots/${file}\``).join(', ') : '\`none declared\`'}.
+5. Create the required \`.buildprint/phase-runs/<phase-id>/\` plan/team/handoff/return/review/proof artifacts before evidence.
+6. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
+7. Execute the phase implementation loop through phase-flow: observe, plan, execute, verify, reflect, record.
+8. If verification fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
+9. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`, and only after phase-flow artifacts exist.
+10. After proof, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
 
 Rules:
 
