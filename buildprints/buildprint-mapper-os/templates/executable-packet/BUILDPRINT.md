@@ -46,6 +46,15 @@ Every phase must repeat this loop until the proof gate passes or a real blocker 
 
 A phase cannot be marked done from code edits alone.
 
+## Completion semantics
+
+Read this before interpreting any phase status, evidence row, or progress file.
+
+- `PROOF_REQUIRED`, `checkpoint_recorded`, `phase_core_passed`, and `complete-bounded-proof` describe **bounded packet proof**, not production-product completion. A run may honestly finish all phases with blockers and still not deliver the final product the user expects.
+- A role return, review file (`reviews/*.md`), handoff, or self-simulated adversarial review is **permission to record evidence**, never evidence itself. Prose that says "tests passed", "screenshots captured", or "no dead handlers" without a rerunnable command output or an on-disk artifact an independent reader can reopen does not prove anything.
+- Every `pass` or `pass-with-scoped-debt` verdict must point to at least one of: (a) an exact command that was run and whose stdout/stderr is quoted or saved under `.buildprint/phase-runs/<phase-id>/`, or (b) a file path under the implementation project or `.buildprint/phase-runs/<phase-id>/` that exists and matches the claim.
+- When subagents are unavailable, the implementer and reviewer share one context. Treat `06-contracts/test-and-verification.md` **Self-simulation referee** plus the scaffold **runnable verification commands** from `02-project-setup.md` as the minimum substitute for an independent reviewer — not optional narration.
+
 ## Repair routing
 
 If verification fails, route back before editing again:

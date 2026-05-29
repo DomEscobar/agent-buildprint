@@ -86,6 +86,34 @@ Each handoff must include:
 
 Each return file must use the headings required by its role contract. The main agent remains responsible for integration, final verification, claim limits, and evidence rows even when subagents produce the role returns.
 
+### Handoff anti-boilerplate rule
+
+A handoff is a real brief, not a formatted placeholder. Before writing any handoff:
+
+1. Every path listed under `files to read` must exist in the implementation project at the time the handoff is written. Do not guess likely paths  before the project structure exists. List only paths you have confirmed by reading or listing the directory. If a needed file does not yet exist, say so explicitly and name the file as a precondition, not as a read target.
+2. `success criteria` must name the concrete user action path for this phase (e.g. "operator submits a new project form, project row appears in the list, API call returns 200 with persisted ID"). Generic criteria such as "action path and readback are recorded" are invalid.
+3. `verification command or proof artifact expected` must be the exact command string or file path that the role must produce (e.g. `npm test -- --grep "project create"` or `screenshot: .buildprint/phase-runs/01-.../browser-after-project.png`). "Run tests" is not a valid entry.
+4. `evidence row expectations` must name the `proof_type` values and `upgrades_claim` verdict for each row this role is expected to contribute.
+
+A handoff that omits items 1–4 or uses generic boilerplate is invalid. The orchestrator may not use an invalid handoff as the basis for a return and must not count the role gate as satisfied.
+
+## Adversarial self-review
+
+When subagents are unavailable and the orchestrator self-simulates a role, the simulated return must be written as an adversarial falsification, not as a narrator of the quality bar.
+
+For each applicable `## Reject If` criterion in the role contract, the return must:
+
+1. State the criterion explicitly.
+2. Cite the concrete disproving evidence: a source file path and line (or a range), a captured artifact path, or a specific runtime trace entry that demonstrates the criterion is not violated. A general statement that the criterion is satisfied is not disproving evidence.
+3. If disproving evidence cannot be cited, emit `## Verdict: blocker` and name the missing evidence as `## Required repair before evidence`.
+
+Additional requirements for UI roles when self-simulated:
+
+- Read the relevant component/handler source before writing the return. Look specifically for empty event callbacks, route-shaped stubs that return a static response without side effects, and UI state that does not update after user actions. Name each one found as a defect or confirm each one is absent with its source location.
+- At least one captured screenshot or trace must exist and must visibly differ from the initial page load before a UI pass verdict is valid. Name the two artifacts (initial and post-action) and describe the visible difference.
+
+The self-simulated role is a committed adversary, not a narrator. If it cannot produce falsifying evidence, it blocks.
+
 ## Review and Integration
 
 The orchestrator cannot silently discard dissent. If a role return reports a blocker or quality gap, either fix it, route it to setup/questions/prior phase/external blocker, or record why it is out of scope.

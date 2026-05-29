@@ -15,7 +15,9 @@ Do not start phase work until project setup creates the real base project struct
 
 `architecture.md` must define architecture best practices, base project structure, boundary map, dependency rules, architecture decisions, and downstream phase extension map. `engineering-standards.md` must define clean code rules, validation and schemas, persistence standards, provider standards, worker/runtime standards, UI standards when UI-bearing, and test standards. Phase code must extend this scaffold, not create a throwaway mini-app.
 
-Use the phase-flow orchestration protocol, implementation loop, and repair routing before claiming done.
+Use the phase-flow orchestration protocol, implementation loop, completion semantics from `BUILDPRINT.md`, and repair routing before claiming done.
+
+Completion semantics: `phase_core_passed` and `complete-bounded-proof` are bounded packet proof, not production-product completion. Role returns and reviews are not evidence — only rerunnable command output and on-disk artifacts count. Before claiming a phase passed, run the scaffold scripts from `02-project-setup.md` (`verify:no-fake`, `verify:phase-artifacts`) and paste exit code + stdout into `## Self-simulation referee findings`.
 
 You are the orchestrator. When your environment supports subagents, delegated workers, or parallel specialist sessions, use them for the required role gates. Keep each delegation bounded to the active phase, matching `06-contracts/<role>.md`, relevant project files, allowed edit scope, proof expectations, and evidence row requirements. If subagents are unavailable, self-simulate each role and write the same `.buildprint/phase-runs/<phase-id>/returns/<role>.md` artifact.
 
@@ -26,6 +28,12 @@ For non-UI modes (framework, library, integration, automation, data-pipeline, in
 Phase identity rule: every `.buildprint/phase-runs/<dir>/` directory name and every evidence row `phase_id` must exactly match a `phase_id` in `.buildprint/snapshots/03-phases/phase-index.yaml`. Inventing phase IDs that do not appear in the index is a fake-completion violation — invented phases cannot satisfy proof gates, cannot produce valid evidence rows, and must not be reported as `phase_core_passed` or `complete`.
 
 Proof artifact reuse rule: each phase's evidence rows must cite artifacts (test files, screenshots, commands) produced or run during that phase's implementation. Reusing a screenshot or test file from phase 01 as evidence for phases 02, 03, and 04 is an evidence ceiling violation. Use separate rows with distinct artifact paths per phase.
+
+Evidence binding rule: every artifact named in a return file (screenshot path, test file, trace log) must exist on disk before the return is written. A return that names a file path that does not yet exist is a boilerplate placeholder, not evidence. Before writing any role return that cites screenshots or captured artifacts, confirm each file is present under `.buildprint/phase-runs/<phase-id>/`. If a file is absent, write a `blocker` verdict naming the missing artifact; do not write a `pass` verdict and list the file as if it exists.
+
+Handoff anti-boilerplate rule: before writing a role handoff, read or list the implementation project structure to confirm every path you list under "files to read" exists. Do not list `src/ui/App.tsx` or similar guessed paths before the project is scaffolded. State the concrete user action path the role must review (not "action path is recorded"), the exact verification command (not "run tests"), and the exact evidence-row `proof_type` values and `upgrades_claim` expectation. A handoff that omits these or uses generic placeholders is invalid and does not satisfy the role gate.
+
+Adversarial self-review rule: when you self-simulate a role, you are the adversary, not the narrator. For each `## Reject If` criterion in the role contract, cite the source file/line or artifact path that disproves it, or emit `blocker`. For UI roles, read the component and handler source before writing the return: look specifically for empty callbacks (`onClick={() => {}}`), no-op submits, `draggable` without a drag handler, route stubs that return static responses, and controls that do not change visible state. Name each one found as a defect or state "not found at <source-path>" with the path. Do not narrate the quality bar as satisfied — falsify it.
 
 Evidence rows must be narrow: list only proof labels backed by the row's commands/artifacts. Do not claim browser/e2e/screenshot/security/data-lifecycle/worker proofs from generic HTTP traces or static files.
 

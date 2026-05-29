@@ -41,7 +41,7 @@ Start from `templates/executable-packet/` as the structural authority. Preserve 
 Required exact anchors include:
 
 - `blueprint.yaml`: `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `blueprint_mode` with primary/secondary/phase_style, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure.proof_gate_failed: current_phase`, `repair_loop.on_failure.architecture_contradiction: 02-project-setup.md`.
-- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, and `## Repair routing`.
+- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, `## Completion semantics`, and `## Repair routing`. `## Completion semantics` must state that bounded proof is not product completion, that returns/reviews are not evidence, and that every pass verdict requires rerunnable command output or an existing artifact path (copy from `templates/executable-packet/BUILDPRINT.md`; do not omit).
 - `01-questions.md`: use headings `## 1.` through `## 6.` and include the exact AI-best-judgment default phrase below.
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
 - `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, `no_fake`, and `production_readiness`.
@@ -225,6 +225,8 @@ Do not repeat the full phase/delegation protocol inside `02-project-setup.md`. T
 
 For implementation packets, `02-project-setup.md` must require the implementation agent to create the selected stack's real base project structure before Phase 01. The scaffold must include root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents before editing code; otherwise coding agents will avoid them. `architecture.md` must contain architecture best practices with `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. `engineering-standards.md` must contain clean coding standards with `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`, including deterministic timeout/exit behavior for blocked e2e/runtime proof.
 
+`## Foundation scaffold gate` in `02-project-setup.md` must include the **Runnable verification gate** subsection from `templates/executable-packet/02-project-setup.md`: require `verify:no-fake` and `verify:phase-artifacts` scripts (or documented stack equivalents), mandate running them before runtime evidence, and require pasted stdout in `## Self-simulation referee findings`. Do not reduce this to prose-only "run tests".
+
 For long-running full-suite execution, the orchestrated phase-suite loop is mandatory:
 
 1. Orchestrator reads Buildprint state, `03-phases/phase-flow.md`, and active phase.
@@ -261,7 +263,16 @@ Every phase must include a compact `## Phase mode contract` section immediately 
 
 `03-phases/phase-flow.md` is required. It must be a compact delegation router, not the storage location for role expertise. It must define the phase-entry protocol, role-contract resolution through `06-contracts/<role>.md`, required phase-run artifacts, bounded handoff shape, subagent permission, self-simulation fallback when subagents are unavailable, integration/review/proof flow, and the rule that runtime evidence cannot be appended until plan/team-gates/handoffs/returns/reviews/proof artifacts exist.
 
+`03-phases/phase-flow.md` must additionally include the following three sections (copy from `templates/executable-packet/03-phases/phase-flow.md`; do not summarize or omit):
+
+- **Handoff anti-boilerplate rule** — every `files to read` path must exist in the implementation project before the handoff is written; `success criteria` must name the concrete user action path; `verification command or proof artifact expected` must be an exact command string or file path; `evidence row expectations` must name `proof_type` values and `upgrades_claim` per role contribution. Generic placeholders are invalid and block the role gate.
+- **Adversarial self-review** — when a role is self-simulated, the return may emit `pass` only after citing disproving evidence (source file/line or artifact path) against each applicable `## Reject If` item; if evidence cannot be cited, the verdict must be `blocker`. UI self-simulation requires reading component/handler source to name dead handlers and to confirm at least two artifacts (initial and post-action) exist with a described visible difference.
+
 `06-contracts/*.md` files are first-class packet files. Convert Mapper OS team skill capsules into concise role contracts with `## When Active`, `## Handoff Scope`, `## Reject If`, `## Required Return Headings`, and `## Proof/Evidence Expectations`. Do not copy the entire mapper-local `templates/teams/*` files verbatim into selected packets. A selected packet that only lists role names such as `ux-ui-craft` or `product-architect` without matching `06-contracts/<role>.md` files is incomplete.
+
+`06-contracts/ux-ui-craft.md` must include the **Evidence binding** section (copy from `templates/executable-packet/06-contracts/ux-ui-craft.md`): every artifact named in `## Screenshot or browser evidence` must exist on disk under `.buildprint/phase-runs/<phase-id>/`; at least one artifact must visibly differ from the initial page load; reusing an earlier phase's screenshot is an evidence ceiling violation; `pass` is forbidden if any cited artifact is missing or unchanged-from-initial.
+
+`06-contracts/test-and-verification.md` must include the **Self-simulation referee** section (copy from `templates/executable-packet/06-contracts/test-and-verification.md`): when self-simulated, this role confirms every cited artifact exists on disk, runs a no-fake source inspection, audits every `upgrades_claim: true` row, and produces a consolidated verdict that downgrades any role return whose claims cannot be confirmed; its required return headings must include `## Self-simulation referee findings`.
 
 Phase identity rules:
 

@@ -75,6 +75,18 @@ For the active user action path, define and review:
 - A full-suite browser product is implemented as a single embedded HTML/CSS/JS blob without component/state/runtime ownership.
 - Screenshot/browser proof only shows elements exist and does not critique visual hierarchy, density, contrast, responsive behavior, and domain fit.
 - The screenshot reads as a local MVP, admin test harness, default browser page, template dashboard, or generic SaaS card grid.
+- `## Screenshot critique` narrates the quality bar as satisfied without naming the specific artifact file it reviewed and at least one concrete finding (defect found, or explicit "none found" with the artifact path as evidence).
+- A `pass` or `pass-with-scoped-debt` verdict is written when `## Screenshot or browser evidence` names files that do not exist under `.buildprint/phase-runs/<phase-id>/`, or when all named screenshots are identical to the initial page load.
+
+## Evidence binding
+
+Before writing `## Verdict: pass` or `## Verdict: pass-with-scoped-debt`:
+
+1. Confirm every artifact named in `## Screenshot or browser evidence` exists on disk under `.buildprint/phase-runs/<phase-id>/`. A file named but absent on disk is a blocker; do not invent paths or assume the file will be created later.
+2. Confirm that at least one artifact visibly differs from the initial page load: the post-action screenshot or trace must show a state change driven by the user action path (e.g. a new row in a list, a status badge change, a filled form being replaced by a readback view). Name the initial artifact, the post-action artifact, and the visible difference explicitly.
+3. Confirm that no artifact in this return was first produced for an earlier phase. Reusing a phase 01 screenshot as evidence for phase 03 is an evidence ceiling violation and a blocker.
+
+If any of conditions 1–3 fails, set `## Verdict: blocker` and name the missing or invalid artifact in `## Required repair before evidence`.
 
 ## Required Return Headings
 
@@ -88,8 +100,8 @@ The return file `.buildprint/phase-runs/<phase-id>/returns/ux-ui-craft.md` must 
 - `## State matrix`
 - `## Visual quality bar`
 - `## Responsive/accessibility proof`
-- `## Screenshot or browser evidence`
-- `## Screenshot critique`
+- `## Screenshot or browser evidence` — list each file by exact path; confirm each exists
+- `## Screenshot critique` — name the specific file reviewed; name at least one concrete defect found, or state "none found: <artifact-path>" with the path as evidence
 - `## Required repair before evidence`
 
 ## Proof/Evidence Expectations

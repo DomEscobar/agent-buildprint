@@ -54,6 +54,28 @@ Claims cannot exceed evidence:
 
 The return must explicitly say which of these states is supported and why.
 
+## Self-simulation referee
+
+When subagents are unavailable and this role is self-simulated by the orchestrator, it acts as the independent referee for all other self-simulated role returns. This is the only mechanism that restores the adversarial check that subagent separation would otherwise provide.
+
+The self-simulated test-and-verification role must:
+
+1. **Confirm every cited artifact exists.** For each file path named in the other roles' returns (screenshots, test output files, trace logs, source file citations), verify the file is present on disk under `.buildprint/phase-runs/<phase-id>/` or in the implementation project. A role return that names non-existent files is invalid and must be downgraded to `blocker`.
+
+2. **Run a no-fake source inspection.** Read the relevant implementation source for each role's claimed behavior. Look specifically for:
+   - Empty or no-op event callbacks, placeholder/stub handlers that do not write state.
+   - Route-shaped stubs: handlers that return a fixed response without side effects, `res.json({ok: true})` with no domain logic.
+   - Dead controls: UI elements that render but produce no visible or persistence change when activated.
+   - Static shell patterns: a single file with inline HTML/CSS/JS replacing a modular product boundary.
+   - Mock-only promotion: code paths that always run through deterministic/mock mode with no real adapter wiring.
+   Cite the file/line for each finding. If none are found, state "no fake patterns found at: <source paths read>" as the falsifying evidence.
+
+3. **Audit every `upgrades_claim: true` row.** For each proposed row, confirm the `proves` array is backed by the row's actual command and artifact. A row that lists `visual_quality_gate` must cite a screenshot critique artifact, not a generic browser trace. A row that lists `persistence_roundtrip` must cite a readback test or trace, not a create-only command.
+
+4. **Run scaffold verification commands.** Execute the runnable scripts required by `02-project-setup.md` (at minimum `verify:no-fake` and `verify:phase-artifacts` for the active `phase_id`). Quote the real exit code and stdout in `## Self-simulation referee findings`, or cite `.buildprint/phase-runs/<phase-id>/verify-output.txt`. A return that only says the scripts passed without pasted output is invalid.
+
+5. **Produce a consolidated verdict.** If any step 1–4 check fails for any role return, this role's verdict is `blocker` naming the downgraded return and the missing evidence. Only when all checks pass may the verdict be `pass` or `pass-with-scoped-debt`.
+
 ## Reject If
 
 - A phase is marked passed from code edits, static text, screenshots-only proof, review prose, generic smoke tests, or checkpoint-only evidence.
@@ -65,6 +87,10 @@ The return must explicitly say which of these states is supported and why.
 - A broad test command is cited without naming the relevant subtest, artifact section, or assertion.
 - `engineering-standards.md` or `test-strategy.md` is missing, lacks Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, or Test standards, or defines blocker/e2e paths that can hang instead of exiting deterministically.
 - Root `AGENTS.md` does not require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing.
+- A role return is accepted whose cited artifacts do not exist on disk.
+- A UI role return is passed while source inspection reveals dead handlers, empty callbacks, or no-op controls.
+- A handoff used as the basis for a self-simulated return contains generic placeholders or omits the concrete action path, exact verification command, or evidence row expectations (per the Handoff anti-boilerplate rule in `03-phases/phase-flow.md`).
+- `## Self-simulation referee findings` omits pasted stdout/exit code from `verify:no-fake` or `verify:phase-artifacts`, or cites verification scripts that are not defined in the implementation project `package.json` / `test-strategy.md`.
 
 ## Required Return Headings
 
@@ -77,6 +103,7 @@ The return file `.buildprint/phase-runs/<phase-id>/returns/test-and-verification
 - `## What passed`
 - `## Negative cases`
 - `## What this does not prove`
+- `## Self-simulation referee findings` — list artifact-existence checks, source inspection findings, pasted output from `verify:no-fake` and `verify:phase-artifacts` (exit code + stdout or log path), and upgraded/downgraded role verdicts
 - `## Evidence row check`
 - `## Claim limits`
 - `## Required repair before evidence`

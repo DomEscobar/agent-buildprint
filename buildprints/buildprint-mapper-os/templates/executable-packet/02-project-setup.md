@@ -117,8 +117,25 @@ Required implementation-project files:
 - `architecture.md`: architecture best practices for this project, including `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. It must name the UI, API/controller, domain/use-case, schema/validation, config/env, provider adapter, persistence/repository, worker/runtime, observability, deployment, and test boundaries that apply to the selected stack.
 - `engineering-standards.md`: clean coding and implementation standards, including `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`. It must define deterministic timeout/exit behavior for blocked browser/e2e/runtime proof.
 - `ui-identity.md`: required for UI-bearing products. It defines product-specific visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, and what would count as a generic dashboard/form/raw-list failure for this product.
-- `test-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface.
+- `test-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface. It must name the runnable verification commands below and require pasting their exit code and stdout (or a saved log file path) into `.buildprint/phase-runs/<phase-id>/returns/test-and-verification.md` under `## Self-simulation referee findings` before any `phase_core_passed` claim.
 - Base project directories/files for the chosen stack, including app/source directories, tests, scripts, config/env boundary, provider adapter boundary, persistence/repository boundary, worker/runtime boundary when later phases require it, observability/logging, and e2e/browser proof boundary when UI-bearing.
+
+### Runnable verification gate (required scripts)
+
+The scaffold must include **executable** verification the agent cannot satisfy with prose alone. Add at least these npm scripts (or stack-equivalent commands documented in `test-strategy.md`):
+
+| Script | Purpose | Must fail when |
+|---|---|---|
+| `verify:no-fake` | Scan implementation source for placeholder/stub patterns (empty handlers, route-shaped stubs, mock-only promotion paths) | Dead controls, no-op callbacks, or static-shell signatures are present in phase-owned files |
+| `verify:phase-artifacts` | Given `PHASE_ID` env or CLI arg, verify every path cited in `.buildprint/phase-runs/<phase-id>/returns/*.md` under Screenshot/browser evidence exists; for UI phases, at least one screenshot byte-differs from the initial capture | Cited screenshot/trace is missing, or all captures are identical to initial |
+| `verify:phase-artifacts` (optional strict) | Reject screenshot paths reused from an earlier phase-run directory | Primary evidence reuses another phase's artifact |
+
+Rules:
+
+- Scripts must exit non-zero on violation and zero on pass. They must be runnable in CI and locally without paid providers.
+- `engineering-standards.md` must document what patterns `verify:no-fake` checks and how to extend the scan for this product's boundaries.
+- Before appending runtime evidence for a phase, run `verify:no-fake` and `verify:phase-artifacts` for that `phase_id`. Save combined output to `.buildprint/phase-runs/<phase-id>/verify-output.txt` or paste it into `## Self-simulation referee findings`.
+- A `test-and-verification` return that describes verification without quoting real command output from these scripts is invalid and blocks `phase_core_passed`.
 
 Simple/custom primitives are allowed only when `architecture.md` and `engineering-standards.md` document the reason, bound the blast radius, define tests, and name the production replacement path. Handrolled HTTP, upload parsing, storage, runtime workers, or UI shells must not become hidden production defaults.
 
