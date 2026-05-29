@@ -1,73 +1,20 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": [
-    "artifact_id",
-    "type",
-    "phase_id",
-    "status",
-    "source",
-    "proves",
-    "proof_type",
-    "provider_mode",
-    "upgrades_claim"
-  ],
+  "required": ["timestamp", "phase_id", "proof_type", "command", "result", "artifacts"],
   "properties": {
-    "artifact_id": {
-      "type": "string"
-    },
-    "type": {
-      "type": "string"
-    },
-    "phase_id": {
-      "type": "string"
-    },
-    "capability_id": {
-      "type": "string"
-    },
-    "status": {
-      "enum": [
-        "missing",
-        "passed",
-        "proven",
-        "blocked",
-        "failed",
-        "skipped"
-      ]
-    },
-    "source": {
-      "type": "string"
-    },
-    "proves": {
+    "timestamp": { "type": "string" },
+    "phase_id": { "type": "string" },
+    "proof_type": { "type": "string" },
+    "command": { "type": "string" },
+    "result": { "type": "string" },
+    "artifacts": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
-    "proof_type": {
-      "type": "string"
-    },
-    "provider_mode": {
-      "type": "string"
-    },
-    "upgrades_claim": {
-      "type": "boolean"
-    },
-    "commands": {
+    "blockers": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "changed_files": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "blocker": {
-      "type": "string"
+      "items": { "type": "string" }
     }
-  },
-  "additionalProperties": true
+  }
 }

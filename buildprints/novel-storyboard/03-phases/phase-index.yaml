@@ -1,53 +1,27 @@
-schema_version: mapper-os/phase-index
-blueprint_mode:
-  primary: product
-  phase_style: outcome_flow
-active_phase: 03-phases/01-project-workspace-auth.md
+active_phase: 03-phases/01-canvas-workbench.md
 phases:
-  - phase_id: 01-project-workspace-auth
-    file: 03-phases/01-project-workspace-auth.md
+  - id: 01-canvas-workbench
+    file: 03-phases/01-canvas-workbench.md
+    title: Canvas production board
     status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on: []
-    proof_gate: proof-01-project-workspace-auth
-  - phase_id: 02-novel-event-ingestion
-    file: 03-phases/02-novel-event-ingestion.md
+    requires_roles: [product-architect, ux-ui-craft, test-and-verification]
+  - id: 02-flow-persistence
+    file: 03-phases/02-flow-persistence.md
+    title: Episode flow persistence
     status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 01-project-workspace-auth
-    proof_gate: proof-02-novel-event-ingestion
-  - phase_id: 03-script-agent-assets
-    file: 03-phases/03-script-agent-assets.md
+    requires_roles: [data-persistence, test-and-verification, security-boundary]
+  - id: 03-production-agent-loop
+    file: 03-phases/03-production-agent-loop.md
+    title: Production agent chat and board updates
     status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 02-novel-event-ingestion
-    proof_gate: proof-03-script-agent-assets
-  - phase_id: 04-production-storyboard-flow
-    file: 03-phases/04-production-storyboard-flow.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 03-script-agent-assets
-    proof_gate: proof-04-production-storyboard-flow
-  - phase_id: 05-media-preview-export
-    file: 03-phases/05-media-preview-export.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 04-production-storyboard-flow
-    proof_gate: proof-05-media-preview-export
-  - phase_id: 06-safety-runtime-boundary
-    file: 03-phases/06-safety-runtime-boundary.md
+    requires_roles: [integration-runtime, security-boundary, test-and-verification]
+  - id: 04-media-generation
+    file: 03-phases/04-media-generation.md
+    title: Async media generation and provider boundaries
     status: INCLUDED_RISKY_REQUIRES_HARDENING
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 05-media-preview-export
-    proof_gate: proof-06-safety-runtime-boundary
+    requires_roles: [integration-runtime, data-persistence, security-boundary, test-and-verification]
+  - id: 05-webapp-runtime
+    file: 03-phases/05-webapp-runtime.md
+    title: Webapp runtime, auth and deployment
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+    requires_roles: [product-architect, security-boundary, data-persistence, test-and-verification, ux-ui-craft]
