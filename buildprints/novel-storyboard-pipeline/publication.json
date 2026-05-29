@@ -1,0 +1,121 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "novel-storyboard-pipeline",
+  "title": "Novel Storyboard Pipeline",
+  "creator": "Agent Buildprint",
+  "category": "Mapped Project",
+  "tier": "agent-grade",
+  "status": "validated",
+  "runtime": [
+    "Capability packet",
+    "Mock-first AI providers",
+    "Browser QA"
+  ],
+  "stack": [
+    "BUILDPRINT start",
+    "Context map",
+    "Capability packets",
+    "Evidence ledger",
+    "Preview manifest export"
+  ],
+  "iconKeys": [
+    "typescript",
+    "json",
+    "md"
+  ],
+  "difficulty": "Advanced",
+  "featured": true,
+  "summary": "Execution-packet remap of the Toonflow-inspired portable creative pipeline: project workspace, ordered novel ingestion, event extraction, scripts/assets, storyboard flow, media tasks, preview export, and safety gates.",
+  "plainDescription": "A router-first Buildprint for a novel-to-storyboard workbench. Agents start at BUILDPRINT.md and blueprint.yaml, load one active capability at a time, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
+  "promise": "A Mapper execution-packet for rebuilding the portable novel-to-storyboard workflow without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
+  "whatYouGet": [
+    "Capability packet shape",
+    "BUILDPRINT.md and blueprint.yaml router",
+    "Context map that names the active capability",
+    "Six phase files with consolidated contracts and proof gates",
+    "Source-surface map tied to product obligations",
+    "Provider, state, runtime, safety, acceptance, and evidence ledgers"
+  ],
+  "whatYouNeed": [
+    "Nothing for deterministic no-network proof mode",
+    "Browser runtime proof for qualification",
+    "Optional AI/image/video provider keys only for live-provider upgrade proof",
+    "Security review before public deployment or destructive/admin claims"
+  ],
+  "architectureFlow": [
+    "Router",
+    "Project",
+    "Novel",
+    "Script",
+    "Storyboard",
+    "Media",
+    "Safety"
+  ],
+  "includes": [
+    "BUILDPRINT.md execution entry",
+    "BUILDPRINT.md executable start file",
+    "blueprint.yaml authority packet",
+    "00-intent mission, obligations, and source-surface map",
+    "01-operating-model stop rules and autonomy policy",
+    "02-project-setup.md active context map and read order",
+    "03-phases slice index and six phase files",
+    "inline phase interface contracts",
+    "inline phase state/runtime contracts",
+    "06-safety threat model and secrets/destructive-action policy",
+    "07-execution implementation plan",
+    "04-evaluation acceptance/test/quality gates",
+    "05-evidence ledger and unresolved blockers",
+    "Generated prompt",
+    "BUILDPRINT.md canonical start",
+    "01-questions.md numbered alignment",
+    "02-project-setup.md architecture and AGENTS plan",
+    "03-phases proof-gated phase files",
+    "04-evaluation.md claim rules",
+    "05-evidence/evidence-ledger.jsonl proof/blocker ledger",
+    "06-contracts/*.md role contracts for delegated architecture, UX/UI, integration/runtime, security, data persistence, and verification"
+  ],
+  "risks": [
+    "Treating generated/agent-prompt.md as source of truth",
+    "Reading all phase files upfront",
+    "Claiming qualification without evidence-ledger rows",
+    "Counting deterministic providers as live provider proof",
+    "Generic dashboard UI instead of storyboard-first workbench",
+    "Using Toonflow source as implementation input"
+  ],
+  "checks": [
+    "Mapper execution-packet validator passes",
+    "BUILDPRINT.md routes to blueprint.yaml, team/UX gates, and active capability",
+    "02-project-setup.md/context-map.yaml blocks reading unrelated phase files upfront",
+    "02-project-setup.md/team-stack.yaml, ux-contract.md, and design-quality-bar.md gate UI-bearing phase files",
+    "Each phase file has slice entry, active capability contract, active capability implementation path, source-evidence-index.yaml, and Proof gate in the active capability",
+    "05-evidence/evidence-ledger.jsonl is the claim-promotion authority",
+    "Claim status remains PROOF_REQUIRED until browser, provider, persistence, security, and clean-room proof rows pass"
+  ],
+  "trustBadges": [
+    {
+      "label": "Capability packet",
+      "detail": "Router, context map, phase files, acceptance gates, and evidence ledger are separated.",
+      "tone": "success"
+    },
+    {
+      "label": "One-slice-at-a-time execution",
+      "detail": "Agents load the active capability first and consult the slice index only after proof.",
+      "tone": "success"
+    },
+    {
+      "label": "Clean-room boundary",
+      "detail": "Derived from Toonflow evidence, but implementation must not use Toonflow source as input.",
+      "tone": "info"
+    },
+    {
+      "label": "Proof required",
+      "detail": "Runtime/provider/persistence/security/clean-room proof still gates any qualification claim.",
+      "tone": "warning"
+    }
+  ],
+  "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
+  "originLabel": "HBAI-Ltd/Toonflow-app",
+  "copyPrompt": "Use the Novel-to-Storyboard Pipeline Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/novel-storyboard-pipeline/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/novel-storyboard-pipeline/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the required 06-contracts/<role>.md files for the active phase, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims proof-required until proof rows pass. Build the portable novel-to-storyboard workflow from the Buildprint package, not from Toonflow source. Use subagents/delegated workers when supported; when unavailable, self-simulate each required role through the same handoff/return artifacts before phase_core_passed."
+}

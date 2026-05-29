@@ -1,0 +1,33 @@
+schema_version: mapper-os/phase-index
+active_phase: 03-phases/01-provider-chat-runtime.md
+phases:
+  - phase_id: 01-provider-chat-runtime
+    file: 03-phases/01-provider-chat-runtime.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+    proof_gate: proof-01-provider-chat-runtime
+  - phase_id: 02-multimodal-routing-agent-tools
+    file: 03-phases/02-multimodal-routing-agent-tools.md
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+    depends_on: [01-provider-chat-runtime]
+    proof_gate: proof-02-multimodal-routing-agent-tools
+  - phase_id: 03-knowledge-base-ingestion-retrieval
+    file: 03-phases/03-knowledge-base-ingestion-retrieval.md
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+    depends_on: [01-provider-chat-runtime]
+    proof_gate: proof-03-knowledge-base-ingestion-retrieval
+  - phase_id: 04-memory-review-injection
+    file: 03-phases/04-memory-review-injection.md
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+    depends_on: [01-provider-chat-runtime]
+    proof_gate: proof-04-memory-review-injection
+  - phase_id: 05-settings-data-lifecycle-operations
+    file: 03-phases/05-settings-data-lifecycle-operations.md
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: [01-provider-chat-runtime, 03-knowledge-base-ingestion-retrieval, 04-memory-review-injection]
+    proof_gate: proof-05-settings-data-lifecycle-operations
+  - phase_id: 06-voice-sidecar-experience
+    file: 03-phases/06-voice-sidecar-experience.md
+    status: INCLUDED_RISKY_REQUIRES_HARDENING
+    depends_on: [01-provider-chat-runtime, 05-settings-data-lifecycle-operations]
+    proof_gate: proof-06-voice-sidecar-experience

@@ -1,0 +1,1 @@
+{"artifact_id":"seed-perfect-rag-scope","type":"seed_scope","phase_id":"01-corpus-contracts","status":"missing","source":"packet seed: scope migrated from prior Buildprint into Mapper OS phase-flow","proves":["scope_preserved_for_perfect_rag_retrieval"],"proof_type":"seed_only","provider_mode":"not_runtime","upgrades_claim":false}

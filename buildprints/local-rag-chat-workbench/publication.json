@@ -1,0 +1,108 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "local-rag-chat-workbench",
+  "title": "Local RAG Chat Workbench",
+  "creator": "Agent Buildprint",
+  "category": "Mapped Project",
+  "tier": "agent-grade",
+  "status": "proof-required",
+  "runtime": [
+    "Local-first AI chat",
+    "Ollama-compatible provider adapter",
+    "SQLite/libSQL persistence",
+    "Browser proof required"
+  ],
+  "stack": [
+    "Streaming chat",
+    "Document ingestion",
+    "RAG indexing",
+    "Vector search",
+    "Citations",
+    "Memory/settings",
+    "Lifecycle controls"
+  ],
+  "iconKeys": [
+    "nextjs",
+    "typescript",
+    "sqlite"
+  ],
+  "difficulty": "Intermediate",
+  "featured": false,
+  "summary": "Compact executable packet for a local-first RAG chat app with Ollama-compatible provider seams, durable SQLite/libSQL state, document ingestion, citations, memory/settings, and repeatable browser proof.",
+  "plainDescription": "A fast Mapper AI-app regression packet inspired by Maxkrvo/OllamaChat. It is smaller than the swarm simulation workbench but still pressures provider adapters, RAG behavior, persistence, browser proof, lifecycle controls, and evidence honesty.",
+  "promise": "Build a production-grade local RAG chat workbench without depending on the original source repo. Status remains PROOF_REQUIRED until proof gates pass.",
+  "whatYouGet": [
+    "Executable Buildprint start and machine contract",
+    "Three compact production-grade phase files",
+    "Provider adapter, RAG, persistence, browser, lifecycle, and no-fake proof gates",
+    "Evidence ledger seed with runtime writes to .buildprint/evidence/evidence-ledger.jsonl"
+  ],
+  "whatYouNeed": [
+    "A clean implementation workspace",
+    "Optional local Ollama runtime for live provider proof",
+    "SQLite/libSQL-capable local environment",
+    "Browser test tooling for repeatable UI proof"
+  ],
+  "architectureFlow": [
+    "Chat",
+    "Provider",
+    "Persistence",
+    "Documents",
+    "Retrieval",
+    "Citations",
+    "Memory"
+  ],
+  "includes": [
+    "Provider Chat Runtime",
+    "Document RAG Indexing",
+    "Memory Settings Lifecycle",
+    "BUILDPRINT.md canonical start",
+    "01-questions.md safe defaults",
+    "02-project-setup.md production readiness gate",
+    "03-phases/phase-flow.md orchestration contract",
+    "04-evaluation.md claim rules",
+    "05-evidence/evidence-ledger.jsonl seed ledger",
+    "06-contracts/*.md role contracts for delegated architecture, UX/UI, integration/runtime, security, data persistence, and verification"
+  ],
+  "risks": [
+    "Counting deterministic provider responses as live Ollama proof",
+    "Static citations presented as RAG behavior",
+    "In-memory-only chat or documents counted as persistence",
+    "Screenshots without repeatable browser/e2e proof",
+    "No-op memory, settings, export, delete, or reindex controls",
+    "Secret leakage through prompts, logs, screenshots, or evidence rows"
+  ],
+  "checks": [
+    "Executable packet file shape generated",
+    "Provider adapter/config/tests required before live-proof blockers",
+    "Document ingestion and vector retrieval proof required",
+    "Repeatable browser/e2e proof required for UI phases",
+    "Qualification remains PROOF_REQUIRED until proof gates pass"
+  ],
+  "trustBadges": [
+    {
+      "label": "Fast AI eval",
+      "detail": "Compact local RAG packet for Mapper replay loops.",
+      "tone": "success"
+    },
+    {
+      "label": "Local-first",
+      "detail": "Ollama live proof is optional; provider seams are mandatory.",
+      "tone": "success"
+    },
+    {
+      "label": "Proof required",
+      "detail": "Live runtime, persistence, browser, and lifecycle proof remains pending.",
+      "tone": "warning"
+    }
+  ],
+  "originGithubUrl": "https://github.com/Maxkrvo/OllamaChat",
+  "originLabel": "Maxkrvo/OllamaChat",
+  "copyPrompt": "Use the Local RAG Chat Workbench Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/local-rag-chat-workbench/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/local-rag-chat-workbench/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the required 06-contracts/<role>.md files for the active phase, the active phase file, 04-evaluation.md, and 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Production-grade architecture is the default: implement Ollama-compatible provider adapters/config/tests, deterministic test doubles, durable SQLite/libSQL persistence, RAG/vector retrieval, browser/e2e proof, security controls, and lifecycle proof before accepting live-proof blockers. Missing local Ollama blocks live proof only after adapter/config/test/runtime wiring exists. Execute one active phase at a time through phase-flow with observe, plan, execute, verify, reflect, and record. Runtime evidence belongs in .buildprint/evidence/evidence-ledger.jsonl; packaged 05-evidence/evidence-ledger.jsonl is seed-only. Keep claims proof-required until proof rows pass. Use subagents/delegated workers when supported; when unavailable, self-simulate each required role through the same handoff/return artifacts before phase_core_passed.",
+  "publicStatus": {
+    "label": "Mapped, proof pending",
+    "explanation": "Compact AI-app packet exists; live implementation proof is not complete."
+  }
+}

@@ -1,1 +1,0 @@
-{"artifact_id":"seed-source-scope","type":"source_seed","phase_id":"01-contracts-storage","status":"missing","source":"packaged seed ledger","proves":["Packet preserves mapped source scope for portable personal agent OS but contains no runtime implementation proof."],"proof_type":"seed_scope","provider_mode":"none","upgrades_claim":false}

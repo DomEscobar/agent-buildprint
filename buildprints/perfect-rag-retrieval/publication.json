@@ -1,0 +1,120 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "perfect-rag-retrieval",
+  "title": "Perfect RAG Retrieval",
+  "creator": "Agent Buildprint",
+  "category": "Workflow",
+  "tier": "agent-grade",
+  "status": "phase-flow-ready",
+  "runtime": [
+    "Any backend",
+    "Deterministic proof mode",
+    "Optional live providers"
+  ],
+  "stack": [
+    "Mapper",
+    "Hybrid retrieval",
+    "Reranking",
+    "Citations",
+    "RAG evals"
+  ],
+  "iconKeys": [
+    "typescript",
+    "json",
+    "md"
+  ],
+  "difficulty": "Advanced",
+  "featured": true,
+  "summary": "Executable Mapper phase-flow packet for building a serious RAG/Retrieval with corpus contracts, ingestion, chunking, hybrid retrieval, permission filtering, reranking, grounded citations, refusal behavior, traces, and eval gates.",
+  "plainDescription": "A stack-adaptable phase-flow Buildprint for implementing production-grade RAG. It preserves deterministic local proof mode while separating live provider, persistence, security, and eval claims into explicit proof gates.",
+  "promise": "A fresh agent can run the packet from BUILDPRINT.md through phase-flow to implement a permission-safe, citation-grounded retrieval system without reducing the product to vector search plus a prompt.",
+  "whatYouGet": [
+    "Mapper execution spine",
+    "Corpus and threat-model setup gate",
+    "Document source and chunk contracts",
+    "Ingestion, chunking, and index phase",
+    "Hybrid lexical/sparse plus dense retrieval phase",
+    "Fusion, dedupe, permission filtering, and rerank contract",
+    "Grounded answer, citations, and refusal contract",
+    "Trace, latency, cost, token-budget, and eval proof gates",
+    "Advanced-module guidance for HyDE, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG, and CRAG"
+  ],
+  "whatYouNeed": [
+    "Your document corpus and permission model",
+    "Target backend and persistence/search infrastructure",
+    "Embedding, vector, reranker, or LLM provider keys only for live mode",
+    "Eval cases representing real success and failure",
+    "Human approval for paid providers, external writes, destructive re-indexing, or public deployment"
+  ],
+  "architectureFlow": [
+    "Setup gate",
+    "Corpus contracts",
+    "Ingestion and chunks",
+    "Hybrid indexes",
+    "Permission-safe retrieve",
+    "Rerank and pack context",
+    "Grounded answer or refusal",
+    "Trace and eval gates"
+  ],
+  "includes": [
+    "BUILDPRINT.md canonical start",
+    "01-questions.md alignment gate",
+    "02-project-setup.md architecture, team, authority, handoff, AGENTS.md, quality, safety, and phase-start contract",
+    "blueprint.yaml executable Buildprint machine contract",
+    "03-phases/phase-flow.md orchestration protocol",
+    "Four implementation phases with proof gates",
+    "04-evaluation.md retrieval, answer, operational, blocker, and claim-upgrade rules",
+    "05-evidence seed ledger and runtime evidence schema",
+    "06-contracts/*.md role contracts for delegated architecture, UX/UI, integration/runtime, security, data persistence, and verification"
+  ],
+  "risks": [
+    "Vector-only false confidence",
+    "Hallucinated uncited answers",
+    "Permission leakage",
+    "Eval-free quality drift",
+    "Reranker latency/cost creep",
+    "Live provider claims from deterministic proof",
+    "Advanced-tech hype without measured gain"
+  ],
+  "checks": [
+    "Mapper selected-output structural check passes",
+    "Packet uses BUILDPRINT.md as canonical start",
+    "Every phase starts with Mapper phase-flow entry grammar",
+    "Runtime evidence is separated from packaged seed evidence",
+    "Evidence schema blocks missing, blocked, synthetic, partial, sandbox, network-limited, and credential-limited rows from upgrading claims",
+    "Publication copy reflects phase-flow methodology rather than legacy proof-only package"
+  ],
+  "resultChecklist": [
+    "Read BUILDPRINT.md first",
+    "Complete setup gate before phase work",
+    "Create phase-flow artifacts before implementation evidence",
+    "Run deterministic fixture checks without live credentials",
+    "Record live provider, persistence, browser, and eval blockers honestly",
+    "Append runtime evidence only to .buildprint/evidence/evidence-ledger.jsonl"
+  ],
+  "trustBadges": [
+    {
+      "label": "Mapper",
+      "detail": "Phase-flow packet with setup gate, role handoffs, proof gates, and evidence honesty.",
+      "tone": "success"
+    },
+    {
+      "label": "Hybrid + rerank by default",
+      "detail": "The packet explicitly rejects vector-only RAG and requires measurable retrieval behavior.",
+      "tone": "success"
+    },
+    {
+      "label": "Provider-honest",
+      "detail": "Deterministic proof mode is separated from live embedding, search, reranker, and generator claims.",
+      "tone": "info"
+    },
+    {
+      "label": "Permission-safe retrieval",
+      "detail": "Tenant/private filtering is a server-side proof gate before context packing and answer generation.",
+      "tone": "success"
+    }
+  ],
+  "copyPrompt": "Use the Perfect RAG  Retrieval Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/perfect-rag-retrieval/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/perfect-rag-retrieval/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the required 06-contracts/<role>.md files for the active phase, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Complete setup before phase work, create .buildprint phase-run artifacts, and append runtime evidence only to .buildprint/evidence/evidence-ledger.jsonl. Implement corpus contracts, ingestion/chunking/indexing, hybrid lexical/sparse plus dense retrieval, fusion/dedupe, permission filtering before context packing, reranking, token-budgeted grounded answers with citations, insufficient-evidence refusal, traces, and eval gates. Use deterministic proof mode unless live providers are explicitly configured and separately proven. Do not call vector-only retrieval complete. Use subagents/delegated workers when supported; when unavailable, self-simulate each required role through the same handoff/return artifacts before phase_core_passed."
+}
