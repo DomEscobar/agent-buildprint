@@ -12,12 +12,14 @@ This file is the project constitution for implementation. Keep it compact. It sh
 
 ## Product / capability shape
 
+The product picture — golden path, surface index, and done-looks-like — lives in `BUILDPRINT.md` `## Final product at a glance`. Do not re-narrate it here. Record only the mode classification and mode-specific shape decisions below.
+
 - Blueprint mode:
   - Primary: <product|framework|integration|automation|library|data-pipeline|infrastructure|mixed>
   - Secondary: <ui/api/worker/provider/sdk/cli/agent/data/deployment as applicable>
   - Phase style: <outcome_flow|primitive_composition_map|callable_contract|boundary_transaction_contract|task_loop_contract|dataflow_contract|operations_contract|mixed_contract>
   - Why this mode fits: <source-grounded reason; do not force framework/integration/infra into product-app language>
-- Product / capability: <mapped-app or framework/integration/automation/pipeline/infra name>
+- Product / capability: <capability name matching BUILDPRINT.md Product brief — not the source brand>
 - For product / mixed: Primary user jobs, Frontend/UI surfaces, Backend/API surfaces, State/runtime surfaces.
 - For framework / library: Public API surfaces, callable entry points, primitives, extension points, consumer patterns.
 - For integration: External provider/service, boundary type, config/secrets, sandbox vs live split.
@@ -102,6 +104,7 @@ Rules:
 - No mapped surface may disappear silently.
 - Source repo filenames are mapping notes, not packet-file references.
 - Future implementation outputs are runtime artifacts or generated outputs, not packet files.
+- Traceability: every surface named in `BUILDPRINT.md` `## Final product at a glance` must appear in this matrix with exactly one owning phase. A glance surface absent from this matrix is dropped scope and must be added or explicitly deferred/dropped with rationale.
 
 ## Implementation project setup
 

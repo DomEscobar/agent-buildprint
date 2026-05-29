@@ -53,13 +53,14 @@ When generating a selected phase, use this sequence:
 
 1. Classify the blueprint mode and phase style before choosing language.
 2. Name the meaningful capability in the right lens: `## Product outcome` for product mode, `## Capability outcome` for framework/library/integration/automation/data phases, or `## Operation outcome` for infrastructure/operations phases.
-3. List mapped obligations as capabilities/primitives/boundaries/tasks/dataflows/operations, not source route parity.
-4. Define the smallest real proof path: preconditions/inputs, entrypoint/use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals.
-5. Split `Core-pass required` from `Claim-upgrade or blocker tracks`.
-6. Name interfaces, state, runtime, UX/DX/operator experience, and safety boundaries.
-7. Require tests and browser/runtime/import/CLI/provider/data/deployment proof that match the mode and slice.
-8. Give evidence rows that prove only what the command or artifact actually proves.
-9. Route failures back to the current phase, setup, questions, prior dependency, or runtime evidence ledger.
+3. Declare which `## Final product at a glance` surfaces this phase delivers. This is mandatory for bidirectional coverage: every phase must name at least one glance surface, and every glance surface must be owned by exactly one phase.
+4. List mapped obligations as capabilities/primitives/boundaries/tasks/dataflows/operations, not source route parity.
+5. Define the smallest real proof path: preconditions/inputs, entrypoint/use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals.
+6. Split `Core-pass required` from `Claim-upgrade or blocker tracks`.
+7. Name interfaces, state, runtime, UX/DX/operator experience, and safety boundaries.
+8. Require tests and browser/runtime/import/CLI/provider/data/deployment proof that match the mode and slice.
+9. Give evidence rows that prove only what the command or artifact actually proves.
+10. Route failures back to the current phase, setup, questions, prior dependency, or runtime evidence ledger.
 
 ## Negative few-shot - bad phase slice
 
@@ -105,6 +106,7 @@ PDF support is not required for `phase_core_passed` unless the selected product 
 - blueprint_mode: product
 - phase_style: outcome_flow
 - Lens: this example is a UI-bearing product workbench phase, so it is written as a user/operator outcome flow.
+- Glance surfaces delivered: Project workbench entry; Document upload; Ontology preview (as named in `BUILDPRINT.md` `## Final product at a glance`). Every generated phase must name the glance surfaces it delivers; a phase that names none is delivering invented scope.
 - Shared proof spine:
   - Preconditions/inputs: project owner/session exists; text or Markdown files and prediction requirement are available.
   - Entrypoint/use site: user submits the upload/ontology form or equivalent API/controller action.

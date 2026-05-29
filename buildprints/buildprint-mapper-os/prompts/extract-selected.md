@@ -41,7 +41,7 @@ Start from `templates/executable-packet/` as the structural authority. Preserve 
 Required exact anchors include:
 
 - `blueprint.yaml`: `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `blueprint_mode` with primary/secondary/phase_style, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure.proof_gate_failed: current_phase`, `repair_loop.on_failure.architecture_contradiction: 02-project-setup.md`.
-- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, `## Completion semantics`, and `## Repair routing`. `## Completion semantics` must state that bounded proof is not product completion, that returns/reviews are not evidence, and that every pass verdict requires rerunnable command output or an existing artifact path (copy from `templates/executable-packet/BUILDPRINT.md`; do not omit).
+- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Final product at a glance`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, `## Completion semantics`, and `## Repair routing`. `## Completion semantics` must state that bounded proof is not product completion, that returns/reviews are not evidence, and that every pass verdict requires rerunnable command output or an existing artifact path (copy from `templates/executable-packet/BUILDPRINT.md`; do not omit).
 - `01-questions.md`: use headings `## 1.` through `## 6.` and include the exact AI-best-judgment default phrase below.
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
 - `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, `no_fake`, and `production_readiness`.
@@ -97,7 +97,22 @@ Before the read order, `BUILDPRINT.md` must include a compact `## Product brief`
 - `Main surfaces`
 - `What this packet must not become`
 
-Keep this brief to orientation only. Do not copy phase details, source evidence, setup matrices, role contract text, or implementation plans into `BUILDPRINT.md`. Do not freeze source implementation frameworks in the product brief: write capability surfaces such as `browser workbench`, `API service`, `worker/runtime`, `provider adapter`, `persistence`, and `artifact export`, not concrete stack names such as Vue, React, Flask, Django, FastAPI, Express, Rails, Laravel, Spring, Next, Nuxt, Svelte, or Angular. Product-defining external systems/providers such as OASIS, Zep, platform names, model/provider boundaries, and runtime artifacts may be named when they are part of the mapped product contract.
+Rules for `## Product brief`:
+
+- `Product` must be a **capability name** — what kind of tool or system this is — not the source app or brand name. Writing "Toonflow production canvas webapp" when the source app is called Toonflow is invalid. Write "AI short-drama production canvas workbench" instead.
+- `Primary outcome` must be a **single concrete user-visible result**: what the user can do and what they receive. Do not list internal source node names, route names, or component identifiers as if the reader knows them. Do not restate the product name. One sentence, product language, from the user's perspective.
+- Keep this brief to five orientation bullets. Do not copy phase details, source evidence, setup matrices, role contract text, or implementation plans.
+- Do not freeze source implementation frameworks: write capability surfaces (`browser workbench`, `API service`, `worker/runtime`, `provider adapter`, `persistence`, `artifact export`), not concrete stack names such as Vue, React, Flask, Django, FastAPI, Express, Next, Nuxt, Svelte, or Angular. Product-defining external systems such as named platforms, model/provider boundaries, and runtime artifacts may be named when they are part of the mapped product contract.
+
+Immediately after `## Product brief`, `BUILDPRINT.md` must include `## Final product at a glance` with exactly three bounded parts:
+
+1. **Golden path** — one short paragraph narrating the single primary end-to-end user journey through the core surfaces from first action to final result. Use product language only. Do not use source-internal node names, route names, or component identifiers. Do not enumerate every feature — only the spine.
+2. **Surfaces** — one line per major view or surface, in the format: `- <Surface name> — <what the user does here> — Phase <N>`. Every surface named here must trace to a row in the `02-project-setup.md` obligation/surface matrix with exactly one owning phase. Do not invent surfaces beyond what the mapped obligations support. Depth stays in the phase file; this is a map, not a spec.
+3. **Done looks like** — 2–4 bullets naming the observable end-state that distinguishes the real product from a proof shell. Examples: a saved entity reloads intact after restart; real drag/edit/generate interaction rather than static markup; honest blocked-provider states when credentials are absent.
+
+This section is the product north star. It must not contain architecture decisions, API contracts, state schemas, or per-phase implementation detail. It carries `PROOF_REQUIRED` framing: it is the target picture, not a claim the product is built.
+
+Traceability rule (both directions): every surface named in `## Final product at a glance` must appear in the `02-project-setup.md` obligation/surface matrix with exactly one owning phase; every phase in the packet must deliver at least one named glance surface. A glance surface with no owning phase is dropped scope. A phase that delivers no named glance surface is invented scope.
 
 ## 01-questions.md
 
@@ -286,7 +301,7 @@ Every implementation phase file under `03-phases/*.md` must include:
 - `## How to implement this phase` with required pre-code reads: `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`; it must tell the agent to execute through phase-flow and block evidence until phase-flow artifacts exist.
 - `requires_roles:` seeded from phase needs, not a fixed always-on team. Every listed role must have a matching `06-contracts/<role>.md` file.
 - `## Product outcome` for product mode, or `## Capability outcome` / `## Operation outcome` for non-product modes
-- `## Phase mode contract`
+- `## Phase mode contract` — must include a `Glance surfaces delivered:` line naming which surfaces from `BUILDPRINT.md` `## Final product at a glance` this phase owns. At least one surface must be named. A phase that delivers no named glance surface is delivering invented scope and must be removed or traced to a missing glance entry.
 - `## Mapped product obligations` for product mode, or `## Mapped capability obligations` / `## Mapped operation obligations` for non-product modes
 - `## Behavior compatibility contract`
 - `## Implementation scope`

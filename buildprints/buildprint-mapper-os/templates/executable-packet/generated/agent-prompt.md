@@ -15,6 +15,8 @@ Do not start phase work until project setup creates the real base project struct
 
 `architecture.md` must define architecture best practices, base project structure, boundary map, dependency rules, architecture decisions, and downstream phase extension map. `engineering-standards.md` must define clean code rules, validation and schemas, persistence standards, provider standards, worker/runtime standards, UI standards when UI-bearing, and test standards. Phase code must extend this scaffold, not create a throwaway mini-app.
 
+Before implementing any phase, read `BUILDPRINT.md` `## Final product at a glance`. This is the product north star: the golden path, the surface index with owning phases, and the observable done-looks-like criteria. Use it as the product target to build toward and as the measurement for self-review: if what you have built does not resemble the glance description, the phase is not done regardless of test counts or evidence rows. Every phase must name in its `## Phase mode contract` which glance surfaces it delivers.
+
 Use the phase-flow orchestration protocol, implementation loop, completion semantics from `BUILDPRINT.md`, and repair routing before claiming done.
 
 Completion semantics: `phase_core_passed` and `complete-bounded-proof` are bounded packet proof, not production-product completion. Role returns and reviews are not evidence — only rerunnable command output and on-disk artifacts count. Before claiming a phase passed, run the scaffold scripts from `02-project-setup.md` (`verify:no-fake`, `verify:phase-artifacts`) and paste exit code + stdout into `## Self-simulation referee findings`.

@@ -6,11 +6,31 @@ This is the canonical starting point and execution contract for the blueprint. D
 
 ## Product brief
 
-- Product: <mapped-app>
-- Primary outcome: <one-sentence user-visible result>
+- Product: <capability name — not the source app or brand name; describe what kind of tool or system this is>
+- Primary outcome: <one concrete user-visible result: what the user can do and what they receive; do not repeat surface names as a list>
 - Primary users: <who uses it>
 - Main surfaces: <capability surfaces, e.g. browser workbench, API service, worker/runtime boundary, provider adapters, persistence, export/report surfaces; avoid concrete source framework names unless the framework itself is the mapped product>
 - What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
+
+## Final product at a glance
+
+This section is the product north star. It is read first and stays bounded: no architecture, no API detail, no per-phase spec. Depth lives in the owning phase file. Every surface named here must appear in the `02-project-setup.md` obligation/surface matrix with exactly one owning phase, and vice versa.
+
+**Golden path:** <one short paragraph — the single primary end-to-end journey a user takes through the core surfaces from first action to final result. Use product language; do not use source-internal node or route names.>
+
+**Surfaces** (one line each; depth in the owning phase):
+
+- <Surface name> — <what the user does here> — Phase <N>
+- <Surface name> — <what the user does here> — Phase <N>
+- …
+
+**Done looks like:**
+
+- <Observable end-state 1, e.g. a saved entity reloads intact after restart>
+- <Observable end-state 2, e.g. real interaction — drag/edit/generate — not static markup or dead controls>
+- <Observable end-state 3, e.g. honest blocked-provider states when credentials are absent>
+
+This package is `PROOF_REQUIRED`. The glance describes the target product, not a claim that it is built.
 
 ## Required read order
 
