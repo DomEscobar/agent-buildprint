@@ -2,8 +2,8 @@
   "schema": "agent-buildprint/publication.v1",
   "publish": true,
   "fileExcludes": [],
-  "slug": "novel-storyboard-pipeline",
-  "title": "Novel Storyboard Pipeline",
+  "slug": "novel-storyboard",
+  "title": "Novel Storyboard",
   "creator": "Agent Buildprint",
   "category": "Mapped Project",
   "tier": "agent-grade",
@@ -117,5 +117,5 @@
   ],
   "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
   "originLabel": "HBAI-Ltd/Toonflow-app",
-  "copyPrompt": "Use the Novel Storyboard Pipeline Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/novel-storyboard-pipeline/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/novel-storyboard-pipeline/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl, and required 06-contracts/<role>.md files. Build the novel-to-storyboard workbench proof with project workspace, ordered novel ingestion, event extraction, script and asset planning, storyboard flow, media task handling, preview export, browser QA, deterministic mock/no-network defaults, and honest claim boundaries."
+  "copyPrompt": "Use the Novel-to-Storyboard Buildprint to build a perfect webapp. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually."
 }
