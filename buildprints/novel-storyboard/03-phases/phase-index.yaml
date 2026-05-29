@@ -1,27 +1,38 @@
+schema_version: mapper-os/phase-index
 active_phase: 03-phases/01-canvas-workbench.md
 phases:
-  - id: 01-canvas-workbench
+  - phase_id: 01-canvas-workbench
     file: 03-phases/01-canvas-workbench.md
-    title: Cinematic storyboard workbench
     status: INCLUDED_NEEDS_PROOF
-    requires_roles: [product-architect, ux-ui-craft, test-and-verification]
-  - id: 02-flow-persistence
+    depends_on: []
+    proof_gate: proof-01-canvas-workbench
+  - phase_id: 02-flow-persistence
     file: 03-phases/02-flow-persistence.md
-    title: Episode flow persistence
     status: INCLUDED_NEEDS_PROOF
-    requires_roles: [data-persistence, test-and-verification, security-boundary]
-  - id: 03-production-agent-loop
+    depends_on:
+      - 01-canvas-workbench
+    proof_gate: proof-02-flow-persistence
+  - phase_id: 03-production-agent-loop
     file: 03-phases/03-production-agent-loop.md
-    title: Production agent chat and board updates
     status: INCLUDED_NEEDS_PROOF
-    requires_roles: [integration-runtime, security-boundary, test-and-verification]
-  - id: 04-media-generation
+    depends_on:
+      - 01-canvas-workbench
+      - 02-flow-persistence
+    proof_gate: proof-03-production-agent-loop
+  - phase_id: 04-media-generation
     file: 03-phases/04-media-generation.md
-    title: Async media generation and provider boundaries
     status: INCLUDED_RISKY_REQUIRES_HARDENING
-    requires_roles: [integration-runtime, data-persistence, security-boundary, test-and-verification]
-  - id: 05-webapp-runtime
+    depends_on:
+      - 01-canvas-workbench
+      - 02-flow-persistence
+      - 03-production-agent-loop
+    proof_gate: proof-04-media-generation
+  - phase_id: 05-webapp-runtime
     file: 03-phases/05-webapp-runtime.md
-    title: Webapp runtime, auth and deployment
     status: INCLUDED_RISKY_REQUIRES_HARDENING
-    requires_roles: [product-architect, security-boundary, data-persistence, test-and-verification, ux-ui-craft]
+    depends_on:
+      - 01-canvas-workbench
+      - 02-flow-persistence
+      - 03-production-agent-loop
+      - 04-media-generation
+    proof_gate: proof-05-webapp-runtime

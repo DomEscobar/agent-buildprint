@@ -1,5 +1,7 @@
 # BUILDPRINT: Novel Storyboard production workbench
 
+This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files. Your first action must be reading this file; do not inventory, glob, or enumerate packet files before this read order is established.
+
 Claim status: `PROOF_REQUIRED`
 
 ## Product brief
@@ -43,18 +45,18 @@ The implementation must feel like a real storyboard product, not a technically a
 
 ## Required read order
 
-1. `BUILDPRINT.md`
-2. `01-questions.md`
-3. `02-project-setup.md`
-4. `blueprint.yaml`
-5. `03-phases/phase-index.yaml`
-6. `03-phases/phase-flow.md`
-7. required `06-contracts/<role>.md` files for the active phase only
-8. active phase file only
-9. `04-evaluation.md`
-10. `05-evidence/evidence-ledger.jsonl`
+1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.
+2. Read `01-questions.md`.
+3. Read and complete `02-project-setup.md`.
+4. Read `blueprint.yaml` as the machine-readable mirror.
+5. Read `03-phases/phase-index.yaml`.
+6. Read `03-phases/phase-flow.md`.
+7. Read only the role contracts under `06-contracts/` required by the active phase `requires_roles`.
+8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
+9. Read `04-evaluation.md`.
+10. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 
-Do not inventory all Markdown files before following this read order. `blueprint.yaml` is the machine-readable mirror; this file owns the human execution route.
+Read these files sequentially. Do not batch, parallelize, or reorder the initial context reads, even when using multi-command tooling.
 
 ## Project setup gate
 
@@ -71,6 +73,12 @@ For each phase:
 5. Run the phase proof gate.
 6. Record command output or artifact paths in `.buildprint/evidence/evidence-ledger.jsonl`.
 7. If proof fails, repair the current phase before advancing.
+
+## Phase discipline
+
+Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, bounded handoffs for every role in `requires_roles`, and return files for every role. Use subagents or delegated workers when available; when unavailable, self-simulate each role through the same handoff/return artifacts. Collect returns/reviews/proof, and only then append runtime evidence.
+
+A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
 
 ## Completion semantics
 

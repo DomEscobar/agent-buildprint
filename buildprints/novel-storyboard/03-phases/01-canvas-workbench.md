@@ -1,32 +1,56 @@
-# Phase 1 - Cinematic Storyboard Workbench
+# Phase 01 - Cinematic Storyboard Workbench
+
+## How to implement this phase
+
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md`
+- current project `AGENTS.md`
+
+Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then declare phase objective, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, create handoff and return artifacts, collect reviews, integrate, verify, and record evidence.
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`. You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+
+requires_roles:
+  - product-architect
+  - ux-ui-craft
+  - test-and-verification
 
 ## Phase mode contract
 
-`blueprint_mode: product`
+- blueprint_mode: product
+- phase_style: outcome_flow
+- Mode lens: product outcome flow with shared proof spine.
+- Product implementation rule: preserve source-backed outcome flows through UI/API/domain/provider/persistence boundaries without copying source implementation code.
 
-`phase_style: outcome_flow`
+## Product outcome
 
-This phase delivers the user-visible browser storyboard workbench. The outcome flow is: open an episode workbench, see an ordered cinematic storyboard with dependency flow, inspect a shot frame, manipulate the canvas/shot layout, and keep graph and storyboard state stable while moving and laying out nodes.
+The user opens an episode and immediately sees a cinematic storyboard workbench: ordered shot frames, selected-frame inspector, real canvas flow, dependency nodes/edges, zoom, pan, drag, layout controls, empty/loading/error states, and a right chat shell that coexists with the board. This phase proves the first visible product experience, not persistence or live media.
 
-## Build target
+## Mapped product obligations
 
-Implement the production storyboard workbench with:
+- Source path `Toonflow-web/src/views/production/index.vue` mapped a production canvas board as the primary browser surface.
+- Source path `Toonflow-web/src/views/production/utils/flowBuilder.ts` mapped the script, plan, assets, storyboard table, storyboard, and workbench topology.
+- `02-project-setup.md` upgrades the target into a storyboard-first workbench with shot frames, inspector state, and visual_quality_gate screenshot critique.
 
-- node graph surface for prose/script, script plan, assets, storyboard table, storyboard panel and video workbench;
-- storyboard-first shot strip or grid with frame cards that remain visually primary over the technical graph;
-- frame inspector for the selected shot with prompt, scene/beat, aspect ratio, continuity tags, linked character/assets, notes and review/media status;
-- edges that preserve the source flow: script to assets, script to plan, plan to storyboard table, storyboard table to storyboard, storyboard to workbench;
-- zoom, pan, space-drag, node dragging, fit view and auto layout;
-- empty state when no episode is selected;
-- visible loading/error states for flow fetch failures;
-- right-side chat shell placeholder only as a connected surface, without implementing agent behavior in this phase.
+## Behavior compatibility contract
+
+- production-canvas-flow: preserve. Equivalent target behavior: real graph nodes/edges, zoom, pan, drag, layout, and stable positions. Compatibility impact: not route/function parity; implementation may use any proven graph/canvas library.
+- storyboard-frame-review: replace. Equivalent target behavior: source storyboard panel becomes ordered shot strip/grid plus selected-frame inspector with shot number, scene/beat, prompt, notes, status, linked assets/characters, media state, and continuity tags.
+- chat-shell-placeholder: defer. Equivalent target behavior: connected right panel exists, but agent behavior is owned by Phase 03.
+- live-provider-media: defer. Equivalent target behavior: preview containers and blocked/pending states exist, but live provider proof is owned by Phase 04.
+
+## Implementation scope
+
+Define FlowData and topology for prose/script, scriptPlan, assets, storyboardTable, storyboard frames, and workbench. Render the storyboard-first workbench with fixture data only, build stable frame preview containers, add selected-frame inspector, implement graph controls, drag/layout behavior, narrow viewport usability, and visible empty/loading/error states.
 
 ## Interfaces touched
 
 - Browser route or view for production workbench.
 - Graph/canvas component API.
 - FlowData client model with prose/script, scriptPlan, assets, storyboardTable, storyboard frames and workbench.
-- Episode selection input may be stubbed with fixture data until Phase 2, but the canvas must use the same model shape.
+- Episode selection input may be stubbed with fixture data until Phase 2.
 
 ## State/runtime touched
 
@@ -34,41 +58,43 @@ This phase may use fixture FlowData in browser memory only for UI proof. It must
 
 ## UX/UI requirements
 
-- The first viewport must immediately read as a storyboard production tool: visible shot frames, ordered sequence, selected-frame detail and canvas flow.
-- Nodes must be visually distinct, dense enough for production work and readable at common desktop viewport sizes.
-- Storyboard frame previews must use stable aspect-ratio containers and show useful placeholders, generated image previews or blocked/failed states without layout shifts.
-- Shot cards must show shot number, scene/beat label, status, linked assets/characters and revision signal in a compact readable form.
-- Canvas controls must not overlap the right chat shell or episode selector.
-- The board must remain usable at narrow viewport widths with horizontal/vertical pan or responsive layout.
-- The visual design must feel like a production-grade creative tool, not a marketing page, generic SaaS dashboard, technical graph demo or loose card board.
+For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. The first viewport must immediately read as a storyboard production tool with visible shot frames, ordered sequence, selected-frame detail and canvas flow. Storyboard previews must use stable aspect-ratio containers. Canvas controls must not overlap chat or episode selection.
 
 ## Safety/security constraints
 
 No provider calls, destructive actions or secret inputs in this phase. Fixture data must not include real credentials.
 
-## Implementation loop
+## Quality gates
 
-1. Define FlowData and node/edge topology.
-2. Render the canvas and node components.
-3. Add interaction controls and layout.
-4. Add fixture/empty/error states.
-5. Run browser proof and visual checks.
+- Topology unit test for required node IDs and edges.
+- Browser interaction test for render, zoom, pan, drag, layout and selected-frame inspection.
+- Desktop and narrow screenshots with Screenshot critique.
+- No static graph image, card-only board, generic dashboard, default-control shell, or local MVP visual fallback.
 
 ## Proof gate
 
-- Unit test: topology builder returns required node IDs and edges.
-- Browser test: production board renders all nodes, at least one edge, an ordered storyboard strip/grid, selected-frame inspector, can zoom/pan/drag and trigger layout.
-- Screenshot artifacts: desktop and narrow viewport after layout.
-- Evidence row: `phase_id=01-canvas-workbench`, `proof_type=browser_runtime_trace`.
+Additional production proof tracks:
+- visual_quality_gate
+
+Proof id: proof-01-canvas-workbench
+Required proof types:
+- unit_or_integration_test
+- browser_runtime_trace
+- repeatable_browser_e2e
+- visual_quality_gate
+- no_fake_scan_pass
+- evidence_ledger_entry
+
+Production-grade proof split:
+- provider_adapter_config_test_required
+- live_provider_proof_blocker_only
+- worker_retry_cancel_recovery
+- repeatable_browser_e2e
+
+Missing live credentials block live proof only after adapter/config/test/runtime wiring exists for provider, media, worker/runtime, browser, storyboard, and deployment paths.
+
+Required runtime evidence row must use `phase_id: 01-canvas-workbench` for the current phase and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
 
 ## Repair routing
 
-If nodes render as static cards outside a canvas, return to this phase. If the graph renders but the storyboard frames are absent, visually secondary, or indistinguishable from generic task cards, return to this phase. If text overlaps or canvas controls are unusable, repair UX before advancing.
-
-## Stop condition
-
-Stop if no graph/canvas-capable implementation approach exists in the chosen stack; otherwise default to a proven graph/canvas library.
-
-## Unlocks
-
-Unlocks Phase 2 once canvas accepts FlowData and can render fixture board state.
+If this phase fails verification, return here before editing again. Route architecture contradictions to `02-project-setup.md`, product-defining human ambiguity to `01-questions.md`, packet seed-only blockers to `05-evidence/evidence-ledger.jsonl`, and runtime proof/blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.

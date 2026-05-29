@@ -1,32 +1,58 @@
-# Phase 5 - Webapp Runtime, Auth And Deployment
+# Phase 05 - Webapp Runtime, Auth And Deployment
+
+## How to implement this phase
+
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md`
+- current project `AGENTS.md`
+
+Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then declare phase objective, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, create handoff and return artifacts, collect reviews, integrate, verify, and record evidence.
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`. You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+
+requires_roles:
+  - product-architect
+  - security-boundary
+  - data-persistence
+  - test-and-verification
+  - ux-ui-craft
 
 ## Phase mode contract
 
-`blueprint_mode: product`
+- blueprint_mode: product
+- phase_style: outcome_flow
+- Mode lens: product outcome flow with shared proof spine.
+- Product implementation rule: preserve source-backed outcome flows through UI/API/domain/provider/persistence boundaries without copying source implementation code.
 
-`phase_style: outcome_flow`
+## Product outcome
 
-This phase proves the selected Canvas workbench runs as a deployable webapp with authenticated API/socket, static client, durable data and operational checks.
+The selected storyboard workbench runs as a deployable authenticated browser webapp with static client serving, API/socket runtime, durable database/media storage, health/readiness, login/session setup, restart proof, and screenshot-proofed production UI.
 
-## Build target
+## Mapped product obligations
 
-Implement:
+- Source path `app.ts` and README runtime sections mapped API/socket/static frontend serving.
+- `02-project-setup.md` requires deployment and operations contract, auth/session/tenant boundary, durable persistence, browser/e2e contract, and Screenshot critique.
+- Prior phases provide the board, persistence, agent loop, and media provider boundaries that runtime must serve.
 
-- browser app build and static serving;
-- API service startup;
-- socket service startup;
-- login/session setup;
-- first-run credential rotation or secure setup alternative;
-- durable data directory/volume;
-- health/readiness endpoint;
-- deployment command or compose profile;
-- source-to-build provenance for the frontend.
+## Behavior compatibility contract
+
+- browser-webapp-runtime: preserve. Equivalent target behavior: browser app loads from deployment URL with API/socket and static assets.
+- auth-session-boundary: preserve. Equivalent target behavior: login protects API/socket/media routes and default credentials are setup-only or rotated.
+- deployment-shape: replace. Equivalent target behavior: local documented command or compose profile may differ from source but must prove build/start/restart.
+- live-provider-runtime: defer. Equivalent target behavior: missing credentials produce explicit live-proof blocker after adapter/config/test/runtime wiring exists.
+
+## Implementation scope
+
+Wire browser build/static serving, API startup, socket startup, login/session setup, first-run credential rotation or secure setup alternative, durable data/media volume, health/readiness endpoint, deployment command/profile, source-to-build provenance, browser login/open-board flow, restart proof, and security checks.
 
 ## Interfaces touched
 
 - App startup command.
 - Static frontend serving.
 - Auth/session middleware.
+- API/socket service startup.
 - Docker or local deployment configuration.
 - Health/readiness endpoint.
 - Evidence commands.
@@ -37,40 +63,46 @@ Runtime must use durable database and media storage. Restart must not reset user
 
 ## UX/UI requirements
 
-- Login route and protected board route work in browser.
-- Unauthorized API/socket requests fail clearly.
-- First-run setup/credential rotation is visible and not confusing.
-- Browser app loads directly from deployment URL without desktop shell.
+For UI-bearing work, apply `02-project-setup.md` visual and Screenshot critique requirements. Login route and protected storyboard board route work in browser. First-run setup/credential rotation is visible and not confusing. Unauthorized API/socket requests fail clearly. Desktop/narrow screenshots still read as a storyboard product, not a generic dashboard or local MVP.
 
 ## Safety/security constraints
 
 Default credentials must not remain as production-ready state. JWT/session secret must be generated/configured securely. Static media serving must prevent path traversal and secret file access. Upload and destructive routes need authorization.
 
-## Implementation loop
+## Quality gates
 
-1. Wire build/start/deploy commands.
-2. Implement auth/session and secure first-run setup.
-3. Serve browser app and API/socket from deployment shape.
-4. Add health/readiness and persistent volume.
-5. Run build, start, browser login and restart smoke proof.
+- Build command passes.
+- Start/deploy command serves browser app at documented URL.
+- Browser test: login, open storyboard workbench, reload, unauthorized route rejected.
+- Restart test: persisted state remains.
+- Security tests: default credential mitigation, invalid token API/socket rejection, no secrets in client bundle/evidence.
 
 ## Proof gate
 
-- Build command passes.
-- Start/deploy command starts webapp at documented URL.
-- Browser test: login, open production board, reload, unauthorized route rejected.
-- Restart test: state remains after service restart.
-- Security tests: default credential rotation/setup, invalid token API/socket rejection, no secrets in client bundle/evidence.
-- Evidence row: `phase_id=05-webapp-runtime`, `proof_type=production_readiness`.
+Additional production proof tracks:
+- visual_quality_gate
+
+Proof id: proof-05-webapp-runtime
+Required proof types:
+- production_readiness
+- browser_runtime_trace
+- durable_persistence
+- security_boundary
+- repeatable_browser_e2e
+- visual_quality_gate
+- no_fake_scan_pass
+- evidence_ledger_entry
+
+Production-grade proof split:
+- provider_adapter_config_test_required
+- live_provider_proof_blocker_only
+- worker_retry_cancel_recovery
+- repeatable_browser_e2e
+
+Missing live credentials block live proof only after adapter/config/test/runtime wiring exists for provider, media, worker/runtime, browser, deployment, and security paths.
+
+Required runtime evidence row must use `phase_id: 05-webapp-runtime` for the current phase and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
 
 ## Repair routing
 
-If deployment only starts backend API without browser app, repair this phase. If default credentials remain unmitigated, return to security boundary before claiming readiness.
-
-## Stop condition
-
-Stop if deployment requires external infrastructure not available locally. Record blocker and provide local proof instead.
-
-## Unlocks
-
-Unlocks evaluation promotion review. Claim remains `PROOF_REQUIRED` until all evaluation gates pass.
+If this phase fails verification, return here before editing again. Route architecture contradictions to `02-project-setup.md`, product-defining human ambiguity to `01-questions.md`, packet seed-only blockers to `05-evidence/evidence-ledger.jsonl`, and runtime proof/blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.

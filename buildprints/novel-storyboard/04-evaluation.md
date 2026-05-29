@@ -1,35 +1,51 @@
 # Evaluation
 
-Claim status: `PROOF_REQUIRED`
+## Claim upgrade rules
 
-## Promotion Gates
+Claims upgrade only after the relevant phase proof gate passes and evidence is recorded.
 
-| Gate | Required proof concept | Pass condition |
-|---|---|---|
-| Browser runtime | browser_runtime_trace | Canvas board renders, interacts and screenshots cleanly on desktop and narrow viewport. |
-| Storyboard product quality | storyboard_product_quality | First viewport presents a coherent storyboard workbench with ordered shot frames, selected-frame inspector, media/review states and no generic dashboard/graph-demo fallback. |
-| Provider integration | provider_live | Live provider call succeeds with safe credentials, or blocker remains explicit and fake-provider proof is not promoted. |
-| Persistence | durable_persistence | Flow data and media state survive reload and backend restart. |
-| Security | security_boundary | Auth protects API/socket, default credentials are mitigated, secrets are not exposed, destructive routes are guarded. |
-| No fake | no_fake | No static canvas mock, in-memory persistence, fake provider success, no-op controls or skeleton adapters count as product behavior. |
-| Runtime/deployment | production_readiness | Build/start/deploy smoke proof serves browser app with API/socket and health/readiness. |
+Required proof concepts:
 
-## Required Evidence Rows
+- provider_live: real provider/API behavior is proven. If credentials or paid-service approval are missing, the blocker may apply only to live proof after provider adapters, config contracts, deterministic test doubles, error handling, and integration tests exist.
+- durable_persistence: state survives readback/reload/restart where durability is claimed.
+- security_boundary: auth, project/episode scope, secrets, destructive actions, media paths, and unsafe input paths are reviewed.
+- no_fake: no static shell, fake green test, placeholder provider, no-op control, in-memory-only demo, generic graph demo, or static card board is claimed as production behavior.
+- clean_room_implementation_trace: implementation does not depend on opening the original source repo as implementation input.
+- production_readiness: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e gates, and security controls are implemented or explicitly blocked without downgrading scope.
+- visual_quality_gate: the first viewport presents a coherent storyboard workbench with ordered shot frames, selected-frame inspector, media/review states, unobstructed canvas controls, and no generic dashboard/graph-demo fallback.
 
-Runtime proof must be recorded under `.buildprint/evidence/evidence-ledger.jsonl`, not by editing this packet seed.
+## Loop completion rule
 
-Required `phase_id` rows:
+A phase is complete only when:
 
-- `01-canvas-workbench`
-- `02-flow-persistence`
-- `03-production-agent-loop`
-- `04-media-generation`
-- `05-webapp-runtime`
+- observe/plan/execute/verify/reflect/record loop completed at least once
+- verification evidence exists
+- phase proof gate passes, or an honest blocker is recorded only for unavailable live credentials, external services, paid-service approval, browser tooling, screenshot tooling, or deployment authorization
+- blocker/unknowns are not hidden
+- failed gates are repaired or routed correctly
 
-## Qualification Rule
+## Phase state model
 
-Do not promote to `QUALIFIED_SOURCE_INDEPENDENT` until every gate passes with rerunnable command output or artifact paths. If live provider credentials are absent, provider-live proof remains blocked and the packet remains `PROOF_REQUIRED`.
+- `checkpoint_recorded`: at least one valid runtime evidence row exists for the phase. This proves evidence discipline only.
+- `phase_core_passed`: the phase-owned local vertical path works end to end with matching tests/proof, including UI action/state-transition proof for UI-bearing phases.
+- `claim_qualified`: the specific live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle claim has matching executable proof and may upgrade.
 
-## Visual Qualification Rule
+Do not treat `checkpoint_recorded` as `phase_core_passed`. Do not treat `phase_core_passed` as `claim_qualified`.
 
-Technical browser proof is not enough for UI-bearing phases. A screenshot can pass runtime but fail product quality. Reject promotion if the implemented workbench looks like a generic dashboard, static card grid, raw graph editor, marketing page or internal debug tool instead of a storyboard product creators would plausibly use for repeated production work.
+## Evidence requirements
+
+Each evidence row must include phase id, proof type, provider mode, status, source/command summary, claim proven or blocker, and whether it upgrades a claim.
+
+## Blocker honesty
+
+A blocker preserves scope. Do not silently downgrade the product, hide missing proof, skip required UI states, or call deterministic adapters live providers.
+
+## Continuation versus qualification
+
+Some blockers prevent claim qualification without blocking later implementation. Missing live credentials, unavailable browser/e2e tooling, screenshot tooling, deployment authorization, or external services should be recorded as non-upgrading blocker rows and may set `blocks_continuation: false` when the phase's core local implementation path, persistence, safety checks, and runtime/API proof passed.
+
+Do not use `blocks_continuation: false` for failed core implementation, failed owned persistence, failed local runtime/API proof, unresolved destructive/security ambiguity, missing required project structure, or any condition that makes downstream phases unsafe or invalid.
+
+## Visual quality gate
+
+- visual_quality_gate upgrades only after browser/screenshot evidence is reviewed against the active UX contract and no blocking local-MVP, default-control, generic dashboard, raw text-list, bare graph demo, static card board, or storyboard-specific defect remains.

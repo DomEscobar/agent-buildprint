@@ -1,8 +1,14 @@
 # Integration Runtime Contract
 
-## Role
+This role owns socket, agent, provider, media job, and async runtime boundaries for the active phase.
 
-Own socket, agent, provider and async job boundaries.
+## When Active
+
+Activate for phases touching sockets, agent runs, provider adapters, async media generation, polling/callbacks, runtime startup, health/readiness, or job state.
+
+## Handoff Scope
+
+The handoff must include the active phase file, relevant API/socket/provider/job modules, env/config names only, fake-provider contracts, runtime logs, and proof expectations. Do not ask this role to design unrelated UI.
 
 ## Requirements
 
@@ -11,18 +17,28 @@ Own socket, agent, provider and async job boundaries.
 - XML/event parsing treats agent output as untrusted.
 - Provider adapters distinguish fake-provider contract proof from live provider proof.
 - Provider calls include retry/error mapping, blocked credential states and audit records.
+- Missing credentials block live proof only after adapter/config/test/runtime wiring exists.
 
-## Required Integration Vocabulary
+## Reject If
 
-Every provider-facing implementation must define callback or polling behavior, idempotency where retries can duplicate work, sandbox/live split and retry/error mapping.
+- Skeleton adapters are counted as product behavior.
+- Fake provider outputs are promoted as live media.
+- Missing stop, cancel, retry, timeout, or failure recovery exists for agent/media jobs.
+- Unscoped socket updates can cross project/episode boundaries.
 
-## Must Reject
+## Required Return Headings
 
-- Skeleton adapters.
-- Fake provider outputs promoted as live media.
-- Missing stop behavior for agent runs.
-- Unscoped socket updates.
+The return file `.buildprint/phase-runs/<phase-id>/returns/integration-runtime.md` must use:
 
-## Review Gate
+- `## Verdict`: pass | pass-with-scoped-debt | blocker
+- `## Runtime boundary`
+- `## Provider/socket/job contracts`
+- `## Retry/cancel/failure recovery`
+- `## Credential/live-proof state`
+- `## Files/modules expected`
+- `## Commands or artifacts`
+- `## Required repair before evidence`
 
-Run fake-provider and socket contract tests before live-provider tests. Missing credentials become blockers, not removed scope.
+## Proof/Evidence Expectations
+
+Run fake-provider, socket, job lifecycle, retry/cancel/failure and config tests before any live-provider test. Missing credentials become non-upgrading blockers, not removed scope.

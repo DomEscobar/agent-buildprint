@@ -1,31 +1,59 @@
-# UX/UI Craft Contract
+# UX UI Craft Contract
 
-## Role
+This role is the visual and interaction quality gate for the active phase. It prevents generic dashboard output, static mockups, dead controls, local-MVP screens, and "it renders" claims from becoming product evidence.
 
-Ensure the webapp feels like a desirable production storyboard tool and the Canvas board is usable under real creative work conditions.
+## When Active
+
+Activate for every phase with a visible screen, workflow, graph, timeline, storyboard, media surface, chat, settings panel, status surface, or user-facing error/blocked state.
+
+## Handoff Scope
+
+The handoff must include the active phase file and `## UX/UI requirements`, `02-project-setup.md` workbench UX quality contract, relevant UI files/tests/screenshots, the expected user action path, and role returns that affect UI behavior.
+
+## Taste Variables
+
+Infer storyboard-specific values unless product direction is ambiguous: creative production tool, medium-high density, canvas plus inspector, media-board surface depth, iterative review/approval tempo.
 
 ## Requirements
 
-- Nodes, edges and controls must be readable and manipulable.
-- The first viewport must clearly communicate "storyboard production workbench" through ordered shot frames, visual media surfaces and selected-shot detail.
+- The first viewport must clearly communicate storyboard production workbench through ordered shot frames, visual media surfaces and selected-shot detail.
 - Storyboard frames must be first-class visual objects with stable preview aspect ratios, shot number, scene/beat label, status, linked assets/characters and revision signal.
 - The graph/canvas supports production flow, but it must not be the only meaningful visual artifact on screen.
-- Zoom, pan, drag and layout controls must work without layout shifts.
-- Right chat panel must coexist with the canvas and be resizable or otherwise space-conscious.
-- A selected-frame inspector must support prompt, notes, continuity, status and media review without burying core actions.
+- A selected-frame inspector must support prompt, notes, continuity, status and media review.
 - Empty, loading, blocked, streaming, pending, success and failure states must be visible.
-- The visual system must be intentional and production-grade: dense but calm, media-forward, polished spacing, readable type scale, no generic dashboard filler and no decorative gradients used as a substitute for product content.
-- Desktop and narrow viewport screenshots are required for UI-bearing phases.
 
-## Must Reject
+## Visual quality bar
 
-- Marketing-page layout as the main screen.
-- Generic SaaS dashboard, kanban board or bare node graph that lacks storyboard-specific frame review.
-- Text overlapping controls.
-- Static graph image or fake canvas.
-- Hidden controls required for core workflow.
-- Visual states that require reading logs or raw JSON to understand whether a shot is blocked, failed, queued, ready, revised or approved.
+The visual system must be intentional and production-grade: dense but calm, media-forward, polished spacing, readable type scale, no generic dashboard filler, no decorative gradients used as a substitute for product content, and no local MVP look.
 
-## Review Gate
+## Screenshot critique
 
-Run browser screenshot and interaction checks for every UI phase and record artifact paths in `.buildprint/evidence/evidence-ledger.jsonl`. A UI phase fails if screenshots are technically rendered but do not show a coherent storyboard product with legible shot frames, inspector state and unobstructed controls.
+Browser or screenshot evidence must critique visual hierarchy, shot-frame legibility, responsive behavior, accessibility, overlap/clipping, and whether the screen reads as a storyboard product rather than a raw graph editor.
+
+## Reject If
+
+- The UI is static markup, generic dashboard cards, stacked default forms, raw text-list substitutes, dead controls, or a disconnected demo page.
+- The primary storyboard job is not visible in the first useful viewport.
+- Graph/storyboard/media concepts are rendered as plain lists when the domain needs richer affordances.
+- Text overflows, overlaps, clips controls, hides next actions, or fails mobile/desktop layout.
+- Screenshot proof only shows elements exist and does not critique visual hierarchy, density, contrast, responsive behavior, and domain fit.
+
+## Required Return Headings
+
+The return file `.buildprint/phase-runs/<phase-id>/returns/ux-ui-craft.md` must use:
+
+- `## Verdict`: pass | pass-with-scoped-debt | blocker | not-ui-bearing
+- `## Primary user job`
+- `## Taste variables`
+- `## Screen composition`
+- `## Domain interaction model`
+- `## State matrix`
+- `## Visual quality bar`
+- `## Responsive/accessibility proof`
+- `## Screenshot or browser evidence`
+- `## Screenshot critique`
+- `## Required repair before evidence`
+
+## Proof/Evidence Expectations
+
+UI-bearing phases need one real user action path through UI/controller/runtime and back to visible state or readback before `phase_core_passed`. Browser/e2e/screenshot proof can upgrade UX claims only when this return critiques the actual captured UI and finds no blocking visual or interaction defects.

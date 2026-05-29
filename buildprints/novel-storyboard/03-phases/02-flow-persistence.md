@@ -1,30 +1,56 @@
-# Phase 2 - Episode Flow Persistence
+# Phase 02 - Episode Flow Persistence
+
+## How to implement this phase
+
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md`
+- current project `AGENTS.md`
+
+Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then declare phase objective, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, create handoff and return artifacts, collect reviews, integrate, verify, and record evidence.
+
+Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`. You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+
+requires_roles:
+  - data-persistence
+  - test-and-verification
+  - security-boundary
 
 ## Phase mode contract
 
-`blueprint_mode: product`
+- blueprint_mode: product
+- phase_style: outcome_flow
+- Mode lens: product outcome flow with shared proof spine.
+- Product implementation rule: preserve source-backed outcome flows through UI/API/domain/provider/persistence boundaries without copying source implementation code.
 
-`phase_style: outcome_flow`
+## Product outcome
 
-This phase makes the board durable. The outcome flow is: select an episode, load board data, edit/order board state, save it, restart or reload, and see the same board.
+The user selects an episode, loads board data, edits storyboard order or selected-frame metadata, saves, reloads or restarts the backend, and sees the same script, plan, assets, frame order, notes, continuity tags, media state, and workbench metadata restored.
 
-## Build target
+## Mapped product obligations
 
-Implement project/episode scoped persistence for:
+- Source paths `getFlowData.ts` and `saveFlowData.ts` mapped episode-scoped board load/save behavior.
+- `02-project-setup.md` requires durable persistence for storyboard order, frame metadata, media records, and restart/readback ownership.
+- Phase 01 FlowData becomes the persisted contract.
 
-- prose source excerpt or imported episode text;
-- script content;
-- script plan;
-- asset list and derived assets;
-- storyboard table;
-- storyboard items, order, shot numbers, scene/beat labels, frame prompts, notes, review status, image state, continuity tags and associated character/asset IDs;
-- workbench/video metadata sufficient for later media phases.
+## Behavior compatibility contract
+
+- episode-flow-load-save: preserve. Equivalent target behavior: authenticated project/episode flow API loads and saves canonical FlowData. Compatibility impact: route names may change, but behavior must survive reload and restart.
+- frame-metadata: replace. Equivalent target behavior: source storyboard items become richer storyboard frames with shot number, prompt, notes, status, media state and continuity tags.
+- destructive-overwrite: merge. Equivalent target behavior: saves are deliberate, authorized, and errors are visible.
+- live-provider-state: defer. Equivalent target behavior: provider job fields exist, but live media generation proof is Phase 04.
+
+## Implementation scope
+
+Define database schema/migrations and repositories for users, projects, episodes, scripts, assets, storyboard frames, media records, and workbench metadata. Implement authenticated load/save APIs and client store methods. Preserve storyboard ordering and frame metadata through reload and restart.
 
 ## Interfaces touched
 
 - API endpoints for flow load and save.
-- Database schema/migrations for users, projects, episodes/scripts, assets, storyboards, work data and media references.
+- Database schema/migrations.
 - Client store methods for `getFlowData` and `saveFlowData`.
+- Browser episode selector and save/load error states.
 
 ## State/runtime touched
 
@@ -32,38 +58,44 @@ Use durable database-backed persistence. In-memory state is allowed only as requ
 
 ## UX/UI requirements
 
-- Episode selector loads available episodes.
-- Save/load failures show user-visible errors.
-- Persisted frame metadata must rehydrate into the storyboard strip/grid and selected-frame inspector without dropping notes, status or continuity tags.
-- Unsaved or streaming episode switch must require confirmation if it would drop in-flight work.
+For UI-bearing work, apply `02-project-setup.md` visual and Screenshot critique requirements. Episode selector loads available episodes; save/load failures show visible errors; persisted frame metadata rehydrates into the storyboard strip/grid and selected-frame inspector without dropping notes, status or continuity tags.
 
 ## Safety/security constraints
 
 API routes must require authenticated session. Project/episode IDs must be authorized for the current user/session. Destructive overwrite must be deliberate and tested.
 
-## Implementation loop
+## Quality gates
 
-1. Define database schema and fixture seed.
-2. Implement flow load/save API contracts.
-3. Wire client store to API.
-4. Preserve storyboard ordering.
-5. Run persistence/restart proof.
+- API contract tests for initial load, saved load, missing episode and invalid auth.
+- Persistence restart/readback test comparing canonical state.
+- Browser test editing storyboard order and selected-frame metadata, then reload.
+- Denied-path security proof for wrong auth or wrong project/episode.
 
 ## Proof gate
 
-- API contract tests for initial load, saved load, missing episode and invalid auth.
-- Persistence roundtrip test: save board, restart service or recreate app process, reload board and compare canonical state.
-- Browser test: edit node/storyboard order, selected-frame notes/status/continuity tags, reload and confirm state.
-- Evidence row: `phase_id=02-flow-persistence`, `proof_type=persistence_roundtrip`.
+Additional production proof tracks:
+- visual_quality_gate
+
+Proof id: proof-02-flow-persistence
+Required proof types:
+- unit_or_integration_test
+- persistence_roundtrip
+- security_boundary
+- repeatable_browser_e2e
+- visual_quality_gate
+- no_fake_scan_pass
+- evidence_ledger_entry
+
+Production-grade proof split:
+- provider_adapter_config_test_required
+- live_provider_proof_blocker_only
+- worker_retry_cancel_recovery
+- repeatable_browser_e2e
+
+Missing live credentials block live proof only after adapter/config/test/runtime wiring exists for provider, media, worker/runtime, browser, persistence, and deployment paths.
+
+Required runtime evidence row must use `phase_id: 02-flow-persistence` for the current phase and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
 
 ## Repair routing
 
-If data is lost on reload/restart, repair persistence before advancing. If auth can be bypassed, route through security-boundary contract before continuing.
-
-## Stop condition
-
-Stop if durable storage cannot be configured in the environment. Record blocker rather than replacing persistence with memory.
-
-## Unlocks
-
-Unlocks Phase 3 once board state is loaded/saved through the API and survives restart.
+If this phase fails verification, return here before editing again. Route architecture contradictions to `02-project-setup.md`, product-defining human ambiguity to `01-questions.md`, packet seed-only blockers to `05-evidence/evidence-ledger.jsonl`, and runtime proof/blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.
