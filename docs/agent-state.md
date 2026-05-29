@@ -4,7 +4,7 @@ _Last updated: 2026-05-29 08:36 Europe/Berlin_
 
 ## Current repo state
 
-Repository: `/root/blueprint` (`DomEscobar/agent-buildprint`)
+Repository: `DomEscobar/agent-buildprint`
 
 Current pushed `main` head:
 
@@ -15,7 +15,7 @@ At the time of this handoff, local `main` matched `origin/main` before this docu
 
 ## What changed
 
-Six foundation Buildprints were remapped with the live Mapper OS `copyAgent` prompt, integrated into `/root/blueprint`, validated, committed, and pushed.
+Six foundation Buildprints were remapped with the live Mapper OS `copyAgent` prompt, integrated into the source repository, validated, committed, and pushed.
 
 ### Remapped / renamed Buildprints
 
@@ -73,9 +73,9 @@ Targeted publication checks passed:
 - `npm run check:mapper-published`
 - targeted grep found no legacy refs in the six remapped `publication.json` files.
 
-Website verification passed from `/root/AGB-website`:
+Website verification passed from the website repository:
 
-- `npm run sync:buildprints -- --source /root/blueprint`
+- `npm run sync:buildprints -- --source <agent-buildprint repo>`
 - `npm run check:buildprints`
 - `npm run build`
 - live publication URLs returned HTTP 200 for all six remapped slugs and showed correct slug/title with no targeted legacy refs.
@@ -91,14 +91,12 @@ Live checked publication URLs:
 
 ## Known caveats / what may be left to do
 
-1. **Website sync default path caveat**
-   - `/root/AGB-website/scripts/sync-buildprints-from-source.mjs` defaults to `../agent-buildprint`.
-   - In this environment the source repo is `/root/blueprint`, so the passing command was:
-     - `npm run sync:buildprints -- --source /root/blueprint`
-   - Optional follow-up: either create/standardize the expected repo path or update the website workflow/docs so future agents do not hit the missing `/root/agent-buildprint/buildprints` path.
+1. **Website sync source-path caveat**
+   - The website sync script may need an explicit `--source <agent-buildprint repo>` argument depending on the local checkout layout.
+   - Optional follow-up: standardize the repo checkout path or update the website workflow/docs so future agents do not depend on machine-specific paths.
 
 2. **Public website proof pages still mention old proof package links outside these six publication records**
-   - Example found earlier: `/root/AGB-website/src/pages/proofs/openshorts-ai-shorts-proof/index.astro` links to `/buildprints/portable-ai-shorts-production-studio/`.
+   - Example found earlier: the OpenShorts proof page links to `/buildprints/portable-ai-shorts-production-studio/`.
    - The six live package/publication URLs are correct, but old proof pages may still need link cleanup.
 
 3. **Implementation proof remains downstream work**
@@ -113,15 +111,14 @@ Live checked publication URLs:
 
 Before making further changes:
 
-1. `cd /root/blueprint && git status --short --branch`
+1. In the source repository, run `git status --short --branch`.
 2. Confirm `main` is at/after this handoff commit and matches `origin/main`.
 3. If touching publication metadata, run:
    - `npm run check:publication`
    - `npm run check:mapper-published`
    - targeted live URL checks after push/deploy.
 4. If touching any Buildprint packet structure, run full `npm test`.
-5. If verifying the website, use:
-   - `cd /root/AGB-website`
-   - `npm run sync:buildprints -- --source /root/blueprint`
+5. If verifying the website, use the website repository and run:
+   - `npm run sync:buildprints -- --source <agent-buildprint repo>`
    - `npm run check:buildprints`
    - `npm run build`
