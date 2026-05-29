@@ -31,7 +31,7 @@
   "featured": true,
   "summary": "Mapper phase-flow packet for building a clean-room, self-hosted personal agent chatbot with streaming chat, provider routing, tools, skills, MCP, memory, subagents, telemetry, and WebUI/API workbench surfaces.",
   "plainDescription": "An executable Buildprint packet for implementing a local personal AI assistant through phase-flow artifacts, review contracts, and honest runtime evidence. It preserves the mapped Emperor Agent-inspired scope without claiming clone, live provider, real MCP, shell/browser/network, auth, billing, publishing, or hosted SaaS parity.",
-  "promise": "A phase-flow Buildprint that lets a downstream agent implement a portable personal agent chatbot while keeping deterministic proof separate from live/external claims.",
+  "promise": "A phase-flow Buildprint that lets a downstream agent implement a source-independent personal agent chatbot while keeping deterministic proof separate from live/external claims.",
   "whatYouGet": [
     "Canonical BUILDPRINT.md start file",
     "Setup gate with architecture, operating model, safety, and AGENTS.md plan",
