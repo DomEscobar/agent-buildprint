@@ -8,7 +8,7 @@ status: publishable-draft
 agentFile: true
 ---
 
-# Buildprint: OpenClaw AI Influencer OS
+# BUILDPRINT: OpenClaw AI Influencer OS
 
 ## Agent Operating Contract
 

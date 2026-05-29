@@ -3237,7 +3237,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
       throw new Error(`downloaded snapshot ${file.path} is suspiciously short (${snapshotBytes} bytes from ${source}) — expected at least ${minBytes} bytes; the file may not be published or the URL is stale`)
     }
     // Key-file content assertions: critical spine files must contain their canonical anchor
-    if (file.path === 'BUILDPRINT.md' && !/^# BUILDPRINT:/m.test(text)) {
+    if (file.path === 'BUILDPRINT.md' && !/^# BUILDPRINT:/im.test(text)) {
       throw new Error(`downloaded BUILDPRINT.md is missing "# BUILDPRINT:" heading — content appears invalid or truncated from ${source}`)
     }
     if (file.path === 'blueprint.yaml' && !/schema_version:/i.test(text)) {
@@ -3255,7 +3255,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   // Post-download corruption check: if key spine files are missing or broken, fail loudly
   // (guards against servers that respond 200 with error-page text for non-existent files)
   const spineChecks = [
-    { path: 'BUILDPRINT.md', test: (t) => /^# BUILDPRINT:/m.test(t), msg: 'missing "# BUILDPRINT:" heading' },
+    { path: 'BUILDPRINT.md', test: (t) => /^# BUILDPRINT:/im.test(t), msg: 'missing "# BUILDPRINT:" heading' },
     { path: 'blueprint.yaml', test: (t) => /schema_version:/i.test(t), msg: 'missing schema_version:' },
   ]
   for (const check of spineChecks) {
