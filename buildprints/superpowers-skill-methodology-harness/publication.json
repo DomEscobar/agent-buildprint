@@ -97,7 +97,7 @@
     },
     {
       "label": "Actual skill harness",
-      "detail": "Focuses on bootstrap, activation, methodology gates, subagents, and transcripts\u2014not dashboards or managers.",
+      "detail": "Focuses on bootstrap, activation, methodology gates, subagents, and transcripts—not dashboards or managers.",
       "tone": "info"
     },
     {
@@ -113,5 +113,5 @@
   ],
   "originGithubUrl": "https://github.com/obra/superpowers",
   "originLabel": "obra/superpowers",
-  "copyPrompt": "Use the Superpowers Skill Methodology Harness Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/superpowers-skill-methodology-harness/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/superpowers-skill-methodology-harness/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build a clean-room skill-methodology harness proof. Do not make a dashboard/manager. Implement session bootstrap, skill lookup before action, brainstorming-before-code, TDD gate, subagent/review loop contracts, and transcript evals. Keep claims Superpowers-inspired unless installing the official plugin."
+  "copyPrompt": "Use the Superpowers Skill Methodology Harness Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/superpowers-skill-methodology-harness/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/superpowers-skill-methodology-harness/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build the skill-methodology harness from the packet; do not substitute a generic dashboard."
 }

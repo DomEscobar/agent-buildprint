@@ -102,5 +102,5 @@
       "tone": "warning"
     }
   ],
-  "copyPrompt": "Use the Auth, Teams & RBAC OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/auth-teams-rbac-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/auth-teams-rbac-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Do Phase 00 auth forensics and tenant research before coding. Reuse existing auth by default. Do not claim done while any team-scoped route lacks direct server/API authorization tests."
+  "copyPrompt": "Use the Auth, Teams & RBAC OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/auth-teams-rbac-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/auth-teams-rbac-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Do Phase 00 auth forensics before coding. Reuse existing auth by default; do not claim done without server-side authorization tests on team-scoped routes."
 }

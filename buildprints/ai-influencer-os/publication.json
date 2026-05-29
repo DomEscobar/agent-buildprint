@@ -103,5 +103,5 @@
       "tone": "info"
     }
   ],
-  "copyPrompt": "Use the AI Influencer OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Implement the Instagram posting automation path through queue, auth check, dry-run, approved draft, and browser/noVNC handoff. Do not auto-publish by default."
+  "copyPrompt": "Use the AI Influencer OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Focus on the approval-gated influencer workflow; do not auto-publish by default."
 }

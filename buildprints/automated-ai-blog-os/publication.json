@@ -104,5 +104,5 @@
       "tone": "info"
     }
   ],
-  "copyPrompt": "Use the Automated AI Blog OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/automated-ai-blog-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/automated-ai-blog-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build the approval-gated AI blog pipeline with source scanning, idea scoring, draft generation, claim/SEO validation, approval queue, gated publishing/scheduling, manager audit, and tests. Do not auto-publish by default."
+  "copyPrompt": "Use the Automated AI Blog OS Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/automated-ai-blog-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/automated-ai-blog-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Build the approval-gated blog pipeline; do not auto-publish by default."
 }
