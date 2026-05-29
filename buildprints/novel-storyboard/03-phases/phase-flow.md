@@ -16,9 +16,12 @@ The main coding session is the orchestrator/integrator. It may delegate bounded 
 6. If the proof gate fails, repair the current phase.
 7. Advance `active_phase` only after proof and evidence recording.
 
+For UI-bearing phases, proof must include product-quality review as well as runtime checks. A phase is not complete if the UI technically renders but the first viewport does not communicate a storyboard workbench with ordered shot frames, selected-frame detail, visible media/review states and unobstructed controls.
+
 ## Stop Rules
 
 - Stop on missing irreversible/product-defining human decision.
 - Stop on live provider credential need for live proof, but continue fake-provider contract proof.
 - Stop on security finding that exposes secrets, bypasses auth, allows destructive action without confirmation or corrupts persisted data.
 - Stop on static Canvas mock, in-memory-only persistence or provider fake counted as production behavior.
+- Stop on generic dashboard, bare graph demo or card-only layout that satisfies data plumbing but fails the storyboard product-quality contract.

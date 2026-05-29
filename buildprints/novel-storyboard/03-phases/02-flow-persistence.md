@@ -12,11 +12,12 @@ This phase makes the board durable. The outcome flow is: select an episode, load
 
 Implement project/episode scoped persistence for:
 
+- prose source excerpt or imported episode text;
 - script content;
 - script plan;
 - asset list and derived assets;
 - storyboard table;
-- storyboard items, order, image state and associated asset IDs;
+- storyboard items, order, shot numbers, scene/beat labels, frame prompts, notes, review status, image state, continuity tags and associated character/asset IDs;
 - workbench/video metadata sufficient for later media phases.
 
 ## Interfaces touched
@@ -33,6 +34,7 @@ Use durable database-backed persistence. In-memory state is allowed only as requ
 
 - Episode selector loads available episodes.
 - Save/load failures show user-visible errors.
+- Persisted frame metadata must rehydrate into the storyboard strip/grid and selected-frame inspector without dropping notes, status or continuity tags.
 - Unsaved or streaming episode switch must require confirmation if it would drop in-flight work.
 
 ## Safety/security constraints
@@ -51,7 +53,7 @@ API routes must require authenticated session. Project/episode IDs must be autho
 
 - API contract tests for initial load, saved load, missing episode and invalid auth.
 - Persistence roundtrip test: save board, restart service or recreate app process, reload board and compare canonical state.
-- Browser test: edit node/storyboard order, reload and confirm state.
+- Browser test: edit node/storyboard order, selected-frame notes/status/continuity tags, reload and confirm state.
 - Evidence row: `phase_id=02-flow-persistence`, `proof_type=persistence_roundtrip`.
 
 ## Repair routing

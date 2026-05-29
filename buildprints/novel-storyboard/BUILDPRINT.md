@@ -1,22 +1,33 @@
-# BUILDPRINT: AI short-drama production canvas webapp
+# BUILDPRINT: Novel Storyboard production workbench
 
 Claim status: `PROOF_REQUIRED`
 
 ## Product brief
 
-- Product: AI short-drama production canvas workbench
-- Primary outcome: A creator can turn an episode into a saved production board with script, plan, assets, storyboard images and video workbench state that survives reloads.
-- Primary users: creators, producers and operators configuring AI media providers.
-- Main surfaces: browser workbench, agent chat, API service, provider adapter, persistence, media artifact storage, deployment/runtime shell.
+- Product: Novel-to-storyboard production workbench for visually planning short-drama or cinematic story episodes.
+- Primary outcome: A creator can turn a prose episode into a saved, reviewable, visually compelling storyboard board with script beats, shot frames, character/asset continuity, media generation state and video workbench state that survives reloads.
+- Primary users: creators, directors, producers, storyboard artists and operators configuring AI media providers.
+- Main surfaces: browser storyboard workbench, cinematic canvas, shot strip/timeline, frame inspector, agent chat, API service, provider adapter, persistence, media artifact storage, deployment/runtime shell.
 - What this packet must not become: a desktop-only clone, static graph mock, route inventory, provider fake counted as live media generation, or a source-framework prescription.
+
+## Product experience spine
+
+The implementation must feel like a real storyboard product, not a technically adequate graph demo.
+
+- **First impression:** opening an episode presents an intentional production workspace: cinematic board area, ordered shot strip, readable scene/beat hierarchy, visual frame previews and a restrained tool chrome.
+- **Core workflow:** import or edit prose/script beats, convert them into ordered storyboard shots, review each shot as a frame with prompt, image, character/asset references, status and notes, then move selected shots toward video workbench output.
+- **Visual grammar:** storyboard frames are first-class objects with aspect-ratio-safe previews, shot number, scene/beat label, status, continuity tags and media state. The graph may show dependency flow, but it must not replace the storyboard strip/grid as the user's visual planning surface.
+- **Art direction:** the UI should look like a production-grade creative tool: dense, calm, sharp, tactile and media-forward. Avoid generic SaaS dashboards, oversized marketing hero sections, pastel template cards, empty gradient decoration or a bare technical node graph.
+- **Review loop:** creators can see what is ready, blocked, failed, needs revision and selected for video without reading logs. Every blocked provider or failed media state must be visually obvious and recoverable.
+- **Production readiness:** success means the product is useful for repeated work: save/reload, restart durability, responsive canvas behavior, authenticated runtime, no fake provider promotion, screenshot-proofed desktop and narrow layouts, and a plausible path from storyboard frame to generated media.
 
 ## Final product at a glance
 
-**Golden path** - The user logs in, opens a project episode, sees a real interactive production canvas, uses the agent chat to shape script and storyboard data, generates or reviews assets and storyboard media, moves through the workbench toward video output, saves the board, and later returns to the same state with honest blocked-provider messages when credentials are absent.
+**Golden path** - The user logs in, opens a project episode, sees a real interactive cinematic storyboard workspace, uses the agent chat to shape prose/script beats into ordered shots, reviews frame previews and continuity details, generates or reviews assets and storyboard media, moves selected shots toward video output, saves the board, and later returns to the same state with honest blocked-provider messages when credentials are absent.
 
 **Surfaces**
 
-- Production canvas board - create and manipulate the visual production flow - Phase 1
+- Cinematic storyboard workbench - create, inspect and manipulate visual shot flow - Phase 1
 - Episode flow state - load, save and restore board data by project and episode - Phase 2
 - Agent chat controller - drive board updates through chat, stop and XML events - Phase 3
 - Media generation paneling - request, poll, select and fail asset/storyboard/video work - Phase 4
@@ -24,10 +35,11 @@ Claim status: `PROOF_REQUIRED`
 
 **Done looks like**
 
-- The board is an interactive canvas with nodes, edges, zoom, pan, drag, layout and responsive behavior, not static cards.
-- A saved episode reloads with the same script, plan, assets, storyboard order and workbench data after backend restart.
+- The board is an interactive storyboard workbench with shot frames, canvas flow, nodes, edges, zoom, pan, drag, layout, inspector/review states and responsive behavior, not static cards.
+- A saved episode reloads with the same prose/script, plan, assets, storyboard order, frame media/status/notes and workbench data after backend restart.
 - Agent chat can update board data through streamed/parsed events and can stop or report errors without corrupting state.
 - Provider credentials absence produces blocked states and fake-provider tests, not fake success.
+- Desktop and narrow screenshots show a visually coherent, production-grade storyboard product with no overlapping controls, not merely a passing technical canvas.
 
 ## Required read order
 

@@ -16,6 +16,7 @@ Implement:
 - fake-provider test adapter and live-provider adapter interface;
 - derived asset generation requests;
 - storyboard image generation requests;
+- storyboard frame regeneration with prompt, continuity, character/asset reference and aspect-ratio inputs;
 - video prompt/video generation requests where selected workbench state requires them;
 - polling for pending jobs;
 - selection/deletion/update operations with confirmations where destructive;
@@ -36,7 +37,8 @@ Generation records need durable state: pending, success, failure, error reason, 
 
 - Pending items show progress or at least polling state.
 - Failed generation shows reason and allows retry where safe.
-- Selected/generated media previews must not block the entire board.
+- Selected/generated media previews must appear inside stable storyboard frame containers and the frame inspector; they must not block the entire board.
+- Media state must be legible at a glance across the shot strip/grid: blocked, queued, generating, failed, needs revision, approved and selected for video.
 - Provider missing/invalid credentials must show blocked state, not success.
 
 ## Safety/security constraints
@@ -55,7 +57,7 @@ Provider secrets remain server-side. Uploads and generated media must be path-sa
 
 - Fake-provider tests for pending, success, failure, timeout/retry and cancellation where supported.
 - API tests for unauthorized access, missing credentials and invalid IDs.
-- Browser test: trigger generation, see pending, poll to success/failure, retry or blocked state.
+- Browser test: trigger generation from a storyboard frame, see pending on that frame, poll to success/failure, retry or blocked state, and confirm media preview/metadata persist.
 - Evidence row: `phase_id=04-media-generation`, `proof_type=provider_integration_proof`.
 
 ## Repair routing

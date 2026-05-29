@@ -15,7 +15,7 @@ Implement:
 - authenticated production-agent socket/channel scoped by project and episode;
 - right chat panel with connected/disconnected, pending, streaming, stopped and error states;
 - chat send and stop actions;
-- XML/event parser for script, scriptPlan, storyboardTable and storyboardItem updates;
+- XML/event parser for prose/script, scriptPlan, storyboardTable, storyboardItem, shot status, continuity tag and frame prompt updates;
 - duplicate/malformed event handling;
 - trace recording for each agent run.
 
@@ -35,6 +35,8 @@ Agent messages, parsed board updates and abort state must be scoped to project/e
 - Chat panel is resizable and does not cover the entire board by default.
 - Stop action is visible while generation is pending/streaming.
 - Errors show actionable messages without deleting board state.
+- Agent-created storyboard updates must surface as visible shot-frame changes, not only as raw text messages or invisible store mutations.
+- Partial agent output should show draft/streaming state on affected shots until committed or stopped.
 - Memory clearing, if implemented, must require confirmation.
 
 ## Safety/security constraints
@@ -52,8 +54,8 @@ Socket must reject missing/invalid session and missing isolation scope. Agent ou
 ## Proof gate
 
 - Socket tests: invalid auth rejected, valid scoped connection accepted, stop aborts run.
-- Parser tests: valid script/plan/table/storyboard item updates; malformed/duplicate/partial XML handled.
-- Browser test: chat instruction updates board state and stop leaves board consistent.
+- Parser tests: valid script/plan/table/storyboard item/status/continuity/frame prompt updates; malformed/duplicate/partial XML handled.
+- Browser test: chat instruction updates visible storyboard frame state and stop leaves board consistent.
 - Evidence row: `phase_id=03-production-agent-loop`, `proof_type=agent_runtime_trace`.
 
 ## Repair routing

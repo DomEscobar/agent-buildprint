@@ -27,14 +27,15 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Execution-packet remap of the Toonflow-inspired creative pipeline: project workspace, ordered novel ingestion, event extraction, scripts/assets, storyboard flow, media tasks, preview export, and safety gates.",
-  "plainDescription": "A router-first Buildprint for a novel-to-storyboard workbench. Agents start at BUILDPRINT.md and blueprint.yaml, load one active capability at a time, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
-  "promise": "A Mapper execution-packet for rebuilding the source-independent novel-to-storyboard workflow without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
+  "summary": "Execution-packet remap of a Toonflow-inspired creative pipeline into a desirable novel-to-storyboard product: cinematic shot frames, episode planning, script/assets, storyboard flow, media tasks, preview export, and safety gates.",
+  "plainDescription": "A router-first Buildprint for a production-grade novel-to-storyboard workbench. Agents start at BUILDPRINT.md and blueprint.yaml, build a storyboard-first browser workspace, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
+  "promise": "A Mapper execution-packet for rebuilding the source-independent novel-to-storyboard workflow as a visually strong storyboard product without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
   "whatYouGet": [
     "Capability packet shape",
     "BUILDPRINT.md and blueprint.yaml router",
     "Context map that names the active capability",
-    "Six phase files with consolidated contracts and proof gates",
+    "Five phase files with consolidated contracts and proof gates",
+    "Storyboard-first product quality gates for shot frames, inspector state, visual review flow, and media status",
     "Source-surface map tied to product obligations",
     "Provider, state, runtime, safety, acceptance, and evidence ledgers"
   ],
@@ -81,17 +82,17 @@
     "Reading all phase files upfront",
     "Claiming qualification without evidence-ledger rows",
     "Counting deterministic providers as live provider proof",
-    "Generic dashboard UI instead of storyboard-first workbench",
+    "Generic dashboard UI, bare graph demo, or static cards instead of a visually compelling storyboard-first workbench",
     "Using Toonflow source as implementation input"
   ],
   "checks": [
     "Mapper execution-packet validator passes",
-    "BUILDPRINT.md routes to blueprint.yaml, team/UX gates, and active capability",
+    "BUILDPRINT.md routes to blueprint.yaml, product-quality/UX gates, and active capability",
     "02-project-setup.md/context-map.yaml blocks reading unrelated phase files upfront",
     "02-project-setup.md/team-stack.yaml, ux-contract.md, and design-quality-bar.md gate UI-bearing phase files",
     "Each phase file has slice entry, active capability contract, active capability implementation path, source-evidence-index.yaml, and Proof gate in the active capability",
     "05-evidence/evidence-ledger.jsonl is the claim-promotion authority",
-    "Claim status remains PROOF_REQUIRED until browser, provider, persistence, security, and clean-room proof rows pass"
+    "Claim status remains PROOF_REQUIRED until browser, storyboard product quality, provider, persistence, security, and clean-room proof rows pass"
   ],
   "trustBadges": [
     {

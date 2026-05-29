@@ -15,6 +15,30 @@ blueprint_mode:
   primary: product
   secondary: [ui, api, worker, provider, agent, data, deployment]
   phase_style: outcome_flow
+product_quality:
+  primary_experience: cinematic_storyboard_workbench
+  must_feel_like:
+    - production_grade_creative_tool
+    - storyboard_first_review_surface
+    - media_forward_episode_planning_workspace
+  must_not_feel_like:
+    - generic_dashboard
+    - bare_graph_demo
+    - static_card_board
+    - marketing_page
+  first_viewport_requires:
+    - ordered_shot_frames
+    - selected_frame_inspector
+    - visible_media_or_blocked_states
+    - canvas_flow_controls_without_overlap
+  storyboard_frame_requires:
+    - stable_aspect_ratio_preview
+    - shot_number
+    - scene_or_beat_label
+    - status
+    - linked_assets_or_characters
+    - prompt_or_notes_surface
+    - continuity_tags
 setup_gate:
   questions: 01-questions.md
   project_setup: 02-project-setup.md
@@ -44,7 +68,7 @@ repair_loop:
     external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
   - phase_id: 01-canvas-workbench
-    title: Canvas production board
+    title: Cinematic storyboard workbench
     file: 03-phases/01-canvas-workbench.md
     status: INCLUDED_NEEDS_PROOF
     requires_roles: [product-architect, ux-ui-craft, test-and-verification]

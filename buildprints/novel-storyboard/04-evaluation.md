@@ -7,6 +7,7 @@ Claim status: `PROOF_REQUIRED`
 | Gate | Required proof concept | Pass condition |
 |---|---|---|
 | Browser runtime | browser_runtime_trace | Canvas board renders, interacts and screenshots cleanly on desktop and narrow viewport. |
+| Storyboard product quality | storyboard_product_quality | First viewport presents a coherent storyboard workbench with ordered shot frames, selected-frame inspector, media/review states and no generic dashboard/graph-demo fallback. |
 | Provider integration | provider_live | Live provider call succeeds with safe credentials, or blocker remains explicit and fake-provider proof is not promoted. |
 | Persistence | durable_persistence | Flow data and media state survive reload and backend restart. |
 | Security | security_boundary | Auth protects API/socket, default credentials are mitigated, secrets are not exposed, destructive routes are guarded. |
@@ -28,3 +29,7 @@ Required `phase_id` rows:
 ## Qualification Rule
 
 Do not promote to `QUALIFIED_SOURCE_INDEPENDENT` until every gate passes with rerunnable command output or artifact paths. If live provider credentials are absent, provider-live proof remains blocked and the packet remains `PROOF_REQUIRED`.
+
+## Visual Qualification Rule
+
+Technical browser proof is not enough for UI-bearing phases. A screenshot can pass runtime but fail product quality. Reject promotion if the implemented workbench looks like a generic dashboard, static card grid, raw graph editor, marketing page or internal debug tool instead of a storyboard product creators would plausibly use for repeated production work.

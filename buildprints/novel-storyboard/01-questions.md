@@ -6,7 +6,7 @@ Default rule:
 
 ## 1. Product direction
 
-Should the implementation optimize for the selected Canvas-board webapp only, or should it also include non-core suite surfaces such as novel management, all settings, task center and desktop packaging? Default: selected Canvas-board webapp only.
+Should the implementation optimize for the selected storyboard workbench only, or should it also include non-core suite surfaces such as full novel management, all settings, task center and desktop packaging? Default: selected storyboard workbench only, with enough project/episode context to make the product feel real.
 
 ## 2. Tech stack preferences
 
@@ -14,7 +14,11 @@ Do you require a specific frontend/backend/runtime/storage/deployment stack, or 
 
 ## 3. UX/UI preferences
 
-Should the Canvas preserve the source interaction model closely, including node graph, right chat panel, zoom/pan/drag, layout and dense production controls? Default: yes, preserve the interaction model and improve polish only where it does not change behavior.
+Should the workbench preserve the source interaction model closely, including node graph, right chat panel, zoom/pan/drag, layout and dense production controls? Default: yes, but elevate it into a storyboard-first product with cinematic shot frames, an ordered shot strip/grid, frame inspector, media previews, continuity tags and clear review states.
+
+## 3a. Visual product quality
+
+Should the UI prioritize technical completeness or a visually distinctive production-grade storyboard experience? Default: visually distinctive production-grade storyboard experience. Technical completion is not sufficient if the result looks like a generic dashboard, graph demo or rough internal tool.
 
 ## 4. Architecture preferences
 

@@ -2,7 +2,7 @@ active_phase: 03-phases/01-canvas-workbench.md
 phases:
   - id: 01-canvas-workbench
     file: 03-phases/01-canvas-workbench.md
-    title: Canvas production board
+    title: Cinematic storyboard workbench
     status: INCLUDED_NEEDS_PROOF
     requires_roles: [product-architect, ux-ui-craft, test-and-verification]
   - id: 02-flow-persistence

@@ -5,12 +5,12 @@
 - Blueprint mode: `product`
 - Phase style: `outcome_flow`
 - Claim status: `PROOF_REQUIRED`
-- Primary selected scope: browser webapp preserving the production Canvas board.
+- Primary selected scope: browser webapp preserving the production Canvas board while elevating it into a storyboard-first workbench.
 - Default implementation posture: production-grade selected scope with durable persistence, authenticated API/socket boundary, provider configuration contracts, fake-provider tests, browser proof and honest live-provider blockers.
 
 ## Product / capability shape
 
-Build an AI short-drama production canvas workbench. The product must let a creator select an episode, view and manipulate a visual production board, use an agent chat to update board data, generate or track storyboard/assets/video work, and persist the board across reloads.
+Build a novel-to-storyboard production workbench. The product must let a creator select an episode, turn prose/script beats into ordered storyboard shots, inspect visually rich frame cards, manipulate a production canvas, use an agent chat to update board data, generate or track storyboard/assets/video work, and persist the board across reloads.
 
 The selected scope is UI-bearing, stateful, provider-backed, agent-driven and runtime-heavy. A static UI shell, route-only API, deterministic provider adapter, in-memory board store or single-screen demo is a no-fake failure.
 
@@ -18,6 +18,7 @@ The selected scope is UI-bearing, stateful, provider-backed, agent-driven and ru
 
 - Use a browser-first webapp architecture with a real client, API service, socket channel, durable database, media/object storage path and provider adapter boundary.
 - The Canvas board is a domain surface, not decoration. It needs explicit graph state, node components, edge topology and interaction controls.
+- Storyboard frames are the product's most important visual objects. They need stable media previews, shot numbers, scene/beat labels, prompts, notes, continuity tags, linked assets/characters and review/media status.
 - The agent loop is a bounded automation runtime. It needs a task loop, stop behavior, trace/evidence, XML/event parsing and state mutation rules.
 - Provider adapters must split fake-provider tests from live provider proof. Missing credentials must produce blocked states.
 - The implementation may choose stack/frameworks unless user answers otherwise. Do not blindly copy the source stack as a requirement.
@@ -25,7 +26,7 @@ The selected scope is UI-bearing, stateful, provider-backed, agent-driven and ru
 ## Production readiness contract
 
 - Auth/session: login must protect API and socket; default credentials must be setup-only or forced to rotate.
-- Persistence: project/episode flow data, storyboard order, media generation state and provider config survive restart.
+- Persistence: project/episode flow data, storyboard order, frame metadata, media generation state and provider config survive restart.
 - Runtime: API, socket and browser app start through one documented command or compose profile.
 - Observability: agent events, provider calls, polling failures and persistence errors are inspectable in logs and test artifacts.
 - Security: provider secrets are never logged, copied into Buildprint files or exposed to browser code.
@@ -33,9 +34,10 @@ The selected scope is UI-bearing, stateful, provider-backed, agent-driven and ru
 
 ## Experience quality contract
 
+- First viewport must read as a production storyboard product, not a dashboard: ordered shot frames, selected-frame inspector, visible media/review states and usable canvas controls.
 - Canvas must support visible nodes and edges, zoom, pan, drag, auto layout, empty/loading/error states and responsive behavior.
 - Right chat panel must be resizable, stoppable and disconnected/error aware.
-- Storyboard/assets/workbench states must show pending, success and failure states without fake success.
+- Storyboard/assets/workbench states must show blocked, queued, generating, failed, needs revision, approved, selected and success states without fake success.
 - Browser proof must include desktop and mobile/narrow viewport screenshots or traces.
 - Text must remain readable and not overlap controls in the dense production UI.
 
@@ -54,8 +56,8 @@ The selected scope is UI-bearing, stateful, provider-backed, agent-driven and ru
 
 | Surface name | Mapped obligation | Owning phase | Readiness | Source anchors | First proof |
 |---|---|---|---|---|---|
-| Production canvas board | Render and operate the graph board with nodes, edges, zoom, pan, drag and layout. | Phase 1 | INCLUDED_NEEDS_PROOF | Toonflow-web `index.vue:1-196`, `flowBuilder.ts:4-260` | Browser interaction trace and visual screenshots. |
-| Episode flow state | Load, save and restore episode-scoped board data and storyboard order. | Phase 2 | INCLUDED_NEEDS_PROOF | Toonflow-app `getFlowData.ts:9-156`, `saveFlowData.ts:9-63` | API and restart persistence test. |
+| Storyboard production workbench | Render and operate the graph board plus storyboard-first shot strip/grid, selected-frame inspector, nodes, edges, zoom, pan, drag and layout. | Phase 1 | INCLUDED_NEEDS_PROOF | Toonflow-web `index.vue:1-196`, `flowBuilder.ts:4-260` | Browser interaction trace, storyboard product-quality screenshots and visual checks. |
+| Episode flow state | Load, save and restore episode-scoped board data, storyboard order and frame metadata. | Phase 2 | INCLUDED_NEEDS_PROOF | Toonflow-app `getFlowData.ts:9-156`, `saveFlowData.ts:9-63` | API and restart persistence test. |
 | Agent chat controller | Send/stop chat, parse XML/event updates, mutate board data and record traces. | Phase 3 | INCLUDED_NEEDS_PROOF | Toonflow-web `productionAgent.ts:42-113`, Toonflow-app `productionAgent.ts:21-99` | Socket/agent integration test with fake model stream. |
 | Media generation paneling | Generate/poll/select/fail storyboard, asset and video work through provider boundary. | Phase 4 | INCLUDED_RISKY_REQUIRES_HARDENING | Toonflow-web `productionAgent.ts:214-400`, Toonflow-app `tools.ts:159-209` | Fake-provider pending/success/failure tests; live blocker row. |
 | Webapp runtime shell | Run authenticated API/socket/static frontend with durable data and deploy proof. | Phase 5 | INCLUDED_RISKY_REQUIRES_HARDENING | Toonflow-app `app.ts:45-144`, README `283-301`, `465-481` | Build/start/login/browser/Docker smoke proof. |
