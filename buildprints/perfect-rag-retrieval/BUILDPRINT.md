@@ -10,6 +10,23 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Main surfaces: BUILDPRINT.md canonical start; 01-questions.md alignment gate; 02-project-setup.md architecture, team, authority, handoff, AGENTS.md, quality, safety, and phase-start contract; blueprint.yaml executable Buildprint machine contract
 - What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
 
+## Final product at a glance
+
+**Golden path** - An operator defines corpus/security contracts, ingests and chunks documents, builds hybrid retrieval with permission filtering and reranking, asks grounded questions with citations and refusal behavior, then runs traceable eval/operations proof before any production-readiness claim.
+
+**Surfaces**
+
+- Corpus contracts - define corpus, threat model, fixtures and safety rules - Phase 1
+- Ingestion and indexing - chunk, index and validate source documents - Phase 2
+- Retrieval and answering - retrieve, rerank, cite and refuse honestly - Phase 3
+- Evaluation and operations - run traces, evals, provider checks and optional modules - Phase 4
+
+**Done looks like**
+
+- Retrieval answers cite allowed corpus chunks and refuse unsupported or unauthorized questions.
+- Index, permission, trace and eval artifacts survive reruns instead of living in memory-only shortcuts.
+- The product reads as a serious retrieval system, not a static demo or generic dashboard.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.

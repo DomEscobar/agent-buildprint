@@ -10,6 +10,20 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Main surfaces: Safety and secrets boundary; Source census and source-independent distillation; Scoped candidate selection before extraction; Executable selected-buildprint packet spine
 - What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
 
+## Final product at a glance
+
+**Golden path** - An operator points Mapper OS at a source repo, reviews source-backed behavior discovery, chooses a scoped candidate, and receives a source-independent executable Buildprint packet with setup, phases, proof gates, and evidence rules that a fresh agent can implement without reading the original code.
+
+**Surfaces**
+
+- Discovery workspace - inspect source behavior and risk signals - Phase 1
+
+**Done looks like**
+
+- The selected packet has a clear product target and phase path, not a generic dashboard or local MVP.
+- Runtime evidence rows are narrow and source-independent.
+- A fresh implementation agent can start from `BUILDPRINT.md` and reach the active phase without source repo context.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md`.

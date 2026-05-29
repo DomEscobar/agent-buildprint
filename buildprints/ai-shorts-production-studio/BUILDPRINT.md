@@ -11,6 +11,24 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Main surfaces: BUILDPRINT.md canonical start; 01-questions.md AI best-judgment alignment gate; 02-project-setup.md with product shape, architecture decisions, production readiness, implementation setup, assumptions, and phase start gate; blueprint.yaml executable Buildprint machine contract
 - What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
 
+## Final product at a glance
+
+**Golden path** - A creator enters a product URL or manual brief, receives UGC short scripts, starts pollable clip/media jobs, reviews 1080x1920 vertical previews in a browser studio, saves approved clips into a private gallery, and only publishes through a consent-gated handoff with honest fake/live provider disclosure.
+
+**Surfaces**
+
+- Contracts and adapters - define product input, provider modes and deterministic fixtures - Phase 1
+- Job runtime state - track pollable queued/running/success/failure jobs - Phase 2
+- Media pipeline - generate or fixture vertical media with explicit provider state - Phase 3
+- Browser studio - review scripts, clips, status and edits in a creator UI - Phase 4
+- Gallery and publish validation - save approved shorts and gate publishing consent - Phase 5
+
+**Done looks like**
+
+- A short moves from brief to script to media preview to private gallery without static demo shortcuts.
+- The browser studio is a vertical-video production surface, not a generic dashboard or static cards.
+- Missing provider keys create blocked states, not fake success.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.

@@ -1,6 +1,6 @@
 # Project Setup
 
-This setup contract is completed before phase implementation. It turns short human alignment and mapped observations into concrete project architecture, team operating rules, quality gates, and the future project `AGENTS.md` plan.
+This setup contract is completed before phase implementation. It turns short human alignment, mapped observations, and the product vision embedded in `BUILDPRINT.md` into concrete project architecture, experience direction, quality gates, and the future project `AGENTS.md` plan.
 
 ## Setup defaults
 
@@ -21,6 +21,7 @@ This setup contract is completed before phase implementation. It turns short hum
 ## Product / capability shape
 
 - Product: Novel-to-storyboard production workbench.
+- Product vision source: `BUILDPRINT.md` `## Product brief` and `## Final product at a glance`. Translate the embedded vision into implementation-project `ui-identity.md`; do not create any extra packet-level vision file.
 - Frontend/UI surfaces: storyboard workbench, cinematic canvas, ordered shot strip/grid, selected-frame inspector, episode selector, agent chat, media generation paneling, blocked-provider states, and runtime login/setup surfaces.
 - Backend/API surfaces: flow load/save, authenticated project/episode authorization, production-agent socket, media generation jobs, provider adapters, media URL resolver, health/readiness, and evidence-safe logs.
 - State/runtime surfaces: prose/script, script plan, assets, storyboard table, storyboard frames, shot order, frame prompts, notes, review status, continuity tags, media generation records, provider job IDs, workbench/video metadata, session state, and runtime evidence.
@@ -56,9 +57,9 @@ Production-grade architecture is the default for the selected storyboard workben
 
 Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.buildprint/setup/*.md` in the implementation workspace with the concrete choices above. Creating only `AGENTS.md` is not enough; `AGENTS.md` is a scope governor and local instruction map after setup decisions exist.
 
-## Workbench UX quality contract
+## Experience quality contract
 
-- UI architecture: define a real UI boundary, component/state ownership, controller/API integration, and browser proof path for every user-facing phase.
+- UI architecture: define a real UI boundary, component/state ownership, controller/API integration, and browser proof path for every user-facing phase. The implementation-project `ui-identity.md` must derive from `BUILDPRINT.md` product vision and reject generic dashboard, local MVP, bare graph, raw text-list, static card, and default-form fallbacks for this storyboard product.
 - Product composition: start from the storyboard workbench surface, not a generic dashboard, default form, marketing shell, bare graph demo, or static card board.
 - Domain-specific affordances: represent shots as storyboard frames with aspect-ratio-safe previews, shot numbers, scene/beat labels, prompts, notes, review status, linked assets/characters, continuity tags, and media state.
 - Visual system: define hierarchy, density, typography, spacing, color, focus, disabled, loading, error, blocked, queued, generating, approved, selected, and success states.
@@ -160,7 +161,7 @@ The Foundation scaffold gate requires:
 - `architecture.md` with required sections: Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map.
 - `engineering-standards.md` with required sections: Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, UI standards, and Test standards with deterministic blocker/e2e/runtime exit behavior.
 - `test-strategy.md` with phase proof commands, no-network provider gates, browser/e2e gates, screenshot critique gates, security/secret scans, and evidence row policy.
-- `ui-identity.md` because this is UI-bearing; it must define storyboard-production visual identity, interaction density, responsive rules, accessibility baseline, screenshot critique rubric, and forbidden generic/local-MVP patterns.
+- `ui-identity.md` because this is UI-bearing; it must derive from `BUILDPRINT.md` product vision and define storyboard-production visual identity, interaction density, responsive rules, accessibility baseline, screenshot critique rubric, and forbidden generic/local-MVP patterns.
 
 No phase implementation may start until these files exist and the base project can run an install/build or an honest setup blocker is written. If scaffold verification fails, exit deterministically before phase work and route the repair to this setup gate.
 
@@ -179,7 +180,7 @@ The Buildprint packet must not contain `AGENTS.md`. The implementation project s
 - Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
 - Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
 - Creating only `AGENTS.md` is not enough to satisfy the setup gate.
-- Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
+- Phase entry remains governed by `03-phases/phase-flow.md`.
 
 ## Open assumptions
 

@@ -10,6 +10,24 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Main surfaces: browser workbench, API service, worker/runtime boundary, LLM provider adapter, Zep graph-memory provider adapter, OASIS simulation runtime, durable project/simulation/report storage, graph visualization, report export, and interview/chat surfaces.
 - What this packet must not become: a generic local MVP, static dashboard, source clone, no-provider demo, route-only shell, or single-file product mock.
 
+## Final product at a glance
+
+**Golden path** - An analyst uploads seed material and a prediction requirement, validates ontology output, builds an inspectable graph memory, prepares a simulation environment, runs a monitored swarm scenario, receives a grounded report, and can interrogate the simulated world through chat or interview surfaces.
+
+**Surfaces**
+
+- Seed ontology workbench - ingest seed documents and preview ontology output - Phase 1
+- Graph memory explorer - build and inspect graph-backed memory - Phase 2
+- Simulation environment - configure agents, world state and run preconditions - Phase 3
+- Simulation run observability - run the scenario with progress, logs and blockers - Phase 4
+- Report and interaction - review report outputs and interrogate results - Phase 5
+
+**Done looks like**
+
+- Uploaded seed material, graph memory, simulation state and report artifacts survive restart/readback.
+- The graph and report surfaces are interactive analysis tools, not a bare graph or static dashboard.
+- Provider, simulation and browser proof claims are upgraded only by matching evidence.
+
 ## Required read order
 
 1. Read this packet file `BUILDPRINT.md` first, before listing or opening other packet files.

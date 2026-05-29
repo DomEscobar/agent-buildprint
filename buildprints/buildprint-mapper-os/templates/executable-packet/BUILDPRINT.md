@@ -10,11 +10,11 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Primary outcome: <one concrete user-visible result: what the user can do and what they receive; do not repeat surface names as a list>
 - Primary users: <who uses it>
 - Main surfaces: <capability surfaces, e.g. browser workbench, API service, worker/runtime boundary, provider adapters, persistence, export/report surfaces; avoid concrete source framework names unless the framework itself is the mapped product>
-- What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
+- What this packet must not become: a generic local MVP, static demo, source clone, single-file product shell, generic dashboard, default-form stack, or product-agnostic UI.
 
 ## Final product at a glance
 
-This section is the product north star. It is read first and stays bounded: no architecture, no API detail, no per-phase spec. Depth lives in the owning phase file. Every surface named here must appear in the `02-project-setup.md` obligation/surface matrix with exactly one owning phase, and vice versa.
+This section is the product north star generated from Mapper OS `vision.md`. It is read first and stays bounded: no architecture, no API detail, no per-phase spec. Depth lives in the owning phase file. Every surface named here must appear in the `02-project-setup.md` obligation/surface matrix with exactly one owning phase, and vice versa.
 
 **Golden path:** <one short paragraph — the single primary end-to-end journey a user takes through the core surfaces from first action to final result. Use product language; do not use source-internal node or route names.>
 
@@ -40,10 +40,9 @@ This package is `PROOF_REQUIRED`. The glance describes the target product, not a
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
 6. Read `03-phases/phase-flow.md`.
-7. Read only the role contracts under `06-contracts/` required by the active phase `requires_roles`.
-8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
-9. Read `04-evaluation.md`.
-10. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
+7. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
+8. Read `04-evaluation.md`.
+9. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 
 Read these files sequentially. Do not batch, parallelize, or reorder the initial context reads, even when using multi-command tooling.
 
@@ -71,9 +70,9 @@ A phase cannot be marked done from code edits alone.
 Read this before interpreting any phase status, evidence row, or progress file.
 
 - `PROOF_REQUIRED`, `checkpoint_recorded`, `phase_core_passed`, and `complete-bounded-proof` describe **bounded packet proof**, not production-product completion. A run may honestly finish all phases with blockers and still not deliver the final product the user expects.
-- A role return, review file (`reviews/*.md`), handoff, or self-simulated adversarial review is **permission to record evidence**, never evidence itself. Prose that says "tests passed", "screenshots captured", or "no dead handlers" without a rerunnable command output or an on-disk artifact an independent reader can reopen does not prove anything.
+- Review prose, summaries, screenshots, or status notes are **permission to record evidence**, never evidence themselves. Prose that says "tests passed", "screenshots captured", or "no dead handlers" without a rerunnable command output or an on-disk artifact an independent reader can reopen does not prove anything.
 - Every `pass` or `pass-with-scoped-debt` verdict must point to at least one of: (a) an exact command that was run and whose stdout/stderr is quoted or saved under `.buildprint/phase-runs/<phase-id>/`, or (b) a file path under the implementation project or `.buildprint/phase-runs/<phase-id>/` that exists and matches the claim.
-- When subagents are unavailable, the implementer and reviewer share one context. Treat `06-contracts/test-and-verification.md` **Self-simulation referee** plus the scaffold **runnable verification commands** from `02-project-setup.md` as the minimum substitute for an independent reviewer — not optional narration.
+- When independent reviewers are unavailable, the implementer must still run the scaffold **runnable verification commands** from `02-project-setup.md`; verification output is the minimum substitute for review prose.
 
 ## Repair routing
 
@@ -89,6 +88,6 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 ## Phase discipline
 
-Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, bounded handoffs for every role in `requires_roles`, and return files for every role. Use subagents or delegated workers when available; when unavailable, self-simulate each role through the same handoff/return artifacts. Collect returns/reviews/proof, and only then append runtime evidence.
+Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, implement the smallest real vertical path, run verification, write `.buildprint/phase-runs/<phase-id>/proof.md`, and only then append runtime evidence.
 
 A phase is a proof-gated mode-aware slice, not a waterfall task bucket. Each phase must declare its `blueprint_mode` and `phase_style` in `## Phase mode contract`, and must define outcome (product/capability/operation depending on mode), mapped obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements (or non-UI statement), safety/security constraints, quality gates, proof gate, and repair routing.

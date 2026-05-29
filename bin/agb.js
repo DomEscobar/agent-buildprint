@@ -2389,7 +2389,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   const currentStateMd = [
     '# Current State',
     '',
-    'Purpose: anti-context-rot handoff file. Update after every phase and before stopping.',
+    'Purpose: anti-context-rot continuity file. Update after every phase and before stopping.',
     '',
     '## Mission',
     '',
@@ -2999,10 +2999,10 @@ function packetCheckResults(dir) {
   ok('questions use numbered AI-default alignment', /## 1\./.test(questions) && /## 6\./.test(questions) && /AI best judgment/i.test(questions))
   const setup = safeReadText(path.join(dir, '02-project-setup.md'))
   ok('project setup defines architecture and AGENTS plan', /Architecture principles|Architecture rules/i.test(setup) && /implementation-project `AGENTS\.md`|AGENTS\.md plan/i.test(setup) && /Phase start gate/i.test(setup))
-  ok('project setup defines phase-flow execution authority', /Execution authority model/i.test(setup) && /03-phases\/phase-flow\.md/i.test(setup) && /bounded handoff/i.test(setup))
+  ok('project setup defines phase-flow execution authority', /03-phases\/phase-flow\.md/i.test(setup) && /Foundation scaffold gate/i.test(setup) && /\.buildprint\/setup/i.test(setup))
   const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
-  ok('phase flow defines phase-entry orchestration artifacts', /Phase-entry protocol/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/plan\.md/i.test(phaseFlow) && /handoffs\/<role>\.md/i.test(phaseFlow) && /returns\/<role>\.md/i.test(phaseFlow) && /reviews\/qa\.md/i.test(phaseFlow))
-  ok('phase flow blocks evidence until reviews/proof exist', /You may not append runtime evidence/i.test(phaseFlow) && /\.buildprint\/evidence\/evidence-ledger\.jsonl/i.test(phaseFlow))
+  ok('phase flow defines phase-entry proof artifacts', /Phase-entry protocol/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/plan\.md/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/proof\.md/i.test(phaseFlow))
+  ok('phase flow blocks evidence until proof exists', /may not append runtime evidence|Before writing runtime evidence/i.test(phaseFlow) && /\.buildprint\/evidence\/evidence-ledger\.jsonl/i.test(phaseFlow))
   const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
   ok('phase index names active proof-gated phase', /active_phase:\s*03-phases\//i.test(phaseIndex) && /phase_id:/i.test(phaseIndex) && /proof_gate:/i.test(phaseIndex))
   const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
@@ -3167,32 +3167,7 @@ function phaseIndexActiveInfo(phaseIndexText) {
   return { activePhase, activePhaseId: fallbackId || null }
 }
 
-function roleContractsFromPhaseText(activePhaseText, hasManifestFile) {
-  const inline = activePhaseText.match(/^requires_roles:\s*\[([^\]]+)\]\s*$/im)
-  if (inline) {
-    return inline[1]
-      .split(',')
-      .map((role) => role.trim().replace(/^['"]|['"]$/g, ''))
-      .filter(Boolean)
-      .map((role) => `06-contracts/${role}.md`)
-      .filter(hasManifestFile)
-  }
-
-  const lines = activePhaseText.split(/\r?\n/)
-  const start = lines.findIndex((line) => /^requires_roles:\s*$/i.test(line.trim()))
-  if (start < 0) return []
-  const roles = []
-  for (let i = start + 1; i < lines.length; i += 1) {
-    const line = lines[i]
-    if (!line.trim()) continue
-    const m = line.match(/^\s*-\s*([a-z0-9-]+)\s*$/i)
-    if (!m) break
-    roles.push(m[1])
-  }
-  return roles.map((role) => `06-contracts/${role}.md`).filter(hasManifestFile)
-}
-
-function executableReadOrder(baseReadOrder, hasManifestFile, activePhase, roleContracts) {
+function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
   const canonical = [
     'BUILDPRINT.md',
     '01-questions.md',
@@ -3200,7 +3175,6 @@ function executableReadOrder(baseReadOrder, hasManifestFile, activePhase, roleCo
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
-    ...roleContracts,
     activePhase,
     '04-evaluation.md',
     '05-evidence/evidence-ledger.jsonl'
@@ -3274,10 +3248,8 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   const phaseIndexPath = path.join(snapshotDir, '03-phases', 'phase-index.yaml')
   const phaseIndexText = fs.existsSync(phaseIndexPath) ? fs.readFileSync(phaseIndexPath, 'utf8') : ''
   const { activePhase, activePhaseId } = phaseIndexActiveInfo(phaseIndexText)
-  const activePhaseText = activePhase ? safeReadText(path.join(snapshotDir, activePhase)) : ''
-  const activeRoleContracts = isExecutablePacket ? roleContractsFromPhaseText(activePhaseText, hasManifestFile) : []
   const manifestReadOrder = isExecutablePacket
-    ? executableReadOrder(baseReadOrder, hasManifestFile, activePhase, activeRoleContracts)
+    ? executableReadOrder(baseReadOrder, hasManifestFile, activePhase)
     : uniqueStrings(baseReadOrder.filter(hasManifestFile))
   const evidenceDir = path.join(stateDir, 'evidence')
   const runtimeEvidencePath = path.join(evidenceDir, 'evidence-ledger.jsonl')
@@ -3333,8 +3305,8 @@ This is a Mapper OS executable Buildprint. Local runtime state wins over stale a
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work.
-4. Read \`.buildprint/snapshots/03-phases/phase-flow.md\` and the active phase role contracts: ${activeRoleContracts.length ? activeRoleContracts.map((file) => `\`.buildprint/snapshots/${file}\``).join(', ') : '\`none declared\`'}.
-5. Create the required \`.buildprint/phase-runs/<phase-id>/\` plan/team/handoff/return/review/proof artifacts before evidence.
+4. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
+5. Create the required \`.buildprint/phase-runs/<phase-id>/\` plan/proof artifacts before evidence.
 6. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
 7. Execute the phase implementation loop through phase-flow: observe, plan, execute, verify, reflect, record.
 8. If verification fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.

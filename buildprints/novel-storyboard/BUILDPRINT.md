@@ -10,7 +10,7 @@ Claim status: `PROOF_REQUIRED`
 - Primary outcome: A creator can turn a prose episode into a saved, reviewable, visually compelling storyboard board with script beats, shot frames, character/asset continuity, media generation state and video workbench state that survives reloads.
 - Primary users: creators, directors, producers, storyboard artists and operators configuring AI media providers.
 - Main surfaces: browser storyboard workbench, cinematic canvas, shot strip/timeline, frame inspector, agent chat, API service, provider adapter, persistence, media artifact storage, deployment/runtime shell.
-- What this packet must not become: a desktop-only clone, static graph mock, route inventory, provider fake counted as live media generation, or a source-framework prescription.
+- What this packet must not become: a desktop-only clone, generic dashboard, local MVP shell, static demo, bare graph, raw text-list, static card board, route inventory, provider fake counted as live media generation, or a source-framework prescription.
 
 ## Product experience spine
 
@@ -51,10 +51,9 @@ The implementation must feel like a real storyboard product, not a technically a
 4. Read `blueprint.yaml` as the machine-readable mirror.
 5. Read `03-phases/phase-index.yaml`.
 6. Read `03-phases/phase-flow.md`.
-7. Read only the role contracts under `06-contracts/` required by the active phase `requires_roles`.
-8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
-9. Read `04-evaluation.md`.
-10. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
+7. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
+8. Read `04-evaluation.md`.
+9. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 
 Read these files sequentially. Do not batch, parallelize, or reorder the initial context reads, even when using multi-command tooling.
 
@@ -68,21 +67,20 @@ For each phase:
 
 1. Read `03-phases/phase-flow.md`.
 2. Read the active phase named in `03-phases/phase-index.yaml`.
-3. Read only the role contracts listed for that active phase.
-4. Implement the smallest complete vertical outcome for that phase.
-5. Run the phase proof gate.
-6. Record command output or artifact paths in `.buildprint/evidence/evidence-ledger.jsonl`.
-7. If proof fails, repair the current phase before advancing.
+3. Implement the smallest complete vertical outcome for that phase.
+4. Run the phase proof gate.
+5. Record command output or artifact paths in `.buildprint/evidence/evidence-ledger.jsonl`.
+6. If proof fails, repair the current phase before advancing.
 
 ## Phase discipline
 
-Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, bounded handoffs for every role in `requires_roles`, and return files for every role. Use subagents or delegated workers when available; when unavailable, self-simulate each role through the same handoff/return artifacts. Collect returns/reviews/proof, and only then append runtime evidence.
+Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, implement the smallest real vertical path, verify with the phase proof gate, write `.buildprint/phase-runs/<phase-id>/proof.md`, and only then append runtime evidence.
 
 A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
 
 ## Completion semantics
 
-Bounded proof is not product completion. A passing phase verdict proves only the named phase gate under the recorded environment, input data and artifacts. Returns, reviews, screenshots, summaries and handoffs are not evidence by themselves. Every pass verdict requires rerunnable command output or an existing artifact path. Do not claim `validated`, `complete`, `production-ready` or `end-to-end` unless `04-evaluation.md` promotion gates pass and evidence rows exist for the required proofs.
+Bounded proof is not product completion. A passing phase verdict proves only the named phase gate under the recorded environment, input data and artifacts. Reviews, screenshots, summaries and status notes are not evidence by themselves. Every pass verdict requires rerunnable command output or an existing artifact path. Do not claim `validated`, `complete`, `production-ready` or `end-to-end` unless `04-evaluation.md` promotion gates pass and evidence rows exist for the required proofs.
 
 ## Repair routing
 

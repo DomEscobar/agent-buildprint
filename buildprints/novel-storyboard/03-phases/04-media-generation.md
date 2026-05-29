@@ -8,21 +8,16 @@ Before writing code, read:
 - `.buildprint/next-agent.md`
 - current project `AGENTS.md`
 
-Then execute this current phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`, then declare phase objective, write `.buildprint/phase-runs/<phase-id>/team-gates.md`, create handoff and return artifacts, collect reviews, integrate, verify, and record evidence.
+Then execute this current phase through `03-phases/phase-flow.md`: declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`, implement the first real provider/job/status path inside the scaffold, verify, write `.buildprint/phase-runs/<phase-id>/proof.md`, and record evidence.
 
-Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`. You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
-
-requires_roles:
-  - integration-runtime
-  - data-persistence
-  - security-boundary
-  - test-and-verification
+You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
 ## Phase mode contract
 
 - blueprint_mode: product
 - phase_style: outcome_flow
 - Mode lens: product outcome flow with shared proof spine.
+- Glance surfaces delivered: Media generation paneling.
 - Product implementation rule: preserve source-backed outcome flows through UI/API/domain/provider/persistence boundaries without copying source implementation code.
 
 ## Product outcome

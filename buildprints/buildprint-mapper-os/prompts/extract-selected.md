@@ -21,18 +21,13 @@ selected-buildprint/
   05-evidence/
     evidence-ledger.jsonl
     evidence-ledger.schema.json
-  06-contracts/
-    product-architect.md
-    ux-ui-craft.md
-    test-and-verification.md
-    integration-runtime.md
-    security-boundary.md
-    data-persistence.md
   generated/
     agent-prompt.md
 ```
 
 `schema_version` must be `mapper-os/executable-blueprint`.
+
+Mapper OS maintains `buildprints/buildprint-mapper-os/vision.md` as generator guidance. Use it while synthesizing selected packets, but never emit packet-level `vision.md` into `selected-buildprint/`.
 
 ## Scaffold preservation contract
 
@@ -41,11 +36,10 @@ Start from `templates/executable-packet/` as the structural authority. Preserve 
 Required exact anchors include:
 
 - `blueprint.yaml`: `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `blueprint_mode` with primary/secondary/phase_style, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure.proof_gate_failed: current_phase`, `repair_loop.on_failure.architecture_contradiction: 02-project-setup.md`.
-- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Final product at a glance`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, `## Completion semantics`, and `## Repair routing`. `## Completion semantics` must state that bounded proof is not product completion, that returns/reviews are not evidence, and that every pass verdict requires rerunnable command output or an existing artifact path (copy from `templates/executable-packet/BUILDPRINT.md`; do not omit).
+- `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Final product at a glance`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, `## Completion semantics`, and `## Repair routing`. `## Completion semantics` must state that bounded proof is not product completion, that review prose/status notes are not evidence, and that every pass verdict requires rerunnable command output or an existing artifact path (copy from `templates/executable-packet/BUILDPRINT.md`; do not omit).
 - `01-questions.md`: use headings `## 1.` through `## 6.` and include the exact AI-best-judgment default phrase below.
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
 - `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, `no_fake`, and `production_readiness`.
-- `06-contracts/`: include one role contract file for each allowed `requires_roles` value: `product-architect`, `ux-ui-craft`, `test-and-verification`, `integration-runtime`, `security-boundary`, and `data-persistence`.
 
 `generated/agent-prompt.md` must declare `Generated from: blueprint.yaml`, state that it is not source of truth, and summarize the selected blueprint mode/phase style without overriding the packet files.
 
@@ -82,14 +76,15 @@ Do not emit:
 4. `blueprint.yaml`
 5. `03-phases/phase-index.yaml`
 6. `03-phases/phase-flow.md`
-7. required `06-contracts/<role>.md` files for the active phase only
-8. active phase file only
-9. `04-evaluation.md`
-10. `05-evidence/evidence-ledger.jsonl`
+7. active phase file only
+8. `04-evaluation.md`
+9. `05-evidence/evidence-ledger.jsonl`
 
 No phase may start until `02-project-setup.md` is explicit enough to create project root/local `AGENTS.md` without inventing architecture.
 
-Before the read order, `BUILDPRINT.md` must include a compact `## Product brief` with:
+For product-mode packets and UI-bearing mixed outputs, synthesize `BUILDPRINT.md` and `02-project-setup.md` from Mapper OS `vision.md`. Do not copy `vision.md` into the packet. Convert its quality bar into concise product-specific language that makes the downstream agent picture a desirable finished product before it sees implementation mechanics.
+
+Before the read order, `BUILDPRINT.md` must include a compact vision-derived `## Product brief` with:
 
 - `Product`
 - `Primary outcome`
@@ -101,8 +96,9 @@ Rules for `## Product brief`:
 
 - `Product` must be a **capability name** — what kind of tool or system this is — not the source app or brand name. Writing "Toonflow production canvas webapp" when the source app is called Toonflow is invalid. Write "AI short-drama production canvas workbench" instead.
 - `Primary outcome` must be a **single concrete user-visible result**: what the user can do and what they receive. Do not list internal source node names, route names, or component identifiers as if the reader knows them. Do not restate the product name. One sentence, product language, from the user's perspective.
-- Keep this brief to five orientation bullets. Do not copy phase details, source evidence, setup matrices, role contract text, or implementation plans.
+- Keep this brief to five orientation bullets. Do not copy phase details, source evidence, setup matrices, or implementation plans.
 - Do not freeze source implementation frameworks: write capability surfaces (`browser workbench`, `API service`, `worker/runtime`, `provider adapter`, `persistence`, `artifact export`), not concrete stack names such as Vue, React, Flask, Django, FastAPI, Express, Next, Nuxt, Svelte, or Angular. Product-defining external systems such as named platforms, model/provider boundaries, and runtime artifacts may be named when they are part of the mapped product contract.
+- The brief must reject ugly-app failure modes in product-specific terms: generic dashboards, local MVP shells, static demos, bare graphs, raw text lists, default forms, and product-agnostic UI.
 
 Immediately after `## Product brief`, `BUILDPRINT.md` must include `## Final product at a glance` with exactly three bounded parts:
 
@@ -232,26 +228,27 @@ AI may decide ordinary engineering defaults, but each default must be appropriat
 The matrix must include source evidence, target disposition, owning phase, and required proof for every high-signal mapped surface. Generic buckets like “simulation”, “dashboard”, “memory”, “reports”, “runtime”, or “core app” are invalid unless decomposed into sub-surfaces with distinct obligations. If a surface is split across phases, name one primary owning phase and supporting phases. If a surface is intentionally dropped, deferred, blocked, or uncertain, mark that disposition with rationale; do not silently omit it.
 
 
-## Execution authority and delegation
+## Execution authority
 
-Selected packets for multi-phase work must compile into orchestrator handoffs, not only implementation instructions.
+Selected packets for multi-phase work must compile into a lean phase-run protocol, not role-contract bureaucracy.
 
-Do not repeat the full phase/delegation protocol inside `02-project-setup.md`. That file should only contain implementation-project setup instructions: root/local `AGENTS.md` plan, `.buildprint/setup.md` requirement, Foundation scaffold gate, and the statement that phase entry remains governed by `03-phases/phase-flow.md` plus `06-contracts/*`.
+Do not repeat the full phase protocol inside `02-project-setup.md`. That file should only contain implementation-project setup instructions: root/local `AGENTS.md` plan, `.buildprint/setup.md` requirement, Foundation scaffold gate, `ui-identity.md` requirement for UI-bearing work, and the statement that phase entry remains governed by `03-phases/phase-flow.md`.
 
 For implementation packets, `02-project-setup.md` must require the implementation agent to create the selected stack's real base project structure before Phase 01. The scaffold must include root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents before editing code; otherwise coding agents will avoid them. `architecture.md` must contain architecture best practices with `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. `engineering-standards.md` must contain clean coding standards with `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`, including deterministic timeout/exit behavior for blocked e2e/runtime proof.
 
-`## Foundation scaffold gate` in `02-project-setup.md` must include the **Runnable verification gate** subsection from `templates/executable-packet/02-project-setup.md`: require `verify:no-fake` and `verify:phase-artifacts` scripts (or documented stack equivalents), mandate running them before runtime evidence, and require pasted stdout in `## Self-simulation referee findings`. Do not reduce this to prose-only "run tests".
+For UI-bearing packets, `ui-identity.md` is mandatory and must derive from the product vision in `BUILDPRINT.md`: visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, screenshot critique, and product-specific anti-generic failure patterns.
+
+`## Foundation scaffold gate` in `02-project-setup.md` must include the **Runnable verification gate** subsection from `templates/executable-packet/02-project-setup.md`: require `verify:no-fake` and `verify:phase-artifacts` scripts (or documented stack equivalents), mandate running them before runtime evidence, and require pasted stdout in `.buildprint/phase-runs/<phase-id>/proof.md`. Do not reduce this to prose-only "run tests".
 
 For long-running full-suite execution, the orchestrated phase-suite loop is mandatory:
 
 1. Orchestrator reads Buildprint state, `03-phases/phase-flow.md`, and active phase.
-2. Orchestrator resolves every phase `requires_roles` value to `06-contracts/<role>.md`.
-3. Orchestrator writes `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, and bounded handoffs for every required role.
-4. Specialists implement or review scoped slices from those handoffs, or the orchestrator explicitly simulates the role and writes the same return artifact when subagents are unavailable.
-5. Orchestrator integrates results in one workspace.
-6. Proof gate runs for the phase after reviews are written under `.buildprint/phase-runs/<phase-id>/reviews/`.
-7. Runtime evidence rows are appended to `.buildprint/evidence/evidence-ledger.jsonl` only after required phase-run artifacts exist.
-8. Progress and next-agent continuity are updated before moving to the next phase.
+2. Orchestrator writes `.buildprint/phase-runs/<phase-id>/plan.md` with scope, product target, files to inspect, proof commands, and expected evidence rows.
+3. Orchestrator implements the smallest real vertical path inside the scaffold.
+4. Proof gate runs for the phase with exact tests, runtime/browser traces, screenshot critique, and source inspection required by the phase.
+5. Orchestrator writes `.buildprint/phase-runs/<phase-id>/proof.md` with command output, artifact paths, screenshots/traces, blockers, and claim limits.
+6. Runtime evidence rows are appended to `.buildprint/evidence/evidence-ledger.jsonl` only after required phase-run artifacts exist.
+7. Progress and next-agent continuity are updated before moving to the next phase.
 
 A full-suite replay must fail if later phases are merely reserved, stubbed, or blocked while the run claims pass.
 
@@ -276,18 +273,7 @@ Every phase must include a compact `## Phase mode contract` section immediately 
 
 `03-phases/phase-index.yaml` must include `active_phase`, `phase_id`, `file`, `status`, dependencies, and proof gate. `active_phase` and every `file` value must point to the full packet-relative phase file path under `03-phases/`.
 
-`03-phases/phase-flow.md` is required. It must be a compact delegation router, not the storage location for role expertise. It must define the phase-entry protocol, role-contract resolution through `06-contracts/<role>.md`, required phase-run artifacts, bounded handoff shape, subagent permission, self-simulation fallback when subagents are unavailable, integration/review/proof flow, and the rule that runtime evidence cannot be appended until plan/team-gates/handoffs/returns/reviews/proof artifacts exist.
-
-`03-phases/phase-flow.md` must additionally include the following three sections (copy from `templates/executable-packet/03-phases/phase-flow.md`; do not summarize or omit):
-
-- **Handoff anti-boilerplate rule** — every `files to read` path must exist in the implementation project before the handoff is written; `success criteria` must name the concrete user action path; `verification command or proof artifact expected` must be an exact command string or file path; `evidence row expectations` must name `proof_type` values and `upgrades_claim` per role contribution. Generic placeholders are invalid and block the role gate.
-- **Adversarial self-review** — when a role is self-simulated, the return may emit `pass` only after citing disproving evidence (source file/line or artifact path) against each applicable `## Reject If` item; if evidence cannot be cited, the verdict must be `blocker`. UI self-simulation requires reading component/handler source to name dead handlers and to confirm at least two artifacts (initial and post-action) exist with a described visible difference.
-
-`06-contracts/*.md` files are first-class packet files. Convert Mapper OS team skill capsules into concise role contracts with `## When Active`, `## Handoff Scope`, `## Reject If`, `## Required Return Headings`, and `## Proof/Evidence Expectations`. Do not copy the entire mapper-local `templates/teams/*` files verbatim into selected packets. A selected packet that only lists role names such as `ux-ui-craft` or `product-architect` without matching `06-contracts/<role>.md` files is incomplete.
-
-`06-contracts/ux-ui-craft.md` must include the **Evidence binding** section (copy from `templates/executable-packet/06-contracts/ux-ui-craft.md`): every artifact named in `## Screenshot or browser evidence` must exist on disk under `.buildprint/phase-runs/<phase-id>/`; at least one artifact must visibly differ from the initial page load; reusing an earlier phase's screenshot is an evidence ceiling violation; `pass` is forbidden if any cited artifact is missing or unchanged-from-initial.
-
-`06-contracts/test-and-verification.md` must include the **Self-simulation referee** section (copy from `templates/executable-packet/06-contracts/test-and-verification.md`): when self-simulated, this role confirms every cited artifact exists on disk, runs a no-fake source inspection, audits every `upgrades_claim: true` row, and produces a consolidated verdict that downgrades any role return whose claims cannot be confirmed; its required return headings must include `## Self-simulation referee findings`.
+`03-phases/phase-flow.md` is required. It must be a compact phase-run constitution, not the storage location for role expertise. It must define snapshot integrity, phase identity, phase-entry protocol, required phase-run artifacts, proof/evidence sequencing, continuation rules, and the rule that runtime evidence cannot be appended until `plan.md` and `proof.md` exist.
 
 Phase identity rules:
 
@@ -299,7 +285,6 @@ Phase identity rules:
 Every implementation phase file under `03-phases/*.md` must include:
 
 - `## How to implement this phase` with required pre-code reads: `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`; it must tell the agent to execute through phase-flow and block evidence until phase-flow artifacts exist.
-- `requires_roles:` seeded from phase needs, not a fixed always-on team. Every listed role must have a matching `06-contracts/<role>.md` file.
 - `## Product outcome` for product mode, or `## Capability outcome` / `## Operation outcome` for non-product modes
 - `## Phase mode contract` — must include a `Glance surfaces delivered:` line naming which surfaces from `BUILDPRINT.md` `## Final product at a glance` this phase owns. At least one surface must be named. A phase that delivers no named glance surface is delivering invented scope and must be removed or traced to a missing glance entry.
 - `## Mapped product obligations` for product mode, or `## Mapped capability obligations` / `## Mapped operation obligations` for non-product modes
@@ -332,7 +317,7 @@ UI-bearing phases must not reference non-existent shared files such as `02-conte
 `## Implementation scope` must enumerate specific features, interactions, and depth items rather than generic boilerplate. Forbidden verbatim filler:
 
 - `"Inputs are defined by the product obligation and interface contracts."` — name the actual inputs
-- `"Outputs are defined by the product obligation and interface contracts."` — name the actual outputs and downstream handoffs
+- `"Outputs are defined by the product obligation and interface contracts."` — name the actual outputs and downstream artifacts
 
 For UI-bearing product phases, `## Implementation scope` or the `## Proof gate` must name at least one concrete **interaction depth** item per domain capability:
 
@@ -389,13 +374,13 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 ## Behavior loss review
 
-Before handoff, ask:
+Before returning selected output, ask:
 
 > What mapped product behavior, workflow, integration boundary, persistence behavior, auth/security rule, job/runtime behavior, import/export, or operational requirement would be impossible to rebuild from this Buildprint?
 
 Any identified loss must become a phase, a blocker, an explicit user-approved exclusion, or a documented merge into another phase.
 
-## Required self-check before handoff
+## Required self-check before return
 
 Before returning selected output, run the product-facing packet check when the CLI is available:
 

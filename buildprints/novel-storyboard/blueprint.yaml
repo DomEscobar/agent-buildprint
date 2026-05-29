@@ -71,27 +71,22 @@ phases:
     title: Cinematic storyboard workbench
     file: 03-phases/01-canvas-workbench.md
     status: INCLUDED_NEEDS_PROOF
-    requires_roles: [product-architect, ux-ui-craft, test-and-verification]
   - phase_id: 02-flow-persistence
     title: Episode flow persistence
     file: 03-phases/02-flow-persistence.md
     status: INCLUDED_NEEDS_PROOF
-    requires_roles: [data-persistence, test-and-verification, security-boundary]
   - phase_id: 03-production-agent-loop
     title: Production agent chat and board updates
     file: 03-phases/03-production-agent-loop.md
     status: INCLUDED_NEEDS_PROOF
-    requires_roles: [integration-runtime, security-boundary, test-and-verification]
   - phase_id: 04-media-generation
     title: Async media generation and provider boundaries
     file: 03-phases/04-media-generation.md
     status: INCLUDED_RISKY_REQUIRES_HARDENING
-    requires_roles: [integration-runtime, data-persistence, security-boundary, test-and-verification]
   - phase_id: 05-webapp-runtime
     title: Webapp runtime, auth and deployment
     file: 03-phases/05-webapp-runtime.md
     status: INCLUDED_RISKY_REQUIRES_HARDENING
-    requires_roles: [product-architect, security-boundary, data-persistence, test-and-verification, ux-ui-craft]
 context:
   phase_index: 03-phases/phase-index.yaml
   phase_flow: 03-phases/phase-flow.md

@@ -36,26 +36,13 @@ const requiredFiles = [
   '04-evaluation.md',
   '05-evidence/evidence-ledger.jsonl',
   '05-evidence/evidence-ledger.schema.json',
-  '06-contracts/product-architect.md',
-  '06-contracts/ux-ui-craft.md',
-  '06-contracts/test-and-verification.md',
-  '06-contracts/integration-runtime.md',
-  '06-contracts/security-boundary.md',
-  '06-contracts/data-persistence.md',
   'generated/agent-prompt.md',
-];
-const roleContracts = [
-  'product-architect',
-  'ux-ui-craft',
-  'test-and-verification',
-  'integration-runtime',
-  'security-boundary',
-  'data-persistence',
 ];
 const forbiddenPaths = [
   'START_HERE.md',
   'PRE_IMPLEMENTATION_QUESTIONS.md',
   'AGENTS.md',
+  'vision.md',
   '00-intent/',
   '01-operating-model/',
   '02-context/',
@@ -340,7 +327,7 @@ function validate(target, dir) {
   if (concreteFrameworkPattern.test(productBrief)) {
     fail(target, 'BUILDPRINT.md Product brief must describe capability surfaces, not freeze source framework names; stack preferences belong in 01-questions.md/setup decisions');
   }
-  for (const token of ['01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '06-contracts/', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
+  for (const token of ['01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl']) {
     if (!buildprint.includes(token)) fail(target, `BUILDPRINT.md read order missing ${token}`);
   }
   if (/Read only the active phase file:\s*`03-phases\//i.test(buildprint)) {
@@ -354,10 +341,16 @@ function validate(target, dir) {
   }
   if (!/Implementation loop/i.test(buildprint) || !/Repair routing/i.test(buildprint)) fail(target, 'BUILDPRINT.md must include implementation loop and repair routing');
   if (!/phase-flow\.md/i.test(buildprint) || !/phase-runs/i.test(buildprint)) fail(target, 'BUILDPRINT.md must require phase-flow phase-run orchestration before evidence');
-  if (!/06-contracts\/<role>\.md|06-contracts\/`? required/i.test(buildprint)) fail(target, 'BUILDPRINT.md must route required roles through 06-contracts/<role>.md');
-  if (!/subagents|delegated workers/i.test(buildprint) || !/self-simulate/i.test(buildprint)) fail(target, 'BUILDPRINT.md must permit subagents and require self-simulation fallback');
-  if (/\.buildprint\/phase-runs\/<phase-id>\/team\.md/i.test(buildprint)) fail(target, 'BUILDPRINT.md must use team-gates.md, not obsolete team.md');
+  if (/\.buildprint\/phase-runs\/<phase-id>\/team\.md/i.test(buildprint)) fail(target, 'BUILDPRINT.md must not use obsolete team.md');
   if (/START_HERE|PRE_IMPLEMENTATION_QUESTIONS|03-capabilities/i.test(buildprint)) fail(target, 'BUILDPRINT.md contains obsolete pre-baseline entrypoint/capability wording');
+  if (blueprintPrimary === 'product') {
+    for (const token of ['Final product at a glance', 'Golden path', 'Done looks like']) {
+      if (!buildprint.includes(token)) fail(target, `BUILDPRINT.md product vision missing ${token}`);
+    }
+    if (!/generic dashboard|local MVP|static demo|bare graph|raw text-list|static card/i.test(buildprint)) {
+      fail(target, 'BUILDPRINT.md product vision must reject ugly product-output patterns');
+    }
+  }
 
   const questions = safeRead(path.join(dir, '01-questions.md'));
   for (const n of [1, 2, 3, 4, 5, 6]) if (!new RegExp(`## ${n}\\.`, 'i').test(questions)) fail(target, `01-questions.md missing numbered question ${n}`);
@@ -415,20 +408,16 @@ function validate(target, dir) {
   if (!/tests pass|app builds|feature preserved/i.test(setup) || !/Required proof/i.test(setup)) fail(target, '02-project-setup.md mapped obligation/surface matrix must reject generic proof in favor of surface-specific proof');
 
   const phaseFlow = safeRead(path.join(dir, '03-phases/phase-flow.md'));
-  for (const token of ['Phase-Entry Protocol', 'Required Phase Artifacts', '.buildprint/phase-runs/<phase-id>/plan.md', '.buildprint/phase-runs/<phase-id>/team-gates.md', '06-contracts/<role>.md', 'handoffs/<role>.md', 'returns/<role>.md', 'reviews/architecture.md', 'reviews/ux.md', 'reviews/qa.md', '.buildprint/evidence/evidence-ledger.jsonl']) {
+  for (const token of ['Phase-Entry Protocol', 'Required Phase Artifacts', '.buildprint/phase-runs/<phase-id>/plan.md', '.buildprint/phase-runs/<phase-id>/proof.md', '.buildprint/evidence/evidence-ledger.jsonl']) {
     if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing ${token}`);
   }
-  if (!/Use subagents, delegated workers, or parallel specialist sessions/i.test(phaseFlow) || !/self-simulate/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must include subagent permission plus self-simulation fallback');
-  if (!/Subagents are optional tooling\. Role-gated delegation artifacts are mandatory/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must make role-gated delegation artifacts mandatory');
   for (const token of ['Foundation scaffold gate', 'architecture.md', 'engineering-standards.md', 'test-strategy.md', 'mandatory', 'base project structure', 'phase_core_passed', 'exiting deterministically']) {
     if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing foundation scaffold rule: ${token}`);
   }
-  if (/Compiled team skill gates|templates\/teams\/\*|taste variables|domain-fit rubric|ADR-lite tradeoffs before coding/i.test(phaseFlow)) fail(target, '03-phases/phase-flow.md must route role expertise to 06-contracts instead of carrying copied team capsule bodies');
   for (const token of [
     'Do not copy every required proof label into every evidence row',
     'HTTP/API runtime traces prove API/runtime behavior, not browser behavior',
     'Provider adapter/config tests can prove adapter seams',
-    'QA review must explicitly audit every `upgrades_claim: true` row',
     'Review prose cannot upgrade implementation proof by itself',
     'Continuation gate',
     'blocks_continuation: false',
@@ -441,21 +430,6 @@ function validate(target, dir) {
     'raw text-list substitutes',
   ]) {
     if (!phaseFlow.includes(token)) fail(target, `03-phases/phase-flow.md missing evidence honesty rule: ${token}`);
-  }
-
-  const contractChecks = {
-    'product-architect': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'ADR-lite', 'First vertical slice', 'Foundation scaffold verdict', 'architecture.md', 'Boundary map'],
-    'ux-ui-craft': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'Visual quality bar', 'Screenshot critique'],
-    'test-and-verification': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'evidence ceiling rule', 'no_fake_scan_pass', 'Setup/standards verdict', 'engineering-standards.md', 'Test standards'],
-    'integration-runtime': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'Missing credentials block live proof only'],
-    'security-boundary': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'Denied-path'],
-    'data-persistence': ['When Active', 'Handoff Scope', 'Reject If', 'Required Return Headings', 'Proof/Evidence Expectations', 'restart/readback'],
-  };
-  for (const [role, tokens] of Object.entries(contractChecks)) {
-    const contract = safeRead(path.join(dir, `06-contracts/${role}.md`));
-    for (const token of tokens) {
-      if (!contract.toLowerCase().includes(token.toLowerCase())) fail(target, `06-contracts/${role}.md missing ${token}`);
-    }
   }
 
   const generatedPrompt = safeRead(path.join(dir, 'generated/agent-prompt.md'));
@@ -566,14 +540,6 @@ function validate(target, dir) {
     if (/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text)) fail(target, `${rel} references missing shared UX/design context instead of inline UX contract`);
     if (!/^# [^\r\n]+(?:\r?\n){2}## How to implement this phase\r?\n/i.test(text)) fail(target, `${rel} must start with ## How to implement this phase immediately after the title`);
     if (!/Before writing code, read:[\s\S]*03-phases\/phase-flow\.md[\s\S]*\.buildprint\/next-agent\.md[\s\S]*AGENTS\.md/i.test(text)) fail(target, `${rel} must include phase-flow entry instructions before implementation`);
-    if (!/requires_roles:/i.test(text)) fail(target, `${rel} must declare or seed phase-derived required roles`);
-    const roles = phaseRoles(text);
-    for (const role of roles) {
-      if (!roleContracts.includes(role)) fail(target, `${rel} declares unknown requires_roles value ${role}`);
-      if (!files.includes(`06-contracts/${role}.md`)) fail(target, `${rel} requires missing role contract 06-contracts/${role}.md`);
-    }
-    if (roles.length && !/06-contracts\/<role>\.md|06-contracts\/[a-z0-9-]+\.md/i.test(text)) fail(target, `${rel} must tell the agent to resolve requires_roles through 06-contracts/<role>.md`);
-    if (roles.length && !/handoff[\s\S]*return/i.test(text)) fail(target, `${rel} must require handoff and return artifacts for every required role before phase_core_passed`);
     if (!/phase-flow required artifacts/i.test(text)) fail(target, `${rel} must block evidence until phase-flow artifacts exist`);
     if (/Runtime evidence ledger:\s*`05-evidence\/evidence-ledger\.jsonl`/i.test(text)) fail(target, `${rel} must write runtime evidence to .buildprint/evidence/evidence-ledger.jsonl, not the packet seed ledger`);
     if (!/preserve|replace|merge|defer|drop/i.test(text)) fail(target, `${rel} behavior compatibility contract must include disposition language`);
@@ -627,23 +593,14 @@ function validate(target, dir) {
   const prompt = safeRead(path.join(dir, 'generated/agent-prompt.md'));
   if (!/Generated from:\s*blueprint\.yaml/i.test(prompt)) fail(target, 'generated/agent-prompt.md must declare Generated from: blueprint.yaml');
   if (!/not source of truth|not authoritative/i.test(prompt)) fail(target, 'generated/agent-prompt.md must say it is not source of truth');
-  for (const token of ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '06-contracts/', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl', '05-evidence/evidence-ledger.schema.json']) {
+  for (const token of ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl', '05-evidence/evidence-ledger.schema.json']) {
     if (!prompt.includes(token)) fail(target, `generated/agent-prompt.md missing ${token}`);
   }
-  if (!/subagents|delegated workers/i.test(prompt) || !/self-simulate/i.test(prompt)) fail(target, 'generated/agent-prompt.md must mention subagents/delegated workers and self-simulation fallback');
   if (!/Evidence rows must be narrow/i.test(prompt)) fail(target, 'generated/agent-prompt.md must warn against broad evidence overclaims');
   if (!/do not automatically block downstream implementation/i.test(prompt)) fail(target, 'generated/agent-prompt.md must distinguish qualification blockers from continuation blockers');
   for (const token of ['visual_quality_gate', 'default browser controls', 'local MVP']) {
     if (!prompt.includes(token)) fail(target, `generated/agent-prompt.md missing UX quality warning token ${token}`);
   }
-}
-
-function phaseRoles(text) {
-  const inline = text.match(/requires_roles:\s*\[([^\]]+)\]/i);
-  if (inline) return inline[1].split(',').map((role) => role.trim()).filter(Boolean);
-  const block = text.match(/requires_roles:\s*\r?\n((?:\s*-\s*[a-z0-9-]+\s*\r?\n?)+)/i);
-  if (!block) return [];
-  return [...block[1].matchAll(/^\s*-\s*([a-z0-9-]+)\s*$/gmi)].map((match) => match[1]);
 }
 
 for (const target of targets) {

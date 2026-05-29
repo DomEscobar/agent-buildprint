@@ -35,8 +35,8 @@ const manifest = {
   status: 'proof-required',
   files: files.map((file) => ({ path: file, rawUrl: path.join(packet, file) })),
   instructions: {
-    // Regression shape: manifests may omit phase-flow and role contracts from readOrder.
-    // agb start must still produce an executable handoff read order that includes them.
+    // Regression shape: manifests may omit phase-flow from readOrder.
+    // agb start must still produce an executable bootstrap read order that includes it.
     readOrder: [
       'BUILDPRINT.md',
       '01-questions.md',
@@ -61,15 +61,6 @@ const readOrder = source.readOrder || []
 if (state.activePhaseId !== '01-provider-chat-runtime') fail(`activePhaseId lost canonical phase id: ${state.activePhaseId}`)
 if (!readOrder.includes('03-phases/phase-flow.md')) fail('readOrder missing phase-flow.md')
 if (!readOrder.includes('03-phases/01-provider-chat-runtime.md')) fail('readOrder missing active phase')
-for (const contract of [
-  '06-contracts/product-architect.md',
-  '06-contracts/integration-runtime.md',
-  '06-contracts/data-persistence.md',
-  '06-contracts/ux-ui-craft.md',
-  '06-contracts/test-and-verification.md'
-]) {
-  if (!readOrder.includes(contract)) fail(`readOrder missing active role contract ${contract}`)
-  if (!nextAgent.includes(`.buildprint/snapshots/${contract}`)) fail(`next-agent missing active role contract ${contract}`)
-}
+if (/active phase role contracts|06-contracts\//i.test(nextAgent)) fail('next-agent still references role contracts')
 
-console.log('agb start executable handoff check passed')
+console.log('agb start executable bootstrap check passed')

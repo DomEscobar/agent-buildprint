@@ -11,24 +11,13 @@ Before writing code, read:
 Then execute this phase through `03-phases/phase-flow.md`:
 
 1. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`.
-2. Resolve every role in `requires_roles` to `06-contracts/<role>.md`.
-3. Write `.buildprint/phase-runs/<phase-id>/team-gates.md`.
-4. Write bounded handoffs and returns for every required role, unless the active packet's phase-flow explicitly allows compact self-simulation.
-5. Implement the first real vertical path.
-6. Review architecture, UX, and QA.
-7. Verify with commands and browser/runtime artifacts.
-8. Write `.buildprint/phase-runs/<phase-id>/proof.md`.
-9. Append narrow proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.
+2. Confirm the implementation scaffold and local guidance files required by `02-project-setup.md` exist.
+3. Implement the first real vertical path.
+4. Verify with commands and browser/runtime artifacts.
+5. Write `.buildprint/phase-runs/<phase-id>/proof.md`.
+6. Append narrow proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.
 
 Do not append evidence or mark this phase passed until the phase-flow required artifacts exist.
-
-requires_roles:
-  - product-architect
-  - ux-ui-craft
-  - integration-runtime
-  - data-persistence
-  - security-boundary
-  - test-and-verification
 
 ## Few-shot target
 
@@ -181,7 +170,7 @@ Do not claim these tracks from review prose, generic smoke tests, static screens
 
 - API/routes/adapters/frontend-backend contracts: project create/get/list/delete/reset, upload and ontology generation, provider config status.
 - Provider/tool contracts: LLM-compatible ontology adapter with deterministic and live modes.
-- UI/controller contracts: upload flow, project readback, provider-blocked state, retry, reset, delete confirmation, next-action handoff to graph phase.
+- UI/controller contracts: upload flow, project readback, provider-blocked state, retry, reset, delete confirmation, next-action link to graph phase.
 - None - reason: not applicable only if this phase is converted to a non-interactive backend-only product, which this example is not.
 
 ## State/runtime touched
@@ -401,10 +390,6 @@ Use the right example as the structural pattern for each mode. Do not copy produ
 
 Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
 
-requires_roles:
-  - product-architect
-  - test-and-verification
-
 ## Capability outcome
 
 Define and prove the reusable record-validation primitive: accept a record object, enforce required-field invariants, expose composition rules for downstream adapters, document extension points, and provide misuse cases with typed errors.
@@ -459,11 +444,6 @@ None — this phase is not UI-bearing. Consumer experience proof must include im
 
 Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
 
-requires_roles:
-  - product-architect
-  - integration-runtime
-  - test-and-verification
-
 ## Capability outcome
 
 Define and prove the public HTTP client callable surface: typed request/response, error contract, semver/compat surface, and consumer import patterns.
@@ -509,12 +489,6 @@ None — this phase is a library with no UI. Consumer experience proof must incl
 ## How to implement this phase
 
 Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
-
-requires_roles:
-  - product-architect
-  - integration-runtime
-  - security-boundary
-  - test-and-verification
 
 ## Capability outcome
 
@@ -563,11 +537,6 @@ None — this is a provider integration with no UI. Operator experience proof in
 ## How to implement this phase
 
 Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
-
-requires_roles:
-  - product-architect
-  - integration-runtime
-  - test-and-verification
 
 ## Capability outcome
 
@@ -618,11 +587,6 @@ None — this phase has no browser UI. Operator experience proof includes the tr
 
 Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
 
-requires_roles:
-  - product-architect
-  - data-persistence
-  - test-and-verification
-
 ## Capability outcome
 
 Define and prove the event ingestion and enrichment dataflow: input schema, transform semantics, output schema, lineage, backfill/idempotency, and data quality proof.
@@ -671,11 +635,6 @@ None — this phase is a data-pipeline with no browser UI. Operator experience p
 ## How to implement this phase
 
 Before writing code, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md`. Execute through phase-flow; block evidence until phase-flow artifacts exist.
-
-requires_roles:
-  - product-architect
-  - security-boundary
-  - test-and-verification
 
 ## Operation outcome
 

@@ -10,6 +10,25 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Main surfaces: browser workbench, API service, worker/runtime, provider adapters, durable persistence, knowledge-base indexing, memory review, settings, optional speech sidecar.
 - What this packet must not become: a generic local MVP, static demo, source clone, single-file product shell, provider mock demo, or broad "chat/RAG" bucket without decomposed proof.
 
+## Final product at a glance
+
+**Golden path** - A local operator configures an Ollama-compatible provider, chats with visible streaming and tool traces, ingests documents into a durable knowledge base, receives cited grounded answers, reviews memory and settings, and can enable optional voice sidecar behavior without pretending mocks are live provider proof.
+
+**Surfaces**
+
+- Provider chat runtime - configure local provider and prove streaming chat - Phase 1
+- Multimodal routing and agent tools - route inputs and show tool traces - Phase 2
+- Knowledge-base ingestion and retrieval - index documents and answer with citations - Phase 3
+- Memory review and injection - inspect and reuse durable memory - Phase 4
+- Settings and data lifecycle operations - manage config, export/delete and lifecycle controls - Phase 5
+- Voice sidecar experience - add optional local speech interaction - Phase 6
+
+**Done looks like**
+
+- Chats, indexed documents, citations, settings and memory reload from durable storage.
+- The workbench shows real chat/RAG workflows and states, not a static demo or generic dashboard.
+- Missing provider or voice dependencies produce honest blockers that do not erase adapter/config tests.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.

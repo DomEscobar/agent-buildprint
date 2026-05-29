@@ -10,6 +10,25 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Main surfaces: Clean-room source mapping; Executable Buildprint packet; Pre-implementation questions; Project setup gate
 - What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
 
+## Final product at a glance
+
+**Golden path** - An admin configures a self-hosted presentation generator, submits a prompt or document, watches an outline become a structured deck, edits slides and assets in a browser editor, exports PPTX/PDF, and can use API, webhook, MCP, or desktop boundaries without hiding provider or persistence blockers.
+
+**Surfaces**
+
+- Instance/auth/provider setup - configure runtime, admin access, provider mode and persistence roots - Phase 1
+- Content ingestion and outline generation - turn prompt or documents into a deck outline with streaming status - Phase 2
+- Deck and slide generation - produce persisted slide structure and layout choices - Phase 3
+- Media, templates and themes - manage image/icon/font/theme assets - Phase 4
+- Editor and chat iteration - edit slides and iterate with chat assistance - Phase 5
+- Export/API/webhook/MCP/desktop boundary - deliver deck files and integration entrypoints - Phase 6
+
+**Done looks like**
+
+- A generated deck reloads with slide structure, assets, edits and provider mode intact after restart.
+- Browser editing changes real slide state instead of static markup or a local MVP shell.
+- Exports, API tasks and webhooks are backed by rerunnable proof or honest blocked-provider rows.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.

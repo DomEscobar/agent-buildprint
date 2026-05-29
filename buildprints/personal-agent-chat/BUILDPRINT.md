@@ -10,6 +10,25 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Main surfaces: BUILDPRINT.md canonical entry; 01-questions.md setup questions; 02-project-setup.md architecture and operating contract; blueprint.yaml machine contract
 - What this packet must not become: a generic local MVP, static demo, source clone, source-code port, or single-file product shell.
 
+## Final product at a glance
+
+**Golden path** - A self-hosted operator configures providers and storage, opens a streaming personal agent chat workbench, routes messages through tools, skills and MCP policy, reviews memory/subagent telemetry, enforces safety boundaries, and uses a WebUI/API surface that keeps state and traces durable.
+
+**Surfaces**
+
+- Contracts and storage - define persistence, schemas and core records - Phase 1
+- Provider streaming runtime - stream chat through provider adapters - Phase 2
+- Tools, skills and MCP policy - run governed tool and skill calls - Phase 3
+- Memory, subagents and telemetry - manage memory, coordination and token traces - Phase 4
+- Safety and claim boundaries - enforce permissions, denials and claim limits - Phase 5
+- WebUI/API workbench - expose the agent through usable browser/API surfaces - Phase 6
+
+**Done looks like**
+
+- Conversation, memory, tool traces, settings and telemetry persist and can be inspected.
+- The WebUI is a real agent workbench with streaming states, not a static chat mock or local MVP.
+- Provider, MCP, tool and safety claims upgrade only from matching proof rows.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.

@@ -2,12 +2,13 @@
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command and not a source-code clone plan.
 
-The mapper agent reads source, promotes only evidence-backed claims, preserves the requested scope, maps the full relevant behavior surface, classifies the selected blueprint mode honestly, distills source behavior into mode-aware phase packets with role gates, and records qualification blockers honestly.
+The mapper agent reads source, promotes only evidence-backed claims, preserves the requested scope, maps the full relevant behavior surface, classifies the selected blueprint mode honestly, distills source behavior into mode-aware product-led phase packets, and records qualification blockers honestly.
 
 ## Authority
 
 - `mapper-os-requirement.md` is the root product requirement.
 - This package is the operating Buildprint for agents performing mapping.
+- `vision.md` is the maintained product-quality generator guide. It shapes selected packet `BUILDPRINT.md`, `02-project-setup.md`, and UI-bearing phase language, but it is not emitted into selected packets.
 - Source files are evidence. Product obligations and phase packets are the rebuild contract.
 - Static scanning may guide discovery but must never become product authority.
 - A qualified Buildprint is an implementation input, not proof that a future implementation already works.
@@ -32,7 +33,7 @@ For generated selected packages, do not make the implementing agent read all Mar
 3. Behavior discovery: read source surfaces to discover product behavior and promote claims to `OBSERVED`, `INFERRED`, `QUESTION`, `BLOCKED`, or `OUT_OF_SCOPE`.
 4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection; never shrink selected scope without explicit user decision.
 5. Source distillation: convert source facts into source-independent obligations, phase packets, and verification oracles.
-6. Execution planning: give the downstream coding agent slice readiness, verification gates, implementation-team signals, repair loops, review rules, and handoff requirements. Multi-phase outputs must define an orchestrated execution model: the main coding session plans, writes bounded handoffs, delegates specialist work, integrates, verifies, and records evidence phase by phase.
+6. Execution planning: give the downstream coding agent product vision, slice readiness, verification gates, repair loops, and proof/evidence rules. Multi-phase outputs must define a lean execution model: the main coding session plans, implements the phase path, verifies, writes proof, and records evidence phase by phase.
 7. Qualification: keep output unqualified until required evidence, runtime/test proof, no-fake checks, hardening artifacts, and reversal evidence exist.
 
 ## Output Modes
@@ -121,19 +122,18 @@ The shared proof spine is mandatory for every mode: preconditions/inputs, entryp
 - Do not preserve source internals unless they are externally observable or qualification-relevant.
 - Do not use `validated`, `production-ready`, `complete`, or `end-to-end` unless label is `QUALIFIED_SOURCE_INDEPENDENT` and evidence is linked.
 
-## Handoff Contract
+## Downstream Contract
 
 Every selected package must tell the next coding agent:
 
 - that `AGENTS.md` in the downstream repo is a scope governor, not a product brain;
 - that `.buildprint/next-agent.md` is continuity for fresh sessions;
-- that bounded assignment/handoff text is the unit of delegated work;
-- that orchestrator/integrator authority must be explicit in the task prompt, not inferred from the repo;
+- that `BUILDPRINT.md` embeds the product dream and `02-project-setup.md` turns it into architecture plus UI/DX identity requirements;
+- that phase-flow authority must be explicit, not inferred from the repo;
 - what phase packet to implement next;
 - what behavior is stable;
 - what implementation choices are free;
 - which pre-implementation questions must be asked or safely defaulted before coding;
-- which team-pack gates must run before and during coding;
 - what verification gate to run immediately;
 - what evidence is missing;
 - when to stop, replan, or escalate.

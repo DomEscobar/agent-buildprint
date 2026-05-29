@@ -547,30 +547,6 @@
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/06-contracts/data-persistence.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/06-contracts/integration-runtime.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/06-contracts/product-architect.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/06-contracts/security-boundary.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/06-contracts/test-and-verification.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/06-contracts/ux-ui-craft.md",
-      "role": "source"
-    },
-    {
       "path": "templates/executable-packet/blueprint.yaml",
       "role": "source"
     },
@@ -608,6 +584,10 @@
     },
     {
       "path": "VERIFICATION.md",
+      "role": "source"
+    },
+    {
+      "path": "vision.md",
       "role": "source"
     }
   ],
