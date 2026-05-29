@@ -24,7 +24,7 @@ This packet file is the project constitution for implementation. Keep it compact
 - Backend/API surfaces: project lifecycle, ontology generation, graph build/status/data/delete, entity lookup, simulation create/prepare/status/profile/config/start/stop/run-status/actions/timeline/posts/comments/interview/env-close, report generate/status/sections/download/chat/log/tool endpoints.
 - State/runtime surfaces: project metadata, uploaded files, extracted text, ontology JSON, Zep graph id, in-memory task progress, simulation state, profiles, simulation config, run state, OASIS action logs, SQLite simulation DBs, report folders, report progress, agent logs, console logs, IPC command/response artifacts.
 - External providers/runtime: OpenAI-compatible LLM, Zep Cloud graph memory, OASIS social simulation runtime, filesystem/object storage, worker/queue runtime, browser runtime.
-- Tests/evaluation source: derive from packet file `04-evaluation.md` and per-phase proof gates.
+- Proof source: derive from packet file `04-evaluation.md` and each active phase proof gate.
 
 ## Architecture decisions
 
@@ -104,11 +104,11 @@ Account for every high-signal mapped surface according to blueprint mode: produc
 
 ## Implementation project setup
 
-The Buildprint packet must not contain implementation-project files such as `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `ui-identity.md`, or `test-strategy.md`. The implementation project must create them inside the real project root after this file is resolved and before Phase 01 starts.
+The Buildprint packet must not contain implementation-project files such as `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `ui-identity.md`, or `proof-strategy.md`. The implementation project must create them inside the real project root after this file is resolved and before Phase 01 starts.
 
-Root `AGENTS.md` or implementation-project `AGENTS.md` must be a short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` before editing code.
+Root `AGENTS.md` or implementation-project `AGENTS.md` must be a short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` before editing code.
 
-Local `AGENTS.md` files may exist only at real architectural boundaries such as frontend/app, API, provider adapters, workers, data/db, infra, or tests/e2e. Each local file must point back to the root `AGENTS.md` and relevant sections of the implementation-project guidance files.
+Local `AGENTS.md` files may exist only at real architectural boundaries such as frontend/app, API, provider adapters, workers, data/db, infra, or proof/e2e. Each local file must point back to the root `AGENTS.md` and relevant sections of the implementation-project guidance files.
 
 ## Foundation scaffold gate
 
@@ -116,11 +116,11 @@ Before any packet phase file `03-phases/*` implementation starts, create the sel
 
 Required implementation-project files:
 
-- Root `AGENTS.md`: short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` before editing code. If these files are missing or contradicted, agents must stop and repair setup rather than continue.
+- Root `AGENTS.md`: short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` before editing code. If these files are missing or contradicted, agents must stop and repair setup rather than continue.
 - `architecture.md`: architecture best practices for this project, including `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. It must name UI, API/controller, domain/use-case, schema/validation, config/env, provider adapter, persistence/repository, worker/runtime, observability, deployment, and test boundaries.
 - `engineering-standards.md`: clean coding and implementation standards, including `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards`, and `Test standards`. It must define deterministic timeout/exit behavior for blocked browser/e2e/runtime proof.
 - `ui-identity.md`: required because this is UI-bearing. It defines product-specific visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, and what would count as a generic dashboard/form/raw-list failure for this product.
-- `test-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface.
+- `proof-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface.
 - Base project directories/files for the chosen stack, including app/source directories, tests, scripts, config/env boundary, provider adapter boundary, persistence/repository boundary, worker/runtime boundary, observability/logging, and e2e/browser proof boundary.
 
 Runtime setup artifact: before starting packet phase files `03-phases/*`, write runtime artifact `.buildprint/setup.md` or runtime artifacts under `.buildprint/setup/` recording the scaffold, selected stack, architecture decisions, auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions. Creating only `AGENTS.md` is not enough to satisfy the setup gate. Phase entry remains governed by packet file `03-phases/phase-flow.md` and role contracts under packet directory `06-contracts/`.
@@ -134,7 +134,7 @@ Runtime setup artifact: before starting packet phase files `03-phases/*`, write 
 - Assumption: Live LLM, Zep, and OASIS runtime credentials are not available during Buildprint extraction.
   - Evidence: source path `.env.example` lines 1-16 contains only env var names and placeholders.
   - Risk: live proof cannot upgrade until credentials/runtime access exists.
-  - Blocks phase work: no, after adapters/tests/blockers are implemented.
+  - Blocks phase work: no, after adapters/proof-fixtures/blockers are implemented.
 - Assumption: Auth is not explicit in source but production-grade implementation must include owner/session boundary.
   - Evidence: source project persists project/simulation/report state but no auth surface was observed.
   - Risk: public deployment would be unsafe without auth/session/tenant controls.

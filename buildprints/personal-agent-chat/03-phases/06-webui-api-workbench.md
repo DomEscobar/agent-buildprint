@@ -27,7 +27,6 @@ requires_roles:
   - ux-ui-craft
   - integration-runtime
   - security-boundary
-  - test-and-verification
 
 ## Product outcome
 

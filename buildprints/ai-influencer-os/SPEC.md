@@ -108,7 +108,7 @@ Then exact required env names from `BUILDPRINT.md` are present, no test/mock mod
 
 Given `package.json` is generated
 When static validation runs
-Then `npm run test:static` includes the required `node --check` syntax checks and alignment checks.
+Then `static verification command` includes the required `node --check` syntax checks and alignment checks.
 
 Given `package.json` is generated
 When package identity is inspected

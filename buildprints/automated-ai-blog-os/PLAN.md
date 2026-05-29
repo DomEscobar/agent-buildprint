@@ -26,5 +26,5 @@ plans/08-tests-validation.md
 
 - tests pass;
 - static/build checks pass;
-- every risk in `TEST_MATRIX.md` is covered or marked blocked;
-- `VALIDATION.md` follows `VALIDATION_TEMPLATE.md`.
+- every phase risk is covered or marked blocked;
+- `VALIDATION.md` records implementation evidence and blockers.

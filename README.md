@@ -2,7 +2,7 @@
 
 Executable build contracts for coding agents.
 
-Agent Buildprint packages product intent, source evidence, phase order, quality gates, and proof rules into files that an implementation agent can follow. The CLI, `agb`, bootstraps those packages into a workspace and checks whether packet and evidence files obey the current contract.
+Agent Buildprint packages product intent, source evidence, phase order, quality gates, and proof rules into files that an implementation agent can follow. The CLI, `agb`, bootstraps those packages into a workspace and can inspect packet/evidence files when you need a local sanity check.
 
 It is not a framework generator. It does not choose React, Vue, Python, Rails, or any other runtime for you. A good Buildprint preserves product behavior and proof obligations while leaving implementation technology flexible unless the source evidence or product contract requires a specific stack.
 
@@ -26,7 +26,6 @@ node ./bin/agb.js --help
 - `agb start`: bootstrap an exact Buildprint snapshot into `.buildprint/` for an implementation workspace.
 - `agb packet check`: validate executable packet shape, read order, phase routing, proof/evidence rules, and obsolete-layout rejection.
 - `agb evidence check`: validate runtime evidence ledger rows.
-- Repository checks and eval scripts for Mapper OS packets, published Buildprints, negative fixtures, and replay harnesses.
 - Published Buildprint packages under `buildprints/`, each with a `publication.json` record and a canonical `BUILDPRINT.md` start file.
 
 ## Quick Start
@@ -49,7 +48,7 @@ That file routes the agent through the exact snapshot files in the required orde
 
 ## Current Executable Packet Contract
 
-The current Mapper OS executable packet baseline is documented in [Buildprint v1 Execution Contract](docs/buildprint/Buildprint.v1.HTML).
+The current Mapper OS executable packet baseline is documented in [Buildprint v3 Draft](docs/buildprint/buildprint-v3(DRAFT).html).
 
 Typical packet shape:
 
@@ -132,32 +131,6 @@ Buildprints are useful only when claims stay tied to proof.
 - Browser, screenshot, worker, security, persistence, and data-lifecycle claims need matching executable proof or honest non-upgrading blocker rows.
 - A broad smoke test should not upgrade unrelated claims.
 
-## Development Checks
-
-Run the fast structural and mapper checks:
-
-```bash
-npm run check:spine
-npm run check:publication
-npm run check:mapper-output
-npm run check:mapper-published
-npm run check:mapper-output:negative
-npm run check:mapper-replay:negative
-npm run eval:mapper-fast
-```
-
-Run the package smoke test before publishing:
-
-```bash
-npm run pack:smoke
-```
-
-Run the full test chain when release risk is higher:
-
-```bash
-npm test
-```
-
 ## Publishing
 
 The latest published npm version should be checked before every release:
@@ -170,7 +143,6 @@ For a README/package metadata update with no CLI API break, use a patch release:
 
 ```bash
 npm version patch --no-git-tag-version
-npm run pack:smoke
 npm publish --access public
 ```
 

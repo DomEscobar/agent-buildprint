@@ -17,7 +17,7 @@
     "Static lint",
     "Loadout inventory",
     "Skill tests",
-    "Activation evals",
+    "Activation reviews",
     "Transcript checks",
     "Multi-agent safety"
   ],
@@ -84,7 +84,7 @@
     "Static-invalid setups fail before expensive behavior tests",
     "Loadout inventory exposes loaded token tax and dormant artifacts",
     "Skill unit tests are separated from activation tests",
-    "Activation evals include positive and negative prompts",
+    "Activation reviews include positive and negative prompts",
     "Transcript checks enforce skill-before-action and approval-before-risky-action invariants",
     "Multi-agent cases check parent context, output schema, and file ownership",
     "Safety hard-fails override good final outputs",

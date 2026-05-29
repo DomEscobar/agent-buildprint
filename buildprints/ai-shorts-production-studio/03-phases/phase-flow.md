@@ -6,7 +6,7 @@ You are the orchestrator for this phase only. Keep the active context small: rou
 
 Before writing code for any phase:
 
-0. Enforce the Foundation scaffold gate from `02-project-setup.md`: create and verify the implementation-project base project structure plus root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` before Phase 01 code edits. Root `AGENTS.md` must list those standards files as mandatory reads. If the base project structure, standards files, install/build baseline, or deterministic setup blocker is missing, stop before phase work and exit deterministically through the setup repair route; this is the required exiting deterministically behavior.
+0. Enforce the Foundation scaffold gate from `02-project-setup.md`: create and verify the implementation-project base project structure plus root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` before Phase 01 code edits. Root `AGENTS.md` must list those standards files as mandatory reads. If the base project structure, standards files, install/build baseline, or deterministic setup blocker is missing, stop before phase work and exit deterministically through the setup repair route; this is the required exiting deterministically behavior.
 1. Read the active phase file named by `03-phases/phase-index.yaml`.
 2. Resolve every `requires_roles` entry to `06-contracts/<role>.md`.
 3. Read only the role contracts required by the active phase.
@@ -27,7 +27,7 @@ Before Phase 01 implementation:
 - base project structure exists.
 - `architecture.md` contains Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map.
 - `engineering-standards.md` contains Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, UI standards, and Test standards with deterministic blocker/e2e/runtime exit behavior.
-- `test-strategy.md` exists and names phase proof commands.
+- `proof-strategy.md` exists and names phase proof commands.
 - `ui-identity.md` exists for this UI-bearing packet.
 - If any scaffold artifact is missing, no phase evidence may be appended.
 
@@ -86,7 +86,7 @@ Required runtime artifact reviews:
 
 - `.buildprint/phase-runs/<phase-id>/reviews/architecture.md`: use the `product-architect` return to verify topology, dependency direction, state/runtime ownership, product obligation preservation, ADR-lite tradeoffs, and next-phase boundary.
 - `.buildprint/phase-runs/<phase-id>/reviews/ux.md`: use the `ux-ui-craft` return for UI-bearing phases; for non-UI phases, write `## Verdict: not-ui-bearing`, `## Reason`, and `## Downstream UI obligations`.
-- `.buildprint/phase-runs/<phase-id>/reviews/qa.md`: use the `test-and-verification` return to verify commands, negative cases, evidence row scope, and claim limits.
+- `.buildprint/phase-runs/<phase-id>/reviews/qa.md`: write a phase proof review that verifies commands, negative cases, evidence row scope, and claim limits.
 
 ## Evidence Gate
 
@@ -94,7 +94,7 @@ Runtime proof/blocker rows go only to `.buildprint/evidence/evidence-ledger.json
 
 Before writing runtime evidence, read `05-evidence/evidence-ledger.schema.json` and conform to it. Every runtime row must include `artifact_id`, `type`, `phase_id`, valid `status`, `source`, array `proves`, `proof_type`, `provider_mode`, and `upgrades_claim`.
 
-Use the evidence ceiling rule from `06-contracts/test-and-verification.md`: Do not copy every required proof label into every evidence row; HTTP/API runtime traces prove API/runtime behavior, not browser behavior; Provider adapter/config tests can prove adapter seams but not live provider behavior; Review prose cannot upgrade implementation proof by itself; QA review must explicitly audit every `upgrades_claim: true` row; `visual_quality_gate` requires screenshot/browser critique, not default-control shells or raw text-list substitutes; use `blocks_continuation: false` only when a blocker limits qualification but not downstream implementation.
+Use the evidence ceiling rule from `06-contracts/proof-and-evidence.md`: Do not copy every required proof label into every evidence row; HTTP/API runtime traces prove API/runtime behavior, not browser behavior; Provider adapter/config tests can prove adapter seams but not live provider behavior; Review prose cannot upgrade implementation proof by itself; QA review must explicitly audit every `upgrades_claim: true` row; `visual_quality_gate` requires screenshot/browser critique, not default-control shells or raw text-list substitutes; use `blocks_continuation: false` only when a blocker limits qualification but not downstream implementation.
 
 ## Continuation gate
 

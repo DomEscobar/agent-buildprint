@@ -57,7 +57,7 @@ Required before marking done:
 4. Identify rows that cannot be safely mapped.
 5. Add read-side compatibility if rollout is staged.
 6. Define rollback behavior for partial backfill.
-7. Record every assumption in `VALIDATION_TEMPLATE.md`.
+7. Record every assumption in the phase proof notes.
 
 ## Abuse and edge cases
 

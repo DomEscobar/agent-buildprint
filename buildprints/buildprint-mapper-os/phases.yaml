@@ -77,7 +77,7 @@ phases:
 
   - id: 06-qualification
     title: Qualification
-    inputs: [VERIFICATION.md, plans/07-validation-submission.md]
+    inputs: [plans/07-validation-submission.md]
     must_produce:
       - gate results or blockers
       - no-fake scan result

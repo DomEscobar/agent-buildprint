@@ -27,7 +27,6 @@ requires_roles:
   - data-persistence
   - integration-runtime
   - security-boundary
-  - test-and-verification
 
 ## Product outcome
 

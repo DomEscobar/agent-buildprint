@@ -11,7 +11,7 @@ Start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`
 
 Initial context reads must be sequential and observable. Do not batch or parallelize the required read order; a later summary that claims the right order does not repair an out-of-order transcript.
 
-Do not start phase work until project setup creates the real base project structure and local guidance files: root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` for UI-bearing products. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents; otherwise agents will avoid them.
+Do not start phase work until project setup creates the real base project structure and local guidance files: root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` for UI-bearing products. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents; otherwise agents will avoid them.
 
 `architecture.md` must define architecture best practices, base project structure, boundary map, dependency rules, architecture decisions, and downstream phase extension map. `engineering-standards.md` must define clean code rules, validation and schemas, persistence standards, provider standards, worker/runtime standards, UI standards when UI-bearing, and test standards. Phase code must extend this scaffold, not create a throwaway mini-app.
 

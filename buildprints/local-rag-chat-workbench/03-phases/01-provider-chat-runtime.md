@@ -19,7 +19,6 @@ requires_roles:
   - integration-runtime
   - data-persistence
   - ux-ui-craft
-  - test-and-verification
 
 ## Product outcome
 

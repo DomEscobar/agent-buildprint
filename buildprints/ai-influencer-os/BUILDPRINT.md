@@ -14,7 +14,7 @@ agentFile: true
 
 Build an OpenClaw-based AI Influencer OS with a configurable fictional persona, a default preset, persistent relationship memory, separate persona life state, Wavespeed image generation, grounded social drafting, manager audit, and secured local browser/noVNC publishing handoff.
 
-`BUILDPRINT.md` is the canonical authority. `SPEC.md`, `CONTRACTS.md`, `DEFAULT_PRESET.md`, `PLAN.md`, `plans/*.md`, `TEST_MATRIX.md`, `VALIDATION_TEMPLATE.md`, policies, and acceptance checks support this contract but do not replace it.
+`BUILDPRINT.md` is the canonical authority. `SPEC.md`, `CONTRACTS.md`, `DEFAULT_PRESET.md`, `PLAN.md`, `plans/*.md`, policies, and acceptance checks support this contract but do not replace it.
 
 The generated app package must be named `openclaw-ai-influencer-os`. The runtime shape is Dockerized OpenClaw, not a generic chatbot, generic social scheduler, LangGraph replacement, SaaS dashboard-first app, or non-OpenClaw runtime.
 
@@ -76,9 +76,6 @@ If a required production key is missing, the relevant production path must retur
 7. `plans/*.md` in numeric order
 8. `policies/media.md`
 9. `policies/safety.md`
-10. `TEST_MATRIX.md`
-11. `checks/acceptance.md`
-12. `VALIDATION_TEMPLATE.md`
 
 ## Phase Gates
 
@@ -92,7 +89,7 @@ If a required production key is missing, the relevant production path must retur
 7. Wavespeed image skill: implement concrete Wavespeed request/poll adapter and mock test mode.
 8. Social planner and media queue: enforce `groundedIn`, QA notes, draft status, and media job linkage.
 9. Publisher handoff: implement mock publisher, approval gate, secured browser/noVNC service shape, and operator commands.
-10. Tests: implement unit and static checks; `npm test` must run without external APIs.
+10. Tests: implement unit and static checks; `target verification command` must run without external APIs.
 11. Validation: fill `VALIDATION.md` with choices, commands, test results, missing keys, deviations, and blockers.
 
 ## Acceptance Gates
@@ -110,7 +107,7 @@ The build is accepted only when all are true:
 | Social | drafts include `groundedIn`; publisher is mock/manual by default |
 | Browser handoff | Chromium/noVNC service or compose profile is runnable, local-only by default, auth-required, and documented |
 | Manager | audit reports stale, unsafe, ungrounded, blocked, and publishing-risk items |
-| Tests | `npm test` passes without external APIs and `npm run test:static` includes syntax and alignment checks |
+| Tests | `target verification command` passes without external APIs and `static verification command` includes syntax and alignment checks |
 | Env contract | `.env.example` has exact required names and does not enable test/mock mode by default |
 | Package identity | generated app package is `openclaw-ai-influencer-os` |
 | Validation | `VALIDATION.md` records choices, keys, deviations, blockers, commands, and test result |
@@ -209,11 +206,11 @@ storage/social/media-jobs.json
 storage/social/posted-history.json
 storage/browser/profile/.gitkeep
 dashboard/public/index.html
-tests/runner.js
-tests/persona.test.js
-tests/image-generation.test.js
-tests/life.test.js
-tests/social-publish.test.js
+proof-fixtures/runner.js
+proof-fixtures/persona.test.js
+proof-fixtures/image-generation.test.js
+proof-fixtures/life.test.js
+proof-fixtures/social-publish.test.js
 MANAGER.md
 LIFE_CONTINUITY.md
 .env.example
@@ -250,7 +247,7 @@ Rules:
 
 - Use exactly these env var names.
 - `.env.example` must not set `TEST_MODE=true`, `INFLUENCER_TEST_MODE=mock`, or any other test/mock flag by default.
-- Tests must set their own mock/test env inside `tests/runner.js` or the individual test process.
+- Tests must set their own mock/test env inside `proof-fixtures/runner.js` or the individual test process.
 - `WAVESPEED_API_KEY` gates real image generation.
 - No production key is required for tests.
 - Missing keys must appear in `VALIDATION.md`.
@@ -346,9 +343,9 @@ Required `package.json` scripts:
 {
   "name": "openclaw-ai-influencer-os",
   "scripts": {
-    "test": "node tests/runner.js",
-    "test:unit": "node --test tests/*.test.js",
-    "test:static": "node --check extensions/influencer-persona/index.js && node --check extensions/influencer-persona/analyzer-adapter.js && node --check extensions/influencer-persona/runtime-context.js && node --check extensions/influencer-persona/media-flow.js && node --check extensions/influencer-persona/runtime-check.js && node --check skills/influencer-image/wavespeed-client.js && node --check life/life-tick.mjs && node --check life/social-planner.mjs && node --check life/social-publisher.mjs && node --check life/manager-audit.mjs && node tests/static-check.js"
+    "test": "node proof-fixtures/runner.js",
+    "test:unit": "node --test proof-fixtures/*.test.js",
+    "test:static": "node --check extensions/influencer-persona/index.js && node --check extensions/influencer-persona/analyzer-adapter.js && node --check extensions/influencer-persona/runtime-context.js && node --check extensions/influencer-persona/media-flow.js && node --check extensions/influencer-persona/runtime-check.js && node --check skills/influencer-image/wavespeed-client.js && node --check life/life-tick.mjs && node --check life/social-planner.mjs && node --check life/social-publisher.mjs && node --check life/manager-audit.mjs && node proof-fixtures/static-check.js"
   }
 }
 ```
@@ -359,7 +356,7 @@ This Buildprint specifies required structure and behavior for a generated implem
 
 ## Required Validation
 
-`npm test` must run without external APIs and prove:
+`target verification command` must run without external APIs and prove:
 
 1. runtime context separates user memory and self-state;
 2. private runtime context is not leaked;
@@ -374,7 +371,7 @@ This Buildprint specifies required structure and behavior for a generated implem
 11. Docker/compose includes OpenClaw runtime command or structured missing-runtime blocker;
 12. browser/noVNC compose service or Dockerfile exists, binds local-only by default, requires a non-empty secret-backed password/auth value, and profile storage is mounted;
 13. `.env.example` has exact required env var names and no default test/mock mode;
-14. `npm run test:static` preserves required `node --check` syntax checks plus alignment checks;
+14. `static verification command` preserves required `node --check` syntax checks plus alignment checks;
 15. `media-flow.js` imports/uses the Wavespeed client by default for real mode;
 16. `package.json.name` is `openclaw-ai-influencer-os`.
 

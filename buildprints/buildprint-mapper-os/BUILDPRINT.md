@@ -19,10 +19,9 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 2. `SPEC.md`
 3. `CONTRACTS.md`
 4. `PLAN.md`
-5. `VERIFICATION.md`
-6. `questions.md`
-7. `policies/*.md`
-8. `prompts/*.md` and `templates/`
+5. `questions.md`
+6. `policies/*.md`
+7. `prompts/*.md` and `templates/`
 
 For generated selected packages, do not make the implementing agent read all Markdown files or all phases before it knows the next action. `BUILDPRINT.md` is the only execution start, `blueprint.yaml` is the machine-readable contract, `01-questions.md` and `02-project-setup.md` gate alignment/setup, `03-phases/phase-index.yaml` names the active phase, and `03-phases/phase-flow.md` owns phase-run orchestration before runtime evidence.
 
@@ -34,7 +33,7 @@ For generated selected packages, do not make the implementing agent read all Mar
 4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection; never shrink selected scope without explicit user decision.
 5. Source distillation: convert source facts into source-independent obligations, phase packets, and verification oracles.
 6. Execution planning: give the downstream coding agent product vision, slice readiness, verification gates, repair loops, and proof/evidence rules. Multi-phase outputs must define a lean execution model: the main coding session plans, implements the phase path, verifies, writes proof, and records evidence phase by phase.
-7. Qualification: keep output unqualified until required evidence, runtime/test proof, no-fake checks, hardening artifacts, and reversal evidence exist.
+7. Qualification: keep output unqualified until required evidence, runtime proof, no-fake review, hardening artifacts, and reversal evidence exist.
 
 ## Output Modes
 

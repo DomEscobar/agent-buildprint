@@ -36,4 +36,4 @@ Implement the image skill with Wavespeed real mode and mock test mode.
 - low-trust sensitive request is blocked;
 - public request requires platform-safe/canon/grounding checks;
 - tests verify the client uses Wavespeed URL, bearer auth, and normalized status without making external calls;
-- tests/static checks verify media flow references the default Wavespeed client adapter.
+- proof-fixtures/static checks verify media flow references the default Wavespeed client adapter.

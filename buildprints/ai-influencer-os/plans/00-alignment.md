@@ -10,7 +10,7 @@ Configure the fixed OpenClaw Influencer OS without redesigning it.
 2. Otherwise ask exactly `questions.md`.
 3. Summarize choices.
 4. Wait for confirmation.
-5. Start `VALIDATION.md` from `VALIDATION_TEMPLATE.md` and record choices.
+5. Start `VALIDATION.md` with choices, evidence, and blockers.
 
 ## Do not
 

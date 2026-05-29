@@ -33,11 +33,11 @@
   "difficulty": "Advanced",
   "featured": true,
   "summary": "AI Swarm Simulator Buildprint remapped from MiroFish with Foundation scaffold rules: seed intake, ontology, Zep graph memory, simulation prep/run, observability, reports, and interaction as a proof-gated AI swarm prediction workbench.",
-  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish as a product/outcome-flow AI swarm simulator. It now requires a real implementation-project foundation before Phase 01: AGENTS.md, architecture.md, engineering-standards.md, test-strategy.md, ui-identity.md, and a base project structure that coding agents must follow.",
+  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish as a product/outcome-flow AI swarm simulator. It now requires a real implementation-project foundation before Phase 01: AGENTS.md, architecture.md, engineering-standards.md, proof-strategy.md, ui-identity.md, and a base project structure that coding agents must follow.",
   "promise": "Build a production-grade AI swarm simulator without depending on the original source repo. Status remains PROOF_REQUIRED until all proof gates pass.",
   "whatYouGet": [
     "Executable Buildprint packet with BUILDPRINT.md canonical start",
-    "Foundation scaffold gate requiring AGENTS.md, architecture.md, engineering-standards.md, test-strategy.md, and ui-identity.md",
+    "Foundation scaffold gate requiring AGENTS.md, architecture.md, engineering-standards.md, proof-strategy.md, and ui-identity.md",
     "Five outcome-flow phases covering seed/ontology, graph memory, simulation environment, simulation run observability, and report interaction",
     "Role contracts for product architecture, backend services, frontend workbench, and QA/security",
     "Generated agent prompt and seed evidence ledger with claim status kept PROOF_REQUIRED"
@@ -90,7 +90,7 @@
   "checks": [
     "Mapper selected-output validator passes with fixture placeholders forbidden and /root/MiroFish source grounding required",
     "Foundation scaffold gate present in 02-project-setup.md",
-    "Root AGENTS.md mandatory-read requirement present for architecture.md, engineering-standards.md, test-strategy.md, and ui-identity.md",
+    "Root AGENTS.md mandatory-read requirement present for architecture.md, engineering-standards.md, proof-strategy.md, and ui-identity.md",
     "Generated agent prompt includes scaffold and clean-code instructions",
     "Provider/runtime/browser proof remains PROOF_REQUIRED until downstream evidence passes"
   ],

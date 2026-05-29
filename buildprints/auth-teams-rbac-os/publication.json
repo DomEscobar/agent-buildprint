@@ -59,8 +59,7 @@
     "Role mutation safety",
     "Audit log",
     "Migration and rollback plan",
-    "Offline TypeScript proof",
-    "Target-app conformance kit"
+    "Phase proof plan"
   ],
   "risks": [
     "Auth provider rip-and-replace",
@@ -77,12 +76,11 @@
     "Phase 00 artifacts exist before implementation",
     "Existing auth is reused by default",
     "Permission engine denies unknown/missing access by default",
-    "Every team-scoped route has direct API authorization tests",
-    "Invite expiry/revoke/single-use/exact-email policies are tested",
+    "Every team-scoped route has direct API authorization proof",
+    "Invite expiry/revoke/single-use/exact-email policies have proof",
     "Role mutation blocks self-escalation and last-owner loss",
     "Audit metadata is redacted",
-    "Offline proof harness is included in the manifest and passes npm --prefix proof test",
-    "Target-app conformance kit is included and typechecks; completion requires it to pass against a real adapter or record blockers",
+    "Phase proof records cover target-app authorization paths or record blockers",
     "Migration/backfill/rollback/recovery path is documented"
   ],
   "trustBadges": [

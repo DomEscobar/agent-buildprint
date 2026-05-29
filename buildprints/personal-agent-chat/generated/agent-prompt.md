@@ -14,7 +14,7 @@ Primary implementation outcome: build a clean-room self-hosted personal agent ch
 
 Qualification status: `PROOF_REQUIRED`. The packet contains seed evidence only; implementation proof must be written to `.buildprint/evidence/evidence-ledger.jsonl`.
 
-Before Phase 01, create the real base project structure plus root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md`. Root `AGENTS.md` must list those files as mandatory reads before code edits. `architecture.md` must define the boundary map. `engineering-standards.md` must include clean code rules, validation and schemas, persistence standards, provider standards, worker/runtime standards, UI standards, and test standards with deterministic exits for blocked proof.
+Before Phase 01, create the real base project structure plus root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md`. Root `AGENTS.md` must list those files as mandatory reads before code edits. `architecture.md` must define the boundary map. `engineering-standards.md` must include clean code rules, validation and schemas, persistence standards, provider standards, worker/runtime standards, UI standards, and test standards with deterministic exits for blocked proof.
 
 Use subagents or delegated workers when available; when unavailable, self-simulate every required role and write the same handoff/return artifacts. Evidence rows must be narrow: do not let static text, broad smoke commands, screenshots, or deterministic providers overclaim live, browser, persistence, security, or production readiness behavior.
 

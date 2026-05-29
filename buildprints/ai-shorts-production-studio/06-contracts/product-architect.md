@@ -29,7 +29,7 @@ Do not ask this role to read the whole packet, all phases, or the original sourc
 
 The return must complete this workflow before implementation is treated as ready:
 
-0. Foundation scaffold verdict: verify that the implementation-project base project structure exists and that root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` are present before Phase 01 code edits. `architecture.md` must include Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map. If missing, return `blocker`.
+0. Foundation scaffold verdict: verify that the implementation-project base project structure exists and that root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` are present before Phase 01 code edits. `architecture.md` must include Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map. If missing, return `blocker`.
 1. Product shape: classify the active phase as UI workflow, API service, data pipeline, worker/runtime, provider integration, report/export, admin/security surface, generated artifact pipeline, or mixed.
 2. Architecture style: choose the smallest style that fits the selected scope: modular monolith, layered app, hexagonal ports/adapters, worker queue, workflow engine, local-first desktop/web workbench, serverless adapter, or tiny single-surface. State why the choice fits.
 3. Context boundary: name users, local runtime, external providers, storage, worker/job systems, deployment surface, and security boundary touched by this phase.

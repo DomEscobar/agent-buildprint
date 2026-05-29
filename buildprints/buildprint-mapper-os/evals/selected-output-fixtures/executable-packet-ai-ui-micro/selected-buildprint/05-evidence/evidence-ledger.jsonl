@@ -1,1 +1,0 @@
-{"artifact_id":"seed-01-micro-chat-runtime","type":"seed","phase_id":"01-micro-chat-runtime","status":"missing","source":"packet seed only; runtime writes belong in .buildprint/evidence/evidence-ledger.jsonl","proves":[],"proof_type":"seed","provider_mode":"none","upgrades_claim":false}

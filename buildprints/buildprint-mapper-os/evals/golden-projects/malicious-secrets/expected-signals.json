@@ -1,7 +1,0 @@
-{
-  "integrations": ["ai"],
-  "riskIncludes": ["AI/tool calls"],
-  "envNames": ["OPENAI_API_KEY", "PRIVATE_TOKEN"],
-  "mustContain": ["OPENAI_API_KEY", "PRIVATE_TOKEN", "AI/tool calls"],
-  "mustNotContain": ["<redacted-test-fixture-do-not-copy>"]
-}

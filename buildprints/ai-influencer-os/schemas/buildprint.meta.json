@@ -11,9 +11,7 @@
     "SPEC.md",
     "PLAN.md",
     "CONTRACTS.md",
-    "DEFAULT_PRESET.md",
-    "TEST_MATRIX.md",
-    "VALIDATION_TEMPLATE.md"
+    "DEFAULT_PRESET.md"
   ],
   "phasePlans": "plans/*.md",
   "requiredRuntime": "OpenClaw",
@@ -21,6 +19,5 @@
   "requiredAlignmentInterview": true,
   "defaultPersonaNameFixed": false,
   "requiresExternalAPIsForDryRun": false,
-  "requiresExternalAPIsForProduction": true,
-  "validationCommandExpected": "npm test"
+  "requiresExternalAPIsForProduction": true
 }

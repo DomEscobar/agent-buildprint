@@ -26,7 +26,6 @@ requires_roles:
   - product-architect
   - security-boundary
   - integration-runtime
-  - test-and-verification
 
 ## Product outcome
 

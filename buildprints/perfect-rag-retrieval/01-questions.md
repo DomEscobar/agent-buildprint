@@ -38,4 +38,4 @@ Default if blank: return chunk/source citations with titles and URIs, expose com
 
 What eval cases, quality thresholds, latency targets, and cost budgets define launch readiness? Which failures block release?
 
-Default if blank: require fixture evals for exact, paraphrase, contextualized, private/tenant mismatch, unsupported, and rerank cases; record recall@k, MRR, citation precision, answer correctness, refusal behavior, permission drops, latency, cost labels, and token budget use.
+Default if blank: require fixture reviews for exact, paraphrase, contextualized, private/tenant mismatch, unsupported, and rerank cases; record recall@k, MRR, citation precision, answer correctness, refusal behavior, permission drops, latency, cost labels, and token budget use.

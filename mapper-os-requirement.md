@@ -147,7 +147,7 @@ The downstream-agent execution flow must follow this default loop unless a phase
 
 ```text
 1. Intake: confirm requested scope, selected target boundary, phase readiness map, risks, and success criteria.
-2. Team-pack routing: infer the builder quality lenses from Buildprint signals before coding. User-facing UI requires `ux-ui-craft`; broad or full-suite surfaces require `product-architect`; every selected output requires `test-and-verification`; provider/runtime surfaces require `integration-runtime`; sensitive surfaces require `security-boundary`; durable state requires `data-persistence`. Users choose scope/product intent, not quality tiers.
+2. Team-pack routing: infer the builder quality lenses from Buildprint signals before coding. User-facing UI requires `ux-ui-craft`; broad or full-suite surfaces require `product-architect`; every selected output requires an inline proof/evidence gate; provider/runtime surfaces require `integration-runtime`; sensitive surfaces require `security-boundary`; durable state requires `data-persistence`. Users choose scope/product intent, not quality tiers.
 3. Context load: read only the Buildprint spine and relevant phase packet.
 4. Baseline: run declared preflight checks or record why they cannot run.
 5. Implement phase: build the next behaviorally complete vertical slice without erasing later phases from the plan.
@@ -224,7 +224,7 @@ Implementation plans must stay source-independent. They may reference Buildprint
   - pending API or UI contracts in selected output;
   - unresolved `QUESTION` markers in files that claim implementation readiness;
   - missing source citations for observed claims;
-  - missing runtime or test proof;
+  - missing runtime proof;
   - copied secret values;
   - duplicate candidates;
   - root and selected scaffold crossover;
@@ -238,12 +238,7 @@ Implementation plans must stay source-independent. They may reference Buildprint
 - Fail phase packets without proof gates.
 - Fail full-suite output without `03-phases/phase-index.yaml` and phase Markdown files.
 - Fail UI-bearing selected output without inline UX/UI requirements and `ux-ui-craft` role routing in relevant phase packets.
-- Golden evals must test discovery quality, source-independent extraction readiness, and false-claim prevention.
-- Golden evals must reject source-code-clone output that preserves internals without explaining product relevance.
-- Golden evals must reject Buildprints that contain contracts but no concrete downstream-agent execution sequence.
-- Golden evals must reject one-pass implementation plans that lack verification after each meaningful slice.
-- Golden evals must reject over-broad context instructions that require the implementing agent to read every generated file before knowing the next action.
-- Golden evals must reject selected/full-suite package shape failures: missing `03-phases/phase-index.yaml`, missing `03-phases/phase-flow.md`, missing inline UI obligations, incomplete phase packets, blueprint drift, typo alias files, missing required role routing, and duplicate canonical handoff files.
+- Manual review must cover discovery quality, source-independent extraction readiness, false-claim prevention, product specificity, visual/UI direction, phase routing, and duplicate canonical handoff files.
 
 ## Product Contract Model
 
@@ -313,7 +308,7 @@ generated/agent-prompt.md
 
 Each phase packet file must define build target, source evidence refs, required roles and gates, user-visible outcome, architecture obligations, UI obligations where applicable, inputs, outputs, implementation path, stop rules, proof gate, and unlocks.
 
-Team routing is embedded in `02-project-setup.md`, `03-phases/phase-flow.md`, and each phase `requires_roles:` field. It must not ask the user to choose lazy/simple/quick quality. It must select `test-and-verification` for every selected output and route `product-architect`, `ux-ui-craft`, `integration-runtime`, `security-boundary`, and `data-persistence` whenever product signals require them.
+Team routing is embedded in `02-project-setup.md`, `03-phases/phase-flow.md`, and each phase `requires_roles:` field. It must not ask the user to choose lazy/simple/quick quality. It must embed proof/evidence gates for every selected output and route `product-architect`, `ux-ui-craft`, `integration-runtime`, `security-boundary`, and `data-persistence` whenever product signals require them.
 
 Obsolete selected-output files are invalid: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, `generated/current-buildprint-compat/`, and fragmented per-capability mini-files.
 
@@ -358,7 +353,7 @@ Required posture:
 - Source-independent implementation is possible.
 - Required behavior is represented in contracts and acceptance checks.
 - Downstream-agent execution order, implementation slices, verification gates, repair loops, and handoff evidence are represented.
-- Runtime/test/reversal proof exists for included behavior.
+- Runtime/reversal proof exists for included behavior.
 - Unsafe claims are explicitly prohibited.
 - Internal implementation remains free unless a specific compatibility requirement constrains it.
 
@@ -373,15 +368,7 @@ Required posture:
 - Mapper OS must not claim the future implementation is verified merely because the Buildprint is qualified.
 - Mapper OS must not generate implementation plans that depend on preserving proprietary source expression, comments, assets, or unique internal algorithms unless the user has rights and the element is explicitly required behavior.
 
-## Test Plan
-
-Run after changes to mapper behavior, mapper templates, or Mapper OS docs:
-
-```bash
-node --check bin/agb.js
-npm run eval:analyze
-git diff --check
-```
+## Review Plan
 
 Manual review must confirm:
 

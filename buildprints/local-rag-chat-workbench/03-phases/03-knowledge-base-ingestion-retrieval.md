@@ -20,7 +20,6 @@ requires_roles:
   - data-persistence
   - security-boundary
   - ux-ui-craft
-  - test-and-verification
 
 ## Product outcome
 
@@ -31,7 +30,7 @@ Deliver the knowledge-base path: file/URL/content ingestion, document table, par
 blueprint_mode: product
 phase_style: outcome_flow
 - Mode lens: prove the operator outcome of adding knowledge and receiving grounded, cited chat context, not a generic RAG bucket.
-- Shared proof spine: preconditions are chat runtime and provider seams; entrypoint is knowledge-base UI/API; execution validates upload/URL/content, creates document/job records, parses/chunks/embeds, stores vectors, retrieves top-k chunks, injects context after memory, persists citations, and displays source trace; state/artifact effects include document/chunk/vector/citation rows and job status; observable proof is parser/chunker/vector integration, retrieval quality/eval, citation UI/readback, worker status/failure recovery, and destructive confirmation; failure/recovery covers bad file, denied URL, parser failure, embedding provider unavailable, reindex failure, and delete cleanup.
+- Shared proof spine: preconditions are chat runtime and provider seams; entrypoint is knowledge-base UI/API; execution validates upload/URL/content, creates document/job records, parses/chunks/embeds, stores vectors, retrieves top-k chunks, injects context after memory, persists citations, and displays source trace; state/artifact effects include document/chunk/vector/citation rows and job status; observable proof is parser/chunker/vector integration, retrieval quality review, citation UI/readback, worker status/failure recovery, and destructive confirmation; failure/recovery covers bad file, denied URL, parser failure, embedding provider unavailable, reindex failure, and delete cleanup.
 
 ## Mapped product obligations
 
@@ -58,7 +57,7 @@ Implement ingestion job ownership, parser/chunker interfaces, deterministic embe
 ## State/runtime touched
 
 - Persistence: documents, chunks/vectors, citations, ingestion jobs, errors, last-cited timestamps.
-- Runtime: worker/job loop, URL fetch boundary, embedding provider seam, retrieval quality/eval export.
+- Runtime: worker/job loop, URL fetch boundary, embedding provider seam, retrieval quality review export.
 
 ## UX/UI requirements
 

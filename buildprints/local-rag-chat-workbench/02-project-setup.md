@@ -35,7 +35,7 @@ Do not copy source implementation code. Source files are evidence only.
 - Provider boundary: implement Ollama-compatible chat/embedding adapters, deterministic no-network test doubles, and optional OpenAI-compatible speech adapter. Provider mode must be visible in evidence.
 - Worker/runtime boundary: document ingestion, URL indexing, embedding, watched folder processing, reindex, delete cleanup, and eval/export tasks need job ownership, status, retry/cancel/failure recovery, and restart behavior.
 - Persistence boundary: use durable relational state plus vector/retrieval storage with migrations, restart/readback proof, retention/export/delete/reset semantics, and schema/version ownership.
-- Testing boundary: unit/integration tests for domain/provider/persistence, browser/e2e for UI flows, visual quality screenshots/critique, no-fake scan, security invalid-input/denied-path proof, and clean-room implementation trace.
+- Testing boundary: unit/integration proof for domain/provider/persistence, browser/e2e for UI flows, visual quality screenshots/critique, no-fake scan, security invalid-input/denied-path proof, and clean-room implementation trace.
 
 ## Production readiness contract
 
@@ -68,7 +68,7 @@ Do not downgrade to a toy/local-MVP. Missing proof preserves scope and records `
 Source repo: `https://github.com/Maxkrvo/OllamaChat`.
 
 Observed source anchors:
-- Source path `README.md` describes local Ollama chat, no cloud API key by default, streaming responses, vision/image input, smart model routing, system prompts, grounded citations, persistent memory, voice mode, model settings, dark/mobile UI, knowledge base, RAG settings, watched folders, memory page, setup, grounding evals, and architecture modules.
+- Source path `README.md` describes local Ollama chat, no cloud API key by default, streaming responses, vision/image input, smart model routing, system prompts, grounded citations, persistent memory, voice mode, model settings, dark/mobile UI, knowledge base, RAG settings, watched folders, memory page, setup, grounding review cases, and architecture modules.
 - Source path `prisma/schema.prisma` defines Conversation, Message, Document, Chunk, MessageCitation, RagConfig, AppConfig, and MemoryItem persistence.
 - Source path `src/app/api/chat/route.ts` shows the chat request path: conversation lookup, model resolution, message persistence, system/memory/RAG injection, optional tool loop, streaming response, citation persistence, memory usage/capture, and title update.
 - Source paths `src/components/chat.tsx`, `src/components/knowledge-base.tsx`, `src/components/memory-center.tsx`, `src/components/settings-form.tsx`, and `src/components/rag-settings.tsx` show the user-facing surfaces and states.
@@ -94,13 +94,13 @@ This matrix is not route/function parity. No mapped surface may disappear silent
 | Agent tool loop | Source paths `src/app/api/chat/route.ts`, `src/lib/tools/definitions.ts`, `src/lib/tools/executor.ts` | Capability-gated web_search/fetch_url tool calls, timeout/error capture, visible trace | preserve with safer defaults | Tool loop uses allowlist, timeout, SSRF review, visible trace, and non-upgrading live-web blocker when blocked. | 02-multimodal-routing-agent-tools | Allowlist, timeout, SSRF/input review, trace proof |
 | File/URL/content ingestion | Source path README.md; source paths `src/components/knowledge-base.tsx`, `src/app/api/rag/documents/route.ts` | Validate and ingest files/URLs/content into document records and jobs | preserve with safer defaults | Worker/job records status, progress, errors, retry/cancel, parser failures, and URL/path denials. | 03-knowledge-base-ingestion-retrieval | Upload/URL validation, worker status, parse failure proof |
 | Parser/chunker/embedding/vector storage | Source paths `src/lib/rag/index.ts`, `src/lib/rag/chunker.ts`, `src/lib/rag/vector-db.ts`, schema models Document/Chunk | Parse supported sources, chunk with metadata, embed through provider seam, store/search vectors | preserve | Parser/chunker/vector boundaries are durable, provider-gated, and searchable with readback. | 03-knowledge-base-ingestion-retrieval | Parser/vector integration, persistence, embedding proof/blocker |
-| Retrieval, citations, grounding | Source path README.md; source paths `src/lib/chat/context.ts`, `src/app/api/rag/search/route.ts`; schema model MessageCitation | Inject top-k context, compute confidence, persist/display citations | preserve | Retrieval injects after memory, persists citation metadata, displays source/confidence trace. | 03-knowledge-base-ingestion-retrieval | Retrieval quality/eval tests, citation UI/readback |
+| Retrieval, citations, grounding | Source path README.md; source paths `src/lib/chat/context.ts`, `src/app/api/rag/search/route.ts`; schema model MessageCitation | Inject top-k context, compute confidence, persist/display citations | preserve | Retrieval injects after memory, persists citation metadata, displays source/confidence trace. | 03-knowledge-base-ingestion-retrieval | Retrieval quality/review cases, citation UI/readback |
 | Document management | Source paths `src/components/knowledge-base.tsx`, `src/app/api/rag/documents/[id]/route.ts` | Status/error/chunks/size/last-cited, search, reindex, delete | preserve | Knowledge-base UI/API proves search, reindex, delete cleanup, failure restore, and confirmation. | 03-knowledge-base-ingestion-retrieval | Browser proof, destructive confirmation, cleanup |
 | Memory capture | Source path README.md; source paths `src/lib/memory/index.ts`, `src/app/api/chat/route.ts` | Conservative preference/fact/decision capture after completed turns | preserve | Capture is non-fatal, dedupes/supersedes, and tags source conversation. | 04-memory-review-injection | Capture/dedupe/supersede tests, non-fatal failure proof |
 | Memory selection/injection/usage | Source paths `src/lib/memory/index.ts`, `src/app/api/chat/route.ts` | Rank global/conversation memory, enforce token budget, inject before RAG, update use counts | preserve | Context builder enforces injection order, token budget, and use-count readback. | 04-memory-review-injection | Injection-order, budget, use-count readback |
 | Memory review center | Source path `src/components/memory-center.tsx` | Search, manual add, archive, promote to global, clear all with confirmation | preserve | UI/API proves memory CRUD, promote/archive/clear, privacy review, and destructive confirmation. | 04-memory-review-injection | Browser proof, destructive confirmation, privacy review |
 | Model/app/RAG config | Source paths `src/components/settings-form.tsx`, `src/components/rag-settings.tsx`, schema models AppConfig/RagConfig | Save/readback model, memory budget, RAG params, watched folders, supported types | preserve | Config service validates, persists, and proves downstream routing/retrieval effects. | 05-settings-data-lifecycle-operations | Validation, persistence, downstream effect proof |
-| Data lifecycle and operations | Source path `prisma/schema.prisma`; source path package.json; source path README.md eval/setup notes | Migrations/setup, export/delete/reset, health, CI/evals, evidence-safe logs | preserve | Operations include migration/readback, export/delete/reset, health/readiness, no-secret logs, and eval gates. | 05-settings-data-lifecycle-operations | Migration/readback, export/delete/reset, health/eval proof |
+| Data lifecycle and operations | Source path `prisma/schema.prisma`; source path package.json; source path README.md eval/setup notes | Migrations/setup, export/delete/reset, health, CI/review gates, evidence-safe logs | preserve | Operations include migration/readback, export/delete/reset, health/readiness, no-secret logs, and eval gates. | 05-settings-data-lifecycle-operations | Migration/readback, export/delete/reset, health/review proof |
 | Watched folders and file type controls | Source paths `src/components/rag-settings.tsx`, schema field `RagConfig.watchedFolders` | Add/remove local watched folders and extension allowlist for automatic indexing | preserve with safer defaults | Path safety and file-watcher proof are required; unavailable watcher records non-upgrading blocker. | 05-settings-data-lifecycle-operations | Path safety review, watcher proof/blocker, extension tests |
 | Optional voice sidecar | Source path README.md; source path VOICE.md; source paths `src/lib/voice.ts`, `src/components/chat.tsx`, `src/components/settings-form.tsx` | Voice config, health, STT, TTS, push-to-talk, auto/manual speak, SSRF-conscious URL policy | preserve | Voice is optional but included; media/sidecar proof may block qualification only after adapters/UI states exist. | 06-voice-sidecar-experience | Voice adapter tests, media/browser proof/blocker, security review |
 
@@ -111,10 +111,10 @@ The Buildprint packet must not contain `AGENTS.md`. The downstream implementatio
 - Root `AGENTS.md`: scope governor with product shape, current phase limit, safety rules, and mandatory read list.
 - `architecture.md`: mandatory read for coding agents; must include Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map.
 - `engineering-standards.md`: mandatory read; must include Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, UI standards, and Test standards with deterministic blocker/e2e/runtime exit behavior.
-- `test-strategy.md`: mandatory read; must include unit, integration, browser/e2e, visual, provider, persistence, security, worker, no-fake, evidence, and CI gates.
+- `proof-strategy.md`: mandatory read; must include unit, integration, browser/e2e, visual, provider, persistence, security, worker, no-fake, evidence, and CI gates.
 - `ui-identity.md`: mandatory read because this packet is UI-bearing; must define visual direction, layout model, state matrix, accessibility, responsive constraints, domain affordances, and screenshot critique rules.
 
-Root `AGENTS.md` must explicitly list `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits.
+Root `AGENTS.md` must explicitly list `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits.
 
 Recommended base structure:
 
@@ -123,7 +123,7 @@ implementation-project/
   AGENTS.md
   architecture.md
   engineering-standards.md
-  test-strategy.md
+  proof-strategy.md
   ui-identity.md
   app-or-frontend/
   api-or-server/
@@ -131,7 +131,7 @@ implementation-project/
   providers/
   workers/
   persistence/
-  tests/
+  proof-fixtures/
   e2e/
   .buildprint/
 ```
@@ -159,6 +159,6 @@ Do not start `03-phases/*` until:
 
 - `01-questions.md` has been reviewed or defaulted.
 - The foundation scaffold gate is complete.
-- Root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` exist and are referenced by `AGENTS.md`.
+- Root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` exist and are referenced by `AGENTS.md`.
 - `.buildprint/setup.md` or `.buildprint/setup/*` records concrete auth/session, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
 - `03-phases/phase-flow.md` can create handoffs/returns/reviews/proof/evidence for the active phase.

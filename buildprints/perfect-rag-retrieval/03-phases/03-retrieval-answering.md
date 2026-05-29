@@ -28,7 +28,6 @@ requires_roles:
   - data-persistence
   - ux-ui-craft
   - security-boundary
-  - test-and-verification
 
 ## Phase mode contract
 

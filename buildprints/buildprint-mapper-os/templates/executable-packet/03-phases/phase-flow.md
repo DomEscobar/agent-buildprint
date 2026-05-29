@@ -22,14 +22,14 @@ Evidence proof artifacts (test files, screenshots, trace logs) must be distinct 
 
 Before writing code for any phase:
 
-0. Verify the implementation project foundation exists: root `AGENTS.md`, `.buildprint/setup.md` or `.buildprint/setup/`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` for UI-bearing products. Root `AGENTS.md` must explicitly list those files as mandatory reads before code edits. If the Foundation scaffold gate is missing, incomplete, or inconsistent, stop phase work and create/repair the scaffold first, exiting deterministically through the setup repair route instead of drifting into phase code.
-1. Read root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing; then read the active phase file named by `03-phases/phase-index.yaml`.
+0. Verify the implementation project foundation exists: root `AGENTS.md`, `.buildprint/setup.md` or `.buildprint/setup/`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` for UI-bearing products. Root `AGENTS.md` must explicitly list those files as mandatory reads before code edits. If the Foundation scaffold gate is missing, incomplete, or inconsistent, stop phase work and create/repair the scaffold first, exiting deterministically through the setup repair route instead of drifting into phase code.
+1. Read root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing; then read the active phase file named by `03-phases/phase-index.yaml`.
 2. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`, including how this phase extends the base project structure and local standards rather than bypassing them.
 3. Implement the first real vertical path inside the scaffold.
 4. Verify with the phase's exact proof commands and browser/screenshot artifacts where required.
 5. Reflect against the phase proof gate, write `.buildprint/phase-runs/<phase-id>/proof.md`, then record evidence.
 
-A phase cannot reach `phase_core_passed` if it violates `architecture.md`, `engineering-standards.md`, `test-strategy.md`, or `ui-identity.md`; implements a standalone demo outside the agreed base project structure; bypasses provider/persistence/worker/schema boundaries; or uses a browser/e2e/runtime blocker that hangs or exits ambiguously instead of writing a blocker artifact and exiting deterministically.
+A phase cannot reach `phase_core_passed` if it violates `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, or `ui-identity.md`; implements a standalone demo outside the agreed base project structure; bypasses provider/persistence/worker/schema boundaries; or uses a browser/e2e/runtime blocker that hangs or exits ambiguously instead of writing a blocker artifact and exiting deterministically.
 
 ## Required Phase Artifacts
 

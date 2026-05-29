@@ -69,7 +69,7 @@
   "checks": [
     "Codex dry-run generated a TypeScript billing proof",
     "npm run build passed in dry-run proof",
-    "npm test passed: 6/6 lifecycle tests",
+    "target verification command passed: 6/6 lifecycle tests",
     "Target-stack adapters document Node/TypeScript, Python, Rails, Go, and PHP/Laravel mappings",
     "Webhook signatures verified before state mutation",
     "Premium access uses server-side subscription state",

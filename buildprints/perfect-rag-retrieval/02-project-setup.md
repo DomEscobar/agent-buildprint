@@ -20,7 +20,7 @@ This setup contract is completed before phase implementation. It turns human ali
 - Frontend/UI surfaces: corpus/source management if the host app has admin UI; query/answer screen or API client surface; citation display; insufficient-evidence/refusal state; blocked provider/credential state; trace/eval report views for admins or developers.
 - Backend/API surfaces: source ingestion/update/delete endpoints or jobs; chunking/index build jobs; query endpoint; trace endpoint or log sink; eval-run endpoint or command; provider adapter contracts for lexical search, dense search, embeddings, reranking, generation, and cost/latency collection.
 - State/runtime surfaces: durable document sources, chunk records, access scopes, lexical/sparse index, dense/vector index, query traces, eval cases, eval run results, generated report outputs, job state, provider config, and runtime artifacts for proof reports.
-- Tests/evaluation: deterministic fixture tests plus production corpus evals from `04-evaluation.md` and phase proof gates.
+- Proof source: deterministic proof fixtures plus production corpus reviews from `04-evaluation.md` and each active phase proof gate.
 
 ## Architecture decisions
 
@@ -52,15 +52,15 @@ Runtime setup artifact: before phase work, write `.buildprint/setup.md` or `.bui
 
 ## Foundation scaffold gate
 
-Before Phase 01, create the selected stack real base project structure plus implementation-project root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` because this packet is UI-bearing whenever the host app exposes corpus, query, trace, or eval screens.
+Before Phase 01, create the selected stack real base project structure plus implementation-project root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` because this packet is UI-bearing whenever the host app exposes corpus, query, trace, or eval screens.
 
-Root `AGENTS.md` must explicitly list `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits. It must also identify this Buildprint as the scope governor and tell agents not to broaden the current phase.
+Root `AGENTS.md` must explicitly list `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits. It must also identify this Buildprint as the scope governor and tell agents not to broaden the current phase.
 
 `architecture.md` must require Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map. It must name module families for UI/controllers, API/routes or services, domain contracts, repositories, provider adapters, workers/jobs, security middleware, observability, and tests.
 
 `engineering-standards.md` must require Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, UI standards when UI-bearing, and Test standards with deterministic blocker/e2e/runtime exit behavior.
 
-`test-strategy.md` must define deterministic proof mode, provider-live blocker handling, permission/security tests, persistence readback tests, no-fake scan expectations, browser/e2e and screenshot proof for UI-bearing work, and evidence-row discipline. `ui-identity.md` must define the operational retrieval workbench visual system, citation and trace interaction model, responsive behavior, accessibility expectations, and `visual_quality_gate` Screenshot critique criteria.
+`proof-strategy.md` must define deterministic proof mode, provider-live blocker handling, permission/security tests, persistence readback tests, no-fake scan expectations, browser/e2e and screenshot proof for UI-bearing work, and evidence-row discipline. `ui-identity.md` must define the operational retrieval workbench visual system, citation and trace interaction model, responsive behavior, accessibility expectations, and `visual_quality_gate` Screenshot critique criteria.
 
 The Foundation scaffold gate is not satisfied by empty files. It must name the actual base project structure, commands, and runtime boundaries that Phase 01 can extend without inventing architecture.
 
@@ -126,7 +126,7 @@ Promote these observations into implementation contracts before starting phases:
   - Target disposition: preserve
   - Target contract: implement lexical/sparse and dense channels, score normalization/fusion, dedupe, access filtering, reranking, and permission-drop trace fields.
   - Required proof: exact identifier retrieval test, semantic paraphrase retrieval test, hybrid/dedupe test, hard distractor rerank test, permission drop test, and runtime/API trace proof.
-  - Compatibility impact: provider-specific scoring can differ, but evals must prove target chunks and blocked private chunks.
+  - Compatibility impact: provider-specific scoring can differ, but reviews must prove target chunks and blocked private chunks.
   - Owning phase: `03-phases/03-retrieval-answering.md`
 
 - Surface id: grounded-answer-refusal-context-pack
@@ -151,10 +151,10 @@ Promote these observations into implementation contracts before starting phases:
 
 - Surface id: advanced-retrieval-modules
   - Source evidence: mapped observations from legacy advanced guidance for HyDE, query rewriting, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG/CRAG, contextual retrieval, cross-encoder or BGE reranking.
-  - Mapped obligation: defer advanced retrieval modules until baseline evals show a gap and measured improvement justifies cost, complexity, trace, and safety impact.
+  - Mapped obligation: defer advanced retrieval modules until baseline reviews show a gap and measured improvement justifies cost, complexity, trace, and safety impact.
   - Source capability: offers quality upgrades without default hype or unnecessary complexity.
   - Target disposition: defer
-  - Target contract: optional modules are implemented only after baseline evals identify a gap and prove improvement; trace generated queries/summaries/graphs.
+  - Target contract: optional modules are implemented only after baseline reviews identify a gap and prove improvement; trace generated queries/summaries/graphs.
   - Required proof: advanced-module decision log with baseline gap, measured improvement, safety review, and cost/latency impact before enablement.
   - Compatibility impact: not required for baseline launch unless user requirements or eval failures demand them.
   - Owning phase: `03-phases/04-evaluation-operations.md`
@@ -175,7 +175,7 @@ If a source-backed contract cannot be made self-contained, record the blocker be
 The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
 - Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
-- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or proof/e2e.
 - Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
 - Creating only `AGENTS.md` is not enough to satisfy the setup gate.
 - Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
@@ -192,14 +192,14 @@ For each unresolved choice, record:
 Initial assumptions:
 
 - Assumption: deterministic proof mode is required even when live providers are planned.
-  - Evidence: product requires tests without live model, vector database, reranker, or provider credentials.
+  - Evidence: product requires proof without live model, vector database, reranker, or provider credentials.
   - Risk: proof metrics do not prove provider quality.
   - Blocks phase work: no
 - Assumption: multi-tenant plus per-user private access is the safe default.
   - Evidence: permission and tenant leakage are explicit product risks.
   - Risk: implementation may need to adapt to a simpler single-tenant app.
   - Blocks phase work: no
-- Assumption: optional advanced modules are deferred until evals justify them.
+- Assumption: optional advanced modules are deferred until reviews justify them.
   - Evidence: source guidance says to enable HyDE/RAPTOR/GraphRAG/Self-RAG/CRAG/SPLADE/ColBERT only when eval cases show benefit.
   - Risk: a product requiring global corpus summaries may need GraphRAG/RAPTOR earlier.
   - Blocks phase work: no unless user explicitly requires those modules for baseline.

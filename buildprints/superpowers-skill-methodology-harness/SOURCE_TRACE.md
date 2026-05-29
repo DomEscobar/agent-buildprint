@@ -23,7 +23,7 @@ Mapped source: `obra/superpowers` at commit `f2cbfbefebbfef77321e4c9abc9e949826b
 | Harness support acceptance requires clean session prompt “Let's make a react task tracker” to auto-trigger brainstorming before code. | `AGENTS.md:67-86` |
 | Skill changes require eval evidence and adversarial pressure testing. | `AGENTS.md:88-99` |
 | Integration tests verify skill invocation, subagent dispatch, TodoWrite, implementation files, passing tests, commits, and no extra features. | `docs/testing.md:40-64`, `:73-98` |
-| There are dedicated skill-triggering and explicit-skill-request test runners. | `tests/skill-triggering/run-all.sh:10-60`, `tests/explicit-skill-requests/run-all.sh:17-70` |
+| There are dedicated skill-triggering and explicit-skill-request test runners. | `proof-fixtures/skill-triggering/run-all.sh:10-60`, `proof-fixtures/explicit-skill-requests/run-all.sh:17-70` |
 
 ## Mapping caveat
 

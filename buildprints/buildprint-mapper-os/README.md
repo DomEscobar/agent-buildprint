@@ -12,7 +12,6 @@ Read:
 2. `SPEC.md`
 3. `CONTRACTS.md`
 4. `PLAN.md`
-5. `VERIFICATION.md`
 
 For generated selected packages, downstream implementers should not read all Markdown files upfront. They should read: `BUILDPRINT.md`, `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, then only the active phase named by the phase index.
 

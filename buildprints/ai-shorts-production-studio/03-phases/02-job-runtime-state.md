@@ -27,7 +27,6 @@ requires_roles:
   - integration-runtime
   - data-persistence
   - security-boundary
-  - test-and-verification
 
 ## Phase mode contract
 
@@ -84,7 +83,7 @@ Do not run live providers by default. Do not leak provider tokens in logs or rec
 
 ## Quality gates
 
-- Lifecycle unit/integration tests.
+- Lifecycle unit/integration proof.
 - Persistence readback or restart test, or blocker row for production durability.
 - No-network default gate.
 - Structured error and blocked-state tests.

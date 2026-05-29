@@ -25,5 +25,5 @@ Each runtime adapter must answer:
 - How is bootstrap injected once per session/conversation?
 - How are subagents/tasks spawned?
 - How are todos tracked?
-- How are transcripts/logs captured for evals?
+- How are transcript logs captured for reviews?
 - How are file edits, shell commands, and git operations authorized?

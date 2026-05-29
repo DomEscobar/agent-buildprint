@@ -42,6 +42,6 @@
    - tiny ReAct-like loop without network/provider calls.
 
 8. Complete tests and reversal proof.
-   - use `TEST_MATRIX.md`;
+   - use phase proof gates;
    - ensure no network/provider calls;
    - ensure no source code copying from LangGraph.

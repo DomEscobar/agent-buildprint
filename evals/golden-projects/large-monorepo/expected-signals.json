@@ -1,7 +1,0 @@
-{
-  "integrations": ["stripe", "ai", "email"],
-  "riskIncludes": ["payments", "external messaging", "AI/tool calls", "admin surfaces"],
-  "envNames": ["STRIPE_WEBHOOK_SECRET", "ANTHROPIC_API_KEY"],
-  "mustContain": ["admin surfaces", "external messaging", "STRIPE_WEBHOOK_SECRET", "ANTHROPIC_API_KEY"],
-  "mustNotContain": ["sk-live"]
-}

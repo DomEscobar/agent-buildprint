@@ -13,7 +13,7 @@ Then execute this phase through `03-phases/phase-flow.md`: declare the phase obj
 
 You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
 
-requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persistence, security-boundary, test-and-verification]
+requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persistence, security-boundary]
 
 ## Phase mode contract
 

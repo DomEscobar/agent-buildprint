@@ -26,7 +26,7 @@ discovery/
 evidence/
   EVIDENCE_LEDGER.json
   SOURCE_SURFACE_CENSUS.json
-quality/
+review/
   PROMOTION_GATE.md
 ```
 

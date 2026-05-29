@@ -21,7 +21,7 @@
     "Skill routing",
     "TDD",
     "Subagents",
-    "Transcript evals"
+    "Transcript review"
   ],
   "iconKeys": [
     "md",
@@ -46,7 +46,7 @@
   "whatYouNeed": [
     "One target agent runtime to support first",
     "A skill loading mechanism or plugin adapter",
-    "A transcript/eval runner",
+    "A transcript/review runner",
     "A safe subagent/task interface",
     "Human policy for exceptions to TDD/design gates"
   ],
@@ -87,7 +87,7 @@
     "Buildprint distinguishes manager tooling from methodology harness behavior",
     "Bootstrap/skill activation is treated as required runtime behavior",
     "Acceptance prompt requires brainstorming before code",
-    "Clean-room proof passes npm test 6/6 and transcript evals 5/5"
+    "Clean-room proof passes target verification command 6/6 and transcript review 5/5"
   ],
   "trustBadges": [
     {
@@ -102,7 +102,7 @@
     },
     {
       "label": "Clean-room proof passed",
-      "detail": "Codex built a neutral Node.js proof from snapshots; npm test passed 6/6 and transcript evals passed 5/5.",
+      "detail": "Codex built a neutral Node.js proof from snapshots; target verification command passed 6/6 and transcript review passed 5/5.",
       "tone": "success"
     },
     {

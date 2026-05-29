@@ -25,7 +25,7 @@ This setup contract is completed before phase implementation. It turns short hum
 - Backend/API surfaces: authenticated `/api/v1`-style presentation, files, outlines, images/icons/fonts/themes/templates, slide edit, chat, export, webhooks, provider config, health/status, and optional MCP routes.
 - Worker/runtime surfaces: async generation queue/status, document parsing/OCR, provider calls, image search/generation, export rendering, webhook delivery, desktop packaging boundary.
 - State/runtime surfaces: user/session config, provider configuration, uploaded files, parsed chunks, presentations, slides, themes/templates, media assets, chat history, async task status, export artifacts, webhook subscriptions/events.
-- Tests/evaluation: derive from `04-evaluation.md` and phase proof gates.
+- Proof source: derive from `04-evaluation.md` and each active phase proof gate.
 
 ## Architecture decisions
 
@@ -134,7 +134,7 @@ Rules:
 The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
 - Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
-- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or proof/e2e.
 - Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
 - Creating only `AGENTS.md` is not enough to satisfy the setup gate.
 - Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
@@ -146,7 +146,7 @@ Before Phase 01 starts, the implementation agent must create a real base project
 - `implementation-project/AGENTS.md`
 - `implementation-project/architecture.md`
 - `implementation-project/engineering-standards.md`
-- `implementation-project/test-strategy.md`
+- `implementation-project/proof-strategy.md`
 - `implementation-project/ui-identity.md`
 - frontend app boundary for auth/settings, generation, editor, assets, and export surfaces
 - backend/API boundary for auth, provider config, ingestion, outlines, deck generation, assets, chat, export, webhooks, MCP, health, and status
@@ -154,13 +154,13 @@ Before Phase 01 starts, the implementation agent must create a real base project
 - persistence boundary for sessions, provider config, uploaded files, parsed chunks, presentations, slides, themes/templates, assets, chat, async tasks, export artifacts, and webhook events
 - test/e2e boundary for unit, integration, worker recovery, browser/e2e, screenshot critique, API contract, security, and no-fake scans
 
-Root `AGENTS.md` in the implementation project must explicitly require coding agents to read `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` as mandatory reads before code edits. It must also restate phase discipline, no source implementation copying, no silent scope downgrade, and no phase completion without proof/evidence.
+Root `AGENTS.md` in the implementation project must explicitly require coding agents to read `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` as mandatory reads before code edits. It must also restate phase discipline, no source implementation copying, no silent scope downgrade, and no phase completion without proof/evidence.
 
 `architecture.md` must contain these sections: Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map.
 
 `engineering-standards.md` must contain these sections: Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, UI standards, and Test standards with deterministic blocker/e2e/runtime exit behavior.
 
-`test-strategy.md` must define local deterministic tests, live-provider blockers, API/browser/e2e gates, screenshot critique, export proof, webhook retry proof, worker cancellation/recovery proof, security/no-fake scans, and evidence row responsibilities.
+`proof-strategy.md` must define local deterministic tests, live-provider blockers, API/browser/e2e gates, screenshot critique, export proof, webhook retry proof, worker cancellation/recovery proof, security/no-fake scans, and evidence row responsibilities.
 
 `ui-identity.md` must define a product-grade presentation workbench identity: navigation hierarchy, editor canvas/filmstrip behavior, asset/theme affordances, generation progress states, responsive rules, accessibility/focus states, and screenshot critique criteria. Generic forms, default controls, raw text lists, or local-MVP screenshots cannot upgrade UX claims.
 

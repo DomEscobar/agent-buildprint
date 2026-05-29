@@ -39,7 +39,7 @@ Create the runnable OpenClaw-shaped project structure.
 
 - file tree exists;
 - `package.json.name` is `openclaw-ai-influencer-os`;
-- `npm run test:static` can be added later without changing structure;
+- `static verification command` can be added later without changing structure;
 - missing keys are blank secret fields only;
 - env names match `BUILDPRINT.md` exactly;
 - `.env.example` does not default to test/mock mode;

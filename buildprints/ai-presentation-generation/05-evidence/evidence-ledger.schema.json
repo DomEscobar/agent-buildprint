@@ -1,16 +1,40 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": ["phase_id", "proof_type", "command", "artifact", "provider_mode", "result", "upgrades_claim"],
+  "required": [
+    "phase_id",
+    "proof_type",
+    "command",
+    "artifact",
+    "provider_mode",
+    "result",
+    "upgrades_claim"
+  ],
   "properties": {
-    "phase_id": { "type": "string" },
-    "proof_type": { "type": "string" },
-    "command": { "type": "string" },
-    "artifact": { "type": "string" },
-    "provider_mode": { "type": "string" },
-    "result": { "type": "string" },
-    "upgrades_claim": { "type": "boolean" },
-    "notes": { "type": "string" }
+    "phase_id": {
+      "type": "string"
+    },
+    "proof_type": {
+      "type": "string"
+    },
+    "command": {
+      "type": "string"
+    },
+    "artifact": {
+      "type": "string"
+    },
+    "provider_mode": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string"
+    },
+    "upgrades_claim": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string"
+    }
   },
   "additionalProperties": true
 }

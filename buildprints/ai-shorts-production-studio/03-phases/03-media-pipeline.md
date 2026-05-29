@@ -27,7 +27,6 @@ requires_roles:
   - integration-runtime
   - data-persistence
   - security-boundary
-  - test-and-verification
 
 ## Phase mode contract
 
@@ -84,7 +83,7 @@ Escape shell-sensitive and subtitle-sensitive text. Do not pipe untrusted provid
 
 ## Quality gates
 
-- Media unit/integration tests for subtitle escaping and b-roll timing.
+- Media unit/integration proof for subtitle escaping and b-roll timing.
 - Probe command or equivalent metadata proving width 1080 and height 1920.
 - Nonblank/visual-transition check.
 - Browser-compatible playable file check where possible.

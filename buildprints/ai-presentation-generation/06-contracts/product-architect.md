@@ -67,7 +67,7 @@ The returned topology must be specific enough that an implementer can create fil
 The return file `.buildprint/phase-runs/<phase-id>/returns/product-architect.md` must use:
 
 - `## Verdict`: pass | pass-with-scoped-debt | blocker
-- `## Foundation scaffold verdict`: confirm implementation-project `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and UI-bearing `ui-identity.md` exist before Phase 01; include blocker if missing.
+- `## Foundation scaffold verdict`: confirm implementation-project `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and UI-bearing `ui-identity.md` exist before Phase 01; include blocker if missing.
 - `## Product shape`
 - `## Topology and boundaries`
 - `## Boundary map`: summarize the `architecture.md` boundary map touched by this phase and any dependency-rule risks.

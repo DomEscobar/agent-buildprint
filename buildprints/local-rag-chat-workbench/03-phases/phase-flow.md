@@ -6,7 +6,7 @@ You are the orchestrator for this phase only. Keep the active context small: rou
 
 Before writing code for any phase:
 
-0. Confirm the `Foundation scaffold gate` in `02-project-setup.md` has produced a real base project structure, mandatory root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` because this packet is UI-bearing. If the scaffold is missing, stop before phase code, create it, and ensure any blocked setup, e2e, runtime, provider, worker, or media proof is exiting deterministically instead of hanging.
+0. Confirm the `Foundation scaffold gate` in `02-project-setup.md` has produced a real base project structure, mandatory root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` because this packet is UI-bearing. If the scaffold is missing, stop before phase code, create it, and ensure any blocked setup, e2e, runtime, provider, worker, or media proof is exiting deterministically instead of hanging.
 1. Read the active phase file named by `03-phases/phase-index.yaml`.
 2. Resolve every `requires_roles` entry to `06-contracts/<role>.md`.
 3. Read only the role contracts required by the active phase.
@@ -76,7 +76,7 @@ Required runtime artifact reviews:
 
 - `.buildprint/phase-runs/<phase-id>/reviews/architecture.md`: use the `product-architect` return to verify topology, dependency direction, state/runtime ownership, mapped obligation preservation, ADR-lite tradeoffs, and next-phase boundary.
 - `.buildprint/phase-runs/<phase-id>/reviews/ux.md`: use the `ux-ui-craft` return for UI-bearing phases; for non-UI phases, write `## Verdict: not-ui-bearing`, `## Reason`, and `## Downstream UI obligations`.
-- `.buildprint/phase-runs/<phase-id>/reviews/qa.md`: use the `test-and-verification` return to verify commands, negative cases, evidence row scope, and claim limits.
+- `.buildprint/phase-runs/<phase-id>/reviews/qa.md`: write a phase proof review that verifies commands, negative cases, evidence row scope, and claim limits.
 
 ## Evidence Gate
 
@@ -84,7 +84,7 @@ Runtime proof/blocker rows go only to `.buildprint/evidence/evidence-ledger.json
 
 Before writing runtime evidence, read `05-evidence/evidence-ledger.schema.json` and conform to it. Every runtime row must include `artifact_id`, `type`, `phase_id`, valid `status`, `source`, array `proves`, `proof_type`, `provider_mode`, and `upgrades_claim`.
 
-Use the evidence ceiling rule from `06-contracts/test-and-verification.md`: Do not copy every required proof label into every evidence row; HTTP/API runtime traces prove API/runtime behavior, not browser behavior; Provider adapter/config tests can prove adapter seams but not live provider behavior; Review prose cannot upgrade implementation proof by itself; QA review must explicitly audit every `upgrades_claim: true` row; `visual_quality_gate` requires screenshot/browser critique, not default-control shells or raw text-list substitutes; use `blocks_continuation: false` only when a blocker limits qualification but not downstream implementation.
+Use the evidence ceiling rule from `06-contracts/proof-and-evidence.md`: Do not copy every required proof label into every evidence row; HTTP/API runtime traces prove API/runtime behavior, not browser behavior; Provider adapter/config tests can prove adapter seams but not live provider behavior; Review prose cannot upgrade implementation proof by itself; QA review must explicitly audit every `upgrades_claim: true` row; `visual_quality_gate` requires screenshot/browser critique, not default-control shells or raw text-list substitutes; use `blocks_continuation: false` only when a blocker limits qualification but not downstream implementation.
 
 ## Continuation gate
 

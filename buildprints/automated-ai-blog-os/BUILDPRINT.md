@@ -57,9 +57,6 @@ The minimum included behavior is the content-operations pipeline, not a generic 
 5. `questions.md`
 6. `PLAN.md`
 7. `plans/*.md` in listed phase order
-8. `TEST_MATRIX.md`
-9. `VALIDATION_TEMPLATE.md`
-10. `checks/acceptance.md`
 11. `policies/publishing.md`
 
 ## Phase Gates
@@ -73,7 +70,7 @@ The minimum included behavior is the content-operations pipeline, not a generic 
 7. Claim and SEO validation: block ungrounded factual claims and invalid metadata, schema, feeds, llms output, or build status.
 8. Approval and publishing: require approval plus passing claim, SEO, feed, and build gates before manual preparation, scheduling, or publishing.
 9. Manager audit: report stale, weak, repeated, broken, blocked, and contradictory records with evidence and recommended action.
-10. Tests and validation: run the target test/build commands and map every `TEST_MATRIX.md` risk to evidence or an explicit blocker.
+10. Proof and validation: run the target test/build commands and map every phase risk to evidence or an explicit blocker.
 
 ## Acceptance Gates
 
@@ -87,7 +84,7 @@ The minimum included behavior is the content-operations pipeline, not a generic 
 - Schedule or auto mode requires explicit configuration and the same gates.
 - Manager audit reports stale drafts, repeated angles, weak sources, SEO/feed failures, failed builds, and blocked publish attempts.
 - Tests pass without network or publishing credentials.
-- `VALIDATION.md` follows `VALIDATION_TEMPLATE.md`.
+- `VALIDATION.md` records implementation evidence and blockers.
 
 ## Purpose
 
@@ -171,13 +168,13 @@ Any unavailable source access, LLM/provider integration, deployment access, or p
 Default command gate:
 
 ```bash
-npm test
+target verification command
 npm run build
 ```
 
 If the target project does not use npm, run equivalent test/build commands and record the substitution in `VALIDATION.md`.
 
-`VALIDATION.md` must include configuration, generated modules/files, exact commands and results, risk coverage mapped to `TEST_MATRIX.md`, deviations, blockers, and the publish safety statement.
+`VALIDATION.md` must include configuration, generated modules/files, exact commands and results, risk coverage mapped to per-phase proof gates, deviations, blockers, and the publish safety statement.
 
 ## Copyable Agent Prompt
 

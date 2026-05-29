@@ -20,7 +20,7 @@ The orchestrator handoff must include only:
 - active phase file and its `requires_roles`;
 - `03-phases/phase-index.yaml`;
 - `02-project-setup.md` product shape, architecture decisions, production readiness contract, Foundation scaffold gate, open assumptions, and phase start gate;
-- implementation-project `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing;
+- implementation-project `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing;
 - relevant current project files for the active phase;
 - relevant returns from other active roles when those returns affect topology.
 
@@ -30,7 +30,7 @@ Do not ask this role to read the whole packet, all phases, or the original sourc
 
 The return must complete this workflow before implementation is treated as ready:
 
-0. Foundation scaffold: verify the base project structure exists and root `AGENTS.md` requires coding agents to read `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing before code edits.
+0. Foundation scaffold: verify the base project structure exists and root `AGENTS.md` requires coding agents to read `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing before code edits.
 1. Product / capability shape: classify the active phase as UI workflow, API service, data pipeline, worker/runtime, provider integration, report/export, admin/security surface, generated artifact pipeline, or mixed.
 2. Architecture style: choose the smallest style that fits the selected scope: modular monolith, layered app, hexagonal ports/adapters, worker queue, workflow engine, local-first desktop/web workbench, serverless adapter, or tiny single-surface. State why the choice fits.
 3. Context boundary: name users, local runtime, external providers, storage, worker/job systems, deployment surface, and security boundary touched by this phase.
@@ -53,7 +53,7 @@ The returned topology must be specific enough that an implementer can create fil
 
 ## Reject If
 
-- The implementation project lacks a real base project structure, root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, or `test-strategy.md`; or root `AGENTS.md` fails to route coding agents to those files as mandatory reads.
+- The implementation project lacks a real base project structure, root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, or `proof-strategy.md`; or root `AGENTS.md` fails to route coding agents to those files as mandatory reads.
 - `architecture.md` does not define Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map.
 - A medium/large/full-suite product collapses into one server file, one route file, one component file, or embedded HTML/CSS/JS as the product architecture.
 - A UI-only shell is presented as product progress without state/domain/provider behavior or a stated blocker.

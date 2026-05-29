@@ -28,7 +28,6 @@ requires_roles:
   - integration-runtime
   - data-persistence
   - security-boundary
-  - test-and-verification
 
 ## Phase mode contract
 

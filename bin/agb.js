@@ -140,11 +140,9 @@ function loadMapperOsAlignment() {
   const discoverPrompt = requiredMapperOsFile(base, 'prompts/discover.md')
   const extractPrompt = requiredMapperOsFile(base, 'prompts/extract-selected.md')
   const phases = requiredMapperOsFile(base, 'phases.yaml')
-  const acceptance = requiredMapperOsFile(base, 'acceptance.yaml')
-  const claims = requiredMapperOsFile(base, 'claims.yaml')
   const checksum = crypto
     .createHash('sha256')
-    .update([buildprintJsonText, buildprintMd, discoverPrompt, extractPrompt, phases, acceptance, claims].join('\n---MAPPER-OS-FILE---\n'))
+    .update([buildprintJsonText, buildprintMd, discoverPrompt, extractPrompt, phases].join('\n---MAPPER-OS-FILE---\n'))
     .digest('hex')
 
   return {
@@ -842,7 +840,7 @@ function writeDiscoveryPackage(out, facts, confidence, questions, docs) {
     'evidence/EVIDENCE_COVERAGE.md',
     'evidence/SOURCE_VALIDATION_QUEUE.md',
     'evidence/qualification-records.json',
-    'quality/PROMOTION_GATE.md'
+    'review/PROMOTION_GATE.md'
   ]
   if (facts.selectedCandidate) requiredFiles.push('selected-buildprint/BUILDPRINT.md')
 
@@ -869,7 +867,7 @@ function writeDiscoveryPackage(out, facts, confidence, questions, docs) {
     qualification: {
       command: 'agb map',
       status: 'QUALIFICATION_REVIEW_REQUIRED',
-      gate: 'Source validation and runtime/test evidence are required before qualification.'
+      gate: 'Source validation and runtime evidence are required before qualification.'
     }
   }
   const currentState = [
@@ -890,7 +888,7 @@ function writeDiscoveryPackage(out, facts, confidence, questions, docs) {
     '- `discovery/DISCOVERY_QUEUE.md`',
     '- `discovery/CLAIM_REGISTER.md`',
     '- `evidence/EVIDENCE_LEDGER.json`',
-    '- `quality/PROMOTION_GATE.md`',
+    '- `review/PROMOTION_GATE.md`',
     facts.selectedCandidate ? '- `selected-buildprint/BUILDPRINT.md`' : '- No selected implementation Buildprint was generated.',
     '',
     '## Boundary',
@@ -910,7 +908,7 @@ function writeDiscoveryPackage(out, facts, confidence, questions, docs) {
     '3. `discovery/SOURCE_READING_PLAN.md`',
     '4. `discovery/DISCOVERY_QUEUE.md`',
     '5. `discovery/CLAIM_REGISTER.md`',
-    '6. `quality/PROMOTION_GATE.md`',
+    '6. `review/PROMOTION_GATE.md`',
     '',
     '## Output boundary',
     '',
@@ -928,7 +926,7 @@ function writeDiscoveryPackage(out, facts, confidence, questions, docs) {
     '- Default `agb map` output is a discovery workspace only.',
     '- Scanner/census hints are not product facts.',
     '- Implementation scaffold requires explicit `--candidate` or `--scope` and is isolated under `selected-buildprint/`.',
-    '- Final qualification requires source validation plus runtime/test evidence where required.',
+    '- Final qualification requires source validation plus runtime evidence where required.',
     ''
   ].join('\n')
 
@@ -1124,7 +1122,7 @@ function claimRegisterMd(facts) {
     ['env-name-hints', 'CENSUS_HINT', facts.envNames.join(', ') || 'pending agent discovery', 'facts.json'],
     ['product-architecture', 'PENDING_AGENT_DISCOVERY', 'agent must read source before writing architecture facts', 'SOURCE_READING_PLAN.md'],
     ['feature-candidates', 'PENDING_AGENT_DISCOVERY', 'agent must promote/reject candidates with source evidence', 'DISCOVERY_QUEUE.md'],
-    ['runtime-qualification', 'BLOCKED', 'requires source review plus runtime/test evidence', 'quality/PROMOTION_GATE.md']
+    ['runtime-qualification', 'BLOCKED', 'requires source review plus runtime evidence', 'review/PROMOTION_GATE.md']
   ]
   return [
     '# CLAIM_REGISTER',
@@ -1445,7 +1443,7 @@ function buildMapReviewPrompt(facts, mapperOsAlignment) {
     'You are the AI reviewer for a mapped Buildprint generated from an existing repository.',
     'Use REVIEW_PACKET.json as an evidence map, not as a verdict.',
     `Use ${mapperOsAlignment.title} from ${mapperOsAlignment.source} as the canonical mapper alignment. Alignment checksum: ${mapperOsAlignment.checksum}.`,
-    'Read AGENT_EXECUTION_BRIEF.md, BUILDPRINT.md, FEATURE_INVENTORY.md, PRODUCT_CAPABILITY_MAP.md, IMPLEMENTATION_DECOMPOSITION.md, PHASE_PLAN.md, LOOP_GATES.md, PARITY_ACCEPTANCE.md, SYSTEM_MAP.md, BUILDPRINT_CANDIDATES.md, SPEC.md, CONTRACTS.md, TEST_MATRIX.md, TRACEABILITY_MATRIX.md, questions.md, and the mapped source files that matter for the selected scope.',
+    'Read AGENT_EXECUTION_BRIEF.md, BUILDPRINT.md, FEATURE_INVENTORY.md, PRODUCT_CAPABILITY_MAP.md, IMPLEMENTATION_DECOMPOSITION.md, PHASE_PLAN.md, LOOP_GATES.md, PARITY_ACCEPTANCE.md, SYSTEM_MAP.md, BUILDPRINT_CANDIDATES.md, SPEC.md, CONTRACTS.md, PROOF_PLAN.md, TRACEABILITY_MATRIX.md, questions.md, and the mapped source files that matter for the selected scope.',
     'Assess whether a coding agent can continue from this mapped package without scope drift, fake completion, secret leakage, or weak handover.',
     'Separate OBSERVED, INFERRED, QUESTION, and OUT_OF_SCOPE claims. Never promote scanner evidence to behavioral proof without source-file evidence.',
     facts.needsScopeSelection
@@ -1758,7 +1756,7 @@ function evidenceCoverageMd(facts) {
     '## Gate rule',
     '',
     '- If any selected feature is `unqualified_hypothesis`, the mapper must not call the output a qualified implementation plan.',
-    '- Qualification requires source-file review and/or runtime/test evidence beyond scanner detection.',
+    '- Qualification requires source-file review and/or runtime evidence beyond scanner detection.',
     ''
   ].join('\n')
 }
@@ -2026,8 +2024,8 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     'SPEC.md',
     'PLAN.md',
     'CONTRACTS.md',
-    'TEST_MATRIX.md',
-    'VALIDATION_TEMPLATE.md',
+    'PROOF_PLAN.md',
+    'VALIDATION_NOTES.md',
     'QA_PLAN.md',
     'IMPLEMENTATION_COMPLETENESS.md',
     'HEAD_TO_FOOT_QA.md',
@@ -2088,7 +2086,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '- Execution plan: `PLAN.md` and `plans/*.md`',
     '- Agent execution rails: `AGENT_EXECUTION_BRIEF.md`, `agent-contract.xml`, `CURRENT_STATE.md`, `manifest.json`',
     '- Interface/data contracts: `CONTRACTS.md`',
-    '- Risk-to-test map: `TEST_MATRIX.md`',
+    '- Risk-to-proof map: `PROOF_PLAN.md`',
     '- QA and no-fake gates: `QA_PLAN.md`, `HEAD_TO_FOOT_QA.md`, `IMPLEMENTATION_COMPLETENESS.md`',
     '- Confidence report: `confidence-report.md`',
     '- Review questions: `questions.md`',
@@ -2160,7 +2158,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     'plans/01-confirm-unknowns.md',
     'plans/02-safe-change-plan.md',
     'plans/03-implementation.md',
-    'plans/04-tests-validation.md',
+    'plans/04-validation.md',
     '~~~',
     '',
     '## Rules',
@@ -2207,7 +2205,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   ].join('\n')
 
   const testMatrixMd = [
-    '# TEST_MATRIX',
+    '# PROOF_PLAN',
     '',
     '| Risk | Required check |',
     '|---|---|',
@@ -2304,7 +2302,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '01-confirm-unknowns.md': '# Phase 01 - Confirm Unknowns\n\n## Goal\nResolve only the decisions that block selected-scope extraction.\n\n## Keep in context\n- `questions.md`\n- `policies/questions.md` if available\n- `BUILDPRINT_CANDIDATES.md`\n- `SYSTEM_MAP.md`\n\n## Steps\n- Ask at most one blocking question at a time.\n- Use safe defaults only for non-blocking unknowns.\n- Keep appendix questions out of chat unless the selected scope touches them.\n\n## Do not\n- Run a broad questionnaire.\n- Ask questions the repo already answers.\n- Invent answers for auth, money, data, external writes, providers, or parity.\n\n## Exit criteria\n- Selected candidate/scope is confirmed or blocker is recorded.\n- Production-grade selected-scope posture is confirmed.\n\n## Validation evidence\n- `questions.md` and `CURRENT_STATE.md` show decisions or blockers.\n',
     '02-safe-change-plan.md': '# Phase 02 - Safe Change Plan\n\n## Goal\nPlan the smallest production-grade selected scope.\n\n## Keep in context\n- `BUILDPRINT.md`\n- `SPEC.md`\n- `CONTRACTS.md`\n- `IMPLEMENTATION_COMPLETENESS.md`\n- `TRACEABILITY_MATRIX.md`\n\n## Steps\n- Identify included routes, APIs, data, providers, jobs, exports, and UI surfaces.\n- Exclude capabilities that cannot be real.\n- Map each important requirement to evidence and a validation check.\n- Define architecture topology expectations for UI/API/domain/service/provider/storage/task/test layers where the scope is medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy.\n- Define a capability depth matrix: UI/UX, API, domain logic, persistence/state, provider/runtime, failure states, tests, proof, and depth status.\n\n## Do not\n- Merge unrelated scopes.\n- Keep hard features as placeholders.\n- Count mocks, fixtures, or in-memory-only stores as product behavior.\n\n## Exit criteria\n- Change/extraction scope is explicit.\n- Required tests, QA, persistence, and no-fake checks are known.\n\n## Validation evidence\n- `TRACEABILITY_MATRIX.md` and `IMPLEMENTATION_COMPLETENESS.md` are updated.\n',
     '03-implementation.md': '# Phase 03 - Implementation\n\n## Goal\nImplement or extract only the confirmed selected scope.\n\n## Keep in context\n- `AGENT_EXECUTION_BRIEF.md`\n- `agent-contract.xml`\n- `CURRENT_STATE.md`\n- `PLAN.md`\n- `CONTRACTS.md`\n\n## Steps\n- Follow the selected scope exactly.\n- Preserve observed stack and behavior unless explicitly changed.\n- Update Buildprint artifacts when architecture changes.\n- Keep medium/large/full-suite architecture honest: route layer, domain/service logic, provider adapters, storage, task/runtime, and UI feature structure must be separated unless explicitly justified as tiny scope.\n- Update capability depth status as `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `FAKE_OR_PLACEHOLDER_FAIL`.\n\n## Do not\n- Modify unrelated source areas.\n- Add route-shaped links, no-op controls, fake success states, or skeleton adapters.\n- Count deterministic provider/runtime adapters, static UI labels, or flat single-file shells as product-quality implementation.\n- Expand scope without recording the decision and QA impact.\n\n## Exit criteria\n- Included capabilities are real or explicitly excluded/blocked.\n- `CURRENT_STATE.md` records completed work and next action.\n\n## Validation evidence\n- Changed/generated files and blockers are listed in `SUBMISSION_CHECKLIST.md`.\n',
-    '04-tests-validation.md': '# Phase 04 - Tests and Validation\n\n## Goal\nProve the selected scope honestly.\n\n## Keep in context\n- `TEST_MATRIX.md`\n- `QA_PLAN.md`\n- `HEAD_TO_FOOT_QA.md`\n- `VALIDATION_TEMPLATE.md`\n- `SUBMISSION_CHECKLIST.md`\n\n## Steps\n- Run available tests/build/checks or record blockers.\n- Run runtime/browser QA for product UI when applicable.\n- Run architecture topology review for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes.\n- Run capability depth review; every included capability must be `REAL_IMPLEMENTED` or honestly marked `CONTRACT_SEAM_ONLY`/`BLOCKED_WITH_REASON`.\n- Run persistence/restart QA when state exists.\n- Run no-fake implementation scan.\n- Finish with a chat handover.\n\n## Do not\n- Claim pass status for checks that did not run.\n- Hide known gaps.\n- Count test/demo fixtures as product implementation.\n\n## Exit criteria\n- Validation evidence, gaps, and next direction are recorded.\n- Final chat handover includes outcome, selected scope, evidence, files, commands, gaps, and next direction.\n\n## Validation evidence\n- `VALIDATION_TEMPLATE.md` is filled or an explicit blocker explains why not.\n',
+    '04-validation.md': '# Phase 04 - Tests and Validation\n\n## Goal\nProve the selected scope honestly.\n\n## Keep in context\n- `PROOF_PLAN.md`\n- `QA_PLAN.md`\n- `HEAD_TO_FOOT_QA.md`\n- `VALIDATION_NOTES.md`\n- `SUBMISSION_CHECKLIST.md`\n\n## Steps\n- Run available tests/build/checks or record blockers.\n- Run runtime/browser QA for product UI when applicable.\n- Run architecture topology review for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes.\n- Run capability depth review; every included capability must be `REAL_IMPLEMENTED` or honestly marked `CONTRACT_SEAM_ONLY`/`BLOCKED_WITH_REASON`.\n- Run persistence/restart QA when state exists.\n- Run no-fake implementation scan.\n- Finish with a chat handover.\n\n## Do not\n- Claim pass status for checks that did not run.\n- Hide known gaps.\n- Count test/demo fixtures as product implementation.\n\n## Exit criteria\n- Validation evidence, gaps, and next direction are recorded.\n- Final chat handover includes outcome, selected scope, evidence, files, commands, gaps, and next direction.\n\n## Validation evidence\n- `VALIDATION_NOTES.md` is filled or an explicit blocker explains why not.\n',
   }
 
   const agentExecutionBriefMd = [
@@ -2327,13 +2325,13 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '5. `SPEC.md`',
     '6. `CONTRACTS.md`',
     '7. `IMPLEMENTATION_COMPLETENESS.md`',
-    '8. `TEST_MATRIX.md` and `HEAD_TO_FOOT_QA.md`',
+    '8. `PROOF_PLAN.md` and `HEAD_TO_FOOT_QA.md`',
     '9. `MAPPER_OS_ALIGNMENT.md`',
     '',
     '## Hard constraints',
     '',
     '- Included capabilities must be real, wired, persistent where relevant, and QA-tested.',
-    '- Preserve quality/depth, not only capability names: endpoint/label/seam presence is not implementation.',
+    '- Preserve review/depth, not only capability names: endpoint/label/seam presence is not implementation.',
     '- Medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes require architecture topology evidence.',
     '- Each included capability needs a depth status: REAL_IMPLEMENTED, CONTRACT_SEAM_ONLY, BLOCKED_WITH_REASON, OUT_OF_SCOPE_BY_USER_ONLY, or FAKE_OR_PLACEHOLDER_FAIL.',
     '- Cut or block capabilities that cannot be real.',
@@ -2366,7 +2364,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     <file priority="5">SPEC.md</file>
     <file priority="6">CONTRACTS.md</file>
     <file priority="7">IMPLEMENTATION_COMPLETENESS.md</file>
-    <file priority="8">TEST_MATRIX.md</file>
+    <file priority="8">PROOF_PLAN.md</file>
     <file priority="9">HEAD_TO_FOOT_QA.md</file>
     <file priority="10">MAPPER_OS_ALIGNMENT.md</file>
   </read-order>
@@ -2453,7 +2451,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
       'SPEC.md',
       'CONTRACTS.md',
       'IMPLEMENTATION_COMPLETENESS.md',
-      'TEST_MATRIX.md',
+      'PROOF_PLAN.md',
       'HEAD_TO_FOOT_QA.md',
       'REVIEW_PROTOCOL.md',
       'REVIEW_PACKET.json',
@@ -2481,7 +2479,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     qualificationStatus: 'QUALIFICATION_REVIEW_REQUIRED',
     discoveryStatus: 'DISCOVERY_REVIEW_REQUIRED',
     claimStates: CLAIM_STATES,
-    qualificationGate: 'Source validation and runtime/test evidence are required before this package can be called a qualified Buildprint.',
+    qualificationGate: 'Source validation and runtime evidence are required before this package can be called a qualified Buildprint.',
     qualification: {
       command: 'agb map',
       promoted: false,
@@ -2491,7 +2489,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
         'Scanner census hints are not product facts and cannot qualify routes, APIs, providers, persistence, or parity.',
         'Isolated eval harnesses review Mapper OS packets and downstream outcomes.',
         'No separate top-level qualify command is required for the core product flow.',
-        'Side effects, auth, privacy, and external behavior require runtime/test proof before final promotion.',
+        'Side effects, auth, privacy, and external behavior require runtime proof before final promotion.',
         'Blocked unknowns must remain explicit and must not enter parity claims.'
       ]
     },
@@ -2639,7 +2637,7 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
     '- [ ] No-fake implementation scan completed or blocked.',
     '- [ ] Runtime/browser QA recorded when UI/runtime proof applies.',
     '- [ ] Persistence/restart QA recorded when state exists.',
-    '- [ ] Golden mapper evals run when mapper behavior changes.',
+    '- [ ] Mapper behavior receives manual review when it changes.',
     '- [ ] Final chat handover includes outcome, selected scope, evidence, files, commands, known gaps, and next direction.',
     ''
   ].join('\n')
@@ -2768,8 +2766,8 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   fs.writeFileSync(path.join(out, 'SPEC.md'), specMd)
   fs.writeFileSync(path.join(out, 'PLAN.md'), planMd)
   fs.writeFileSync(path.join(out, 'CONTRACTS.md'), contractsMd)
-  fs.writeFileSync(path.join(out, 'TEST_MATRIX.md'), testMatrixMd)
-  fs.writeFileSync(path.join(out, 'VALIDATION_TEMPLATE.md'), validationTemplateMd)
+  fs.writeFileSync(path.join(out, 'PROOF_PLAN.md'), testMatrixMd)
+  fs.writeFileSync(path.join(out, 'VALIDATION_NOTES.md'), validationTemplateMd)
   fs.writeFileSync(path.join(out, 'questions.md'), questionsMd)
   fs.writeFileSync(path.join(out, 'AGENT_EXECUTION_BRIEF.md'), agentExecutionBriefMd)
   fs.writeFileSync(path.join(out, 'agent-contract.xml'), agentContractXml)
@@ -2840,13 +2838,13 @@ function writeMappedPackageExtras(out, facts, confidence, questions) {
   writeOut('implementation/loops/no-fake-loop.md', loopGatesMd(facts))
   writeOut('implementation/loops/security-loop.md', loopGatesMd(facts))
 
-  writeOut('quality/README.md', '# Quality\n\nAcceptance, test, no-fake, security/privacy, observability, and parity checks.\n')
-  writeOut('quality/ACCEPTANCE_MATRIX.md', parityAcceptanceMd(facts))
-  writeOut('quality/TEST_STRATEGY.md', testMatrixMd)
-  writeOut('quality/NO_FAKE_CHECKS.md', implementationCompletenessMd)
-  writeOut('quality/SECURITY_PRIVACY_REVIEW.md', needsThreatModel ? threatModelMd : '# SECURITY_PRIVACY_REVIEW\n\nNo high-risk security surface detected by static mapper; still validate before qualification.\n')
-  writeOut('quality/OBSERVABILITY.md', observabilityMd)
-  writeOut('quality/PROMOTION_GATE.md', ['# PROMOTION_GATE', '', `Promotion status: ${manifestJson.qualificationStatus}`, '', '- `agb map` is allowed to generate evidence-backed draft packages only.', '- Isolated eval harnesses are the analytic review surface for mapped packages.', '- Final `QUALIFIED_BUILDPRINT` requires readable source evidence plus runtime/test proof where required.', '- Scope preservation alone is insufficient; broad/product scopes also require architecture topology evidence and a capability depth matrix.', '- Route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, and flat single-file prototypes are not product implementation unless proven by the applicable gates.', '- If any record is `blocked_unknown`, implementation phases may use it only as an open question or excluded scope.', ''].join('\n'))
+  writeOut('review/README.md', '# Quality\n\nAcceptance, proof, no-fake, security/privacy, observability, and parity checks.\n')
+  writeOut('review/ACCEPTANCE_MATRIX.md', parityAcceptanceMd(facts))
+  writeOut('review/PROOF_STRATEGY.md', testMatrixMd)
+  writeOut('review/NO_FAKE_CHECKS.md', implementationCompletenessMd)
+  writeOut('review/SECURITY_PRIVACY_REVIEW.md', needsThreatModel ? threatModelMd : '# SECURITY_PRIVACY_REVIEW\n\nNo high-risk security surface detected by static mapper; still validate before qualification.\n')
+  writeOut('review/OBSERVABILITY.md', observabilityMd)
+  writeOut('review/PROMOTION_GATE.md', ['# PROMOTION_GATE', '', `Promotion status: ${manifestJson.qualificationStatus}`, '', '- `agb map` is allowed to generate evidence-backed draft packages only.', '- Manual review sessions are the review surface for mapped packages.', '- Final `QUALIFIED_BUILDPRINT` requires readable source evidence plus runtime proof where required.', '- Scope preservation alone is insufficient; broad/product scopes also require architecture topology evidence and a capability depth matrix.', '- Route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, and flat single-file prototypes are not product implementation unless proven by the applicable gates.', '- If any record is `blocked_unknown`, implementation phases may use it only as an open question or excluded scope.', ''].join('\n'))
 
   writeOut('evidence/README.md', '# Evidence\n\nSource evidence, coverage, validation logs, and review packet.\n')
   writeOut('evidence/SOURCE_EVIDENCE.md', '# SOURCE_EVIDENCE\n\n- Facts: `../facts.json` or root `facts.json`\n- Files scanned: ' + facts.totalFilesScanned + '\n- Routes: ' + facts.routes.length + '\n- APIs: ' + facts.apis.length + '\n- Tests: ' + facts.tests.length + '\n')
@@ -3106,7 +3104,7 @@ function featureQualificationRecords(facts) {
     if (!feature.requiredBehavior?.length) missing.push('required behavior')
     if (!feature.acceptance?.length) missing.push('acceptance proof')
     const needsRuntimeProof = /external|provider|stripe|billing|payment|email|notification|AI|Agent|tool|webhook|auth|permission/i.test(feature.title + ' ' + feature.requiredBehavior.join(' '))
-    if (needsRuntimeProof) missing.push('runtime/test proof for side effects, auth, privacy, or external behavior')
+    if (needsRuntimeProof) missing.push('runtime proof for side effects, auth, privacy, or external behavior')
     return {
       title: feature.title,
       kind: feature.kind,
@@ -3119,7 +3117,7 @@ function featureQualificationRecords(facts) {
         behavior: feature.requiredBehavior,
         stateChanges: hasSource ? 'requires source review; not inferred as qualified from filenames' : 'unknown',
         permissions: needsRuntimeProof ? 'requires explicit auth/privacy review' : 'not detected by static mapper',
-        externalSideEffects: needsRuntimeProof ? 'requires runtime/test evidence before promotion' : 'not detected by static mapper',
+        externalSideEffects: needsRuntimeProof ? 'requires runtime evidence before promotion' : 'not detected by static mapper',
         errorEmptyStates: 'requires source/test review before promotion',
         acceptanceProof: feature.acceptance
       },
@@ -3333,7 +3331,7 @@ Start here.
 Rules:
 
 - \`BUILDPRINT.md\` is the canonical start file and owns the required read order.
-- Structured control files such as \`buildprint.json\`, \`phases.yaml\`, \`acceptance.yaml\`, and \`claims.yaml\` are machine-readable mirrors only; do not treat them as competing instructions.
+- Structured control files such as \`buildprint.json\` and \`phases.yaml\` are machine-readable mirrors only; do not treat them as competing instructions.
 - Snapshot files were downloaded exactly from the manifest. Do not rewrite them manually.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
 - If blocked, update \`.buildprint/blockers.md\`.
@@ -3348,7 +3346,7 @@ if (args.length === 0 || isHelp(args[0])) usage(0)
 
 
 if (args[0] === 'analyze') {
-  console.error('agb analyze has been removed. Use isolated eval harnesses such as npm run eval:mapper-replay or npm run eval:mirofish-flow.')
+  console.error('agb analyze has been removed. Use an agent session with buildprints/buildprint-mapper-os/ for mapping.')
   process.exit(1)
 }
 

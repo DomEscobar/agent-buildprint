@@ -20,7 +20,6 @@ requires_roles:
   - data-persistence
   - security-boundary
   - ux-ui-craft
-  - test-and-verification
 
 ## Product outcome
 

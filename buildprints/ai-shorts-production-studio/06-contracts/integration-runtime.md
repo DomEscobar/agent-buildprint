@@ -33,7 +33,7 @@ The return must identify:
 ## Provider And Runtime Rules
 
 - Missing credentials block live proof only; they do not remove adapter/config/test/runtime wiring from scope.
-- A provider adapter must fail closed when config is missing, expose actionable blocked-provider state, and support deterministic local tests.
+- A provider adapter must fail closed when config is missing, expose actionable blocked-provider state, and support deterministic local proof.
 - Runtime paths must expose progress or status when work can take longer than a request/response interaction.
 - Jobs must define ownership of create, observe, retry, cancel, timeout, failed, completed, and restart/recovery behavior.
 - External writes, paid services, deployments, and irreversible side effects require explicit approval before they run.

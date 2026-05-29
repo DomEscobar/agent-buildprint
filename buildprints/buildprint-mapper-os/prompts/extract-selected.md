@@ -134,7 +134,7 @@ Adapt the question wording to match the selected lueprint_mode. The six numbere
 - Area 2 (tech stack): product → frontend/backend/runtime/storage/deployment; framework/library → language/package manager/registry/test harness; integration → auth/SDK/transport/retry library; automation → orchestration runtime/agent framework/tools; data-pipeline → engine/storage/scheduler/validation library; infrastructure → IaC/provisioner/cloud/container/secrets manager.
 - Area 3 (UX/UI): product/mixed → visual style/interaction quality/accessibility; framework/library → DX: docs format/API ergonomics/example style; integration → operator experience/webhook dashboard; automation → run log/approval UI/trace format; data-pipeline → lineage view/quality dashboard; infrastructure → deployment log/health dashboard/runbook format.
 - Area 4 (architecture): product → frontend/backend/domain boundaries; framework/library → adapter/plugin/extension architecture; integration → auth boundary/idempotency strategy/sandbox setup; automation → tool/action boundary/loop topology; data-pipeline → DAG vs linear/transform isolation/backfill strategy; infrastructure → IaC modular layout/environment separation.
-- Area 5 (quality): product → typecheck/lint/test/build/browser/e2e; framework/library → import/API/CLI contract tests/semver compat; integration → fake-provider tests/webhook replay/sandbox-live split; automation → trace-based proof/stop-condition verification; data-pipeline → schema validation/lineage tests/quality gate; infrastructure → health/readiness/rollback proof/drift detection.
+- Area 5 (quality): product → typecheck/lint/test/build/browser/e2e; framework/library → import/API/CLI contract proof-fixtures/semver compat; integration → fake-provider proof-fixtures/webhook replay/sandbox-live split; automation → trace-based proof/stop-condition verification; data-pipeline → schema validation/lineage proof-fixtures/quality gate; infrastructure → health/readiness/rollback proof/drift detection.
 - Area 6 (constraints): product → forbidden patterns/out-of-scope surfaces; framework/library → breaking changes policy/max dependency additions; integration → secret/auth scope/rate-quota limits; automation → tool scope/dangerous-action approvals; data-pipeline → PII handling/retention policy; infrastructure → permission scope/immutable resources/blast radius.
 
 Do not add a seventh question. Do not split any area into multiple numbered sections.
@@ -234,7 +234,7 @@ Selected packets for multi-phase work must compile into a lean phase-run protoco
 
 Do not repeat the full phase protocol inside `02-project-setup.md`. That file should only contain implementation-project setup instructions: root/local `AGENTS.md` plan, `.buildprint/setup.md` requirement, Foundation scaffold gate, `ui-identity.md` requirement for UI-bearing work, and the statement that phase entry remains governed by `03-phases/phase-flow.md`.
 
-For implementation packets, `02-project-setup.md` must require the implementation agent to create the selected stack's real base project structure before Phase 01. The scaffold must include root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents before editing code; otherwise coding agents will avoid them. `architecture.md` must contain architecture best practices with `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. `engineering-standards.md` must contain clean coding standards with `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`, including deterministic timeout/exit behavior for blocked e2e/runtime proof.
+For implementation packets, `02-project-setup.md` must require the implementation agent to create the selected stack's real base project structure before Phase 01. The scaffold must include root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents before editing code; otherwise coding agents will avoid them. `architecture.md` must contain architecture best practices with `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. `engineering-standards.md` must contain clean coding standards with `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`, including deterministic timeout/exit behavior for blocked e2e/runtime proof.
 
 For UI-bearing packets, `ui-identity.md` is mandatory and must derive from the product vision in `BUILDPRINT.md`: visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, screenshot critique, and product-specific anti-generic failure patterns.
 
@@ -326,7 +326,7 @@ For UI-bearing product phases, `## Implementation scope` or the `## Proof gate` 
 - Where the product promises async generation/processing: name the worker lifecycle states (queued, running, progress, done, failed, retry/cancel) that must be proven, not just a sandbox success response
 - Where the product promises persistence per entity type: name each entity class that must survive restart and be readable
 
-A broad smoke test (`npm test` or `npm run check`) that passes one happy path does not satisfy any of the above depth items. Each depth item requires its own named test, browser interaction, or evidence row.
+A broad smoke test (`target verification command` or `a generic check command`) that passes one happy path does not satisfy any of the above depth items. Each depth item requires its own named test, browser interaction, or evidence row.
 
 ## Implementation loop
 
@@ -380,18 +380,12 @@ Before returning selected output, ask:
 
 Any identified loss must become a phase, a blocker, an explicit user-approved exclusion, or a documented merge into another phase.
 
-## Required self-check before return
+## Required self-review before return
 
-Before returning selected output, run the product-facing packet check when the CLI is available:
+Before returning selected output, review the packet from the next implementer's point of view:
 
-```bash
-node /root/blueprint/bin/agb.js packet check <selected-buildprint-dir>
-```
-
-If working inside the `/root/blueprint` repository, also run:
-
-```bash
-node /root/blueprint/scripts/check-mapper-selected-output.mjs <selected-buildprint-dir>
-```
-
-A generated packet that fails these checks is not ready. Fix the root structural cause in the packet output rather than explaining the failure away.
+- `BUILDPRINT.md` contains a specific product dream, golden path, surfaces, and done-looks-like.
+- `02-project-setup.md` turns that dream into architecture, UI/DX identity, and implementation setup.
+- `03-phases/phase-index.yaml` names the active phase and each phase file has proof, stop, repair, and evidence rules.
+- `04-evaluation.md` describes runtime proof expectations without relying on repo-local harnesses.
+- No selected packet depends on deleted Mapper OS eval fixtures, role contracts, or repo check scripts.

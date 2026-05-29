@@ -1,5 +1,0 @@
-claims:
-  - id: ai-presentation-os
-    status: proof_required
-    source: https://github.com/presenton/presenton
-    boundary: source-independent rebuild contract, not exact clone parity

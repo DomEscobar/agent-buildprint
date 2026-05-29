@@ -8,7 +8,7 @@ Prove what can be proven and block what cannot be proven.
 
 - Run applicable static, build, unit/contract, runtime, browser/API, persistence/restart, no-fake, security/privacy, and clean-room reversal checks.
 - Record commands run, commands not run, evidence, blockers, timestamps, environment, and artifacts.
-- Run fixture review using `evals/golden-projects/` when Mapper OS behavior or templates change.
+- Run fixture review using `manual fixture review` when Mapper OS behavior or templates change.
 - Run selected-output shape validation for generated selected/full-suite executable-blueprint packets and regression fixtures.
 - Keep label `PROOF_REQUIRED` unless source-independent qualification proof is complete.
 

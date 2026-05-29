@@ -19,7 +19,7 @@ This is the canonical starting point and execution contract for the blueprint. D
 - Corpus contracts - define corpus, threat model, fixtures and safety rules - Phase 1
 - Ingestion and indexing - chunk, index and validate source documents - Phase 2
 - Retrieval and answering - retrieve, rerank, cite and refuse honestly - Phase 3
-- Evaluation and operations - run traces, evals, provider checks and optional modules - Phase 4
+- Evaluation and operations - run traces, reviews, provider checks and optional modules - Phase 4
 
 **Done looks like**
 

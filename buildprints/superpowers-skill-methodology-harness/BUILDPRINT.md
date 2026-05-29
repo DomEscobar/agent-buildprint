@@ -8,7 +8,7 @@ The Buildprint is source-backed by the public `obra/superpowers` methodology, bu
 
 ## Binding Implementation Slice
 
-The validated slice is a compact, neutral Node.js proof harness with transcript evals.
+The validated slice is a compact, neutral methodology proof pattern with transcript review.
 
 Included in the validated slice:
 
@@ -16,14 +16,14 @@ Included in the validated slice:
 - machine-readable skill metadata;
 - activation of brainstorming for build requests;
 - design approval before implementation;
-- plan contracts with exact paths and test commands;
+- plan contracts with exact paths and proof commands;
 - TDD gate before production changes;
 - systematic debugging gate before fixes;
 - task-specific subagent packets and ordered review;
 - completion gate requiring verification evidence;
-- transcript eval runner proving the process order.
+- transcript review runner proving the process order.
 
-Production adapter work is intentionally outside the validated slice until implemented and tested:
+Production adapter work is intentionally outside the validated slice until implemented and proven:
 
 - Claude Code, Codex, OpenCode, Gemini, Cursor, or Copilot CLI adapter;
 - filesystem writer for generated specs and plans;
@@ -38,8 +38,8 @@ Production adapter work is intentionally outside the validated slice until imple
 - Do not claim official Superpowers compatibility without installing and validating the real plugin path.
 - Do not treat static skill files as sufficient; activation and transcript evidence are part of the product contract.
 - Do not build a marketplace, dashboard, or control plane as the core product.
-- Do not claim real runtime integration from the neutral proof harness.
-- Do not claim worktree isolation, filesystem artifact writing, or live subagent orchestration until those adapters exist and pass acceptance tests.
+- Do not claim real runtime integration from the neutral proof pattern.
+- Do not claim worktree isolation, filesystem artifact writing, or live subagent orchestration until those adapters exist and have acceptance proof.
 
 ## Required Read Order
 
@@ -52,7 +52,6 @@ Production adapter work is intentionally outside the validated slice until imple
 7. `WORKFLOW.md`
 8. `SUBAGENT_ORCHESTRATION.md`
 9. `CONTRACTS.md`
-10. `TEST_MATRIX.md`
 11. `VALIDATION_REPORT.md`
 
 ## Phase Gates
@@ -62,7 +61,7 @@ Production adapter work is intentionally outside the validated slice until imple
 | Source boundary | Establish inspiration source and non-copying constraint. | `SOURCE_TRACE.md` lists mapped claims and source evidence. |
 | Harness contract | Define bootstrap, routing, skill metadata, workflow, subagents, and completion gates. | `SPEC.md`, `CONTRACTS.md`, and supporting docs agree. |
 | Proof implementation | Implement the neutral harness for the binding slice. | Proof files under `proof/` execute without network dependency. |
-| Transcript evals | Prove activation and process order on realistic prompts. | `npm test` and eval runner results are recorded. |
+| Transcript review | Prove activation and process order on realistic prompts. | `target verification command` and review runner results are recorded. |
 | Runtime adapter upgrade | Add one real agent runtime adapter before claiming production runtime behavior. | Adapter-specific install, activation, transcript, and safety evidence. |
 
 ## Acceptance Gates
@@ -106,7 +105,7 @@ Required files for the compact proof package:
 - session-start bootstrap instruction;
 - deterministic harness modules for bootstrap, skill lookup, workflow gates, subagent packets, review order, and completion verification;
 - generated project-doc fixtures for specs and plans;
-- tests or evals proving automatic activation on realistic prompts.
+- tests or reviews proving automatic activation on realistic prompts.
 
 Required additions before production runtime claims:
 
@@ -121,7 +120,7 @@ Validated evidence covers the included neutral proof only. The proof demonstrate
 
 Safe claim:
 
-- The Buildprint can produce a runnable clean-room methodology-harness proof with transcript evals.
+- The Buildprint can produce a runnable clean-room methodology-harness proof with transcript review.
 
 Unsafe until separately validated:
 
@@ -137,14 +136,14 @@ For the included proof:
 
 ```bash
 cd proof
-npm test
-node src/run-evals.js
+target verification command
+node src/run-reviews.js
 ```
 
 Required result:
 
 - all harness tests pass;
-- all transcript evals pass;
+- all transcript review pass;
 - validation report records commands, results, covered scenarios, and remaining adapter gaps.
 
 For a production runtime adapter, add runtime-specific install tests, clean-session activation tests, transcript capture, destructive/external-action approval checks, and fixture snapshots for the core acceptance prompts.

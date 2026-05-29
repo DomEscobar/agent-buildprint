@@ -28,14 +28,13 @@ requires_roles:
   - data-persistence
   - ux-ui-craft
   - security-boundary
-  - test-and-verification
 
 ## Phase mode contract
 
 - blueprint_mode: product
 - phase_style: outcome_flow
 - Outcome flow: fixture and approved corpus cases become repeatable eval runs, machine-readable reports, operational readiness signals, and measured decisions for optional retrieval modules.
-- Shared proof spine: inputs are eval cases, traces, thresholds, provider readiness config, and optional-module candidates; execution behavior runs evals, computes metrics, emits reports, checks readiness, and records decisions; state effects are eval runs, reports, trace exports, provider readiness records, and optional experiment logs where owned; observable proof is eval report, negative cases, trace/latency/cost/token metrics, CI/release command, readiness proof/blocker, and security review; failure/recovery routes missing live credentials, private corpus approval, deployment authorization, or advanced-module evidence to non-upgrading blockers.
+- Shared proof spine: inputs are eval cases, traces, thresholds, provider readiness config, and optional-module candidates; execution behavior runs reviews, computes metrics, emits reports, checks readiness, and records decisions; state effects are eval runs, reports, trace exports, provider readiness records, and optional experiment logs where owned; observable proof is eval report, negative cases, trace/latency/cost/token metrics, CI/release command, readiness proof/blocker, and security review; failure/recovery routes missing live credentials, private corpus approval, deployment authorization, or advanced-module evidence to non-upgrading blockers.
 
 ## Product outcome
 
@@ -46,7 +45,7 @@ The RAG system has a repeatable evaluation harness, machine-readable reports, tr
 - Legacy eval harness required retrieval metrics, answer metrics, operational metrics, and fixture cases for exact identifiers, semantic paraphrase, contextualized chunks, private mismatch, unsupported refusal, and rerank distractors.
 - Legacy test matrix covered vector-only misses, lexical-only misses, bad ordering, hallucinated answers, citation laundering, tenant leaks, chunk context loss, eval-free drift, and live-provider dependence.
 - Legacy operational requirements included latency by stage, candidate counts, token budget used, provider cost fields labeled measured/estimated/unavailable, and permission filter drops.
-- Legacy advanced guidance said HyDE, query rewriting, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG/CRAG, contextual retrieval, cross-encoder, and BGE rerankers should be added only when evals justify complexity.
+- Legacy advanced guidance said HyDE, query rewriting, SPLADE, ColBERT, RAPTOR, GraphRAG, Self-RAG/CRAG, contextual retrieval, cross-encoder, and BGE rerankers should be added only when reviews justify complexity.
 
 ## Behavior compatibility contract
 
@@ -61,7 +60,7 @@ The RAG system has a repeatable evaluation harness, machine-readable reports, tr
 Implement the evaluation and operations layer:
 
 - fixture eval cases and real-corpus eval case format;
-- machine-readable eval runner/report;
+- machine-readable review runner/report;
 - retrieval, answer, refusal, citation, permission, latency, cost, and token-budget metrics;
 - CI/release command or documented blocked gate;
 - trace retention/export policy;

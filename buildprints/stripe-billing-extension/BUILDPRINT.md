@@ -45,7 +45,6 @@ The proof intentionally uses in-memory storage and local provider fixtures. Prod
 2. `SPEC.md`
 3. `CONTRACTS.md`
 4. `TARGET_STACK_ADAPTERS.md`
-5. `TEST_MATRIX.md`
 6. `README.md`
 7. `proof/` only as a behavioral reference
 
@@ -122,11 +121,11 @@ For the proof:
 
 ```sh
 cd proof
-npm test
+target verification command
 npm run build
 ```
 
-For a production adaptation, run the host app's equivalent unit/integration tests and record how each `TEST_MATRIX.md` risk is covered.
+For a production adaptation, run the host app's equivalent unit/integration proof and record how each phase risk is covered.
 
 ## Copyable Agent Prompt
 

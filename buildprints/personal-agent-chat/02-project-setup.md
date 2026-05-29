@@ -22,7 +22,7 @@ This setup contract is completed before phase implementation. It turns human ali
 - Frontend/UI surfaces: chat stream, provider/model settings, tool workbench with risk labels, skills list/detail, MCP server/tool status, memory editor/viewer, team/subagents view, token/usage view, and config diagnostics.
 - Backend/API surfaces: bootstrap state, chat stream via SSE/WebSocket or equivalent, provider registry/config diagnostics, tool request policy path, skill discovery/selection, MCP adapter mapping, memory/checkpoint read/write, team task events, token telemetry, trace/event inspection, cancellation/retry if supported.
 - State/runtime surfaces: sessions, messages, trace events, checkpoints, provider configs, enabled tools/skills/MCP servers, raw history, daily/episodic summaries, curated long-term memory, attachment/source summaries, team task state, normalized usage totals, compaction markers.
-- Tests/evaluation: derive from `04-evaluation.md` and phase proof gates; deterministic local tests are required before any live-provider claim.
+- Proof source: derive from `04-evaluation.md` and each active phase proof gate; deterministic local proof are required before any live-provider claim.
 
 ## Architecture decisions
 
@@ -81,7 +81,7 @@ This matrix is not route/function parity. No mapped surface may disappear silent
 | message/session/checkpoint storage | Existing packet maps runner checkpoints, message history, memory, compactor, and telemetry signals. | Durable local store owns sessions, messages, checkpoints, trace events, memory tiers, telemetry totals, enabled config, migrations, reset/delete/export, and restart readback. | preserve | `03-phases/01-contracts-storage.md` | repository roundtrip, restart/readback proof, migration/schema validation |
 | tool schema registry | Existing packet maps `agent/tools/schema.py`, registry, dispatcher, filesystem, shell, web/search, task-list, and skills tools. | Every tool is a `ToolSpec` with input schema, risk label, approval/deny policy, timeout, bounded roots, audit events, and structured result/error. | preserve with safer defaults | `03-phases/03-tools-skills-mcp-policy.md` | schema validation tests, allow/deny runtime traces, audit readback |
 | dangerous tool classes | Existing packet maps filesystem/shell/web/search/tool script surfaces. | Shell, write, network, browser, publishing, billing, media, retrieval, and destructive actions are denied by default and require explicit config plus separate proof. | preserve as blocked/policy-gated | `03-phases/05-safety-claim-boundaries.md` | denied-path tests, no-secret scan, claim-boundary review |
-| skill discovery and selected instruction injection | Existing packet maps `agent/skills.py`, `skills/*/SKILL.md`, and skill tools. | Discover skill metadata, triggers, scripts/resources, explicit selection, narrow context injection, and script execution through tool policy only. | preserve without copying source skill text | `03-phases/03-tools-skills-mcp-policy.md` | skill discovery fixture, selected-only injection test, denied script policy test |
+| skill discovery and selected instruction injection | Existing packet maps `agent/skills.py`, `skills/*/SKILL.md`, and skill tools. | Discover skill metadata, triggers, scripts and resources, explicit selection, narrow context injection, and script execution through tool policy only. | preserve without copying source skill text | `03-phases/03-tools-skills-mcp-policy.md` | skill discovery fixture, selected-only injection test, denied script policy test |
 | MCP server and tool adapter | Existing packet maps `agent/mcp/client.py`, `config.py`, `connection.py`, and adapter. | Configured MCP servers expose namespaced tools through the same `ToolSpec` policy path with timeout, health, blocked state, retry/error mapping, and audit. | preserve with proof blocker for live servers | `03-phases/03-tools-skills-mcp-policy.md` | deterministic local MCP fixture, timeout/error mapping test, non-upgrading real MCP blocker |
 | memory tiers and context builder | Existing packet maps `agent/memory.py`, `agent/compactor.py`, checkpoint and attachment store signals. | Preserve raw history, daily/episodic summaries, curated long-term memory, checkpoints, attachment/source summaries, selected skills, team context, recent messages, and tool results in context order. | preserve | `03-phases/04-memory-subagents-telemetry.md` | context assembly order test, compaction threshold test, persistence readback |
 | user-editable memory | Existing packet maps memory routes and webui memory view signals. | Workbench allows memory read/edit/delete/reset with local-only privacy posture, audit/readback, validation, and empty/error/success states. | preserve | `03-phases/06-webui-api-workbench.md` | browser/API memory edit path, persistence readback, invalid-input test |
@@ -111,7 +111,7 @@ Rules:
 The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
 - Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
-- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or proof/e2e.
 - Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
 - Creating only `AGENTS.md` is not enough to satisfy the setup gate.
 - Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.
@@ -126,17 +126,17 @@ Required implementation-project scaffold:
 - `.buildprint/setup.md`
 - `architecture.md`
 - `engineering-standards.md`
-- `test-strategy.md`
+- `proof-strategy.md`
 - `ui-identity.md` because this packet is UI-bearing
 - concrete application directories for UI, API/application services, domain/contracts, repositories/persistence, provider/tool/MCP adapters, worker/runtime services, tests, e2e/browser proof, and operations/config
 
-Root `AGENTS.md` must explicitly list `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits. It must also state that `AGENTS.md` is a scope governor, not a product brain; `.buildprint/next-agent.md` is continuity for fresh sessions; bounded handoff text is the unit of delegated work; and orchestrator/integrator authority must be explicit in the task prompt.
+Root `AGENTS.md` must explicitly list `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits. It must also state that `AGENTS.md` is a scope governor, not a product brain; `.buildprint/next-agent.md` is continuity for fresh sessions; bounded handoff text is the unit of delegated work; and orchestrator/integrator authority must be explicit in the task prompt.
 
 `architecture.md` must include these sections: `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`.
 
 `engineering-standards.md` must include these sections: `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards`, and `Test standards`. `Test standards` must require deterministic timeout and exit behavior for blocked e2e/runtime proof.
 
-`test-strategy.md` must define unit, integration, persistence, provider-adapter, worker/runtime, security, browser/e2e, visual quality, no-fake, and evidence-ledger gates.
+`proof-strategy.md` must define unit, integration, persistence, provider-adapter, worker/runtime, security, browser/e2e, visual quality, no-fake, and evidence-ledger gates.
 
 `ui-identity.md` must define product-grade visual quality for a dense local workbench, including typography, spacing, color, responsive constraints, accessibility, interaction states, forbidden generic/default patterns, and required screenshot critique.
 

@@ -27,7 +27,7 @@ A phase is complete only when:
 ## Phase state model
 
 - `checkpoint_recorded`: at least one valid runtime evidence row exists for the phase. This proves evidence discipline only.
-- `phase_core_passed`: the phase-owned local vertical path works end to end with matching tests/proof, including UI action/state-transition proof for UI-bearing phases.
+- `phase_core_passed`: the phase-owned local vertical path works end to end with matching proof-fixtures/proof, including UI action/state-transition proof for UI-bearing phases.
 - `claim_qualified`: the specific live-provider, browser/e2e, screenshot, deployment, security, worker, data-lifecycle, voice, or provider claim has matching executable proof and may upgrade.
 
 Do not treat `checkpoint_recorded` as `phase_core_passed`. Do not treat `phase_core_passed` as `claim_qualified`.

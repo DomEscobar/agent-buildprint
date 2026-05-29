@@ -95,7 +95,7 @@
     },
     {
       "label": "Tests pass",
-      "detail": "Dry-run implementation completed its local tests/static checks without real credentials.",
+      "detail": "Dry-run implementation completed its local proof-fixtures/static checks without real credentials.",
       "tone": "success"
     },
     {

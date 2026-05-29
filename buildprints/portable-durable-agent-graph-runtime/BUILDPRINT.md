@@ -41,7 +41,6 @@ Execution is deterministic and single process. The binding must not claim distri
 2. `SPEC.md`
 3. `CONTRACTS.md`
 4. `THREAT_MODEL.md`
-5. `TEST_MATRIX.md`
 6. `QA_PLAN.md`
 7. `PLAN.md`
 8. `SOURCE_TRACE.md`
@@ -142,10 +141,10 @@ The source trace supports architectural concepts only. Implementations must use 
 
 ## Required Validation
 
-Run the behavioral, security, and static checks in `TEST_MATRIX.md` and `QA_PLAN.md`. Record exact commands, pass/fail status, and known gaps in the implementation validation report. Any implementation that adds production storage, provider integrations, concurrency, UI, or cloud behavior must add specific tests for those capabilities before claiming them.
+Run the behavioral, security, and static phase proof gates and `QA_PLAN.md`. Record exact commands, pass/fail status, and known gaps in the implementation validation report. Any implementation that adds production storage, provider integrations, concurrency, UI, or cloud behavior must add specific tests for those capabilities before claiming them.
 
 ## Copyable Agent Prompt
 
 ```text
-Implement the Portable Durable Agent Graph Runtime from BUILDPRINT.md. Treat BUILDPRINT.md as the canonical authority. Implement only the binding slice: typed state schema, graph builder, compiled deterministic runtime, stream events, checkpoint tuples and pending writes, in-memory test/debug checkpoint saver, interrupt/resume, Command/Send controls, and strict serializer safety. Do not claim production durability from in-memory storage. Do not implement provider, cloud, LangSmith, full API compatibility, or source-project clone behavior unless separately scoped and tested. Run the acceptance gates from TEST_MATRIX.md and record commands and results.
+Implement the Portable Durable Agent Graph Runtime from BUILDPRINT.md. Treat BUILDPRINT.md as the canonical authority. Implement only the binding slice: typed state schema, graph builder, compiled deterministic runtime, stream events, checkpoint tuples and pending writes, in-memory test/debug checkpoint saver, interrupt/resume, Command/Send controls, and strict serializer safety. Do not claim production durability from in-memory storage. Do not implement provider, cloud, LangSmith, full API compatibility, or source-project clone behavior unless separately scoped and tested. Run the acceptance gates from phase proof gates and record commands and results.
 ```

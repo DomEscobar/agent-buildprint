@@ -26,7 +26,6 @@ requires_roles:
   - product-architect
   - integration-runtime
   - data-persistence
-  - test-and-verification
 
 ## Product outcome
 

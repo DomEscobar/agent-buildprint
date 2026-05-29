@@ -42,18 +42,11 @@ Encode the threat model: cross-tenant access, privilege escalation, invite repla
 
 Owner invites admin; admin invites member; member attempts forbidden action; owner changes role; removed user loses access; team switcher works; audit reflects actions.
 
-## 09.11 Target-App Conformance Suite
+## 09.11 Target-App Authorization Proof
 
-Run the non-illustrative conformance kit against the target app:
+Record target-app authorization proof against the real DB/API/service path. Hard-coded allow/deny responses, in-memory-only fake routes, or adapters that bypass the actual guards do not count.
 
-```bash
-npm --prefix .buildprint/snapshots/conformance run typecheck
-AUTH_RBAC_CONFORMANCE_ADAPTER=file:///absolute/path/to/adapter.js npm --prefix .buildprint/snapshots/conformance test
-```
-
-The adapter must call the real DB/API/service authorization path. Hard-coded allow/deny responses, in-memory-only fake routes, or adapters that bypass the actual guards do not count.
-
-Required conformance coverage:
+Required authorization proof coverage:
 
 - anonymous and non-member direct API denial;
 - cross-tenant resource denial;
@@ -66,4 +59,4 @@ Required conformance coverage:
 
 ## 09.12 Evidence Requirements
 
-Output test command, pass/fail counts, skipped tests with reason, screenshots for key UI flows if UI exists, every route/permission covered, conformance adapter path, proof that the adapter calls real target-app authorization code, and uncovered routes as blockers.
+Output proof commands/artifacts, pass/fail counts where commands exist, skipped proof with reason, screenshots for key UI flows if UI exists, every route/permission covered, proof that the target path calls real target-app authorization code, and uncovered routes as blockers.

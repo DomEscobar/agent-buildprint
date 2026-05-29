@@ -24,7 +24,7 @@ This setup contract is completed before phase implementation. It turns short hum
 - Frontend/UI surfaces: studio home/workbench, source input, analysis/scripts, configuration, generation progress, review/player, private gallery, video detail, publish handoff, limitations notice, and secondary debug/details drawer.
 - Backend/API surfaces: clip generator process/status/edit/subtitle/hook/translate/render, product analysis/scripts, actor options/upload validation, voice list, AI Shorts generation/status, gallery list, video detail, social publish handoff, YouTube Studio upload/analyze/title-refine/thumbnail/description/publish, provider request records, output manifest, and validation/report surfaces.
 - State/runtime surfaces: product project state, script selection and edits, actor/voice/video config, consent flags, job queue/status/logs, provider request records, output manifests, local media artifacts, gallery metadata, publish handoff payloads, validation reports, browser screenshots, and runtime evidence.
-- Tests/evaluation: derive from `04-evaluation.md` and phase proof gates: contract, adapter, job, media, browser, privacy, publishing, security, no-fake, build, and evidence checks.
+- Proof source: derive from `04-evaluation.md` and each active phase proof gate: contract, adapter, job, media, browser, privacy, publishing, security, no-fake, build, and evidence checks.
 
 ## Architecture decisions
 
@@ -202,10 +202,10 @@ Before Phase 01, the implementation agent must create the selected stack real ba
 The Foundation scaffold gate requires:
 
 - base project structure with real package manifests, source directories, test directories, configuration, and CI/build commands appropriate to the selected stack.
-- implementation-project root `AGENTS.md` that explicitly lists `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits.
+- implementation-project root `AGENTS.md` that explicitly lists `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` as mandatory reads for coding agents before code edits.
 - `architecture.md` with required sections: Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map.
 - `engineering-standards.md` with required sections: Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, UI standards, and Test standards with deterministic blocker/e2e/runtime exit behavior.
-- `test-strategy.md` with phase proof commands, no-network provider gates, media probe gates, browser/e2e gates, security/secret scans, and evidence row policy.
+- `proof-strategy.md` with phase proof commands, no-network provider gates, media probe gates, browser/e2e gates, security/secret scans, and evidence row policy.
 - `ui-identity.md` because this is UI-bearing; it must define production-studio visual identity, interaction density, responsive rules, accessibility baseline, screenshot critique rubric, and forbidden generic/local-MVP patterns.
 
 No phase implementation may start until these files exist and the base project can run an install/build or an honest setup blocker is written. If scaffold verification fails, exit deterministically before phase work and route the repair to this setup gate.
@@ -225,7 +225,7 @@ If a source-backed contract cannot be made self-contained, record the blocker be
 The Buildprint packet must not contain `AGENTS.md`. The implementation project should create root/local `AGENTS.md` and setup artifacts after this file is resolved.
 
 - Root `AGENTS.md`: short scope governor with project shape, architecture boundaries, safety rules, local instruction map, and "do not broaden current phase" rule.
-- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or tests/e2e.
+- Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or proof/e2e.
 - Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording concrete auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
 - Creating only `AGENTS.md` is not enough to satisfy the setup gate.
 - Phase entry remains governed by `03-phases/phase-flow.md` and role contracts under `06-contracts/`.

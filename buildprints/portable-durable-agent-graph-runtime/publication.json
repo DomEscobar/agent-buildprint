@@ -77,7 +77,7 @@
     "Pinned source commit is recorded: 076e2a3627206f5a1aef573aaca4a01e5af897ca",
     "166 source references checked with 0 missing and 0 bad line ranges",
     "Clean-room TypeScript proof uses Buildprint docs only, not LangGraph source imports",
-    "npm test runs tsc and node --test",
+    "target verification command runs tsc and node --test",
     "12/12 proof tests pass",
     "Claim boundary remains workflow-proof + contract-parity + mocked-runtime-proof",
     "Full clone/API/provider/cloud/storage/Pregel parity are explicitly out of scope"

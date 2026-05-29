@@ -1,8 +1,0 @@
-{
-  "integrations": ["ai", "auth", "cache"],
-  "riskIncludes": ["AI/tool calls", "auth/session handling", "file upload / storage"],
-  "envNames": ["AUTH_SECRET", "UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN"],
-  "apiIncludes": ["app/(chat)/api/chat/route.ts", "src/routes/api/tasks/index.ts GET /", "src/routes/api/tasks/index.ts POST /:id/upload"],
-  "mustContain": ["Vercel AI SDK integration", "Data Infrastructure Buildprint", "Auth / Session Buildprint", "Web App Route/API Buildprint"],
-  "mustNotContain": ["super-secret-value"]
-}

@@ -58,7 +58,6 @@ Excluded until adapter work is implemented:
 10. `E2E_TASK_BENCH.md`
 11. `MULTI_AGENT_SAFETY.md`
 12. `SCORECARD.md`
-13. `TEST_MATRIX.md`
 14. `VALIDATION_REPORT.md`
 
 ## Phase Gates
@@ -69,8 +68,8 @@ Excluded until adapter work is implemented:
 | Snapshot | Capture skills, commands, agents, hooks, MCP servers, permissions, router settings, versions, and source refs. | `SetupSnapshot` validates and secrets are redacted. |
 | Static lint | Validate files and references before behavior tests. | Critical static errors block expensive/live tests unless exploratory mode is explicit. |
 | Loadout inventory | Measure loaded context, active usage, duplicates, dormant artifacts, and router misses. | Inventory metrics feed the scorecard. |
-| Skill unit evals | Run selected skills in fresh sandboxes or deterministic fixtures. | Assertions cover files, commands, JSON, output, duration, and token guards. |
-| Activation evals | Test positive and negative natural prompts for each component. | Recall, precision, wrong-component rate, and clarification behavior are scored. |
+| Skill unit reviews | Run selected skills in fresh sandboxes or deterministic fixtures. | Assertions cover files, commands, JSON, output, duration, and token guards. |
+| Activation reviews | Test positive and negative natural prompts for each component. | Recall, precision, wrong-component rate, and clarification behavior are scored. |
 | Transcript checks | Parse events and enforce process order. | Required event-order invariants pass or produce findings. |
 | E2E task bench | Run representative complete tasks for the selected adapter mode. | Artifacts, tests, process, safety, recovery, and evidence are scored. |
 | Multi-agent safety | Evaluate delegation briefs, ownership, worktree/session isolation, and merge safety. | File ownership and coordination checks pass or hard-fail. |
@@ -83,7 +82,7 @@ The offline proof is accepted only as `offline proof accepted` when:
 - snapshot, lint, loadout, unit, activation, transcript, E2E, and multi-agent layers execute through deterministic fixtures;
 - scoring weights and hard-fail overrides are applied;
 - findings include evidence and remediation context;
-- all local proof tests pass with `npm test`.
+- all local proof tests pass with `target verification command`.
 
 A production adapter is accepted only when:
 
@@ -105,7 +104,7 @@ Setup Snapshot
   -> Static Lint
   -> Loadout Inventory
   -> Skill Unit Tests
-  -> Activation Evals
+  -> Activation Reviews
   -> Transcript Process Checks
   -> E2E Task Bench
   -> Multi-Agent Safety
@@ -118,7 +117,7 @@ Canonical modules:
 2. Static Lint: validate frontmatter, names, paths, hook schemas, MCP refs, permissions, tool declarations, forbidden patterns, and broken links.
 3. Loadout Inventory: measure context footprint, active and dormant artifacts, duplicates, token cost, and stale components.
 4. Skill Unit Tests: run one skill at a time with fixtures and deterministic assertions.
-5. Activation Evals: generate positive and negative prompts for every component and score routing behavior.
+5. Activation Reviews: generate positive and negative prompts for every component and score routing behavior.
 6. Transcript Process Checks: enforce required event order and prohibited shortcuts.
 7. E2E Task Bench: run complete repo tasks requiring multiple components and evidence capture.
 8. Multi-Agent Safety: evaluate delegation, ownership, isolation, conflict handling, and parent-context preservation.
@@ -147,7 +146,7 @@ Run the included proof:
 
 ```bash
 cd proof
-npm test
+target verification command
 ```
 
 Required result:
@@ -168,7 +167,7 @@ Implement or extend only the selected evaluation slice. Preserve the architectur
 - static lint,
 - loadout inventory,
 - skill unit tests,
-- activation evals,
+- activation reviews,
 - transcript process checks,
 - E2E task bench,
 - multi-agent safety,

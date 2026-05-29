@@ -18,7 +18,7 @@
     "Hybrid retrieval",
     "Reranking",
     "Citations",
-    "RAG evals"
+    "RAG review set"
   ],
   "iconKeys": [
     "typescript",

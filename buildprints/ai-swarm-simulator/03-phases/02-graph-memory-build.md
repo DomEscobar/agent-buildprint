@@ -4,7 +4,7 @@
 
 Before writing code, read: packet file `03-phases/phase-flow.md`, runtime continuity file `.buildprint/next-agent.md`, and current project `AGENTS.md`. Then resolve requires_roles through `06-contracts/<role>.md`, create phase-flow required artifacts, and block runtime evidence until plan, team-gates, handoffs, returns, reviews, and proof exist.
 
-requires_roles: [product-architect, ux-ui-craft, test-and-verification, integration-runtime, security-boundary, data-persistence]
+requires_roles: [product-architect, ux-ui-craft, integration-runtime, security-boundary, data-persistence]
 
 ## Product outcome
 

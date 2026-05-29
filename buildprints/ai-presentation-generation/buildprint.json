@@ -35,7 +35,7 @@
     "06-contracts/integration-runtime.md",
     "06-contracts/product-architect.md",
     "06-contracts/security-boundary.md",
-    "06-contracts/test-and-verification.md",
+    "06-contracts/proof-and-evidence.md",
     "06-contracts/ux-ui-craft.md",
     "generated/agent-prompt.md"
   ]

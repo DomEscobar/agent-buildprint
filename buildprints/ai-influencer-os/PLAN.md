@@ -24,7 +24,7 @@ plans/08-tests-validation.md
 
 ## Done means
 
-- `npm test` passes;
-- `npm run test:static` or equivalent syntax check passes;
-- `VALIDATION.md` follows `VALIDATION_TEMPLATE.md`;
-- every risk in `TEST_MATRIX.md` is covered or explicitly marked blocked.
+- `target verification command` passes;
+- `static verification command` or equivalent syntax check passes;
+- `VALIDATION.md` records implementation evidence and blockers;
+- every phase risk is covered or explicitly marked blocked.

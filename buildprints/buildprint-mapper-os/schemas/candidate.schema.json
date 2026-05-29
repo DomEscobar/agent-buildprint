@@ -14,29 +14,76 @@
     "questions"
   ],
   "properties": {
-    "title": { "type": "string" },
-    "scope": { "type": "string" },
-    "includedPaths": { "type": "array", "items": { "type": "string" } },
-    "excludedPaths": { "type": "array", "items": { "type": "string" } },
-    "whyReusable": { "type": "string" },
-    "estimatedTier": { "enum": ["basic", "strong", "agent-grade", "system"] },
+    "title": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "includedPaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "excludedPaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "whyReusable": {
+      "type": "string"
+    },
+    "estimatedTier": {
+      "enum": [
+        "basic",
+        "strong",
+        "agent-grade",
+        "system"
+      ]
+    },
     "productionGradeScope": {
       "type": "string",
       "description": "Smallest selected scope that should be implemented fully rather than as proof-only product behavior."
     },
     "capabilitiesToExcludeRatherThanFake": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Capabilities that must be cut from current scope unless implemented for real."
     },
     "mockFixtureBoundary": {
       "type": "string",
-      "description": "Where mocks/fixtures may exist for tests/demos and how production path avoids them."
+      "description": "Where mocks/fixtures may exist for proof-fixtures/demos and how production path avoids them."
     },
-    "recommendedFidelityTarget": { "type": "string" },
-    "optionalDeeperTargets": { "type": "array", "items": { "type": "string" } },
-    "explicitlyExcludedTargets": { "type": "array", "items": { "type": "string" } },
-    "risks": { "type": "array", "items": { "type": "string" } },
-    "questions": { "type": "array", "items": { "type": "string" } }
+    "recommendedFidelityTarget": {
+      "type": "string"
+    },
+    "optionalDeeperTargets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "explicitlyExcludedTargets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
   }
 }

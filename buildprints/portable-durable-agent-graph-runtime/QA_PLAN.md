@@ -10,7 +10,7 @@
 
 ## Behavioral Tests
 
-Implement and run the tests in `TEST_MATRIX.md`.
+Implement and run the tests in per-phase proof gates.
 
 Required test conditions:
 - No network access.

@@ -23,7 +23,7 @@ Evidence boundary: the bundled TypeScript proof uses in-memory service-level sto
 
 ```sh
 cd proof
-npm test
+target verification command
 npm run build
 ```
 

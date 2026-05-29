@@ -10,7 +10,7 @@ Evaluate what the agent carries into context.
 - Dormant artifacts: no invocation in 90+ days or no recorded use.
 - Duplicates: multiple skills covering same trigger/intention.
 - High-cost low-use items.
-- Router misses: installed artifacts that never activate in activation evals.
+- Router misses: installed artifacts that never activate in activation reviews.
 
 ## Tool mapping
 

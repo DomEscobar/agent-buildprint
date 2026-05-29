@@ -25,7 +25,7 @@ description: Use when ...
 **Files:**
 - Create: `path/file.ext`
 - Modify: `path/existing.ext:line-range`
-- Test: `tests/path/file.test.ext`
+- Test: `proof-fixtures/path/file.test.ext`
 
 - [ ] Step 1: Write failing test
 - [ ] Step 2: Run test and confirm expected failure
@@ -41,5 +41,5 @@ A validation transcript should prove:
 - bootstrap/skill loaded,
 - correct skill activated,
 - prohibited premature action did not occur,
-- required docs/files/tests/commits exist,
+- required docs/files/proof-fixtures/commits exist,
 - final claim includes evidence.
