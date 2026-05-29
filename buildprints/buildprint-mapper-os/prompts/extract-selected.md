@@ -295,6 +295,28 @@ Do not paste the same artifact inventory or proof-label prose into every phase. 
 
 UI-bearing phases must not reference non-existent shared files such as `02-context/ux-contract.md` or `design-quality-bar.md`. Put the UX/UI contract inline in the phase or add an actual packet file and list it in the package.
 
+## Product outcome quality bar
+
+`## Product outcome` must be a concrete multi-sentence user-visible result. It must name what the user can do, what visible result they receive, and at least one non-success state (loading, blocked, error, empty, retry). It must not be:
+
+- identical or nearly identical to the phase title (e.g., `## Product outcome\n\nProduction Storyboard Flow` after a title of `Phase 04 — Production Storyboard Flow` is forbidden)
+- a single noun phrase or label without a user action and a visible result
+- a restatement of "implement X" without naming what the user sees or proves
+
+`## Implementation scope` must enumerate specific features, interactions, and depth items rather than generic boilerplate. Forbidden verbatim filler:
+
+- `"Inputs are defined by the product obligation and interface contracts."` — name the actual inputs
+- `"Outputs are defined by the product obligation and interface contracts."` — name the actual outputs and downstream handoffs
+
+For UI-bearing product phases, `## Implementation scope` or the `## Proof gate` must name at least one concrete **interaction depth** item per domain capability:
+
+- Where the product promises drag/pan/zoom/resize: name the specific pointer event, transform, or coordinate range that proves real manipulation (not just `draggable="true"`)
+- Where the product promises editing (inspector, node editor, property panel): name what the user edits, how it persists, and how restart readback proves it
+- Where the product promises async generation/processing: name the worker lifecycle states (queued, running, progress, done, failed, retry/cancel) that must be proven, not just a sandbox success response
+- Where the product promises persistence per entity type: name each entity class that must survive restart and be readable
+
+A broad smoke test (`npm test` or `npm run check`) that passes one happy path does not satisfy any of the above depth items. Each depth item requires its own named test, browser interaction, or evidence row.
+
 ## Implementation loop
 
 `BUILDPRINT.md`, `blueprint.yaml`, `03-phases/phase-flow.md`, and every phase must require:

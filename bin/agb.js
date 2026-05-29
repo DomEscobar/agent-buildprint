@@ -2908,6 +2908,7 @@ async function fetchTextExact(url) {
   if (!res.ok) throw new Error(`failed to fetch ${url}: HTTP ${res.status}`)
   const text = await res.text()
   if (looksLikeHtml(text)) throw new Error(`expected Buildprint snapshot text but received HTML from ${url}`)
+  if (/^not\s+found\s*$/i.test(text.trim())) throw new Error(`expected Buildprint snapshot content but received "${text.trim()}" from ${url} — the file may not be published yet or the URL is stale; re-run agb start after the packet is published`)
   return text
 }
 
@@ -3229,12 +3230,46 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     if (!source) throw new Error(`missing source URL for ${file.path}`)
     const text = await fetchTextExact(source)
     if (!text.trim() && !file.path.endsWith('.gitkeep')) throw new Error(`downloaded empty snapshot for ${file.path}`)
+    // Minimum content length — suspiciously short files indicate a broken CDN or unpublished asset
+    const snapshotBytes = Buffer.byteLength(text)
+    const minBytes = 32
+    if (snapshotBytes < minBytes && !file.path.endsWith('.gitkeep') && !file.path.endsWith('.jsonl')) {
+      throw new Error(`downloaded snapshot ${file.path} is suspiciously short (${snapshotBytes} bytes from ${source}) — expected at least ${minBytes} bytes; the file may not be published or the URL is stale`)
+    }
+    // Key-file content assertions: critical spine files must contain their canonical anchor
+    if (file.path === 'BUILDPRINT.md' && !/^# BUILDPRINT:/m.test(text)) {
+      throw new Error(`downloaded BUILDPRINT.md is missing "# BUILDPRINT:" heading — content appears invalid or truncated from ${source}`)
+    }
+    if (file.path === 'blueprint.yaml' && !/schema_version:/i.test(text)) {
+      throw new Error(`downloaded blueprint.yaml is missing schema_version: — content appears invalid or truncated from ${source}`)
+    }
+    if (file.path === '03-phases/phase-index.yaml' && !/active_phase:/i.test(text)) {
+      throw new Error(`downloaded 03-phases/phase-index.yaml is missing active_phase: — content appears invalid or truncated from ${source}`)
+    }
     const dest = path.join(snapshotDir, file.path)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
     fs.writeFileSync(dest, text)
     downloaded.push({ path: file.path, sourceUrl: source, bytes: Buffer.byteLength(text) })
   }
 
+  // Post-download corruption check: if key spine files are missing or broken, fail loudly
+  // (guards against servers that respond 200 with error-page text for non-existent files)
+  const spineChecks = [
+    { path: 'BUILDPRINT.md', test: (t) => /^# BUILDPRINT:/m.test(t), msg: 'missing "# BUILDPRINT:" heading' },
+    { path: 'blueprint.yaml', test: (t) => /schema_version:/i.test(t), msg: 'missing schema_version:' },
+  ]
+  for (const check of spineChecks) {
+    const spineFile = path.join(snapshotDir, check.path)
+    if (!fs.existsSync(spineFile)) continue // optional file absent; already caught by required-file checks elsewhere
+    const spineText = fs.readFileSync(spineFile, 'utf8')
+    if (!check.test(spineText)) {
+      throw new Error(
+        `Snapshot integrity failure: ${check.path} ${check.msg}.\n` +
+        `This usually means the published packet files are not yet live or the manifest URLs point to stale content.\n` +
+        `Do not proceed — re-run agb start after the packet is published, or supply the packet files manually.`
+      )
+    }
+  }
   const now = new Date().toISOString()
   const phaseIndexPath = path.join(snapshotDir, '03-phases', 'phase-index.yaml')
   const phaseIndexText = fs.existsSync(phaseIndexPath) ? fs.readFileSync(phaseIndexPath, 'utf8') : ''

@@ -2,6 +2,7 @@
 import { spawnSync } from 'node:child_process';
 
 const fixtures = [
+  ['product phase with title-only outcome and filler scope', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/product-phase-thin-outcome/selected-buildprint'],
   ['mixed mode collapsed to product', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/mixed-mode-collapsed-to-product/selected-buildprint'],
   ['framework phase using product language', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/framework-phase-using-product-language/selected-buildprint'],
   ['integration phase missing webhook idempotency', 'buildprints/buildprint-mapper-os/evals/selected-output-fixtures/integration-phase-missing-webhook-idempotency/selected-buildprint'],
@@ -34,6 +35,7 @@ const fixtures = [
 ];
 
 const expectations = new Map([
+  ['product phase with title-only outcome and filler scope', /mapper boilerplate filler|## Product outcome is identical to the phase title/i],
   ['mixed mode collapsed to product', /is in a mixed packet but declares blueprint_mode mixed|mixed blueprint_mode packet must have at least 2 distinct per-phase/i],
   ['framework phase using product language', /uses ## Mapped product obligations for non-product blueprint_mode framework|uses wrong mapped-obligations heading for blueprint_mode framework/i],
   ['integration phase missing webhook idempotency', /phase mode integration requires at least/i],

@@ -2,22 +2,6 @@
 
 You are the orchestrator for this phase only. Keep the active context small: route work through the active phase, the required role contracts in `06-contracts/`, and runtime phase-run artifacts.
 
-## Snapshot integrity gate
-
-Before any phase work, verify:
-
-1. `.buildprint/snapshots/BUILDPRINT.md` starts with `# BUILDPRINT:`.
-2. `.buildprint/snapshots/03-phases/phase-index.yaml` contains `active_phase:`.
-3. `.buildprint/snapshots/02-project-setup.md` is not empty or an error string.
-
-If any of these checks fail, **STOP**. Do not improvise phases. Do not use a mirror source as a substitute. Record a blocker in `.buildprint/blockers.md` naming the corrupt files and instruct the user to re-run `agb start`.
-
-## Phase identity contract
-
-Every `.buildprint/phase-runs/<dir>/` directory name and every evidence row `phase_id` must exactly match a `phase_id` listed in `.buildprint/snapshots/03-phases/phase-index.yaml`. Creating phase-run directories with names that do not appear in the index, or writing evidence rows with invented `phase_id` values, is a fake-completion violation. Invented phase IDs cannot satisfy proof gates and must not be claimed as `phase_core_passed`.
-
-Evidence proof artifacts (test files, screenshots, trace logs) must be distinct per phase. Reusing an artifact from an earlier phase as primary evidence for a later phase is an evidence ceiling violation — write a separate row with a distinct command and artifact path.
-
 ## Phase-Entry Protocol
 
 Before writing code for any phase:

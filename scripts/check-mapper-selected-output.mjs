@@ -542,6 +542,25 @@ function validate(target, dir) {
     }
     if (/03-capabilities|09-evidence|08-evaluation|06-safety\/security-test-fixtures/i.test(text)) fail(target, `${rel} contains obsolete pre-baseline paths`);
     if (/provider_integration_proof_or_blocker/i.test(text)) fail(target, `${rel} uses soft provider blocker label; split adapter/config/test implementation from live proof blockers`);
+    // Phase content quality: forbid filler sentences that indicate the mapper did not extract real content
+    const fillerPatterns = [
+      /Inputs are defined by the product obligation and interface contracts./i,
+      /Outputs are defined by the product obligation and interface contracts./i,
+    ];
+    for (const filler of fillerPatterns) {
+      if (filler.test(text)) fail(target, `${rel} contains mapper boilerplate filler: "${filler.source.slice(0, 60)}..." — replace with source-specific inputs/outputs`);
+    }
+    // Forbid Product outcome that is just the phase title repeated
+    const titleMatch = text.match(/^# ([^\r\n]+)/);
+    const outcomeMatch = text.match(/## Product outcome[\s\S]*?\n([^\n#][^\r\n]+)/i);
+    if (titleMatch && outcomeMatch) {
+      const titleWords = titleMatch[1].replace(/^Phase \d+ [—-]+\s*/i, '').trim().toLowerCase();
+      const outcomeWords = outcomeMatch[1].trim().toLowerCase();
+      // Outcome is just the title (or title with minor suffix) — reject
+      if (titleWords && outcomeWords && outcomeWords === titleWords) {
+        fail(target, `${rel} ## Product outcome is identical to the phase title ("${outcomeMatch[1].trim()}"); write a concrete multi-sentence user-visible result instead`);
+      }
+    }
     if (/Treat each named file as a runtime artifact output/i.test(text)) fail(target, `${rel} uses generic artifact-ownership prose; state/runtime must be phase-owned and distinguish upstream inputs from downstream artifacts`);
     if (/capability_id\s*:/i.test(text)) fail(target, `${rel} must use phase_id, not capability_id, for proof rows`);
     if (/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text)) fail(target, `${rel} references missing shared UX/design context instead of inline UX contract`);

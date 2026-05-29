@@ -1,20 +1,18 @@
-# BUILDPRINT: <mapped-app>
+# BUILDPRINT: executable packet good fixture
 
-This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files. Your first action must be reading this file; do not inventory, glob, or enumerate packet files before this read order is established.
-
-**Before reading anything else:** verify this file begins with `# BUILDPRINT:` and that `02-project-setup.md`, `blueprint.yaml`, and `03-phases/phase-index.yaml` exist in the snapshot directory and are not empty or error strings. If any critical snapshot file is absent, empty, or contains only `not found`, **STOP** — do not improvise phases, do not invent phase IDs, do not substitute a mirror source. Record the corruption in `.buildprint/blockers.md` and instruct the user to re-run `agb start`.
+This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files.
 
 ## Product brief
 
-- Product: <mapped-app>
-- Primary outcome: <one-sentence user-visible result>
-- Primary users: <who uses it>
-- Main surfaces: <capability surfaces, e.g. browser workbench, API service, worker/runtime boundary, provider adapters, persistence, export/report surfaces; avoid concrete source framework names unless the framework itself is the mapped product>
+- Product: Buildprint Mapper OS
+- Primary outcome: Agent-session workflow for mapping an existing repo into an executable, source-independent Buildprint packet with phase-flow replay, schema-valid runtime evidence, and fresh-agent proof gates.
+- Primary users: operators or developers implementing the mapped product workflow.
+- Main surfaces: Safety and secrets boundary; Source census and source-independent distillation; Scoped candidate selection before extraction; Executable selected-buildprint packet spine
 - What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
 
 ## Required read order
 
-1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.
+1. Read this `BUILDPRINT.md`.
 2. Read `01-questions.md`.
 3. Read and complete `02-project-setup.md`.
 4. Read `blueprint.yaml` as the machine-readable mirror.
@@ -62,4 +60,4 @@ Do not mark a phase complete while its verification failure is unresolved.
 
 Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, bounded handoffs for every role in `requires_roles`, and return files for every role. Use subagents or delegated workers when available; when unavailable, self-simulate each role through the same handoff/return artifacts. Collect returns/reviews/proof, and only then append runtime evidence.
 
-A phase is a proof-gated mode-aware slice, not a waterfall task bucket. Each phase must declare its `blueprint_mode` and `phase_style` in `## Phase mode contract`, and must define outcome (product/capability/operation depending on mode), mapped obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements (or non-UI statement), safety/security constraints, quality gates, proof gate, and repair routing.
+A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.

@@ -4,9 +4,6 @@ Generated from: blueprint.yaml
 
 This generated prompt is convenience copy only. It is not source of truth and not authoritative.
 
-**Snapshot integrity gate — check this before anything else.**
-Verify that `.buildprint/snapshots/BUILDPRINT.md` begins with `# BUILDPRINT:`. If it does not, or if any critical snapshot (`blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`) is absent, empty, or contains only an error string such as `not found`, **STOP immediately**. Do not improvise phases. Do not rename or invent phase IDs. Do not use a GitHub mirror as a substitute packet source. Record the failure in `.buildprint/blockers.md` with the affected file names, then instruct the user to re-run `agb start` or supply the packet files manually.
-
 Start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, the required `06-contracts/<role>.md` files for the active phase, the active phase file, `04-evaluation.md`, `05-evidence/evidence-ledger.jsonl`, and `05-evidence/evidence-ledger.schema.json`.
 
 Initial context reads must be sequential and observable. Do not batch or parallelize the required read order; a later summary that claims the right order does not repair an out-of-order transcript.
@@ -22,10 +19,6 @@ You are the orchestrator. When your environment supports subagents, delegated wo
 Product-grade UI is required for product-mode packets and UI-bearing mixed phases. A single embedded HTML/CSS/JS file, default browser controls, stacked forms, generic cards, raw text-list substitutes, or screenshots that look like a local MVP must be treated as a UX blocker even when functional browser assertions pass. The implementation must define a real UI boundary, domain-specific interactions, visual hierarchy, responsive behavior, focus/disabled states, and screenshot critique before upgrading `ux_design_gate` or `visual_quality_gate`.
 
 For non-UI modes (framework, library, integration, automation, data-pipeline, infrastructure), do not apply UI/browser proof requirements as blockers. Instead apply the mode-appropriate proof: import/API/CLI contract tests for framework/library; fake-provider tests, webhook/idempotency proof, and sandbox/live split for integration; trace-based loop proof, stop-condition evidence, and approval-point records for automation; schema validation, transform proof, lineage, and data quality for data-pipeline; health/readiness, rollback, and drift detection for infrastructure. Missing browser tooling does not block non-UI phases.
-
-Phase identity rule: every `.buildprint/phase-runs/<dir>/` directory name and every evidence row `phase_id` must exactly match a `phase_id` in `.buildprint/snapshots/03-phases/phase-index.yaml`. Inventing phase IDs that do not appear in the index is a fake-completion violation — invented phases cannot satisfy proof gates, cannot produce valid evidence rows, and must not be reported as `phase_core_passed` or `complete`.
-
-Proof artifact reuse rule: each phase's evidence rows must cite artifacts (test files, screenshots, commands) produced or run during that phase's implementation. Reusing a screenshot or test file from phase 01 as evidence for phases 02, 03, and 04 is an evidence ceiling violation. Use separate rows with distinct artifact paths per phase.
 
 Evidence rows must be narrow: list only proof labels backed by the row's commands/artifacts. Do not claim browser/e2e/screenshot/security/data-lifecycle/worker proofs from generic HTTP traces or static files.
 
