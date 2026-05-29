@@ -1,53 +1,15 @@
-schema_version: mapper-os/phase-index
-blueprint_mode:
-  primary: product
-  phase_style: outcome_flow
-active_phase: 03-phases/01-project-workspace-auth.md
+active_phase: 01-foundation-webapp-shell
 phases:
-  - phase_id: 01-project-workspace-auth
-    file: 03-phases/01-project-workspace-auth.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on: []
-    proof_gate: proof-01-project-workspace-auth
-  - phase_id: 02-novel-event-ingestion
-    file: 03-phases/02-novel-event-ingestion.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 01-project-workspace-auth
-    proof_gate: proof-02-novel-event-ingestion
-  - phase_id: 03-script-agent-assets
-    file: 03-phases/03-script-agent-assets.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 02-novel-event-ingestion
-    proof_gate: proof-03-script-agent-assets
-  - phase_id: 04-production-storyboard-flow
-    file: 03-phases/04-production-storyboard-flow.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 03-script-agent-assets
-    proof_gate: proof-04-production-storyboard-flow
-  - phase_id: 05-media-preview-export
-    file: 03-phases/05-media-preview-export.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 04-production-storyboard-flow
-    proof_gate: proof-05-media-preview-export
-  - phase_id: 06-safety-runtime-boundary
-    file: 03-phases/06-safety-runtime-boundary.md
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
-    blueprint_mode: product
-    phase_style: outcome_flow
-    depends_on:
-      - 05-media-preview-export
-    proof_gate: proof-06-safety-runtime-boundary
+  - id: 01-foundation-webapp-shell
+    file: 03-phases/01-foundation-webapp-shell.md
+    status: pending
+  - id: 02-project-script-planning
+    file: 03-phases/02-project-script-planning.md
+    status: pending
+  - id: 03-canvas-production-workbench
+    file: 03-phases/03-canvas-production-workbench.md
+    status: pending
+  - id: 04-generation-video-output
+    file: 03-phases/04-generation-video-output.md
+    status: pending
+continuation_rule: after active phase proof passes, update active_phase to the next pending phase

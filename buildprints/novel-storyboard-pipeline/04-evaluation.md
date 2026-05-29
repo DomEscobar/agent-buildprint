@@ -1,50 +1,53 @@
 # Evaluation
 
-## Claim upgrade rules
+Qualification label remains PROOF_REQUIRED until every required proof is complete.
 
-Claims upgrade only after the relevant phase proof gate passes and evidence is recorded.
+## Promotion Gates
 
-Required proof concepts:
+1. Executable packet spine exists and contains no obsolete selected-output files.
+2. Foundation scaffold exists under `implementation-project/` with required `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md`.
+3. Every phase proof gate passes and records runtime evidence in `.buildprint/evidence/evidence-ledger.jsonl`.
+4. UI-bearing phases include browser e2e traces and inspected screenshots on desktop and mobile.
+5. Canvas visual quality gate passes: no generic forms, default controls, raw text-list substitutes, local-MVP screenshots, overlapping text, or weak Canvas replacement.
+6. Persistence roundtrip proves app/project/script/Canvas/task/media state survives restart.
+7. Provider proof is honestly labeled as blocked, sandbox, fake-provider contract, or live. Fake-provider proof cannot qualify live generation.
+8. Security hardening passes for auth bootstrap, provider secrets, media access, cross-project isolation, rate limits, and destructive actions.
+9. No unresolved high/critical no-fake findings remain.
 
-- provider_live: real provider/API behavior is proven. If credentials or paid-service approval are missing, the blocker may apply only to live proof after provider adapters, config contracts, deterministic test doubles, error handling, and integration tests exist.
-- durable_persistence: state survives readback/reload where durability is claimed.
-- security_boundary: auth, tenant/privacy, secrets, destructive actions, and unsafe input paths are reviewed.
-- no_fake: no static shell, fake green test, placeholder provider, no-op control, or in-memory-only demo is claimed as production behavior.
-- clean_room_implementation_trace: implementation does not depend on opening the original source repo as implementation input.
-- production_readiness: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e gates, and security controls are implemented or explicitly blocked without downgrading scope.
+## Required Evidence Rows
 
-## Loop completion rule
+Runtime rows must include:
 
-A phase is complete only when:
+- `phase_id`
+- command/action
+- result
+- artifact path
+- environment
+- proof summary
+- blocker status
 
-- observe/plan/execute/verify/reflect/record loop completed at least once
-- verification evidence exists
-- phase proof gate passes, or an honest blocker is recorded only for unavailable live credentials, external services, paid-service approval, or deployment authorization
-- blocker/unknowns are not hidden
-- failed gates are repaired or routed correctly
+## No-Fake Checks
 
-## Phase state model
+Fail qualification if:
 
-- `checkpoint_recorded`: at least one valid runtime evidence row exists for the phase. This proves evidence discipline only.
-- `phase_core_passed`: the phase-owned local vertical path works end to end with matching tests/proof, including UI action/state-transition proof for UI-bearing phases.
-- `claim_qualified`: the specific live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle claim has matching executable proof and may upgrade.
+- Canvas is only a static shell or generic CRUD.
+- Provider calls are mocked while claimed as live.
+- Generation success appears without durable task/media state.
+- Public auth uses default admin credentials.
+- Media access is not project/user-scoped.
+- Persistence is in-memory or not restart-proven.
+- Final output/export is claimed without implemented and proven artifact behavior.
 
-Do not treat `checkpoint_recorded` as `phase_core_passed`. Do not treat `phase_core_passed` as `claim_qualified`.
+## Recommended Verification Commands
 
-## Evidence requirements
+Downstream implementation should define exact commands in `implementation-project/test-strategy.md`, then run at least:
 
-Each evidence row must include phase id, proof type, provider mode, status, source/command summary, claim proven or blocker, and whether it upgrades a claim.
-
-## Blocker honesty
-
-A blocker preserves scope. Do not silently downgrade the product, hide missing proof, skip required UI states, or call deterministic adapters live providers.
-
-## Continuation versus qualification
-
-Some blockers prevent claim qualification without blocking later implementation. Missing live credentials, unavailable browser/e2e tooling, screenshot tooling, deployment authorization, or external services should be recorded as non-upgrading blocker rows and may set `blocks_continuation: false` when the phase's core local implementation path, persistence, safety checks, and runtime/API proof passed.
-
-Do not use `blocks_continuation: false` for failed core implementation, failed owned persistence, failed local runtime/API proof, unresolved destructive/security ambiguity, missing required project structure, or any condition that makes downstream phases unsafe or invalid.
-
-## Visual quality gate
-
-- visual_quality_gate upgrades only after browser/screenshot evidence is reviewed against the active UX contract and no blocking local-MVP, default-control, generic dashboard, or raw text-list defect remains.
+- package install/build/typecheck
+- unit tests
+- integration/API tests
+- migration and persistence roundtrip tests
+- worker/provider contract tests
+- browser e2e tests
+- screenshot/visual review
+- accessibility smoke
+- secret scan and no-fake review

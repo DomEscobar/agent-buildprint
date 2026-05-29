@@ -926,7 +926,7 @@
       "actions": []
     },
     {
-      "slug": "portable-novel-storyboard-pipeline",
+      "slug": "portable-novel-storyboard",
       "verdict": "PASS_WITH_WARNINGS",
       "files": [],
       "packageChecks": {

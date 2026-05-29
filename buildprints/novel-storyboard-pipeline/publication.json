@@ -2,8 +2,8 @@
   "schema": "agent-buildprint/publication.v1",
   "publish": true,
   "fileExcludes": [],
-  "slug": "novel-storyboard-pipeline",
-  "title": "Novel Storyboard Pipeline",
+  "slug": "novel-storyboard",
+  "title": "Novel Storyboard",
   "creator": "Agent Buildprint",
   "category": "Mapped Project",
   "tier": "agent-grade",
@@ -27,7 +27,7 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Execution-packet remap of the Toonflow-inspired creative pipeline: project workspace, ordered novel ingestion, event extraction, scripts/assets, storyboard flow, media tasks, preview export, and safety gates.",
+  "summary": "Execution-packet remap of the Toonflow-inspired creative webapp: project workspace, ordered novel ingestion, event extraction, scripts/assets, storyboard flow, media tasks, preview export, and safety gates.",
   "plainDescription": "A router-first Buildprint for a novel-to-storyboard workbench. Agents start at BUILDPRINT.md and blueprint.yaml, load one active capability at a time, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
   "promise": "A Mapper execution-packet for rebuilding the source-independent novel-to-storyboard workflow without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
   "whatYouGet": [
@@ -117,5 +117,5 @@
   ],
   "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
   "originLabel": "HBAI-Ltd/Toonflow-app",
-  "copyPrompt": "Use the Novel-to-Storyboard Pipeline Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/novel-storyboard-pipeline/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/novel-storyboard-pipeline/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped guide will route through BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, the required 06-contracts/<role>.md files for the active phase, the active phase file, 04-evaluation.md, 05-evidence/evidence-ledger.jsonl. Complete project setup before phase implementation. Create project root/local AGENTS.md only in the implementation project from 02-project-setup.md, never inside the blueprint packet. Execute one active phase at a time with observe, plan, execute, verify, reflect, and record. On verification failure, route repair back to the current phase unless setup, questions, a prior phase, or an external blocker is responsible. Keep claims proof-required until proof rows pass. Build the source-independent novel-to-storyboard workflow from the Buildprint package, not from Toonflow source. Use subagents/delegated workers when supported; when unavailable, self-simulate each required role through the same handoff/return artifacts before phase_core_passed."
+  "copyPrompt": "Use the Novel-to-Storyboard Buildprint to build a perfect webapp. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually."
 }

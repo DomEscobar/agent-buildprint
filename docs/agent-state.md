@@ -26,7 +26,7 @@ New public slugs:
 - `buildprints/ai-presentation-generation`
 - `buildprints/ai-shorts-production-studio`
 - `buildprints/personal-agent-chat`
-- `buildprints/novel-storyboard-pipeline`
+- `buildprints/novel-storyboard`
 
 Legacy package dirs replaced/removed:
 
@@ -35,7 +35,7 @@ Legacy package dirs replaced/removed:
 - `buildprints/portable-ai-presentation-generation-os`
 - `buildprints/portable-ai-shorts-production-studio`
 - `buildprints/portable-personal-agent-chat-os`
-- `buildprints/portable-novel-storyboard-pipeline`
+- `buildprints/portable-novel-storyboard`
 
 ### Publication metadata
 
@@ -87,7 +87,7 @@ Live checked publication URLs:
 - `https://agent-buildprint.com/buildprints/ai-presentation-generation/files/publication.json`
 - `https://agent-buildprint.com/buildprints/ai-shorts-production-studio/files/publication.json`
 - `https://agent-buildprint.com/buildprints/personal-agent-chat/files/publication.json`
-- `https://agent-buildprint.com/buildprints/novel-storyboard-pipeline/files/publication.json`
+- `https://agent-buildprint.com/buildprints/novel-storyboard/files/publication.json`
 
 ## Known caveats / what may be left to do
 

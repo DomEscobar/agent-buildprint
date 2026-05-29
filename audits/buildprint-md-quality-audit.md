@@ -156,7 +156,7 @@ Notes:
 
 - None
 
-## portable-novel-storyboard-pipeline — PASS_WITH_WARNINGS
+## portable-novel-storyboard — PASS_WITH_WARNINGS
 
 ### Edge checks
 

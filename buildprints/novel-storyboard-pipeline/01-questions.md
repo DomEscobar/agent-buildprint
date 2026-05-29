@@ -1,47 +1,24 @@
-# Questions
+# Implementation Alignment Questions
 
-Blueprint mode: `product`. Phase style: `outcome_flow`.
+Let the user answer these before coding. If no user answer is available and the question is not sensitive, use the AI-best-judgment default and record it in `.buildprint/progress.md`.
 
-Answer only what you care about. Leave anything blank and the implementation agent must choose the best-fit option from mapped observations, product goals, architecture quality, UX quality, security, maintainability, and long-term scalability.
+1. What deployment posture should the implementation target?
+   AI-best-judgment default: public webapp, but require secure first-run admin setup and never ship Toonflow's source-observed default credentials as production credentials.
 
-Default for every unanswered question:
+2. Which scope is selected?
+   AI-best-judgment default: selected core webapp flow only: project setup, ScriptAgent planning, ProductionAgent Canvas workbench, generation queues, video tracks, and export-ready boundary. Marketplace/community/docs, desktop Electron packaging, and full frontend parity are outside this selected packet unless explicitly re-added.
 
-> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Favor simplicity unless mapped product obligations or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
+3. Which persistence default should be used?
+   AI-best-judgment default: durable relational database with migrations for app state, plus durable object/file storage for generated media. SQLite is acceptable for trusted local deployment; Postgres-compatible schema is preferred for public or team deployments.
 
-Default execution standard: production-grade architecture. Do not offer or choose an MVP quality tier. Missing credentials block live proof only; they do not remove the requirement to implement provider adapter seams, config contracts, deterministic tests, durable state paths, security boundaries, worker/runtime ownership, browser/e2e proof plans, media/export seams, and runtime evidence.
+4. Are sandbox credentials or provider test accounts available for text, image, video, and TTS proof?
+   AI-best-judgment default: no live credentials available. Implement provider interfaces, sandbox/live split, validation, retries, and failure states; mark live provider proof as blocked until credentials exist.
 
-## 1. Product direction
+5. Should programmable vendor code be supported in the first implementation?
+   AI-best-judgment default: support provider adapters through typed plugin modules and config, but block arbitrary user-supplied executable code in public webapp posture until sandboxing, audit logging, and secret isolation are proven.
 
-What should the final product feel like or optimize for?
+6. What is the visual quality target for the Canvas UI?
+   AI-best-judgment default: product-grade creative workstation. Preserve the good Canvas feel with spatial node layout, media thumbnails, generation state badges, inspector panels, timeline/track affordances, drag/drop, zoom/pan, keyboard-safe focus, and polished empty/loading/error states.
 
-Default: AI chooses the product direction that best fits the mapped source and user value.
-
-## 2. Tech stack preferences
-
-Do you require or prefer any stack, framework, package manager, database, auth, payments, AI provider, hosting, or deployment target?
-
-Default: AI chooses the strongest practical stack from mapped observations and target product needs.
-
-## 3. UX/UI preferences
-
-Do you want a specific visual style, design system, interaction quality, accessibility level, or responsive behavior?
-
-Default: AI creates a polished, modern, accessible UI appropriate for the product category.
-
-## 4. Architecture preferences
-
-Do you require a specific architecture style or project organization?
-
-Default: AI chooses clean, maintainable project architecture with clear frontend/backend/domain boundaries and local `AGENTS.md` alignment.
-
-## 5. Quality bar
-
-What must be true before work is considered done?
-
-Default: AI defines and enforces strong gates: typecheck, lint, tests, build, relevant UI checks, no fake data, no skipped proof.
-
-## 6. Constraints / things to avoid
-
-Anything forbidden, unwanted, expensive, risky, or out of scope?
-
-Default: avoid unsafe, overcomplicated, brittle, fake, insecure, unmaintainable, or unproven implementation choices.
+7. Should agent collaboration use real delegated workers?
+   AI-best-judgment default: use real subagents/workers if supported by the implementation environment; otherwise self-simulate decision, execution, supervision, and verification roles and write the same handoff/return artifacts.
