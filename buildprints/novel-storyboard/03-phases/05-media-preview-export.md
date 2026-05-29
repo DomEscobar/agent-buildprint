@@ -17,7 +17,7 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 ## Product outcome
 
-Media Preview Export
+For storyboard panels with asset refs, the operator creates image/video preview tasks with visible lifecycle status, previews generated media honestly (including sandbox or credential-blocked states), and exports a reviewable manifest. Final stitched-video export parity is explicitly out of scope and must not be claimed.
 
 ## Phase mode contract
 
@@ -53,10 +53,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 05-media-preview-export`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Storyboard panels with asset refs and persisted panel order from phase 04
+- Image/video provider adapters with sandbox/live config separation
+- Local file storage roots and export manifest schema
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Media task rows (pending/running/success/failure) with provider mode
+- Generated file refs stored under project-scoped paths
+- Export manifest/artifact set validated for download and phase 06 safety review
 
 Downstream slices may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

@@ -63,10 +63,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 01-instance-auth-config-provider-setup`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Docker/Electron/bootstrap config and admin auth env vars from `02-project-setup.md`
+- Empty app data roots, database connection plan, and provider env resolution
+- Auth route contracts (`/api/v1/auth`) and provider config UX surfaces
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Bootable instance with admin/session auth and protected app shell
+- Persisted provider config (text LLM, image) with runtime mode disclosure
+- App data directory layout for presentations, assets, and generated files
 
 Downstream phases may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

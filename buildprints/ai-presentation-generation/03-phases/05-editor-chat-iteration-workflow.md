@@ -63,10 +63,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 05-editor-chat-iteration-workflow`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Presentation deck records and themed slides from phase 04
+- Dashboard/list/detail navigation contracts and slide edit APIs
+- Chat assistant scope/memory boundaries and browser-visible auth/settings state
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Editable presentation with slide updates persisted (including undo/redo where claimed)
+- Chat iteration history scoped to deck context with trustworthy progress/error states
+- Updated slide HTML/content and user config readable by phase 06 export/integration
 
 Downstream phases may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

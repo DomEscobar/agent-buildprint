@@ -17,7 +17,7 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 ## Product outcome
 
-Project Workspace Auth
+An operator signs in, creates or selects a project, edits project metadata and provider settings, and sees persisted readback after restart. Unauthorized API, realtime, and browser paths show explicit denied states instead of silent failure or anonymous access.
 
 ## Phase mode contract
 
@@ -53,10 +53,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 01-project-workspace-auth`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Scaffolded app shell and auth/session defaults from `02-project-setup.md`
+- Empty user, setting, and project schema or migration plan
+- Provider config names and sandbox/live mode policy
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Authenticated session with user identity bound to project owner
+- Persisted `project_id`, project metadata, and provider settings readable after restart
+- API/realtime guard behavior and denied-path fixtures for phase 02
 
 Downstream slices may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

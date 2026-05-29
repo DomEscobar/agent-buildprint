@@ -17,7 +17,7 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 ## Product outcome
 
-Production Storyboard Flow
+From script and asset records, the operator generates an ordered storyboard sequence, reorders and edits panels on a production board, and sees persistence across refresh. Board interaction proof covers real edit/reorder behavior and responsive layout critique—not a static panel screenshot reused across phases.
 
 ## Phase mode contract
 
@@ -53,10 +53,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 04-production-storyboard-flow`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Persisted script beats/episodes and deduplicated assets from phase 03
+- Flow/storyboard generation adapters and panel schema
+- Browser workbench surfaces for board edit, reorder, and review
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Ordered storyboard panels/scenes with notes, prompts, and provenance
+- Board interaction state persisted across refresh/restart
+- Panel refs and status metadata consumable by phase 05 media tasks
 
 Downstream slices may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

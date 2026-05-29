@@ -17,7 +17,7 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 ## Product outcome
 
-Script Agent Assets
+From persisted narrative events, the operator generates structured script beats and episodes, extracts deduplicated roles/scenes/props, and edits script workspace records. Progress, failure, retry, and provider-blocked states are visible in the workbench—not chat-only prose substitutes.
 
 ## Phase mode contract
 
@@ -53,10 +53,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 03-script-agent-assets`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Persisted `event` records and project context from phase 02
+- Script planning/writing provider adapters and controlled tool boundaries
+- Asset-extraction contracts and deduplication rules
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Structured script beats/episodes with editable readback
+- Deduplicated asset records (roles, scenes, props) with persistence
+- Job/runtime status, provider mode, and failure semantics for phase 04
 
 Downstream slices may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

@@ -17,7 +17,7 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 ## Product outcome
 
-Novel Event Ingestion
+In an authenticated project, the operator imports ordered chapter text, sees validation and normalization feedback, triggers event extraction, and reviews persisted narrative events. Missing live provider credentials show honest blocked states without faking extraction results.
 
 ## Phase mode contract
 
@@ -53,10 +53,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 02-novel-event-ingestion`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Authenticated `project_id` and persisted user/session/project settings from phase 01
+- Ordered chapter/novel text payloads (paste, upload, or API)
+- Text-extraction provider adapter configuration (deterministic or configured)
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Persisted chapter/novel rows with stable ordering
+- Structured narrative `event` records linked to chapters
+- Extraction job status, provider mode disclosure, and error reasons for phase 03
 
 Downstream slices may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

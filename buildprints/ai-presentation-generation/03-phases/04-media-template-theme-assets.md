@@ -63,10 +63,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 04-media-template-theme-assets`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Persisted presentation and slide records from phase 03
+- Image/icon/font/theme asset stores, custom templates, and PPTX/PDF import processors
+- Asset path isolation rules and MIME/type validation policy
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Themed slides with attached media assets (generated, uploaded, or imported)
+- Asset file refs under app data with containment and readback proof
+- Export-safe asset bindings without path leakage for phase 05 editor flows
 
 Downstream phases may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

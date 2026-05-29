@@ -63,10 +63,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 03-deck-structure-slide-generation`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Validated outline and persisted presentation handle from phase 02
+- Slide layout catalog, TOC/title-slide rules, and content generation provider adapter
+- `/api/v1/ppt/presentation/*` contracts and async stream/status semantics
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Persisted editable presentation with slide records and selected layouts
+- Generated slide content with schema validation and deterministic IDs/status
+- Slide IDs and layout metadata for phase 04 media/theme attachment
 
 Downstream phases may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

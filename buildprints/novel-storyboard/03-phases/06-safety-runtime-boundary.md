@@ -17,7 +17,7 @@ requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persi
 
 ## Product outcome
 
-Safety Runtime Boundary
+Across admin, provider, upload, import/export, and evidence surfaces, the operator sees fail-closed auth, secret redaction, destructive confirmations, and upload limits. Live provider and public deployment readiness stay blocked with explicit evidence rows instead of being implied by bounded phase completion.
 
 ## Phase mode contract
 
@@ -53,10 +53,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 06-safety-runtime-boundary`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Full pipeline surfaces from phases 01–05 (auth, providers, uploads, admin, exports)
+- Safety/security contracts from `06-contracts/security-boundary.md`
+- Evidence ledger and readiness rules from `04-evaluation.md`
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Audit rows and safety blocker records in `.buildprint/evidence/evidence-ledger.jsonl`
+- Denied-path and redaction test fixtures for admin/provider/upload/export
+- Documented deployment blockers and claim ceiling for live/public readiness
 
 Downstream slices may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

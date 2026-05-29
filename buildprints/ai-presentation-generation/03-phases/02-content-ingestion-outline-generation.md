@@ -63,10 +63,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 02-content-ingestion-outline-generation`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Authenticated session and app data roots from phase 01
+- Prompt text, uploaded documents, slide markdown, and generation request params (`content`, `n_slides`, `language`, `template`, `files`)
+- Document parser/OCR/decomposition services and outline provider adapter
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Validated presentation outline with streaming/progress trace
+- Uploaded/decomposed file records and parsing failure states
+- Persisted presentation or outline handle for phase 03 deck generation
 
 Downstream phases may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 

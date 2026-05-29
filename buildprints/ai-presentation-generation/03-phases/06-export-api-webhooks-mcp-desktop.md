@@ -63,10 +63,14 @@ This packet is source-independent: use these observations to preserve product be
 5. Append proof or blocker rows to `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id: 06-export-api-webhooks-mcp-desktop`.
 
 Inputs:
-- Inputs are defined by the product obligation and interface contracts.
+- Complete presentation pipeline artifacts from phases 01–05
+- Export renderer contracts for PPTX/PDF and async generation status endpoints
+- Webhook subscription model, MCP server/tool boundary, and desktop packaging config
 
 Outputs/downstream handoff:
-- Outputs are defined by the product obligation and interface contracts.
+- Authenticated generate/edit/export API with downloadable PPTX/PDF artifacts
+- Webhook delivery events with retry/failure evidence and payload redaction
+- MCP/desktop packaging proof or explicit deployment blockers in evidence ledger
 
 Downstream phases may rely on persisted identifiers, state transitions, provider-mode disclosure, and failure semantics proven here.
 
