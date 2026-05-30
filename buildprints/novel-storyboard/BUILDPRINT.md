@@ -20,8 +20,10 @@ This package is `PROOF_REQUIRED`. The glance describes the target product, not a
 4. 02-project-setup.md
 5. 03-phases/phase-index.yaml
 6. 03-phases/phase-flow.md
-7. The active phase named in 03-phases/phase-index.yaml
-8. 04-evaluation.md
+7. generated/agent-prompt.md as implementation alignment speech
+8. The active phase named in 03-phases/phase-index.yaml
+9. 04-evaluation.md
+10. 05-evidence/evidence-ledger.jsonl as seed evidence only
 
 Do not start by reading every Markdown file. Use phase-flow and the active phase to continue.
 
@@ -39,12 +41,14 @@ Do not start by reading every Markdown file. Use phase-flow and the active phase
 - deep_interaction_console — user chats with report/simulated agents and inspects answers — Phase 5
 - history_restore — user reopens prior simulations/reports and workflow trail — Phase 5
 - provider_persistence_operability — user-visible provider/storage posture distinguishes local artifacts, live provider credentials, runtime processes, destructive actions, and deployment readiness — Setup/All phases
+- final_critical_review_handover — implementation is adversarially reviewed, anti-slop checked, locally repaired where possible, and summarized in `.buildprint/handover.md` — Phase 6
 
 **Done looks like:**
 
 - Seed upload, graph build, simulation, report, and interaction surfaces are real browser/API/runtime paths, not static cards.
 - Saved projects, graph/report artifacts, and interaction history reload after restart.
 - Missing live provider credentials show honest blocked-provider states after adapters/config/tests exist.
+- Final review can click visible controls, reload surfaces, inspect artifacts, and find no unresolved placeholders, dead controls, canned outputs, generic dashboard leakage, or unrecorded blockers.
 
 ## Product Engineering Lead contract
 
@@ -92,3 +96,38 @@ The source maps a five-step product flow, not a static dashboard. The downstream
 - Review prose, summaries, screenshots, or status notes are permission to record evidence, never evidence themselves.
 - Every `pass` or `pass-with-scoped-debt` verdict must point to rerunnable command output or an existing artifact path under `.buildprint/phase-runs/PHASE_ID/`.
 - `phase_core_passed` does not qualify live provider, deployment, worker, security, visual, or lifecycle claims unless matching claim-upgrade evidence exists.
+
+
+## Final critical reviewer
+
+Phase 06 is the explicit final critical review and handover phase. After the final feature phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — switch modes before handover: become a harsh reviewer instead of the optimistic implementer.
+
+Assume the product is trying to fool you. Inspect source, run the runnable verification commands from `02-project-setup.md`, and use browser/e2e or screenshots to exercise the real surface. Click every visible control. Try empty, loading, error, blocked, and reload states. Look for placeholder copy, TODO/FIXME-visible behavior, raw ids, debug/proof vocabulary, generic dashboard/form/list leakage, canned output, mock-only paths, dead buttons, fake controls, missing persistence, and the absence of the obvious next user action.
+
+Run an anti-slop pass after tests/lint/build, following the spirit of `https://huecki.com/en/blog/ai-slop-gate-after-tests-and-lint/`: search for AI-generated residue that normal tests miss — swallowed errors, TODO stubs, dead code, hallucinated imports, fake/narrative comments, pointless casts, duplicated helpers, oversized functions, mock-only branches promoted to product paths, and cleanup prompts accidentally left in source. Use `npx aislop scan --changes` or an equivalent deterministic source scan when it fits the stack; otherwise do the same review manually and record what was checked.
+
+Fix local issues before handover. Only leave work unfixed when it is genuinely blocked, credentialed, destructive, expensive, or too large for this run, and name the reason plainly.
+
+## Handover
+
+After the final critical reviewer pass is complete — or when the run stops with honest blockers on remaining phases — write `.buildprint/handover.md`. This is a runtime artifact for the human developer, not a packet file. Do not restate packet prose. Compare the actual built state against `## Final product at a glance`, the final reviewer findings, and `## Completion semantics`.
+
+In `.buildprint/handover.md`, use these six `##` section headings:
+
+## 1. Current status
+One short paragraph: current run status from `.buildprint/state.json`, phase states from `03-phases/phase-index.yaml`, what the evidence ledger shows, and whether the final reviewer found unresolved required repairs. State clearly whether the run reached `complete-bounded-proof`, stopped on blockers, or is incomplete. Bounded proof is not production completion.
+
+## 2. Built surfaces
+A table or bullets for every surface in `## Final product at a glance`: built / partial / blocked / not started, with exact command/artifact evidence or blocker reason.
+
+## 3. Verification run
+Commands run, pass/fail status, artifact paths, screenshots/browser reports, and anti-slop review output.
+
+## 4. Known blockers and risks
+Credential, provider, security, persistence, runtime, UX, deployment, or scope blockers. Include exact owner phase and next repair route.
+
+## 5. Changed files / important artifacts
+Implementation files, `.buildprint/phase-runs/*`, evidence ledger, final review artifact, handover artifact, and user-visible outputs.
+
+## 6. Next atomic actions
+Numbered list of concrete next steps a human can take without rereading the packet. Include live credential setup, deployment approval, security review, or fixing named blockers when applicable.

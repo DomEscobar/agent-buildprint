@@ -34,7 +34,7 @@
     "BUILDPRINT.md execution entry",
     "blueprint.yaml executable packet contract",
     "02-project-setup.md architecture/setup contract",
-    "Five phase files with phase-preflight, claim typing, proof IDs, and repair routing",
+    "Five feature phase files plus explicit final review/handover phase with phase-preflight, claim typing, proof IDs, and repair routing",
     "Evidence ledger schema and seed blocker row",
     "Provider/runtime/persistence/security proof ceilings"
   ],
@@ -42,7 +42,8 @@
     "Nothing for deterministic no-network proof mode",
     "Browser runtime proof for qualification",
     "Optional AI/image/video provider keys only for live-provider upgrade proof",
-    "Security review before public deployment or destructive/admin claims"
+    "Security review before public deployment or destructive/admin claims",
+    "Final critical review and handover before any complete-bounded-proof claim"
   ],
   "architectureFlow": [
     "Seed Intake",
@@ -58,12 +59,12 @@
     "BUILDPRINT.md executable start file",
     "blueprint.yaml authority packet",
     "02-project-setup.md architecture, experience quality, Foundation scaffold gate, and ui-identity requirement",
-    "03-phases phase index, phase-flow, and five phase files",
+    "03-phases phase index, phase-flow, five feature phase files, and final review/handover phase",
     "inline phase interface contracts",
     "inline phase state/runtime contracts",
     "04-evaluation acceptance/test/quality gates",
     "05-evidence ledger and unresolved blockers",
-    "Generated prompt",
+    "Generated alignment prompt with anti-slop reviewer guidance",
     "BUILDPRINT.md canonical start",
     "01-questions.md numbered alignment",
     "02-project-setup.md architecture and AGENTS plan",

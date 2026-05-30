@@ -80,4 +80,18 @@ phases:
       - proof-persistence-roundtrip
       - proof-security-boundary
     proof_gate: proof-05-deep-interaction-console
-continuation_rule: unlock the next phase only after the current phase proof.md passes and evidence is appended to .buildprint/evidence/evidence-ledger.jsonl
+  - phase_id: 06-final-review-handover
+    file: 03-phases/06-final-review-handover.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    depends_on:
+      - 05-deep-interaction-console
+    glance_surfaces: []
+    owned_surface_ids: []
+    required_proofs:
+      - proof-final-critical-review
+      - proof-anti-slop-pass
+      - proof-handover-written
+    proof_gate: proof-handover-written
+continuation_rule: unlock the next phase only after the current phase proof.md passes and evidence is appended to .buildprint/evidence/evidence-ledger.jsonl; complete-bounded-proof also requires 06-final-review-handover, .buildprint/final-critical-review.md, anti-slop evidence, and .buildprint/handover.md
