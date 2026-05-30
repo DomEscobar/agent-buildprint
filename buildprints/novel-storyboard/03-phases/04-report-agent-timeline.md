@@ -12,12 +12,12 @@ Glance surfaces delivered: report_agent_timeline
 
 This phase uses an integration lens because it coordinates webapp, report worker, LLM provider, graph memory provider, logs, and report storage. It must define webhook/callback or polling semantics, idempotency, sandbox/live split, retry/error mapping, and fake-provider proof limits.
 
-## Mapped source notes
+## Mapped capability obligations
 
-- Report generation creates report_id and starts daemon thread: backend/app/api/report.py:109-186.
-- Report API surfaces: backend/app/api/report.py:25-1016.
-- Step 4 polls report agent log and console log: frontend/src/components/Step4Report.vue:402-412 and 2025-2182.
-- Zep report tools provide graph search/statistics/interview context: backend/app/services/zep_tools.py:401-491 and 855-1481.
+- Support report generation requests with simulation lookup, force-regeneration policies, and idempotency.
+- Coordinate a background report worker with log/console stream support and section-level progress.
+- Establish robust report retrieval, download, and storage with error and timeout mapping.
+- Decouple LLM/Graph provider logic through adapters, enforcing sandbox boundaries.
 
 ## Implementation scope
 

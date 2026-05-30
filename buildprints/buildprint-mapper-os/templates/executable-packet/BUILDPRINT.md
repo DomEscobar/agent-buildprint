@@ -97,3 +97,41 @@ Do not mark a phase complete while its verification failure is unresolved.
 Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, implement the smallest real vertical path, run verification, write `.buildprint/phase-runs/<phase-id>/proof.md`, and only then append runtime evidence.
 
 A phase is a proof-gated mode-aware slice, not a waterfall task bucket. Each phase must declare its `blueprint_mode` and `phase_style` in `## Phase mode contract`, and must define outcome (product/capability/operation depending on mode), mapped obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements (or non-UI statement), safety/security constraints, quality gates, proof gate, and repair routing.
+
+## Handover
+
+After the final phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — write `.buildprint/handover.md`. This is a runtime artifact for the human developer, not a packet file. Do not restate packet prose. Compare the actual built state against `## Final product at a glance` and `## Completion semantics`.
+
+In `.buildprint/handover.md`, use these six `##` section headings:
+
+### Build state
+
+One short paragraph: current run status from `.buildprint/state.json`, phase states from `03-phases/phase-index.yaml`, and what the evidence ledger shows. State clearly whether the run reached `complete-bounded-proof`, stopped on blockers, or is incomplete. Bounded proof is not production completion.
+
+### North star comparison
+
+One row per surface named in `## Final product at a glance`:
+
+| Surface | Status | Honest gap |
+|---|---|---|
+| <surface name> | built / partial / blocked / not started | <specific fact, file path, or blocker reason> |
+
+Honest gap rule: a surface is **built** only if its owning phase reached `phase_core_passed` **and** the relevant **Done looks like** criteria are satisfied by real artifacts or command output. `checkpoint_recorded`, review prose, or blocker rows alone do not count as built.
+
+### What was built
+
+Bullet list of surfaces and capabilities that meet the built bar above. Cite `phase_id` and the proof artifact or command that supports each item.
+
+### What is missing or blocked
+
+Bullet list of every glance surface, done-looks-like criterion, or claim that is not yet honestly satisfied. Cite the glance surface, phase, and reason (missing proof, stub handler, live credential blocker, etc.).
+
+### What the human must do next
+
+Numbered list of atomic actions the human can take without rereading the packet. Each item must be completable in one sitting by one developer. Include live credential setup, deployment approval, security review, or fixing a named stub/blocker when applicable. Do not omit external dependencies.
+
+### Micro roadmap
+
+3–7 numbered items in dependency order to reach production-ready from the current state. Each item is one sentence plus an effort label (`small`, `medium`, or `large`). Omit work already done. This is the smallest next sequence, not a full project plan.
+
+Tone: state facts, not aspirations. Write for a developer who has never seen this Buildprint.

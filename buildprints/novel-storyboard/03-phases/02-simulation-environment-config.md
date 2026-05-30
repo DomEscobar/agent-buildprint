@@ -12,13 +12,12 @@ Glance surfaces delivered: env_setup_profiles_config
 
 This phase uses a data-pipeline lens because it transforms graph entities and source text into profiles and simulation_config artifacts. Required dataflow terms apply: schema, transform, lineage, backfill, idempotency, and data quality.
 
-## Mapped source notes
+## Mapped capability obligations
 
-- Simulation create from project_id and graph_id: frontend/src/components/Step1GraphBuild.vue:215-234.
-- Step 2 preparation and polling: frontend/src/components/Step2EnvSetup.vue:638-849.
-- Simulation API create/prepare/status/config/profile routes: backend/app/api/simulation.py:165-642 and 990-1294.
-- Simulation manager writes state.json, reddit_profiles.json, and simulation_config.json: backend/app/services/simulation_manager.py:127-510.
-- Profile/config generation uses LLM/Zep context: backend/app/services/oasis_profile_generator.py:145-239 and backend/app/services/simulation_config_generator.py:122-423.
+- Preserve simulation creation from a completed project graph, mapping the graph entities and source text.
+- Standardize the data schema for agent profiles, preparation tasks, and platform-ready config files.
+- Enable step-by-step progress tracking and status polling during environment preparation.
+- Implement idempotency and backfill/retry logic for interrupted profile or config generation.
 
 ## Implementation scope
 

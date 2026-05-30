@@ -226,12 +226,14 @@ Required UI elements:
 
 Visual contract:
 
-- clear workflow rail or step header showing this is the ingestion/ontology step
+- clear workflow rail or step header showing this is the ingestion/ontology step, in product language (do not label it "Phase 01" or show Buildprint/proof vocabulary)
 - dense but readable technical layout
 - stable spacing and hierarchy across empty, loading, error, blocked, success, retry, reset, and deleted states
 - focus, disabled, hover, and error states for controls
 - mobile and desktop layouts without overlapping text or controls
-- screenshot critique that rejects generic dashboards, raw text-list substitutes, single-file demo shells, and default browser-control pages
+- every visible control performs a real action: interactions such as zoom, pan, drag, and selection are gestures/handlers on the surface, not pills or buttons that merely name the capability; a control that does nothing is a dead control and fails the gate
+- no scaffolding leak: raw internal ids (`project_…`, `graph_…`), "deterministic mode", "local contract proof only", "test-only", or other proof/test strings must not appear on the user-facing surface
+- screenshot critique that rejects generic dashboards, raw text-list substitutes, single-file demo shells, default browser-control pages, capability-label pill rows, and leaked packet/phase/proof scaffolding
 
 ## Safety/security constraints
 

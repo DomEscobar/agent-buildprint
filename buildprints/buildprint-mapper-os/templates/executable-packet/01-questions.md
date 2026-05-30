@@ -4,7 +4,7 @@ Answer only what you care about. Leave anything blank and the implementation age
 
 Default for every unanswered question:
 
-> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Favor simplicity unless mapped product obligations or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
+> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture on a mainstream, actively-maintained stack: for UI-bearing products a real component/UI framework with a build step and a recognized styling system (utility-first or design-token based), a typed or schema-validated backend, auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Keep the implementation as simple as the obligations allow, but simplicity ranks below production-grade: it never justifies a single-file HTML/CSS/JS shell, hand-rolled UI/CSS/routing/data layers that a mainstream library already solves, or skipping a build system or component model for a real product UI. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
 
 ## 1. Product direction
 
@@ -16,19 +16,19 @@ Default: AI chooses the direction that best fits the mapping, blueprint mode, an
 
 Do you require or prefer any specific stack, package manager, database, runtime, auth, AI provider, hosting, or deployment target? Do not assume the source repository's frameworks are desired defaults.
 
-Default: AI chooses the strongest practical stack matching the selected blueprint mode and mapped obligations.
+Default: AI chooses the strongest practical stack matching the selected blueprint mode and mapped obligations, defaulting to mainstream, actively-maintained frameworks and libraries over hand-rolled equivalents. For UI-bearing products this means a component/UI framework with a build system and a styling system (utility-first such as Tailwind, or a design-token/component library), not vanilla single-file HTML/CSS/JS.
 
 ## 3. UX/UI preferences
 
 For product / mixed packets: do you want a specific visual style, design system, interaction quality, accessibility level, or responsive behavior? For framework / library / integration / automation / data-pipeline / infrastructure packets: what are your developer/operator experience preferences — docs format, API ergonomics, trace output style, approval UI, lineage view, runbook format?
 
-Default: AI creates a polished experience appropriate for the blueprint mode — product-grade UI for product mode, high-quality DX/operator experience for non-UI modes.
+Default: AI creates a polished experience appropriate for the blueprint mode — product-grade UI built on a real component model and styling system (utility-first or design tokens) for product mode, high-quality DX/operator experience for non-UI modes. Do not deliver generic, unstyled, or single-file UI.
 
 ## 4. Architecture preferences
 
 Do you require a specific architecture style or project organization?
 
-Default: AI chooses clean, maintainable architecture appropriate to the blueprint mode: clear frontend/backend/domain boundaries for product; adapter/plugin architecture for framework/library; idempotency strategy and sandbox/live separation for integration; tool/action boundary for automation; transform isolation and backfill strategy for data-pipeline; IaC modular layout for infrastructure.
+Default: AI chooses clean, maintainable architecture appropriate to the blueprint mode: clear frontend/backend/domain boundaries for product; adapter/plugin architecture for framework/library; idempotency strategy and sandbox/live separation for integration; tool/action boundary for automation; transform isolation and backfill strategy for data-pipeline; IaC modular layout for infrastructure. Reject single-file or flat architecture for any non-trivial product; separate UI, API/controller, domain, and persistence layers.
 
 ## 5. Quality bar
 

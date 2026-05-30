@@ -12,12 +12,12 @@ Glance surfaces delivered: dual_platform_simulation_runtime, provider_persistenc
 
 This phase uses an automation lens because it owns a task loop with plan-execute-observe behavior. It must define stop condition, approval point, trace, runtime recovery, and safe cancellation.
 
-## Mapped source notes
+## Mapped capability obligations
 
-- Step 3 starts/stops simulation, polls run status/detail, displays actions, and generates report: frontend/src/components/Step3Simulation.vue:293-669.
-- Simulation start/stop/status/detail/action/timeline/post/comment/interview/env routes: backend/app/api/simulation.py:1451-2712.
-- Runtime process, subprocess, run_state.json, action logs, stop, cleanup, env status, IPC, and close-env: backend/app/services/simulation_runner.py:208-489 and 721-1632.
-- Graph memory updater batches simulation actions into Zep: backend/app/services/zep_graph_memory_updater.py:232-549.
+- Establish process or job control for starting, stopping, and polling simulation runs.
+- Stream runtime actions and event logs through a durable task loop with robust cancellation.
+- Batch and apply simulation action streams into a graph memory updater queue.
+- Require user confirmation and audits before destructive simulation stop or close actions.
 
 ## Implementation scope
 

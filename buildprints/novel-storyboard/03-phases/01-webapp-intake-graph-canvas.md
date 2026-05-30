@@ -12,14 +12,12 @@ Glance surfaces delivered: upload_prompt_intake, graph_canvas_workbench
 
 This phase uses a product lens because the deliverable is the first user-facing outcome flow. The shared proof spine is mandatory: preconditions/inputs, entrypoint/use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals.
 
-## Mapped source notes
+## Mapped product obligations
 
-- Upload and prompt collection: frontend/src/views/Home.vue:137-196 and 224-306.
-- Pending upload state: frontend/src/store/pendingUpload.js:8-29.
-- Routes: frontend/src/router/index.js:9-42.
-- Workbench layout and polling: frontend/src/views/MainView.vue:15-98 and 212-366.
-- Graph canvas: frontend/src/components/GraphPanel.vue:19-228 and 472-786.
-- Graph APIs: backend/app/api/graph.py:122-610.
+- Preserve the webapp intake flow with file upload/drag-drop and prediction prompt collection.
+- Maintain the multi-screen routing spine across Home, Workbench, and future simulation views.
+- Implement the graph build pipeline, transforming document intake and prediction prompts into ontologies.
+- Expose the interactive graph canvas workbench supporting layout adjustments and zoom/pan/drag controls.
 
 ## Implementation scope
 

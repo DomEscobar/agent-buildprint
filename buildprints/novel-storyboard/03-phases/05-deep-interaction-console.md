@@ -12,6 +12,13 @@ Glance surfaces delivered: deep_interaction_console, history_restore
 
 This phase uses a product lens because the output is a post-report interactive user workflow. The shared proof spine is mandatory: preconditions/inputs, entrypoint/use site, execution behavior, state/artifact effects, observable proof, failure/recovery, and non-goals.
 
+## Mapped product obligations
+
+- Establish an interactive report console with conversational report-agent chat.
+- Support deep agent-level interaction, allowing users to select individual simulated profiles and run batch surveys/interviews.
+- Maintain a historical record of prior simulations and prediction reports, supporting restoration and deep linkage.
+- Harden all destructive controls (reset, delete, close) with explicit user confirmation and role gating.
+
 ## Implementation scope
 
 - Interaction page keyed by report_id with report context, simulation_id lookup, and provider/runtime availability checks.

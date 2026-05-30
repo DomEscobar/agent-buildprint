@@ -9,6 +9,8 @@ This file is the project constitution for implementation. Keep it compact. It sh
 - Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 - Full-suite packets default to production-grade architecture, not a local MVP.
 - Do not downgrade to a local MVP unless the selected scope explicitly says prototype-only.
+- Default to a mainstream, actively-maintained stack over hand-rolled equivalents. For UI-bearing products this means a real component/UI framework with a build step and a recognized styling system (utility-first such as Tailwind, or a design-token/component library) — never a single-file HTML/CSS/JS shell or hand-rolled CSS framework. Simplicity ranks below production-grade and never justifies skipping a build system, component model, or proven library for a problem a mainstream tool already solves.
+- This does not mean cloning the source repository's specific frameworks. Choose the best-fit target stack; the source stack is only a hint.
 - `PRODUCT.md` is optional by default. Require it only for large, complex, full-suite, or product-contract-heavy packets; otherwise keep the product contract compact in `BUILDPRINT.md`, this file, and phase-local checks.
 - Setup tier must be explicit: `compact_setup` for small/single-phase packets; `full_setup` for full-suite, medium/large UI-bearing, provider-backed, auth/admin, durable persistence, worker/runtime, billing, upload, or deployment-heavy packets.
 
@@ -38,10 +40,13 @@ The product picture — golden path, surface index, and done-looks-like — live
 Record concrete decisions the implementation project must follow:
 
 - Framework/runtime:
-  - Decision:
+  - Decision: name a concrete mainstream, actively-maintained framework/runtime for the target (not the source repo's framework by default, and not a hand-rolled equivalent). For UI-bearing products this must be a real component/UI framework, not vanilla single-file HTML/CSS/JS.
   - Why this fits:
 - Package/build system:
-  - Decision:
+  - Decision: name a real package manager and build system. A UI-bearing product must have a build step; a single static file with inline scripts is not acceptable.
+  - Why this fits:
+- Styling / UI system (UI-bearing only; else state `not UI-bearing`):
+  - Decision: name a recognized styling system — utility-first (e.g. Tailwind) or a design-token/component library. Hand-rolled global CSS as the primary system is a downgrade and must be justified.
   - Why this fits:
 - Module topology:
   - Decision: name frontend, API/controller, service/domain, provider adapter, repository/store, worker/runtime, security, and test boundaries.
@@ -69,12 +74,14 @@ Complete these decisions before phase work. Missing credentials block only live 
 
 Adapt this to the selected mode. UI-bearing outputs need product-grade UX; non-UI frameworks, libraries, CLIs, integrations, data pipelines, and infrastructure need product-grade developer/operator experience instead of fake UI requirements.
 
-- UI architecture: for UI-bearing outputs, define the frontend/UI boundary. A full-suite browser product cannot pass as a single server file with embedded HTML/CSS/JS. For non-UI outputs, state `not UI-bearing` and define the callable/import/CLI/operator surface instead.
+- UI architecture: for UI-bearing outputs, define the frontend/UI boundary on a real component framework with a build step and a styling system (utility-first or design tokens). A full-suite browser product cannot pass as a single server file with embedded HTML/CSS/JS, nor as vanilla DOM scripting with hand-rolled CSS standing in for a framework. For non-UI outputs, state `not UI-bearing` and define the callable/import/CLI/operator surface instead.
 - Product composition: for products, define screens, navigation/workflow structure, primary jobs, status surfaces, and next-action model. For non-products, define primitive/API composition, command flow, provider boundary, task loop, dataflow, or operation sequence.
 - Domain-specific affordances: use domain controls and visualizations where the product calls for graph, timeline, media, document, report, chat, or simulation interactions; otherwise define domain-specific DX/operator affordances such as typed examples, error messages, trace output, dry-run, rollback, or reference patterns.
+- Working controls only: every visible control must perform a real domain action. Do not render a phase's capability/interaction checklist as labeled pills or buttons that merely name a feature (a "zoom/pan" or "layout modes" pill that does nothing is a dead control). Interactions such as zoom, pan, drag, and selection are gestures and handlers on a surface, not buttons that announce themselves. Do not surface debug toggles, mock/seed/simulate buttons, or raw state dumps on the product surface.
+- No scaffolding leak: the product UI shows product surfaces only. Do not display Buildprint/phase identifiers ("Phase 01", "BUILDPRINT…"), raw internal ids (`project_…`, `graph_…`), or proof/test vocabulary ("deterministic mode", "local contract proof only", "test-only"). Express provider-blocked/sandbox states in product language.
 - Visual system: for UI, define typography, spacing, color, density, surface hierarchy, focus/disabled states, alerts, and responsive behavior. For non-UI, define documentation/readability, API ergonomics, output format stability, logging, and discoverability.
 - State quality: every major surface needs empty, loading, error, blocked-provider, success, and recovery states with stable layout or mode-equivalent states.
-- Screenshot critique: if UI/browser proof is used, screenshots must reject quick local MVP, admin form, generic dashboard, or test harness visuals. For non-UI outputs, replace screenshots with import/API/CLI/provider/data/deployment proof and critique the consumer/operator experience.
+- Screenshot critique: if UI/browser proof is used, screenshots must reject quick local MVP, admin form, generic dashboard, test harness visuals, capability-label pill rows, and any leaked packet/phase/proof scaffolding. For non-UI outputs, replace screenshots with import/API/CLI/provider/data/deployment proof and critique the consumer/operator experience.
 
 ## Mapped contract anchors
 
@@ -124,7 +131,7 @@ Required implementation-project files for `full_setup` (for `compact_setup`, roo
 - `architecture.md`: architecture best practices for this project, including `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. It must name the UI, API/controller, domain/use-case, schema/validation, config/env, provider adapter, persistence/repository, worker/runtime, observability, deployment, and test boundaries that apply to the selected stack.
 - `engineering-standards.md`: clean coding and implementation standards, including `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`. It must define deterministic timeout/exit behavior for blocked browser/e2e/runtime proof.
 - `ui-identity.md`: required for UI-bearing products. It must derive from `BUILDPRINT.md` product vision and define product-specific visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, and what would count as a generic dashboard/form/raw-list failure for this product.
-- `proof-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface. It must name the runnable verification commands below and require pasting their exit code and stdout (or a saved log file path) into `.buildprint/phase-runs/<phase-id>/proof.md` before any `phase_core_passed` claim.
+- `proof-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface. It must name the runnable verification commands below — including the concrete `verify:stack-baseline` checks derived from `## Architecture decisions` (declared framework(s), build entrypoint, styling system) — and require pasting their exit code and stdout (or a saved log file path) into `.buildprint/phase-runs/<phase-id>/proof.md` before any `phase_core_passed` claim.
 - Base project directories/files for the chosen stack, including app/source directories, tests, scripts, config/env boundary, provider adapter boundary, persistence/repository boundary, worker/runtime boundary when later phases require it, observability/logging, and e2e/browser proof boundary when UI-bearing.
 
 ### Runnable verification gate (required scripts)
@@ -133,15 +140,18 @@ The scaffold must include **executable** verification the agent cannot satisfy w
 
 | Script | Purpose | Must fail when |
 |---|---|---|
-| `verify:no-fake` | Scan implementation source for placeholder/stub patterns (empty handlers, route-shaped stubs, mock-only promotion paths) | Dead controls, no-op callbacks, or static-shell signatures are present in phase-owned files |
+| `verify:no-fake` | Scan implementation source for placeholder/stub patterns (empty handlers, route-shaped stubs, mock-only promotion paths). Dead controls include capability-label controls — controls that render a feature name but bind no action | Dead controls, no-op callbacks, capability-label controls with no bound handler, or static-shell signatures are present in phase-owned files |
 | `verify:phase-artifacts` | Given `PHASE_ID` env or CLI arg, verify every path cited in `.buildprint/phase-runs/<phase-id>/returns/*.md` under Screenshot/browser evidence exists; for UI phases, at least one screenshot byte-differs from the initial capture | Cited screenshot/trace is missing, or all captures are identical to initial |
 | `verify:phase-artifacts` (optional strict) | Reject screenshot paths reused from an earlier phase-run directory | Primary evidence reuses another phase's artifact |
+| `verify:stack-baseline` | Assert the scaffold uses the production-grade stack declared in `## Architecture decisions`: a build system/manifest exists, and for UI-bearing products a real component framework and a styling system are present dependencies (not vanilla single-file HTML/CSS/JS, not hand-rolled CSS-as-framework). The exact checks (declared frameworks, build entrypoint, styling dependency) are documented in `proof-strategy.md` from the architecture decisions, not hardcoded to one stack | UI-bearing product ships as a single static HTML file, has no build step, or declares no component framework/styling system; or any mode contradicts its own declared `## Architecture decisions` stack |
 
 Rules:
 
 - Scripts must exit non-zero on violation and zero on pass. They must be runnable in CI and locally without paid providers.
 - `engineering-standards.md` must document what patterns `verify:no-fake` checks and how to extend the scan for this product's boundaries.
+- `verify:stack-baseline` must pass before Phase 01 starts (it proves the scaffold matches the declared production-grade stack) and must stay green in CI. A failing stack-baseline blocks the Foundation scaffold gate; do not begin phase work on a downgraded stack.
 - Before appending runtime evidence for a phase, run `verify:no-fake` and `verify:phase-artifacts` for that `phase_id`. Save combined output to `.buildprint/phase-runs/<phase-id>/verify-output.txt` or paste it into `.buildprint/phase-runs/<phase-id>/proof.md`.
+- Dead/capability-label controls are caught by behavior, not by matching control labels: the UI-bearing e2e proof must exercise each visible control and assert an observable effect (state change, navigation, network call, or canvas mutation). A control with no asserted effect is a dead control and blocks the visual quality claim. `verify:no-fake` may additionally flag controls whose handler is empty or absent at the source level.
 - A `proof.md` file that describes verification without quoting real command output from these scripts is invalid and blocks `phase_core_passed`.
 - Each phase must also write `.buildprint/phase-runs/<phase-id>/evidence.json` with `phase_id`, command records, artifact paths, ledger row ids, and blockers. `verify:phase-artifacts` should validate paths named in this manifest.
 
