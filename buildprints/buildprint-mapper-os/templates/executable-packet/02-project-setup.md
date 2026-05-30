@@ -133,20 +133,35 @@ Rules:
 
 ## Implementation project setup
 
-The Buildprint packet must not contain implementation-project files such as `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `ui-identity.md`, or `proof-strategy.md`. The implementation project must create them inside the real project root after this file is resolved and before Phase 01 starts.
+The Buildprint packet must not contain implementation-project files such as `AGENTS.md`, `agentic-harness.md`, `architecture.md`, `engineering-standards.md`, `ui-identity.md`, or `proof-strategy.md`. The implementation project must create them inside the real project root after this file is resolved and before Phase 01 starts.
 
 ## Foundation scaffold gate
 
 Before any `03-phases/*` implementation starts, create the selected stack's real base project structure and local guidance files. This is a required setup gate, not optional documentation. The scaffold must be concrete enough that Phase 01 adds the first vertical slice inside long-lived boundaries instead of inventing a standalone mini-app.
 
-Required implementation-project files for `full_setup` (for `compact_setup`, root `AGENTS.md`, `.buildprint/setup.md`, and `proof-strategy.md` are mandatory, while architecture and engineering standards may be embedded inside `.buildprint/setup.md` if the packet is small and non-risky):
+Required implementation-project files for `full_setup` (for `compact_setup`, root `AGENTS.md`, `agentic-harness.md`, `.buildprint/setup.md`, and `proof-strategy.md` are mandatory, while architecture and engineering standards may be embedded inside `.buildprint/setup.md` if the packet is small and non-risky):
 
-- Root `AGENTS.md`: short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing before editing code. If these files are missing or contradicted, agents must stop and repair setup rather than continue.
+- Root `AGENTS.md`: short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `agentic-harness.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing before editing code. If these files are missing or contradicted, agents must stop and repair setup rather than continue.
+- `agentic-harness.md`: the implementation alignment harness. It must be created before Phase 01 and must actively shape every coding pass, not summarize the packet. It must include `North-star pressure`, `Best-effort implementation rules`, `Visionary drift allowance`, `Feature hammering rules`, `Anti-cheat bans`, and `Final critical reviewer protocol`. The harness must tell agents to improve shallow phase specs when the product clearly needs a better interaction, state, UX, or domain model, while preserving the mapped scope and recording the enhancement. It must forbid stopping at literal minimum acceptance when a real product would require the obvious next interaction/state/copy/adapter. It must require a post-phase self-critique and a separate final reviewer pass before handover.
 - `architecture.md`: architecture best practices for this project, including `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. It must name the UI, API/controller, domain/use-case, schema/validation, config/env, provider adapter, persistence/repository, worker/runtime, observability, deployment, and test boundaries that apply to the selected stack.
 - `engineering-standards.md`: clean coding and implementation standards, including `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing, and `Test standards`. It must define deterministic timeout/exit behavior for blocked browser/e2e/runtime proof.
 - `ui-identity.md`: required for UI-bearing products. It must derive from `BUILDPRINT.md` product vision and define product-specific visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, and what would count as a generic dashboard/form/raw-list failure for this product.
 - `proof-strategy.md`: proof plan for unit, integration, browser/e2e, provider, worker/runtime, security, persistence, and deployment checks. It must state which blockers do not upgrade claims and which commands prove each phase-owned surface. It must name the runnable verification commands below — including the concrete `verify:stack-baseline` checks derived from `## Architecture decisions` (declared framework(s), build entrypoint, styling system) — and require pasting their exit code and stdout (or a saved log file path) into `.buildprint/phase-runs/<phase-id>/proof.md` before any `phase_core_passed` claim.
 - Base project directories/files for the chosen stack, including app/source directories, tests, scripts, config/env boundary, provider adapter boundary, persistence/repository boundary, worker/runtime boundary when later phases require it, observability/logging, and e2e/browser proof boundary when UI-bearing.
+
+### Agentic harness gate
+
+Before Phase 01 starts, the implementation project must have a working `agentic-harness.md` and root `AGENTS.md` that make quality behavior executable for future coding agents. This is not documentation polish. It is the control layer for implementation behavior.
+
+The harness must require each phase implementer to:
+
+1. Identify the strongest user/developer/operator outcome the phase can reasonably deliver.
+2. Hammer the central feature beyond the literal minimum when the obvious product-quality improvement is local, safe, and scope-preserving.
+3. Add missing interaction states, domain rules, empty/error/retry behavior, and copy quality when the phase spec under-describes them.
+4. Record any enhancement as a scope-preserving product-quality upgrade, not as silent scope drift.
+5. Stop and mark a blocker only for real missing information, credentials, cost, destructive action, or architectural contradiction.
+
+Allowed visionary drift: local enhancements that make the mapped product more credible without changing the product category, adding external paid dependencies, inventing unrelated features, weakening safety, or hiding missing live-provider proof. Disallowed drift: new product direction, unrelated surfaces, fake AI, ornamental UI, or broad rewrites that dodge phase obligations.
 
 ### Runnable verification gate (required scripts)
 
@@ -173,7 +188,7 @@ Simple/custom primitives are allowed only when `architecture.md` and `engineerin
 
 - Local `AGENTS.md`: create only at real architectural boundaries such as frontend/app, backend/API, provider adapters, workers, data/db, infra, or proof/e2e. Each local file must point back to the root `AGENTS.md` and the relevant sections of `architecture.md`, `engineering-standards.md`, `ui-identity.md`, and `proof-strategy.md`.
 - Runtime setup artifact: before starting `03-phases/*`, write `.buildprint/setup.md` or files under `.buildprint/setup/` recording the scaffold, selected stack, architecture decisions, auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
-- Creating only `AGENTS.md` is not enough to satisfy the setup gate. The base project structure and local guidance files above must exist and be internally consistent.
+- Creating only `AGENTS.md` is not enough to satisfy the setup gate. The base project structure, `agentic-harness.md`, and local guidance files above must exist and be internally consistent.
 - Phase entry remains governed by `03-phases/phase-flow.md`.
 
 ## Open assumptions
@@ -189,7 +204,7 @@ Unanswered ordinary engineering choices become AI-owned assumptions, not blocker
 
 ## Phase start gate
 
-Do not start `03-phases/*` until this file is explicit enough to create implementation-project `AGENTS.md` and `.buildprint/setup.md` without inventing architecture.
+Do not start `03-phases/*` until this file is explicit enough to create implementation-project `AGENTS.md`, `agentic-harness.md`, and `.buildprint/setup.md` without inventing architecture.
 
 Initial phase set:
 

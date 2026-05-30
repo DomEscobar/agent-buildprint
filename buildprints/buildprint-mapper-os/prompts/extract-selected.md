@@ -54,10 +54,13 @@ Do **not** place `AGENTS.md` in `selected-buildprint/` or inside the Buildprint 
 The generated prompt is the downstream coding-agent alignment layer. It must be explicit enough that the coding agent cannot satisfy it with a self-written review paragraph. Do not make it mostly about proof or evidence. The prompt must shape building behavior directly:
 
 - Tell the agent it is building for a real user/developer/operator, not for green packet mechanics.
+- Require an implementation-project agentic harness before Phase 01: root `AGENTS.md`, `agentic-harness.md`, architecture/standards guidance, and verification scripts that shape future coding agents toward best effort.
 - Define a non-negotiable quality floor: coherent concept, distinct visual/developer experience, real states, domain-shaped data/language, strong central artifact, persistence/readback, and real boundaries.
 - Name anti-cheat shortcuts: label substitution, decorative artifacts, canned intelligence, dead controls, phase wallpaper, raw-data escape, happy-path disguise, toy copy, and self-review laundering.
 - Give source-adapted examples of what strong implementation means for the packet's central artifact.
+- Permit scope-preserving visionary drift: agents should add obvious local quality upgrades to interactions, states, domain model, UX, and copy when the phase under-specifies them.
 - Prefer one excellent vertical slice over broad shallow phase coverage when time is limited.
+- Require a final critical reviewer pass before handover that checks dead buttons, placeholders, scaffold leaks, fake controls, non-persistence, canned outputs, and product-quality gaps.
 
 Do not bury this alignment inside `phase-flow.md`. `phase-flow.md` is mechanics. `generated/agent-prompt.md` is the coding-agent quality prompt.
 

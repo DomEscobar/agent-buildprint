@@ -52,7 +52,7 @@ Read this `BUILDPRINT.md` first. After this file establishes authority, the rema
 
 ## Project setup gate
 
-Do not start `03-phases/*` until `02-project-setup.md` has enough explicit architecture, team rules, quality gates, safety rules, and `AGENTS.md` plan to prevent agents from inventing project structure.
+Do not start `03-phases/*` until `02-project-setup.md` has enough explicit architecture, team rules, quality gates, safety rules, `AGENTS.md`, and `agentic-harness.md` plan to prevent agents from inventing project structure or settling for literal-minimum implementation.
 
 Blank answers in `01-questions.md` are not blockers. They authorize AI best-fit decisions unless the choice is irreversible, expensive, credentialed, destructive, or product-defining.
 
@@ -98,15 +98,29 @@ Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entr
 
 A phase is a proof-gated mode-aware slice, not a waterfall task bucket. Each phase must declare its `blueprint_mode` and `phase_style` in `## Phase mode contract`, and must define outcome (product/capability/operation depending on mode), mapped obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements (or non-UI statement), safety/security constraints, quality gates, proof gate, and repair routing.
 
+## Final critical reviewer
+
+After the final phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — run a final critical reviewer pass before handover. This is a separate adversarial review of the actual product/capability, not a summary written by the same implementation impulse.
+
+Create `.buildprint/final-critical-review.md` with these sections:
+
+- `## Dead surfaces`: every visible button, tab, filter, link, command, endpoint, menu item, canvas gesture, and generated artifact checked; mark working / dead / fake / blocked.
+- `## Placeholder and scaffold scan`: placeholder copy, lorem ipsum, TODO/FIXME-visible behavior, raw ids, debug/proof vocabulary, generic dashboard/form/list leakage, canned output, and mock-only paths.
+- `## Product-quality gaps`: what still feels thin, fake, confusing, ugly, generic, or below the product north star.
+- `## Required repairs before handover`: local fixes that must be done now.
+- `## Honest remaining blockers`: only non-local, credentialed, destructive, expensive, or genuinely large work that cannot be fixed in this run.
+
+The reviewer must inspect source and run the runnable verification commands from `02-project-setup.md`. For UI-bearing products, it must also use browser/e2e or screenshots to exercise controls. Handover is blocked until every `Required repairs before handover` item is either fixed and rechecked or moved to `Honest remaining blockers` with a specific reason.
+
 ## Handover
 
-After the final phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — write `.buildprint/handover.md`. This is a runtime artifact for the human developer, not a packet file. Do not restate packet prose. Compare the actual built state against `## Final product at a glance` and `## Completion semantics`.
+After the final critical reviewer pass is complete — or when the run stops with honest blockers on remaining phases — write `.buildprint/handover.md`. This is a runtime artifact for the human developer, not a packet file. Do not restate packet prose. Compare the actual built state against `## Final product at a glance`, `.buildprint/final-critical-review.md`, and `## Completion semantics`.
 
 In `.buildprint/handover.md`, use these six `##` section headings:
 
 ### Build state
 
-One short paragraph: current run status from `.buildprint/state.json`, phase states from `03-phases/phase-index.yaml`, and what the evidence ledger shows. State clearly whether the run reached `complete-bounded-proof`, stopped on blockers, or is incomplete. Bounded proof is not production completion.
+One short paragraph: current run status from `.buildprint/state.json`, phase states from `03-phases/phase-index.yaml`, what the evidence ledger shows, and whether `.buildprint/final-critical-review.md` has unresolved required repairs. State clearly whether the run reached `complete-bounded-proof`, stopped on blockers, or is incomplete. Bounded proof is not production completion.
 
 ### North star comparison
 

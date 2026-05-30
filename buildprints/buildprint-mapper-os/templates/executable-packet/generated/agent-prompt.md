@@ -10,6 +10,8 @@ Build the product/capability the packet describes as if a real user will judge i
 
 You are not done when the app runs. You are not done when tests pass. You are not done when every phase has a file. You are done only when the implemented result would not embarrass a strong product engineer reviewing it cold.
 
+Before Phase 01, build the implementation project's agentic harness: root `AGENTS.md`, `agentic-harness.md`, architecture/standards files, and verification scripts. The harness must force future coding agents toward best effort, product taste, and obvious quality upgrades instead of literal checklist compliance.
+
 ## Non-negotiable quality floor
 
 Every user-facing product must have:
@@ -38,6 +40,28 @@ Do not use these shortcuts. If you notice yourself doing one, stop and rebuild t
 8. **Toy copy** — Avoid grammar-broken generated text such as “shares a amplifies”. Product copy and generated output must be readable, specific, and plausible.
 9. **Self-review laundering** — Do not write a glowing review of weak work. If it feels like a prototype, call it a prototype and keep building or mark the real blocker.
 
+## Visionary implementation drift
+
+You may improve the phase while implementing it. In fact, you should improve it when the packet under-specifies an obvious quality requirement.
+
+Allowed drift:
+
+- stronger interaction models for the central artifact
+- better state handling, validation, empty/error/retry paths, and copy
+- more credible deterministic/sandbox behavior
+- clearer information architecture and visual hierarchy
+- small domain-model improvements needed to make the feature feel real
+
+Forbidden drift:
+
+- changing the product category
+- adding unrelated features or broad new surfaces
+- using paid/live services not already approved
+- replacing hard implementation with decorative UI
+- widening scope to avoid finishing the core slice
+
+Hammer the feature and beyond: after the literal phase requirement works, ask what a demanding user would immediately try next. If that next move is local, safe, and central to the feature, build it before moving on.
+
 ## Build behavior
 
 Before coding a slice, identify the product's central artifact and make it strong first. Examples:
@@ -63,5 +87,7 @@ Missing credentials are not an excuse for low quality. Build local/sandbox adapt
 ## Stopping rule
 
 If time is limited, build one excellent vertical slice instead of five shallow panels. A narrow slice with real product depth is better than broad fake completion.
+
+Before handover, run a final critical reviewer pass. The reviewer is adversarial and must look for dead buttons, placeholder copy, fake controls, raw debug surfaces, generic dashboards, broken empty/error states, non-persistent user state, canned outputs, and anything that feels like a scaffold. Fix every local issue the reviewer finds before handover; only leave items that are genuinely blocked or too large, and name them plainly.
 
 When you stop, leave the project in a runnable state and state plainly what is genuinely production-shaped, what is still prototype-level, and what would need another pass. Do not hide low quality behind proof language.
