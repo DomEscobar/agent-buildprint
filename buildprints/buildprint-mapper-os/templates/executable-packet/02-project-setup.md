@@ -72,7 +72,21 @@ Complete these decisions before phase work. Missing credentials block only live 
 
 ## Experience quality contract
 
-Adapt this to the selected mode. UI-bearing outputs need product-grade UX; non-UI frameworks, libraries, CLIs, integrations, data pipelines, and infrastructure need product-grade developer/operator experience instead of fake UI requirements.
+Adapt this to the selected mode. UI-bearing outputs need product-grade UX; non-UI frameworks, libraries, CLIs, integrations, data pipelines, and infrastructure need product-grade developer/operator experience instead of fake UI requirements. Keep this section sharp: name the quality floor, the domain-specific artifact, and the cheap-pass failures. Do not pad it with generic design advice.
+
+### Product-quality invariant
+
+A phase is not done when it merely exists. It must pass three layers: functional proof, semantic proof, and experience proof. Functional proof shows the path runs. Semantic proof shows the domain output has meaningful structure, causality, or decision value. Experience proof shows the user/developer/operator would recognize the intended product or capability instead of a generic harness.
+
+### Cheap-pass failures to specialize
+
+Before phase work, replace these examples with source-specific rejection criteria:
+
+- Decorative primary artifact: canvas/graph/media/timeline/report exists but has no real interaction, state, structure, or inspection.
+- Toy domain model: deterministic mode emits canned phrases, counts, or labels instead of domain-shaped output.
+- Generic shell: dashboard cards, raw CRUD/forms, text lists, default controls, leaked internal ids, mock/debug/proof vocabulary.
+- Fake control: visible control has no exercised effect in browser/API proof.
+- Evidence inflation: one smoke test or screenshot is reused to qualify unrelated claims.
 
 - UI architecture: for UI-bearing outputs, define the frontend/UI boundary on a real component framework with a build step and a styling system (utility-first or design tokens). A full-suite browser product cannot pass as a single server file with embedded HTML/CSS/JS, nor as vanilla DOM scripting with hand-rolled CSS standing in for a framework. For non-UI outputs, state `not UI-bearing` and define the callable/import/CLI/operator surface instead.
 - Product composition: for products, define screens, navigation/workflow structure, primary jobs, status surfaces, and next-action model. For non-products, define primitive/API composition, command flow, provider boundary, task loop, dataflow, or operation sequence.

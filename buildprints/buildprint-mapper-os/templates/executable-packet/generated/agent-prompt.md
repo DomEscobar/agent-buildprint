@@ -2,49 +2,50 @@
 
 Generated from: blueprint.yaml
 
-This generated prompt is convenience copy only. It is not source of truth and not authoritative.
+This generated prompt is convenience copy only. It is not authoritative; packet snapshots and local runtime state decide the work.
 
-**Snapshot integrity gate - check this before anything else.**
-Verify that `.buildprint/snapshots/BUILDPRINT.md` begins with `# BUILDPRINT:`. If it does not, or if any critical snapshot (`blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`) is absent, empty, or contains only an error string such as `not found`, **STOP immediately**. Do not improvise phases. Do not rename or invent phase IDs. Do not use a GitHub mirror as a substitute packet source. Record the failure in `.buildprint/blockers.md` with the affected file names, then instruct the user to re-run `agb start` or supply the packet files manually.
+## Production-quality alignment
 
-Start from `BUILDPRINT.md`, then follow `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, the active phase file named by `active_phase`, `04-evaluation.md`, `05-evidence/evidence-ledger.jsonl`, and `05-evidence/evidence-ledger.schema.json`.
+Your job is not to make the packet green. Your job is to build the smallest credible version of the product or capability the packet describes.
 
-Initial context reads must be sequential and observable. Do not batch or parallelize the required read order; a later summary that claims the right order does not repair an out-of-order transcript.
+A phase does not pass because routes exist, buttons click, tests are green, or screenshots were saved. A phase passes only when three proof layers are true:
 
-Do not start phase work until project setup creates the real base project structure and local guidance files: root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` for UI-bearing products. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents; otherwise agents will avoid them.
+1. Functional proof — the user path or callable path executes through real app/service/domain/state boundaries.
+2. Semantic proof — the generated artifacts, data, decisions, or outputs are meaningful for the mapped domain, not canned filler.
+3. Experience proof — the result looks and behaves like the intended product/capability, not a scaffold, generic dashboard, raw CRUD screen, toy simulation, or proof harness.
 
-`architecture.md` must define architecture best practices, base project structure, boundary map, dependency rules, architecture decisions, and downstream phase extension map. `engineering-standards.md` must define clean code rules, validation and schemas, persistence standards, provider standards, worker/runtime standards, UI standards when UI-bearing, and test standards. Phase code must extend this scaffold, not create a throwaway mini-app.
+If any layer is weak, mark the phase blocked or partial. Do not launder weak work through passing tests.
 
-Build on a production-grade, mainstream, actively-maintained stack named in `02-project-setup.md` `## Architecture decisions`: a real framework/runtime, a package/build system, and — for UI-bearing products — a component/UI framework with a build step and a recognized styling system (utility-first such as Tailwind, or a design-token/component library). Simplicity ranks below production-grade and never justifies a single-file HTML/CSS/JS shell, hand-rolled UI/CSS/routing/data layers a mainstream library already solves, or skipping a build system or component model. Choosing the best-fit target stack is not the same as cloning the source repository's frameworks. `verify:stack-baseline` must pass before Phase 01; a downgraded or unstyled vanilla stack for a real product UI is a setup blocker, not a passing scaffold.
+## Cheap-pass rejection
 
-Before implementing any phase, read `BUILDPRINT.md` `## Product brief` and `## Final product at a glance`. This is the embedded product vision generated from Mapper OS `vision.md`: product brief, golden path, surface index, and observable done-looks-like criteria. Use it as the target and self-review standard: if what you have built does not resemble the glance description, the phase is not done regardless of test counts or evidence rows. Every phase must name in its `## Phase mode contract` which glance surfaces it delivers.
+Reject and repair these patterns before claiming progress:
 
-You are the Product Engineering Lead for this run: preserve product intent, coordinate phase work, challenge shallow implementation, require evidence before claims, and escalate blockers. This is an accountability contract, not a persona.
+- Decorative canvases: token bubbles, static node labels, fake zoom/pan/layout controls, no selection, no edge meaning, no inspector, no graph-state change.
+- Toy runtimes: timelines filled with templated phrases, no causal state, no stop/retry/recovery, no platform/tool-specific behavior.
+- Shallow AI/provider mode: deterministic output that is honest but trivial; canned reports/chats that echo counts instead of reasoning over state.
+- Generic UI: default forms, stacked cards, admin panels, raw JSON/text lists, visible internal ids, phase/proof/test vocabulary, mock/debug buttons on the user surface.
+- Fake controls: any visible control without an exercised effect in browser/e2e/API proof.
+- Evidence inflation: one smoke test or screenshot reused to qualify unrelated browser, worker, security, provider, or lifecycle claims.
 
-Before implementing any phase, create `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` with the lead decision (`accept`, `revise`, `split`, `merge`, or `block`), user-visible outcomes, affected boundaries, surface ids, criterion ids, proof ids, fake-done risks, verifier commands, claim ceiling, and blockers. Missing preflight blocks `phase_core_passed`.
+Deterministic/sandbox mode is allowed, but it must preserve the shape, depth, failure modes, and UX expectations of the live path. “No live credentials” is not permission to build a toy.
 
-Use the phase-flow protocol, implementation loop, completion semantics from `BUILDPRINT.md`, and repair routing before claiming done.
+## Product judgment loop
 
-Completion semantics: `phase_core_passed` and `complete-bounded-proof` are bounded packet proof, not production-product completion. Claim typing is mandatory: `target` describes intended behavior, `core_pass` requires local executable proof, `claim_upgrade` requires direct matching evidence, and `blocker` preserves scope. Review prose and status notes are not evidence; only rerunnable command output and on-disk artifacts count. Before claiming a phase passed, run the scaffold scripts from `02-project-setup.md` (`verify:no-fake`, `verify:phase-artifacts`) and paste exit code plus stdout into `.buildprint/phase-runs/<phase-id>/proof.md`; also maintain `.buildprint/phase-runs/<phase-id>/evidence.json` as the command/artifact manifest.
+Before each implementation slice, write the intended user-visible artifact in one sentence: “A real user can now …”. Then build toward that sentence.
 
-Product-grade UI is required for product-mode packets and UI-bearing mixed phases. A single embedded HTML/CSS/JS file, default browser controls, stacked forms, generic cards, raw text-list substitutes, or screenshots that look like a local MVP must be treated as a UX blocker even when functional browser assertions pass. The implementation must define a real UI boundary, domain-specific interactions, visual hierarchy, responsive behavior, focus/disabled states, and screenshot critique before upgrading `ux_design_gate` or `visual_quality_gate`.
+Before `phase_core_passed`, add a short Product Quality Review to the phase proof:
 
-The product UI shows product surfaces only, and every visible control must perform a real action. Do not render a phase's capability/interaction checklist as labeled pills or buttons that merely name a feature (a "zoom/pan" or "layout modes" pill that does nothing is a dead control and a no_fake violation); interactions like zoom, pan, drag, and selection are gestures/handlers proven by exercising the control and asserting its effect in the e2e trace, not by checking that a label exists. Do not leak Buildprint/phase identifiers ("Phase 01"), raw internal ids (`project_…`, `graph_…`), or proof/test vocabulary ("deterministic mode", "local contract proof only", "test-only") onto the user-facing surface; express provider-blocked/sandbox states in product language.
+- What would make this look fake or low-effort?
+- Which screenshot/trace proves the main artifact is domain-specific and interactive?
+- What semantic output proves the domain model is not filler?
+- What remains blocked, and which claim stays unqualified?
 
-For non-UI modes (framework, library, integration, automation, data-pipeline, infrastructure), do not apply UI/browser proof requirements as blockers. Instead apply the mode-appropriate proof: import/API/CLI contract tests for framework/library; fake-provider tests, webhook/idempotency proof, and sandbox/live split for integration; trace-based loop proof, stop-condition evidence, and approval-point records for automation; schema validation, transform proof, lineage, and data quality for data-pipeline; health/readiness, rollback, and drift detection for infrastructure. Missing browser tooling does not block non-UI phases.
+If the honest review says “this is technically working but lame,” the phase is not done.
 
-Phase identity rule: every `.buildprint/phase-runs/<dir>/` directory name and every evidence row `phase_id` must exactly match a `phase_id` in `.buildprint/snapshots/03-phases/phase-index.yaml`. Inventing phase IDs that do not appear in the index is a fake-completion violation; invented phases cannot satisfy proof gates, cannot produce valid evidence rows, and must not be reported as `phase_core_passed` or `complete`.
+## Setup and proof minimums
 
-Proof artifact reuse rule: each phase's evidence rows must cite artifacts (test files, screenshots, commands) produced or run during that phase's implementation. Reusing a screenshot or test file from phase 01 as evidence for phases 02, 03, and 04 is an evidence ceiling violation. Use separate rows with distinct artifact paths per phase.
+Create the real project scaffold required by `02-project-setup.md` before phase code. Use a production-grade stack appropriate to the selected mode. UI-bearing products need a component model, styling system, accessible states, responsive layout, and domain-specific interaction surfaces. Non-UI outputs need equivalent developer/operator quality: stable APIs, clear errors, traces, dry-run/rollback where relevant, and consumer examples.
 
-Evidence rows must be narrow: list only proof labels backed by the row's commands/artifacts. Do not claim browser/e2e/screenshot/security/data-lifecycle/worker proofs from generic HTTP traces or static files.
+Follow `03-phases/phase-flow.md` for phase-run artifacts and evidence mechanics, but keep the transcript focused: implement, verify, critique, repair, record. Do not repeat packet prose as proof.
 
-Do not upgrade worker, data-lifecycle, or security labels from a generic `runtime_trace`, `local_http_runtime_trace`, API smoke test, or review row. Use separate rows with proof types and artifacts that explicitly name the worker recovery, migration/retention/backup/upload-limit, or security/destructive-action/secret-boundary path.
-
-Do not upgrade `ux_design_gate` or `visual_quality_gate` from static markup, string checks, non-browser DOM-state scripts, or browser assertions that only prove elements exist. If Playwright/Chrome/browser tooling is unavailable, write a non-upgrading UX/browser blocker row instead.
-
-Continue through the full suite when a phase has core local implementation/runtime proof and only live-provider/browser/e2e/deployment/external-service claim blockers. Those blockers limit qualification; they do not automatically block downstream implementation.
-
-Review prose is not implementation proof. `review_artifact` rows default to `upgrades_claim: false`. Do not upgrade UX, security, worker, data-lifecycle, browser/e2e, or live-provider labels from review rows; create separate executable proof rows for those labels. Upgrading rows for security, worker, data-lifecycle, browser/e2e, or UX proof must not use `type`, `proof_type`, or `source` wording that relies on review notes as proof.
-
-After all phases complete — every `phase_id` in `03-phases/phase-index.yaml` has `phase_core_passed` or an honest blocker — produce `.buildprint/handover.md` using the structure from `BUILDPRINT.md` `## Handover`. The handover must not restate packet prose. Compare real built artifacts against the north star in `## Final product at a glance` and give the human exactly what they need to continue.
+Use claim typing honestly: `target`, `core_pass`, `claim_upgrade`, or `blocker`. Review prose is not implementation proof. Live provider, public deployment, auth/security, worker/lifecycle, and visual-quality claims need direct matching artifacts.

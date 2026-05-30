@@ -1,4 +1,4 @@
-# Buildprint Mapper OS
+# BUILDPRINT: Buildprint Mapper OS
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command and not a source-code clone plan.
 
