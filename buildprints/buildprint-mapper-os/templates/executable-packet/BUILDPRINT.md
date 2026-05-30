@@ -105,6 +105,8 @@ After the final phase passes its continuation gate — or when the run stops wit
 
 Assume the product is trying to fool you. Inspect source, run the runnable verification commands from `02-project-setup.md`, and for UI-bearing products use browser/e2e or screenshots to exercise the real surface. Click every visible control. Try empty, loading, error, blocked, and reload states. Look for placeholder copy, TODO/FIXME-visible behavior, raw ids, debug/proof vocabulary, generic dashboard/form/list leakage, canned output, mock-only paths, dead buttons, fake controls, missing persistence, and the absence of the obvious next user action.
 
+Run an anti-slop pass after tests/lint/build, following the spirit of `https://huecki.com/en/blog/ai-slop-gate-after-tests-and-lint/`: search for AI-generated residue that normal tests miss — swallowed errors, TODO stubs, dead code, hallucinated imports, fake/narrative comments, pointless casts, duplicated helpers, oversized functions, mock-only branches promoted to product paths, and cleanup prompts accidentally left in source. Use `npx aislop scan --changes` or an equivalent deterministic source scan when it fits the stack; otherwise do the same review manually and record what was checked.
+
 Fix local issues before handover. Only leave work unfixed when it is genuinely blocked, credentialed, destructive, expensive, or too large for this run, and name the reason plainly.
 
 ## Handover

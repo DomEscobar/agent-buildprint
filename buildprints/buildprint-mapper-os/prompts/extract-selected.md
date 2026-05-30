@@ -61,7 +61,7 @@ It must say, in concise natural language:
 - Prefer real workflows, intentional UI, domain-specific behavior, meaningful state, useful interactions, polished copy, resilient sandbox behavior, and production-shaped architecture.
 - You are allowed and expected to improve beyond literal phase text when the improvement is local, safe, and central to the product promise.
 - Do not expand into unrelated features, change product category, add unapproved live services, or use decorative UI/fake AI as a substitute for hard behavior.
-- Before handoff, become a harsh reviewer: click controls, change inputs, reload, inspect generated output, find placeholders/dead surfaces/generic layouts/canned responses/missing persistence, and fix what is local.
+- Before handoff, become a harsh reviewer: click controls, change inputs, reload, inspect generated output, find placeholders/dead surfaces/generic layouts/canned responses/missing persistence, run an anti-slop pass inspired by `https://huecki.com/en/blog/ai-slop-gate-after-tests-and-lint/` for AI residue after tests/lint/build, and fix what is local.
 
 Do not bury this alignment inside `phase-flow.md`. `phase-flow.md` is mechanics. `generated/agent-prompt.md` is the coding-agent alignment speech.
 

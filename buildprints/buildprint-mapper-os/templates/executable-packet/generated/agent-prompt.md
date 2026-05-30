@@ -26,6 +26,8 @@ For deterministic or sandboxed mode, keep the shape of the real product. Inputs 
 
 While building, keep asking: what would a real user try next? What would make this feel fake? What interaction is currently just implied by a label? What state disappears on reload? Which button exists only to look complete? Which sentence sounds like generated filler? Fix the local, central issues before moving on.
 
-Before handoff, become a harsh reviewer. Assume the implementation is trying to fool you. Click the buttons. Try the empty states. Reload the page. Change the inputs. Inspect the generated output. Look for placeholders, dead controls, debug leakage, canned responses, generic layouts, missing persistence, broken copy, and the absence of the obvious next user action. Fix what you can. Be direct about what remains.
+Before handoff, become a harsh reviewer. Assume the implementation is trying to fool you. Click the buttons. Try the empty states. Reload the page. Change the inputs. Inspect the generated output. Look for placeholders, dead controls, debug leakage, canned responses, generic layouts, missing persistence, broken copy, and the absence of the obvious next user action.
+
+Also run an anti-slop pass after tests/lint/build, inspired by https://huecki.com/en/blog/ai-slop-gate-after-tests-and-lint/: look for AI residue that green tests miss — swallowed errors, TODO stubs, dead code, hallucinated imports, fake/narrative comments, pointless casts, duplicated helpers, oversized functions, mock-only branches promoted to product paths, and cleanup prompts accidentally left in source. Treat findings as a focused cleanup queue, not as proof theater. Fix the high-signal local residue before handoff. Be direct about what remains.
 
 Build something you would be willing to demo without apologizing for it.
