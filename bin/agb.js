@@ -2939,7 +2939,7 @@ async function packetDirFromRef(ref) {
   const baseUrl = isUrl(ref) ? new URL('.', ref).toString() : null
   for (const entry of files) {
     const file = typeof entry === 'string' ? entry : entry?.path
-    const url = typeof entry === 'object' ? entry.url : null
+    const url = typeof entry === 'object' ? (entry.url || entry.rawUrl || entry.siteUrl) : null
     if (!file) continue
     const target = path.join(temp, file)
     fs.mkdirSync(path.dirname(target), { recursive: true })
