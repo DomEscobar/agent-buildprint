@@ -3046,7 +3046,8 @@ function packetCheckResults(dir) {
   const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
   const files = new Set(packetFiles(dir))
   const allFiles = Array.from(files)
-  const isMapperTemplatePacket = dir.split(path.sep).join('/').endsWith('buildprints/buildprint-mapper-os/templates/executable-packet')
+  const normalizedPacketDir = dir.split(path.sep).join('/')
+  const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') || normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet')
 
   // Keep this checker as an executable-packet smoke alarm, not a product-quality theology gate.
   // Product taste lives in generated/agent-prompt.md and the Buildprint prose; this check only
