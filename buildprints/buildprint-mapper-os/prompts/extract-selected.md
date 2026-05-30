@@ -44,25 +44,26 @@ Required exact anchors include:
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
 - `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, `no_fake`, and `production_readiness`.
 
-`generated/agent-prompt.md` must declare `Generated from: blueprint.yaml`, remain non-authoritative, and act as a detailed production-quality coding-agent alignment prompt. It must not center on proof/evidence mechanics, because agents can self-cheat those. It must instead tell the coding agent exactly what low-quality shortcuts are forbidden and what production-shaped behavior means: central artifact first, domain-shaped data/language, real interaction states, no decorative canvases, no canned intelligence, no dead controls, no raw-data escape, no phase wallpaper, credible deterministic adapters, and one excellent vertical slice preferred over broad shallow completion.
+`generated/agent-prompt.md` must declare `Generated from: blueprint.yaml`, remain non-authoritative, and act as a coding-agent alignment speech, not a checklist, promise document, proof protocol, or artifact factory. It should sound like a senior product/design lead briefing an implementer: treat the Buildprint as the minimum contract, choose the tasteful non-cheap interpretation, deepen the core, improve underspecified interactions/states/copy/domain behavior when local and safe, avoid unrelated scope expansion, and review the result harshly before handoff.
 
 Do **not** place `AGENTS.md` in `selected-buildprint/` or inside the Buildprint packet. `AGENTS.md` belongs to the downstream implementation project. `02-project-setup.md` defines the root/local `AGENTS.md` plan.
 
 
-## Generated agent prompt quality bar
+## Generated agent alignment speech
 
-The generated prompt is the downstream coding-agent alignment layer. It must be explicit enough that the coding agent cannot satisfy it with a self-written review paragraph. Do not make it mostly about proof or evidence. The prompt must shape building behavior directly:
+The generated prompt is the downstream coding-agent alignment layer. It must be a speech that shifts the implementer's default posture, not another artifact or checklist. Do not make it mostly about proof/evidence mechanics, promises, or required markdown outputs.
 
-- Tell the agent it is building for a real user/developer/operator, not for green packet mechanics.
-- Require an implementation-project agentic harness before Phase 01: root `AGENTS.md`, `agentic-harness.md`, architecture/standards guidance, and verification scripts that shape future coding agents toward best effort.
-- Define a non-negotiable quality floor: coherent concept, distinct visual/developer experience, real states, domain-shaped data/language, strong central artifact, persistence/readback, and real boundaries.
-- Name anti-cheat shortcuts: label substitution, decorative artifacts, canned intelligence, dead controls, phase wallpaper, raw-data escape, happy-path disguise, toy copy, and self-review laundering.
-- Give source-adapted examples of what strong implementation means for the packet's central artifact.
-- Permit scope-preserving visionary drift: agents should add obvious local quality upgrades to interactions, states, domain model, UX, and copy when the phase under-specifies them.
-- Prefer one excellent vertical slice over broad shallow phase coverage when time is limited.
-- Require a final critical reviewer pass before handover that checks dead buttons, placeholders, scaffold leaks, fake controls, non-persistence, canned outputs, and product-quality gaps.
+It must say, in concise natural language:
 
-Do not bury this alignment inside `phase-flow.md`. `phase-flow.md` is mechanics. `generated/agent-prompt.md` is the coding-agent quality prompt.
+- You are not a checklist executor; you are a senior product engineer/designer building something real.
+- Treat the Buildprint as the minimum contract, not the maximum ambition.
+- When underspecified, choose the interpretation a demanding user, designer, and staff engineer would respect.
+- Prefer real workflows, intentional UI, domain-specific behavior, meaningful state, useful interactions, polished copy, resilient sandbox behavior, and production-shaped architecture.
+- You are allowed and expected to improve beyond literal phase text when the improvement is local, safe, and central to the product promise.
+- Do not expand into unrelated features, change product category, add unapproved live services, or use decorative UI/fake AI as a substitute for hard behavior.
+- Before handoff, become a harsh reviewer: click controls, change inputs, reload, inspect generated output, find placeholders/dead surfaces/generic layouts/canned responses/missing persistence, and fix what is local.
+
+Do not bury this alignment inside `phase-flow.md`. `phase-flow.md` is mechanics. `generated/agent-prompt.md` is the coding-agent alignment speech.
 
 ## Explicitly forbidden obsolete/default files
 
@@ -91,17 +92,18 @@ Do not emit:
 
 1. `BUILDPRINT.md`
 2. `01-questions.md`
-3. `02-project-setup.md`
-4. `blueprint.yaml`
-5. `03-phases/phase-index.yaml`
-6. `03-phases/phase-flow.md`
-7. active phase file only
-8. `04-evaluation.md`
-9. `05-evidence/evidence-ledger.jsonl`
+3. `generated/agent-prompt.md` — alignment speech; not source authority, but must shape implementation posture
+4. `02-project-setup.md`
+5. `blueprint.yaml`
+6. `03-phases/phase-index.yaml`
+7. `03-phases/phase-flow.md`
+8. active phase file only
+9. `04-evaluation.md`
+10. `05-evidence/evidence-ledger.jsonl`
 
 No phase may start until `02-project-setup.md` is explicit enough to create project root/local `AGENTS.md` without inventing architecture.
 
-For product-mode packets and UI-bearing mixed outputs, synthesize `BUILDPRINT.md` and `02-project-setup.md` from Mapper OS `vision.md`. Do not copy `vision.md` into the packet. Convert its quality bar into concise product-specific language that makes the downstream agent picture a desirable finished product before it sees implementation mechanics.
+For product-mode packets and UI-bearing mixed outputs, synthesize `BUILDPRINT.md` and `02-project-setup.md` from Mapper OS `vision.md`. Do not copy `vision.md` into the packet. Convert its product intent into concise product-specific language that makes the downstream agent picture a desirable finished product before it sees implementation mechanics.
 
 Before the read order, `BUILDPRINT.md` must include a compact vision-derived `## Product brief` with:
 
@@ -260,7 +262,7 @@ Selected packets for multi-phase work must compile into a lean phase-run protoco
 
 Do not repeat the full phase protocol inside `02-project-setup.md`. That file should only contain implementation-project setup instructions: root/local `AGENTS.md` plan, `.buildprint/setup.md` requirement, Foundation scaffold gate, `ui-identity.md` requirement for UI-bearing work, and the statement that phase entry remains governed by `03-phases/phase-flow.md`.
 
-For implementation packets, `02-project-setup.md` must require the implementation agent to create the selected stack's real base project structure before Phase 01. The scaffold must include root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing. Root `AGENTS.md` must explicitly mention those files as mandatory reads for coding agents before editing code; otherwise coding agents will avoid them. `architecture.md` must contain architecture best practices with `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. `engineering-standards.md` must contain clean coding standards with `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing (component model, styling-system usage, and a ban on single-file shells and hand-rolled CSS-as-framework), and `Test standards`, including deterministic timeout/exit behavior for blocked e2e/runtime proof.
+For implementation packets, `02-project-setup.md` must require the implementation agent to create the selected stack's real base project structure before Phase 01. The scaffold must include root `AGENTS.md`, `.buildprint/setup.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing. Root `AGENTS.md` must explicitly carry the generated alignment speech and mention those files as mandatory reads for coding agents before editing code; otherwise coding agents will avoid them. Do not require a separate harness markdown file. `architecture.md` must contain architecture best practices with `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. `engineering-standards.md` must contain clean coding standards with `Clean code rules`, `Validation and schemas`, `Persistence standards`, `Provider standards`, `Worker/runtime standards`, `UI standards` when UI-bearing (component model, styling-system usage, and a ban on single-file shells and hand-rolled CSS-as-framework), and `Test standards`, including deterministic timeout/exit behavior for blocked e2e/runtime proof.
 
 For UI-bearing packets, `ui-identity.md` is mandatory and must derive from the product vision in `BUILDPRINT.md`: visual identity, interaction principles, layout standards, empty/loading/error/blocked/success states, responsive behavior, screenshot critique, and product-specific anti-generic failure patterns.
 
@@ -330,9 +332,9 @@ Every phase proof gate must split implementation obligations from live-proof blo
 
 Do not paste the same artifact inventory or proof-label prose into every phase. `## State/runtime touched` must name only phase-owned durable/runtime state, explicitly distinguish read-only upstream inputs from downstream artifacts, and reject ownership of artifacts that belong to later phases. `## Proof gate` may repeat canonical labels, but each label's explanation must be phase-specific and name the exact provider, worker, persistence, browser, and visual paths proven by that phase. A generic sentence such as “Treat each named file as a runtime artifact output when this phase owns or reads it” is invalid because it teaches downstream agents to overclaim ownership.
 
-UI-bearing phases must not reference non-existent shared files such as `02-context/ux-contract.md` or `design-quality-bar.md`. Put the UX/UI contract inline in the phase or add an actual packet file and list it in the package.
+UI-bearing phases must not reference non-existent shared files such as `02-context/ux-contract.md` or `design-quality-bar.md`. Put the UX/UI direction inline in the phase or add an actual packet file and list it in the package.
 
-## Product outcome quality bar
+## Product outcome writing rules
 
 `## Product outcome` must be a concrete multi-sentence user-visible result. It must name what the user can do, what visible result they receive, and at least one non-success state (loading, blocked, error, empty, retry). It must not be:
 

@@ -40,19 +40,20 @@ You are the Product Engineering Lead for this implementation run. This is an acc
 
 1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.
 2. Read `01-questions.md`.
-3. Read and complete `02-project-setup.md`.
-4. Read `blueprint.yaml` as the machine-readable mirror.
-5. Read `03-phases/phase-index.yaml`.
-6. Read `03-phases/phase-flow.md`.
-7. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
-8. Read `04-evaluation.md`.
-9. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
+3. Read `generated/agent-prompt.md` as the implementation alignment speech. It is not source authority, but it must shape how you implement the packet.
+4. Read and complete `02-project-setup.md`.
+5. Read `blueprint.yaml` as the machine-readable mirror.
+6. Read `03-phases/phase-index.yaml`.
+7. Read `03-phases/phase-flow.md`.
+8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
+9. Read `04-evaluation.md`.
+10. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 
 Read this `BUILDPRINT.md` first. After this file establishes authority, the remaining required spine files may be read in one batch when tooling makes that safer or faster, but their instructions must be interpreted in the listed order.
 
 ## Project setup gate
 
-Do not start `03-phases/*` until `02-project-setup.md` has enough explicit architecture, team rules, quality gates, safety rules, `AGENTS.md`, and `agentic-harness.md` plan to prevent agents from inventing project structure or settling for literal-minimum implementation.
+Do not start `03-phases/*` until `02-project-setup.md` has enough explicit architecture, team rules, quality gates, safety rules, and an `AGENTS.md` plan that carries the alignment speech into implementation instead of letting agents settle for literal-minimum compliance.
 
 Blank answers in `01-questions.md` are not blockers. They authorize AI best-fit decisions unless the choice is irreversible, expensive, credentialed, destructive, or product-defining.
 
@@ -100,27 +101,21 @@ A phase is a proof-gated mode-aware slice, not a waterfall task bucket. Each pha
 
 ## Final critical reviewer
 
-After the final phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — run a final critical reviewer pass before handover. This is a separate adversarial review of the actual product/capability, not a summary written by the same implementation impulse.
+After the final phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — switch modes before handover: become a harsh reviewer instead of the optimistic implementer.
 
-Create `.buildprint/final-critical-review.md` with these sections:
+Assume the product is trying to fool you. Inspect source, run the runnable verification commands from `02-project-setup.md`, and for UI-bearing products use browser/e2e or screenshots to exercise the real surface. Click every visible control. Try empty, loading, error, blocked, and reload states. Look for placeholder copy, TODO/FIXME-visible behavior, raw ids, debug/proof vocabulary, generic dashboard/form/list leakage, canned output, mock-only paths, dead buttons, fake controls, missing persistence, and the absence of the obvious next user action.
 
-- `## Dead surfaces`: every visible button, tab, filter, link, command, endpoint, menu item, canvas gesture, and generated artifact checked; mark working / dead / fake / blocked.
-- `## Placeholder and scaffold scan`: placeholder copy, lorem ipsum, TODO/FIXME-visible behavior, raw ids, debug/proof vocabulary, generic dashboard/form/list leakage, canned output, and mock-only paths.
-- `## Product-quality gaps`: what still feels thin, fake, confusing, ugly, generic, or below the product north star.
-- `## Required repairs before handover`: local fixes that must be done now.
-- `## Honest remaining blockers`: only non-local, credentialed, destructive, expensive, or genuinely large work that cannot be fixed in this run.
-
-The reviewer must inspect source and run the runnable verification commands from `02-project-setup.md`. For UI-bearing products, it must also use browser/e2e or screenshots to exercise controls. Handover is blocked until every `Required repairs before handover` item is either fixed and rechecked or moved to `Honest remaining blockers` with a specific reason.
+Fix local issues before handover. Only leave work unfixed when it is genuinely blocked, credentialed, destructive, expensive, or too large for this run, and name the reason plainly.
 
 ## Handover
 
-After the final critical reviewer pass is complete — or when the run stops with honest blockers on remaining phases — write `.buildprint/handover.md`. This is a runtime artifact for the human developer, not a packet file. Do not restate packet prose. Compare the actual built state against `## Final product at a glance`, `.buildprint/final-critical-review.md`, and `## Completion semantics`.
+After the final critical reviewer pass is complete — or when the run stops with honest blockers on remaining phases — write `.buildprint/handover.md`. This is a runtime artifact for the human developer, not a packet file. Do not restate packet prose. Compare the actual built state against `## Final product at a glance`, the final reviewer findings, and `## Completion semantics`.
 
 In `.buildprint/handover.md`, use these six `##` section headings:
 
 ### Build state
 
-One short paragraph: current run status from `.buildprint/state.json`, phase states from `03-phases/phase-index.yaml`, what the evidence ledger shows, and whether `.buildprint/final-critical-review.md` has unresolved required repairs. State clearly whether the run reached `complete-bounded-proof`, stopped on blockers, or is incomplete. Bounded proof is not production completion.
+One short paragraph: current run status from `.buildprint/state.json`, phase states from `03-phases/phase-index.yaml`, what the evidence ledger shows, and whether the final reviewer found unresolved required repairs. State clearly whether the run reached `complete-bounded-proof`, stopped on blockers, or is incomplete. Bounded proof is not production completion.
 
 ### North star comparison
 
