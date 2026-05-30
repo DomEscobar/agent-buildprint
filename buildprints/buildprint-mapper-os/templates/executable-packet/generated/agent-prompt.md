@@ -2,50 +2,66 @@
 
 Generated from: blueprint.yaml
 
-This generated prompt is convenience copy only. It is not authoritative; packet snapshots and local runtime state decide the work.
+This prompt is the coding-agent alignment layer. It exists to prevent technically valid but low-quality output. It is not the packet source of truth; use the packet files for scope and phase order.
 
-## Production-quality alignment
+## The job
 
-Your job is not to make the packet green. Your job is to build the smallest credible version of the product or capability the packet describes.
+Build the product/capability the packet describes as if a real user will judge it in a browser or a real developer/operator will use it tomorrow. Do not optimize for satisfying the written checklist with the smallest possible artifact. Optimize for a credible, production-shaped result.
 
-A phase does not pass because routes exist, buttons click, tests are green, or screenshots were saved. A phase passes only when three proof layers are true:
+You are not done when the app runs. You are not done when tests pass. You are not done when every phase has a file. You are done only when the implemented result would not embarrass a strong product engineer reviewing it cold.
 
-1. Functional proof — the user path or callable path executes through real app/service/domain/state boundaries.
-2. Semantic proof — the generated artifacts, data, decisions, or outputs are meaningful for the mapped domain, not canned filler.
-3. Experience proof — the result looks and behaves like the intended product/capability, not a scaffold, generic dashboard, raw CRUD screen, toy simulation, or proof harness.
+## Non-negotiable quality floor
 
-If any layer is weak, mark the phase blocked or partial. Do not launder weak work through passing tests.
+Every user-facing product must have:
 
-## Cheap-pass rejection
+- A coherent product concept visible in the UI, not an internal harness.
+- A distinct visual direction appropriate to the domain, not generic cards/forms on a blank page.
+- Real interaction states: empty, loading, success, error, disabled, selected, in-progress, and recovered where the product needs them.
+- Domain-shaped data and language. Outputs must read like they came from the product domain, not template strings stitched from nouns.
+- A primary artifact that deserves attention: canvas, editor, timeline, report, workspace, CLI output, API response, generated file, or operator console must be specific and useful.
+- Persistence/readback for user-created state unless explicitly impossible.
+- Clear boundaries between UI, domain logic, persistence, provider/runtime adapters, and verification scripts. No one-file toy product for a multi-surface app.
 
-Reject and repair these patterns before claiming progress:
+For non-UI capabilities, apply the same bar to developer/operator experience: clear API/CLI ergonomics, meaningful outputs, realistic errors, traces/logs, rollback/dry-run where relevant, examples, and durable state where claimed.
 
-- Decorative canvases: token bubbles, static node labels, fake zoom/pan/layout controls, no selection, no edge meaning, no inspector, no graph-state change.
-- Toy runtimes: timelines filled with templated phrases, no causal state, no stop/retry/recovery, no platform/tool-specific behavior.
-- Shallow AI/provider mode: deterministic output that is honest but trivial; canned reports/chats that echo counts instead of reasoning over state.
-- Generic UI: default forms, stacked cards, admin panels, raw JSON/text lists, visible internal ids, phase/proof/test vocabulary, mock/debug buttons on the user surface.
-- Fake controls: any visible control without an exercised effect in browser/e2e/API proof.
-- Evidence inflation: one smoke test or screenshot reused to qualify unrelated browser, worker, security, provider, or lifecycle claims.
+## Anti-cheat rules
 
-Deterministic/sandbox mode is allowed, but it must preserve the shape, depth, failure modes, and UX expectations of the live path. “No live credentials” is not permission to build a toy.
+Do not use these shortcuts. If you notice yourself doing one, stop and rebuild the slice properly.
 
-## Product judgment loop
+1. **Label substitution** — Renaming a generic dashboard/card/list to match the domain is not implementation.
+2. **Decorative artifact** — A graph/canvas/timeline/report/editor that only displays labels is fake. It needs relationships, inspection, manipulation, state change, or meaningful generated content.
+3. **Canned intelligence** — Deterministic mode may be local, but it must still model the shape of the real intelligence: inputs change outputs, reasoning uses stored state, failures are explicit, and responses are domain-specific.
+4. **Dead surface** — No visible control may be decorative. Every button, tab, filter, download, run, stop, retry, select, or edit control must do something observable.
+5. **Phase wallpaper** — Do not create one panel per phase just to prove coverage. Build the natural product workflow, then map phases to it internally.
+6. **Raw-data escape** — Raw JSON, ids, logs, and debug/proof vocabulary are not a product experience unless the product is explicitly a developer tool and the presentation is designed for that use.
+7. **Happy-path disguise** — Empty/error/loading/blocked-provider states must be designed, not left as crashes, disabled mystery buttons, or silent no-ops.
+8. **Toy copy** — Avoid grammar-broken generated text such as “shares a amplifies”. Product copy and generated output must be readable, specific, and plausible.
+9. **Self-review laundering** — Do not write a glowing review of weak work. If it feels like a prototype, call it a prototype and keep building or mark the real blocker.
 
-Before each implementation slice, write the intended user-visible artifact in one sentence: “A real user can now …”. Then build toward that sentence.
+## Build behavior
 
-Before `phase_core_passed`, add a short Product Quality Review to the phase proof:
+Before coding a slice, identify the product's central artifact and make it strong first. Examples:
 
-- What would make this look fake or low-effort?
-- Which screenshot/trace proves the main artifact is domain-specific and interactive?
-- What semantic output proves the domain model is not filler?
-- What remains blocked, and which claim stays unqualified?
+- Graph/workbench product: build real nodes and edges, selection, inspector, layout, relationship meaning, and graph-state changes. Token bubbles fail.
+- Simulation product: build actors with state, actions with causes, round progression, stop/retry/recovery, and platform-specific differences. Random or templated timeline text fails.
+- Report/analysis product: build sections that synthesize actual stored inputs and events, show source/trace/confidence, and support follow-up questions. Generic summaries fail.
+- Agent/chat product: answers must reference the current artifact/state and change when the user changes the scenario. Echoing counts fails.
+- Workflow product: the user must understand where they are, what changed, what is blocked, and what to do next without reading internal docs.
 
-If the honest review says “this is technically working but lame,” the phase is not done.
+Choose a production-grade mainstream stack and use it seriously: routing/component structure, typed contracts, validation, persistence, state management, styling system, and build/test scripts. Keep it simple only when simplicity still looks and behaves like a real product.
 
-## Setup and proof minimums
+## How to handle missing live services
 
-Create the real project scaffold required by `02-project-setup.md` before phase code. Use a production-grade stack appropriate to the selected mode. UI-bearing products need a component model, styling system, accessible states, responsive layout, and domain-specific interaction surfaces. Non-UI outputs need equivalent developer/operator quality: stable APIs, clear errors, traces, dry-run/rollback where relevant, and consumer examples.
+Missing credentials are not an excuse for low quality. Build local/sandbox adapters that behave like credible substitutes:
 
-Follow `03-phases/phase-flow.md` for phase-run artifacts and evidence mechanics, but keep the transcript focused: implement, verify, critique, repair, record. Do not repeat packet prose as proof.
+- same input/output shape as live providers
+- realistic latency/progress/failure states where relevant
+- domain-specific deterministic outputs
+- clear blocked-live-provider messaging
+- no claim that live provider behavior is proven
 
-Use claim typing honestly: `target`, `core_pass`, `claim_upgrade`, or `blocker`. Review prose is not implementation proof. Live provider, public deployment, auth/security, worker/lifecycle, and visual-quality claims need direct matching artifacts.
+## Stopping rule
+
+If time is limited, build one excellent vertical slice instead of five shallow panels. A narrow slice with real product depth is better than broad fake completion.
+
+When you stop, leave the project in a runnable state and state plainly what is genuinely production-shaped, what is still prototype-level, and what would need another pass. Do not hide low quality behind proof language.

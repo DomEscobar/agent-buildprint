@@ -44,21 +44,22 @@ Required exact anchors include:
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
 - `04-evaluation.md`: include literal proof concept labels `provider_live`, `durable_persistence`, `security_boundary`, `no_fake`, and `production_readiness`.
 
-`generated/agent-prompt.md` must declare `Generated from: blueprint.yaml`, remain non-authoritative, and act as a concise production-quality alignment prompt. It must not repeat the full protocol. It should pressure the coding agent to satisfy functional proof, semantic proof, and experience proof; reject cheap passes (generic dashboard, decorative canvas, toy runtime, canned AI output, dead controls, proof inflation); and force honest blockers when output is technically working but low-quality.
+`generated/agent-prompt.md` must declare `Generated from: blueprint.yaml`, remain non-authoritative, and act as a detailed production-quality coding-agent alignment prompt. It must not center on proof/evidence mechanics, because agents can self-cheat those. It must instead tell the coding agent exactly what low-quality shortcuts are forbidden and what production-shaped behavior means: central artifact first, domain-shaped data/language, real interaction states, no decorative canvases, no canned intelligence, no dead controls, no raw-data escape, no phase wallpaper, credible deterministic adapters, and one excellent vertical slice preferred over broad shallow completion.
 
 Do **not** place `AGENTS.md` in `selected-buildprint/` or inside the Buildprint packet. `AGENTS.md` belongs to the downstream implementation project. `02-project-setup.md` defines the root/local `AGENTS.md` plan.
 
 
 ## Generated agent prompt quality bar
 
-The generated prompt is the downstream coding-agent alignment layer. Keep it short and forceful. It should fit in a coding agent's active attention and must not become another checklist dump. It must include:
+The generated prompt is the downstream coding-agent alignment layer. It must be explicit enough that the coding agent cannot satisfy it with a self-written review paragraph. Do not make it mostly about proof or evidence. The prompt must shape building behavior directly:
 
-- One production-quality invariant: green tests are insufficient if the product/capability feels fake, generic, or semantically shallow.
-- Three proof layers: functional proof, semantic proof, and experience/developer-operator proof.
-- Cheap-pass rejection examples adapted to the selected source: decorative canvases, generic dashboards, raw CRUD/text lists, canned reports/chats, toy timelines, fake controls, proof artifact reuse, or deterministic mode used as a toy-mode excuse.
-- A Product Quality Review requirement in each phase proof: what looks fake, what artifact proves domain-specific interaction, what semantic output proves depth, and which claims remain blocked.
+- Tell the agent it is building for a real user/developer/operator, not for green packet mechanics.
+- Define a non-negotiable quality floor: coherent concept, distinct visual/developer experience, real states, domain-shaped data/language, strong central artifact, persistence/readback, and real boundaries.
+- Name anti-cheat shortcuts: label substitution, decorative artifacts, canned intelligence, dead controls, phase wallpaper, raw-data escape, happy-path disguise, toy copy, and self-review laundering.
+- Give source-adapted examples of what strong implementation means for the packet's central artifact.
+- Prefer one excellent vertical slice over broad shallow phase coverage when time is limited.
 
-Do not bury this alignment inside `phase-flow.md`. `phase-flow.md` is mechanics. `generated/agent-prompt.md` is the coding-agent reward-shaping prompt.
+Do not bury this alignment inside `phase-flow.md`. `phase-flow.md` is mechanics. `generated/agent-prompt.md` is the coding-agent quality prompt.
 
 ## Explicitly forbidden obsolete/default files
 

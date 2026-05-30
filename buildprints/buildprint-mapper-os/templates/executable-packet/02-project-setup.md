@@ -76,7 +76,7 @@ Adapt this to the selected mode. UI-bearing outputs need product-grade UX; non-U
 
 ### Product-quality invariant
 
-A phase is not done when it merely exists. It must pass three layers: functional proof, semantic proof, and experience proof. Functional proof shows the path runs. Semantic proof shows the domain output has meaningful structure, causality, or decision value. Experience proof shows the user/developer/operator would recognize the intended product or capability instead of a generic harness.
+A phase is not done when it merely exists. It must produce a credible product/capability slice a real user, developer, or operator could understand and value. The central artifact must be domain-specific, interactive or operable, and meaningfully affected by user input/state. A narrow excellent slice beats broad shallow coverage.
 
 ### Cheap-pass failures to specialize
 
