@@ -377,8 +377,6 @@ Do not mark a phase complete while its verification failure is unresolved.
 - Only actual packet files are packet links. Source repository files such as package manifests/lockfiles/route files must be labeled as source paths, not ambiguous packet-file references. Runtime artifacts such as `state.json`, `actions.jsonl`, `project.json`, `env_status.json`, `section_XX.md`, upload paths, report files, provider output files, or `<id>` paths must be labeled as runtime artifact paths and should not be written as ambiguous packet-file references.
 - Preserve selected/requested behavior. Do not omit hard/risky/external/provider/stateful behavior; mark blockers honestly when proof is missing.
 - Include stable-vs-free boundaries inside relevant phase files.
-- Include mapped product/capability/operation obligations inside each phase according to `blueprint_mode`. Source references may appear only as compact mapped source notes; the implementation contract must be self-contained.
-- Mark selected output `PROOF_REQUIRED` until proof exists.
 - Public wording must avoid validated/production-ready/complete/end-to-end unless qualified evidence exists.
 
 ## Behavior loss review

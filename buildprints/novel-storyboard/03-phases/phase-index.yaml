@@ -1,38 +1,18 @@
-schema_version: mapper-os/phase-index
-active_phase: 03-phases/01-canvas-workbench.md
+active_phase: 01-webapp-intake-graph-canvas
 phases:
-  - phase_id: 01-canvas-workbench
-    file: 03-phases/01-canvas-workbench.md
-    status: INCLUDED_NEEDS_PROOF
-    depends_on: []
-    proof_gate: proof-01-canvas-workbench
-  - phase_id: 02-flow-persistence
-    file: 03-phases/02-flow-persistence.md
-    status: INCLUDED_NEEDS_PROOF
-    depends_on:
-      - 01-canvas-workbench
-    proof_gate: proof-02-flow-persistence
-  - phase_id: 03-production-agent-loop
-    file: 03-phases/03-production-agent-loop.md
-    status: INCLUDED_NEEDS_PROOF
-    depends_on:
-      - 01-canvas-workbench
-      - 02-flow-persistence
-    proof_gate: proof-03-production-agent-loop
-  - phase_id: 04-media-generation
-    file: 03-phases/04-media-generation.md
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
-    depends_on:
-      - 01-canvas-workbench
-      - 02-flow-persistence
-      - 03-production-agent-loop
-    proof_gate: proof-04-media-generation
-  - phase_id: 05-webapp-runtime
-    file: 03-phases/05-webapp-runtime.md
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
-    depends_on:
-      - 01-canvas-workbench
-      - 02-flow-persistence
-      - 03-production-agent-loop
-      - 04-media-generation
-    proof_gate: proof-05-webapp-runtime
+  - id: 01-webapp-intake-graph-canvas
+    file: 01-webapp-intake-graph-canvas.md
+    status: pending
+  - id: 02-simulation-environment-config
+    file: 02-simulation-environment-config.md
+    status: locked
+  - id: 03-dual-platform-runtime
+    file: 03-dual-platform-runtime.md
+    status: locked
+  - id: 04-report-agent-timeline
+    file: 04-report-agent-timeline.md
+    status: locked
+  - id: 05-deep-interaction-console
+    file: 05-deep-interaction-console.md
+    status: locked
+continuation_rule: unlock the next phase only after the current phase proof.md passes and evidence is appended to .buildprint/evidence/evidence-ledger.jsonl

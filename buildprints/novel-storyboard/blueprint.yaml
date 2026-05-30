@@ -1,97 +1,75 @@
-schema_version: mapper-os/executable-blueprint
+name: mirofish-canvas-webapp-workbench
+version: 0.1.0
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
+qualification_status: PROOF_REQUIRED
 source:
-  input: https://github.com/HBAI-Ltd/Toonflow-app
-  checkout_path: .buildprint/source-checkouts/Toonflow-app
-  commit: 122d2aa431d3240fea3eab491e6fbc690bb088cb
-  referenced_sources:
-    - input: https://github.com/HBAI-Ltd/Toonflow-web
-      checkout_path: .buildprint/source-checkouts/Toonflow-web
-      commit: 8e661b7372debf92508020923d37eb29fdb95874
-generated_at: 2026-05-29T14:36:00Z
-claim_status: PROOF_REQUIRED
+  input: https://github.com/666ghj/MiroFish
+  checkout_path: source-checkout/MiroFish
+  commit: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
+  mapped_at: "2026-05-30T12:35:00+02:00"
+output_mode: selected_extraction
+selected_scope: complete canvas/webapp workbench flow
 blueprint_mode:
-  primary: product
-  secondary: [ui, api, worker, provider, agent, data, deployment]
-  phase_style: outcome_flow
-product_quality:
-  primary_experience: cinematic_storyboard_workbench
-  must_feel_like:
-    - production_grade_creative_tool
-    - storyboard_first_review_surface
-    - media_forward_episode_planning_workspace
-  must_not_feel_like:
-    - generic_dashboard
-    - bare_graph_demo
-    - static_card_board
-    - marketing_page
-  first_viewport_requires:
-    - ordered_shot_frames
-    - selected_frame_inspector
-    - visible_media_or_blocked_states
-    - canvas_flow_controls_without_overlap
-  storyboard_frame_requires:
-    - stable_aspect_ratio_preview
-    - shot_number
-    - scene_or_beat_label
-    - status
-    - linked_assets_or_characters
-    - prompt_or_notes_surface
-    - continuity_tags
+  primary: mixed
+  secondary:
+    - product
+    - data-pipeline
+    - automation
+    - integration
+  phase_style: mixed_contract
 setup_gate:
   questions: 01-questions.md
   project_setup: 02-project-setup.md
-  required_before_phases: true
 implementation_loop:
-  required: true
-  steps:
-    - observe
-    - plan
-    - execute
-    - verify
-    - reflect
-    - record
-  completion_requires:
-    - proof_gate_passed
-    - evidence_recorded
+  start_with: 03-phases/phase-flow.md
+  active_phase_index: 03-phases/phase-index.yaml
+  evidence_target: .buildprint/evidence/evidence-ledger.jsonl
+  packaged_evidence_seed: 05-evidence/evidence-ledger.jsonl
 repair_loop:
   on_failure:
-    test_failed: current_phase
-    build_failed: current_phase
-    runtime_error: current_phase
-    ui_quality_failed: current_phase
     proof_gate_failed: current_phase
     architecture_contradiction: 02-project-setup.md
-    missing_human_preference: 01-questions.md
-    missing_dependency_phase: required_prior_phase
-    external_blocker: .buildprint/evidence/evidence-ledger.jsonl
+    missing_source_obligation: 02-project-setup.md
+    provider_unavailable: record_blocker_not_fake
 phases:
-  - phase_id: 01-canvas-workbench
-    title: Cinematic storyboard workbench
-    file: 03-phases/01-canvas-workbench.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 02-flow-persistence
-    title: Episode flow persistence
-    file: 03-phases/02-flow-persistence.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 03-production-agent-loop
-    title: Production agent chat and board updates
-    file: 03-phases/03-production-agent-loop.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 04-media-generation
-    title: Async media generation and provider boundaries
-    file: 03-phases/04-media-generation.md
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
-  - phase_id: 05-webapp-runtime
-    title: Webapp runtime, auth and deployment
-    file: 03-phases/05-webapp-runtime.md
-    status: INCLUDED_RISKY_REQUIRES_HARDENING
-context:
-  phase_index: 03-phases/phase-index.yaml
-  phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-canvas-workbench.md
-  evaluation: 04-evaluation.md
-  evidence_schema: 05-evidence/evidence-ledger.schema.json
-generated_artifacts:
-  agent_prompt: generated/agent-prompt.md
+  - id: 01-webapp-intake-graph-canvas
+    file: 03-phases/01-webapp-intake-graph-canvas.md
+    blueprint_mode: product
+    phase_style: outcome_flow
+  - id: 02-simulation-environment-config
+    file: 03-phases/02-simulation-environment-config.md
+    blueprint_mode: data-pipeline
+    phase_style: dataflow_contract
+  - id: 03-dual-platform-runtime
+    file: 03-phases/03-dual-platform-runtime.md
+    blueprint_mode: automation
+    phase_style: task_loop_contract
+  - id: 04-report-agent-timeline
+    file: 03-phases/04-report-agent-timeline.md
+    blueprint_mode: integration
+    phase_style: boundary_transaction_contract
+  - id: 05-deep-interaction-console
+    file: 03-phases/05-deep-interaction-console.md
+    blueprint_mode: product
+    phase_style: outcome_flow
+required_runtime_proofs:
+  - browser_runtime_trace
+  - provider_adapter_config_test_required
+  - persistence_roundtrip
+  - security_boundary_review
+  - worker_retry_cancel_recovery
+  - clean_room_implementation_trace
+capability_readiness:
+  included_ready: 0
+  included_needs_proof: 10
+  included_blocked: 0
+  included_risky_requires_hardening: 2
+mock_policy: test_only_mocks_do_not_upgrade_claims
+no_fake_scan_status: proof_required
+production_posture: private_authenticated_by_default_public_requires_hardening
+completeness_score:
+  label: mapped_selected_scope
+  score: 0.82
+  threshold_for_qualification: 0.95
+  blocker_override: live provider and browser runtime proof missing

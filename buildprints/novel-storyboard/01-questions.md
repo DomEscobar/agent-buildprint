@@ -1,33 +1,18 @@
-# Alignment Questions
+# Pre-Implementation Questions
 
-Default rule:
+Ask only if the answer is available. If unanswered, use the AI-best-judgment defaults below and record the decision in .buildprint/setup.md.
 
-> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture: auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Favor simplicity unless mapped product obligations or product goals prove more complexity is needed. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
+1. Deployment posture: trusted-local, private authenticated, or public webapp?
+   Default: private authenticated webapp. Trusted-local is acceptable for provider smoke tests, but public deployment requires auth, upload limits, destructive-action controls, and audit logs.
 
-## 1. Product direction
+2. Provider proof access: are sandbox credentials available for the OpenAI-compatible LLM, graph memory provider, and simulation runtime?
+   Default: implement real provider adapters behind explicit env vars and run deterministic adapter/config tests; mark live_provider_proof_blocker_only until credentials exist.
 
-Should the implementation optimize for the selected storyboard workbench only, or should it also include non-core suite surfaces such as full novel management, all settings, task center and desktop packaging? Default: selected storyboard workbench only, with enough project/episode context to make the product feel real.
+3. Persistence default: what storage should hold projects, uploaded files, job/task state, simulations, reports, logs, and action streams?
+   Default: Postgres or SQLite for structured state plus durable local/object storage for uploads/reports/logs. Do not use in-memory task state for production claims.
 
-## 2. Tech stack preferences
+4. Risky capability policy: should destructive actions such as delete project/report/graph, stop simulation, close environment, and log cleanup be exposed?
+   Default: include them behind role-gated controls, confirmation, idempotency, audit logging, and reversible retention where feasible.
 
-Do you require a specific frontend/backend/runtime/storage/deployment stack, or may the implementer choose a maintainable webapp stack that satisfies the mapped contracts? Default: choose the simplest production-grade webapp stack that meets the contracts.
-
-## 3. UX/UI preferences
-
-Should the workbench preserve the source interaction model closely, including node graph, right chat panel, zoom/pan/drag, layout and dense production controls? Default: yes, but elevate it into a storyboard-first product with cinematic shot frames, an ordered shot strip/grid, frame inspector, media previews, continuity tags and clear review states.
-
-## 3a. Visual product quality
-
-Should the UI prioritize technical completeness or a visually distinctive production-grade storyboard experience? Default: visually distinctive production-grade storyboard experience. Technical completion is not sufficient if the result looks like a generic dashboard, graph demo or rough internal tool.
-
-## 4. Architecture preferences
-
-Do you require Electron parity, or is browser-first deployment with API/socket/provider/persistence services sufficient? Default: browser-first webapp; Electron packaging is out of selected scope.
-
-## 5. Quality bar
-
-Should live provider proof be required before delivery, or should fake-provider contract tests plus explicit live-credential blockers be accepted until credentials are supplied? Default: fake-provider contract tests are required; live proof remains blocked without credentials.
-
-## 6. Constraints / things to avoid
-
-Are there forbidden patterns beyond the mapped no-fake rules, such as no default admin password, no in-memory persistence, no static canvas mocks, no provider stubs counted as production and no destructive routes without confirmation? Default: all listed constraints apply.
+5. Browser/canvas fidelity: should the implementation exactly match the visual styling or preserve behavior with a new UI identity?
+   Default: preserve behavior and interaction depth with a new polished product UI identity; do not clone source styling as the contract.
