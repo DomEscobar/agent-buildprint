@@ -38,7 +38,7 @@
   "whatYouGet": [
     "Executable Buildprint packet with BUILDPRINT.md canonical start",
     "A generated agent prompt that frames the task as senior product/design alignment, not checklist compliance",
-    "Four outcome-flow phases from scenario intake through report interaction",
+    "Four feature phases from scenario intake through report interaction plus an explicit final review/handover phase",
     "Explicit graph-workbench requirements: meaningful nodes/edges, selection, inspectors, layout, pan/zoom, refresh, and downstream simulation effects",
     "Anti-slop final reviewer requirements for dead controls, placeholders, canned outputs, weak graph substitutes, and non-persistent state"
   ],
@@ -68,6 +68,7 @@
     "Graph canvas workbench phase with explicit no-token-bubbles constraint",
     "Simulation preparation and runtime monitor phase",
     "Prediction report and interaction console phase",
+    "Final critical review and handover phase",
     "04-evaluation.md claim rules",
     "05-evidence seed ledger/schema"
   ],

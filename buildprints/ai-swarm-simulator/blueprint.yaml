@@ -122,9 +122,20 @@ phases:
     required_proofs:
       - proof-report-generation-artifact
       - proof-interaction-stateful-chat
+    proof_gate: proof-report-generation-artifact
+  - phase_id: 05-final-review-handover
+    title: Final critical review and handover
+    file: 03-phases/05-final-review-handover.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces: []
+    owned_surface_ids: []
+    required_proofs:
       - proof-final-critical-review
       - proof-anti-slop-pass
-    proof_gate: proof-final-critical-review
+      - proof-handover-written
+    proof_gate: proof-handover-written
 context:
   phase_index: 03-phases/phase-index.yaml
   phase_flow: 03-phases/phase-flow.md

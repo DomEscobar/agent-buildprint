@@ -14,7 +14,7 @@ This is the canonical starting point and execution contract for the blueprint. D
 
 ## Final product at a glance
 
-This section is the product north star generated from Mapper OS `vision.md`. It is read first and stays bounded: no architecture, no API detail, no per-phase spec. Depth lives in the owning phase file. Every surface named here must appear in the `02-project-setup.md` obligation/surface matrix with exactly one owning phase, and vice versa.
+This section is the product north star generated from Mapper OS `vision.md`. It is read first and stays bounded: no architecture, no API detail, no per-phase spec. Depth lives in the owning phase file. Every product surface named here must appear in the `02-project-setup.md` obligation/surface matrix with exactly one owning feature phase, and vice versa. The final review/handover phase is a required closeout phase over all surfaces, not a separate product surface.
 
 **Golden path:** <one short paragraph — the single primary end-to-end journey a user takes through the core surfaces from first action to final result. Use product language; do not use source-internal node or route names.>
 
@@ -101,7 +101,7 @@ A phase is a proof-gated mode-aware slice, not a waterfall task bucket. Each pha
 
 ## Final critical reviewer
 
-After the final phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — switch modes before handover: become a harsh reviewer instead of the optimistic implementer.
+The generated packet must include an explicit final review/handover phase. After the final feature phase passes its continuation gate — or when the run stops with honest blockers on remaining phases — switch modes before handover: become a harsh reviewer instead of the optimistic implementer.
 
 Assume the product is trying to fool you. Inspect source, run the runnable verification commands from `02-project-setup.md`, and for UI-bearing products use browser/e2e or screenshots to exercise the real surface. Click every visible control. Try empty, loading, error, blocked, and reload states. Look for placeholder copy, TODO/FIXME-visible behavior, raw ids, debug/proof vocabulary, generic dashboard/form/list leakage, canned output, mock-only paths, dead buttons, fake controls, missing persistence, and the absence of the obvious next user action.
 

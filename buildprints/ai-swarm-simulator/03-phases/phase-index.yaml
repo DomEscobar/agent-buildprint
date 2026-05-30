@@ -23,4 +23,10 @@ phase_order:
     status: INCLUDED_NEEDS_PROOF
     depends_on:
       - 03-simulation-runtime-monitor
-completion_rule: all phases require phase_preflight, plan, proof, evidence row, verification output, and final critical reviewer pass before complete-bounded-proof.
+  - phase_id: 05-final-review-handover
+    file: 03-phases/05-final-review-handover.md
+    title: Final critical review and handover
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - 04-report-interaction-console
+completion_rule: all phases require phase_preflight, plan, proof, evidence row, verification output, final critical reviewer artifact, anti-slop artifact, and .buildprint/handover.md before complete-bounded-proof.

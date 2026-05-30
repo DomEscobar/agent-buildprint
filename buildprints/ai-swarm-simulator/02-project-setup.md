@@ -39,7 +39,7 @@ This is a UI-bearing, provider-backed, stateful product packet. The graph canvas
 | surface-prediction-report-workspace | Prediction report workspace | 4 | Generate a sectioned report from simulation artifacts, show planning/tool traces, persist/reload report content, and avoid canned generic analysis. | INCLUDED_NEEDS_PROOF |
 | surface-interaction-console | Interaction console | 4 | Let the user chat with the report agent or selected simulated agents and send survey-style prompts against stored simulation context. | INCLUDED_NEEDS_PROOF |
 
-Every glance surface in `BUILDPRINT.md` appears exactly once above. Do not add a phase that owns no listed surface, and do not drop a listed surface without a blocker or explicit user exclusion.
+Every glance surface in `BUILDPRINT.md` appears exactly once above. Feature phases must own listed surfaces. The final review/handover phase owns no product surface by design; it reviews every listed surface and writes closeout artifacts. Do not drop a listed product surface without a blocker or explicit user exclusion.
 
 ## Architecture decisions
 
