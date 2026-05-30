@@ -34,6 +34,19 @@
 - `FAKE_OR_PLACEHOLDER_FAIL`: skeleton adapter, route-shaped endpoint, no-op control, fake success state, static-only UX claim, or mock counted as product behavior. This blocks qualification.
 
 ## Required Selected Manifest Fields
+## Lead Agent Contract
+
+`Product Engineering Lead` is a responsibility contract, not persona theater. It means the current lead agent owns product-intent preservation, phase sequencing, reviewer/verifier delegation when useful, evidence discipline, no-fake challenge, and honest escalation. It does not authorize shrinking scope, replacing proof with prose, or claiming completion from alignment language.
+
+## Phase Preflight Contract
+
+Every phase run must create `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` before implementation. Required fields: `phase_id`, `lead_decision` (`accept|revise|split|merge|block`), `user_visible_outcomes`, `affected_boundaries`, `surface_ids`, `criterion_ids`, `proof_ids`, `fake_done_risks`, `verifier_commands`, `claim_ceiling`, and `blockers`. Missing preflight blocks `phase_core_passed`.
+
+## Claim Typing Contract
+
+Claims are typed as `target`, `core_pass`, `claim_upgrade`, or `blocker`. `target` describes intended product behavior before implementation. `core_pass` requires local executable proof. `claim_upgrade` requires direct matching proof for live provider, browser/e2e, security, worker, deployment, or lifecycle claims. `blocker` preserves scope and must not be rewritten as exclusion.
+
+## Required Selected Manifest Fields
 
 - source URL or local input;
 - source checkout path;

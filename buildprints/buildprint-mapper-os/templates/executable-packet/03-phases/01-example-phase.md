@@ -11,6 +11,7 @@ Before writing code, read:
 Then execute this phase through `03-phases/phase-flow.md`:
 
 1. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`.
+1a. Write `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` with lead decision, user-visible outcomes, affected boundaries, surface ids, criterion ids, proof ids, fake-done risks, verifier commands, claim ceiling, and blockers.
 2. Confirm the implementation scaffold and local guidance files required by `02-project-setup.md` exist.
 3. Implement the first real vertical path.
 4. Verify with commands and browser/runtime artifacts.
@@ -91,6 +92,31 @@ A user can create an owned project by uploading text or Markdown seed documents 
 PDF support is not required for `phase_core_passed` unless the selected product explicitly makes PDF the first required upload format. If PDF extraction is not implemented, the UI and API must reject PDF with a clear non-upgrading blocker or unsupported-file response.
 
 ## Phase mode contract
+
+```yaml
+phase_contract:
+  phase_id: 01-example-phase
+  blueprint_mode: product
+  phase_style: outcome_flow
+  glance_surfaces:
+    - Project workbench entry
+    - Document upload
+    - Ontology preview
+  owned_surface_ids:
+    - surface-project-workbench-entry
+    - surface-document-upload
+    - surface-ontology-preview
+  core_pass_required:
+    - criterion-api-upload-readback
+    - criterion-ui-runtime-readback
+    - criterion-persistence-roundtrip
+    - criterion-security-denied-path
+    - criterion-no-fake-scan
+  claim_upgrade_tracks:
+    - criterion-live-provider-proof
+    - criterion-worker-retry-cancel-recovery
+    - criterion-deployment-operations-proof
+```
 
 - blueprint_mode: product
 - phase_style: outcome_flow
@@ -278,9 +304,10 @@ Passing core API row:
   "status": "passed",
   "source": ".buildprint/phase-runs/01-example-phase/proof.md#api-upload-readback",
   "proves": ["unit_or_integration_test", "runtime_or_browser_trace", "persistence_roundtrip"],
-  "proof_type": "api_integration_test",
+  "proof_type": "runtime_api",
   "provider_mode": "deterministic",
-  "upgrades_claim": true
+  "upgrades_claim": true,
+  "claim_type": "core_pass"
 }
 ```
 
@@ -294,9 +321,10 @@ Non-upgrading live-provider blocker row:
   "status": "blocked",
   "source": ".buildprint/phase-runs/01-example-phase/proof.md#live-provider-blocker",
   "proves": ["live_provider_proof_blocker_only"],
-  "proof_type": "provider_config_blocker",
+  "proof_type": "blocker",
   "provider_mode": "missing_live_credentials",
   "upgrades_claim": false,
+  "claim_type": "blocker",
   "blocks_continuation": false
 }
 ```
@@ -311,9 +339,10 @@ Bad overclaim row:
   "status": "passed",
   "source": ".buildprint/phase-runs/01-example-phase/reviews/qa.md",
   "proves": ["live_provider_proof_blocker_only", "worker_retry_cancel_recovery", "visual_quality_gate_for_core_path"],
-  "proof_type": "review",
+  "proof_type": "security_review",
   "provider_mode": "deterministic",
-  "upgrades_claim": true
+  "upgrades_claim": true,
+  "claim_type": "claim_upgrade"
 }
 ```
 

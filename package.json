@@ -6,6 +6,11 @@
     "agb": "./bin/agb.js"
   },
   "dependencies": {},
+  "scripts": {
+    "check:syntax": "node --check bin/agb.js",
+    "check:packet:mapper": "node bin/agb.js packet check buildprints/buildprint-mapper-os",
+    "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs"
+  },
   "description": "CLI for bootstrapping Agent Buildprints for coding agents.",
   "license": "MIT",
   "repository": {
@@ -36,6 +41,7 @@
     "src/",
     "buildprints/",
     "docs/",
+    "scripts/",
     "templates/",
     "README.md"
   ]

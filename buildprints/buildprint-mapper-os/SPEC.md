@@ -17,6 +17,9 @@
 - Use executable Buildprint proof-gated phases for medium, large, and full-suite selected outputs.
 - Include downstream-agent execution planning in every source-independent selected package.
 - Keep qualification label exactly one of `DISCOVERY_ONLY`, `PROOF_REQUIRED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
+- Emit a Product Engineering Lead accountability contract in selected packets; it must define responsibility for product intent, evidence, phase coordination, anti-fake-done review, and blocker escalation without using CEO/persona framing.
+- Emit a required phase preflight contract before coding: `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` with `phase_id`, `lead_decision`, `user_visible_outcomes`, `affected_boundaries`, `surface_ids`, `criterion_ids`, `proof_ids`, `fake_done_risks`, `verifier_commands`, `claim_ceiling`, and `blockers`.
+- Emit deterministic checker anchors for proof IDs, criterion IDs, claim typing, evidence-first completion, verifier loops, and optional-vs-required `PRODUCT.md`.
 
 ## Must Not
 
@@ -48,6 +51,8 @@ Each selected slice must answer questions appropriate to its `blueprint_mode`:
 - unlock/dependency relation to later phases.
 
 For **mixed** packets, each phase must clearly state which mode lens it uses and include mode-appropriate proof.
+
+Before implementation starts, the Product Engineering Lead may accept, revise, split, merge, or block proposed phases, but the decision must be recorded in phase preflight and must preserve every mapped surface through an owning phase, explicit blocker, or user-approved exclusion.
 
 ## Qualification Contract
 

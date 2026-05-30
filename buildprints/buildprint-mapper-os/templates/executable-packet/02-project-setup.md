@@ -9,6 +9,8 @@ This file is the project constitution for implementation. Keep it compact. It sh
 - Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
 - Full-suite packets default to production-grade architecture, not a local MVP.
 - Do not downgrade to a local MVP unless the selected scope explicitly says prototype-only.
+- `PRODUCT.md` is optional by default. Require it only for large, complex, full-suite, or product-contract-heavy packets; otherwise keep the product contract compact in `BUILDPRINT.md`, this file, and phase-local checks.
+- Setup tier must be explicit: `compact_setup` for small/single-phase packets; `full_setup` for full-suite, medium/large UI-bearing, provider-backed, auth/admin, durable persistence, worker/runtime, billing, upload, or deployment-heavy packets.
 
 ## Product / capability shape
 
@@ -28,6 +30,8 @@ The product picture — golden path, surface index, and done-looks-like — live
 - For infrastructure: Target environment, resources managed, deploy/apply entrypoint, health/readiness shape.
 - External providers/runtime:
 - Proof source: derive from `04-evaluation.md` and each active phase proof gate.
+- Setup tier: <compact_setup|full_setup>
+- Optional product contract: <none|PRODUCT.md required because ...>
 
 ## Architecture decisions
 
@@ -114,7 +118,7 @@ The Buildprint packet must not contain implementation-project files such as `AGE
 
 Before any `03-phases/*` implementation starts, create the selected stack's real base project structure and local guidance files. This is a required setup gate, not optional documentation. The scaffold must be concrete enough that Phase 01 adds the first vertical slice inside long-lived boundaries instead of inventing a standalone mini-app.
 
-Required implementation-project files:
+Required implementation-project files for `full_setup` (for `compact_setup`, root `AGENTS.md`, `.buildprint/setup.md`, and `proof-strategy.md` are mandatory, while architecture and engineering standards may be embedded inside `.buildprint/setup.md` if the packet is small and non-risky):
 
 - Root `AGENTS.md`: short scope governor with project shape, current phase rule, safety rules, local instruction map, and mandatory reads. It must explicitly require coding agents to read and follow `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing before editing code. If these files are missing or contradicted, agents must stop and repair setup rather than continue.
 - `architecture.md`: architecture best practices for this project, including `Architecture principles`, `Base project structure`, `Boundary map`, `Dependency rules`, `Architecture decisions`, and `Downstream phase extension map`. It must name the UI, API/controller, domain/use-case, schema/validation, config/env, provider adapter, persistence/repository, worker/runtime, observability, deployment, and test boundaries that apply to the selected stack.
@@ -139,6 +143,7 @@ Rules:
 - `engineering-standards.md` must document what patterns `verify:no-fake` checks and how to extend the scan for this product's boundaries.
 - Before appending runtime evidence for a phase, run `verify:no-fake` and `verify:phase-artifacts` for that `phase_id`. Save combined output to `.buildprint/phase-runs/<phase-id>/verify-output.txt` or paste it into `.buildprint/phase-runs/<phase-id>/proof.md`.
 - A `proof.md` file that describes verification without quoting real command output from these scripts is invalid and blocks `phase_core_passed`.
+- Each phase must also write `.buildprint/phase-runs/<phase-id>/evidence.json` with `phase_id`, command records, artifact paths, ledger row ids, and blockers. `verify:phase-artifacts` should validate paths named in this manifest.
 
 Simple/custom primitives are allowed only when `architecture.md` and `engineering-standards.md` document the reason, bound the blast radius, define tests, and name the production replacement path. Handrolled HTTP, upload parsing, storage, runtime workers, or UI shells must not become hidden production defaults.
 

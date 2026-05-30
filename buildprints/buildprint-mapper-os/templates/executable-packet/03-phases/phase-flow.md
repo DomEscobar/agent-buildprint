@@ -22,6 +22,26 @@ Evidence proof artifacts (test files, screenshots, trace logs) must be distinct 
 
 Before writing code for any phase:
 
+### Lead Phase Preflight Gate
+
+Create `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` before implementation. Required fields:
+
+```yaml
+phase_id: <phase-id>
+lead_decision: accept # accept | revise | split | merge | block
+user_visible_outcomes: []
+affected_boundaries: []
+surface_ids: []
+criterion_ids: []
+proof_ids: []
+fake_done_risks: []
+verifier_commands: []
+claim_ceiling: target # target | core_pass | claim_upgrade | blocker
+blockers: []
+```
+
+The Product Engineering Lead may revise, split, merge, or block Mapper OS proposed phases, but must preserve every mapped surface through an owning phase, explicit blocker, or user-approved exclusion. A missing preflight means no `phase_core_passed` claim is valid.
+
 0. Verify the implementation project foundation exists: root `AGENTS.md`, `.buildprint/setup.md` or `.buildprint/setup/`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` for UI-bearing products. Root `AGENTS.md` must explicitly list those files as mandatory reads before code edits. If the Foundation scaffold gate is missing, incomplete, or inconsistent, stop phase work and create/repair the scaffold first, exiting deterministically through the setup repair route instead of drifting into phase code.
 1. Read root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing; then read the active phase file named by `03-phases/phase-index.yaml`.
 2. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`, including how this phase extends the base project structure and local standards rather than bypassing them.
@@ -35,11 +55,13 @@ A phase cannot reach `phase_core_passed` if it violates `architecture.md`, `engi
 
 Before implementation:
 
+- `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml`
 - `.buildprint/phase-runs/<phase-id>/plan.md`
 
 Before evidence:
 
 - `.buildprint/phase-runs/<phase-id>/proof.md`
+- `.buildprint/phase-runs/<phase-id>/evidence.json` with command/artifact manifest
 
 Only then:
 
@@ -55,6 +77,8 @@ Every phase must distinguish three states:
 - `claim_qualified`: live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle proof has enough matching evidence to upgrade the corresponding claim.
 
 An early checkpoint is not phase completion. A phase may continue after `checkpoint_recorded`, but it is not `phase_core_passed` until the owned implementation path works end to end.
+
+Claim typing is mandatory: `target` describes intended behavior, `core_pass` requires local executable proof, `claim_upgrade` requires direct matching evidence, and `blocker` preserves scope without claiming implementation. `phase_core_passed` does not qualify live provider, deployment, worker, security, visual, or lifecycle claims unless matching claim-upgrade evidence exists.
 
 For UI-bearing phases, `phase_core_passed` requires at least one user action path through a UI/controller boundary into runtime behavior and back into visible state or readback. Static state cards, dead buttons, generic dashboards, stacked forms, raw text-list substitutes, default browser controls, and screenshots that read as local MVPs do not satisfy the UI path.
 

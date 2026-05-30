@@ -7,6 +7,20 @@ source:
   commit: <source-commit-or-unavailable>
 generated_at: <iso-timestamp>
 claim_status: PROOF_REQUIRED
+qualification_label: PROOF_REQUIRED
+setup_tier: <compact_setup|full_setup>
+product_contract:
+  product_md: optional
+  rule: PRODUCT.md is optional; require it only for large, complex, full-suite, or product-contract-heavy packets. Otherwise keep the compact product contract in BUILDPRINT.md and 02-project-setup.md.
+lead_agent_contract:
+  role: Product Engineering Lead
+  role_type: accountability_contract_not_persona
+  responsibilities:
+    - preserve_product_intent
+    - coordinate_phase_work
+    - require_evidence_before_claims
+    - challenge_shallow_implementation
+    - escalate_blockers
 blueprint_mode:
   primary: <product|framework|integration|automation|library|data-pipeline|infrastructure|mixed>
   secondary: []
@@ -43,6 +57,15 @@ phases:
     title: 01-example-phase
     file: 03-phases/01-example-phase.md
     status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - MAPPER_REQUIRED_GLANCE_SURFACE
+    owned_surface_ids:
+      - MAPPER_REQUIRED_SURFACE_ID
+    required_proofs:
+      - proof-01-example-phase
+    proof_gate: proof-01-example-phase
 context:
   phase_index: 03-phases/phase-index.yaml
   phase_flow: 03-phases/phase-flow.md

@@ -27,6 +27,8 @@ selected-buildprint/
 
 `schema_version` must be `mapper-os/executable-blueprint`.
 
+`blueprint.yaml` must also include `qualification_label: PROOF_REQUIRED`, explicit `setup_tier`, optional-vs-required `PRODUCT.md` rule, and the Product Engineering Lead accountability contract. Do not use CEO/persona framing.
+
 Mapper OS maintains `buildprints/buildprint-mapper-os/vision.md` as generator guidance. Use it while synthesizing selected packets, but never emit packet-level `vision.md` into `selected-buildprint/`.
 
 ## Scaffold preservation contract
@@ -36,6 +38,7 @@ Start from `templates/executable-packet/` as the structural authority. Preserve 
 Required exact anchors include:
 
 - `blueprint.yaml`: `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, `blueprint_mode` with primary/secondary/phase_style, `setup_gate.questions: 01-questions.md`, `setup_gate.project_setup: 02-project-setup.md`, `implementation_loop`, and `repair_loop.on_failure.proof_gate_failed: current_phase`, `repair_loop.on_failure.architecture_contradiction: 02-project-setup.md`.
+- `blueprint.yaml`: must include `qualification_label`, `setup_tier`, `lead_agent_contract.role: Product Engineering Lead`, optional-vs-required `PRODUCT.md` rule, and each phase entry must include `phase_id`, `file`, `blueprint_mode`, `phase_style`, `glance_surfaces`, `owned_surface_ids`, `required_proofs`, and `proof_gate`.
 - `BUILDPRINT.md`: heading `# BUILDPRINT: <mapped-app>`, section headings `## Product brief`, `## Final product at a glance`, `## Required read order`, `## Project setup gate`, `## Implementation loop`, `## Completion semantics`, and `## Repair routing`. `## Completion semantics` must state that bounded proof is not product completion, that review prose/status notes are not evidence, and that every pass verdict requires rerunnable command output or an existing artifact path (copy from `templates/executable-packet/BUILDPRINT.md`; do not omit).
 - `01-questions.md`: use headings `## 1.` through `## 6.` and include the exact AI-best-judgment default phrase below.
 - `03-phases/phase-index.yaml`: `active_phase` must be the active phase file path, e.g. `03-phases/01-ingestion-ontology.md`, not only the phase id.
@@ -128,7 +131,7 @@ Default rule:
 `01-questions.md` may ask for stack preferences, but it must not bias the human toward the source repository's concrete frameworks. Ask generically for frontend/backend/runtime/storage/deployment preferences; do not say “if different from Vue/Flask/etc.” Framework choices are implementation decisions unless the human names them or the framework itself is the product being mapped.
 
 
-Adapt the question wording to match the selected lueprint_mode. The six numbered areas are fixed; only the wording within each area shifts by mode:
+Adapt the question wording to match the selected blueprint_mode. The six numbered areas are fixed; only the wording within each area shifts by mode:
 
 - Area 1 (direction): product/mixed → what the product optimizes for; framework/library → target primitive/API/semver policy; integration → which provider/service boundary; automation → task objective and stop policy; data-pipeline → input sources and output artifacts; infrastructure → target resources and environment.
 - Area 2 (tech stack): product → frontend/backend/runtime/storage/deployment; framework/library → language/package manager/registry/test harness; integration → auth/SDK/transport/retry library; automation → orchestration runtime/agent framework/tools; data-pipeline → engine/storage/scheduler/validation library; infrastructure → IaC/provisioner/cloud/container/secrets manager.
@@ -360,6 +363,12 @@ Do not mark a phase complete while its verification failure is unresolved.
 `05-evidence/evidence-ledger.jsonl` is the packaged immutable seed ledger. Runtime/implementation may copy from it, but implementation proof and blockers are appended only to `.buildprint/evidence/evidence-ledger.jsonl`; claims only upgrade from passing runtime evidence rows with canonical `phase_id`.
 
 ## Extraction rules
+
+- Treat Product Engineering Lead as an accountability contract, not a persona. Generated packets must say the lead preserves product intent, coordinates phase work, requires evidence, challenges shallow implementation, and escalates blockers. Do not use CEO language.
+- Every selected packet must require `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` before coding, with user-visible outcomes, affected boundaries, surface ids, criterion ids, proof ids, fake-done risks, verifier commands, claim ceiling, and blockers.
+- Every phase must include structured `phase_contract` data with `phase_id`, `blueprint_mode`, `phase_style`, `glance_surfaces`, `owned_surface_ids`, `core_pass_required`, and `claim_upgrade_tracks`.
+- Generate claim typing explicitly: `target`, `core_pass`, `claim_upgrade`, and `blocker`. Do not allow `phase_core_passed` to qualify live provider, deployment, worker, security, visual, or lifecycle claims without matching claim-upgrade evidence.
+- Generate verifier commands and proof ids as concrete anchors. A proof gate without criterion ids, proof ids, or command/artifact expectations is invalid.
 
 - Convert source facts into source-independent mapped obligations inside setup and phase files. Do not expose `## Source evidence` as an implementation-agent section.
 - Include a compact `## Mapped obligation/surface matrix` in `02-project-setup.md`. It must account for high-signal mapped surfaces according to mode: product flows, framework primitives/composition rules, integration boundary transactions, automation task loops, dataflows, infrastructure operations, routes/screens/API handlers/jobs/providers/auth/admin/state/uploads/imports/exports/artifacts/destructive lifecycle/deployment runtime. Include surface id, source evidence, mapped obligation (use “Mapped obligation” as the column label, not “Product obligation”), target disposition (`preserve`, `replace`, `merge`, `defer`, `drop`, or `blocked`), target contract, exactly one owning phase/blocker destination, and required proof. Broad buckets are invalid unless decomposed into sub-surfaces.

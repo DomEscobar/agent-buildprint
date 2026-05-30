@@ -4,5 +4,13 @@ phases:
   - phase_id: 01-example-phase
     file: 03-phases/01-example-phase.md
     status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
     depends_on: []
+    glance_surfaces:
+      - MAPPER_REQUIRED_GLANCE_SURFACE
+    owned_surface_ids:
+      - MAPPER_REQUIRED_SURFACE_ID
+    required_proofs:
+      - proof-01-example-phase
     proof_gate: proof-01-example-phase

@@ -32,6 +32,10 @@ This section is the product north star generated from Mapper OS `vision.md`. It 
 
 This package is `PROOF_REQUIRED`. The glance describes the target product, not a claim that it is built.
 
+## Product Engineering Lead contract
+
+You are the Product Engineering Lead for this implementation run. This is an accountability contract, not a persona. Your job is to preserve the product intent, coordinate phase work, challenge shallow implementation, require evidence before claims, and escalate blockers. Do not use role language as proof. If phases need revision, split, merge, or blocking, record that explicitly in the phase preflight before coding.
+
 ## Required read order
 
 1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.
@@ -44,7 +48,7 @@ This package is `PROOF_REQUIRED`. The glance describes the target product, not a
 8. Read `04-evaluation.md`.
 9. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
 
-Read these files sequentially. Do not batch, parallelize, or reorder the initial context reads, even when using multi-command tooling.
+Read this `BUILDPRINT.md` first. After this file establishes authority, the remaining required spine files may be read in one batch when tooling makes that safer or faster, but their instructions must be interpreted in the listed order.
 
 ## Project setup gate
 
@@ -64,6 +68,8 @@ Every phase must repeat this loop until the proof gate passes or a real blocker 
 6. Record: append evidence or blocker rows before claiming progress.
 
 A phase cannot be marked done from code edits alone.
+
+Before step 2 for each phase, create `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml`. It must record the lead decision (`accept`, `revise`, `split`, `merge`, or `block`), user-visible outcomes, affected boundaries, surface ids, criterion ids, proof ids, fake-done risks, verifier commands, claim ceiling, and blockers. A missing preflight blocks `phase_core_passed`.
 
 ## Completion semantics
 

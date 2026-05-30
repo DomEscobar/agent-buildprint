@@ -2,6 +2,8 @@
 
 ## Claim upgrade rules
 
+All claims must be typed: `target`, `core_pass`, `claim_upgrade`, or `blocker`. A target claim is not proof. A core-pass claim needs local executable proof. A claim-upgrade needs direct matching evidence. A blocker preserves scope and must not be converted into exclusion without user approval.
+
 Claims upgrade only after the relevant phase proof gate passes and evidence is recorded.
 
 Required proof concepts:
@@ -45,6 +47,8 @@ For non-UI modes, `phase_core_passed` requires the mode-appropriate proof: impor
 ## Evidence requirements
 
 Each evidence row must include phase id, proof type, provider mode, status, source/command summary, claim proven or blocker, and whether it upgrades a claim.
+
+Each phase must maintain `.buildprint/phase-runs/<phase-id>/evidence.json` as the command/artifact manifest. Upgrading rows must point to a command result or artifact listed there; review prose alone cannot upgrade runtime, provider, browser, persistence, security, worker, deployment, or lifecycle claims.
 
 ## Blocker honesty
 

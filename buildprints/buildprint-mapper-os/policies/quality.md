@@ -4,6 +4,8 @@ Mapper OS optimizes for correctness over impressive output.
 
 ## Quality Invariant
 
+Core invariant: Buildprints should not make agents sound smarter; they should make low-quality completion harder to claim. Prefer structured fields, proof paths, verifier commands, and evidence ceilings over persuasive prose or roleplay.
+
 A Mapper OS output is acceptable only when:
 
 - scanner hints remain non-authoritative;
@@ -44,6 +46,8 @@ Block qualification on:
 - missing hardening artifacts for sensitive surfaces.
 
 ## Execution Policy
+
+The Product Engineering Lead must run phase preflight before coding, decide whether Mapper OS proposed phases are accepted/revised/split/merged/blocked, and record the decision in `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml`. A missing preflight is a setup/protocol failure, not a phase pass.
 
 Each included capability must include:
 

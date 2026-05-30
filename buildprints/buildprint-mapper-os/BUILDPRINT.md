@@ -12,6 +12,7 @@ The mapper agent reads source, promotes only evidence-backed claims, preserves t
 - Source files are evidence. Product obligations and phase packets are the rebuild contract.
 - Static scanning may guide discovery but must never become product authority.
 - A qualified Buildprint is an implementation input, not proof that a future implementation already works.
+- The downstream executor role is **Product Engineering Lead**: not a persona or title, but an accountability contract to preserve product intent, coordinate phase work, require evidence, challenge shallow implementation, and escalate blockers before claims are upgraded.
 
 ## Read Order
 
@@ -33,6 +34,7 @@ For generated selected packages, do not make the implementing agent read all Mar
 4. Scope selection: keep default output discovery-only; create `selected-buildprint/` only after candidate, scope, or full-suite selection; never shrink selected scope without explicit user decision.
 5. Source distillation: convert source facts into source-independent obligations, phase packets, and verification oracles.
 6. Execution planning: give the downstream coding agent product vision, slice readiness, verification gates, repair loops, and proof/evidence rules. Multi-phase outputs must define a lean execution model: the main coding session plans, implements the phase path, verifies, writes proof, and records evidence phase by phase.
+   Before coding each phase, the lead must create `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` containing user-visible outcomes, affected boundaries, surface ids, criterion ids, proof ids, fake-done risks, verifier commands, claim ceilings, and explicit accept/revise/split/merge phase handling.
 7. Qualification: keep output unqualified until required evidence, runtime proof, no-fake review, hardening artifacts, and reversal evidence exist.
 
 ## Output Modes
@@ -74,6 +76,8 @@ generated/
 ```
 
 `generated/agent-prompt.md` is compiled output and must not be treated as source of truth.
+
+Selected packets must expose `qualification_label` in `blueprint.yaml` (`DISCOVERY_ONLY`, `PROOF_REQUIRED`, or `QUALIFIED_SOURCE_INDEPENDENT`). Public completion wording must derive from that label. A `PROOF_REQUIRED` packet may describe target outcomes but must not claim validated, production-ready, complete, fully working, or end-to-end status except in explicit negative rules.
 
 Qualification is evidence-derived. `claim_status: PROOF_REQUIRED` can be promoted only when runtime `.buildprint/evidence/evidence-ledger.jsonl` contains passing rows for all required promotion proofs, including `browser_runtime_trace`, `provider_integration_proof`, `persistence_roundtrip`, `security_boundary_review`, and `clean_room_implementation_trace` when applicable. The packaged `05-evidence/evidence-ledger.jsonl` is an immutable seed/template, not the write target.
 
