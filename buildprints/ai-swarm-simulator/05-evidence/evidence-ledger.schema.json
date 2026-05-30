@@ -10,7 +10,8 @@
     "proves",
     "proof_type",
     "provider_mode",
-    "upgrades_claim"
+    "upgrades_claim",
+    "claim_type"
   ],
   "properties": {
     "artifact_id": {
@@ -45,10 +46,13 @@
       }
     },
     "proof_type": {
-      "type": "string"
+      "enum": ["static", "unit_contract", "integration", "runtime_api", "browser_e2e", "screenshot_review", "persistence_restart", "provider_fake", "provider_live", "security_review", "no_fake_scan", "clean_room_reversal", "deployment_ops", "blocker"]
     },
     "provider_mode": {
-      "type": "string"
+      "enum": ["none", "fake", "deterministic", "sandbox", "live", "blocked", "missing_live_credentials", "not_applicable"]
+    },
+    "claim_type": {
+      "enum": ["target", "core_pass", "claim_upgrade", "blocker"]
     },
     "upgrades_claim": {
       "type": "boolean"
@@ -66,6 +70,18 @@
       }
     },
     "blocker": {
+      "type": "string"
+    },
+    "blocks_continuation": {
+      "type": "boolean"
+    },
+    "artifact_path": {
+      "type": "string"
+    },
+    "trace_path": {
+      "type": "string"
+    },
+    "screenshot_path": {
       "type": "string"
     }
   },

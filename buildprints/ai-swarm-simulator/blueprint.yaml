@@ -2,20 +2,33 @@ schema_version: mapper-os/executable-blueprint
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 source:
-  input: /root/MiroFish
-  checkout_path: /root/MiroFish
-  commit: fa0f6519b10c4a25b78f1bcc1f00dfcd8bf1ab41
-generated_at: 2026-05-28 17:30:00+02:00
+  input: source/MiroFish
+  checkout_path: /root/.openclaw/workspace/mapper-runs/mirofish-remap-20260530-172045/source/MiroFish
+  commit: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
+generated_at: 2026-05-30T15:23:56Z
 claim_status: PROOF_REQUIRED
+qualification_label: PROOF_REQUIRED
+setup_tier: full_setup
+product_contract:
+  product_md: optional
+  rule: PRODUCT.md is optional; require it only for large, complex, full-suite, or product-contract-heavy packets. Otherwise keep the compact product contract in BUILDPRINT.md and 02-project-setup.md.
+lead_agent_contract:
+  role: Product Engineering Lead
+  role_type: accountability_contract_not_persona
+  responsibilities:
+    - preserve_product_intent
+    - coordinate_phase_work
+    - require_evidence_before_claims
+    - challenge_shallow_implementation
+    - escalate_blockers
 blueprint_mode:
   primary: product
   secondary:
-  - ui
-  - api
-  - worker
-  - provider
-  - data
-  - deployment
+    - ui
+    - api
+    - worker
+    - provider
+    - data
   phase_style: outcome_flow
 setup_gate:
   questions: 01-questions.md
@@ -24,15 +37,15 @@ setup_gate:
 implementation_loop:
   required: true
   steps:
-  - observe
-  - plan
-  - execute
-  - verify
-  - reflect
-  - record
+    - observe
+    - plan
+    - execute
+    - verify
+    - reflect
+    - record
   completion_requires:
-  - proof_gate_passed
-  - evidence_recorded
+    - proof_gate_passed
+    - evidence_recorded
 repair_loop:
   on_failure:
     test_failed: current_phase
@@ -45,32 +58,78 @@ repair_loop:
     missing_dependency_phase: required_prior_phase
     external_blocker: .buildprint/evidence/evidence-ledger.jsonl
 phases:
-- phase_id: 01-seed-ontology-workbench
-  title: Seed Intake And Ontology Workbench
-  file: 03-phases/01-seed-ontology-workbench.md
-  status: INCLUDED_NEEDS_PROOF
-- phase_id: 02-graph-memory-build
-  title: Graph Memory Build And Explorer
-  file: 03-phases/02-graph-memory-build.md
-  status: INCLUDED_NEEDS_PROOF
-- phase_id: 03-simulation-environment
-  title: Simulation Environment Preparation
-  file: 03-phases/03-simulation-environment.md
-  status: INCLUDED_NEEDS_PROOF
-- phase_id: 04-simulation-run-observability
-  title: Simulation Run And Observability
-  file: 03-phases/04-simulation-run-observability.md
-  status: INCLUDED_NEEDS_PROOF
-- phase_id: 05-report-and-interaction
-  title: Report Generation And Deep Interaction
-  file: 03-phases/05-report-and-interaction.md
-  status: INCLUDED_NEEDS_PROOF
+  - phase_id: 01-scenario-ontology-intake
+    title: Scenario intake and ontology review
+    file: 03-phases/01-scenario-ontology-intake.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Scenario intake console
+      - Ontology review lane
+    owned_surface_ids:
+      - surface-scenario-intake-console
+      - surface-ontology-review-lane
+    required_proofs:
+      - proof-scenario-intake-roundtrip
+      - proof-ontology-domain-validation
+      - proof-intake-ui-browser
+    proof_gate: proof-scenario-intake-roundtrip
+  - phase_id: 02-graph-canvas-workbench
+    title: Graph canvas workbench
+    file: 03-phases/02-graph-canvas-workbench.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Graph canvas workbench
+    owned_surface_ids:
+      - surface-graph-canvas-workbench
+    required_proofs:
+      - proof-graph-canvas-runtime
+      - proof-graph-interaction-browser
+      - proof-provider-blocker-honesty
+    proof_gate: proof-graph-interaction-browser
+  - phase_id: 03-simulation-runtime-monitor
+    title: Simulation preparation and runtime monitor
+    file: 03-phases/03-simulation-runtime-monitor.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Simulation preparation board
+      - Dual-platform event monitor
+    owned_surface_ids:
+      - surface-simulation-preparation-board
+      - surface-dual-platform-event-monitor
+    required_proofs:
+      - proof-simulation-preparation-artifacts
+      - proof-dual-platform-event-runtime
+      - proof-runtime-stop-recovery
+    proof_gate: proof-dual-platform-event-runtime
+  - phase_id: 04-report-interaction-console
+    title: Prediction report and interaction console
+    file: 03-phases/04-report-interaction-console.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Prediction report workspace
+      - Interaction console
+    owned_surface_ids:
+      - surface-prediction-report-workspace
+      - surface-interaction-console
+    required_proofs:
+      - proof-report-generation-artifact
+      - proof-interaction-stateful-chat
+      - proof-final-critical-review
+      - proof-anti-slop-pass
+    proof_gate: proof-final-critical-review
 context:
   phase_index: 03-phases/phase-index.yaml
   phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-seed-ontology-workbench.md
+  active_phase: 03-phases/01-scenario-ontology-intake.md
   evaluation: 04-evaluation.md
   evidence_schema: 05-evidence/evidence-ledger.schema.json
 generated_artifacts:
   agent_prompt: generated/agent-prompt.md
-name: ai-swarm-simulator

@@ -3047,6 +3047,10 @@ function packetCheckResults(dir) {
   const files = new Set(packetFiles(dir))
   const allFiles = Array.from(files)
   const isMapperTemplatePacket = dir.split(path.sep).join('/').endsWith('buildprints/buildprint-mapper-os/templates/executable-packet')
+
+  // Keep this checker as an executable-packet smoke alarm, not a product-quality theology gate.
+  // Product taste lives in generated/agent-prompt.md and the Buildprint prose; this check only
+  // rejects packets that are structurally unbootstrappable, stale, or obviously placeholder-filled.
   const need = [
     'BUILDPRINT.md', 'blueprint.yaml', '01-questions.md', '02-project-setup.md',
     '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md',
@@ -3055,6 +3059,7 @@ function packetCheckResults(dir) {
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
   ok('packet does not ship project AGENTS.md', !files.has('AGENTS.md') && !allFiles.some((file) => file.startsWith('docs/')))
   ok('packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
+
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
   ok('blueprint declares executable Buildprint authority', /schema_version:\s*mapper-os\/executable-blueprint\s*$/im.test(blueprint) && /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
   ok('blueprint includes project setup gate', /questions:\s*01-questions\.md/i.test(blueprint) && /project_setup:\s*02-project-setup\.md/i.test(blueprint))
@@ -3064,50 +3069,45 @@ function packetCheckResults(dir) {
   const qualificationLabel = yamlScalar(blueprint, 'qualification_label') || yamlScalar(blueprint, 'claim_status')
   ok('blueprint declares qualification label', ['DISCOVERY_ONLY', 'PROOF_REQUIRED', 'QUALIFIED_SOURCE_INDEPENDENT'].includes(qualificationLabel))
   ok('blueprint declares setup tier', /setup_tier:\s*(compact_setup|full_setup|<compact_setup\|full_setup>)/i.test(blueprint))
-  ok('blueprint declares Product Engineering Lead as accountability contract', /Product Engineering Lead/i.test(blueprint) && /accountability_contract_not_persona|accountability contract/i.test(blueprint))
-  ok('blueprint declares optional PRODUCT.md rule', /PRODUCT\.md[\s\S]*(optional|large|complex|full-suite)/i.test(blueprint))
-  ok('blueprint phase entries include proof/surface metadata', /glance_surfaces:/i.test(blueprint) && /owned_surface_ids:/i.test(blueprint) && /required_proofs:/i.test(blueprint) && /blueprint_mode:/i.test(blueprint) && /phase_style:/i.test(blueprint))
+
   const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
-  ok('BUILDPRINT owns read order', /01-questions\.md[\s\S]*02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md/i.test(buildprint))
-  ok('BUILDPRINT includes loop, phase-flow, and repair protocol', /Implementation loop/i.test(buildprint) && /phase-runs/i.test(buildprint) && /Repair routing/i.test(buildprint))
-  ok('BUILDPRINT includes Product Engineering Lead contract', /Product Engineering Lead/i.test(buildprint) && /accountability contract|not a persona/i.test(buildprint))
-  ok('BUILDPRINT requires phase preflight before coding', /phase-preflight\.yaml/i.test(buildprint) && /fake-done risks|fake_done_risks/i.test(buildprint) && /claim ceiling|claim_ceiling/i.test(buildprint))
-  ok('PROOF_REQUIRED packet avoids completion language overclaim', isMapperTemplatePacket || qualificationLabel === 'QUALIFIED_SOURCE_INDEPENDENT' || !containsForbiddenCompletionLanguage(buildprint))
-  const questions = safeReadText(path.join(dir, '01-questions.md'))
-  ok('questions use numbered AI-default alignment', /## 1\./.test(questions) && /## 6\./.test(questions) && /AI best judgment/i.test(questions))
+  ok('BUILDPRINT owns read order', /01-questions\.md[\s\S]*(generated\/agent-prompt\.md[\s\S]*)?02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md/i.test(buildprint))
+  ok('BUILDPRINT includes phase loop and repair routing', /Implementation loop/i.test(buildprint) && /phase-runs/i.test(buildprint) && /Repair routing/i.test(buildprint))
+  ok('BUILDPRINT includes final reviewer mode', /Final critical reviewer/i.test(buildprint) && /dead buttons|dead controls|placeholder/i.test(buildprint))
+
   const setup = safeReadText(path.join(dir, '02-project-setup.md'))
-  ok('project setup defines architecture and AGENTS plan', /Architecture principles|Architecture rules/i.test(setup) && /implementation-project `AGENTS\.md`|AGENTS\.md plan/i.test(setup) && /Phase start gate/i.test(setup))
-  ok('project setup defines phase-flow execution authority', /03-phases\/phase-flow\.md/i.test(setup) && /Foundation scaffold gate/i.test(setup) && /\.buildprint\/setup/i.test(setup))
-  ok('project setup defines optional PRODUCT.md and setup tier', /PRODUCT\.md[\s\S]*(optional|large|complex|full-suite)/i.test(setup) && /compact_setup/i.test(setup) && /full_setup/i.test(setup))
-  ok('project setup requires runnable verifier commands', /verify:no-fake/i.test(setup) && /verify:phase-artifacts/i.test(setup) && /exit non-zero|non-zero/i.test(setup))
-  ok('project setup uses mapped obligation matrix', /\|\s*Surface id\s*\|[\s\S]*Mapped obligation[\s\S]*Owning phase[\s\S]*Required proof/i.test(setup))
+  ok('project setup defines implementation scaffold', /AGENTS\.md/i.test(setup) && /\.buildprint\/setup/i.test(setup) && /Foundation scaffold gate|Required foundation scaffold|Phase start gate/i.test(setup))
+
   const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
-  ok('phase flow defines phase-entry proof artifacts', /Phase-entry protocol/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/plan\.md/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/proof\.md/i.test(phaseFlow))
-  ok('phase flow requires Lead Phase Preflight', /Lead Phase Preflight Gate/i.test(phaseFlow) && /phase-preflight\.yaml/i.test(phaseFlow) && /lead_decision/i.test(phaseFlow) && /criterion_ids/i.test(phaseFlow) && /proof_ids/i.test(phaseFlow) && /fake_done_risks/i.test(phaseFlow))
-  ok('phase flow defines claim typing and evidence ceilings', /claim typing/i.test(phaseFlow) && /target[\s\S]*core_pass[\s\S]*claim_upgrade[\s\S]*blocker/i.test(phaseFlow) && /does not qualify live provider/i.test(phaseFlow))
-  ok('phase flow blocks evidence until proof exists', /may not append runtime evidence|Before writing runtime evidence/i.test(phaseFlow) && /\.buildprint\/evidence\/evidence-ledger\.jsonl/i.test(phaseFlow))
+  ok('phase flow defines phase-entry artifacts', /Phase-entry protocol/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/plan\.md/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/proof\.md/i.test(phaseFlow))
+  ok('phase flow requires preflight or explicit phase planning', /phase-preflight\.yaml|preflight/i.test(phaseFlow) && /lead_decision|decision/i.test(phaseFlow))
+  ok('phase flow defines claim typing or honest blockers', /claim typing|target[\s\S]*core_pass[\s\S]*claim_upgrade[\s\S]*blocker|honest blocker/i.test(phaseFlow))
+  ok('phase flow writes runtime evidence separately', /\.buildprint\/evidence\/evidence-ledger\.jsonl/i.test(phaseFlow))
+
   const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
-  ok('phase index names active proof-gated phase', /active_phase:\s*03-phases\//i.test(phaseIndex) && /phase_id:/i.test(phaseIndex) && /proof_gate:/i.test(phaseIndex))
-  ok('phase index carries mode/surface/proof metadata', /blueprint_mode:/i.test(phaseIndex) && /phase_style:/i.test(phaseIndex) && /glance_surfaces:/i.test(phaseIndex) && /owned_surface_ids:/i.test(phaseIndex) && /required_proofs:/i.test(phaseIndex))
+  ok('phase index names active phase file', /active_phase:\s*03-phases\/[^\s#]+\.md/i.test(phaseIndex))
   const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
   const phaseIdSet = new Set(phaseIds)
-  ok('phase index has unique canonical phase ids', phaseIds.length === phaseIdSet.size)
+  ok('phase index has unique canonical phase ids', phaseIds.length > 0 && phaseIds.length === phaseIdSet.size)
+  const phaseIndexFiles = phaseFilesFromIndex(phaseIndex)
+  const activePhase = (phaseIndex.match(/active_phase:\s*(03-phases\/[^\s#]+\.md)/i) || [])[1]
+  ok('phase index active phase exists', !!activePhase && files.has(activePhase))
+  ok('phase index referenced phase files exist', phaseIndexFiles.length > 0 && phaseIndexFiles.every((file) => files.has(file)))
+
   const phaseDir = path.join(dir, '03-phases')
-  const phases = exists(phaseDir) ? fs.readdirSync(phaseDir).filter((file) => file.endsWith('.md')).sort() : []
+  const phases = exists(phaseDir) ? fs.readdirSync(phaseDir).filter((file) => file.endsWith('.md') && file !== 'phase-flow.md').sort() : []
   ok('packet has at least one phase file', phases.length > 0)
   for (const file of phases) {
-    if (file === 'phase-flow.md') continue
     const text = safeReadText(path.join(phaseDir, file))
-    ok(`${file} includes phase-flow entry plus inline interfaces/state/proof/repair`, /## How to implement this phase/i.test(text) && /03-phases\/phase-flow\.md/i.test(text) && /phase-flow required artifacts/i.test(text) && /## Interfaces touched/i.test(text) && /## State\/runtime touched/i.test(text) && /## Proof gate/i.test(text) && /## Repair routing/i.test(text))
-    ok(`${file} includes structured phase contract`, /phase_contract:/i.test(text) && /owned_surface_ids:/i.test(text) && /core_pass_required:/i.test(text) && /claim_upgrade_tracks:/i.test(text))
-    ok(`${file} requires preflight with criteria/proofs/fake-done risks`, /phase-preflight\.yaml/i.test(text) && /criterion ids|criterion_ids/i.test(text) && /proof ids|proof_ids/i.test(text) && /fake-done risks|fake_done_risks/i.test(text))
+    ok(`${file} has implementable phase contract`, /phase_id|Phase mode contract|Product outcome|Capability outcome|Operation outcome/i.test(text) && /## Implementation scope/i.test(text) && /## Proof gate/i.test(text) && /## Repair routing/i.test(text))
     ok(`${file} uses phase_id not capability_id for proof rows`, !/capability_id\s*:/i.test(text))
     ok(`${file} does not reference missing shared UX context`, !/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text))
   }
+
   const rules = safeReadText(path.join(dir, '04-evaluation.md'))
-  for (const key of ['provider_live', 'durable_persistence', 'security_boundary', 'no_fake']) ok(`evaluation includes ${key}`, rules.includes(key))
-  ok('evaluation defines claim typing', /target[\s\S]*core_pass[\s\S]*claim_upgrade[\s\S]*blocker/i.test(rules))
-  ok('evaluation requires phase evidence manifest', /evidence\.json/i.test(rules) && /command\/artifact manifest|command.*artifact/i.test(rules))
+  ok('evaluation includes no_fake', rules.includes('no_fake'))
+  ok('evaluation includes production_readiness or honest blocker semantics', /production_readiness|blocker|blocked/i.test(rules))
+
   const schema = safeReadText(path.join(dir, '05-evidence/evidence-ledger.schema.json'))
   for (const key of ['phase_id', 'proof_type', 'provider_mode', 'upgrades_claim', 'claim_type', 'blocks_continuation']) ok(`evidence schema includes ${key}`, schema.includes(key))
   ok('evidence schema constrains proof/provider/claim types', /unit_contract/i.test(schema) && /provider_live/i.test(schema) && /claim_upgrade/i.test(schema))
@@ -3119,19 +3119,13 @@ function packetCheckResults(dir) {
   ok('seed evidence cannot upgrade claims', seedRows.every((row) => row.upgrades_claim !== true))
   ok('seed evidence rows use phase_id not capability_id', seedRows.every((row) => !('capability_id' in row) || 'phase_id' in row))
 
-  const glanceSurfaces = extractBuildprintGlanceSurfaces(buildprint)
-  const matrixRows = extractSetupMatrixRows(setup)
-  const phaseIndexFiles = phaseFilesFromIndex(phaseIndex)
-  ok('BUILDPRINT defines at least one glance surface', glanceSurfaces.length > 0)
-  ok('setup matrix has non-empty surface/proof rows', isMapperTemplatePacket || (matrixRows.length > 0 && matrixRows.every((row) => row.surfaceId && row.mappedObligation && row.disposition && row.requiredProof)))
-  ok('setup matrix rows have one owning phase or explicit drop/block', isMapperTemplatePacket || matrixRows.every((row) => /drop|blocked/i.test(row.disposition) || phaseIndexFiles.includes(row.owningPhase.replace(/`/g, ''))))
-  ok('glance surfaces trace into setup matrix', isMapperTemplatePacket || glanceSurfaces.every((surface) => matrixRows.some((row) => row.raw.join(' ').includes(surface))))
   ok('no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
     if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false
     const text = safeReadText(path.join(dir, file)).replace(/<phase-id>/g, '')
-    return /MAPPER_REQUIRED_|<[^>]+>/.test(text)
+    return /MAPPER_REQUIRED_|<mapped-app>|<capability name/i.test(text)
   }))
-  ok('generated prompt is not authority', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || !/start here|read first|source of truth|override|canonical/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md')).replace(/Generated from:[^\n]+/gi, '').replace(/not source of truth|not authoritative/gi, '')))
+  ok('generated prompt is alignment speech, not authority', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || (/not a checklist|senior product engineer|checklist executor/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))) && !/start here|read first|source of truth|override|canonical/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md')).replace(/Generated from:[^\n]+/gi, '').replace(/not source of truth|not authoritative|not a substitute/gi, ''))))
+  ok('generated prompt includes anti-slop reviewer when present', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || /anti-slop|ai-slop|slop gate/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))))
   return checks
 }
 

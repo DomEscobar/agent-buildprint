@@ -9,21 +9,21 @@
   "tier": "agent-grade",
   "status": "proof-required",
   "runtime": [
-    "Full-stack web runtime",
-    "Foundation scaffold gate",
-    "Provider adapters",
-    "Worker/runtime lifecycle",
+    "Full-stack browser workbench",
+    "Scenario intake and ontology review",
+    "Graph canvas central artifact",
+    "Simulation worker/runtime lifecycle",
+    "Report and interaction console",
     "Browser/e2e proof required"
   ],
   "stack": [
-    "Base project scaffold",
-    "Architecture and clean-code standards",
-    "Document ingestion",
-    "Ontology generation",
-    "Graph memory",
-    "Simulation runtime",
-    "Report interaction",
-    "Durable lifecycle"
+    "Scenario/document intake",
+    "Ontology generation/review",
+    "Graph data model and canvas interactions",
+    "Provider adapters and blocked-provider states",
+    "Simulation preparation and runtime monitor",
+    "Prediction report generation",
+    "Durable local persistence"
   ],
   "iconKeys": [
     "node",
@@ -32,95 +32,90 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "AI Swarm Simulator Buildprint remapped from MiroFish with Foundation scaffold rules: seed intake, ontology, Zep graph memory, simulation prep/run, observability, reports, and interaction as a proof-gated AI swarm prediction workbench.",
-  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish as a product/outcome-flow AI swarm simulator. It now requires a real implementation-project foundation before Phase 01: AGENTS.md, architecture.md, engineering-standards.md, proof-strategy.md, ui-identity.md, and a base project structure that coding agents must follow.",
-  "promise": "Build a production-grade AI swarm simulator without depending on the original source repo. Status remains PROOF_REQUIRED until all proof gates pass.",
+  "summary": "AI Swarm Simulator Buildprint remapped from MiroFish as a social simulation workbench with scenario intake, ontology review, a real graph canvas workbench, simulation runtime monitor, prediction report, and interaction console.",
+  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish. It is intentionally PROOF_REQUIRED: downstream agents must build the graph workbench as the central artifact, preserve real state/persistence/provider boundaries, and pass anti-slop review instead of shipping token bubbles or canned dashboards.",
+  "promise": "Build a credible AI swarm/social simulation workbench without depending on the original source repo. Status remains PROOF_REQUIRED until local, browser, persistence, provider, and runtime proof gates pass.",
   "whatYouGet": [
     "Executable Buildprint packet with BUILDPRINT.md canonical start",
-    "Foundation scaffold gate requiring AGENTS.md, architecture.md, engineering-standards.md, proof-strategy.md, and ui-identity.md",
-    "Five outcome-flow phases covering seed/ontology, graph memory, simulation environment, simulation run observability, and report interaction",
-    "Role contracts for product architecture, backend services, frontend workbench, and QA/security",
-    "Generated agent prompt and seed evidence ledger with claim status kept PROOF_REQUIRED"
+    "A generated agent prompt that frames the task as senior product/design alignment, not checklist compliance",
+    "Four outcome-flow phases from scenario intake through report interaction",
+    "Explicit graph-workbench requirements: meaningful nodes/edges, selection, inspectors, layout, pan/zoom, refresh, and downstream simulation effects",
+    "Anti-slop final reviewer requirements for dead controls, placeholders, canned outputs, weak graph substitutes, and non-persistent state"
   ],
   "whatYouNeed": [
     "A clean implementation workspace",
-    "LLM provider credentials for live ontology/report/profile proof, or acceptance that only live proof remains blocked",
-    "Zep-compatible graph-memory credentials for live graph proof, or a configured adapter/test-double path",
-    "OASIS/CAMEL-compatible runtime or approved simulation worker, plus deployment authorization for production proof",
-    "Persistence/backend and browser test environment capable of repeatable e2e proof"
+    "LLM provider credentials for live ontology/profile/report proof, or explicit blocked-provider evidence",
+    "Zep-compatible graph-memory credentials for live graph proof, or a deterministic sandbox adapter clearly labeled as such",
+    "OASIS/CAMEL-compatible runtime or approved local deterministic simulation worker",
+    "Browser/e2e environment for graph interaction, persistence, report, and console proof"
   ],
   "architectureFlow": [
-    "Foundation scaffold",
-    "Seed intake",
-    "Ontology",
-    "Graph memory",
-    "Simulation setup",
-    "Run observability",
-    "Report interaction"
+    "Scenario intake",
+    "Ontology review",
+    "Graph canvas workbench",
+    "Simulation preparation",
+    "Runtime monitor",
+    "Prediction report",
+    "Interaction console"
   ],
   "includes": [
-    "MiroFish seed intake and ontology workbench",
-    "Zep graph memory build and explorer",
-    "Simulation environment preparation",
-    "Simulation run and observability",
-    "Report generation and deep interaction",
-    "Foundation scaffold gate",
     "BUILDPRINT.md canonical start",
+    "generated/agent-prompt.md alignment speech",
     "01-questions.md alignment defaults",
-    "02-project-setup.md setup and surface matrix",
+    "02-project-setup.md source-evidenced surface matrix",
     "03-phases/phase-flow.md orchestration contract",
-    "03-phases proof-gated phase files",
+    "Scenario intake and ontology review phase",
+    "Graph canvas workbench phase with explicit no-token-bubbles constraint",
+    "Simulation preparation and runtime monitor phase",
+    "Prediction report and interaction console phase",
     "04-evaluation.md claim rules",
-    "05-evidence seed ledger/schema",
-    "06-contracts/*.md role contracts",
-    "generated/agent-prompt.md"
+    "05-evidence seed ledger/schema"
   ],
   "risks": [
-    "Overclaiming MiroFish clone parity",
-    "Counting deterministic adapters as live provider proof",
-    "Treating missing credentials as permission to omit provider adapters/config/tests",
-    "Static graph/report data presented as real behavior",
-    "No-op start/stop/chat/delete controls",
+    "Collapsing the graph workbench into token bubbles, chips, cards, or static SVG decoration",
+    "Canned ontology/report/simulation outputs that do not change with inputs",
+    "Dead buttons or fake controls presented as completed product behavior",
+    "Counting deterministic sandbox adapters as live provider proof",
+    "Omitting provider adapters because credentials are missing",
+    "Raw debug/admin surfaces standing in for product UX",
     "In-memory-only state counted as persistence",
-    "Plain local-MVP UI passed as workbench UX",
-    "Graph/simulation/report behavior shown as raw text lists instead of product affordances",
     "Screenshots without repeatable browser/e2e proof",
-    "Secret leakage through logs, reports, screenshots, or ledger entries"
+    "Secret leakage through logs, reports, screenshots, or evidence rows"
   ],
   "checks": [
-    "Mapper selected-output validator passes with fixture placeholders forbidden and /root/MiroFish source grounding required",
-    "Foundation scaffold gate present in 02-project-setup.md",
-    "Root AGENTS.md mandatory-read requirement present for architecture.md, engineering-standards.md, proof-strategy.md, and ui-identity.md",
-    "Generated agent prompt includes scaffold and clean-code instructions",
-    "Provider/runtime/browser proof remains PROOF_REQUIRED until downstream evidence passes"
+    "Mapper executable packet check passes",
+    "generated/agent-prompt.md is alignment speech and includes anti-slop review",
+    "Graph canvas phase explicitly forbids token bubbles/static SVG/card-list substitutes",
+    "Provider/runtime/browser proof remains PROOF_REQUIRED until downstream evidence passes",
+    "Final critical reviewer checks dead buttons, placeholders, canned outputs, persistence, and graph-workbench quality"
   ],
   "trustBadges": [
     {
       "label": "Executable packet",
-      "detail": "Current Mapper OS selected-output validator passes for the remapped packet.",
+      "detail": "The remapped packet passes the Mapper executable-integrity check.",
       "tone": "success"
     },
     {
-      "label": "Foundation scaffold required",
-      "detail": "Root AGENTS.md must route coding agents to architecture, engineering, test, and UI identity files before code edits.",
+      "label": "Graph workbench protected",
+      "detail": "The central artifact must be meaningful graph/canvas behavior, not token bubbles or static decoration.",
       "tone": "success"
     },
     {
-      "label": "Product outcome flow",
-      "detail": "Five proof-gated phases preserve the MiroFish workbench outcome from seed intake to report interaction.",
+      "label": "Anti-slop review",
+      "detail": "Final handover requires a harsh product-quality review after build/test/lint proof.",
       "tone": "success"
     },
     {
       "label": "Proof required",
-      "detail": "Live provider/runtime/browser proof remains pending until downstream implementation evidence is recorded.",
+      "detail": "Live LLM/Zep/OASIS/runtime proof remains pending until downstream implementation evidence is recorded.",
       "tone": "warning"
     }
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use the AI Swarm Simulator Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped packet is the source of truth — follow its read order (BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 04-evaluation.md, and the active phase files) instead of restating its rules here.",
+  "copyPrompt": "Use the AI Swarm Simulator Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped packet is the source of truth \u2014 follow its read order including BUILDPRINT.md, generated/agent-prompt.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, phase-flow, evaluation, and active phase files.",
   "publicStatus": {
     "label": "Mapped, proof pending",
-    "explanation": "Source-independent packet exists; live implementation proof is not complete."
+    "explanation": "Source-independent packet exists; downstream implementation proof is not complete."
   }
 }

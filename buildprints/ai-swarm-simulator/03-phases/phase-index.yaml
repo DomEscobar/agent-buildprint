@@ -1,33 +1,26 @@
-schema_version: mapper-os/phase-index.v1
-active_phase: 03-phases/01-seed-ontology-workbench.md
-phases:
-  - phase_id: 01-seed-ontology-workbench
-    title: Seed Intake And Ontology Workbench
-    file: 03-phases/01-seed-ontology-workbench.md
+active_phase: 03-phases/01-scenario-ontology-intake.md
+phase_order:
+  - phase_id: 01-scenario-ontology-intake
+    file: 03-phases/01-scenario-ontology-intake.md
+    title: Scenario intake and ontology review
     status: INCLUDED_NEEDS_PROOF
     depends_on: []
-    proof_gate: proof-01-seed-ontology-workbench
-  - phase_id: 02-graph-memory-build
-    title: Graph Memory Build And Explorer
-    file: 03-phases/02-graph-memory-build.md
+  - phase_id: 02-graph-canvas-workbench
+    file: 03-phases/02-graph-canvas-workbench.md
+    title: Graph canvas workbench
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [01-seed-ontology-workbench]
-    proof_gate: proof-02-graph-memory-build
-  - phase_id: 03-simulation-environment
-    title: Simulation Environment Preparation
-    file: 03-phases/03-simulation-environment.md
+    depends_on:
+      - 01-scenario-ontology-intake
+  - phase_id: 03-simulation-runtime-monitor
+    file: 03-phases/03-simulation-runtime-monitor.md
+    title: Simulation preparation and runtime monitor
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [02-graph-memory-build]
-    proof_gate: proof-03-simulation-environment
-  - phase_id: 04-simulation-run-observability
-    title: Simulation Run And Observability
-    file: 03-phases/04-simulation-run-observability.md
+    depends_on:
+      - 02-graph-canvas-workbench
+  - phase_id: 04-report-interaction-console
+    file: 03-phases/04-report-interaction-console.md
+    title: Prediction report and interaction console
     status: INCLUDED_NEEDS_PROOF
-    depends_on: [03-simulation-environment]
-    proof_gate: proof-04-simulation-run-observability
-  - phase_id: 05-report-and-interaction
-    title: Report Generation And Deep Interaction
-    file: 03-phases/05-report-and-interaction.md
-    status: INCLUDED_NEEDS_PROOF
-    depends_on: [04-simulation-run-observability]
-    proof_gate: proof-05-report-and-interaction
+    depends_on:
+      - 03-simulation-runtime-monitor
+completion_rule: all phases require phase_preflight, plan, proof, evidence row, verification output, and final critical reviewer pass before complete-bounded-proof.
