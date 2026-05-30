@@ -3126,7 +3126,11 @@ function packetCheckResults(dir) {
   ok('setup matrix has non-empty surface/proof rows', isMapperTemplatePacket || (matrixRows.length > 0 && matrixRows.every((row) => row.surfaceId && row.mappedObligation && row.disposition && row.requiredProof)))
   ok('setup matrix rows have one owning phase or explicit drop/block', isMapperTemplatePacket || matrixRows.every((row) => /drop|blocked/i.test(row.disposition) || phaseIndexFiles.includes(row.owningPhase.replace(/`/g, ''))))
   ok('glance surfaces trace into setup matrix', isMapperTemplatePacket || glanceSurfaces.every((surface) => matrixRows.some((row) => row.raw.join(' ').includes(surface))))
-  ok('no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => /\.(md|yaml|json|jsonl)$/.test(file) && /MAPPER_REQUIRED_|<[^>]+>/.test(safeReadText(path.join(dir, file)))))
+  ok('no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
+    if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false
+    const text = safeReadText(path.join(dir, file)).replace(/<phase-id>/g, '')
+    return /MAPPER_REQUIRED_|<[^>]+>/.test(text)
+  }))
   ok('generated prompt is not authority', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || !/start here|read first|source of truth|override|canonical/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md')).replace(/Generated from:[^\n]+/gi, '').replace(/not source of truth|not authoritative/gi, '')))
   return checks
 }

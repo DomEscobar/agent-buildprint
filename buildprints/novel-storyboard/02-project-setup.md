@@ -1,5 +1,17 @@
 # Project Setup
 
+## Setup defaults
+
+- Human answers come from `01-questions.md`.
+- Blank answers authorize AI best-fit decisions grounded in mapped obligations.
+- Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks.
+- Full-suite packets default to production-grade architecture, not a local MVP.
+- Do not downgrade to a local MVP unless the selected scope explicitly says prototype-only.
+- `PRODUCT.md` is optional by default. Require it only for large, complex, full-suite, or product-contract-heavy packets; otherwise keep the product contract compact in `BUILDPRINT.md`, this file, and phase-local checks.
+- Setup tier must be explicit: `compact_setup` for small/single-phase packets; `full_setup` for this provider-backed, UI-bearing, stateful, runtime-heavy packet.
+
+# Project Setup
+
 ## Blueprint Classification
 
 blueprint_mode.primary: mixed
@@ -56,3 +68,96 @@ The packet is not production-ready by itself. The implementation becomes product
 ## Phase Start Gate
 
 After scaffold creation, open 03-phases/phase-index.yaml and execute the active phase through 03-phases/phase-flow.md. Do not append runtime evidence before phase plan.md and proof.md exist.
+
+
+## Product / capability shape
+
+- Blueprint mode:
+  - Primary: mixed
+  - Secondary: ui/api/worker/provider/data/deployment
+  - Phase style: mixed_contract
+  - Why this mode fits: MiroFish combines product browser flows, data-pipeline graph/report generation, automation runtime loops, and integration/provider boundaries.
+- Product / capability: MiroFish canvas simulation workbench
+- For product / mixed: Primary user jobs are seed upload, graph canvas workbench, simulation setup/runtime, report generation, and post-report interaction.
+- External providers/runtime: OpenAI-compatible LLM boundary, graph memory provider boundary, async simulation/report workers, durable storage.
+- Proof source: derive from `04-evaluation.md` and each active phase proof gate.
+- Setup tier: full_setup
+- Optional product contract: none; compact contract lives in `BUILDPRINT.md`, this file, and phase-local checks.
+
+
+## Architecture decisions
+
+Record concrete decisions the implementation project must follow:
+
+- Framework/runtime:
+  - Decision: production-capable browser app plus API/runtime service.
+  - Why this fits: preserves graph canvas, async simulation, report generation, and interaction surfaces.
+- Package/build system:
+  - Decision: use scripts for test/build/e2e/no-fake verification.
+  - Why this fits: prevents prose-only completion.
+- Module topology:
+  - Decision: name frontend, API/controller, service/domain, provider adapter, repository/store, worker/runtime, security, and test boundaries.
+  - Why this prevents local-MVP collapse: phase work must extend long-lived boundaries rather than single-file demos.
+- Data/storage:
+  - Decision: durable project, graph, simulation, report, interaction, and artifact storage.
+  - Restart/readback requirement: required before persistence claims upgrade.
+- Auth/providers/deployment:
+  - Decision: private authenticated by default; missing credentials become blockers only after adapters/config/tests exist.
+  - Live-proof blockers: provider credentials and deployment authorization.
+
+
+## Mapped obligation/surface matrix
+
+| Surface id | Source evidence | Mapped obligation | Target disposition | Target contract | Owning phase | Required proof |
+|---|---|---|---|---|---|---|
+| upload_prompt_intake | mapped note: MiroFish upload/prediction workflow | Upload seed files and prediction requirement into a real project/workbench entry | preserve | UI -> API -> persistence -> graph build entry | `03-phases/01-webapp-intake-graph-canvas.md` | proof-browser-runtime-trace |
+| graph_canvas_workbench | mapped note: graph API and graph canvas workflow | Build, display, poll, inspect, and delete graph memory through product UI | preserve | graph provider adapter plus durable local state | `03-phases/01-webapp-intake-graph-canvas.md` | proof-persistence-roundtrip |
+| env_setup_profiles_config | mapped note: simulation environment setup | Convert graph entities into simulation profiles/config with bounded options | preserve | dataflow with validation and provider fake tests | `03-phases/02-simulation-environment-config.md` | proof-dataflow-quality |
+| dual_platform_simulation_runtime | mapped note: simulation runtime workflow | Run, observe, stop, recover, and record dual-platform simulation actions | preserve | task loop with worker/runtime ownership | `03-phases/03-dual-platform-runtime.md` | proof-automation-trace |
+| report_agent_timeline | mapped note: report API/report agent workflow | Generate reports, stream logs/sections, retrieve/download/delete artifacts | preserve | provider/report boundary with artifact readback | `03-phases/04-report-agent-timeline.md` | proof-report-artifact-readback |
+| deep_interaction_console | mapped note: interaction views | Chat with report/simulated agents and inspect responses tied to simulation state | preserve | UI/API/provider interaction contract | `03-phases/05-deep-interaction-console.md` | proof-browser-runtime-trace |
+| history_restore | mapped note: history/database surface | Reopen prior simulations and reports with durable workflow trail | preserve | persistence/readback contract | `03-phases/05-deep-interaction-console.md` | proof-persistence-roundtrip |
+| provider_persistence_operability | mapped note: provider/storage/runtime posture | Distinguish local artifacts, live provider credentials, runtime processes, destructive actions, and deployment readiness | blocked until live credentials/deployment authorization | provider/storage/runtime proof ceiling | external_blocker | proof-provider-live-deployment-blocker |
+
+
+## Implementation project setup
+
+The Buildprint packet must not contain implementation-project files such as `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `ui-identity.md`, or `proof-strategy.md`. The implementation project must create them inside the real project root after this file is resolved and before Phase 01 starts.
+
+## Foundation scaffold gate
+
+Before any `03-phases/*` implementation starts, create the selected stack's real base project structure and local guidance files. Required implementation-project files for `full_setup`:
+
+- Root `AGENTS.md`: short scope governor with mandatory reads for `architecture.md`, `engineering-standards.md`, `proof-strategy.md`, and `ui-identity.md` when UI-bearing.
+- `architecture.md`: Architecture principles, Base project structure, Boundary map, Dependency rules, Architecture decisions, and Downstream phase extension map.
+- `engineering-standards.md`: Clean code rules, Validation and schemas, Persistence standards, Provider standards, Worker/runtime standards, UI standards, and Test standards.
+- `ui-identity.md`: product-specific graph/simulation/report visual identity and generic-dashboard failure criteria.
+- `proof-strategy.md`: commands proving each phase-owned surface and blocker/claim ceilings.
+- `.buildprint/setup.md` or `.buildprint/setup/`: selected stack, architecture, auth, provider, persistence, worker, deployment, browser/e2e, visual QA, safety, and verification decisions.
+
+### Runnable verification gate (required scripts)
+
+The scaffold must include executable verification the agent cannot satisfy with prose alone:
+
+| Script | Purpose | Must fail when |
+|---|---|---|
+| `verify:no-fake` | Scan implementation source for placeholder/stub/dead-control/mock-only promotion paths | Dead controls, no-op callbacks, static-shell signatures, or fake success states are present |
+| `verify:phase-artifacts` | Given `PHASE_ID`, verify every path cited in `.buildprint/phase-runs/PHASE_ID/evidence.json` exists and phase UI artifacts are fresh | Cited screenshot/trace/log is missing or reused as primary proof from another phase |
+
+Rules: scripts exit non-zero on violation; before appending runtime evidence run `verify:no-fake` and `verify:phase-artifacts`; save output to `.buildprint/phase-runs/PHASE_ID/proof.md` or `.buildprint/phase-runs/PHASE_ID/verify-output.txt`.
+
+
+## Open assumptions
+
+- Assumption: private authenticated deployment by default.
+- Evidence: mapped product handles uploads, provider credentials, generated artifacts, and destructive actions.
+- Risk: public deployment without hardening would leak data or create unsafe actions.
+- Blocks phase work: no; blocks public/live/deployment claim upgrades.
+
+## Phase start gate
+
+Do not start `03-phases/*` until this file is explicit enough to create implementation-project `AGENTS.md` and `.buildprint/setup.md` without inventing architecture. Phase entry remains governed by `03-phases/phase-flow.md`.
+
+Initial phase set:
+
+- Packet file `03-phases/01-webapp-intake-graph-canvas.md`

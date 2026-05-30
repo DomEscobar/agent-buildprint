@@ -1,8 +1,16 @@
-# MiroFish Canvas Webapp Workbench Buildprint
+# BUILDPRINT: MiroFish Canvas Webapp Workbench
 
-This Buildprint maps MiroFish into a source-independent implementation packet for the complete canvas/webapp workbench flow: uploaded seed material, graph memory construction, simulation environment preparation, dual-platform simulation, report-agent generation, and deep interaction with simulated agents.
+This Buildprint maps MiroFish into a source-independent implementation packet for the selected canvas/webapp workbench flow: uploaded seed material, graph memory construction, simulation environment preparation, dual-platform simulation, report-agent generation, and deep interaction with simulated agents.
 
-Qualification label: PROOF_REQUIRED
+This package is `PROOF_REQUIRED`. The glance describes the target product, not a claim that it is built.
+
+## Product brief
+
+- Product: MiroFish canvas simulation workbench
+- Primary outcome: Users turn uploaded seed material and a prediction prompt into a graph-backed simulation, generated report, and interactive post-report agent console.
+- Primary users: analysts and builders exploring prediction/simulation workflows from source documents.
+- Main surfaces: browser workbench, graph canvas, simulation runtime, report timeline, agent interaction console, provider adapters, persistence, export/download surfaces.
+- What this packet must not become: a generic dashboard, static graph demo, raw JSON list, local-only MVP shell, dead-control prototype, or source-code clone.
 
 ## Read Order
 
@@ -17,16 +25,47 @@ Qualification label: PROOF_REQUIRED
 
 Do not start by reading every Markdown file. Use phase-flow and the active phase to continue.
 
-## Final Product At A Glance
+## Final product at a glance
 
-- upload_prompt_intake: A public or trusted-local webapp home screen where users upload seed documents and write a prediction requirement before entering the workbench.
-- graph_canvas_workbench: A browser workbench with graph/split/workbench layout modes, a D3-style interactive graph canvas, live graph polling, node/edge detail inspection, legends, empty/loading/error states, and visible step progress.
-- env_setup_profiles_config: A simulation setup experience that converts graph entities into agent profiles, generates simulation configuration, exposes preparation progress, and lets users set bounded run options such as max rounds.
-- dual_platform_simulation_runtime: A controlled runtime that starts/stops a dual-platform social simulation, records platform action streams, updates graph memory when enabled, and exposes status, timeline, posts, comments, and recovery/close controls.
-- report_agent_timeline: A report agent experience that turns simulation output and graph memory into a prediction report, streams agent/tool/console logs, shows section progress, and supports report retrieval/download.
-- deep_interaction_console: A post-report interaction surface where users can chat with the report agent, select simulated agents, run surveys/interviews, and inspect answers tied to the running or preserved simulation environment.
-- history_restore: A history/database surface that lets users reopen prior simulations and reports without losing the workflow trail.
-- provider_persistence_operability: A provider and storage posture that distinguishes local durable artifacts from live provider credentials, runtime processes, task queues, destructive actions, and deployment readiness.
+**Golden path:** A user uploads source material and a prediction requirement, enters a graph canvas workbench, prepares a simulation environment, runs a dual-platform simulation, generates a report timeline, and then interrogates the report/simulated agents through a deep interaction console.
+
+**Surfaces**
+
+- upload_prompt_intake — user uploads seed documents and writes the prediction requirement — Phase 1
+- graph_canvas_workbench — user inspects graph build progress and graph canvas state — Phase 1
+- env_setup_profiles_config — user prepares simulation profiles and configuration — Phase 2
+- dual_platform_simulation_runtime — user runs and observes the simulation runtime — Phase 3
+- report_agent_timeline — user generates, reviews, and downloads report artifacts — Phase 4
+- deep_interaction_console — user chats with report/simulated agents and inspects answers — Phase 5
+- history_restore — user reopens prior simulations/reports and workflow trail — Phase 5
+- provider_persistence_operability — user-visible provider/storage posture distinguishes local artifacts, live provider credentials, runtime processes, destructive actions, and deployment readiness — Setup/All phases
+
+**Done looks like:**
+
+- Seed upload, graph build, simulation, report, and interaction surfaces are real browser/API/runtime paths, not static cards.
+- Saved projects, graph/report artifacts, and interaction history reload after restart.
+- Missing live provider credentials show honest blocked-provider states after adapters/config/tests exist.
+
+## Product Engineering Lead contract
+
+You are the Product Engineering Lead for this implementation run. This is an accountability contract, not a persona. Your job is to preserve the product intent, coordinate phase work, challenge shallow implementation, require evidence before claims, and escalate blockers. Do not use role language as proof. If phases need revision, split, merge, or blocking, record that explicitly in the phase preflight before coding.
+
+## Implementation loop
+
+Every phase must repeat this loop until the proof gate passes or a real blocker is recorded:
+
+1. Observe: inspect existing project files, nearest `AGENTS.md`, current behavior, and constraints.
+2. Plan: create `.buildprint/phase-runs/PHASE_ID/phase-preflight.yaml` and `.buildprint/phase-runs/PHASE_ID/plan.md`.
+3. Execute: make scoped changes without silently shrinking the mapped product.
+4. Verify: run planned test/build/browser/runtime gates and inspect output.
+5. Reflect: compare results against the phase proof gate and claim ceilings.
+6. Record: write `.buildprint/phase-runs/PHASE_ID/proof.md`, `.buildprint/phase-runs/PHASE_ID/evidence.json`, and append evidence/blocker rows.
+
+Before step 2 for each phase, create `.buildprint/phase-runs/PHASE_ID/phase-preflight.yaml`. It must record the lead decision (`accept`, `revise`, `split`, `merge`, or `block`), user-visible outcomes, affected boundaries, surface ids, criterion ids, proof ids, fake-done risks, verifier commands, claim ceiling, and blockers. A missing preflight blocks `phase_core_passed`.
+
+## Repair routing
+
+If verification fails, route back before editing again: test/build/runtime/UI/proof failure -> current phase file; architecture contradiction -> `02-project-setup.md`; missing human preference -> `01-questions.md`; missing dependency -> required prior phase; external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`.
 
 ## Stable Behavior
 
@@ -46,3 +85,10 @@ The source maps a five-step product flow, not a static dashboard. The downstream
 - This BUILDPRINT.md embeds the product dream; 02-project-setup.md turns it into architecture, state, provider, and UI/DX requirements.
 - Phase-flow authority is explicit and must be followed before writing runtime evidence.
 - The active phase is the only implementation entry point after setup.
+
+## Completion semantics
+
+- `PROOF_REQUIRED`, `checkpoint_recorded`, `phase_core_passed`, and `bounded-proof` describe bounded packet proof, not production-product completion.
+- Review prose, summaries, screenshots, or status notes are permission to record evidence, never evidence themselves.
+- Every `pass` or `pass-with-scoped-debt` verdict must point to rerunnable command output or an existing artifact path under `.buildprint/phase-runs/PHASE_ID/`.
+- `phase_core_passed` does not qualify live provider, deployment, worker, security, visual, or lifecycle claims unless matching claim-upgrade evidence exists.
