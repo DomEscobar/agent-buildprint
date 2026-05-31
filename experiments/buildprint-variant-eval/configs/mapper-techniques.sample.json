@@ -1,0 +1,61 @@
+{
+  "name": "mapper-techniques-product-eval",
+  "description": "Drop-in harness config for comparing Mapper OS technique variants by built product quality, not packet checker success.",
+  "agent": {
+    "command": "codex",
+    "args": ["exec", "--full-auto"],
+    "timeoutSeconds": 7200
+  },
+  "budget": {
+    "wallClockMinutes": 90,
+    "maxTurns": 20,
+    "unblockPolicy": "Only fix identical environment blockers across all variants. Do not coach product choices mid-run."
+  },
+  "task": {
+    "name": "local-rag-workbench",
+    "source": "buildprints/local-rag-chat-workbench/buildprint.json",
+    "instruction": "Build the selected product locally from this Buildprint packet. Use the packet as the governing source. Produce a runnable local artifact, run the strongest local gates you can, test the product like a real first-time user, and write a concise handover. Do not optimize for proof artifacts; optimize for a usable product."
+  },
+  "variants": [
+    {
+      "id": "goal-kernel",
+      "label": "Goal-Kernel Mapper OS",
+      "buildprint": "/root/buildprint-variants/mapper-goal-kernel/buildprints/buildprint-mapper-os/buildprint.json",
+      "notes": "Goal condition + acceptance criteria + verification loop."
+    },
+    {
+      "id": "simulation-first",
+      "label": "Simulation-First Mapper OS",
+      "buildprint": "/root/buildprint-variants/mapper-simulation-first/buildprints/buildprint-mapper-os/buildprint.json",
+      "notes": "Simulate first user session, build from failure map, replay as verification."
+    },
+    {
+      "id": "architecture-garden",
+      "label": "Architecture-Garden Mapper OS",
+      "buildprint": "/root/buildprint-variants/mapper-architecture-garden/buildprints/buildprint-mapper-os/buildprint.json",
+      "notes": "Feature slice plus bounded architecture/refactor/UX gardening. Commit may not exist yet; path can point to dirty worktree."
+    }
+  ],
+  "review": {
+    "blindLabels": ["alpha", "beta", "gamma", "delta", "epsilon"],
+    "dimensions": [
+      "runs locally",
+      "core loop completion",
+      "central artifact usefulness",
+      "input-output causality",
+      "state/readback/persistence honesty",
+      "UX clarity and polish",
+      "architecture maintainability",
+      "anti-fake/provider honesty",
+      "handover usefulness"
+    ],
+    "criticalRegressions": [
+      "does not run locally",
+      "central artifact is decorative",
+      "core loop cannot be completed",
+      "fake live-provider behavior",
+      "dead controls dominate the UI",
+      "scope silently shrank from the source promise"
+    ]
+  }
+}
