@@ -3054,36 +3054,46 @@ function packetCheckResults(dir) {
   // rejects packets that are structurally unbootstrappable, stale, or obviously placeholder-filled.
   const need = [
     'BUILDPRINT.md', 'blueprint.yaml', '01-questions.md', '02-project-setup.md',
-    '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md',
-    '05-evidence/evidence-ledger.schema.json', '05-evidence/evidence-ledger.jsonl'
+    '03-phases/phase-index.yaml', '03-phases/phase-flow.md'
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
+  const hasProductReviewHandover = files.has('04-review.md') && files.has('05-handover.md')
+  const hasLegacyEvidenceLedger = files.has('05-evidence/evidence-ledger.schema.json') && files.has('05-evidence/evidence-ledger.jsonl')
+  ok('packet includes review/handover or legacy evidence ledger', hasProductReviewHandover || hasLegacyEvidenceLedger)
+  if (hasProductReviewHandover) {
+    ok('packet file exists: 04-review.md', files.has('04-review.md'))
+    ok('packet file exists: 05-handover.md', files.has('05-handover.md'))
+  } else {
+    ok('packet file exists: 04-evaluation.md', files.has('04-evaluation.md'))
+    ok('packet file exists: 05-evidence/evidence-ledger.schema.json', files.has('05-evidence/evidence-ledger.schema.json'))
+    ok('packet file exists: 05-evidence/evidence-ledger.jsonl', files.has('05-evidence/evidence-ledger.jsonl'))
+  }
   ok('packet does not ship project AGENTS.md', !files.has('AGENTS.md') && !allFiles.some((file) => file.startsWith('docs/')))
   ok('packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
 
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
   ok('blueprint declares executable Buildprint authority', /schema_version:\s*mapper-os\/executable-blueprint\s*$/im.test(blueprint) && /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
-  ok('blueprint includes project setup gate', /questions:\s*01-questions\.md/i.test(blueprint) && /project_setup:\s*02-project-setup\.md/i.test(blueprint))
+  ok('blueprint includes project setup gate', /01-questions\.md/i.test(blueprint) && /02-project-setup\.md/i.test(blueprint))
   ok('blueprint source fields are nested under source', !/\nsource:\s*\ninput:/i.test(`\n${blueprint}`))
-  ok('blueprint includes implementation loop', /observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint))
-  ok('blueprint includes repair routing', /proof_gate_failed:\s*current_phase/i.test(blueprint) && /architecture_contradiction:\s*02-project-setup\.md/i.test(blueprint))
+  ok('blueprint includes implementation loop', /phase_flow:\s*03-phases\/phase-flow\.md/i.test(blueprint) || /observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint))
+  ok('blueprint includes repair routing', /repair_routing:/i.test(blueprint) && /02-project-setup\.md/i.test(blueprint))
   const qualificationLabel = yamlScalar(blueprint, 'qualification_label') || yamlScalar(blueprint, 'claim_status')
-  ok('blueprint declares qualification label', ['DISCOVERY_ONLY', 'PROOF_REQUIRED', 'QUALIFIED_SOURCE_INDEPENDENT'].includes(qualificationLabel))
-  ok('blueprint declares setup tier', /setup_tier:\s*(compact_setup|full_setup|<compact_setup\|full_setup>)/i.test(blueprint))
+  ok('blueprint declares qualification label', ['DISCOVERY_ONLY', 'PROOF_REQUIRED', 'QUALIFIED_SOURCE_INDEPENDENT', 'product_build_required', 'local_build_requires_review'].includes(qualificationLabel))
+  ok('blueprint declares setup tier', /setup_tier:\s*(compact_setup|full_setup|product_leadership|<compact_setup\|full_setup>)/i.test(blueprint))
 
   const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
   ok('BUILDPRINT owns read order', /01-questions\.md[\s\S]*(generated\/agent-prompt\.md[\s\S]*)?02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md/i.test(buildprint))
-  ok('BUILDPRINT includes phase loop and repair routing', /Implementation loop/i.test(buildprint) && /phase-runs/i.test(buildprint) && /Repair routing/i.test(buildprint))
-  ok('BUILDPRINT includes final reviewer mode', /Final critical reviewer/i.test(buildprint) && /dead buttons|dead controls|placeholder/i.test(buildprint))
+  ok('BUILDPRINT includes phase loop', /How to use this packet|Implementation loop/i.test(buildprint) && /phase/i.test(buildprint))
+  ok('BUILDPRINT includes final reviewer mode', /Final critical reviewer|Final Reviewer|reviewer step|04-review\.md/i.test(buildprint) && /dead buttons|dead controls|placeholder|slop|generic dashboard/i.test(buildprint))
 
   const setup = safeReadText(path.join(dir, '02-project-setup.md'))
-  ok('project setup defines implementation scaffold', /AGENTS\.md/i.test(setup) && /\.buildprint\/setup/i.test(setup) && /Foundation scaffold gate|Required foundation scaffold|Phase start gate/i.test(setup))
+  ok('project setup defines implementation alignment', /Before coding/i.test(setup) && /central artifact|product loop/i.test(setup) && /Forbidden shortcuts|Product quality rules/i.test(setup))
 
   const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
-  ok('phase flow defines phase-entry artifacts', /Phase-entry protocol/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/plan\.md/i.test(phaseFlow) && /\.buildprint\/phase-runs\/<phase-id>\/proof\.md/i.test(phaseFlow))
-  ok('phase flow requires preflight or explicit phase planning', /phase-preflight\.yaml|preflight/i.test(phaseFlow) && /lead_decision|decision/i.test(phaseFlow))
-  ok('phase flow defines claim typing or honest blockers', /claim typing|target[\s\S]*core_pass[\s\S]*claim_upgrade[\s\S]*blocker|honest blocker/i.test(phaseFlow))
-  ok('phase flow writes runtime evidence separately', /\.buildprint\/evidence\/evidence-ledger\.jsonl/i.test(phaseFlow))
+  ok('phase flow defines phase-entry behavior', /For each phase/i.test(phaseFlow) && /smallest real usable slice/i.test(phaseFlow))
+  ok('phase flow requires explicit product intention or planning', /product intention|restate|plan|intention/i.test(phaseFlow))
+  ok('phase flow defines quality or blocker behavior', /slop|blocked|blocker|dead|fake|usable/i.test(phaseFlow))
+  ok('phase flow avoids self-proof theater', !/evidence-ledger\.jsonl/i.test(phaseFlow) || /hondo|handover|blocker/i.test(phaseFlow))
 
   const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
   ok('phase index names active phase file', /active_phase:\s*03-phases\/[^\s#]+\.md/i.test(phaseIndex))
@@ -3100,33 +3110,35 @@ function packetCheckResults(dir) {
   ok('packet has at least one phase file', phases.length > 0)
   for (const file of phases) {
     const text = safeReadText(path.join(phaseDir, file))
-    ok(`${file} has implementable phase contract`, /phase_id|Phase mode contract|Product outcome|Capability outcome|Operation outcome/i.test(text) && /## Implementation scope/i.test(text) && /## Proof gate/i.test(text) && /## Repair routing/i.test(text))
+    ok(`${file} has implementable phase contract`, /Product intention|Product outcome|Capability outcome|Operation outcome|Phase mode contract/i.test(text) && /## Build|## Implementation scope|## Review/i.test(text) && /Quality bar|Do not ship|Handover|Repair routing/i.test(text))
     ok(`${file} uses phase_id not capability_id for proof rows`, !/capability_id\s*:/i.test(text))
     ok(`${file} does not reference missing shared UX context`, !/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text))
   }
 
-  const rules = safeReadText(path.join(dir, '04-evaluation.md'))
-  ok('evaluation includes no_fake', rules.includes('no_fake'))
-  ok('evaluation includes production_readiness or honest blocker semantics', /production_readiness|blocker|blocked/i.test(rules))
+  const rules = files.has('04-evaluation.md') ? safeReadText(path.join(dir, '04-evaluation.md')) : safeReadText(path.join(dir, '04-review.md'))
+  ok('evaluation/review includes anti-fake product quality', /no_fake|fake|dead controls|generic dashboard|slop/i.test(rules))
+  ok('evaluation/review includes honest blocker or boundary semantics', /production_readiness|blocker|blocked|boundary|credentials/i.test(rules))
 
-  const schema = safeReadText(path.join(dir, '05-evidence/evidence-ledger.schema.json'))
-  for (const key of ['phase_id', 'proof_type', 'provider_mode', 'upgrades_claim', 'claim_type', 'blocks_continuation']) ok(`evidence schema includes ${key}`, schema.includes(key))
-  ok('evidence schema constrains proof/provider/claim types', /unit_contract/i.test(schema) && /provider_live/i.test(schema) && /claim_upgrade/i.test(schema))
-  const seedText = safeReadText(path.join(dir, '05-evidence/evidence-ledger.jsonl'))
-  const seedParse = evidenceRowsFromText(seedText)
-  const seedRows = seedParse.filter((item) => item.row).map((item) => item.row)
-  ok('seed evidence JSONL parses', seedParse.every((item) => !item.error))
-  ok('seed evidence phase ids match phase index', seedRows.every((row) => !row.phase_id || phaseIdSet.has(row.phase_id)))
-  ok('seed evidence cannot upgrade claims', seedRows.every((row) => row.upgrades_claim !== true))
-  ok('seed evidence rows use phase_id not capability_id', seedRows.every((row) => !('capability_id' in row) || 'phase_id' in row))
+  if (hasLegacyEvidenceLedger) {
+    const schema = safeReadText(path.join(dir, '05-evidence/evidence-ledger.schema.json'))
+    for (const key of ['phase_id', 'proof_type', 'provider_mode', 'upgrades_claim', 'claim_type', 'blocks_continuation']) ok(`evidence schema includes ${key}`, schema.includes(key))
+    ok('evidence schema constrains proof/provider/claim types', /unit_contract/i.test(schema) && /provider_live/i.test(schema) && /claim_upgrade/i.test(schema))
+    const seedText = safeReadText(path.join(dir, '05-evidence/evidence-ledger.jsonl'))
+    const seedParse = evidenceRowsFromText(seedText)
+    const seedRows = seedParse.filter((item) => item.row).map((item) => item.row)
+    ok('seed evidence JSONL parses', seedParse.every((item) => !item.error))
+    ok('seed evidence phase ids match phase index', seedRows.every((row) => !row.phase_id || phaseIdSet.has(row.phase_id)))
+    ok('seed evidence cannot upgrade claims', seedRows.every((row) => row.upgrades_claim !== true))
+    ok('seed evidence rows use phase_id not capability_id', seedRows.every((row) => !('capability_id' in row) || 'phase_id' in row))
+  }
 
   ok('no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
     if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false
     const text = safeReadText(path.join(dir, file)).replace(/<phase-id>/g, '')
     return /MAPPER_REQUIRED_|<mapped-app>|<capability name/i.test(text)
   }))
-  ok('generated prompt is alignment speech, not authority', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || (/not a checklist|senior product engineer|checklist executor/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))) && !/start here|read first|source of truth|override|canonical/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md')).replace(/Generated from:[^\n]+/gi, '').replace(/not source of truth|not authoritative|not a substitute/gi, ''))))
-  ok('generated prompt includes anti-slop reviewer when present', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || /anti-slop|ai-slop|slop gate/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))))
+  ok('generated prompt is alignment speech, not authority', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || (/not a checklist|senior product engineer|senior product engineer|product engineer|checklist executor/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))) && !/start here|read first|source of truth|override|canonical/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md')).replace(/Generated from:[^\n]+/gi, '').replace(/not source of truth|not authoritative|not a substitute/gi, ''))))
+  ok('generated prompt includes anti-slop/product reviewer when present', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || /anti-slop|ai-slop|slop gate|skeptical reviewer|dead buttons|generic dashboards/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))))
   return checks
 }
 
@@ -3267,7 +3279,7 @@ function readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile) {
   if (Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length) return manifest.instructions.readOrder
   if (Array.isArray(manifest.readOrder) && manifest.readOrder.length) return manifest.readOrder
   return isExecutablePacket
-    ? ['BUILDPRINT.md', '01-questions.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
+    ? ['BUILDPRINT.md', '01-questions.md', 'generated/agent-prompt.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-review.md', '05-handover.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
     : ['BUILDPRINT.md'].filter(hasManifestFile)
 }
 
@@ -3289,11 +3301,14 @@ function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
   const canonical = [
     'BUILDPRINT.md',
     '01-questions.md',
+    'generated/agent-prompt.md',
     '02-project-setup.md',
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
     activePhase,
+    '04-review.md',
+    '05-handover.md',
     '04-evaluation.md',
     '05-evidence/evidence-ledger.jsonl'
   ].filter((file) => file && hasManifestFile(file))
@@ -3318,7 +3333,11 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   const downloaded = []
   for (const file of manifest.files) {
     if (!file.path || file.path.includes('*')) continue
-    const source = resolveManifestUrl(baseUrl, file.siteUrl || file.rawUrl)
+    let source = resolveManifestUrl(baseUrl, file.siteUrl || file.rawUrl)
+    if (!source && baseUrl.startsWith('file://')) {
+      const manifestPath = fileURLToPath(baseUrl)
+      source = `file://${path.resolve(path.dirname(manifestPath), file.path)}`
+    }
     if (!source) throw new Error(`missing source URL for ${file.path}`)
     const text = await fetchTextExact(source)
     if (!text.trim() && !file.path.endsWith('.gitkeep')) throw new Error(`downloaded empty snapshot for ${file.path}`)
@@ -3369,11 +3388,14 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   const manifestReadOrder = isExecutablePacket
     ? executableReadOrder(baseReadOrder, hasManifestFile, activePhase)
     : uniqueStrings(baseReadOrder.filter(hasManifestFile))
-  const evidenceDir = path.join(stateDir, 'evidence')
-  const runtimeEvidencePath = path.join(evidenceDir, 'evidence-ledger.jsonl')
   const snapshotEvidencePath = path.join(snapshotDir, '05-evidence', 'evidence-ledger.jsonl')
-  fs.mkdirSync(evidenceDir, { recursive: true })
-  fs.writeFileSync(runtimeEvidencePath, fs.existsSync(snapshotEvidencePath) ? fs.readFileSync(snapshotEvidencePath, 'utf8') : '')
+  const hasLegacyRuntimeEvidence = fs.existsSync(snapshotEvidencePath)
+  if (hasLegacyRuntimeEvidence) {
+    const evidenceDir = path.join(stateDir, 'evidence')
+    const runtimeEvidencePath = path.join(evidenceDir, 'evidence-ledger.jsonl')
+    fs.mkdirSync(evidenceDir, { recursive: true })
+    fs.writeFileSync(runtimeEvidencePath, fs.readFileSync(snapshotEvidencePath, 'utf8'))
+  }
 
   writeJson(path.join(stateDir, 'source.json'), {
     slug: manifest.slug,
@@ -3398,19 +3420,19 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     currentPhase: isExecutablePacket ? activePhaseId || 'active-phase' : '00-alignment',
     activePhase,
     activePhaseId,
-    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'phase-gated' : null),
+    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'product-led-phase-flow' : null),
     completedPhases: [],
     blocked: false,
     lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
     nextAction: isExecutablePacket
       ? 'read .buildprint/next-agent.md, complete project setup, then follow the active phase loop'
       : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
-    runtimeEvidenceLedger: '.buildprint/evidence/evidence-ledger.jsonl',
+    runtimeEvidenceLedger: hasLegacyRuntimeEvidence ? '.buildprint/evidence/evidence-ledger.jsonl' : null,
     updatedAt: now,
   })
 
   fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
-    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Initialized writable runtime evidence ledger at \`.buildprint/evidence/evidence-ledger.jsonl\`.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, complete project setup, then execute the active phase loop.\n`
+    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared product-led phase-flow state.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, complete product setup, then execute the active phase loop.\n`
     : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
@@ -3424,21 +3446,21 @@ This is a Mapper OS executable Buildprint. Local runtime state wins over stale a
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work.
 4. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
-5. Create the required \`.buildprint/phase-runs/<phase-id>/\` plan/proof artifacts before evidence.
-6. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
-7. Execute the phase implementation loop through phase-flow: observe, plan, execute, verify, reflect, record.
-8. If verification fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
-9. Append proof or blocker rows only to \`.buildprint/evidence/evidence-ledger.jsonl\`, and only after phase-flow artifacts exist.
-10. After proof, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
+5. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
+6. Execute the phase-flow loop: restate product intention, build the smallest real usable slice, improve the obvious next user action, run relevant checks, remove visible slop, and record useful handover facts.
+7. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
+8. After each phase, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
+9. Before completion, run \`.buildprint/snapshots/04-review.md\` and write the handover described in \`.buildprint/snapshots/05-handover.md\`.
 
 Rules:
 
 - Do not read every phase upfront.
 - Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
 - Project root/local \`AGENTS.md\` files belong in the implementation project and should be created from \`02-project-setup.md\`, not shipped in the packet.
-- Keep claims scoped until runtime evidence rows prove the required gates.
+- Keep claims scoped until the built product has been checked directly.
+- Do not create proof theater; local checks and product review are useful only insofar as they catch real defects.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
-- If blocked, update \`.buildprint/blockers.md\` and evidence ledger.
+- If blocked, update \`.buildprint/blockers.md\` with the real blocker and next repair route.
 ` : `# Next Agent Instructions
 
 Start here.

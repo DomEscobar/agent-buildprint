@@ -1,30 +1,14 @@
-schema_version: mapper-os/phase-index
 active_phase: 03-phases/01-example-phase.md
-phases:
+phase_order:
   - phase_id: 01-example-phase
     file: 03-phases/01-example-phase.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
+    title: First usable product loop
+    status: included
     depends_on: []
-    glance_surfaces:
-      - MAPPER_REQUIRED_GLANCE_SURFACE
-    owned_surface_ids:
-      - MAPPER_REQUIRED_SURFACE_ID
-    required_proofs:
-      - proof-01-example-phase
-    proof_gate: proof-01-example-phase
   - phase_id: 99-final-review-handover
     file: 03-phases/99-final-review-handover.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
+    title: Final review and handover
+    status: included
     depends_on:
       - 01-example-phase
-    glance_surfaces: []
-    owned_surface_ids: []
-    required_proofs:
-      - proof-final-critical-review
-      - proof-anti-slop-pass
-      - proof-handover-written
-    proof_gate: proof-handover-written
+continuation_rule: move to the next phase only when the current slice is usable or honestly blocked; final review and handover are required before completion.

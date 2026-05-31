@@ -15,11 +15,13 @@ function edit(rel, fn) {
   fs.writeFileSync(file, fn(fs.readFileSync(file, 'utf8')))
 }
 
-// Simulate a future generated packet that is unbootstrappable or lost the current alignment layer.
-edit('blueprint.yaml', (s) => s.replace(/qualification_label: PROOF_REQUIRED\n/, '').replace(/setup_tier: <compact_setup\|full_setup>\n/, ''))
+// Simulate a future generated packet that is unbootstrappable or lost the product-leadership alignment layer.
+edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, ''))
 edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/01-example-phase.md', 'active_phase: 01-example-phase'))
 edit('generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
-edit('05-evidence/evidence-ledger.jsonl', (s) => `${s.trim()}\n{bad json\n`)
+edit('02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
+fs.rmSync(path.join(bad, '04-review.md'))
+fs.rmSync(path.join(bad, '05-handover.md'))
 
 let output = ''
 let failed = false
@@ -31,11 +33,13 @@ try {
 }
 
 const requiredFailures = [
+  'packet includes review/handover or legacy evidence ledger',
+  'blueprint declares qualification label',
   'blueprint declares setup tier',
+  'project setup defines implementation alignment',
   'phase index names active phase file',
-  'seed evidence JSONL parses',
   'generated prompt is alignment speech, not authority',
-  'generated prompt includes anti-slop reviewer when present'
+  'generated prompt includes anti-slop/product reviewer when present'
 ]
 
 const missing = requiredFailures.filter((label) => !output.includes(`✗ ${label}`))

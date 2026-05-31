@@ -1,61 +1,40 @@
-# Mapper OS Quality Policy
+# Quality Policy
 
-Mapper OS optimizes for correctness over impressive output.
+Core invariant: Buildprints should make better product implementation more likely. They should shape the agent's judgment before coding, not invite the agent to grade itself after coding.
 
-## Quality Invariant
+## What Mapper OS should preserve
 
-Core invariant: Buildprints should not make agents sound smarter; they should make low-quality completion harder to claim. Prefer structured fields, proof paths, verifier commands, and evidence ceilings over persuasive prose or roleplay.
+- The product promise and central artifact.
+- The first usable end-to-end loop.
+- Honest boundaries for credentials, providers, deployment, destructive actions, and security review.
+- Domain-shaped language and UI, not generic dashboards.
+- State persistence/readback where the product needs continuity.
+- A skeptical final review and concise handover.
 
-A Mapper OS output is acceptable only when:
+## What Mapper OS should avoid
 
-- scanner hints remain non-authoritative;
-- every observed claim has source evidence;
-- capability boundaries are product-behavior boundaries, not folder boundaries;
-- included capabilities have contracts, verification, no-fake checks, capability packets, and a recorded implementation depth status;
-- scope preservation is not enough: selected outputs must also preserve quality/depth by distinguishing real implementation from contract seams, blockers, and fake placeholders;
-- medium, large, UI-bearing, provider-backed, or full-suite outputs include an architecture topology gate instead of accepting flat route/static-shell prototypes as product-quality implementation;
-- missing evidence is marked `QUESTION`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, or `INCLUDED_RISKY_REQUIRES_HARDENING`;
-- capabilities are excluded only by explicit user decision or selected-target boundary, never because they are hard to prove;
-- explicitly user-excluded capabilities are not replaced with placeholders;
-- qualification wording matches the actual evidence.
+- Evidence theater: large proof ledgers, claim vocabulary, and self-reported compliance as quality substitute.
+- Overlong phase files full of protocol language.
+- Validators that reward proof-shaped prose instead of runnable structure.
+- UI that leaks Buildprint/phase/proof/test vocabulary.
+- Broad shallow panels that satisfy headings but do not create a usable product.
 
-## Evidence Policy
+## Preferred generated packet shape
 
-- Cite source path and line or section for every `OBSERVED` claim.
-- Mark synthesis as `INFERRED`.
-- Mark missing behavior as `QUESTION`, `INCLUDED_NEEDS_PROOF`, or `INCLUDED_BLOCKED`.
-- Mark risky sensitive behavior as `INCLUDED_RISKY_REQUIRES_HARDENING` when it remains in requested scope but needs hardening/proof.
-- Mark removed capabilities as `OUT_OF_SCOPE_BY_USER_ONLY` only when the user or selected target boundary explicitly excludes them.
-- Treat absence as a claim requiring searched surfaces and residual uncertainty.
+Keep the structure:
 
-## No-Fake Policy
+1. setup/alignment;
+2. questions;
+3. phases plus phase-flow;
+4. reviewer step;
+5. handover.
 
-Block qualification on:
+Rewrite the content toward product leadership:
 
-- placeholder routes;
-- route-shaped links;
-- no-op controls;
-- fake success states;
-- skeleton adapters;
-- deterministic provider/runtime adapters counted as live/provider-qualified implementation;
-- static UI shells counted as browser-proven product UX;
-- single-file or flat architecture counted as product architecture for medium, large, UI-bearing, provider-backed, or full-suite scope without explicit justification;
-- production-path mocks;
-- in-memory-only persistence where persistence is claimed;
-- unresolved high/critical security risks;
-- missing hardening artifacts for sensitive surfaces.
-
-## Execution Policy
-
-The Product Engineering Lead must run phase preflight before coding, decide whether Mapper OS proposed phases are accepted/revised/split/merged/blocked, and record the decision in `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml`. A missing preflight is a setup/protocol failure, not a phase pass.
-
-Each included capability must include:
-
-- implementation depth status: `REAL_IMPLEMENTED`, `CONTRACT_SEAM_ONLY`, `BLOCKED_WITH_REASON`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `FAKE_OR_PLACEHOLDER_FAIL`;
-- first implementation slice;
-- first verification gate;
-- topology/proof expectations for UI, API, domain logic, persistence/state, provider/runtime, failure states, tests, and proof;
-- repair-loop instruction;
-- fresh-review trigger when risky;
-- stop/escalation condition;
-- evidence required for qualification.
+- role/mission/craftsmanship alignment;
+- central artifact and product feel;
+- concrete forbidden shortcuts;
+- phase slices with product intention, build scope, quality bar, and do-not-ship list;
+- phase flow that asks for the obvious next user action;
+- final review that clicks, reloads, changes input, and repairs slop;
+- handover that tells the truth briefly.

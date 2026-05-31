@@ -1,69 +1,80 @@
-# Mapper OS Spec
+# SPEC: Buildprint Mapper OS
 
-## Must
+Mapper OS maps a source project into a source-independent implementation packet for coding agents.
 
-- Accept local source folders and Git URLs as source inputs for an agent-run mapping session.
-- Treat source checkouts as read-only.
-- Record source input, checkout path, commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, completeness score, and executable-blueprint readiness counts.
-- Keep census facts as `CENSUS_HINT` or `PENDING_AGENT_DISCOVERY` until source evidence promotes them.
-- Require every `OBSERVED` claim to cite source path and line or section evidence.
-- Treat absence as a claim requiring positive search evidence.
-- Preserve the user-requested scope. If no target is selected, remain discovery-only; if a target is selected, classify the full relevant behavior surface and sequence implementation without dropping behavior. Scope reduction requires explicit user confirmation.
-- Preserve requested quality/depth, not just labels. Selected outputs must make real implementation depth measurable and must not let endpoint/label/seam presence stand in for product behavior.
-- Classify every extracted behavior/slice as `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `OUT_OF_SCOPE_BY_USER_ONLY`, or `TEST_ONLY_MOCK`.
-- Emit implementation signals that help a downstream harness choose its implementation team/passes without turning the Buildprint into an architecture prescription.
-- Emit architecture topology and capability-depth gates for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy selected outputs.
-- Emit selected implementation output only under `selected-buildprint/`.
-- Use executable Buildprint proof-gated phases for medium, large, and full-suite selected outputs.
-- Include downstream-agent execution planning in every source-independent selected package.
-- Keep qualification label exactly one of `DISCOVERY_ONLY`, `PROOF_REQUIRED`, or `QUALIFIED_SOURCE_INDEPENDENT`.
-- Emit a Product Engineering Lead accountability contract in selected packets; it must define responsibility for product intent, evidence, phase coordination, anti-fake-done review, and blocker escalation without using CEO/persona framing.
-- Emit a required phase preflight contract before coding: `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` with `phase_id`, `lead_decision`, `user_visible_outcomes`, `affected_boundaries`, `surface_ids`, `criterion_ids`, `proof_ids`, `fake_done_risks`, `verifier_commands`, `claim_ceiling`, and `blockers`.
-- Emit deterministic checker anchors for proof IDs, criterion IDs, claim typing, evidence-first completion, verifier loops, and optional-vs-required `PRODUCT.md`.
+## Core invariant
 
-## Must Not
+A selected Buildprint should make the downstream product better. It should shape product judgment before coding: mission, central artifact, first usable loop, boundaries, forbidden shortcuts, review, and handover. It must not replace that judgment with evidence bureaucracy or self-proof theater.
 
-- Must not modify source project files.
-- Must not copy secrets or production data.
-- Must not treat static scanning as product authority.
-- Must not create root implementation scaffold in discovery mode.
-- Must not use broad architecture prose as a substitute for proof-gated phase packets.
-- Must not include placeholder-backed or mock-backed behavior in production scope, and must not hide unproven behavior by shrinking scope without user confirmation.
-- Must not call route-shaped endpoints, static UI shells, deterministic adapters, skeleton providers, or flat single-file prototypes “implemented” unless the applicable product behavior is proven; otherwise mark `CONTRACT_SEAM_ONLY` or `BLOCKED_WITH_REASON`.
-- Must not emit obsolete selected-output shapes, `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, packet `AGENTS.md`, root `manifest.json`, or fragmented per-capability mini-files.
-- Must not claim source-independent readiness while implementation order, verification gates, or stop conditions are missing.
-- Must not require downstream implementers to reopen the original source after qualification.
+## Source handling
 
-## Execution Slice Contract
+- Use a read-only source checkout or local source folder.
+- Do not mutate source while mapping.
+- Never copy secrets, private keys, tokens, cookies, production data, or secret values.
+- Treat scanners as hints only.
+- Promote source facts by reading behavior-relevant files.
+- Preserve requested scope; do not silently shrink it.
 
-Each selected slice must answer questions appropriate to its `blueprint_mode`:
+## Selected packet requirements
 
-- what the user, system, consumer, or operator can do;
-- accepted inputs and observable outputs;
-- important state and transitions;
-- failure, loading, empty, and blocked states;
-- provider, persistence, runtime, operational, or security boundaries;
-- stable behavior vs free implementation choices;
-- required implementation depth matching the mode: UI/UX/domain/persistence/provider for product; primitive/composition/extension/misuse for framework/library; config/webhook/idempotency/sandbox/live for integration; loop/tool/stop/approval/trace for automation; schema/transform/lineage/backfill/quality for data-pipeline; deploy/health/rollback/drift/observability for infrastructure;
-- implementation-team signals/passes required by product/capability shape;
-- verification gate and the mode-appropriate proof type;
-- stop or escalation condition (mandatory for automation; applicable for all modes);
-- unlock/dependency relation to later phases.
+A selected packet must contain:
 
-For **mixed** packets, each phase must clearly state which mode lens it uses and include mode-appropriate proof.
+```text
+BUILDPRINT.md
+01-questions.md
+02-project-setup.md
+blueprint.yaml
+03-phases/phase-index.yaml
+03-phases/phase-flow.md
+03-phases/<phase>.md
+03-phases/99-final-review-handover.md
+04-review.md
+05-handover.md
+generated/agent-prompt.md
+```
 
-Before implementation starts, the Product Engineering Lead may accept, revise, split, merge, or block proposed phases, but the decision must be recorded in phase preflight and must preserve every mapped surface through an owning phase, explicit blocker, or user-approved exclusion.
+Required properties:
 
-## Qualification Contract
+- `BUILDPRINT.md` is the execution start and owns read order.
+- `blueprint.yaml` declares `schema_version: mapper-os/executable-blueprint`, `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, a status/qualification label, setup tier, implementation loop, and repair routing.
+- `01-questions.md` asks only implementation-changing questions.
+- `02-project-setup.md` aligns the implementation around product loop, central artifact, persistence, live-boundary honesty, fake-feel risks, commands, quality rules, and forbidden shortcuts.
+- `03-phases/phase-index.yaml` names the active phase and ordered phase files.
+- `03-phases/phase-flow.md` tells the coding agent how to work each phase: restate product intention, build a real usable slice, improve the obvious next action, run checks, remove slop, record useful handover facts.
+- Phase files describe product intention, build scope, quality bar, and do-not-ship failures.
+- `04-review.md` is a skeptical product review: complete the core loop, reload state, change input, click controls, trigger empty/error/blocked states, look for fake/generic/dead behavior, and repair local central defects.
+- `05-handover.md` is concise and honest: current status, built surfaces, verification, known defects/blockers, next atomic actions.
+- `generated/agent-prompt.md` is alignment speech, not authority.
 
-Qualification requires:
+## Forbidden selected-output shapes
 
-- source-independent phase packets for all included selected-scope behavior;
-- traceability from requirement to source evidence to Buildprint slice to implementation check to QA/reversal check;
-- architecture topology proof and capability-depth matrix for medium, large, full-suite, UI-bearing, provider-backed, stateful, or runtime-heavy scopes;
-- runtime/test/reversal proof where behavior requires runtime evidence;
-- runtime evidence rows in `.buildprint/evidence/evidence-ledger.jsonl` using `phase_id`;
-- zero unresolved critical no-fake findings;
-- required hardening artifacts for auth, uploads, external providers, billing, admin actions, or user-data operations;
-- no unresolved high/critical security risks;
-- no secret values in generated outputs, logs, screenshots, or evidence artifacts.
+Do not emit obsolete router/scaffold files: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
+
+## Quality constraints
+
+Mapper OS should preserve:
+
+- central artifact and user loop;
+- state/persistence/readback where required;
+- provider, credential, deployment, paid-service, destructive, and security boundaries;
+- mode-appropriate consumer/operator experience;
+- product language rather than packet/proof language;
+- local runnable checks and manual/browser review where relevant.
+
+Mapper OS should avoid:
+
+- broad shallow dashboards;
+- raw JSON as the main product surface;
+- fake provider success;
+- canned output unrelated to input;
+- dead/no-op controls;
+- proof vocabulary in user-facing UI;
+- self-reported evidence as a substitute for built behavior.
+
+## Qualification labels
+
+Use conservative labels. A packet can be `product_build_required` or `local_build_requires_review` before a downstream implementation exists. Do not claim validated production completeness from the packet alone.
+
+## Validation philosophy
+
+Checkers should catch structural breakage, stale references, missing required files, obsolete packet shapes, and obvious placeholder leakage. They should not reward long ledgers, claim taxonomies, or proof-shaped prose.

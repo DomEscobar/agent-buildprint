@@ -127,18 +127,6 @@
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/04-evaluation.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/05-evidence/evidence-ledger.jsonl",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/05-evidence/evidence-ledger.schema.json",
-      "role": "source"
-    },
-    {
       "path": "templates/executable-packet/blueprint.yaml",
       "role": "source"
     },
@@ -173,6 +161,21 @@
     {
       "path": "vision.md",
       "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/99-final-review-handover.md",
+      "purpose": "Buildprint package file",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/04-review.md",
+      "purpose": "Buildprint package file",
+      "required": true
+    },
+    {
+      "path": "templates/executable-packet/05-handover.md",
+      "purpose": "Buildprint package file",
+      "required": true
     }
   ],
   "forbiddenDefaults": [
