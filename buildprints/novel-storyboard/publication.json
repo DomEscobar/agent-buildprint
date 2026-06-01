@@ -3,11 +3,11 @@
   "publish": true,
   "fileExcludes": [],
   "slug": "novel-storyboard",
-  "title": "Novel Storyboard",
+  "title": "MiroFish Canvas Webapp Workbench",
   "creator": "Agent Buildprint",
   "category": "Mapped Project",
   "tier": "agent-grade",
-  "status": "validated",
+  "status": "proof-required",
   "runtime": [
     "Executable packet",
     "Mock-first AI providers",
@@ -27,44 +27,44 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Execution-packet remap of a Toonflow-inspired creative pipeline into a desirable novel-to-storyboard product: cinematic shot frames, episode planning, script/assets, storyboard flow, media tasks, preview export, and safety gates.",
-  "plainDescription": "A router-first Buildprint for a production-grade novel-to-storyboard workbench. Agents start at BUILDPRINT.md and blueprint.yaml, build a storyboard-first browser workspace, write proof to an evidence ledger, and keep claims unqualified until proof exists.",
-  "promise": "A Mapper execution-packet for rebuilding the source-independent novel-to-storyboard workflow as a visually strong storyboard product without copying Toonflow source or claiming clone, Electron, live-provider, exact UI/canvas, or final stitched-video parity.",
+  "summary": "Executable Buildprint remap of MiroFish into a source-independent graph/simulation/report-agent webapp workbench with proof-gated phases and provider/runtime evidence ceilings.",
+  "plainDescription": "A Mapper OS executable packet for rebuilding the MiroFish canvas webapp workflow: seed upload, graph memory, simulation environment setup, dual-platform runtime, report-agent timeline, and deep interaction console.",
+  "promise": "A source-independent, proof-gated implementation packet for the MiroFish workbench flow without claiming live-provider, deployment, security, or final product qualification before evidence exists.",
   "whatYouGet": [
-    "Executable packet shape",
-    "BUILDPRINT.md product brief, golden path, surfaces, and done-looks-like target",
-    "02-project-setup.md architecture and ui-identity setup contract",
-    "Five phase files with product-led outcomes and proof gates",
-    "Storyboard-first product quality gates for shot frames, inspector state, visual review flow, and media status",
-    "Source-surface map tied to product obligations",
-    "Provider, state, runtime, safety, acceptance, and evidence ledgers"
+    "BUILDPRINT.md execution entry",
+    "blueprint.yaml executable packet contract",
+    "02-project-setup.md architecture/setup contract",
+    "Five feature phase files plus explicit final review/handover phase with phase-preflight, claim typing, proof IDs, and repair routing",
+    "Evidence ledger schema and seed blocker row",
+    "Provider/runtime/persistence/security proof ceilings"
   ],
   "whatYouNeed": [
     "Nothing for deterministic no-network proof mode",
     "Browser runtime proof for qualification",
     "Optional AI/image/video provider keys only for live-provider upgrade proof",
-    "Security review before public deployment or destructive/admin claims"
+    "Security review before public deployment or destructive/admin claims",
+    "Final critical review and handover before any complete-bounded-proof claim"
   ],
   "architectureFlow": [
-    "Router",
-    "Project",
-    "Novel",
-    "Script",
-    "Storyboard",
-    "Media",
-    "Safety"
+    "Seed Intake",
+    "Graph Canvas",
+    "Simulation Config",
+    "Runtime",
+    "Report Agent",
+    "Interaction Console",
+    "Hardening"
   ],
   "includes": [
     "BUILDPRINT.md execution entry",
     "BUILDPRINT.md executable start file",
     "blueprint.yaml authority packet",
     "02-project-setup.md architecture, experience quality, Foundation scaffold gate, and ui-identity requirement",
-    "03-phases phase index, phase-flow, and five phase files",
+    "03-phases phase index, phase-flow, five feature phase files, and final review/handover phase",
     "inline phase interface contracts",
     "inline phase state/runtime contracts",
     "04-evaluation acceptance/test/quality gates",
     "05-evidence ledger and unresolved blockers",
-    "Generated prompt",
+    "Generated alignment prompt with anti-slop reviewer guidance",
     "BUILDPRINT.md canonical start",
     "01-questions.md numbered alignment",
     "02-project-setup.md architecture and AGENTS plan",
@@ -112,5 +112,5 @@
   ],
   "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
   "originLabel": "HBAI-Ltd/Toonflow-app",
-  "copyPrompt": "Use the Novel Storyboard Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped packet is the source of truth — follow its read order (BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 04-evaluation.md, and the active phase files) instead of restating its rules here."
+  "copyPrompt": "Use the Novel Storyboard Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/novel-storyboard/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped packet is the source of truth \u2014 follow its read order (BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 04-evaluation.md, and the active phase files) instead of restating its rules here."
 }

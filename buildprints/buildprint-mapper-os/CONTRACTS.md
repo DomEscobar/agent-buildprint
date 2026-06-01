@@ -1,104 +1,83 @@
-# Mapper OS Contracts
+# CONTRACTS: Buildprint Mapper OS
 
-## Claim States
+## Source contract
 
-- `CENSUS_HINT`: scanner or inventory hint only.
-- `PENDING_AGENT_DISCOVERY`: source reading is required before the claim can guide implementation.
-- `OBSERVED`: directly grounded in source path and line or section evidence.
-- `INFERRED`: synthesis from observed facts; not a hard requirement unless confirmed.
-- `QUESTION`: unresolved decision or ambiguity.
-- `BLOCKED`: cannot be promoted with current evidence.
-- `OUT_OF_SCOPE`: intentionally excluded.
+- Source repositories are read-only during mapping.
+- Scanner output is a hint, not authority.
+- Secrets, tokens, private keys, cookies, and production data must not be copied.
+- Observable product behavior matters more than internal file names.
+- Selected scope must not silently shrink.
 
-## Capability Readiness States
+## Typed selected packet contract
 
-- `INCLUDED_READY`: selected/requested and has enough behavior contract plus verification oracle for implementation.
-- `INCLUDED_NEEDS_PROOF`: selected/requested but runtime, provider, test, browser, persistence, or reversal proof is missing.
-- `INCLUDED_BLOCKED`: selected/requested but cannot be implemented safely until a blocker is resolved.
-- `INCLUDED_RISKY_REQUIRES_HARDENING`: selected/requested and security/privacy/destructive/provider/deployment risk requires hardening artifacts and review before qualification.
-- `OUT_OF_SCOPE_BY_USER_ONLY`: excluded only by explicit user decision or explicit selected-target boundary; lack of proof alone is not enough.
-- `TEST_ONLY_MOCK`: allowed only under test/demo fixture boundaries.
+The selected packet is an implementation input for a future coding agent. It must help that agent build a better artifact for its real consumer, not merely produce better-looking compliance notes.
 
-## Qualification Labels
+Required selected packet spine:
 
-- `DISCOVERY_ONLY`: no selected implementation package exists.
-- `PROOF_REQUIRED`: selected package exists but source-independent qualification proof is incomplete.
-- `QUALIFIED_SOURCE_INDEPENDENT`: selected package can be implemented without reopening source and has required evidence.
+- `BUILDPRINT.md`
+- `01-questions.md`
+- `02-project-setup.md`
+- `blueprint.yaml`
+- `03-phases/phase-index.yaml`
+- `03-phases/phase-flow.md`
+- phase files
+- `03-phases/99-final-review-handover.md`
+- `04-review.md`
+- `05-handover.md`
+- `generated/agent-prompt.md`
 
-## Capability Depth States
+## Downstream role contract
 
-- `REAL_IMPLEMENTED`: selected capability is wired through the applicable UI/API/domain/service/provider/storage/task boundaries, has failure states, and has tests plus proof evidence.
-- `CONTRACT_SEAM_ONLY`: contracts, routes, UI labels, adapters, schemas, or task records exist, but real behavior, provider/runtime execution, persistence, browser proof, or production hardening is missing.
-- `BLOCKED_WITH_REASON`: selected/requested capability remains in scope but cannot be safely implemented or qualified until a named blocker is resolved.
-- `OUT_OF_SCOPE_BY_USER_ONLY`: excluded only by explicit user decision or explicit selected-target boundary.
-- `FAKE_OR_PLACEHOLDER_FAIL`: skeleton adapter, route-shaped endpoint, no-op control, fake success state, static-only UX claim, or mock counted as product behavior. This blocks qualification.
+The downstream agent is a **Senior Product/Developer/Operator Engineer**. This is a responsibility contract:
 
-## Required Selected Manifest Fields
-## Lead Agent Contract
+- preserve artifact intent and type;
+- identify the central artifact/interface/boundary;
+- build the first usable loop for the real consumer;
+- keep provider/deployment/destructive/security boundaries honest;
+- reject generic dashboard shells and fake controls;
+- run relevant local checks;
+- perform skeptical product review;
+- write concise handover.
 
-`Product Engineering Lead` is a responsibility contract, not persona theater. It means the current lead agent owns product-intent preservation, phase sequencing, reviewer/verifier delegation when useful, evidence discipline, no-fake challenge, and honest escalation. It does not authorize shrinking scope, replacing proof with prose, or claiming completion from alignment language.
+Role language is not proof. The built artifact behavior is what matters.
 
-## Phase Preflight Contract
+## Phase contract
 
-Every phase run must create `.buildprint/phase-runs/<phase-id>/phase-preflight.yaml` before implementation. Required fields: `phase_id`, `lead_decision` (`accept|revise|split|merge|block`), `user_visible_outcomes`, `affected_boundaries`, `surface_ids`, `criterion_ids`, `proof_ids`, `fake_done_risks`, `verifier_commands`, `claim_ceiling`, and `blockers`. Missing preflight blocks `phase_core_passed`.
+Each phase must be an implementable usable slice. It should state:
 
-## Claim Typing Contract
+- mode-appropriate intention;
+- what to build;
+- quality bar;
+- do-not-ship failures.
 
-Claims are typed as `target`, `core_pass`, `claim_upgrade`, or `blocker`. `target` describes intended product behavior before implementation. `core_pass` requires local executable proof. `claim_upgrade` requires direct matching proof for live provider, browser/e2e, security, worker, deployment, or lifecycle claims. `blocker` preserves scope and must not be rewritten as exclusion.
+The phase-flow loop is:
 
-## Required Selected Manifest Fields
+1. restate mode-appropriate intention;
+2. build the smallest real usable artifact-type slice;
+3. improve the obvious next consumer action if local, safe, and central;
+4. run relevant checks;
+5. remove visible slop;
+6. record useful handover facts.
 
-- source URL or local input;
-- source checkout path;
-- source commit SHA when available;
-- generation timestamp;
-- output mode;
-- discovery status;
-- qualification status;
-- production posture;
-- mock policy;
-- no-fake scan status;
-- completeness score with rubric, denominator, threshold, blocker overrides, and per-capability contribution;
-- capability readiness counts.
+## Review contract
 
-## Traceability Contract
+Final review must inspect behavior directly:
 
-Traceability lives per capability:
+- complete the core loop from a fresh start;
+- reload/read back required state, traces, or outputs;
+- vary inputs/config/events and verify outputs or behavior change;
+- click visible primary controls or run documented commands/API calls/operator actions;
+- test empty/error/blocked states where possible;
+- look for generic dashboard smell, fake intelligence, raw JSON dumped as the experience, placeholders, dead controls, undocumented public methods, fake adapter seams, canned output, internal/proof vocabulary, missing persistence, and absent next actions.
 
-```text
-capability requirement
--> source evidence
--> Buildprint contract
--> implementation check
--> QA or reversal check
-```
+Fix local, safe, central defects before handover. Leave only real blockers.
 
-Missing evidence, missing gate applicability, missing verification result, or unresolved `QUESTION` markers block qualification.
+## Handover contract
 
-## No-Fake Contract
+Handover is short and honest:
 
-The following never count as production behavior:
-
-- mock providers outside test/demo scope;
-- fixtures counted as product paths;
-- skeleton adapters;
-- placeholder routes;
-- route-shaped links without handlers/pages;
-- no-op controls;
-- fake success states;
-- in-memory-only persistence where persistence is claimed;
-- deterministic provider/runtime adapters counted as live/provider-qualified behavior;
-- static UI labels counted as browser/user-flow proof;
-- mostly single-file/flat architecture counted as product architecture for medium, large, UI-bearing, provider-backed, stateful, or full-suite scope without explicit justification.
-
-Mode-specific no-fake equivalents:
-
-- Framework/library: a single downstream app story counted as the primitive/composition map; a demo that exercises only one use case counted as a complete callable surface without invariants, extension points, or misuse coverage.
-- Integration: fake-provider test passing counted as live provider proof; missing webhook/callback, idempotency key, or sandbox/live split counted as a complete boundary transaction.
-- Automation: a feature checklist without a task loop counted as an agent; missing stop conditions, approval points, or trace artifacts counted as completed automation proof.
-- Data-pipeline: a pipeline without lineage rows or quality assertions counted as production dataflow proof; non-idempotent re-runs counted as backfill-safe.
-- Infrastructure: deployment scripts without health/readiness checks, rollback capability, or drift detection counted as operations-ready proof.
-
-## Source-Independence Contract
-
-Source is allowed during mapping, distillation, and qualification. A `QUALIFIED_SOURCE_INDEPENDENT` package must be implementable from generated Buildprint files alone.
+- current status;
+- built surfaces;
+- verification;
+- known defects and blockers;
+- next atomic actions.

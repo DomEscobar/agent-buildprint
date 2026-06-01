@@ -2,208 +2,146 @@ schema_version: mapper-os/executable-blueprint
 name: open-mirofish-swarm-prediction-workbench
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
-qualification_label: local_build_requires_review
-claim_status: product_build_required
-setup_tier: full_stack_local_first
-
-purpose:
-  summary: Build a local-first MiroFish-style swarm prediction workbench with an OSS graph-memory backend, rich canvas graph, provider-neutral LLM configuration, simulation runtime, report generation, and interaction surfaces.
-  audience: analysts_researchers_and_scenario_operators
-
-runtime:
-  type: full_stack_web_application
-  frontend: framework_flexible_vue_vite_observed
-  backend: framework_flexible_flask_observed
-  graph_memory: oss_graphiti_falkordb_recommended
-  persistence: sqlite_plus_local_artifact_files_recommended
-  llm_provider: openai_compatible_configurable
-
-blueprint_mode:
-  primary: mixed
-  modes:
-    - product
-    - integration
-    - data-pipeline
-    - automation
-
-source_context:
-  source_project: 666ghj/MiroFish
-  observed_revision: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
-  source_access_required_for_execution: false
-
+source:
+  input: source/MiroFish
+  checkout_path: /root/.openclaw/workspace/mapper-runs/mirofish-remap-20260530-172045/source/MiroFish
+  commit: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
+generated_at: 2026-05-30T15:23:56Z
+claim_status: PROOF_REQUIRED
+qualification_label: PROOF_REQUIRED
+setup_tier: full_setup
 product_contract:
-  promise: Upload seed material and a prediction requirement, build a graph-backed agent world, simulate social dynamics, generate a prediction report, and inspect the world through a rich canvas graph.
-  real_consumer: analyst_or_researcher
-  central_artifact: interactive_prediction_workbench_with_graph_memory_canvas
-  first_success_loop: upload_to_ontology_to_graph_to_simulation_setup_to_report_trace
-
+  product_md: optional
+  rule: PRODUCT.md is optional; require it only for large, complex, full-suite, or product-contract-heavy packets. Otherwise keep the compact product contract in BUILDPRINT.md and 02-project-setup.md.
+lead_agent_contract:
+  role: Product Engineering Lead
+  role_type: accountability_contract_not_persona
+  responsibilities:
+    - preserve_product_intent
+    - coordinate_phase_work
+    - require_evidence_before_claims
+    - challenge_shallow_implementation
+    - escalate_blockers
+blueprint_mode:
+  primary: product
+  secondary:
+    - ui
+    - api
+    - worker
+    - provider
+    - data
+  phase_style: outcome_flow
+setup_gate:
+  questions: 01-questions.md
+  project_setup: 02-project-setup.md
+  required_before_phases: true
 implementation_loop:
-  persist_state: true
-  graph_canvas_required: true
-  zep_replacement_required: true
-  ai_provider_independent: true
-  browser_review_required: true
-  local_runtime_required: true
-
-state:
-  project_metadata: durable
-  uploaded_files: durable_local_artifacts
-  extracted_text: durable_local_artifacts
-  ontology: durable
-  graph_memory: durable_oss_graph_backend
-  simulation_state: durable
-  report_outputs: durable_local_artifacts
-  logs: durable_jsonl_and_text
-
-nodes:
-  project_workspace:
-    responsibility: Own uploads, extracted text, ontology, graph id, simulation id, reports, and status.
-    input:
-      reads:
-        - uploaded_files
-        - prediction_requirement
-        - saved_project_metadata
-    output:
-      writes:
-        - project_metadata
-        - extracted_text
-        - project_status
-    side_effects:
-      - writes_local_project_artifacts
-  graph_memory_port:
-    responsibility: Hide backend-specific graph memory operations behind a stable local interface.
-    input:
-      reads:
-        - extracted_text_chunks
-        - ontology
-        - simulation_activity_text
-    output:
-      writes:
-        - graph_id
-        - graph_nodes
-        - graph_edges
-        - graph_search_results
-    side_effects:
-      - writes_to_local_graph_backend
-  graph_canvas:
-    responsibility: Render inspectable node and edge data with controls, details, labels, and states.
-    input:
-      reads:
-        - graph_nodes
-        - graph_edges
-        - workflow_status
-    output:
-      writes:
-        - selected_node_or_edge
-        - canvas_view_state
-    side_effects:
-      - browser_rendering_only
-  simulation_runtime:
-    responsibility: Prepare profiles/config, run deterministic or live simulations, and emit actions.
-    input:
-      reads:
-        - graph_entities
-        - prediction_requirement
-        - simulation_config
-    output:
-      writes:
-        - agent_profiles
-        - simulation_state
-        - action_logs
-        - graph_activity_updates
-    side_effects:
-      - local_process_execution
-      - optional_live_oasis_runtime
-  report_agent:
-    responsibility: Generate traceable prediction reports and answer graph/report questions.
-    input:
-      reads:
-        - graph_search_results
-        - simulation_traces
-        - agent_profiles
-        - report_history
-    output:
-      writes:
-        - report_markdown
-        - report_metadata
-        - agent_logs
-        - chat_messages
-    side_effects:
-      - llm_provider_calls_when_configured
-
-edges:
-  - from: project_workspace
-    to: graph_memory_port
-    relationship: builds_and_reads_graph_memory
-  - from: graph_memory_port
-    to: graph_canvas
-    relationship: supplies_canvas_ready_nodes_and_edges
-  - from: graph_memory_port
-    to: simulation_runtime
-    relationship: supplies_entities_and_receives_activity_updates
-  - from: simulation_runtime
-    to: report_agent
-    relationship: supplies_simulation_traces_and_profiles
-  - from: report_agent
-    to: project_workspace
-    relationship: persists_reports_logs_and_progress
-
-provider_boundaries:
-  llm:
-    required: true
-    posture: openai_compatible_configurable
-    env_names:
-      - LLM_API_KEY
-      - LLM_BASE_URL
-      - LLM_MODEL_NAME
-  graph_memory:
-    required: true
-    recommended_backend: graphiti_falkordb
-    forbidden:
-      - direct_zep_cloud_dependency
-      - zep_api_key_required_for_core_flow
-  simulation:
-    required: true
-    live_oasis_optional: true
-    deterministic_local_fallback_required: true
-
-repair_routing:
-  fake_graph_or_canvas: repair_before_handover
-  missing_persistence: repair_before_handover
-  provider_error_hidden_as_success: repair_before_handover
-  live_provider_credentials_missing: record_blocker_and_keep_local_loop
-  destructive_or_external_write_unclear: block_until_user_decision
-
-validation:
-  structural_files_required:
-    - BUILDPRINT.md
-    - 01-questions.md
-    - 02-project-setup.md
-    - blueprint.yaml
-    - 03-phases/phase-index.yaml
-    - 03-phases/phase-flow.md
-    - 04-review.md
-    - 05-handover.md
-    - generated/agent-prompt.md
-  expected_checks:
-    - backend_unit_or_api_tests
-    - frontend_build
-    - graph_adapter_contract_tests
-    - browser_canvas_smoke_test
-    - persistence_restart_smoke_test
-
-acceptance_criteria:
-  - User can create a project from seed files and a prediction requirement.
-  - Ontology generation produces inspectable entity and relation definitions.
-  - Graph memory builds without Zep Cloud and returns canvas-ready nodes and edges.
-  - Canvas graph supports inspection controls and nonblank browser rendering.
-  - Simulation setup uses graph entities and persists profiles/config.
-  - Deterministic local simulation emits action logs and updates graph memory.
-  - Report generation uses graph and simulation data and persists markdown plus logs.
-  - Restart/readback preserves project, graph id, simulation state, reports, and logs.
-
-forbidden_dependencies:
-  - zep_cloud_required_for_core_flow
-  - hard_coded_single_llm_provider
-  - in_memory_only_durability_claim
-  - canned_report_or_simulation_success
+  required: true
+  steps:
+    - observe
+    - plan
+    - execute
+    - verify
+    - reflect
+    - record
+  completion_requires:
+    - proof_gate_passed
+    - evidence_recorded
+repair_loop:
+  on_failure:
+    test_failed: current_phase
+    build_failed: current_phase
+    runtime_error: current_phase
+    ui_quality_failed: current_phase
+    proof_gate_failed: current_phase
+    architecture_contradiction: 02-project-setup.md
+    missing_human_preference: 01-questions.md
+    missing_dependency_phase: required_prior_phase
+    external_blocker: .buildprint/evidence/evidence-ledger.jsonl
+phases:
+  - phase_id: 01-scenario-ontology-intake
+    title: Scenario intake and ontology review
+    file: 03-phases/01-scenario-ontology-intake.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Scenario intake console
+      - Ontology review lane
+    owned_surface_ids:
+      - surface-scenario-intake-console
+      - surface-ontology-review-lane
+    required_proofs:
+      - proof-scenario-intake-roundtrip
+      - proof-ontology-domain-validation
+      - proof-intake-ui-browser
+    proof_gate: proof-scenario-intake-roundtrip
+  - phase_id: 02-graph-canvas-workbench
+    title: Graph canvas workbench
+    file: 03-phases/02-graph-canvas-workbench.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Graph canvas workbench
+    owned_surface_ids:
+      - surface-graph-canvas-workbench
+    required_proofs:
+      - proof-graph-canvas-runtime
+      - proof-graph-interaction-browser
+      - proof-provider-blocker-honesty
+    proof_gate: proof-graph-interaction-browser
+  - phase_id: 03-simulation-runtime-monitor
+    title: Simulation preparation and runtime monitor
+    file: 03-phases/03-simulation-runtime-monitor.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Simulation preparation board
+      - Dual-platform event monitor
+    owned_surface_ids:
+      - surface-simulation-preparation-board
+      - surface-dual-platform-event-monitor
+    required_proofs:
+      - proof-simulation-preparation-artifacts
+      - proof-dual-platform-event-runtime
+      - proof-runtime-stop-recovery
+    proof_gate: proof-dual-platform-event-runtime
+  - phase_id: 04-report-interaction-console
+    title: Prediction report and interaction console
+    file: 03-phases/04-report-interaction-console.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces:
+      - Prediction report workspace
+      - Interaction console
+    owned_surface_ids:
+      - surface-prediction-report-workspace
+      - surface-interaction-console
+    required_proofs:
+      - proof-report-generation-artifact
+      - proof-interaction-stateful-chat
+    proof_gate: proof-report-generation-artifact
+  - phase_id: 05-final-review-handover
+    title: Final critical review and handover
+    file: 03-phases/05-final-review-handover.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    glance_surfaces: []
+    owned_surface_ids: []
+    required_proofs:
+      - proof-final-critical-review
+      - proof-anti-slop-pass
+      - proof-handover-written
+    proof_gate: proof-handover-written
+context:
+  phase_index: 03-phases/phase-index.yaml
+  phase_flow: 03-phases/phase-flow.md
+  active_phase: 03-phases/01-scenario-ontology-intake.md
+  evaluation: 04-evaluation.md
+  evidence_schema: 05-evidence/evidence-ledger.schema.json
+generated_artifacts:
+  agent_prompt: generated/agent-prompt.md

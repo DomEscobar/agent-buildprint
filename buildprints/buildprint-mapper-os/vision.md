@@ -2,21 +2,20 @@
 
 This file is Mapper OS guidance, not a selected-packet output file. Do not emit `vision.md` into generated Buildprint packets.
 
-Use this guide when generating product-mode packets and mixed packets with product/UI phases. Its job is to make the generated `BUILDPRINT.md` and `02-project-setup.md` point downstream agents toward a desirable product, not a technically aligned but ugly local MVP.
+Use this guide when generating product-mode packets and mixed packets with UI or product-facing phases. For developer/operator modes, translate the same taste principles into adoption clarity, command/API ergonomics, observability, and recovery. Its job is to make generated packets point downstream agents toward a desirable artifact, not a technically aligned but ugly local MVP.
 
-## Generation Target
+## Generation target
 
 For product/UI-bearing output, synthesize the product vision into:
 
-- `BUILDPRINT.md` `## Product brief`
-- `BUILDPRINT.md` `## Final product at a glance`
-- `02-project-setup.md` `## Experience quality contract`
-- `02-project-setup.md` Foundation scaffold requirement for implementation-project `ui-identity.md`
-- UI-bearing phase `## Product outcome`, `## UX/UI requirements`, and `## Proof gate`
+- `BUILDPRINT.md` mission and senior product/developer/operator engineer contract;
+- `02-project-setup.md` artifact type, first loop, central artifact/interface/boundary, fake-feel risk, quality rules, and forbidden shortcuts;
+- phase `## Product intention`, `## Build`, `## Quality bar`, and `## Do not ship` sections;
+- `04-review.md` screenshot/browser/product-review rejection rules where UI matters.
 
-Do not create a packet-level `vision.md`. The vision must be embedded into the files agents already read early.
+Do not create a packet-level `vision.md`. The vision must be embedded into files agents read early.
 
-## Product Brief Standard
+## Product brief standard
 
 The product brief must make the target feel concrete in the first seconds of reading.
 
@@ -28,17 +27,13 @@ The product brief must make the target feel concrete in the first seconds of rea
 
 Avoid technical route inventories, component names, framework names, and internal source nouns unless they are the product domain itself.
 
-## Final Product Standard
+## Central artifact standard
 
-`BUILDPRINT.md` must include a concise product dream:
+Name the thing the product is really about: document, chat thread, board, canvas, trace, run, dataset, workflow, profile, plan, graph, incident, request, or equivalent.
 
-- Golden path: one paragraph that reads like a real workflow through a real product.
-- Surfaces: one line per major surface, each tied to a phase.
-- Done looks like: observable end states that distinguish a product from a proof shell.
+The artifact must be useful, editable/queryable/inspectable where appropriate, and connected to state. It must not be decoration around a generic form.
 
-For UI-bearing products, the final product must also communicate visual quality: what the first viewport shows, how domain objects are represented, what states are visible, and what would make the app feel production-grade.
-
-## Visual Product Standard
+## Visual product standard
 
 Generate product-specific visual direction. Do not say only "polished" or "production-grade".
 
@@ -48,7 +43,7 @@ Name:
 - domain objects and their visual anatomy;
 - density target and interaction tempo;
 - state language for empty, loading, blocked, running, success, failed, retry, selected, approved, or equivalent states;
-- first-viewport proof: what must be visible without reading logs or raw JSON;
+- first-viewport expectation: what must be visible without reading logs or raw JSON;
 - screenshot rejection rules.
 
 Reject:
@@ -62,23 +57,29 @@ Reject:
 - local MVP/admin test harness visuals;
 - screenshots that only prove elements exist.
 
-## Setup Standard
+## Setup standard
 
-`02-project-setup.md` must turn the product vision into implementation setup:
+`02-project-setup.md` must turn the artifact vision into implementation alignment:
 
-- require implementation-project `ui-identity.md` for UI-bearing products;
-- require `ui-identity.md` to derive visual identity, layout rules, interaction principles, state matrix, responsive behavior, accessibility baseline, and screenshot critique from `BUILDPRINT.md`;
-- keep architecture, persistence, provider, runtime, auth, deployment, and test decisions separate from product dream prose;
-- avoid repeating the full phase protocol.
+- first artifact-type loop to make usable first;
+- central artifact and why it is the right shape;
+- state that must persist/read back;
+- provider/deployment boundaries to keep honest;
+- first fake-feel risk;
+- local build/test/smoke commands;
+- product quality rules;
+- forbidden shortcuts.
 
-## Phase Standard
+Keep architecture, persistence, provider, runtime, auth, deployment, and test decisions as concise constraints, not long protocol prose.
 
-UI-bearing phases must name at least one concrete interaction depth item:
+## Phase standard
 
-- drag/pan/zoom/resize: name the pointer/transform behavior that proves real manipulation;
+UI-bearing phases should name concrete interaction depth where relevant:
+
+- drag/pan/zoom/resize: name pointer/transform behavior that proves real manipulation;
 - editing: name what field changes, how it persists, and how readback proves it;
 - async work: name queued/running/progress/done/failed/retry/cancel states;
 - persistence: name entities that must survive restart;
-- screenshot proof: name the visual change or state that must appear.
+- review: name visual or behavior changes the final reviewer must inspect.
 
-Functional browser assertions do not upgrade `visual_quality_gate` unless screenshot critique rejects the ugly-output patterns above.
+Functional assertions do not make a product good. The review must reject ugly, fake, generic, or dead behavior directly.

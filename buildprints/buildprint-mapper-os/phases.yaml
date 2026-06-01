@@ -20,18 +20,18 @@ phases:
       - dependency/framework/script/deploy/test/env-name hints
       - CENSUS_HINT or PENDING_AGENT_DISCOVERY states only
     must_pass:
-      - no product behavior, absence, parity, provider, or persistence claims
+      - no product behavior, absence, parity, provider, or persistence claims from hints alone
 
   - id: 02-behavior-discovery
     title: Behavior Discovery
     inputs: [plans/02-system-map.md, CONTRACTS.md]
     must_produce:
       - behavior inventory
-      - promoted claim register
-      - source evidence paths and lines or sections
+      - source-backed product obligations
+      - questions and blockers
     must_pass:
-      - every OBSERVED claim has evidence
-      - unresolved behavior remains QUESTION or BLOCKED
+      - every observed behavior has source grounding
+      - unresolved behavior remains question or blocker
 
   - id: 03-candidate-selection
     title: Candidate Selection
@@ -41,49 +41,43 @@ phases:
       - readiness classification across the requested/selected surface
     must_pass:
       - no silent scope shrinkage
-      - no placeholder replacement for explicit scope cuts
+      - explicit exclusions are named
 
   - id: 04-source-distillation
-    title: Source Distillation
+    title: Product-Led Source Distillation
     inputs: [prompts/extract-selected.md, templates/]
     must_produce:
       - source-independent selected-buildprint executable Buildprint
-      - product obligations
-      - proof-gated phase packets
-      - stable-vs-free boundaries
-      - BUILDPRINT-first read order with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, and 03-phases/phase-index.yaml before active phase loading
+      - product promise and central artifact
+      - first usable loop and phase slices
+      - honest boundaries and blockers
+      - review and handover files
     must_pass:
       - selected output stays under selected-buildprint/
-      - medium/large/full-suite output is hierarchical
-      - medium/large/full-suite output includes 03-phases/phase-index.yaml
-      - medium/large/full-suite output includes at least one phase markdown file
-      - medium/large/full-suite output includes 05-evidence/evidence-ledger.jsonl and 05-evidence/evidence-ledger.schema.json
-      - phase packets include proof gates, stop rules, implementation loop, repair routing, and unlock policy
+      - output includes BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, phase files, 04-review.md, 05-handover.md, and generated/agent-prompt.md
+      - phase packets include product intention, build scope, quality bar, and do-not-ship failures
       - obsolete selected-output spine files are absent
-      - fragmented per-capability mini-files are absent
-      - typo alias files such as VERFICATION.md are absent
+      - proof/evidence bureaucracy is not emitted as the product-quality mechanism
 
   - id: 05-execution-planning
     title: Downstream Execution Planning
     inputs: [prompts/extract-selected.md, templates/executable-packet/]
     must_produce:
-      - first active phase without hiding later work
-      - first verification gate per included phase
-      - implementation-team signals for downstream harness selection
-      - repair-loop and stop/escalation rules
+      - active phase and phase order
+      - typed artifact phase-flow
+      - local checks and review route
+      - repair/escalation rules
     must_pass:
-      - implementing agent does not need to infer critical order, builder passes, or gates
-      - implementing agent can start from BUILDPRINT.md and 03-phases/phase-index.yaml without reading all Markdown files, all phase packets upfront, or unrelated phases
+      - implementing agent can start from BUILDPRINT.md and phase-index without reading every phase upfront
+      - implementation direction preserves product quality and honest blockers
 
   - id: 06-qualification
     title: Qualification
     inputs: [plans/07-validation-submission.md]
     must_produce:
-      - gate results or blockers
-      - no-fake scan result
-      - hardening evidence when required
-      - reversal or QA evidence when required
+      - structural validation result or blockers
+      - product-review readiness statement
+      - honest qualification label
     must_pass:
-      - qualification label is honest
       - public wording is not misleading
       - selected output shape validation passes or blockers are recorded

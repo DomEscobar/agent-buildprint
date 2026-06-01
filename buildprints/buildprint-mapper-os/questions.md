@@ -16,7 +16,7 @@ Ask after discovery, not before, unless source access or safety boundaries are u
 
 1. Which candidate, explicit scope, or full-suite target should be selected?
 2. Should a risky capability be included, blocked, or out of scope?
-3. Are provider credentials or sandbox access available for qualification?
+3. Are provider credentials, sandbox access, or runtime environments available for verification?
 4. Should a known source defect be preserved or fixed when it affects observable behavior?
 5. Is the package intended to remain discovery-only or move to selected extraction?
 
@@ -27,10 +27,10 @@ Every selected Buildprint must carry a pre-implementation gate covering only unr
 1. Scope / capability boundary if ambiguous: candidate, explicit scope, or full-suite target?
 2. Deployment posture: trusted-local, private authenticated, or public webapp?
 3. Sensitive capability policy: include, block, or safe-seam risky capabilities?
-4. Runtime/provider proof: are sandbox credentials, provider test access, or runtime/browser environments available?
+4. Runtime/provider verification: are sandbox credentials, provider test access, or runtime/browser environments available?
 5. Persistence/infra default: source-observed stack, existing stack, SQLite, Postgres, durable queue/object store, local files only when justified, or other?
 
-Quality is not a question: Mapper OS always targets max-quality for the requested scope. Missing proof becomes a blocker/readiness state, not a lower quality tier.
+Quality is not a question: Mapper OS always targets max-quality for the requested scope. Missing verification becomes a blocker/readiness state, not a lower quality tier.
 
 ## Confirmation Summary
 
@@ -42,11 +42,11 @@ Mapping alignment summary
 - Output mode:
 - Requested scope:
 - Selected target / first capability:
-- Capability readiness summary:
+- Artifact readiness summary:
 - Explicitly user-excluded capabilities:
 - Blocked capabilities:
 - Sensitive surfaces:
 - Required hardening artifacts:
 - Qualification label:
-- Next capability:
+- Next artifact-type slice:
 ```

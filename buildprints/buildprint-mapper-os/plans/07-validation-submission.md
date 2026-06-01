@@ -2,19 +2,19 @@
 
 ## Goal
 
-Prove what can be proven and block what cannot be proven.
+Validate packet structure and hand off honestly. Do not confuse packet validation with proof that a future implementation already works.
 
 ## Steps
 
-- Run applicable static, build, unit/contract, runtime, browser/API, persistence/restart, no-fake, security/privacy, and clean-room reversal checks.
-- Record commands run, commands not run, evidence, blockers, timestamps, environment, and artifacts.
-- Run fixture review using `manual fixture review` when Mapper OS behavior or templates change.
-- Run selected-output shape validation for generated selected/full-suite executable-blueprint packets and regression fixtures.
-- Keep label `PROOF_REQUIRED` unless source-independent qualification proof is complete.
+- Run selected-output shape validation for generated selected/full-suite executable Buildprint packets and regression fixtures.
+- Check required files, read order, phase index references, review/handover presence, obsolete-file absence, and placeholder leakage.
+- Review the packet for typed alignment: artifact mode, real consumer, central artifact/interface/boundary, first usable loop, honest boundaries, forbidden shortcuts, usable phase slices, skeptical review, and concise handover.
+- Run fixture review when Mapper OS behavior or templates change.
+- Keep qualification/status conservative unless actual downstream implementation output has been built and reviewed.
 
 ## Exit Criteria
 
-- Qualification label is honest.
-- Missing gate results are blockers.
-- Selected output shape is valid: executable Buildprint spine, proof-gated phase packets, evidence-ledger routing, no obsolete router/spine files, no packet AGENTS.md, no fragmented per-capability mini-files, no typo aliases, and no duplicate canonical handoff files.
-- Final handoff names active phase, completed phases, blocked phases, next phase, and residual risks.
+- Qualification/status label is honest.
+- Missing validation results are blockers.
+- Selected output shape is valid: executable Buildprint spine, phase-flow, mode-aware phase packets, review, handover, no obsolete router/spine files, no packet AGENTS.md, no fragmented per-capability mini-files, no typo aliases, and no duplicate canonical handoff files.
+- Final handoff names selected scope, active phase, blocked phases, residual risks, and next direction.

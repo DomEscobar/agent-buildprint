@@ -1,0 +1,83 @@
+{
+  "name": "microfish-intake-ux-architecture-buildprint-eval",
+  "productSlice": {
+    "name": "Microfish normal-user intake + analysis slice",
+    "brief": "Build a local Microfish slice for a normal first-time user, not an expert operator. The user should paste messy notes, click one obvious action, receive a plain-language analysis of people/topics/risks/next step, optionally inspect advanced details, return later without losing state, and download JSON.",
+    "requiredOutcomes": [
+      "A normal first-time user understands the first action in under 10 seconds.",
+      "The first result is reachable with one primary action after notes are provided.",
+      "The result uses plain language before technical terms: people, topics, risks, next step.",
+      "Advanced ontology/provider/runtime details are available but progressively disclosed.",
+      "Changed notes visibly change the analysis.",
+      "Local persistence/readback works.",
+      "JSON download/export works and includes both user-facing summary and structured details.",
+      "The implementation uses TypeScript/framework or documents a real environment blocker, and separates domain, storage, provider, export, and UI concerns."
+    ],
+    "constraints": [
+      "Local-only; no external sends, no public deploy, no credential use unless explicitly configured.",
+      "No destructive filesystem actions outside output directory.",
+      "Missing OpenAI/Zep/OASIS credentials should be hidden from first-run UX and honestly explained in advanced details.",
+      "Do not silently collapse to a one-file vanilla JS app unless framework setup is genuinely blocked and documented."
+    ],
+    "forbiddenShortcuts": [
+      "Expert dashboard as the first screen.",
+      "Jargon above the fold: ontology, deterministic, provider, runtime, adapter, payload.",
+      "Hardcoded output that ignores user notes.",
+      "Dead Analyze/Download controls.",
+      "Fake live provider/runtime success.",
+      "One huge file containing UI, domain, storage, provider, and export logic without explanation."
+    ]
+  },
+  "variants": [
+    {
+      "id": "consumer-first-phased",
+      "label": "Consumer-First Phased Buildprint",
+      "buildprintDir": "experiments/buildprint-structure-eval/buildprints/microfish-intake-v2/consumer-first-phased"
+    },
+    {
+      "id": "product-architecture-phased",
+      "label": "Product-Architecture Phased Buildprint",
+      "buildprintDir": "experiments/buildprint-structure-eval/buildprints/microfish-intake-v2/product-architecture-phased"
+    },
+    {
+      "id": "outcome-simulation-phased",
+      "label": "Outcome-Simulation Phased Buildprint",
+      "buildprintDir": "experiments/buildprint-structure-eval/buildprints/microfish-intake-v2/outcome-simulation-phased"
+    }
+  ],
+  "agent": {
+    "command": "codex",
+    "args": ["exec", "--full-auto"],
+    "timeoutSeconds": 7200
+  },
+  "budget": {
+    "wallClockMinutes": 75,
+    "unblockPolicy": "Build local deterministic product; ask only for credentials/external/destructive/irreversible blockers; document framework install blockers instead of silently flattening architecture."
+  },
+  "review": {
+    "blindLabels": ["alpha", "beta", "gamma", "delta", "epsilon"],
+    "dimensions": [
+      "normal-user first-screen clarity",
+      "time to first value",
+      "one obvious primary action",
+      "plain-language result usefulness",
+      "progressive disclosure of advanced details",
+      "input-output causality",
+      "local persistence/readback",
+      "download/export usefulness",
+      "TypeScript/framework/modular architecture",
+      "verification and handover quality"
+    ],
+    "criticalRegressions": [
+      "does not run locally",
+      "normal user cannot identify first action in under 10 seconds",
+      "first screen is an expert dashboard",
+      "core notes -> analysis -> download loop cannot be completed",
+      "analysis ignores user notes",
+      "fake live-provider/runtime success",
+      "state disappears without honest blocker",
+      "technical/provider jargon dominates before first result",
+      "architecture collapses into one large file without documented blocker"
+    ]
+  }
+}

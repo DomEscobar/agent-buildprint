@@ -1,76 +1,48 @@
 schema_version: mapper-os/executable-blueprint
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
-source:
-  input: <source-input>
-  checkout_path: <source-checkout-path>
-  commit: <source-commit-or-unavailable>
-generated_at: <iso-timestamp>
-claim_status: PROOF_REQUIRED
-qualification_label: PROOF_REQUIRED
-setup_tier: <compact_setup|full_setup>
-product_contract:
-  product_md: optional
-  rule: PRODUCT.md is optional; require it only for large, complex, full-suite, or product-contract-heavy packets. Otherwise keep the compact product contract in BUILDPRINT.md and 02-project-setup.md.
-lead_agent_contract:
-  role: Product Engineering Lead
-  role_type: accountability_contract_not_persona
-  responsibilities:
-    - preserve_product_intent
-    - coordinate_phase_work
-    - require_evidence_before_claims
-    - challenge_shallow_implementation
-    - escalate_blockers
+claim_status: product_build_required
+qualification_label: local_build_requires_review
+setup_tier: typed_product_leadership
 blueprint_mode:
-  primary: <product|framework|integration|automation|library|data-pipeline|infrastructure|mixed>
-  secondary: []
-  phase_style: <outcome_flow|primitive_composition_map|boundary_transaction_contract|task_loop_contract|callable_contract|dataflow_contract|operations_contract|mixed_contract>
-setup_gate:
-  questions: 01-questions.md
-  project_setup: 02-project-setup.md
-  required_before_phases: true
+  primary: product
+  consumer: end_user
+  selected_spine: product_app_consumer_first
+  allowed_values:
+    - product
+    - framework
+    - library
+    - integration
+    - automation
+    - data-pipeline
+    - infrastructure
+    - mixed
+  note: Replace primary, consumer, and selected_spine during extraction. Do not force non-product artifacts into product-app phases.
+agent_contract:
+  role: Senior Product Engineer
+  rule: Build a usable artifact-type slice; do not produce proof theater.
+read_order:
+  - BUILDPRINT.md
+  - 01-questions.md
+  - generated/agent-prompt.md
+  - 02-project-setup.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - 04-review.md
+  - 05-handover.md
 implementation_loop:
-  required: true
-  steps:
-    - observe
-    - plan
-    - execute
-    - verify
-    - reflect
-    - record
-  completion_requires:
-    - proof_gate_passed
-    - evidence_recorded
-repair_loop:
-  on_failure:
-    test_failed: current_phase
-    build_failed: current_phase
-    runtime_error: current_phase
-    ui_quality_failed: current_phase
-    proof_gate_failed: current_phase
-    architecture_contradiction: 02-project-setup.md
-    missing_human_preference: 01-questions.md
-    missing_dependency_phase: required_prior_phase
-    external_blocker: .buildprint/evidence/evidence-ledger.jsonl
-phases:
-  - phase_id: 01-example-phase
-    title: 01-example-phase
-    file: 03-phases/01-example-phase.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
-    glance_surfaces:
-      - MAPPER_REQUIRED_GLANCE_SURFACE
-    owned_surface_ids:
-      - MAPPER_REQUIRED_SURFACE_ID
-    required_proofs:
-      - proof-01-example-phase
-    proof_gate: proof-01-example-phase
+  phase_flow: 03-phases/phase-flow.md
+  active_phase: 03-phases/00-product-system-alignment.md
+  final_review: 04-review.md
+  handover: 05-handover.md
+repair_routing:
+  product_contradiction: BUILDPRINT.md
+  setup_or_architecture_gap: 02-project-setup.md
+  phase_gap: current_phase
+  review_gap: 04-review.md
+  handover_gap: 05-handover.md
 context:
   phase_index: 03-phases/phase-index.yaml
-  phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-example-phase.md
-  evaluation: 04-evaluation.md
-  evidence_schema: 05-evidence/evidence-ledger.schema.json
-generated_artifacts:
+  active_phase: 03-phases/00-product-system-alignment.md
   agent_prompt: generated/agent-prompt.md

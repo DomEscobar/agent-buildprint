@@ -6,19 +6,20 @@ Create a source-independent selected Buildprint under `selected-buildprint/` as 
 
 ## Steps
 
-- Distill source facts into product obligations and proof-gated phase packets.
+- Distill source facts into product obligations and usable phase slices.
 - Create required executable Buildprint spine files.
-- Create phase Markdown files for medium or larger scopes.
-- Include stable-vs-free boundaries inside the relevant slice.
-- Include proof gates, no-fake checks, stop conditions, and unlock rules.
-- Make the output BUILDPRINT-first: `BUILDPRINT.md` owns read order, `blueprint.yaml` is the machine contract, and `03-phases/phase-index.yaml` routes the active phase and post-proof continuation.
-- Reject obsolete selected-output spine files, fragmented per-capability mini-files, and typo aliases such as `VERFICATION.md`.
-- Keep qualification label `PROOF_REQUIRED` until runtime proof exists.
+- Identify artifact mode, real consumer, promise, central artifact/interface/boundary, first usable loop, persistence/traces/readback needs, and honest boundaries.
+- Include stable-vs-free boundaries inside relevant slices.
+- Include quality bars, do-not-ship failures, local checks, final review, and handover.
+- Make the output BUILDPRINT-first: `BUILDPRINT.md` owns read order, `blueprint.yaml` is the machine contract, and `03-phases/phase-index.yaml` routes the active phase and continuation.
+- Reject obsolete selected-output spine files, proof/evidence bureaucracy, fragmented per-capability mini-files, and typo aliases such as `VERFICATION.md`.
+- Keep qualification/status conservative until actual implementation output is built and reviewed.
 
 ## Exit Criteria
 
 - Selected package is under `selected-buildprint/`.
 - Every included behavior is represented by an obligation, phase packet, blocker, explicit merge, or user-approved exclusion.
-- Medium/large selected output without `03-phases/phase-index.yaml` is invalid.
-- Every included phase packet includes interfaces/state/UX/safety sections, implementation loop, proof gate, repair routing, stop rules, and unlocks.
+- Medium/large selected output without `03-phases/phase-index.yaml` and `03-phases/phase-flow.md` is invalid.
+- Every included phase packet includes product intention, build scope, quality bar, and do-not-ship failures.
+- `04-review.md` and `05-handover.md` are present.
 - No selected behavior is placeholder-backed.

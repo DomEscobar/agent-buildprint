@@ -9,7 +9,9 @@
   "scripts": {
     "check:syntax": "node --check bin/agb.js",
     "check:packet:mapper": "node bin/agb.js packet check buildprints/buildprint-mapper-os",
-    "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs"
+    "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs",
+    "eval:buildprint-variants": "node scripts/eval-buildprint-variants.mjs",
+    "eval:buildprint-structures": "node scripts/eval-buildprint-structure-slices.mjs --help"
   },
   "description": "CLI for bootstrapping Agent Buildprints for coding agents.",
   "license": "MIT",

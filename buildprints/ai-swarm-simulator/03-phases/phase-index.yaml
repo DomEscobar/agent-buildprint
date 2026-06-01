@@ -1,29 +1,32 @@
-active_phase: 00-product-system-alignment.md
-ordered_phases:
-  - id: product-system-alignment
-    file: 00-product-system-alignment.md
-    mode: product
-  - id: graph-memory-replacement
-    file: 01-graph-memory-replacement.md
-    mode: integration
-  - id: workflow-shell-and-projects
-    file: 02-workflow-shell-and-projects.md
-    mode: product
-  - id: ontology-and-graph-build
-    file: 03-ontology-and-graph-build.md
-    mode: data-pipeline
-  - id: simulation-runtime
-    file: 04-simulation-runtime.md
-    mode: automation
-  - id: report-and-interaction
-    file: 05-report-and-interaction.md
-    mode: product
-  - id: canvas-craft-and-ops
-    file: 06-canvas-craft-and-ops.md
-    mode: product
-  - id: verification
-    file: 07-verification.md
-    mode: mixed
-  - id: final-review-handover
-    file: 99-final-review-handover.md
-    mode: mixed
+active_phase: 03-phases/01-scenario-ontology-intake.md
+phase_order:
+  - phase_id: 01-scenario-ontology-intake
+    file: 03-phases/01-scenario-ontology-intake.md
+    title: Scenario intake and ontology review
+    status: INCLUDED_NEEDS_PROOF
+    depends_on: []
+  - phase_id: 02-graph-canvas-workbench
+    file: 03-phases/02-graph-canvas-workbench.md
+    title: Graph canvas workbench
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - 01-scenario-ontology-intake
+  - phase_id: 03-simulation-runtime-monitor
+    file: 03-phases/03-simulation-runtime-monitor.md
+    title: Simulation preparation and runtime monitor
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - 02-graph-canvas-workbench
+  - phase_id: 04-report-interaction-console
+    file: 03-phases/04-report-interaction-console.md
+    title: Prediction report and interaction console
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - 03-simulation-runtime-monitor
+  - phase_id: 05-final-review-handover
+    file: 03-phases/05-final-review-handover.md
+    title: Final critical review and handover
+    status: INCLUDED_NEEDS_PROOF
+    depends_on:
+      - 04-report-interaction-console
+completion_rule: all phases require phase_preflight, plan, proof, evidence row, verification output, final critical reviewer artifact, anti-slop artifact, and .buildprint/handover.md before complete-bounded-proof.

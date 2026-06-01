@@ -1,16 +1,62 @@
-schema_version: mapper-os/phase-index
-active_phase: 03-phases/01-example-phase.md
-phases:
-  - phase_id: 01-example-phase
-    file: 03-phases/01-example-phase.md
-    status: INCLUDED_NEEDS_PROOF
-    blueprint_mode: product
-    phase_style: outcome_flow
+active_phase: 03-phases/00-product-system-alignment.md
+phase_order:
+  - phase_id: 00-product-system-alignment
+    file: 03-phases/00-product-system-alignment.md
+    title: Product system alignment
+    status: included
     depends_on: []
-    glance_surfaces:
-      - MAPPER_REQUIRED_GLANCE_SURFACE
-    owned_surface_ids:
-      - MAPPER_REQUIRED_SURFACE_ID
-    required_proofs:
-      - proof-01-example-phase
-    proof_gate: proof-01-example-phase
+  - phase_id: 01-shell-and-navigation
+    file: 03-phases/01-shell-and-navigation.md
+    title: Shell and navigation
+    status: included
+    depends_on:
+      - 00-product-system-alignment
+  - phase_id: 02-core-loop-first
+    file: 03-phases/02-core-loop-first.md
+    title: Core loop first
+    status: included
+    depends_on:
+      - 01-shell-and-navigation
+  - phase_id: 03-feature-slices
+    file: 03-phases/03-feature-slices.md
+    title: Feature slices
+    status: included
+    depends_on:
+      - 02-core-loop-first
+  - phase_id: 04-state-and-data
+    file: 03-phases/04-state-and-data.md
+    title: State and data
+    status: included
+    depends_on:
+      - 03-feature-slices
+  - phase_id: 05-domain-and-intelligence
+    file: 03-phases/05-domain-and-intelligence.md
+    title: Domain and intelligence
+    status: included
+    depends_on:
+      - 04-state-and-data
+  - phase_id: 06-design-system-and-copy
+    file: 03-phases/06-design-system-and-copy.md
+    title: Design system and copy
+    status: included
+    depends_on:
+      - 05-domain-and-intelligence
+  - phase_id: 07-architecture-garden
+    file: 03-phases/07-architecture-garden.md
+    title: Architecture garden
+    status: included
+    depends_on:
+      - 06-design-system-and-copy
+  - phase_id: 08-verification
+    file: 03-phases/08-verification.md
+    title: Verification
+    status: included
+    depends_on:
+      - 07-architecture-garden
+  - phase_id: 99-final-review-handover
+    file: 03-phases/99-final-review-handover.md
+    title: Final review and handover
+    status: included
+    depends_on:
+      - 08-verification
+continuation_rule: move to the next phase only when the current slice is usable or honestly blocked; final review and handover are required before completion.

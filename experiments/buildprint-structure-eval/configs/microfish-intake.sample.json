@@ -1,0 +1,80 @@
+{
+  "name": "microfish-intake-buildprint-structure-eval",
+  "productSlice": {
+    "name": "Microfish intake + ontology slice",
+    "brief": "Build a local slice of Microfish, a social-simulation research workbench. The slice covers project intake, seed evidence entry, deterministic ontology/graph preview, provider-status honesty, local persistence/readback, and JSON export for later simulation prep.",
+    "requiredOutcomes": [
+      "A first-time user can start the product locally.",
+      "The user can create or select a project and enter seed evidence.",
+      "The product generates an evidence-sensitive ontology/graph preview with actors/entities, relationships, assumptions, missing information, and provider status.",
+      "Changing seed evidence changes the generated ontology output.",
+      "Project state persists locally and can be read back after reload/restart.",
+      "The user can export JSON containing project metadata, evidence, ontology, provider status, and timestamp.",
+      "Provider/live runtime limits are honest; deterministic local mode is acceptable; fake live success is not."
+    ],
+    "constraints": [
+      "Local-only; no external sends, no public deploy, no credential use unless explicitly configured.",
+      "No destructive filesystem actions outside the output directory.",
+      "Missing OpenAI/Zep/OASIS credentials should produce honest blocked-live status, not fake success.",
+      "Use a small implementation appropriate for the eval budget, but do not silently shrink the core user loop."
+    ],
+    "forbiddenShortcuts": [
+      "Hardcoded ontology that ignores the evidence input.",
+      "Dead Generate/Export controls.",
+      "Claiming live provider/runtime success without actual provider/runtime proof.",
+      "Only writing process artifacts instead of a runnable product.",
+      "Dropping persistence/readback or export without marking a blocker."
+    ]
+  },
+  "variants": [
+    {
+      "id": "goal-kernel",
+      "label": "Goal-Kernel Buildprint",
+      "buildprintDir": "experiments/buildprint-structure-eval/buildprints/microfish-intake/goal-kernel"
+    },
+    {
+      "id": "simulation-first",
+      "label": "Simulation-First Buildprint",
+      "buildprintDir": "experiments/buildprint-structure-eval/buildprints/microfish-intake/simulation-first"
+    },
+    {
+      "id": "architecture-garden",
+      "label": "Architecture-Garden Buildprint",
+      "buildprintDir": "experiments/buildprint-structure-eval/buildprints/microfish-intake/architecture-garden"
+    }
+  ],
+  "agent": {
+    "command": "codex",
+    "args": ["exec", "--full-auto"],
+    "timeoutSeconds": 7200
+  },
+  "budget": {
+    "wallClockMinutes": 60,
+    "unblockPolicy": "Build local deterministic product; ask only for credentials/external/destructive/irreversible blockers."
+  },
+  "review": {
+    "blindLabels": ["alpha", "beta", "gamma", "delta", "epsilon"],
+    "dimensions": [
+      "runs locally",
+      "first-user core loop completion",
+      "Microfish slice fidelity",
+      "input-output causality",
+      "local persistence/readback",
+      "provider/runtime honesty",
+      "UX clarity and domain specificity",
+      "architecture maintainability",
+      "verification depth",
+      "handover usefulness"
+    ],
+    "criticalRegressions": [
+      "does not run locally",
+      "core intake -> ontology -> export loop cannot be completed",
+      "ontology output ignores user evidence",
+      "fake live-provider/runtime success",
+      "state disappears without honest blocker",
+      "dead controls dominate the UI",
+      "scope silently shrank from Microfish intake slice",
+      "security/privacy boundary violated"
+    ]
+  }
+}

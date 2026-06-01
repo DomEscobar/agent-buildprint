@@ -1,18 +1,97 @@
-active_phase: 01-webapp-intake-graph-canvas
+schema_version: mapper-os/phase-index
+active_phase: 03-phases/01-webapp-intake-graph-canvas.md
 phases:
-  - id: 01-webapp-intake-graph-canvas
-    file: 01-webapp-intake-graph-canvas.md
-    status: pending
-  - id: 02-simulation-environment-config
-    file: 02-simulation-environment-config.md
-    status: locked
-  - id: 03-dual-platform-runtime
-    file: 03-dual-platform-runtime.md
-    status: locked
-  - id: 04-report-agent-timeline
-    file: 04-report-agent-timeline.md
-    status: locked
-  - id: 05-deep-interaction-console
-    file: 05-deep-interaction-console.md
-    status: locked
-continuation_rule: unlock the next phase only after the current phase proof.md passes and evidence is appended to .buildprint/evidence/evidence-ledger.jsonl
+  - phase_id: 01-webapp-intake-graph-canvas
+    file: 03-phases/01-webapp-intake-graph-canvas.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    depends_on: []
+    glance_surfaces:
+      - upload_prompt_intake
+      - graph_canvas_workbench
+    owned_surface_ids:
+      - surface-upload-prompt-intake
+      - surface-graph-canvas-workbench
+    required_proofs:
+      - proof-browser-runtime-trace
+      - proof-persistence-roundtrip
+      - proof-no-fake-scan
+    proof_gate: proof-01-webapp-intake-graph-canvas
+  - phase_id: 02-simulation-environment-config
+    file: 03-phases/02-simulation-environment-config.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: data-pipeline
+    phase_style: dataflow_contract
+    depends_on: []
+    glance_surfaces:
+      - env_setup_profiles_config
+    owned_surface_ids:
+      - surface-env-setup-profiles-config
+    required_proofs:
+      - proof-dataflow-quality
+      - proof-provider-fake
+      - proof-persistence-roundtrip
+    proof_gate: proof-02-simulation-environment-config
+  - phase_id: 03-dual-platform-runtime
+    file: 03-phases/03-dual-platform-runtime.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: automation
+    phase_style: task_loop_contract
+    depends_on: []
+    glance_surfaces:
+      - dual_platform_simulation_runtime
+    owned_surface_ids:
+      - surface-dual-platform-simulation-runtime
+    required_proofs:
+      - proof-automation-trace
+      - proof-worker-retry-cancel-recovery
+      - proof-runtime-api
+    proof_gate: proof-03-dual-platform-runtime
+  - phase_id: 04-report-agent-timeline
+    file: 03-phases/04-report-agent-timeline.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: integration
+    phase_style: boundary_transaction_contract
+    depends_on: []
+    glance_surfaces:
+      - report_agent_timeline
+    owned_surface_ids:
+      - surface-report-agent-timeline
+    required_proofs:
+      - proof-provider-fake
+      - proof-report-artifact-readback
+      - proof-security-boundary
+    proof_gate: proof-04-report-agent-timeline
+  - phase_id: 05-deep-interaction-console
+    file: 03-phases/05-deep-interaction-console.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    depends_on: []
+    glance_surfaces:
+      - deep_interaction_console
+      - history_restore
+    owned_surface_ids:
+      - surface-deep-interaction-console
+      - surface-history-restore
+    required_proofs:
+      - proof-browser-runtime-trace
+      - proof-persistence-roundtrip
+      - proof-security-boundary
+    proof_gate: proof-05-deep-interaction-console
+  - phase_id: 06-final-review-handover
+    file: 03-phases/06-final-review-handover.md
+    status: INCLUDED_NEEDS_PROOF
+    blueprint_mode: product
+    phase_style: outcome_flow
+    depends_on:
+      - 05-deep-interaction-console
+    glance_surfaces: []
+    owned_surface_ids: []
+    required_proofs:
+      - proof-final-critical-review
+      - proof-anti-slop-pass
+      - proof-handover-written
+    proof_gate: proof-handover-written
+continuation_rule: unlock the next phase only after the current phase proof.md passes and evidence is appended to .buildprint/evidence/evidence-ledger.jsonl; complete-bounded-proof also requires 06-final-review-handover, .buildprint/final-critical-review.md, anti-slop evidence, and .buildprint/handover.md

@@ -1,41 +1,43 @@
-# Mapper OS Plan
+# PLAN: Buildprint Mapper OS
 
-This plan routes an agent through the Mapper OS workflow. It is decision-complete for running the mapping process, not for implementing the mapped product.
+## Goal
 
-## Phase Index
+Map source projects into source-independent Buildprint packets that improve downstream built product quality.
 
-1. `plans/00-safety-boundaries.md`: establish source read-only boundary and secret rules.
-2. `plans/01-repo-census.md`: collect safe census hints without product claims.
-3. `plans/02-system-map.md`: promote source-evidenced behavior claims.
-4. `plans/03-candidate-buildprints.md`: propose selected-scope candidates from promoted evidence.
-5. `plans/04-scope-decision.md`: ask only blocking scope or risk decisions.
-6. `plans/05-single-extraction.md`: create a selected executable Buildprint under `selected-buildprint/`.
-7. `plans/06-system-extraction.md`: create hierarchical full-suite executable Buildprint output when explicitly requested.
-8. `plans/07-validation-submission.md`: run verification, no-fake, hardening, and reversal gates or record blockers.
+## Operating plan
 
-## Default Flow
+1. Acquire source safely and read-only.
+2. Census the repo for hints: manifests, routes, components, data, providers, commands, deployment, tests.
+3. Discover observable behavior by reading source files.
+4. Preserve requested scope and mark questions/blockers honestly.
+5. Distill source behavior into:
+   - product promise;
+   - primary user/operator;
+   - central artifact;
+   - first usable loop;
+   - state/persistence/readback needs;
+   - provider/deployment/destructive/security boundaries;
+   - implementation slices.
+6. Emit selected packet with typed product-quality structure:
+   - `BUILDPRINT.md`;
+   - `01-questions.md`;
+   - `02-project-setup.md`;
+   - `blueprint.yaml`;
+   - `03-phases/phase-index.yaml`;
+   - `03-phases/phase-flow.md`;
+   - phase files;
+   - `04-review.md`;
+   - `05-handover.md`;
+   - `generated/agent-prompt.md`.
+7. Validate packet structure and references.
+8. Handoff with honest status and blockers.
 
-```text
-source acquisition
--> safe census
--> behavior discovery
--> claim promotion
--> scope decision
--> source distillation
--> selected-buildprint execution packet
--> downstream execution planning
--> verification and qualification review
--> handoff
-```
+## Product direction
 
-## Operating Rules
+Keep the useful broad Buildprint shape: setup/alignment, questions, phases plus phase-flow, reviewer, handover.
 
-- Discover first, ask second.
-- Ask only questions that affect selected scope, hardening, provider access, data handling, or qualification.
-- Prefer smaller complete selected scopes over broad partial scope.
-- Keep implementation scaffold out of the package root.
-- Use proof-gated phase packets for medium, large, and full-suite selected outputs.
-- Make selected outputs BUILDPRINT-first: `BUILDPRINT.md` owns read order, `blueprint.yaml` establishes the machine contract, `01-questions.md` and `02-project-setup.md` gate setup, and `03-phases/phase-index.yaml` names the active proof-gated phase.
-- Validate selected output shape before handoff: executable Buildprint spine, evidence-ledger routing, no typo aliases, no obsolete selected-output files, no packet AGENTS.md, and one canonical handoff artifact.
-- Record blockers instead of inventing behavior.
-- Treat full-suite as user intent, not proof.
+Remove the old center of gravity: proof ledgers, claim taxonomies, phase-preflight bureaucracy, and self-reported evidence as quality substitute.
+
+## Completion bar
+
+Done means the packet is structurally valid, source-independent, selected-scope faithful, and type-aware enough for a fresh coding agent to build a usable artifact-type slice without reading the source repo.

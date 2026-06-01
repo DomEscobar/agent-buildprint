@@ -15,11 +15,13 @@ function edit(rel, fn) {
   fs.writeFileSync(file, fn(fs.readFileSync(file, 'utf8')))
 }
 
-// Simulate a future generated packet that lost the new protocol in ways the checker must reject.
-edit('blueprint.yaml', (s) => s.replace(/qualification_label: PROOF_REQUIRED\n/, '').replace(/setup_tier: <compact_setup\|full_setup>\n/, ''))
-edit('03-phases/phase-flow.md', (s) => s.replace(/[\s\S]*?## Phase identity contract/, '# Phase Flow\n\n## Phase identity contract'))
-edit('03-phases/01-example-phase.md', (s) => s.replace(/```yaml\nphase_contract:[\s\S]*?```\n\n/, '').replace(/1a\. Write `\.buildprint\/phase-runs\/<phase-id>\/phase-preflight\.yaml`[^\n]*\n/, ''))
-edit('02-project-setup.md', (s) => s.replace(/\|  \| mapped note:[^\n]+\n/, '| dashboard | mapped note: source path app | Core app | preserve | Build a dashboard |  | tests pass |\n'))
+// Simulate a future generated packet that is unbootstrappable or lost the product-leadership alignment layer.
+edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, '').replace(/blueprint_mode:[\s\S]*?agent_contract:/m, 'agent_contract:'))
+edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/00-product-system-alignment.md', 'active_phase: 00-product-system-alignment'))
+edit('generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
+edit('02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
+fs.rmSync(path.join(bad, '04-review.md'))
+fs.rmSync(path.join(bad, '05-handover.md'))
 
 let output = ''
 let failed = false
@@ -31,12 +33,14 @@ try {
 }
 
 const requiredFailures = [
+  'packet includes review/handover',
+  'blueprint declares qualification label',
   'blueprint declares setup tier',
-  '01-example-phase.md includes structured phase contract',
-  '01-example-phase.md requires preflight with criteria/proofs/fake-done risks',
-  'setup matrix rows have one owning phase or explicit drop/block',
-  'glance surfaces trace into setup matrix',
-  'no generated sentinel placeholders remain'
+  'blueprint declares artifact mode',
+  'project setup defines implementation alignment',
+  'phase index names active phase file',
+  'generated prompt is alignment speech, not authority',
+  'generated prompt includes anti-slop/product reviewer when present'
 ]
 
 const missing = requiredFailures.filter((label) => !output.includes(`✗ ${label}`))
@@ -46,5 +50,5 @@ if (!failed || missing.length) {
   process.exit(1)
 }
 
-console.log('✓ mapper overhaul negative eval rejected malformed selected packet')
+console.log('✓ mapper executable-integrity eval rejected malformed selected packet')
 console.log(requiredFailures.map((label) => `  - ${label}`).join('\n'))
