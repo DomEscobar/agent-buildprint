@@ -4,7 +4,7 @@ This packet is an implementation input for a coding agent. Its job is to shape p
 
 ## Typed product-quality contract
 
-You are the senior product/developer/operator engineer for this run. First understand the artifact type declared in `blueprint.yaml`: product app, framework, library, integration, automation, data pipeline, infrastructure, or mixed. Build the artifact the packet describes for its real consumer. Preserve the promise, understand the central artifact or boundary, make the first real loop usable, and challenge shallow implementation.
+You are the posture-aware product/developer/operator engineer for this run. First understand the artifact type and deployment posture declared in `blueprint.yaml`. Build the artifact the packet describes for its real consumer and posture obligations. Preserve the promise, understand the central artifact or boundary, make the first real loop usable, and challenge shallow implementation.
 
 Product apps use the Buildprint v4 Consumer-First product-system spine: product-system alignment, shell/navigation, core loop first, feature slices, state/data, domain/intelligence, design/copy, architecture garden, and verification. Developer-facing artifacts use a Developer-First spine. Reliability/operator artifacts use a Reliability-First spine. Do not force every project into product-app UI language.
 
@@ -29,14 +29,14 @@ Do not read every phase upfront unless needed. Work the active slice, then conti
 
 1. Answer only implementation-changing questions.
 2. Set up the project with a short product/architecture note.
-3. For each phase, build the smallest real usable slice for the declared artifact type.
+3. For each phase, apply `requires_roles`, then build the smallest real usable slice for the declared artifact type.
 4. After the literal slice works, ask what the real consumer would immediately try next: end user, developer, operator, maintainer, or automation owner. If local, safe, and central, build it before moving on.
-5. Run relevant local checks.
+5. Run relevant checks for the declared posture.
 6. Remove visible slop.
-7. Finish with the final reviewer step and handover.
+7. Finish with the final reviewer step and handover, including `Not production-grade` status where required.
 
 ## Completion semantics
 
-A local/sandboxed implementation can be successful without being production-ready. It must be honest about live providers, deployment, paid services, destructive actions, security review, and unavailable credentials.
+`trusted_local` can be successful without being production-ready, but unbuilt operability controls must be listed in handover. `private_authenticated` and `public_webapp` require posture-critical controls to be built or explicitly blocked by external constraints.
 
 Do not silently shrink scope. If something cannot be built, preserve it as a blocker or next action.

@@ -32,9 +32,12 @@ Keep the structure:
 Rewrite the content toward product leadership:
 
 - role/mission/craftsmanship alignment;
+- posture-aware role/rule alignment (`trusted_local`, `private_authenticated`, `public_webapp`);
 - central artifact/interface/boundary and artifact feel;
 - concrete forbidden shortcuts;
-- phase slices with product intention, build scope, quality bar, and do-not-ship list;
+- phase slices with `requires_roles`, mapped obligations, stable-vs-free boundaries, implementation scope, quality bar, and do-not-ship list;
 - phase flow that asks for the obvious next consumer action;
-- final review that exercises controls/commands/API calls, reloads/reruns, changes input/config/events, and repairs slop;
-- handover that tells the truth briefly.
+- final review as operational walkthrough (Do/Observe/Record), not self-scoring prose;
+- handover that tells the truth briefly and explicitly lists not-production-grade gaps.
+
+Self-scored evidence is forbidden. Reviews are operational walkthroughs with observed outcomes.

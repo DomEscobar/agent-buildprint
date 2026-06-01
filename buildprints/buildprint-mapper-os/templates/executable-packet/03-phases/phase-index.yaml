@@ -1,4 +1,13 @@
 active_phase: 03-phases/00-product-system-alignment.md
+deployment_posture: trusted_local
+posture_allowed_values:
+  - trusted_local
+  - private_authenticated
+  - public_webapp
+conditional_phase_rules:
+  trusted_local: include posture-hardening phases as INCLUDED_BLOCKED with reason "trusted_local posture -- promote to private_authenticated or public_webapp to unlock"
+  private_authenticated: include posture-hardening phases as included
+  public_webapp: include posture-hardening phases as included with tenant/security depth
 phase_order:
   - phase_id: 00-product-system-alignment
     file: 03-phases/00-product-system-alignment.md
@@ -59,4 +68,23 @@ phase_order:
     status: included
     depends_on:
       - 08-verification
+optional_phase_catalog:
+  - phase_id: 09-auth-and-tenancy
+    file: 03-phases/conditional/auth-and-tenancy.md
+    default_status: conditional
+  - phase_id: 10-observability-and-health
+    file: 03-phases/conditional/observability-and-health.md
+    default_status: conditional
+  - phase_id: 11-deployment-and-operability
+    file: 03-phases/conditional/deployment-and-operability.md
+    default_status: conditional
+  - phase_id: 12-ci-and-release-gates
+    file: 03-phases/conditional/ci-and-release-gates.md
+    default_status: conditional
+  - phase_id: 13-backup-and-recovery
+    file: 03-phases/conditional/backup-and-recovery.md
+    default_status: conditional
+  - phase_id: 14-security-and-abuse-controls
+    file: 03-phases/conditional/security-and-abuse-controls.md
+    default_status: conditional
 continuation_rule: move to the next phase only when the current slice is usable or honestly blocked; final review and handover are required before completion.

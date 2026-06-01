@@ -28,7 +28,13 @@ Required selected packet spine:
 
 ## Downstream role contract
 
-The downstream agent is a **Senior Product/Developer/Operator Engineer**. This is a responsibility contract:
+The downstream role is deployment-posture aware:
+
+- `trusted_local` -> **Senior Product Engineer**
+- `private_authenticated` -> **Senior Staff Engineer**
+- `public_webapp` -> **Staff/Principal Engineer**
+
+This is a responsibility contract:
 
 - preserve artifact intent and type;
 - identify the central artifact/interface/boundary;
@@ -46,18 +52,24 @@ Role language is not proof. The built artifact behavior is what matters.
 Each phase must be an implementable usable slice. It should state:
 
 - mode-appropriate intention;
-- what to build;
+- mapped obligations;
+- stable vs free boundaries;
+- implementation scope;
+- interfaces touched and state/runtime touched;
+- `requires_roles` and routed role constraints;
 - quality bar;
-- do-not-ship failures.
+- do-not-ship failures;
+- repair routing and unlock condition.
 
 The phase-flow loop is:
 
 1. restate mode-appropriate intention;
-2. build the smallest real usable artifact-type slice;
-3. improve the obvious next consumer action if local, safe, and central;
-4. run relevant checks;
-5. remove visible slop;
-6. record useful handover facts.
+2. apply `requires_roles` and role-specific blocks;
+3. build the smallest real usable artifact-type slice;
+4. improve the obvious next consumer action if local, safe, and central;
+5. run relevant checks;
+6. remove visible slop;
+7. record useful handover facts.
 
 ## Review contract
 
@@ -68,6 +80,7 @@ Final review must inspect behavior directly:
 - vary inputs/config/events and verify outputs or behavior change;
 - click visible primary controls or run documented commands/API calls/operator actions;
 - test empty/error/blocked states where possible;
+- execute posture-gated operability walkthrough steps with Do/Observe/Record semantics;
 - look for generic dashboard smell, fake intelligence, raw JSON dumped as the experience, placeholders, dead controls, undocumented public methods, fake adapter seams, canned output, internal/proof vocabulary, missing persistence, and absent next actions.
 
 Fix local, safe, central defects before handover. Leave only real blockers.
@@ -80,4 +93,5 @@ Handover is short and honest:
 - built surfaces;
 - verification;
 - known defects and blockers;
+- not production-grade status by operability item (mandatory for trusted local posture);
 - next atomic actions.

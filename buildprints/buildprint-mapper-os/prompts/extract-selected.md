@@ -19,7 +19,7 @@ BUILDPRINT.md
 blueprint.yaml
 03-phases/phase-index.yaml
 03-phases/phase-flow.md
-03-phases/01-<phase-id>.md
+03-phases/00-<phase-id>.md
 03-phases/99-final-review-handover.md
 04-review.md
 05-handover.md
@@ -31,24 +31,46 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
 ## Generation process
 
 1. Identify the selected scope.
-2. Classify the dominant artifact type: product, framework, library, integration, automation, data-pipeline, infrastructure, or mixed.
-3. Select the matching spine:
-   - product -> Buildprint v4 Consumer-First product app system;
-   - framework/library/integration/CLI/agent tool -> Developer-First framework/integration;
-   - backend service/operator system -> Reliability-First service;
-   - automation -> Task/approval/trace loop;
-   - data-pipeline -> schema/transform/lineage/quality loop;
-   - infrastructure -> apply/health/rollback/drift loop;
-   - mixed -> explicit per-phase modes.
-4. Name the primary consumer: end user, developer, operator, maintainer, approver, analyst, or mixed.
-5. Name the promise in mode-appropriate language.
-6. Identify the central artifact, public interface, boundary transaction, work surface, task, dataflow, or operation.
-7. Identify the first usable end-to-end loop for that consumer.
-8. Identify state that must persist/read back, traces that must be inspectable, or outputs that must be reproducible.
-9. Identify live-provider, credential, deployment, destructive, paid-service, and security boundaries.
-10. Split implementation into a small number of usable, type-aware slices.
-11. Write each phase as intention + build scope + quality bar + do-not-ship failures.
-12. Add final review and handover.
+2. Resolve deployment posture before extraction:
+   - `trusted_local`
+   - `private_authenticated`
+   - `public_webapp`
+   If posture remains unanswered after one prompt, default to `trusted_local` and record the default in `01-questions.md` and `05-handover.md`.
+3. Classify the dominant artifact type: product, framework, library, integration, automation, data-pipeline, infrastructure, or mixed.
+4. Select the matching spine from this canonical list only:
+   - `product_app_consumer_first`
+   - `developer_first_framework`
+   - `reliability_first_service`
+   - `automation_task_loop`
+   - `data_pipeline_quality_loop`
+   - `infrastructure_operations_loop`
+   - `mixed`
+   Never invent custom names such as `product_custom_consumer`.
+5. Name the primary consumer: end user, developer, operator, maintainer, approver, analyst, or mixed.
+6. Name the promise in mode-appropriate language.
+7. Identify the central artifact, public interface, boundary transaction, work surface, task, dataflow, or operation.
+8. Identify the first usable end-to-end loop for that consumer.
+9. Identify state that must persist/read back, traces that must be inspectable, or outputs that must be reproducible.
+10. Identify live-provider, credential, deployment, destructive, paid-service, and security boundaries.
+11. Split implementation into usable, type-aware slices.
+12. Route quality capsules for each phase:
+    - UI-bearing -> `ux-ui-craft`
+    - provider/runtime integration -> `integration-runtime`
+    - durable state or restart/readback -> `data-persistence`
+    - auth/uploads/destructive/admin/user-data/public exposure -> `security-boundary`
+    - broad system refactor or many boundaries -> `product-architect`
+13. Emit each phase with `requires_roles` and embed routed capsule obligations:
+    - `## Required output (<capsule>)`
+    - `## Blocks (<capsule>)`
+14. Add conditional hardening phases:
+    - `auth-and-tenancy`
+    - `observability-and-health`
+    - `deployment-and-operability`
+    - `ci-and-release-gates`
+    - `backup-and-recovery`
+    - `security-and-abuse-controls`
+    For `trusted_local`, include these as `INCLUDED_BLOCKED` with reason: `trusted_local posture -- promote to private_authenticated or public_webapp to unlock`.
+15. Add final review and handover.
 
 ## File guidance
 
@@ -70,6 +92,7 @@ Ask only questions that change implementation. Prefer defaults for ordinary engi
 
 Useful questions:
 
+- deployment posture;
 - primary user;
 - central artifact, public interface, boundary transaction, service state, task, dataflow, or operation;
 - first usable loop;
@@ -91,6 +114,12 @@ Align the coding agent before code:
 - product quality rules;
 - forbidden shortcuts.
 
+Include posture-specific role and rule:
+
+- `trusted_local` -> `Senior Product Engineer` with explicit non-production blocker reporting.
+- `private_authenticated` -> `Senior Staff Engineer` with production-shaped obligations.
+- `public_webapp` -> `Staff/Principal Engineer` with production-grade obligations.
+
 Do not turn this into a long architecture encyclopedia. The point is judgment, not compliance volume.
 
 ### blueprint.yaml
@@ -104,13 +133,27 @@ machine_contract: blueprint.yaml
 claim_status: product_build_required
 qualification_label: local_build_requires_review
 setup_tier: typed_product_leadership
+deployment_posture:
+  current: <trusted_local|private_authenticated|public_webapp>
+  allowed_values:
+    - trusted_local
+    - private_authenticated
+    - public_webapp
 blueprint_mode:
   primary: <product|framework|library|integration|automation|data-pipeline|infrastructure|mixed>
   consumer: <end_user|developer|operator|maintainer|approver|analyst|mixed>
   selected_spine: <product_app_consumer_first|developer_first_framework|reliability_first_service|automation_task_loop|data_pipeline_quality_loop|infrastructure_operations_loop|mixed>
+  allowed_spines:
+    - product_app_consumer_first
+    - developer_first_framework
+    - reliability_first_service
+    - automation_task_loop
+    - data_pipeline_quality_loop
+    - infrastructure_operations_loop
+    - mixed
 agent_contract:
-  role: Senior Product Engineer
-  rule: Build a usable artifact-type slice; do not produce proof theater.
+  role: <posture-derived role>
+  rule: <posture-derived rule>
 read_order:
   - BUILDPRINT.md
   - 01-questions.md
@@ -123,7 +166,7 @@ read_order:
   - 05-handover.md
 implementation_loop:
   phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-<phase-id>.md
+  active_phase: 03-phases/00-<phase-id>.md
   final_review: 04-review.md
   handover: 05-handover.md
 repair_routing:
@@ -151,6 +194,17 @@ For `blueprint_mode.primary: product` / `selected_spine: product_app_consumer_fi
 9. `08-verification`
 10. `99-final-review-handover`
 
+Domain-specific phases may augment this set but must not replace it.
+
+Include conditional hardening phases when posture or source signals require them:
+
+- `09-auth-and-tenancy`
+- `10-observability-and-health`
+- `11-deployment-and-operability`
+- `12-ci-and-release-gates`
+- `13-backup-and-recovery`
+- `14-security-and-abuse-controls`
+
 ### 03-phases/phase-flow.md
 
 Use typed artifact phase flow:
@@ -167,10 +221,20 @@ Use typed artifact phase flow:
 Each phase should include:
 
 - `# Phase NN — <title>`
+- `requires_roles: [<role ids>]`
 - `## Product intention`
-- `## Build`
+- `## Mapped obligations`
+- `## Stable vs free`
+- `## Implementation scope`
+- `## Interfaces touched`
+- `## State / runtime touched`
+- `## UX / DX / operator requirements` (when relevant)
+- `## Required output (<capsule>)`
+- `## Blocks (<capsule>)`
 - `## Quality bar`
 - `## Do not ship`
+- `## Repair routing`
+- `## Unlock condition`
 
 For non-UI modes, adapt language to the consumer/operator/developer experience: API, library, integration, automation, data pipeline, or infrastructure. Do not force UI language where the product surface is CLI/API/operator workflow.
 
@@ -189,6 +253,7 @@ Require skeptical product review:
 - change inputs and confirm outputs change;
 - click primary controls or run documented commands/API calls/operator actions;
 - trigger empty/error/blocked states where possible;
+- run an operability walkthrough with explicit Do/Observe/Record steps for durable persistence, background task ownership, provider blocked-state honesty, dead-control detection, and posture-specific auth/session/tenant/CI checks;
 - look for generic dashboard smell, fake intelligence, raw JSON dumped as the experience, placeholder copy, dead controls, undocumented public methods, fake adapter seams, canned output, internal/proof vocabulary, missing persistence/traces/readback, and absent next actions;
 - fix local, safe, central defects before handover.
 
@@ -200,6 +265,7 @@ Require short headings:
 - Built surfaces;
 - Verification;
 - Known defects and blockers;
+- Not production-grade (mandatory for trusted_local; blocker-only for non-local);
 - Next atomic actions.
 
 ### generated/agent-prompt.md

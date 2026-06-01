@@ -11,7 +11,7 @@ The typed direction is now explicit: Mapper OS should improve downstream artifac
 - `vision.md` is the maintained product-quality generator guide. It shapes selected packet `BUILDPRINT.md`, `02-project-setup.md`, and phase language, but it is not emitted into selected packets.
 - Source files are evidence for discovery. The emitted Buildprint is an implementation input, not proof that a future implementation already works.
 - Static scanning may guide discovery but must never become product authority.
-- The downstream executor role is **Senior Product/Developer/Operator Engineer**: preserve artifact intent, identify the central artifact/interface/boundary, choose the right type spine, build a usable loop, challenge shallow implementation, keep boundaries honest, and repair visible slop before handover.
+- The downstream executor role is posture-aware: `trusted_local` -> **Senior Product Engineer**, `private_authenticated` -> **Senior Staff Engineer**, `public_webapp` -> **Staff/Principal Engineer**. Preserve artifact intent, identify the central artifact/interface/boundary, choose the right type spine, build a usable loop, challenge shallow implementation, keep boundaries honest, and repair visible slop before handover.
 
 ## Read order
 
@@ -31,7 +31,7 @@ For generated selected packages, first classify the artifact type and consumer, 
 2. **Safe census** — collect file tree, manifests, dependency hints, framework hints, env var names, scripts, deploy hints, and test hints as hints only.
 3. **Behavior discovery** — read source surfaces to discover observable product behavior. Separate observed behavior, inferred behavior, questions, blockers, and out-of-scope details.
 4. **Scope selection** — keep default output discovery-only. Create `selected-buildprint/` only after candidate, scope, or full-suite selection. Never shrink selected scope without an explicit user decision.
-5. **Source distillation** — convert source facts into source-independent mode-appropriate obligations, central artifacts/interfaces/boundaries, first loops, boundaries, and phase slices.
+5. **Source distillation** — convert source facts into source-independent mode-appropriate obligations, central artifacts/interfaces/boundaries, first loops, boundaries, deployment posture obligations, and phase slices with routed `requires_roles`.
 6. **Execution shaping** — give the downstream coding agent product mission, alignment questions, implementation setup, usable phase slices, forbidden shortcuts, review behavior, and handover shape.
 7. **Qualification** — keep claims honest. A packet can be a strong local implementation input without claiming validated production completeness.
 
@@ -65,7 +65,7 @@ blueprint.yaml
 03-phases/
   phase-index.yaml
   phase-flow.md
-  01-<phase-id>.md
+  00-<phase-id>.md
   ...
   99-final-review-handover.md
 04-review.md
@@ -82,7 +82,7 @@ The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questi
 
 Obsolete packet files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
-`02-project-setup.md` is mandatory. It should align the coding agent around role, artifact type, real consumer, first success loop, central artifact/interface/boundary, persistence/traces/readback, provider/deployment boundaries, fake-feel risks, local commands, quality rules, and forbidden shortcuts. It should not become a long architecture/proof encyclopedia.
+`02-project-setup.md` is mandatory. It should align the coding agent around role, deployment posture, artifact type, real consumer, first success loop, central artifact/interface/boundary, persistence/traces/readback, provider/deployment boundaries, fake-feel risks, local commands, quality rules, and forbidden shortcuts. It should not become a long architecture/proof encyclopedia.
 
 ## Mode discipline
 
@@ -117,6 +117,7 @@ Every selected package must tell the next coding agent:
 - what product promise and central artifact matter;
 - what first usable loop to build;
 - what state must persist or be read back;
+- what posture-specific operability controls are mandatory now vs explicitly blocked;
 - what provider/deployment/destructive/security boundaries are blocked or local-only;
 - what implementation choices are free;
 - which questions change implementation and which can be defaulted;

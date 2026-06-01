@@ -117,7 +117,7 @@ For non-trivial scopes, the Buildprint is hierarchical: a small global spine plu
 
 - Every extraction output (`--candidate`, `--scope`, `--full-suite`) must classify each phase packet with one of these readiness states: `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `TEST_ONLY_MOCK`, or `OUT_OF_SCOPE_BY_USER_ONLY`.
 - `OUT_OF_SCOPE_BY_USER_ONLY` requires an explicit user decision or selected target boundary; lack of proof alone is not an out-of-scope reason.
-- Completeness is recorded in `03-phases/phase-index.yaml`, each phase packet, and `04-evaluation.md`.
+- Completeness is recorded in `03-phases/phase-index.yaml`, each phase packet, `04-review.md`, and `05-handover.md`.
 - `IMPLEMENTATION_COMPLETENESS.md` is an obsolete default file and not part of the final package shape.
 - Each included phase packet must include phase status, source evidence, required contracts, no-fake rules, verification gates, blockers, and qualification state.
 - Any missing phase classification, missing gate applicability declaration, missing evidence link, or missing per-phase verification oracle is a qualification blocker.
@@ -163,6 +163,7 @@ Implementation plans must stay source-independent. They may reference Buildprint
 ### Stage 6: Qualification
 
 - Keep mapped packages at `QUALIFICATION_REVIEW_REQUIRED` until evidence proves otherwise.
+- `production_readiness` means posture-appropriate operability controls are exercised in `04-review.md` `## Operability walkthrough`, or explicitly marked as blockers in `05-handover.md` `## Not production-grade`.
 - Run static, build, unit/contract, runtime, browser/API, persistence/restart, no-fake, security/privacy, and clean-room reversal checks where applicable.
 - Record commands run, commands not run, evidence produced, blockers, and remaining unsafe claims.
 - Do not promote a Buildprint when runtime/test proof is missing for included behavior that requires runtime evidence.
@@ -188,7 +189,7 @@ Implementation plans must stay source-independent. They may reference Buildprint
 - Another agent should start at `BUILDPRINT.md`, then `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, and exactly one active phase named by `03-phases/phase-index.yaml`.
 - The selected package must not require the implementation agent to read every Markdown file or every phase packet before knowing the next action.
 - `03-phases/phase-index.yaml` must record the active phase, completed phase packets, blocked phase packets, dependencies, and next dependency-ready phase.
-- `03-phases/phase-flow.md` must record phase-entry orchestration, team/review gates, verification gates, and evidence-ledger rules.
+- `03-phases/phase-flow.md` must record phase-entry orchestration, team/review gates, verification gates, and operational walkthrough rules.
 - The handoff must clearly state whether the package is discovery-only, selected with proof pending, or qualified for source-independent implementation.
 - The handoff must state the reimplementation freedom explicitly: what the agent may change internally and which external/product behaviors must remain stable.
 - Qualification label must be exactly one of: `DISCOVERY_ONLY`, `PROOF_REQUIRED`, `QUALIFIED_SOURCE_INDEPENDENT`.
@@ -295,20 +296,19 @@ blueprint.yaml
 03-phases/
   phase-index.yaml
   phase-flow.md
-  01-<phase-id>.md
-  02-<phase-id>.md
-04-evaluation.md
-05-evidence/
-  evidence-ledger.jsonl
-  evidence-ledger.schema.json
+  00-<phase-id>.md
+  ...
+  99-final-review-handover.md
+04-review.md
+05-handover.md
 generated/agent-prompt.md
 ```
 
-`BUILDPRINT.md` is the only execution start and read-order authority. `blueprint.yaml` is the machine contract. `01-questions.md` and `02-project-setup.md` gate alignment/setup. `03-phases/phase-index.yaml` names the active phase and post-proof continuation path. `03-phases/phase-flow.md` owns phase-run orchestration. Runtime proof is appended to `.buildprint/evidence/evidence-ledger.jsonl`; packaged `05-evidence/evidence-ledger.jsonl` is only the immutable seed.
+`BUILDPRINT.md` is the only execution start and read-order authority. `blueprint.yaml` is the machine contract. `01-questions.md` and `02-project-setup.md` gate alignment/setup. `03-phases/phase-index.yaml` names the active phase and continuation path. `03-phases/phase-flow.md` owns phase-run orchestration. `04-review.md` owns operational walkthrough verification. `05-handover.md` owns concise blocker-honest handoff.
 
 Each phase packet file must define build target, source evidence refs, required roles and gates, user-visible outcome, architecture obligations, UI obligations where applicable, inputs, outputs, implementation path, stop rules, proof gate, and unlocks.
 
-Team routing is embedded in `02-project-setup.md`, `03-phases/phase-flow.md`, and each phase `requires_roles:` field. It must not ask the user to choose lazy/simple/quick quality. It must embed proof/evidence gates for every selected output and route `product-architect`, `ux-ui-craft`, `integration-runtime`, `security-boundary`, and `data-persistence` whenever product signals require them.
+Team routing is embedded in `02-project-setup.md`, `03-phases/phase-flow.md`, and each phase `requires_roles:` field. It must not ask the user to choose lazy/simple/quick quality. It must embed operational review gates for every selected output and route `product-architect`, `ux-ui-craft`, `integration-runtime`, `security-boundary`, and `data-persistence` whenever product signals require them.
 
 Obsolete selected-output files are invalid: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, `generated/current-buildprint-compat/`, and fragmented per-capability mini-files.
 

@@ -1,22 +1,72 @@
 # Phase 00 — Product system alignment
 
+requires_roles: [product-architect]
+
 ## Product intention
 
-Name the product promise, real users, primary loops, feature map, state model, architecture boundaries, and quality bar before implementation spreads sideways.
+Align promise, consumer, central artifact, first loop, and posture-driven obligations before implementation starts.
 
-## Build
+## Mapped obligations
 
-- A short product promise that a normal user can understand.
-- Primary user segments and the loop each segment needs first.
-- A feature map grouped by user outcome, not source modules.
-- The state model: what is created, edited, persisted, synced, exported, or recovered.
-- Architecture boundaries for UI, domain logic, provider/data access, persistence, and generated outputs.
-- A product quality bar with first-value, copy, interaction, state, and verification expectations.
+- Name artifact type and real consumer.
+- Name the central artifact/interface/boundary.
+- Name the first usable loop and expected outcome.
+- Name deployment posture (`trusted_local`, `private_authenticated`, or `public_webapp`) and its implications.
+
+## Stable vs free
+
+- Stable: product promise, first-loop semantics, posture commitment, and boundary honesty.
+- Free: framework/library choices, module names, and internal file layout.
+
+## Implementation scope
+
+- Produce a concise implementation note with mission, loop, and persistence needs.
+- Define boundaries for providers, deployment, credentials, and destructive actions.
+- Identify top fake-feel risks and anti-slop expectations.
+
+## Interfaces touched
+
+- Main user/operator/developer entrypoints.
+- Core service/domain boundary.
+- Provider and persistence seams.
+
+## State / runtime touched
+
+- Core state model and lifecycle anchors.
+- Required persistence and readback behavior.
+- Runtime ownership assumptions for long-running paths.
+
+## UX / DX / operator requirements
+
+- First action and first value are obvious.
+- Internal/proof vocabulary is absent from user-facing copy.
+
+## Required output (product-architect)
+
+- Context, component, and data-flow boundaries are explicit for the first loop.
+- Decision notes capture tradeoffs that affect observable behavior.
+
+## Blocks (product-architect)
+
+- UI shell with no real data path.
+- Architecture requiring all markdown files before the next action is clear.
 
 ## Quality bar
 
-A coding agent should know what product it is building, who it serves, which loop proves value first, which features are supporting slices, and which architecture/design constraints prevent a generic dashboard.
+A new engineer can describe exactly what to build first, what must remain stable, and what can change freely.
 
 ## Do not ship
 
-A vague product summary, route/module inventory as the product plan, broad feature buckets without user outcomes, missing state model, or no architecture boundary for provider/data logic.
+- Missionless feature list.
+- Missing central artifact/boundary.
+- Posture silently assumed or unresolved.
+
+## Repair routing
+
+- product contradiction -> `BUILDPRINT.md`
+- setup contradiction -> `02-project-setup.md`
+- unresolved posture/scope -> `01-questions.md`
+
+## Unlock condition
+
+Central artifact, first loop, posture, and boundary honesty are explicit before feature implementation begins.

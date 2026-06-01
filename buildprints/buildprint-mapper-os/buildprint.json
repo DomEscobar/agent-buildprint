@@ -151,6 +151,30 @@
       "role": "source"
     },
     {
+      "path": "templates/executable-packet/03-phases/conditional/auth-and-tenancy.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/conditional/observability-and-health.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/conditional/deployment-and-operability.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/conditional/ci-and-release-gates.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/conditional/backup-and-recovery.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/conditional/security-and-abuse-controls.md",
+      "role": "source"
+    },
+    {
       "path": "templates/executable-packet/03-phases/phase-flow.md",
       "role": "source"
     },

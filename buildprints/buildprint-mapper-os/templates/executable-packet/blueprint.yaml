@@ -4,10 +4,25 @@ machine_contract: blueprint.yaml
 claim_status: product_build_required
 qualification_label: local_build_requires_review
 setup_tier: typed_product_leadership
+deployment_posture:
+  current: trusted_local
+  allowed_values:
+    - trusted_local
+    - private_authenticated
+    - public_webapp
+  note: Set this before extraction. Posture changes role, required phases, and operability review depth.
 blueprint_mode:
   primary: product
   consumer: end_user
   selected_spine: product_app_consumer_first
+  allowed_spines:
+    - product_app_consumer_first
+    - developer_first_framework
+    - reliability_first_service
+    - automation_task_loop
+    - data_pipeline_quality_loop
+    - infrastructure_operations_loop
+    - mixed
   allowed_values:
     - product
     - framework
@@ -17,10 +32,20 @@ blueprint_mode:
     - data-pipeline
     - infrastructure
     - mixed
-  note: Replace primary, consumer, and selected_spine during extraction. Do not force non-product artifacts into product-app phases.
+  note: Replace primary, consumer, and selected_spine during extraction. Do not force non-product artifacts into product-app phases or invent custom spine names.
 agent_contract:
   role: Senior Product Engineer
-  rule: Build a usable artifact-type slice; do not produce proof theater.
+  rule: Build a credible local workbench. Name operability gaps in 05-handover.md and do not fake production readiness.
+  posture_role_map:
+    trusted_local:
+      role: Senior Product Engineer
+      rule: Build a credible local workbench. Name operability gaps as blockers in 05-handover.md and do not fake production readiness.
+    private_authenticated:
+      role: Senior Staff Engineer
+      rule: Build a production-shaped artifact. Auth/session, durable persistence, worker ownership, observability, recovery, and CI gates must be implemented or explicitly blocked.
+    public_webapp:
+      role: Staff/Principal Engineer
+      rule: Build a production-grade artifact. All private-authenticated obligations plus tenant isolation, abuse controls, deployment shape, backup/restore, and security controls must be implemented or explicitly blocked.
 read_order:
   - BUILDPRINT.md
   - 01-questions.md

@@ -48,14 +48,16 @@ phases:
     inputs: [prompts/extract-selected.md, templates/]
     must_produce:
       - source-independent selected-buildprint executable Buildprint
+      - deployment posture selection and posture-aware role/rule
       - product promise and central artifact
       - first usable loop and phase slices
+      - phase files with requires_roles and routed role obligations
       - honest boundaries and blockers
       - review and handover files
     must_pass:
       - selected output stays under selected-buildprint/
       - output includes BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, phase files, 04-review.md, 05-handover.md, and generated/agent-prompt.md
-      - phase packets include product intention, build scope, quality bar, and do-not-ship failures
+      - phase packets include requires_roles, product intention, mapped obligations, stable-vs-free boundaries, implementation scope, quality bar, do-not-ship failures, repair routing, and unlock condition
       - obsolete selected-output spine files are absent
       - proof/evidence bureaucracy is not emitted as the product-quality mechanism
 
