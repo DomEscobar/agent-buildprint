@@ -1,25 +1,60 @@
-# Phase 99: Final Review And Handover
+# Phase 99 - Final Review And Handover
+
+requires_roles: [product-architect, integration-runtime, data-persistence, ux-ui-craft, security-boundary]
 
 ## Product intention
 
-Do a skeptical product review and leave a concise handover that another engineer can use immediately.
+Complete skeptical review, repair central defects, and hand over honestly.
 
-## Build
+## Mapped obligations
 
-- Complete the core loop from a fresh start.
-- Reload the browser and restart the backend to verify durable state.
-- Vary seed input and prediction requirement enough to prove output changes.
-- Exercise graph controls, report controls, simulation controls, and chat target switching.
-- Trigger missing-provider, empty-upload, graph-build failure, and report-failure states where feasible.
-- Fix local, safe, central defects before stopping.
+- Run `04-review.md`.
+- Fix local, safe, central defects before handover.
+- Write `05-handover.md` with exact status, verification, blockers, and next actions.
 
-## Quality Bar
+## Stable vs free
 
-- Handover names exact commands, checks, local URLs, built surfaces, known defects, blockers, and next atomic actions.
-- No fake-done claims.
-- No critical issue remains in the first usable loop unless it is a real external blocker.
+Stable: no overclaiming.
+
+Free: exact handover wording as long as required facts are present.
+
+## Implementation scope
+
+Review and handoff only.
+
+## Interfaces touched
+
+Review checklist, handover, issue list.
+
+## State / runtime touched
+
+Verification artifacts and local test data.
+
+## UX / DX / operator requirements
+
+Handover must be short enough to act on and honest enough to trust.
+
+## Required output (product-architect)
+
+- Completed review notes.
+- Handover with `Not production-grade` block.
+
+## Blocks (product-architect)
+
+- Handover claims production readiness from packet validation or fixture-only smoke.
+
+## Quality bar
+
+The next engineer can continue without source access and without guessing which claims are real.
 
 ## Do not ship
 
-- A handover that says "works" without commands or observed behavior.
-- A known blank canvas, dead primary button, or missing persistence bug.
+Do not hide live-provider, canvas, persistence, or hardening blockers.
+
+## Repair routing
+
+Review defects route to owning phase.
+
+## Unlock condition
+
+Handover is written and status remains conservative.

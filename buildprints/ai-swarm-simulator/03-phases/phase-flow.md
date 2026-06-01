@@ -1,14 +1,18 @@
 # Phase Flow
 
-For each phase:
+Use this loop for every active phase.
 
-1. Read the active phase and restate the product intention in one paragraph.
-2. Build the smallest real usable slice for the AI Swarm Simulator workbench.
-3. Improve the obvious next consumer action if it is local, safe, and central: upload, graph readback, canvas inspection, simulation run, report generation, or interaction.
-4. Run the strongest relevant local check: unit/API test, build, browser smoke, persistence readback, or deterministic simulation replay.
-5. Remove visible slop before moving on: dead buttons, placeholder copy, raw JSON product surfaces, fake provider success, canned output, blank canvas, swallowed errors, and generic dashboard leakage.
-6. Record only useful handover facts in `.buildprint/progress.md`, `.buildprint/blockers.md`, or `.buildprint/decisions.md`: works, partial, blocked, exact command, exact file, next repair.
+1. Read the phase file and restate the product intention in one or two sentences.
+2. Apply `requires_roles` and the role-specific blocks in the phase.
+3. Build the smallest real usable product slice for the phase.
+4. Improve the obvious next user action if it is local, safe, and central.
+5. Run the relevant checks named by the phase.
+6. Remove visible slop: dead controls, placeholder text, raw JSON surfaces, fake provider success, broken responsive layout, and swallowed errors.
+7. Record only useful handover facts: what works, what was checked, what remains blocked, and the next atomic action.
 
-Do not create proof theater. A passed command does not by itself mean the product is good. A blocker preserves scope; it does not silently remove graph memory, provider adapters, simulation runtime, persistence, or canvas quality from the product.
+Rules:
 
-Continue to the next dependency-ready phase only when the current slice is usable locally or honestly blocked with the smallest next repair named.
+- Missing LLM or graph-memory credentials do not lower the quality bar. They create visible blocked states and handover blockers.
+- Deterministic fixtures are allowed for local smoke tests only when clearly labeled.
+- The graph/canvas must be inspected in a browser before any handover that claims UI readiness.
+- Do not proceed to a later phase by hiding broken central behavior from an earlier phase.

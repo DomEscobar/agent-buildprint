@@ -1,31 +1,37 @@
-# Pre-Implementation Questions
+# Implementation Questions
 
-Blank answers authorize AI best judgment for the highest-quality appropriate implementation. Ask only if the answer changes product identity, irreversible cost, credentialed provider access, destructive behavior, or public deployment posture.
+Answer these before implementation when possible. If answers are unavailable, use the default and record it in handover.
 
-1. Deployment posture: trusted local workstation, private authenticated server, or public webapp?
-   - Default: trusted local workstation with optional private server hardening later.
+1. Deployment posture?
 
-Should the first implementation optimize for analyst-grade public-opinion rehearsal, creative scenario rehearsal, or a balanced general social-prediction workbench? Default: balanced general social-prediction workbench, with domain language that works for policy, finance, news, and narrative scenarios.
+   Default: `trusted_local`. This packet blocks public-webapp readiness until auth, tenant isolation, upload abuse controls, observability, backup/recovery, deployment, and security review are implemented.
 
-4. Simulation runtime: should the implementation run OASIS live locally, provide a local deterministic simulator first, or support both?
-   - Default: support both, with a deterministic local simulator as the first reliable loop and OASIS as a live runtime behind explicit setup checks.
+2. Which OSS graph-memory backend should replace Zep Cloud?
 
-Do you require a specific frontend, backend, runtime, storage, job queue, or deployment stack? Default: choose a mainstream actively maintained UI framework with component state, a schema-validated API service, durable project/report storage, background job ownership, and browser-testable local development.
+   Default: Graphiti-style temporal graph memory with a local self-hosted backend. Prefer FalkorDB or Kuzu for trusted-local development; Neo4j is acceptable when the user explicitly chooses it. Keep a `GraphMemoryPort` so the backend can change.
 
-## 3. UX/UI preferences
+3. Which LLM provider should be used for live proof?
 
-Should the product use a quiet analyst workbench style, a more cinematic simulation-lab style, or match an existing design system? Default: quiet high-density simulation lab with a central graph canvas, restrained controls, readable inspectors, live state cues, and no marketing-page hero after the product starts.
+   Default: provider-independent OpenAI-compatible settings: `LLM_API_KEY`, `LLM_BASE_URL`, `LLM_MODEL_NAME`, optional boost provider settings. If no credentials are available, deterministic provider fixtures are allowed only for local smoke tests and must be labeled as such.
 
-## 4. Architecture preferences
+4. Should real-time simulation activities update graph memory?
 
-Are provider adapters allowed to support both deterministic sandbox mode and live LLM/Zep/OASIS mode behind the same contracts? Default: yes. Local deterministic mode must be credible and domain-shaped, but must never be claimed as live-provider proof.
+   Default: include the feature behind an explicit toggle and show a visible blocked/error state if the OSS graph-memory adapter cannot support reliable append/readback yet.
 
-## 5. Quality bar
+5. What must a 60-second demo prove?
 
-Which gates are mandatory in your environment: typecheck, lint, unit/API tests, build, browser/e2e screenshots, worker/runtime smoke tests, security review? Default: run all gates the stack supports and record blockers for credentials or live-provider checks that cannot run locally.
+   Default: upload or load a fixture seed, build/read back the graph through the OSS adapter, inspect nodes and edges in the canvas, prepare simulation state, run or block live provider work honestly, and generate a report or provider-blocked report state without fake content.
 
-## 6. Constraints / things to avoid
+## Alignment Summary
 
-Are there data-handling, provider, cost, destructive-action, or deployment limits beyond this packet? Default: no external writes without explicit credentials and approval, no secrets in output, no production data in fixtures, no single-file UI shell, no token-bubble substitute for the graph workbench, no fake success states, and no generic dashboard/list/form replacement for the product surfaces.
-
-> Use AI best judgment to produce the highest-quality appropriate implementation. Full-suite mapped Buildprints default to production-grade architecture on a mainstream, actively-maintained stack: for UI-bearing products a real component/UI framework with a build step and a recognized styling system (utility-first or design-token based), a typed or schema-validated backend, auth/session/tenant boundaries, durable persistence, worker/runtime ownership, deployment shape, observability, CI/e2e proof, security controls, and maintainable code. Keep the implementation as simple as the obligations allow, but simplicity ranks below production-grade: it never justifies a single-file HTML/CSS/JS shell, hand-rolled UI/CSS/routing/data layers that a mainstream library already solves, or skipping a build system or component model for a real product UI. Do not block on ordinary engineering choices. Ask only for irreversible, expensive, credentialed, destructive, or product-defining forks. Missing credentials block live proof only; they do not remove provider adapters, config contracts, tests, or runtime wiring from scope.
+- Source input: MiroFish behavior mapped from `666ghj/MiroFish` revision `96096ea0ff42b1a30cbc41a1560b8c91090f9968`.
+- Output mode: selected extraction.
+- Requested scope: preserve the graph/canvas and replace Zep Cloud with free/open-source graph memory while keeping AI provider choice independent.
+- Selected target / first capability: trusted-local graph-memory workbench slice.
+- Artifact readiness summary: implementation input only; local build requires review.
+- Explicitly user-excluded capabilities: none.
+- Blocked capabilities: production/public-web hardening and live provider proof without credentials.
+- Sensitive surfaces: uploads, provider calls, graph deletion/reset, background workers, reports, chat, user data.
+- Required hardening artifacts: durable state, provider boundaries, explicit blocked states, runtime/browser review, local backup/restore before promotion.
+- Qualification label: `local_build_requires_review`.
+- Next artifact-type slice: build the local OSS graph-memory adapter and graph/canvas readback path.

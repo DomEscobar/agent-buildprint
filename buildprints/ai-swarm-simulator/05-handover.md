@@ -1,34 +1,51 @@
 # Handover
 
-Write the final handover in this shape:
+Use this shape when stopping.
 
-```text
-Status:
-- qualification:
-- local proof:
-- live-provider proof:
+## Current Status
 
-Built surfaces:
-- frontend:
-- backend:
-- graph memory:
-- simulation:
-- report/chat:
-- persistence:
+State the actual status. Use `local_build_requires_review` unless a downstream implementation has been built and reviewed.
 
-Verification:
-- commands run:
-- browser checks:
-- restart/readback checks:
+## Built Surfaces
 
-Known defects/blockers:
-- blocker:
-- nonblocking defect:
+List only surfaces that exist and were exercised:
 
-Next atomic actions:
-- 1.
-- 2.
-- 3.
-```
+- graph-memory adapter;
+- project ingestion;
+- ontology flow;
+- graph build/readback;
+- graph/canvas;
+- simulation setup/run;
+- report generation;
+- interaction/chat;
+- hardening gates.
 
-Keep it short and factual. Separate deterministic local proof from live-provider proof. Do not claim production readiness unless auth, deployment, secrets, destructive actions, and live provider behavior have actually been reviewed.
+## Verification
+
+Include commands and browser/runtime checks actually run. Name provider mode:
+
+- deterministic fixture;
+- live configured provider;
+- blocked because credentials/runtime unavailable.
+
+## Known Defects And Blockers
+
+Name central defects first. Do not bury provider, persistence, canvas, or security blockers.
+
+## Not Production-Grade
+
+Mandatory for trusted-local handover:
+
+- Auth/session/tenant isolation:
+- Upload abuse controls:
+- Secret management:
+- Durable worker/queue:
+- Observability/health:
+- Backup/recovery:
+- Deployment proof:
+- Security review:
+- Cost/rate-limit controls:
+
+## Next Atomic Actions
+
+Give 1-5 concrete next actions. The first action should continue the active phase unless review discovered a more central blocker.

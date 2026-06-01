@@ -1,50 +1,103 @@
-active_phase: 03-phases/00-product-system-alignment.md
-phase_order:
-  - phase_id: 00-product-system-alignment
-    file: 03-phases/00-product-system-alignment.md
-    title: Product-system alignment
-    status: included
+active_phase: 00-product-system-alignment
+phases:
+  - id: 00-product-system-alignment
+    file: 00-product-system-alignment.md
+    title: Product system alignment
+    status: active
     depends_on: []
-  - phase_id: 01-graph-memory-replacement
-    file: 03-phases/01-graph-memory-replacement.md
-    title: Graph memory replacement
-    status: included
+  - id: 01-shell-and-navigation
+    file: 01-shell-and-navigation.md
+    title: Shell and navigation
+    status: pending
     depends_on:
       - 00-product-system-alignment
-  - phase_id: 02-workflow-shell-and-projects
-    file: 03-phases/02-workflow-shell-and-projects.md
-    title: Workflow shell and projects
-    status: included
+  - id: 02-core-loop-first
+    file: 02-core-loop-first.md
+    title: Core loop first
+    status: pending
     depends_on:
-      - 01-graph-memory-replacement
-  - phase_id: 03-ontology-and-graph-build
-    file: 03-phases/03-ontology-and-graph-build.md
-    title: Ontology and graph build
-    status: included
+      - 01-shell-and-navigation
+  - id: 03-feature-slices
+    file: 03-feature-slices.md
+    title: Simulation and report feature slices
+    status: pending
     depends_on:
-      - 02-workflow-shell-and-projects
-  - phase_id: 04-simulation-runtime
-    file: 03-phases/04-simulation-runtime.md
-    title: Simulation runtime
-    status: included
+      - 02-core-loop-first
+  - id: 04-state-and-data
+    file: 04-state-and-data.md
+    title: State and data persistence
+    status: pending
     depends_on:
-      - 03-ontology-and-graph-build
-  - phase_id: 06-canvas-craft-and-ops
-    file: 03-phases/06-canvas-craft-and-ops.md
-    title: Canvas craft and ops
-    status: included
+      - 03-feature-slices
+  - id: 05-domain-and-intelligence
+    file: 05-domain-and-intelligence.md
+    title: Domain and intelligence boundaries
+    status: pending
     depends_on:
-      - 04-simulation-runtime
-  - phase_id: 07-verification
-    file: 03-phases/07-verification.md
+      - 04-state-and-data
+  - id: 06-design-system-and-copy
+    file: 06-design-system-and-copy.md
+    title: Graph canvas design and copy
+    status: pending
+    depends_on:
+      - 05-domain-and-intelligence
+  - id: 07-architecture-garden
+    file: 07-architecture-garden.md
+    title: Architecture garden
+    status: pending
+    depends_on:
+      - 06-design-system-and-copy
+  - id: 08-verification
+    file: 08-verification.md
     title: Verification
-    status: included
+    status: pending
     depends_on:
-      - 06-canvas-craft-and-ops
-  - phase_id: 99-final-review-handover
-    file: 03-phases/99-final-review-handover.md
+      - 07-architecture-garden
+  - id: 09-auth-and-tenancy
+    file: 09-auth-and-tenancy.md
+    title: Auth and tenancy hardening
+    status: included_blocked
+    depends_on:
+      - 08-verification
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 10-observability-and-health
+    file: 10-observability-and-health.md
+    title: Observability and health
+    status: included_blocked
+    depends_on:
+      - 08-verification
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 11-deployment-and-operability
+    file: 11-deployment-and-operability.md
+    title: Deployment and operability
+    status: included_blocked
+    depends_on:
+      - 08-verification
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 12-ci-and-release-gates
+    file: 12-ci-and-release-gates.md
+    title: CI and release gates
+    status: included_blocked
+    depends_on:
+      - 08-verification
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 13-backup-and-recovery
+    file: 13-backup-and-recovery.md
+    title: Backup and recovery
+    status: included_blocked
+    depends_on:
+      - 08-verification
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 14-security-and-abuse-controls
+    file: 14-security-and-abuse-controls.md
+    title: Security and abuse controls
+    status: included_blocked
+    depends_on:
+      - 08-verification
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 99-final-review-handover
+    file: 99-final-review-handover.md
     title: Final review and handover
-    status: included
+    status: pending
     depends_on:
-      - 07-verification
-continuation_rule: move to the next phase only when the current slice is usable or honestly blocked; final review and handover are required before completion.
+      - 08-verification

@@ -1,26 +1,66 @@
-# Phase 00: Product-System Alignment
+# Phase 00 - Product System Alignment
+
+requires_roles: [product-architect, integration-runtime, data-persistence, ux-ui-craft]
 
 ## Product intention
 
-Establish the product spine before coding. The workbench is not a generic AI dashboard; it is a stepwise prediction simulation tool where the graph memory is the durable world model and the canvas is the user's primary inspection surface.
+Align the implementation around one trusted-local product: a graph-centered swarm prediction workbench with OSS graph memory and provider-independent AI calls.
 
-## Build
+## Mapped obligations
 
-- Define project, graph, simulation, report, log, and provider data models.
-- Choose implementation stack and persistence.
-- Define the graph-memory port and confirm the default OSS backend.
-- Define provider config for LLM and simulation runtime without hard-coding one paid provider.
-- Define the first local success path and the browser review path.
+- Name the central artifact as the interactive graph-centered simulation workbench.
+- Define `GraphMemoryPort` before implementing graph behavior.
+- Define provider config without vendor lock.
+- Decide deterministic fixture mode vs live provider mode.
+- Keep public-production hardening blocked for trusted-local posture.
 
-## Quality Bar
+## Stable vs free
 
-- A new engineer can explain the core loop and where data persists.
-- No direct vendor SDK leaks outside adapter modules.
-- Missing credentials and live runtime gaps have explicit blocked states.
-- Canvas graph requirements are treated as acceptance criteria.
+Stable: selected scope, graph/canvas quality, Zep replacement, provider independence, local persistence/readback.
+
+Free: stack choices, graph backend choice, UI implementation details, queue/storage engine.
+
+## Implementation scope
+
+Create the app skeleton, configuration model, adapter interfaces, route plan, and first fixture data shape.
+
+## Interfaces touched
+
+App entrypoints, config, graph-memory interface, provider interface, route map, local dev commands.
+
+## State / runtime touched
+
+Local graph-memory service config, project store path, simulation store path, provider config.
+
+## UX / DX / operator requirements
+
+The first run path must explain missing graph backend or provider credentials through actionable blocked states.
+
+## Required output (product-architect)
+
+- Product loop contract.
+- Adapter contracts.
+- Runtime topology.
+- Local command list.
+
+## Blocks (product-architect)
+
+- No central artifact named.
+- Zep Cloud remains required.
+- Provider config hard-codes one hosted vendor.
+
+## Quality bar
+
+A new engineer can explain the first usable loop, central data model, graph-memory boundary, and blocked hardening items before writing feature code.
 
 ## Do not ship
 
-- A plan that preserves Zep as a required cloud dependency.
-- A vector-only memory store with no graph readback.
-- An app that cannot survive backend restart for projects/reports.
+Do not begin broad UI panels before the graph-memory and canvas contract is clear.
+
+## Repair routing
+
+Product contradictions go to `BUILDPRINT.md`; setup gaps go to `02-project-setup.md`.
+
+## Unlock condition
+
+Interfaces and local runtime plan are defined, with explicit blocked states for live providers.

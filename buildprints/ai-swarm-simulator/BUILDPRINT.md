@@ -1,48 +1,62 @@
-# BUILDPRINT: AI Swarm Simulator
+# Buildprint: MiroFish OSS Graph-Memory Swarm Workbench
 
-This is the canonical starting point and execution contract. Read this file first. Do not start from generated prompts, package metadata, the website card, or old copied instructions.
+This packet tells a coding agent how to build a source-independent MiroFish-style swarm prediction workbench. It is not a clone plan and it is not proof that the product is already working.
 
-You are a senior product engineer building a source-independent AI swarm/social simulation workbench. The goal is a usable local-first product loop, not a compliance demo or proof ledger.
+## Mission
 
-## Product promise
+Build a trusted-local product workbench where a user uploads seed material, states a prediction question, builds an inspectable knowledge graph, prepares and runs a swarm simulation, generates a report, and interacts with the result.
 
-A user uploads seed material and a prediction requirement, builds an ontology-backed graph world, inspects that world in a real canvas, prepares and runs a deterministic or verified-live social simulation, receives a traceable prediction report, and can interrogate the report or simulated agents.
+The graph/canvas is central. Preserve it as a high-quality work surface, not a decorative preview.
 
-## First usable loop
+The Zep Cloud dependency must be replaced with a free/open-source graph-memory backend behind a stable adapter contract. Default to a Graphiti-family self-hosted implementation, but keep the adapter boundary open enough that the user can choose another OSS graph engine later.
 
-1. Read `01-questions.md`.
-2. Read `generated/agent-prompt.md` as alignment speech, not authority.
-3. Read and complete `02-project-setup.md` before phase implementation.
-4. Read `blueprint.yaml` as the machine-readable mirror.
-5. Read `03-phases/phase-index.yaml`.
-6. Read `03-phases/phase-flow.md`.
-7. Work through the active phase and dependencies.
-8. Run `04-review.md` before final handover.
-9. Write the runtime handover using `05-handover.md`.
+LLM provider choice must remain independent and user-configurable. Use OpenAI-compatible API settings as the default boundary, not as a vendor lock.
 
-## Non-negotiables
+## Read Order
 
-- The central artifact is a durable graph-backed simulation project, not a generic dashboard.
-- Zep, OASIS, or any paid provider must not be required for the first local loop. Missing live credentials produce honest blocked/degraded states.
-- The graph canvas must be inspectable: nodes, edges, labels, selection, detail, refresh, loading/error/empty states, and useful readback.
-- Simulation and report output must change when seed material or prediction requirement changes.
-- Persist projects, graph ids/data, simulation state, report metadata/content, and logs enough to read back after reload/restart.
-- Do not ship fake success, canned output, dead primary controls, placeholder copy, raw JSON as the main product surface, or debug/proof vocabulary in user-facing UI.
+1. `BUILDPRINT.md`
+2. `01-questions.md`
+3. `generated/agent-prompt.md`
+4. `02-project-setup.md`
+5. `blueprint.yaml`
+6. `03-phases/phase-index.yaml`
+7. `03-phases/phase-flow.md`
+8. Active phase from `03-phases/phase-index.yaml`
+9. `04-review.md`
+10. `05-handover.md`
 
-## Implementation loop
+## Engineer Contract
 
-Every phase starts through `03-phases/phase-flow.md`. Build the smallest real usable slice, run the strongest local check, remove visible slop, and move on only when the slice is usable or honestly blocked.
+You are a Senior Product Engineer for a trusted-local product. Build usable behavior, not a compliance demo.
 
-## Repair routing
+Required posture:
 
-If verification fails, route before editing again:
+- Keep selected scope intact: graph/canvas, OSS graph memory, simulation setup/run path, report and interaction path.
+- Preserve user-visible behavior while making implementation choices freely.
+- Build durable local readback before claiming state works.
+- Treat missing provider credentials as a blocked live-proof state, not as permission to fake provider output.
+- Replace Zep names, configs, and SDK assumptions with a neutral graph-memory port.
+- Keep graph data shaped for the canvas: stable ids, labels, summaries, attributes, edge facts, timestamps, self-loops, and multi-edges.
 
-- product contradiction -> `BUILDPRINT.md`
-- setup or architecture gap -> `02-project-setup.md`
-- phase gap -> current phase file
-- review gap -> `04-review.md`
-- handover gap -> `05-handover.md`
+## Completion Semantics
 
-## Final reviewer mode
+This packet starts at `local_build_requires_review`.
 
-Before handover, become skeptical. Exercise the real controls, reload state, vary inputs, inspect graph/report/simulation output, trigger missing-provider/error states where feasible, and fix local central defects before stopping. External blockers should preserve scope honestly; they must not shrink the product promise.
+Do not use "production-ready", "validated", "complete", or "end-to-end" unless a real implementation has been built, reviewed in the browser/runtime, and remaining blockers are named.
+
+Trusted-local success means:
+
+- a local user can run the workbench;
+- fixture ingestion builds a real persisted graph through the OSS adapter;
+- the graph appears in the canvas and survives reload;
+- provider-backed behavior fails closed when credentials are missing;
+- the handover clearly says what is not production-grade.
+
+## Forbidden Shortcuts
+
+- No canned graph nodes unrelated to the seed material.
+- No Zep Cloud required path, `ZEP_API_KEY` required config, or Zep-specific service name in the core product contract.
+- No raw JSON as the primary graph experience.
+- No dead buttons, no-op controls, placeholder report content, or swallowed errors.
+- No in-memory-only durability claims.
+- No public-webapp readiness claim without auth, tenant isolation, upload abuse controls, observability, backup, and deployment proof.
