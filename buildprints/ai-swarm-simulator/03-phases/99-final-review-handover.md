@@ -1,10 +1,10 @@
 # Phase 99: Final Review And Handover
 
-## Intention
+## Product intention
 
 Do a skeptical product review and leave a concise handover that another engineer can use immediately.
 
-## Build Scope
+## Build
 
 - Complete the core loop from a fresh start.
 - Reload the browser and restart the backend to verify durable state.
@@ -19,7 +19,7 @@ Do a skeptical product review and leave a concise handover that another engineer
 - No fake-done claims.
 - No critical issue remains in the first usable loop unless it is a real external blocker.
 
-## Do Not Ship
+## Do not ship
 
 - A handover that says "works" without commands or observed behavior.
 - A known blank canvas, dead primary button, or missing persistence bug.

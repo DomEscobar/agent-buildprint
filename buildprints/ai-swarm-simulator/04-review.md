@@ -33,3 +33,8 @@ Repair any central local defect:
 - broken first local commands;
 - dead primary controls;
 - raw JSON as main product surface.
+
+
+## Honest blocker semantics
+
+If live LLM, graph-memory, OASIS, browser, or deployment checks cannot run, preserve the intended scope and mark the exact blocker. Do not turn an unavailable provider into fake success, and do not remove the provider/runtime path from the product promise.

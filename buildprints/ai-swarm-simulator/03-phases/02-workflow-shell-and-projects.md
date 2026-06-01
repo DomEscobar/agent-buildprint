@@ -1,10 +1,10 @@
 # Phase 02: Workflow Shell And Projects
 
-## Intention
+## Product intention
 
 Build the user-facing shell around the five-step workflow: graph building, environment setup, simulation, report generation, and deep interaction. The user should always know the current project, step, status, and next action.
 
-## Build Scope
+## Build
 
 - Implement project creation with file upload, prediction requirement, extracted text, and project metadata.
 - Persist project files and metadata durably.
@@ -18,7 +18,7 @@ Build the user-facing shell around the five-step workflow: graph building, envir
 - Empty/error states tell the user what happened and what to do next.
 - The shell does not depend on graph data existing before upload/ontology is complete.
 
-## Do Not Ship
+## Do not ship
 
 - In-memory-only projects or tasks.
 - Buttons that look enabled but do nothing.

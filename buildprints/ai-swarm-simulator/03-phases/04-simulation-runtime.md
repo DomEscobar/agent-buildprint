@@ -1,10 +1,10 @@
 # Phase 04: Simulation Runtime
 
-## Intention
+## Product intention
 
 Prepare and run a multi-agent social simulation from graph entities. The first local loop may use a deterministic simulator, but the architecture must also support OASIS live execution behind explicit setup checks.
 
-## Build Scope
+## Build
 
 - Read graph entities and relationships through the graph-memory port.
 - Generate agent profiles from entities and graph context.
@@ -21,7 +21,7 @@ Prepare and run a multi-agent social simulation from graph entities. The first l
 - The UI shows current round, platform statuses, stop/close behavior, and error states.
 - Graph memory is updated after meaningful actions.
 
-## Do Not Ship
+## Do not ship
 
 - A fake completed simulation with no action log.
 - Live OASIS calls that fail silently.

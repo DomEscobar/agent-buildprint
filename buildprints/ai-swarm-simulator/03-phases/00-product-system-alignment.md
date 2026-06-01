@@ -1,10 +1,10 @@
 # Phase 00: Product-System Alignment
 
-## Intention
+## Product intention
 
 Establish the product spine before coding. The workbench is not a generic AI dashboard; it is a stepwise prediction simulation tool where the graph memory is the durable world model and the canvas is the user's primary inspection surface.
 
-## Build Scope
+## Build
 
 - Define project, graph, simulation, report, log, and provider data models.
 - Choose implementation stack and persistence.
@@ -19,7 +19,7 @@ Establish the product spine before coding. The workbench is not a generic AI das
 - Missing credentials and live runtime gaps have explicit blocked states.
 - Canvas graph requirements are treated as acceptance criteria.
 
-## Do Not Ship
+## Do not ship
 
 - A plan that preserves Zep as a required cloud dependency.
 - A vector-only memory store with no graph readback.

@@ -1,32 +1,50 @@
-active_phase: 03-phases/01-scenario-ontology-intake.md
+active_phase: 03-phases/00-product-system-alignment.md
 phase_order:
-  - phase_id: 01-scenario-ontology-intake
-    file: 03-phases/01-scenario-ontology-intake.md
-    title: Scenario intake and ontology review
-    status: INCLUDED_NEEDS_PROOF
+  - phase_id: 00-product-system-alignment
+    file: 03-phases/00-product-system-alignment.md
+    title: Product-system alignment
+    status: included
     depends_on: []
-  - phase_id: 02-graph-canvas-workbench
-    file: 03-phases/02-graph-canvas-workbench.md
-    title: Graph canvas workbench
-    status: INCLUDED_NEEDS_PROOF
+  - phase_id: 01-graph-memory-replacement
+    file: 03-phases/01-graph-memory-replacement.md
+    title: Graph memory replacement
+    status: included
     depends_on:
-      - 01-scenario-ontology-intake
-  - phase_id: 03-simulation-runtime-monitor
-    file: 03-phases/03-simulation-runtime-monitor.md
-    title: Simulation preparation and runtime monitor
-    status: INCLUDED_NEEDS_PROOF
+      - 00-product-system-alignment
+  - phase_id: 02-workflow-shell-and-projects
+    file: 03-phases/02-workflow-shell-and-projects.md
+    title: Workflow shell and projects
+    status: included
     depends_on:
-      - 02-graph-canvas-workbench
-  - phase_id: 04-report-interaction-console
-    file: 03-phases/04-report-interaction-console.md
-    title: Prediction report and interaction console
-    status: INCLUDED_NEEDS_PROOF
+      - 01-graph-memory-replacement
+  - phase_id: 03-ontology-and-graph-build
+    file: 03-phases/03-ontology-and-graph-build.md
+    title: Ontology and graph build
+    status: included
     depends_on:
-      - 03-simulation-runtime-monitor
-  - phase_id: 05-final-review-handover
-    file: 03-phases/05-final-review-handover.md
-    title: Final critical review and handover
-    status: INCLUDED_NEEDS_PROOF
+      - 02-workflow-shell-and-projects
+  - phase_id: 04-simulation-runtime
+    file: 03-phases/04-simulation-runtime.md
+    title: Simulation runtime
+    status: included
     depends_on:
-      - 04-report-interaction-console
-completion_rule: all phases require phase_preflight, plan, proof, evidence row, verification output, final critical reviewer artifact, anti-slop artifact, and .buildprint/handover.md before complete-bounded-proof.
+      - 03-ontology-and-graph-build
+  - phase_id: 06-canvas-craft-and-ops
+    file: 03-phases/06-canvas-craft-and-ops.md
+    title: Canvas craft and ops
+    status: included
+    depends_on:
+      - 04-simulation-runtime
+  - phase_id: 07-verification
+    file: 03-phases/07-verification.md
+    title: Verification
+    status: included
+    depends_on:
+      - 06-canvas-craft-and-ops
+  - phase_id: 99-final-review-handover
+    file: 03-phases/99-final-review-handover.md
+    title: Final review and handover
+    status: included
+    depends_on:
+      - 07-verification
+continuation_rule: move to the next phase only when the current slice is usable or honestly blocked; final review and handover are required before completion.

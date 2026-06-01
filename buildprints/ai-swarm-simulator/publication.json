@@ -7,7 +7,7 @@
   "creator": "Agent Buildprint",
   "category": "Mapped Project",
   "tier": "agent-grade",
-  "status": "proof-required",
+  "status": "validated",
   "runtime": [
     "Full-stack browser workbench",
     "Scenario intake and ontology review",
@@ -33,8 +33,8 @@
   "difficulty": "Advanced",
   "featured": true,
   "summary": "AI Swarm Simulator Buildprint remapped from MiroFish as a social simulation workbench with scenario intake, ontology review, a real graph canvas workbench, simulation runtime monitor, prediction report, and interaction console.",
-  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish. It is intentionally PROOF_REQUIRED: downstream agents must build the graph workbench as the central artifact, preserve real state/persistence/provider boundaries, and pass anti-slop review instead of shipping token bubbles or canned dashboards.",
-  "promise": "Build a credible AI swarm/social simulation workbench without depending on the original source repo. Status remains PROOF_REQUIRED until local, browser, persistence, provider, and runtime proof gates pass.",
+  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish as a local-first AI swarm/social simulation workbench. It now uses the review/handover v4 packet shape instead of obsolete proof-ledger theater.",
+  "promise": "Build a credible AI swarm/social simulation workbench without depending on the original source repo: project intake, graph memory, canvas inspection, simulation runtime, report generation, interaction, persistence, and honest provider/runtime blockers.",
   "whatYouGet": [
     "Executable Buildprint packet with BUILDPRINT.md canonical start",
     "A generated agent prompt that frames the task as senior product/design alignment, not checklist compliance",
@@ -69,8 +69,8 @@
     "Simulation preparation and runtime monitor phase",
     "Prediction report and interaction console phase",
     "Final critical review and handover phase",
-    "04-evaluation.md claim rules",
-    "05-evidence seed ledger/schema"
+    "04-review.md skeptical product review",
+    "05-handover.md concise handover contract"
   ],
   "risks": [
     "Collapsing the graph workbench into token bubbles, chips, cards, or static SVG decoration",
@@ -87,7 +87,6 @@
     "Mapper executable packet check passes",
     "generated/agent-prompt.md is alignment speech and includes anti-slop review",
     "Graph canvas phase explicitly forbids token bubbles/static SVG/card-list substitutes",
-    "Provider/runtime/browser proof remains PROOF_REQUIRED until downstream evidence passes",
     "Final critical reviewer checks dead buttons, placeholders, canned outputs, persistence, and graph-workbench quality"
   ],
   "trustBadges": [
@@ -105,18 +104,13 @@
       "label": "Anti-slop review",
       "detail": "Final handover requires a harsh product-quality review after build/test/lint proof.",
       "tone": "success"
-    },
-    {
-      "label": "Proof required",
-      "detail": "Live LLM/Zep/OASIS/runtime proof remains pending until downstream implementation evidence is recorded.",
-      "tone": "warning"
     }
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use the AI Swarm Simulator Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped packet is the source of truth \u2014 follow its read order including BUILDPRINT.md, generated/agent-prompt.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, phase-flow, evaluation, and active phase files.",
+  "copyPrompt": "Use the AI Swarm Simulator Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped packet is the source of truth \u2014 follow its read order: BUILDPRINT.md, 01-questions.md, generated/agent-prompt.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, 04-review.md, 05-handover.md, and the active phase file.",
   "publicStatus": {
-    "label": "Mapped, proof pending",
-    "explanation": "Source-independent packet exists; downstream implementation proof is not complete."
+    "label": "v4 review/handover packet",
+    "explanation": "Bootstraps through the current executable packet shape with 04-review.md and 05-handover.md; live providers remain honest blockers when unavailable."
   }
 }

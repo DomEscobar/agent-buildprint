@@ -1,10 +1,10 @@
 # Phase 03: Ontology And Graph Build
 
-## Intention
+## Product intention
 
 Turn seed documents and a prediction requirement into an inspectable graph world. Ontology generation and graph build must be observable, resumable enough for local use, and visibly connected to the canvas.
 
-## Build Scope
+## Build
 
 - Parse PDF, Markdown, and text files with encoding handling.
 - Generate ontology entity and relation types through the provider-neutral LLM client.
@@ -20,7 +20,7 @@ Turn seed documents and a prediction requirement into an inspectable graph world
 - Graph build progress represents real backend stages.
 - Graph id and project state are persisted after completion.
 
-## Do Not Ship
+## Do not ship
 
 - Canned ontology output.
 - Graph counts that are not derived from the graph-memory backend.

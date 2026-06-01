@@ -1,10 +1,10 @@
 # Phase 06: Canvas Craft And Ops
 
-## Intention
+## Product intention
 
 Make the graph canvas good enough to preserve MiroFish's core product feel. The graph must be useful for inspection before, during, and after simulation.
 
-## Build Scope
+## Build
 
 - Render graph nodes and edges with stable layout behavior.
 - Include entity-type coloring, legend, edge-label toggle, node/edge details, self-loop grouping, multiple-edge separation, refresh, maximize, empty/loading/error states, and simulation update hints.
@@ -19,7 +19,7 @@ Make the graph canvas good enough to preserve MiroFish's core product feel. The 
 - The graph does not disappear or resize incoherently during workflow transitions.
 - Browser review proves the canvas is nonblank with sample graph data.
 
-## Do Not Ship
+## Do not ship
 
 - A static image of a graph.
 - A graph that only renders node counts.

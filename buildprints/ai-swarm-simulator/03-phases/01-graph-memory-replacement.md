@@ -1,10 +1,10 @@
 # Phase 01: Graph Memory Replacement
 
-## Intention
+## Product intention
 
 Replace Zep Cloud with a local, free/open-source graph-memory layer while preserving the product behaviors that depended on Zep: ontology-aware graph construction, episode ingestion, temporal facts, search, node/edge readback, simulation memory updates, and report-agent retrieval.
 
-## Build Scope
+## Build
 
 - Implement the graph-memory port from `02-project-setup.md`.
 - Provide a Graphiti plus FalkorDB adapter by default, with config for host, database, graph name, embedding/LLM extraction provider, and timeouts.
@@ -18,7 +18,7 @@ Replace Zep Cloud with a local, free/open-source graph-memory layer while preser
 - The canvas can render returned graph data without shape-specific hacks.
 - Adapter errors surface actionable messages and do not corrupt project state.
 
-## Do Not Ship
+## Do not ship
 
 - `ZEP_API_KEY` as a required core env var.
 - A mock adapter as the default implementation.
