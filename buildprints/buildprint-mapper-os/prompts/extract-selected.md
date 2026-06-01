@@ -33,7 +33,7 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
 1. Identify the selected scope.
 2. Classify the dominant artifact type: product, framework, library, integration, automation, data-pipeline, infrastructure, or mixed.
 3. Select the matching spine:
-   - product -> Consumer-First product app;
+   - product -> Buildprint v4 Consumer-First product app system;
    - framework/library/integration/CLI/agent tool -> Developer-First framework/integration;
    - backend service/operator system -> Reliability-First service;
    - automation -> Task/approval/trace loop;
@@ -107,7 +107,7 @@ setup_tier: typed_product_leadership
 blueprint_mode:
   primary: <product|framework|library|integration|automation|data-pipeline|infrastructure|mixed>
   consumer: <end_user|developer|operator|maintainer|approver|analyst|mixed>
-  selected_spine: <consumer_first_product_app|developer_first_framework|reliability_first_service|automation_task_loop|data_pipeline_quality_loop|infrastructure_operations_loop|mixed>
+  selected_spine: <product_app_consumer_first|developer_first_framework|reliability_first_service|automation_task_loop|data_pipeline_quality_loop|infrastructure_operations_loop|mixed>
 agent_contract:
   role: Senior Product Engineer
   rule: Build a usable artifact-type slice; do not produce proof theater.
@@ -138,6 +138,19 @@ repair_routing:
 
 List phase ids, files, titles, status, dependencies, and the active phase. Include final review/handover as the last phase.
 
+For `blueprint_mode.primary: product` / `selected_spine: product_app_consumer_first`, use the Buildprint v4 product-app phase sequence unless the user explicitly selected a smaller slice:
+
+1. `00-product-system-alignment`
+2. `01-shell-and-navigation`
+3. `02-core-loop-first`
+4. `03-feature-slices`
+5. `04-state-and-data`
+6. `05-domain-and-intelligence`
+7. `06-design-system-and-copy`
+8. `07-architecture-garden`
+9. `08-verification`
+10. `99-final-review-handover`
+
 ### 03-phases/phase-flow.md
 
 Use typed artifact phase flow:
@@ -163,7 +176,7 @@ For non-UI modes, adapt language to the consumer/operator/developer experience: 
 
 Recommended phase spines:
 
-- Consumer-First product app: product promise -> first-run UX -> result composition -> state/export -> architecture garden -> screenshot/user journey verification.
+- Buildprint v4 Consumer-First product app: product-system alignment -> shell/navigation -> core loop first -> feature slices -> state/data -> domain/intelligence -> design/copy -> architecture garden -> verification.
 - Developer-First framework/integration: adoption contract -> framework seams -> first host action -> events/failures/observability -> examples/docs -> contract/smoke verification.
 - Reliability-First service: service goal/SLO -> state machine/data contracts -> happy transaction -> retry/failure recovery -> observability/admin controls -> runbook/regression verification.
 

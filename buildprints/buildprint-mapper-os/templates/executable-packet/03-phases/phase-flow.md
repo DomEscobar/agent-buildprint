@@ -1,5 +1,7 @@
 # Phase Flow
 
+For product-app packets, the phase order follows Buildprint v4 Consumer-First Product System: product-system alignment, shell/navigation, core loop first, feature slices, state/data, domain/intelligence, design/copy, architecture garden, verification, then final review/handover.
+
 For each phase:
 
 1. Read the phase and restate the product intention in one paragraph.

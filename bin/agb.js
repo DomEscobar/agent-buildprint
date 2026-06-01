@@ -425,6 +425,22 @@ function packetCheckResults(dir) {
   ok('phase index active phase exists', !!activePhase && files.has(activePhase))
   ok('phase index referenced phase files exist', phaseIndexFiles.length > 0 && phaseIndexFiles.every((file) => files.has(file)))
 
+  const selectedSpine = yamlScalar(blueprint, 'selected_spine')
+  if (/product_app_consumer_first/i.test(selectedSpine)) {
+    const requiredProductSystemPhases = [
+      '00-product-system-alignment',
+      '01-shell-and-navigation',
+      '02-core-loop-first',
+      '03-feature-slices',
+      '04-state-and-data',
+      '05-domain-and-intelligence',
+      '06-design-system-and-copy',
+      '07-architecture-garden',
+      '08-verification'
+    ]
+    ok('product spine uses Buildprint v4 Consumer-First phases', requiredProductSystemPhases.every((phaseId) => phaseIdSet.has(phaseId)))
+  }
+
   const phaseDir = path.join(dir, '03-phases')
   const phases = exists(phaseDir) ? fs.readdirSync(phaseDir).filter((file) => file.endsWith('.md') && file !== 'phase-flow.md').sort() : []
   ok('packet has at least one phase file', phases.length > 0)

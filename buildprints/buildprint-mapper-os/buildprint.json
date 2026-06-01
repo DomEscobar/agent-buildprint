@@ -115,7 +115,39 @@
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/03-phases/01-example-phase.md",
+      "path": "templates/executable-packet/03-phases/00-product-system-alignment.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/01-shell-and-navigation.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/02-core-loop-first.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/03-feature-slices.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/04-state-and-data.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/05-domain-and-intelligence.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/06-design-system-and-copy.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/07-architecture-garden.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/08-verification.md",
       "role": "source"
     },
     {

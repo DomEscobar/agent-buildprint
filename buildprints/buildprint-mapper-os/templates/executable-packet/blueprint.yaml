@@ -7,7 +7,7 @@ setup_tier: typed_product_leadership
 blueprint_mode:
   primary: product
   consumer: end_user
-  selected_spine: consumer_first_product_app
+  selected_spine: product_app_consumer_first
   allowed_values:
     - product
     - framework
@@ -33,7 +33,7 @@ read_order:
   - 05-handover.md
 implementation_loop:
   phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-example-phase.md
+  active_phase: 03-phases/00-product-system-alignment.md
   final_review: 04-review.md
   handover: 05-handover.md
 repair_routing:
@@ -44,5 +44,5 @@ repair_routing:
   handover_gap: 05-handover.md
 context:
   phase_index: 03-phases/phase-index.yaml
-  active_phase: 03-phases/01-example-phase.md
+  active_phase: 03-phases/00-product-system-alignment.md
   agent_prompt: generated/agent-prompt.md

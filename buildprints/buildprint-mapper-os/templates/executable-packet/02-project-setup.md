@@ -20,7 +20,9 @@ Keep it short. Do not create proof theater.
 
 ## Implementation behavior
 
-Build one usable artifact-type loop before expanding panels. Prefer a coherent artifact over broad shallow coverage.
+For product apps, use the Buildprint v4 Consumer-First product-system order: align the product system, stabilize shell/navigation, prove the core loop, then add vertical feature slices with state/data, domain intelligence, design/copy, architecture garden, and verification.
+
+For non-product artifacts, build one usable artifact-type loop before expanding panels. Prefer a coherent artifact over broad shallow coverage.
 
 Once a phase's literal requirement works, ask what the real consumer will obviously try next. For developer-facing work, that might be install, configure, call an API, trigger an example, inspect logs, extend an adapter, or recover from an error. If that next step is local, safe, and central, build it before moving on.
 

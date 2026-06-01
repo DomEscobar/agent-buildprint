@@ -17,7 +17,7 @@ function edit(rel, fn) {
 
 // Simulate a future generated packet that is unbootstrappable or lost the product-leadership alignment layer.
 edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, '').replace(/blueprint_mode:[\s\S]*?agent_contract:/m, 'agent_contract:'))
-edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/01-example-phase.md', 'active_phase: 01-example-phase'))
+edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/00-product-system-alignment.md', 'active_phase: 00-product-system-alignment'))
 edit('generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
 edit('02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
 fs.rmSync(path.join(bad, '04-review.md'))
