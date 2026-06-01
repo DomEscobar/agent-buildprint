@@ -7,3 +7,10 @@ quality/
 .DS_Store
 .project.buildprint/
 .npmrc
+
+# Generated eval/tournament run artifacts. Keep source fixtures/configs tracked, but do not let
+# local run outputs make the production deploy tree look dirty.
+experiments/buildprint-structure-eval/runs/
+experiments/buildprint-structure-tournament/
+experiments/buildprint-type-eval/runs/
+experiments/buildprint-variant-eval/runs/
