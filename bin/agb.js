@@ -441,14 +441,32 @@ function packetCheckResults(dir) {
     ok('product spine uses Buildprint v4 Consumer-First phases', requiredProductSystemPhases.every((phaseId) => phaseIdSet.has(phaseId)))
   }
 
+  const knownRoles = new Set(['product-architect', 'ux-ui-craft', 'integration-runtime', 'security-boundary', 'data-persistence'])
   const phaseDir = path.join(dir, '03-phases')
-  const phases = exists(phaseDir) ? fs.readdirSync(phaseDir).filter((file) => file.endsWith('.md') && file !== 'phase-flow.md').sort() : []
-  ok('packet has at least one phase file', phases.length > 0)
-  for (const file of phases) {
-    const text = safeReadText(path.join(phaseDir, file))
+  const collectPhaseMd = (root) => exists(root)
+    ? fs.readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+        const full = path.join(root, entry.name)
+        if (entry.isDirectory()) return collectPhaseMd(full)
+        return entry.name.endsWith('.md') && entry.name !== 'phase-flow.md' ? [full] : []
+      })
+    : []
+  const phaseFiles = collectPhaseMd(phaseDir).sort()
+  ok('packet has at least one phase file', phaseFiles.length > 0)
+  for (const fullPath of phaseFiles) {
+    const file = path.relative(phaseDir, fullPath).split(path.sep).join('/')
+    const text = safeReadText(fullPath)
     ok(`${file} has implementable phase contract`, /Product intention|Product outcome|Capability outcome|Operation outcome|Phase mode contract/i.test(text) && /## Build|## Implementation scope|## Review/i.test(text) && /Quality bar|Do not ship|Handover|Repair routing/i.test(text))
     ok(`${file} uses phase_id not capability_id for proof rows`, !/capability_id\s*:/i.test(text))
     ok(`${file} does not reference missing shared UX context`, !/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text))
+    const rolesMatch = text.match(/^\s*requires_roles\s*:\s*\[([^\]]*)\]/m)
+    if (rolesMatch) {
+      const declaredRoles = rolesMatch[1].split(',').map((role) => role.trim()).filter(Boolean)
+      const embeddedRoles = (text.match(/##\s*Required output\s*\(([^)]+)\)/gi) || []).map((heading) => heading.replace(/##\s*Required output\s*\(/i, '').replace(/\)\s*$/, '').trim())
+      const unresolved = declaredRoles.filter((role) => !embeddedRoles.includes(role))
+      ok(`${file} embeds every requires_roles role (no dangling role tokens)`, unresolved.length === 0, unresolved.length ? `missing embedded "## Required output (<role>)" for: ${unresolved.join(', ')}` : '')
+      const unknown = declaredRoles.filter((role) => !knownRoles.has(role))
+      ok(`${file} requires_roles names known capsules`, unknown.length === 0, unknown.length ? `unknown role(s): ${unknown.join(', ')} (allowed: ${Array.from(knownRoles).join(', ')})` : '')
+    }
   }
 
   const rules = files.has('04-evaluation.md') ? safeReadText(path.join(dir, '04-evaluation.md')) : safeReadText(path.join(dir, '04-review.md'))
@@ -785,8 +803,15 @@ This is a Mapper OS executable Buildprint. Local runtime state wins over stale a
 5. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
 6. Execute the phase-flow loop: restate product intention, build the smallest real usable slice, improve the obvious next user action, run relevant checks, remove visible slop, and record useful handover facts.
 7. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
-8. After each phase, consult \`.buildprint/snapshots/03-phases/phase-index.yaml\`, update local state, and continue one dependency-ready phase at a time.
+8. Advance according to \`execution_cadence\` in \`.buildprint/snapshots/blueprint.yaml\` (default \`one_phase\`): \`one_phase\` stops after each phase, \`to_checkpoint\` runs through verification then final review, \`all_remaining\` runs every dependency-ready phase to completion. Stop only on a real blocker.
 9. Before completion, run \`.buildprint/snapshots/04-review.md\` and write the handover described in \`.buildprint/snapshots/05-handover.md\`.
+
+Whenever you stop, end your handover with this menu so the developer has a concrete choice (fill in real phase ids from \`03-phases/phase-index.yaml\`):
+
+1. Continue one phase — implement the next phase only, then stop and show this menu again.
+2. Continue to the next checkpoint — implement through verification, pausing only on a real blocker.
+3. Do all remaining phases — implement every dependency-ready phase through final review/handover, stopping only on real blockers.
+4. Stop here.
 
 Rules:
 

@@ -69,6 +69,10 @@ phase_order:
     depends_on:
       - 08-verification
 optional_phase_catalog:
+  # Catalog of posture-conditional hardening phases. When a posture unlocks them, copy the file into
+  # 03-phases/ as the numbered active phase (for example 03-phases/09-auth-and-tenancy.md), add it to
+  # phase_order with its real status, and keep requires_roles embedded. For trusted_local they stay
+  # listed in phase_order as included_blocked with a blocked_reason instead of living only in this catalog.
   - phase_id: 09-auth-and-tenancy
     file: 03-phases/conditional/auth-and-tenancy.md
     default_status: conditional

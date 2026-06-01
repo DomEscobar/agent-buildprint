@@ -45,3 +45,16 @@ For `private_authenticated` and `public_webapp`, list only honest external block
 ## Next atomic actions
 
 Numbered next steps a human or agent can take without rereading the packet.
+
+## Continue from here
+
+Always end the handover with this menu so the developer has a clear decision instead of a vague "continue". Fill the placeholders with real phase ids from `03-phases/phase-index.yaml`.
+
+Tell the agent a number to proceed. If no answer is given, follow `execution_cadence` from `blueprint.yaml` (default `one_phase`).
+
+1. Continue one phase — implement `<next-phase-id>` only, then stop and show this menu again. Safest; best for review between phases.
+2. Continue to the next checkpoint — implement through `<checkpoint-phase-id>` (for example `08-verification`), pausing only on a real blocker. Good for finishing the usable local product in one push.
+3. Do all remaining phases — implement every dependency-ready phase through `99-final-review-handover`, stopping only on real blockers (credentials, destructive actions, deployment authorization, environment failure). Fastest; least review between phases.
+4. Stop here — no further implementation now.
+
+Deferred/blocked phases (`<blocked-phase-ids>`) stay blocked under every option until posture or external blockers change. Note them so option 3 does not look like it skipped work.

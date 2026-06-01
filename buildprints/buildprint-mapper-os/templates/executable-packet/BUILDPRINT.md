@@ -39,4 +39,6 @@ Do not read every phase upfront unless needed. Work the active slice, then conti
 
 `trusted_local` can be successful without being production-ready, but unbuilt operability controls must be listed in handover. `private_authenticated` and `public_webapp` require posture-critical controls to be built or explicitly blocked by external constraints.
 
+Posture only gates operability (auth, deployment, observability, backup, CI). It never lowers the product-craft floor defined in `02-project-setup.md`: a UI-bearing product at any posture, including `trusted_local`, uses a real component/UI framework with a build step and a design/styling system, never a single-file hand-rolled shell.
+
 Do not silently shrink scope. If something cannot be built, preserve it as a blocker or next action.

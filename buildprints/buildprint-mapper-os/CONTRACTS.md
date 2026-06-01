@@ -87,11 +87,12 @@ Fix local, safe, central defects before handover. Leave only real blockers.
 
 ## Handover contract
 
-Handover is short and honest:
+Handover is short and honest, and always ends with a `Continue from here` options menu (continue one phase, continue to checkpoint, do all remaining phases, or stop) honoring `execution_cadence`:
 
 - current status;
 - built surfaces;
 - verification;
 - known defects and blockers;
 - not production-grade status by operability item (mandatory for trusted local posture);
-- next atomic actions.
+- next atomic actions;
+- continue-from-here options menu.

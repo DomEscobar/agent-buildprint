@@ -1,6 +1,6 @@
 # Phase 99 — Final review and handover
 
-requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persistence, security-boundary]
+requires_roles: [product-architect, security-boundary]
 
 ## Product intention
 

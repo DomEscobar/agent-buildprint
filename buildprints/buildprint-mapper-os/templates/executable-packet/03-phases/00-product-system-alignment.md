@@ -1,10 +1,10 @@
 # Phase 00 — Product system alignment
 
-requires_roles: [product-architect]
+requires_roles: [product-architect, ux-ui-craft]
 
 ## Product intention
 
-Align promise, consumer, central artifact, first loop, and posture-driven obligations before implementation starts.
+Align promise, consumer, central artifact, first loop, posture-driven obligations, and the product-craft stack floor before implementation starts. The stack is chosen here and caps quality for every later phase.
 
 ## Mapped obligations
 
@@ -12,11 +12,12 @@ Align promise, consumer, central artifact, first loop, and posture-driven obliga
 - Name the central artifact/interface/boundary.
 - Name the first usable loop and expected outcome.
 - Name deployment posture (`trusted_local`, `private_authenticated`, or `public_webapp`) and its implications.
+- Commit to the product-craft floor from `02-project-setup.md`: for UI-bearing products, a mainstream component/UI framework with a build step plus a real styling/design system; for non-UI, the language-appropriate project/build/test structure. This floor is posture-independent.
 
 ## Stable vs free
 
-- Stable: product promise, first-loop semantics, posture commitment, and boundary honesty.
-- Free: framework/library choices, module names, and internal file layout.
+- Stable: product promise, first-loop semantics, posture commitment, boundary honesty, and the product-craft floor (real framework + design system, no single-file hand-rolled shell).
+- Free: which specific framework/library/design-system is chosen, module names, and internal file layout.
 
 ## Implementation scope
 
@@ -51,15 +52,27 @@ Align promise, consumer, central artifact, first loop, and posture-driven obliga
 - UI shell with no real data path.
 - Architecture requiring all markdown files before the next action is clear.
 
+## Required output (ux-ui-craft)
+
+- A named component/UI framework with a build step and a real styling/design system for UI-bearing products.
+- A first-screen composition plan (workflow-first, not generic dashboard) with defined empty/loading/error/blocked/success states.
+
+## Blocks (ux-ui-craft)
+
+- Single-file hand-rolled HTML/CSS/JS shell or one-string server HTML as the product UI.
+- No design/styling system; ad-hoc inline styles only.
+- Raw internal ids or cryptic unlabeled controls on the surface.
+
 ## Quality bar
 
-A new engineer can describe exactly what to build first, what must remain stable, and what can change freely.
+A new engineer can describe exactly what to build first, what must remain stable, what can change freely, and which framework + design system satisfies the craft floor.
 
 ## Do not ship
 
 - Missionless feature list.
 - Missing central artifact/boundary.
 - Posture silently assumed or unresolved.
+- A stack that violates the product-craft floor (single-file hand-rolled shell, no framework, no design system).
 
 ## Repair routing
 

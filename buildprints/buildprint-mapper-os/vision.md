@@ -35,6 +35,8 @@ The artifact must be useful, editable/queryable/inspectable where appropriate, a
 
 ## Visual product standard
 
+Product craft is posture-independent. `trusted_local` lowers operability, never visual quality. For UI-bearing products at every posture, require a real component/UI framework with a build step plus a design/styling system, decided in phase 00. A single-file hand-rolled HTML/CSS/JS shell or a server emitting one HTML string is never an acceptable product UI.
+
 Generate product-specific visual direction. Do not say only "polished" or "production-grade".
 
 Name:

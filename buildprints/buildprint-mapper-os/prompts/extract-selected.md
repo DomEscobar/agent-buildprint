@@ -59,9 +59,10 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
     - durable state or restart/readback -> `data-persistence`
     - auth/uploads/destructive/admin/user-data/public exposure -> `security-boundary`
     - broad system refactor or many boundaries -> `product-architect`
-13. Emit each phase with `requires_roles` and embed routed capsule obligations:
-    - `## Required output (<capsule>)`
-    - `## Blocks (<capsule>)`
+13. Emit each phase with `requires_roles` and embed routed capsule obligations. EVERY role listed in a phase's `requires_roles` MUST have its own pair of sections in that same phase:
+    - `## Required output (<role>)`
+    - `## Blocks (<role>)`
+    Do not list a role you do not embed, and do not embed a role you did not list. Phases are self-contained: there is no separate roles/capsule file shipped in the packet, so an unembedded role is a dangling token with no definition the downstream agent can resolve. `agb packet check` enforces this ("embeds every requires_roles role").
 14. Add conditional hardening phases:
     - `auth-and-tenancy`
     - `observability-and-health`
@@ -93,6 +94,7 @@ Ask only questions that change implementation. Prefer defaults for ordinary engi
 Useful questions:
 
 - deployment posture;
+- execution cadence (`one_phase`, `to_checkpoint`, or `all_remaining`);
 - primary user;
 - central artifact, public interface, boundary transaction, service state, task, dataflow, or operation;
 - first usable loop;
@@ -120,6 +122,8 @@ Include posture-specific role and rule:
 - `private_authenticated` -> `Senior Staff Engineer` with production-shaped obligations.
 - `public_webapp` -> `Staff/Principal Engineer` with production-grade obligations.
 
+Include a posture-independent product-craft floor, decided in phase 00: for UI-bearing products a mainstream component/UI framework with a build step plus a real design/styling system; never a single-file hand-rolled HTML/CSS/JS shell, no raw internal ids or cryptic unlabeled controls on the surface; for non-UI artifacts the language-appropriate project/build/test structure. Posture changes operability only, never craft. Route `ux-ui-craft` into phase 00 for UI-bearing products so the stack floor is enforced before the stack is chosen.
+
 Do not turn this into a long architecture encyclopedia. The point is judgment, not compliance volume.
 
 ### blueprint.yaml
@@ -139,6 +143,12 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
+execution_cadence:
+  current: <one_phase|to_checkpoint|all_remaining>
+  allowed_values:
+    - one_phase
+    - to_checkpoint
+    - all_remaining
 blueprint_mode:
   primary: <product|framework|library|integration|automation|data-pipeline|infrastructure|mixed>
   consumer: <end_user|developer|operator|maintainer|approver|analyst|mixed>
@@ -266,7 +276,8 @@ Require short headings:
 - Verification;
 - Known defects and blockers;
 - Not production-grade (mandatory for trusted_local; blocker-only for non-local);
-- Next atomic actions.
+- Next atomic actions;
+- Continue from here (a numbered options menu: continue one phase, continue to checkpoint, do all remaining phases, or stop). Every handover must end with this menu so the developer always has a concrete choice instead of a vague "continue".
 
 ### generated/agent-prompt.md
 
