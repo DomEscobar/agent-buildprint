@@ -3,10 +3,24 @@ execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
 qualification_label: local_build_requires_review
-setup_tier: product_leadership
+setup_tier: typed_product_leadership
+blueprint_mode:
+  primary: product
+  consumer: end_user
+  selected_spine: consumer_first_product_app
+  allowed_values:
+    - product
+    - framework
+    - library
+    - integration
+    - automation
+    - data-pipeline
+    - infrastructure
+    - mixed
+  note: Replace primary, consumer, and selected_spine during extraction. Do not force non-product artifacts into product-app phases.
 agent_contract:
   role: Senior Product Engineer
-  rule: Build a usable product slice; do not produce proof theater.
+  rule: Build a usable artifact-type slice; do not produce proof theater.
 read_order:
   - BUILDPRINT.md
   - 01-questions.md

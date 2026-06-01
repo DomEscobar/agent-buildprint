@@ -14,11 +14,11 @@
   ],
   "stack": [
     "Repository census",
+    "Artifact-mode classification",
+    "Typed Buildprint extraction",
     "Phase-flow replay",
-    "Fresh-agent reviews",
-    "Product vision generator",
-    "Product-led phase flow",
-    "Final product review",
+    "Consumer/Developer/Reliability spines",
+    "Final artifact review",
     "Concise handover"
   ],
   "iconKeys": [
@@ -28,14 +28,14 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Agent-session workflow for mapping an existing repo into an executable, source-independent Buildprint packet that improves downstream product quality through product-led setup, usable phase slices, skeptical review, and concise handover.",
-  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a clean, reusable Buildprint: map the source, choose a scoped candidate, then extract a selected-buildprint packet that a fresh coding agent can implement with product judgment, phase-flow, honest boundaries, final review, and handover without reading the original code.",
-  "promise": "A repo-to-Buildprint workflow that preserves scope fidelity, generates product-led executable phase files, embeds product/craft direction from a maintained vision guide, and validates packet structure without encouraging proof theater.",
+  "summary": "Agent-session workflow for mapping an existing repo into an executable, source-independent, typed Buildprint packet that improves downstream artifact quality through mode-aware setup, usable phase slices, skeptical review, and concise handover.",
+  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a clean, reusable Buildprint: map the source, classify the artifact type, choose a scoped candidate, then extract a selected-buildprint packet that a fresh coding agent can implement with product/developer/operator judgment, phase-flow, honest boundaries, final review, and handover without reading the original code.",
+  "promise": "A repo-to-Buildprint workflow that preserves scope fidelity, classifies artifact type, generates typed executable phase files, and validates packet structure without encouraging proof theater.",
   "whatYouGet": [
     "A selected-buildprint/ executable packet with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, phase-index.yaml, phase-flow.md, phase files, 04-review.md, and 05-handover.md",
-    "Product-led setup that names the central artifact, first usable loop, persistence needs, boundaries, fake-feel risks, local commands, and forbidden shortcuts",
-    "Phase-flow execution contract that asks for a real usable slice, the obvious next user action, relevant local checks, and visible slop removal",
-    "Final product review for core loop, reload/readback, input variation, controls, empty/error/blocked states, and fake/generic behavior",
+    "Typed setup that names artifact mode, real consumer, central artifact/interface/boundary, first usable loop, persistence/traces/readback, boundaries, fake-feel risks, local commands, and forbidden shortcuts",
+    "Phase-flow execution contract that asks for a real usable artifact-type slice, the obvious next consumer action, relevant local checks, and visible slop removal",
+    "Final artifact review for core loop, reload/restart/rerun, input/config/event variation, controls/commands/API calls/operator actions, empty/error/blocked states, and fake/generic behavior",
     "Concise handover with status, built surfaces, verification, known defects/blockers, and next atomic actions"
   ],
   "whatYouNeed": [
@@ -47,10 +47,11 @@
   "architectureFlow": [
     "Repo",
     "System map",
+    "Mode classification",
     "Candidates",
-    "Selected packet",
+    "Typed selected packet",
     "Phase-flow",
-    "Product setup",
+    "Artifact setup",
     "Usable phase slices",
     "Final review",
     "Handover"
@@ -58,10 +59,10 @@
   "includes": [
     "BUILDPRINT.md execution start and read order",
     "01-questions.md implementation-changing questions only",
-    "02-project-setup.md product loop, central artifact, persistence, boundaries, fake-feel risks, commands, quality rules, and forbidden shortcuts",
+    "02-project-setup.md artifact mode, consumer, first loop, central artifact/interface/boundary, persistence/traces/readback, boundaries, fake-feel risks, commands, quality rules, and forbidden shortcuts",
     "03-phases/phase-index.yaml and phase-flow.md",
-    "Product-led phase files with Product intention, Build, Quality bar, and Do not ship sections",
-    "04-review.md skeptical product review",
+    "Mode-aware phase files with intention, Build, Quality bar, and Do not ship sections",
+    "04-review.md skeptical artifact review",
     "05-handover.md concise handover",
     "generated/agent-prompt.md alignment speech, not authority"
   ],
@@ -70,25 +71,26 @@
     "Packet overfits source internals instead of observable behavior",
     "Generated phases become generic dashboard work",
     "Agent writes proof-looking prose instead of building a usable loop",
-    "Provider/deployment/security boundaries are hidden instead of named"
+    "Provider/deployment/security boundaries are hidden instead of named",
+    "Non-product artifacts are forced into product-app UI phases"
   ],
   "checks": [
     "Selected output uses executable Buildprint with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, phase files, 04-review.md, and 05-handover.md",
-    "blueprint.yaml declares execution_start, machine_contract, qualification/status label, setup_tier, implementation_loop, and repair_routing",
-    "Phase files contain product intention, build scope, quality bar, and do-not-ship failures",
+    "blueprint.yaml declares execution_start, machine_contract, qualification/status label, setup_tier, blueprint_mode, implementation_loop, and repair_routing",
+    "Phase files contain mode-appropriate intention, build scope, quality bar, and do-not-ship failures",
     "Generated prompt is alignment speech, not authority",
     "Packet avoids obsolete routers, evidence-ledger bureaucracy, packet AGENTS.md, and fragmented mini-files",
-    "Review/handover path names local checks, manual/browser review when relevant, blockers, and next atomic actions"
+    "Review/handover path names local checks, manual/browser/API/CLI/operator review when relevant, blockers, and next atomic actions"
   ],
   "trustBadges": [
     {
-      "label": "Phase-flow replay",
-      "detail": "Generated packets contain phase-flow.md and per-phase implementation grammar so a fresh agent can execute bounded slices.",
+      "label": "Typed extraction",
+      "detail": "Selected packets declare blueprint_mode so product apps, integrations, frameworks, services, automations, pipelines, and infrastructure get different phase language.",
       "tone": "success"
     },
     {
-      "label": "Evidence honesty",
-      "detail": "Runtime evidence must be schema-valid; blockers and synthetic checks cannot upgrade production claims.",
+      "label": "Phase-flow replay",
+      "detail": "Generated packets contain phase-flow.md and per-phase implementation grammar so a fresh agent can execute bounded slices.",
       "tone": "success"
     },
     {
@@ -97,19 +99,9 @@
       "tone": "success"
     },
     {
-      "label": "Product vision",
-      "detail": "Selected packets embed the product dream, golden path, visual quality bar, and screenshot acceptance language before phase work.",
-      "tone": "success"
-    },
-    {
       "label": "No fake scans",
-      "detail": "no_fake_scan_pass is accepted only when an actual scan command/artifact exists and ran.",
+      "detail": "Verification claims require actual command/artifact evidence; blockers and synthetic checks cannot upgrade readiness claims.",
       "tone": "warning"
-    },
-    {
-      "label": "MiroFish proof passed",
-      "detail": "Post-hardening MiroFish map/replay/outcome flow passed with ship-with-notes; replay workspace /tmp/mapper-replay-rDH0JF.",
-      "tone": "success"
     }
   ],
   "howToUse": [
@@ -127,19 +119,19 @@
     },
     {
       "title": "4. Choose the scope",
-      "detail": "Pick one product, feature, workflow, or integration. Smaller is fine; vague whole-repo sludge is not. Full-system mode should be explicit."
+      "detail": "Pick one product, feature, workflow, integration, framework, service, automation, dataflow, or operation. Smaller is fine; vague whole-repo sludge is not. Full-system mode should be explicit."
     },
     {
       "title": "5. Extract the executable packet",
-      "detail": "The selected package should be an executable Buildprint with BUILDPRINT.md, blueprint.yaml, product vision, setup/UI identity requirements, phase files, evaluation gates, evidence ledger, and a final summary."
+      "detail": "The selected package should be an executable typed Buildprint with BUILDPRINT.md, blueprint.yaml including blueprint_mode, setup requirements, phase files, review gates, and concise handover."
     }
   ],
   "resultChecklist": [
-    "Selected scope and source-independent product promise",
-    "Central artifact and first usable loop",
-    "02-project-setup.md product alignment and forbidden shortcuts",
+    "Selected scope and source-independent artifact promise",
+    "Artifact mode, real consumer, central artifact/interface/boundary, and first usable loop",
+    "02-project-setup.md typed alignment and forbidden shortcuts",
     "Phase-flow and phase files for usable implementation slices",
-    "04-review.md skeptical product review",
+    "04-review.md skeptical artifact review",
     "05-handover.md concise handoff",
     "Mode-appropriate handling for UI, API/library, integration, automation, data-pipeline, and infrastructure surfaces",
     "Honest blockers for credentials, deployment, destructive actions, paid services, and security review"

@@ -2,7 +2,7 @@
 
 Mapper OS is an agent-run workflow for turning an existing source project into a source-independent Buildprint. It is not a scanner command, a source-code clone plan, or an evidence-writing machine.
 
-The A/B direction is now explicit: Mapper OS should improve downstream built product quality by shaping product judgment before coding. It should preserve source behavior and scope honestly, then produce a packet that makes a coding agent build a usable product slice instead of a proof-looking artifact.
+The typed direction is now explicit: Mapper OS should improve downstream artifact quality by shaping product/developer/operator judgment before coding. It should preserve source behavior, artifact type, and scope honestly, then produce a packet that makes a coding agent build a usable artifact-type slice instead of a proof-looking artifact.
 
 ## Authority
 
@@ -11,7 +11,7 @@ The A/B direction is now explicit: Mapper OS should improve downstream built pro
 - `vision.md` is the maintained product-quality generator guide. It shapes selected packet `BUILDPRINT.md`, `02-project-setup.md`, and phase language, but it is not emitted into selected packets.
 - Source files are evidence for discovery. The emitted Buildprint is an implementation input, not proof that a future implementation already works.
 - Static scanning may guide discovery but must never become product authority.
-- The downstream executor role is **Senior Product Engineer**: preserve product intent, identify the central artifact, build a usable loop, challenge shallow implementation, keep boundaries honest, and repair visible slop before handover.
+- The downstream executor role is **Senior Product/Developer/Operator Engineer**: preserve artifact intent, identify the central artifact/interface/boundary, choose the right type spine, build a usable loop, challenge shallow implementation, keep boundaries honest, and repair visible slop before handover.
 
 ## Read order
 
@@ -23,7 +23,7 @@ The A/B direction is now explicit: Mapper OS should improve downstream built pro
 6. `policies/*.md`
 7. `prompts/*.md` and `templates/`
 
-For generated selected packages, do not make the implementing agent read every Markdown file or every phase before it knows the next action. `BUILDPRINT.md` is the execution start, `blueprint.yaml` is the machine contract, `01-questions.md` and `02-project-setup.md` gate alignment/setup, `03-phases/phase-index.yaml` names the active phase, `03-phases/phase-flow.md` owns phase work, `04-review.md` owns skeptical product review, and `05-handover.md` owns concise handoff.
+For generated selected packages, first classify the artifact type and consumer, then do not make the implementing agent read every Markdown file or every phase before it knows the next action. `BUILDPRINT.md` is the execution start, `blueprint.yaml` is the machine contract, `01-questions.md` and `02-project-setup.md` gate alignment/setup, `03-phases/phase-index.yaml` names the active phase, `03-phases/phase-flow.md` owns phase work, `04-review.md` owns skeptical product review, and `05-handover.md` owns concise handoff.
 
 ## Required flow
 
@@ -31,7 +31,7 @@ For generated selected packages, do not make the implementing agent read every M
 2. **Safe census** — collect file tree, manifests, dependency hints, framework hints, env var names, scripts, deploy hints, and test hints as hints only.
 3. **Behavior discovery** — read source surfaces to discover observable product behavior. Separate observed behavior, inferred behavior, questions, blockers, and out-of-scope details.
 4. **Scope selection** — keep default output discovery-only. Create `selected-buildprint/` only after candidate, scope, or full-suite selection. Never shrink selected scope without an explicit user decision.
-5. **Source distillation** — convert source facts into source-independent product obligations, central artifacts, user loops, boundaries, and phase slices.
+5. **Source distillation** — convert source facts into source-independent mode-appropriate obligations, central artifacts/interfaces/boundaries, first loops, boundaries, and phase slices.
 6. **Execution shaping** — give the downstream coding agent product mission, alignment questions, implementation setup, usable phase slices, forbidden shortcuts, review behavior, and handover shape.
 7. **Qualification** — keep claims honest. A packet can be a strong local implementation input without claiming validated production completeness.
 
@@ -82,7 +82,7 @@ The packet shape above is mandatory. Output without `blueprint.yaml`, `01-questi
 
 Obsolete packet files are forbidden in selected output: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
 
-`02-project-setup.md` is mandatory. It should align the coding agent around role, product loop, central artifact, persistence, provider/deployment boundaries, fake-feel risks, local commands, product quality rules, and forbidden shortcuts. It should not become a long architecture/proof encyclopedia.
+`02-project-setup.md` is mandatory. It should align the coding agent around role, artifact type, real consumer, first success loop, central artifact/interface/boundary, persistence/traces/readback, provider/deployment boundaries, fake-feel risks, local commands, quality rules, and forbidden shortcuts. It should not become a long architecture/proof encyclopedia.
 
 ## Mode discipline
 
@@ -90,10 +90,10 @@ Selected outputs must classify the dominant blueprint mode before writing setup 
 
 | Mode | `blueprint_mode.primary` | Typical phase emphasis |
 |---|---|---|
-| Product | `product` | user loop, central artifact, interaction, state |
-| Framework | `framework` | primitives, composition, extension points, misuse |
-| Library | `library` | callable API, examples, compatibility, error behavior |
-| Integration | `integration` | boundary transaction, sandbox/live split, retries/errors |
+| Product | `product` | Consumer-First: user loop, central artifact, interaction, state |
+| Framework | `framework` | Developer-First: adoption, primitives, composition, extension points, misuse |
+| Library | `library` | Developer-First: callable API, examples, compatibility, error behavior |
+| Integration | `integration` | Developer-First: boundary transaction, sandbox/live split, retries/errors |
 | Automation | `automation` | task loop, approval point, stop conditions, trace |
 | Data-pipeline | `data-pipeline` | schemas, transform stages, lineage, quality |
 | Infrastructure | `infrastructure` | deploy/apply, health, rollback, drift |

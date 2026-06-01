@@ -18,7 +18,7 @@ Map source projects into source-independent Buildprint packets that improve down
    - state/persistence/readback needs;
    - provider/deployment/destructive/security boundaries;
    - implementation slices.
-6. Emit selected packet with product-led structure:
+6. Emit selected packet with typed product-quality structure:
    - `BUILDPRINT.md`;
    - `01-questions.md`;
    - `02-project-setup.md`;
@@ -40,4 +40,4 @@ Remove the old center of gravity: proof ledgers, claim taxonomies, phase-preflig
 
 ## Completion bar
 
-Done means the packet is structurally valid, source-independent, selected-scope faithful, and product-led enough for a fresh coding agent to build a usable product slice without reading the source repo.
+Done means the packet is structurally valid, source-independent, selected-scope faithful, and type-aware enough for a fresh coding agent to build a usable artifact-type slice without reading the source repo.

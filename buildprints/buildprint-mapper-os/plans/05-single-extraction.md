@@ -8,7 +8,7 @@ Create a source-independent selected Buildprint under `selected-buildprint/` as 
 
 - Distill source facts into product obligations and usable phase slices.
 - Create required executable Buildprint spine files.
-- Identify product promise, central artifact, first usable loop, persistence/readback needs, and honest boundaries.
+- Identify artifact mode, real consumer, promise, central artifact/interface/boundary, first usable loop, persistence/traces/readback needs, and honest boundaries.
 - Include stable-vs-free boundaries inside relevant slices.
 - Include quality bars, do-not-ship failures, local checks, final review, and handover.
 - Make the output BUILDPRINT-first: `BUILDPRINT.md` owns read order, `blueprint.yaml` is the machine contract, and `03-phases/phase-index.yaml` routes the active phase and continuation.

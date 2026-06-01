@@ -2,14 +2,14 @@
 
 This file is Mapper OS guidance, not a selected-packet output file. Do not emit `vision.md` into generated Buildprint packets.
 
-Use this guide when generating product-mode packets and mixed packets with UI or product-facing phases. Its job is to make generated packets point downstream agents toward a desirable product, not a technically aligned but ugly local MVP.
+Use this guide when generating product-mode packets and mixed packets with UI or product-facing phases. For developer/operator modes, translate the same taste principles into adoption clarity, command/API ergonomics, observability, and recovery. Its job is to make generated packets point downstream agents toward a desirable artifact, not a technically aligned but ugly local MVP.
 
 ## Generation target
 
 For product/UI-bearing output, synthesize the product vision into:
 
-- `BUILDPRINT.md` mission and senior product engineer contract;
-- `02-project-setup.md` product loop, central artifact, fake-feel risk, product quality rules, and forbidden shortcuts;
+- `BUILDPRINT.md` mission and senior product/developer/operator engineer contract;
+- `02-project-setup.md` artifact type, first loop, central artifact/interface/boundary, fake-feel risk, quality rules, and forbidden shortcuts;
 - phase `## Product intention`, `## Build`, `## Quality bar`, and `## Do not ship` sections;
 - `04-review.md` screenshot/browser/product-review rejection rules where UI matters.
 
@@ -59,9 +59,9 @@ Reject:
 
 ## Setup standard
 
-`02-project-setup.md` must turn the product vision into implementation alignment:
+`02-project-setup.md` must turn the artifact vision into implementation alignment:
 
-- product loop to make usable first;
+- first artifact-type loop to make usable first;
 - central artifact and why it is the right shape;
 - state that must persist/read back;
 - provider/deployment boundaries to keep honest;

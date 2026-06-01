@@ -64,7 +64,7 @@ phases:
     inputs: [prompts/extract-selected.md, templates/executable-packet/]
     must_produce:
       - active phase and phase order
-      - product-led phase-flow
+      - typed artifact phase-flow
       - local checks and review route
       - repair/escalation rules
     must_pass:

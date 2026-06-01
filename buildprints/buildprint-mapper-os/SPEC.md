@@ -4,7 +4,7 @@ Mapper OS maps a source project into a source-independent implementation packet 
 
 ## Core invariant
 
-A selected Buildprint should make the downstream product better. It should shape product judgment before coding: mission, central artifact, first usable loop, boundaries, forbidden shortcuts, review, and handover. It must not replace that judgment with evidence bureaucracy or self-proof theater.
+A selected Buildprint should make the downstream artifact better. It should shape product/developer/operator judgment before coding: artifact type, mission, central artifact/interface/boundary, first usable loop, boundaries, forbidden shortcuts, review, and handover. It must not replace that judgment with evidence bureaucracy or self-proof theater.
 
 ## Source handling
 
@@ -36,13 +36,13 @@ generated/agent-prompt.md
 Required properties:
 
 - `BUILDPRINT.md` is the execution start and owns read order.
-- `blueprint.yaml` declares `schema_version: mapper-os/executable-blueprint`, `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, a status/qualification label, setup tier, implementation loop, and repair routing.
+- `blueprint.yaml` declares `schema_version: mapper-os/executable-blueprint`, `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, a status/qualification label, setup tier, `blueprint_mode`, implementation loop, and repair routing.
 - `01-questions.md` asks only implementation-changing questions.
-- `02-project-setup.md` aligns the implementation around product loop, central artifact, persistence, live-boundary honesty, fake-feel risks, commands, quality rules, and forbidden shortcuts.
+- `02-project-setup.md` aligns the implementation around artifact type, real consumer, first success loop, central artifact/interface/boundary, persistence/traces/readback, live-boundary honesty, fake-feel risks, commands, quality rules, and forbidden shortcuts.
 - `03-phases/phase-index.yaml` names the active phase and ordered phase files.
 - `03-phases/phase-flow.md` tells the coding agent how to work each phase: restate product intention, build a real usable slice, improve the obvious next action, run checks, remove slop, record useful handover facts.
-- Phase files describe product intention, build scope, quality bar, and do-not-ship failures.
-- `04-review.md` is a skeptical product review: complete the core loop, reload state, change input, click controls, trigger empty/error/blocked states, look for fake/generic/dead behavior, and repair local central defects.
+- Phase files describe mode-appropriate intention, build scope, quality bar, and do-not-ship failures. Product phases should read Consumer-First; developer-facing phases should read Developer-First; service/operator phases should read Reliability-First.
+- `04-review.md` is a skeptical artifact review: complete the core loop, reload/restart/rerun state or traces, change input/config/events, exercise controls/commands/API calls/operator actions, trigger empty/error/blocked states, look for fake/generic/dead behavior, and repair local central defects.
 - `05-handover.md` is concise and honest: current status, built surfaces, verification, known defects/blockers, next atomic actions.
 - `generated/agent-prompt.md` is alignment speech, not authority.
 
@@ -54,10 +54,11 @@ Do not emit obsolete router/scaffold files: `START_HERE.md`, `PRE_IMPLEMENTATION
 
 Mapper OS should preserve:
 
-- central artifact and user loop;
+- artifact type and real consumer;
+- central artifact/interface/boundary and first successful loop;
 - state/persistence/readback where required;
 - provider, credential, deployment, paid-service, destructive, and security boundaries;
-- mode-appropriate consumer/operator experience;
+- mode-appropriate consumer/developer/operator experience;
 - product language rather than packet/proof language;
 - local runnable checks and manual/browser review where relevant.
 
@@ -68,7 +69,7 @@ Mapper OS should avoid:
 - fake provider success;
 - canned output unrelated to input;
 - dead/no-op controls;
-- proof vocabulary in user-facing UI;
+- proof vocabulary in user-facing, developer-facing, or operator-facing surfaces;
 - self-reported evidence as a substitute for built behavior.
 
 ## Qualification labels

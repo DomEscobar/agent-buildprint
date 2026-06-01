@@ -16,7 +16,7 @@ function edit(rel, fn) {
 }
 
 // Simulate a future generated packet that is unbootstrappable or lost the product-leadership alignment layer.
-edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, ''))
+edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, '').replace(/blueprint_mode:[\s\S]*?agent_contract:/m, 'agent_contract:'))
 edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/01-example-phase.md', 'active_phase: 01-example-phase'))
 edit('generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
 edit('02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
@@ -33,9 +33,10 @@ try {
 }
 
 const requiredFailures = [
-  'packet includes review/handover or legacy evidence ledger',
+  'packet includes review/handover',
   'blueprint declares qualification label',
   'blueprint declares setup tier',
+  'blueprint declares artifact mode',
   'project setup defines implementation alignment',
   'phase index names active phase file',
   'generated prompt is alignment speech, not authority',

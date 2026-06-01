@@ -2,7 +2,7 @@ active_phase: 03-phases/01-example-phase.md
 phase_order:
   - phase_id: 01-example-phase
     file: 03-phases/01-example-phase.md
-    title: First usable product loop
+    title: First successful artifact loop
     status: included
     depends_on: []
   - phase_id: 99-final-review-handover

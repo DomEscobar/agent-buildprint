@@ -6,7 +6,7 @@ Use this prompt when the user has selected a repo, candidate, feature set, or fu
 
 Emit a clean executable Buildprint that helps a future coding agent build a better product. Preserve source behavior and selected scope, but rewrite it as product obligations, not source-clone instructions.
 
-The packet must shape product judgment before coding: mission, central artifact, first usable loop, persistence, provider/deployment boundaries, forbidden shortcuts, phase slices, skeptical review, and concise handover.
+The packet must shape product judgment before coding: artifact type, mission, central artifact or boundary, first usable loop, persistence/state/readback, provider/deployment boundaries, forbidden shortcuts, phase slices, skeptical review, and concise handover.
 
 Do not emit evidence bureaucracy. Do not ask the implementing agent to prove quality with long ledgers. Local checks are useful; built product behavior is the standard.
 
@@ -31,15 +31,24 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
 ## Generation process
 
 1. Identify the selected scope.
-2. Name the primary user/operator.
-3. Name the product promise.
-4. Identify the central artifact or main work surface.
-5. Identify the first usable end-to-end loop.
-6. Identify state that must persist/read back.
-7. Identify live-provider, credential, deployment, destructive, paid-service, and security boundaries.
-8. Split implementation into a small number of usable slices.
-9. Write each phase as product intention + build scope + quality bar + do-not-ship failures.
-10. Add final review and handover.
+2. Classify the dominant artifact type: product, framework, library, integration, automation, data-pipeline, infrastructure, or mixed.
+3. Select the matching spine:
+   - product -> Consumer-First product app;
+   - framework/library/integration/CLI/agent tool -> Developer-First framework/integration;
+   - backend service/operator system -> Reliability-First service;
+   - automation -> Task/approval/trace loop;
+   - data-pipeline -> schema/transform/lineage/quality loop;
+   - infrastructure -> apply/health/rollback/drift loop;
+   - mixed -> explicit per-phase modes.
+4. Name the primary consumer: end user, developer, operator, maintainer, approver, analyst, or mixed.
+5. Name the promise in mode-appropriate language.
+6. Identify the central artifact, public interface, boundary transaction, work surface, task, dataflow, or operation.
+7. Identify the first usable end-to-end loop for that consumer.
+8. Identify state that must persist/read back, traces that must be inspectable, or outputs that must be reproducible.
+9. Identify live-provider, credential, deployment, destructive, paid-service, and security boundaries.
+10. Split implementation into a small number of usable, type-aware slices.
+11. Write each phase as intention + build scope + quality bar + do-not-ship failures.
+12. Add final review and handover.
 
 ## File guidance
 
@@ -49,7 +58,7 @@ Include:
 
 - short product mission;
 - read order;
-- senior product engineer contract;
+- senior product/developer/operator engineer contract;
 - how to use the packet;
 - completion semantics and honesty rules.
 
@@ -62,18 +71,18 @@ Ask only questions that change implementation. Prefer defaults for ordinary engi
 Useful questions:
 
 - primary user;
-- central artifact;
+- central artifact, public interface, boundary transaction, service state, task, dataflow, or operation;
 - first usable loop;
 - persistence/readback requirement;
 - provider/deployment/destructive boundaries;
-- what would make a 60-second screen recording embarrassing.
+- what would make a 60-second demo, terminal recording, API trace, or operator walkthrough embarrassing.
 
 ### 02-project-setup.md
 
 Align the coding agent before code:
 
 - role/mission/craftsmanship;
-- product loop to make usable first;
+- first artifact-type loop to make usable: user loop, adoption loop, boundary transaction, service operation, task, dataflow, or infrastructure operation;
 - central artifact and why it is the right shape;
 - state that must persist;
 - live-provider/deployment boundaries to keep honest;
@@ -94,10 +103,14 @@ execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
 qualification_label: local_build_requires_review
-setup_tier: product_leadership
+setup_tier: typed_product_leadership
+blueprint_mode:
+  primary: <product|framework|library|integration|automation|data-pipeline|infrastructure|mixed>
+  consumer: <end_user|developer|operator|maintainer|approver|analyst|mixed>
+  selected_spine: <consumer_first_product_app|developer_first_framework|reliability_first_service|automation_task_loop|data_pipeline_quality_loop|infrastructure_operations_loop|mixed>
 agent_contract:
   role: Senior Product Engineer
-  rule: Build a usable product slice; do not produce proof theater.
+  rule: Build a usable artifact-type slice; do not produce proof theater.
 read_order:
   - BUILDPRINT.md
   - 01-questions.md
@@ -127,11 +140,11 @@ List phase ids, files, titles, status, dependencies, and the active phase. Inclu
 
 ### 03-phases/phase-flow.md
 
-Use product-led phase flow:
+Use typed artifact phase flow:
 
 1. Read the phase and restate product intention.
 2. Build the smallest real usable slice.
-3. Improve the obvious next user action if local, safe, and central.
+3. Improve the obvious next consumer action if local, safe, and central.
 4. Run relevant checks.
 5. Remove visible slop.
 6. Record only useful handover facts.
@@ -146,7 +159,13 @@ Each phase should include:
 - `## Quality bar`
 - `## Do not ship`
 
-For non-UI modes, adapt language to the consumer/operator experience: API, library, integration, automation, data pipeline, or infrastructure. Do not force UI language where the product surface is CLI/API/operator workflow.
+For non-UI modes, adapt language to the consumer/operator/developer experience: API, library, integration, automation, data pipeline, or infrastructure. Do not force UI language where the product surface is CLI/API/operator workflow.
+
+Recommended phase spines:
+
+- Consumer-First product app: product promise -> first-run UX -> result composition -> state/export -> architecture garden -> screenshot/user journey verification.
+- Developer-First framework/integration: adoption contract -> framework seams -> first host action -> events/failures/observability -> examples/docs -> contract/smoke verification.
+- Reliability-First service: service goal/SLO -> state machine/data contracts -> happy transaction -> retry/failure recovery -> observability/admin controls -> runbook/regression verification.
 
 ### 04-review.md
 
@@ -155,9 +174,9 @@ Require skeptical product review:
 - start fresh and complete the core loop;
 - reload/read back state;
 - change inputs and confirm outputs change;
-- click primary controls;
+- click primary controls or run documented commands/API calls/operator actions;
 - trigger empty/error/blocked states where possible;
-- look for generic dashboard smell, fake intelligence, raw JSON, placeholder copy, dead controls, canned output, internal/proof vocabulary, missing persistence, and absent next actions;
+- look for generic dashboard smell, fake intelligence, raw JSON dumped as the experience, placeholder copy, dead controls, undocumented public methods, fake adapter seams, canned output, internal/proof vocabulary, missing persistence/traces/readback, and absent next actions;
 - fix local, safe, central defects before handover.
 
 ### 05-handover.md
@@ -172,7 +191,7 @@ Require short headings:
 
 ### generated/agent-prompt.md
 
-Write alignment speech only. It must say it is not a checklist and not authority. It should position the agent as a senior product engineer and warn against generic dashboards, decorative artifacts, raw JSON product surfaces, fake provider success, canned output, dead buttons, placeholder copy, swallowed errors, debug/proof vocabulary, and broad shallow panels.
+Write alignment speech only. It must say it is not a checklist and not authority. It should position the agent as a senior product/developer/operator engineer and warn against generic dashboards, decorative artifacts, raw JSON product surfaces, fake provider success, canned output, dead buttons, placeholder copy, swallowed errors, debug/proof vocabulary in user/operator surfaces, and broad shallow panels.
 
 ## Anti-fix
 

@@ -2,7 +2,7 @@
 
 Use this Buildprint to map a source project into a source-independent Buildprint package.
 
-Mapper OS is run by an agent. It reads source, distills product obligations, and produces either discovery output or a selected `selected-buildprint/` execution packet. The current direction is product-led: the packet should improve downstream built product quality, not maximize proof/evidence paperwork.
+Mapper OS is run by an agent. It reads source, classifies the artifact type, distills mode-appropriate obligations, and produces either discovery output or a selected `selected-buildprint/` execution packet. The current direction is typed product-quality: the packet should improve downstream artifact quality for the real consumer, not maximize proof/evidence paperwork.
 
 ## Start Here
 
@@ -23,7 +23,7 @@ For generated selected packages, downstream implementers should not read all Mar
 - Keep output discovery-only until scope is selected.
 - Preserve requested scope; do not hide broad, blocked, or unbuilt behavior.
 - Produce executable Buildprint packets for selected outputs.
-- Shape the downstream agent as a senior product engineer: central artifact, first usable loop, honest boundaries, forbidden shortcuts, skeptical review, concise handover.
+- Shape the downstream agent as a senior product/developer/operator engineer: artifact type, real consumer, central artifact/interface/boundary, first usable loop, honest boundaries, forbidden shortcuts, skeptical review, concise handover.
 
 ## Selected Output
 
@@ -46,7 +46,7 @@ generated/
   agent-prompt.md
 ```
 
-`BUILDPRINT.md` is the execution start and read-order authority. `blueprint.yaml` is the machine contract. `01-questions.md` captures only implementation-changing questions. `02-project-setup.md` aligns product loop, central artifact, persistence, live-boundary honesty, fake-feel risks, commands, quality rules, and forbidden shortcuts. `03-phases/` owns active usable implementation slices. `04-review.md` defines skeptical product review. `05-handover.md` defines concise handoff.
+`BUILDPRINT.md` is the execution start and read-order authority. `blueprint.yaml` is the machine contract. `01-questions.md` captures only implementation-changing questions. `02-project-setup.md` aligns artifact type, real consumer, first loop, central artifact/interface/boundary, persistence/traces/readback, live-boundary honesty, fake-feel risks, commands, quality rules, and forbidden shortcuts. `03-phases/` owns active usable implementation slices. `04-review.md` defines skeptical artifact review. `05-handover.md` defines concise handoff.
 
 Obsolete selected-output shapes are not accepted: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, `05-evidence/`, `09-evidence/`, and per-capability mini-files.
 
