@@ -122,7 +122,14 @@ Include posture-specific role and rule:
 - `private_authenticated` -> `Senior Staff Engineer` with production-shaped obligations.
 - `public_webapp` -> `Staff/Principal Engineer` with production-grade obligations.
 
-Include a posture-independent product-craft floor, decided in phase 00: for UI-bearing products a mainstream component/UI framework with a build step plus a real design/styling system; never a single-file hand-rolled HTML/CSS/JS shell, no raw internal ids or cryptic unlabeled controls on the surface; for non-UI artifacts the language-appropriate project/build/test structure. Posture changes operability only, never craft. Route `ux-ui-craft` into phase 00 for UI-bearing products so the stack floor is enforced before the stack is chosen.
+Include a posture-independent product-craft floor as a quality class (not a vendor): for UI-bearing products a mainstream component/UI framework with a build step plus a real design/styling system; never a single-file hand-rolled HTML/CSS/JS shell, no raw internal ids or cryptic unlabeled controls on the surface; for non-UI artifacts the language-appropriate project/build/test structure. Posture changes operability only, never craft. Route `ux-ui-craft` into phase 00 for UI-bearing products.
+
+Stack ownership (critical — do not let `02-project-setup.md` and `00-product-system-alignment.md` collide):
+
+- `02-project-setup.md` sets guardrails only: the craft floor (quality class), integration constraints, and persistence/provider boundaries. It must NOT pick the concrete stack.
+- `03-phases/00-product-system-alignment.md` owns the concrete stack/architecture choice, made inside those guardrails.
+- Do not pin a backend language, framework, or library copied from the source as a decision in either file. Stack stays free and source-independent.
+- Only when a preserved external dependency genuinely forces a stack (for example the graph-memory or simulation runtime is a Python library) state it as a reasoned, swappable constraint with an escape hatch (such as a sidecar), never as a bare "X service backend" decision.
 
 Do not turn this into a long architecture encyclopedia. The point is judgment, not compliance volume.
 

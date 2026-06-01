@@ -10,20 +10,30 @@ You are a senior product/developer/operator engineer with product taste. Your ro
 
 Your job is to make the artifact real for its intended consumer and posture obligations: end-user product loop, developer adoption loop, integration boundary transaction, service operation, automation task, dataflow, or infrastructure operation.
 
-## Product-craft floor (all postures, decided here in phase 00)
+## Stack ownership
 
-This floor is independent of deployment posture. `trusted_local` lowers operability (auth, deployment, observability, backup, CI), it never lowers product craft. Decide the stack here, before any phase code, because the stack choice caps the quality ceiling for every later phase.
+This file sets the guardrails only: the product-craft floor, integration constraints, and persistence/provider boundaries. It does NOT pick the concrete stack. The concrete language, framework, library, and tooling are chosen in `03-phases/00-product-system-alignment.md` and recorded in the implementation note. Phase 00 chooses inside the box this file draws.
+
+Do not pin a backend language, framework, or library copied from the source as a decision. Stack stays free except where a preserved dependency genuinely forces it — and then state it as a reasoned, swappable constraint (see Integration constraints below), not a bare decision.
+
+## Product-craft floor (all postures, quality class not a vendor)
+
+This floor is independent of deployment posture. `trusted_local` lowers operability (auth, deployment, observability, backup, CI); it never lowers product craft. The floor is a minimum quality bar on whatever stack phase 00 chooses, not a specific framework.
 
 For UI-bearing product artifacts:
 
-- Use a mainstream, actively maintained component/UI framework with a build step (for example React, Vue, Svelte, SolidJS, or equivalent). No single-file hand-rolled HTML/CSS/JS shell. No server that emits one big HTML string as the product UI.
+- Use a mainstream, actively maintained component/UI framework with a build step (for example React, Vue, Svelte, SolidJS, or equivalent — the example list is not a decision). No single-file hand-rolled HTML/CSS/JS shell. No server that emits one big HTML string as the product UI.
 - Use a real styling/design system: a utility-first framework or a design-token system with consistent spacing, type scale, color, and component states. Not ad-hoc inline styles.
 - Never render raw internal ids (for example `graph_7e2ce89e3136`), debug strings, or proof/phase vocabulary on the product surface.
 - Every control has a clear label or a recognized icon; no cryptic single-character buttons.
 
 For non-UI artifacts (CLI, API, library, service, pipeline, infra), apply the equivalent craft floor: a real project structure and build/test tooling for the language, clear command/API ergonomics, and no throwaway single-file script standing in for the product.
 
-For all artifacts: keep layered architecture boundaries (UI/domain/provider-adapter/persistence/runtime). This floor is a hard requirement; record the chosen framework and styling system in the implementation note.
+For all artifacts: keep layered architecture boundaries (UI/domain/provider-adapter/persistence/runtime). This floor is a hard requirement on the class of stack, not a chosen vendor.
+
+## Integration constraints
+
+State only the stack constraints that a preserved external dependency genuinely forces, each with a reason and an escape hatch. Example: if the graph-memory or simulation runtime you preserve is a Python library, a Python backend or a Python sidecar is the practical default — but it stays swappable behind the adapter boundary. Everything not constrained this way is free.
 
 ## Before coding
 
@@ -32,7 +42,7 @@ Write a short implementation note in the real project root with:
 - the artifact type from `blueprint.yaml` and the consumer you are serving;
 - the first loop you will make usable first: user loop, adoption loop, boundary transaction, service operation, task loop, dataflow, or infrastructure operation;
 - the central artifact, API, adapter, command, service, pipeline, or operation and why it is the right shape;
-- the chosen UI/component framework and styling/design system (or non-UI equivalent), satisfying the product-craft floor above;
+- the stack chosen in phase 00 (framework + styling/design system, or non-UI equivalent) and how it satisfies the product-craft floor above;
 - the state that must persist;
 - the live-provider/deployment boundaries you will keep honest;
 - the deployment posture and which operability controls are mandatory at that posture;
@@ -66,6 +76,7 @@ Posture obligations (operability only; the product-craft floor above applies reg
 
 ## Forbidden shortcuts
 
+- Pinning a concrete backend language, framework, or library copied from the source as a decision here. State stack as free, or as a reasoned swappable constraint, and let phase 00 choose.
 - Single-file hand-rolled HTML/CSS/JS shell, or a server emitting one HTML string, as the product UI (violates the product-craft floor, even at `trusted_local`).
 - No component framework or no design/styling system for a UI-bearing product.
 - Raw internal ids, debug strings, or proof/phase vocabulary on the product surface.

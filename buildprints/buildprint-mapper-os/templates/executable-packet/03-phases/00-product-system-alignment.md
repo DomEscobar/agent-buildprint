@@ -4,7 +4,7 @@ requires_roles: [product-architect, ux-ui-craft]
 
 ## Product intention
 
-Align promise, consumer, central artifact, first loop, posture-driven obligations, and the product-craft stack floor before implementation starts. The stack is chosen here and caps quality for every later phase.
+Align promise, consumer, central artifact, first loop, and posture-driven obligations, then choose the concrete stack — within the guardrails `02-project-setup.md` sets. This phase owns the stack decision; `02-project-setup.md` only sets the craft floor and integration constraints.
 
 ## Mapped obligations
 
@@ -12,12 +12,12 @@ Align promise, consumer, central artifact, first loop, posture-driven obligation
 - Name the central artifact/interface/boundary.
 - Name the first usable loop and expected outcome.
 - Name deployment posture (`trusted_local`, `private_authenticated`, or `public_webapp`) and its implications.
-- Commit to the product-craft floor from `02-project-setup.md`: for UI-bearing products, a mainstream component/UI framework with a build step plus a real styling/design system; for non-UI, the language-appropriate project/build/test structure. This floor is posture-independent.
+- Choose the concrete stack (language, framework, libraries, tooling) that satisfies the `02-project-setup.md` product-craft floor and integration constraints. Keep the choice source-independent and free, except where a preserved dependency forces a reasoned, swappable constraint (state the reason). Do not inherit a stack just because the source used it.
 
 ## Stable vs free
 
-- Stable: product promise, first-loop semantics, posture commitment, boundary honesty, and the product-craft floor (real framework + design system, no single-file hand-rolled shell).
-- Free: which specific framework/library/design-system is chosen, module names, and internal file layout.
+- Stable: product promise, first-loop semantics, posture commitment, boundary honesty, the product-craft floor (real framework + design system, no single-file hand-rolled shell), and any reasoned integration constraint from `02-project-setup.md`.
+- Free: which specific language/framework/library/design-system is chosen, module names, and internal file layout.
 
 ## Implementation scope
 
