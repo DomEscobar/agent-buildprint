@@ -1,4 +1,7 @@
 schema_version: mapper-os/executable-blueprint
+source:
+  origin_github_url: https://github.com/666ghj/MiroFish
+  origin_label: 666ghj/MiroFish
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
