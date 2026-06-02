@@ -1,4 +1,4 @@
-# AI Swarm Simulator Buildprint
+# BUILDPRINT: AI Swarm Simulator
 
 This packet is for building a source-independent MiroFish-inspired AI Swarm Simulator prediction sandbox. The artifact promise is not a generic dashboard: a user uploads seed material, describes a prediction question, watches a knowledge graph and dual-platform agent simulation take shape, receives a prediction report, and can interrogate the resulting simulated world.
 
