@@ -1,82 +1,54 @@
 # BUILDPRINT: AI Presentation Generation
 
-This is the canonical starting point and execution contract for the blueprint. Do not start from generated prompts or secondary files. Your first action must be reading this file; do not inventory, glob, or enumerate packet files before this read order is established.
+Build a Presenton-inspired AI presentation workbench as a usable product, not as a dashboard-shaped demo. The center is the trusted-local deck generation loop: configure providers, create a deck from prompt/document/template, generate an outline, build editable slides, manage templates and assets, iterate with chat, export files, and expose API/webhook/MCP/desktop boundaries honestly.
 
-## Product brief
+## Read Order
 
-- Product: AI Presentation Generation
-- Primary outcome: Clean-room, Presenton-inspired Buildprint for a self-hosted AI presentation generator and API with prompt/document-to-deck generation, provider configuration, editable slides, assets, templates, export, webhooks, and desktop/MCP boundaries.
-- Primary users: operators or developers implementing the mapped product workflow.
-- Main surfaces: Clean-room source mapping; Executable Buildprint packet; Pre-implementation questions; Project setup gate
-- What this packet must not become: a generic local MVP, static demo, source clone, or single-file product shell.
+1. `BUILDPRINT.md`
+2. `01-questions.md`
+3. `generated/agent-prompt.md`
+4. `02-project-setup.md`
+5. `blueprint.yaml`
+6. `03-phases/phase-index.yaml`
+7. `03-phases/phase-flow.md`
+8. Active phase file from `03-phases/phase-index.yaml`
+9. `04-review.md`
+10. `05-handover.md`
 
-## Final product at a glance
+Do not inventory or batch-read the packet before this order. `generated/agent-prompt.md` is alignment speech, not authority.
 
-**Golden path** - An admin configures a self-hosted presentation generator, submits a prompt or document, watches an outline become a structured deck, edits slides and assets in a browser editor, exports PPTX/PDF, and can use API, webhook, MCP, or desktop boundaries without hiding provider or persistence blockers.
+## Product Brief
 
-**Surfaces**
+- Product: Presenton-inspired AI presentation generation workbench.
+- Primary outcome: a self-hosted product loop for generating, editing, exporting, and integrating AI-generated presentations.
+- Primary users: individuals, teams, or operators who want local/private control over model providers, templates, assets, generated decks, and exports.
+- Main surfaces: provider/runtime setup, deck workbench, outline editor, slide canvas, asset/template manager, chat iteration, export center, API/webhook/MCP/desktop seams.
+- What this packet must not become: a static slide preview, hard-coded deck demo, SaaS clone, generic admin dashboard, or fake export/API shell.
 
-- Instance/auth/provider setup - configure runtime, admin access, provider mode and persistence roots - Phase 1
-- Content ingestion and outline generation - turn prompt or documents into a deck outline with streaming status - Phase 2
-- Deck and slide generation - produce persisted slide structure and layout choices - Phase 3
-- Media, templates and themes - manage image/icon/font/theme assets - Phase 4
-- Editor and chat iteration - edit slides and iterate with chat assistance - Phase 5
-- Export/API/webhook/MCP/desktop boundary - deliver deck files and integration entrypoints - Phase 6
+## Product Intention
 
-**Done looks like**
+The implementation should preserve Presenton's open-source promise: no SaaS lock-in, full provider choice, local/private posture, editable decks, custom templates, and real export/integration boundaries. It may choose a clean stack, but the user workflow must remain recognizable: input content, generate a deck, edit it, export it, and automate it.
 
-- A generated deck reloads with slide structure, assets, edits and provider mode intact after restart.
-- Browser editing changes real slide state instead of static markup or a local MVP shell.
-- Exports, API tasks and webhooks are backed by rerunnable proof or honest blocked-provider rows.
+## Golden Path
 
-## Required read order
-
-1. Read this `BUILDPRINT.md` first, before listing or opening other packet files.
-2. Read `01-questions.md`.
-3. Read and complete `02-project-setup.md`.
-4. Read `blueprint.yaml` as the machine-readable mirror.
-5. Read `03-phases/phase-index.yaml`.
-6. Read `03-phases/phase-flow.md`.
-7. Read only the role contracts under `06-contracts/` required by the active phase `requires_roles`.
-8. Read only the current active phase file. For a fresh run, use `active_phase` from `03-phases/phase-index.yaml`; for a targeted or resumed run, use the assignment or `.buildprint` state override after confirming the phase exists in `03-phases/phase-index.yaml`.
-9. Read `04-evaluation.md`.
-10. Treat `05-evidence/evidence-ledger.jsonl` as the immutable packet seed; append implementation proof or blocker rows only to `.buildprint/evidence/evidence-ledger.jsonl`.
-
-Read these files sequentially. Do not batch, parallelize, or reorder the initial context reads, even when using multi-command tooling.
-
-## Project setup gate
-
-Do not start `03-phases/*` until `02-project-setup.md` has enough explicit architecture, team rules, quality gates, safety rules, and `AGENTS.md` plan to prevent agents from inventing project structure.
-
-Blank answers in `01-questions.md` are not blockers. They authorize AI best-fit decisions unless the choice is irreversible, expensive, credentialed, destructive, or product-defining.
+1. Start the app locally and see provider/export/runtime readiness.
+2. Configure text model, image provider, storage, export runtime, and optional local privacy mode.
+3. Create a deck from prompt, document upload, or imported template.
+4. Generate and edit an outline.
+5. Generate persisted slides with layouts, themes, assets, and notes/content metadata.
+6. Edit the deck on a real canvas with slide thumbnails and properties.
+7. Use chat to refine the deck or selected slide.
+8. Export PPTX/PDF or receive an honest dependency blocker.
+9. Use API/webhook/MCP/desktop seams only when implemented and verified.
 
 ## Implementation loop
 
-Every phase must repeat this loop until the proof gate passes or a real blocker is recorded:
+For every phase: observe current files and behavior, plan the smallest real product slice, execute scoped changes, verify with build/test/browser/API checks, reflect against the phase quality bar, and record concise evidence or blockers. A phase is not complete from code edits alone.
 
-1. Observe: inspect existing project files, nearest `AGENTS.md`, current behavior, and constraints.
-2. Plan: state the smallest coherent change, likely files, and verification gate.
-3. Execute: make scoped changes without silently expanding architecture.
-4. Verify: run the planned test/build/browser/runtime gate and inspect output.
-5. Reflect: compare results against the phase proof gate.
-6. Record: append evidence or blocker rows before claiming progress.
+## Phase rules
 
-A phase cannot be marked done from code edits alone.
+Use `03-phases/phase-flow.md` for every phase. Every role named in `requires_roles` must contribute through the embedded role outputs in the phase file. If a provider key, local model, browser, LibreOffice, document parser, or export runtime is missing, build the honest seam and blocked state rather than fake success.
 
-## Repair routing
+## Final critical reviewer
 
-If verification fails, route back before editing again:
-
-- test/build/runtime/UI/proof failure -> current phase file
-- architecture contradiction -> `02-project-setup.md`
-- missing human preference that affects product identity/cost/secrets/destructive action -> `01-questions.md`
-- missing dependency -> required prior phase
-- external blocker -> `.buildprint/evidence/evidence-ledger.jsonl`
-
-Do not mark a phase complete while its verification failure is unresolved.
-
-## Phase discipline
-
-Every phase starts through `03-phases/phase-flow.md`. Do not collapse phase entry into immediate implementation: create `.buildprint/phase-runs/<phase-id>/plan.md`, `.buildprint/phase-runs/<phase-id>/team-gates.md`, bounded handoffs for every role in `requires_roles`, and return files for every role. Use subagents or delegated workers when available; when unavailable, self-simulate each role through the same handoff/return artifacts. Collect returns/reviews/proof, and only then append runtime evidence.
-
-A phase is a proof-gated product slice, not a waterfall task bucket. Each phase must define product outcome, mapped product obligations, implementation scope, interfaces touched, state/runtime touched, UX/UI requirements, safety/security constraints, quality gates, proof gate, and repair routing.
+Before handover, run `04-review.md` as a skeptical product reviewer. Reject dead buttons, generic dashboard layouts, placeholder slide canvases, fake generation, fake exports, raw JSON as UX, secret leakage, and unproven production claims. Then write `05-handover.md` facts for the next agent.

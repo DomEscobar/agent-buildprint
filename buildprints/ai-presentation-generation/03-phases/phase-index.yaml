@@ -1,27 +1,43 @@
 schema_version: mapper-os/phase-index
-active_phase: 03-phases/01-instance-auth-config-provider-setup.md
+active_phase: 03-phases/00-product-system-alignment.md
 phases:
-  - phase_id: 01-instance-auth-config-provider-setup
-    file: 03-phases/01-instance-auth-config-provider-setup.md
+  - phase_id: 00-product-system-alignment
+    file: 03-phases/00-product-system-alignment.md
     depends_on: []
-    proof_gate: instance boot, admin auth, provider config, persistence roots, runtime mode disclosure
-  - phase_id: 02-content-ingestion-outline-generation
-    file: 03-phases/02-content-ingestion-outline-generation.md
-    depends_on: [instance-auth-config-provider-setup]
-    proof_gate: prompt/file ingestion, document parsing, outline generation, streaming status
-  - phase_id: 03-deck-structure-slide-generation
-    file: 03-phases/03-deck-structure-slide-generation.md
-    depends_on: [content-ingestion-outline-generation]
-    proof_gate: slide structure, slide content, layout selection, persisted deck model
-  - phase_id: 04-media-template-theme-assets
-    file: 03-phases/04-media-template-theme-assets.md
-    depends_on: [deck-structure-slide-generation]
-    proof_gate: image/icon/font/theme/template asset lifecycle
-  - phase_id: 05-editor-chat-iteration-workflow
-    file: 03-phases/05-editor-chat-iteration-workflow.md
-    depends_on: [deck-structure-slide-generation, media-template-theme-assets]
-    proof_gate: editable presentation UI, slide edits, chat-assisted iteration, memory boundaries
-  - phase_id: 06-export-api-webhooks-mcp-desktop
-    file: 03-phases/06-export-api-webhooks-mcp-desktop.md
-    depends_on: [editor-chat-iteration-workflow]
-    proof_gate: PPTX/PDF export, authenticated API, async task/webhook delivery, MCP/desktop packaging boundary
+    proof_gate: product system alignment proof
+  - phase_id: 01-shell-and-navigation
+    file: 03-phases/01-shell-and-navigation.md
+    depends_on: []
+    proof_gate: shell and navigation proof
+  - phase_id: 02-core-loop-first
+    file: 03-phases/02-core-loop-first.md
+    depends_on: []
+    proof_gate: core loop first proof
+  - phase_id: 03-feature-slices
+    file: 03-phases/03-feature-slices.md
+    depends_on: []
+    proof_gate: feature slices proof
+  - phase_id: 04-state-and-data
+    file: 03-phases/04-state-and-data.md
+    depends_on: []
+    proof_gate: state and data proof
+  - phase_id: 05-domain-and-intelligence
+    file: 03-phases/05-domain-and-intelligence.md
+    depends_on: []
+    proof_gate: domain and intelligence proof
+  - phase_id: 06-design-system-and-copy
+    file: 03-phases/06-design-system-and-copy.md
+    depends_on: []
+    proof_gate: design system and copy proof
+  - phase_id: 07-architecture-garden
+    file: 03-phases/07-architecture-garden.md
+    depends_on: []
+    proof_gate: architecture garden proof
+  - phase_id: 08-verification
+    file: 03-phases/08-verification.md
+    depends_on: []
+    proof_gate: verification proof
+  - phase_id: 99-final-review-handover
+    file: 03-phases/99-final-review-handover.md
+    depends_on: []
+    proof_gate: final review handover proof

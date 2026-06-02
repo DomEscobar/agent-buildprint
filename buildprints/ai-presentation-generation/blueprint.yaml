@@ -1,64 +1,90 @@
 schema_version: mapper-os/executable-blueprint
+source:
+  origin_github_url: https://github.com/presenton/presenton
+  origin_label: presenton/presenton
+  observed_commit: 493aff5c764c13f7249a9a908fe41aa85c19b7c3
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
-source:
-  input: https://github.com/presenton/presenton
-  checkout_path: external-source-checkout
-  commit: cd6b0ac1c7ea9fa8f385c766fb900a08e1c2299b
-generated_at: 2026-05-24T10:45:00Z
-claim_status: PROOF_REQUIRED
+claim_status: product_build_required
+qualification_label: local_build_requires_review
+setup_tier: typed_product_leadership
+deployment_posture:
+  current: trusted_local
+  allowed_values:
+    - trusted_local
+    - private_authenticated
+    - public_webapp
+execution_cadence:
+  current: all_remaining
+  allowed_values:
+    - one_phase
+    - to_checkpoint
+    - all_remaining
 blueprint_mode:
   primary: product
-  secondary: []
-  phase_style: outcome_flow
-setup_gate:
-  questions: 01-questions.md
-  project_setup: 02-project-setup.md
-  required_before_phases: true
+  consumer: end_user
+  selected_spine: product_app_consumer_first
+  allowed_spines:
+    - product_app_consumer_first
+    - developer_first_framework
+    - reliability_first_service
+    - automation_task_loop
+    - data_pipeline_quality_loop
+    - infrastructure_operations_loop
+    - mixed
+agent_contract:
+  role: Senior Product Engineer
+  rule: Build the trusted-local presentation product loop honestly; report provider/export/API blockers explicitly.
+read_order:
+  - BUILDPRINT.md
+  - 01-questions.md
+  - generated/agent-prompt.md
+  - 02-project-setup.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - 04-review.md
+  - 05-handover.md
 implementation_loop:
-  required: true
-  steps: [observe, plan, execute, verify, reflect, record]
-  completion_requires: [proof_gate_passed, evidence_recorded]
-repair_loop:
-  on_failure:
-    test_failed: current_phase
-    build_failed: current_phase
-    runtime_error: current_phase
-    ui_quality_failed: current_phase
-    proof_gate_failed: current_phase
-    architecture_contradiction: 02-project-setup.md
-    missing_human_preference: 01-questions.md
-    missing_dependency_phase: required_prior_phase
-    external_blocker: 05-evidence/evidence-ledger.jsonl
-phases:
-  - phase_id: 01-instance-auth-config-provider-setup
-    title: 01-instance-auth-config-provider-setup
-    file: 03-phases/01-instance-auth-config-provider-setup.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 02-content-ingestion-outline-generation
-    title: 02-content-ingestion-outline-generation
-    file: 03-phases/02-content-ingestion-outline-generation.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 03-deck-structure-slide-generation
-    title: 03-deck-structure-slide-generation
-    file: 03-phases/03-deck-structure-slide-generation.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 04-media-template-theme-assets
-    title: 04-media-template-theme-assets
-    file: 03-phases/04-media-template-theme-assets.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 05-editor-chat-iteration-workflow
-    title: 05-editor-chat-iteration-workflow
-    file: 03-phases/05-editor-chat-iteration-workflow.md
-    status: INCLUDED_NEEDS_PROOF
-  - phase_id: 06-export-api-webhooks-mcp-desktop
-    title: 06-export-api-webhooks-mcp-desktop
-    file: 03-phases/06-export-api-webhooks-mcp-desktop.md
-    status: INCLUDED_NEEDS_PROOF
-context:
-  phase_index: 03-phases/phase-index.yaml
-  active_phase: 03-phases/01-instance-auth-config-provider-setup.md
-  evaluation: 04-evaluation.md
-  evidence_schema: 05-evidence/evidence-ledger.schema.json
-generated_artifacts:
-  agent_prompt: generated/agent-prompt.md
+  phase_flow: 03-phases/phase-flow.md
+  active_phase: 03-phases/00-product-system-alignment.md
+  final_review: 04-review.md
+  handover: 05-handover.md
+repair_routing:
+  product_contradiction: BUILDPRINT.md
+  setup_or_architecture_gap: 02-project-setup.md
+  phase_gap: current_phase
+  review_gap: 04-review.md
+  handover_gap: 05-handover.md
+purpose:
+  summary: Build a trusted-local Presenton-inspired AI presentation generator with editable deck workbench, BYOK providers, templates/assets, export, API, webhooks, MCP, and desktop boundaries.
+runtime:
+  frontend: Browser workbench with deck canvas, thumbnails, outline, assets, chat, and export center.
+  backend: API plus worker/export runtime for generation, parsing, storage, export, webhooks, and MCP seams.
+  providers: OpenAI-compatible text provider first, with explicit seams for Gemini, Anthropic, Azure, Bedrock, Vertex, Fireworks, Together, LM Studio, Ollama, and custom endpoints.
+state:
+  durable:
+    - provider/image/export configuration metadata without secret leakage
+    - uploaded source documents and extraction status
+    - deck outline, slides, layouts, notes, assets, themes, templates
+    - chat iterations and generation traces scoped to the deck
+    - export tasks, files, API tasks, and webhook delivery attempts
+  local_only:
+    - provider credentials
+    - local model endpoints
+    - export runtime paths
+nodes:
+  configure_runtime:
+    output: provider, image, storage, export, and privacy readiness
+  ingest_content:
+    input: prompt, document, or template
+    output: extracted content, outline candidates, and blockers
+  generate_deck:
+    input: outline, template, theme, provider config
+    output: persisted editable deck model
+  edit_workbench:
+    input: deck state
+    output: slide edits, asset changes, chat revisions
+  export_integrate:
+    input: deck state
+    output: PPTX/PDF files, API task status, webhook events, MCP/desktop seams
