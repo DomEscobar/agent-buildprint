@@ -5,7 +5,7 @@ Purpose: prevent mocked or unowned provider/runtime paths from being counted as 
 ## Required Output
 
 - Provider/API/runtime boundary contract with config, side effects, retries, error behavior, and secret-name-only handling.
-- Sandbox/live proof where available, or explicit qualification blocker.
+- Sandbox/live verification where available, or explicit qualification blocker.
 - Test fake limited to tests, never production-path success claims.
 
 ## Blocks
@@ -13,4 +13,4 @@ Purpose: prevent mocked or unowned provider/runtime paths from being counted as 
 - Fake provider success in production paths.
 - External writes without confirmation, idempotency, or failure behavior.
 - Long-running jobs without status, progress, logs, cancel, and failure semantics.
-- Runtime behavior claimed without runtime proof or blocker.
+- Runtime behavior claimed without runtime verification or blocker.

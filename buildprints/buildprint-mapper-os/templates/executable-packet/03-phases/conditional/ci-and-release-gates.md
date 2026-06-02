@@ -65,7 +65,7 @@ Ensure releases are gated by repeatable checks that catch regressions in behavio
 
 ## Blocks (ux-ui-craft)
 
-- No proof for empty/loading/error/blocked/success states.
+- No verification for empty/loading/error/blocked/success states.
 
 ## Quality bar
 

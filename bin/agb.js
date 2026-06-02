@@ -2,7 +2,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const cwd = process.cwd()
 const cliDir = path.dirname(fileURLToPath(import.meta.url))
@@ -243,7 +243,7 @@ async function readJsonFromUrlOrFile(ref) {
     }
   }
   const absolute = path.resolve(cwd, ref)
-  return { json: JSON.parse(readText(absolute)), baseUrl: `file://${absolute}` }
+  return { json: JSON.parse(readText(absolute)), baseUrl: pathToFileURL(absolute).href }
 }
 
 function resolveManifestUrl(manifestRef, maybeRelative) {
@@ -252,9 +252,48 @@ function resolveManifestUrl(manifestRef, maybeRelative) {
   if (isUrl(manifestRef)) return new URL(maybeRelative, manifestRef).href
   if (manifestRef.startsWith('file://')) {
     const manifestPath = fileURLToPath(manifestRef)
-    return `file://${path.resolve(path.dirname(manifestPath), maybeRelative)}`
+    return pathToFileURL(path.resolve(path.dirname(manifestPath), maybeRelative)).href
   }
   return maybeRelative
+}
+
+function safeManifestPath(filePath, label = 'manifest file path') {
+  if (typeof filePath !== 'string' || !filePath.trim()) throw new Error(`invalid ${label}`)
+  const normalizedInput = filePath.replace(/\\/g, '/')
+  if (normalizedInput.includes('\0') || normalizedInput.startsWith('/') || /^[A-Za-z]:\//.test(normalizedInput)) {
+    throw new Error(`unsafe ${label}: ${filePath}`)
+  }
+  const parts = normalizedInput.split('/')
+  if (parts.some((part) => part === '..')) throw new Error(`unsafe ${label}: ${filePath}`)
+  const normalized = path.posix.normalize(normalizedInput)
+  if (normalized === '.' || normalized === '..' || normalized.startsWith('../')) throw new Error(`unsafe ${label}: ${filePath}`)
+  return normalized
+}
+
+function safePathInside(baseDir, filePath, label = 'manifest file path') {
+  const safePath = safeManifestPath(filePath, label)
+  const resolvedBase = path.resolve(baseDir)
+  const target = path.resolve(resolvedBase, ...safePath.split('/'))
+  const comparableBase = process.platform === 'win32' ? resolvedBase.toLowerCase() : resolvedBase
+  const comparableTarget = process.platform === 'win32' ? target.toLowerCase() : target
+  if (comparableTarget === comparableBase || !comparableTarget.startsWith(`${comparableBase}${path.sep}`)) {
+    throw new Error(`unsafe ${label}: ${filePath}`)
+  }
+  return target
+}
+
+function redactUrl(value) {
+  if (!value || typeof value !== 'string' || !/^[a-z][a-z0-9+.-]*:\/\//i.test(value)) return value
+  try {
+    const url = new URL(value)
+    if (url.username) url.username = 'REDACTED'
+    if (url.password) url.password = 'REDACTED'
+    if (url.search) url.search = '?redacted=1'
+    if (url.hash) url.hash = ''
+    return url.href
+  } catch {
+    return value
+  }
 }
 
 async function fetchTextExact(url) {
@@ -295,10 +334,11 @@ async function packetDirFromRef(ref) {
   const files = Array.isArray(manifest.files) ? manifest.files : []
   const baseUrl = isUrl(ref) ? new URL('.', ref).toString() : null
   for (const entry of files) {
-    const file = typeof entry === 'string' ? entry : entry?.path
+    const rawFile = typeof entry === 'string' ? entry : entry?.path
     const url = typeof entry === 'object' ? (entry.url || entry.rawUrl || entry.siteUrl) : null
-    if (!file) continue
-    const target = path.join(temp, file)
+    if (!rawFile) continue
+    const file = safeManifestPath(rawFile)
+    const target = safePathInside(temp, file)
     fs.mkdirSync(path.dirname(target), { recursive: true })
     if (url || baseUrl) {
       const source = url || new URL(file, baseUrl).toString()
@@ -306,7 +346,7 @@ async function packetDirFromRef(ref) {
       if (!res.ok) throw new Error(`failed to fetch packet file ${file}: ${res.status}`)
       fs.writeFileSync(target, await res.text())
     } else {
-      const source = path.resolve(path.dirname(path.resolve(cwd, ref)), file)
+      const source = safePathInside(path.dirname(path.resolve(cwd, ref)), file)
       if (exists(source)) fs.copyFileSync(source, target)
     }
   }
@@ -468,6 +508,7 @@ function packetCheckResults(dir) {
   ok('phase index referenced phase files exist', phaseIndexFiles.length > 0 && phaseIndexFiles.every((file) => files.has(file)))
 
   const selectedSpine = yamlScalar(blueprint, 'selected_spine')
+  const blueprintPrimary = ((blueprint.match(/blueprint_mode:[\s\S]*?^\s*primary:\s*([^\s#]+)/mi) || [])[1] || '').trim().replace(/^['"]|['"]$/g, '')
   const hardeningPhases = [
     '09-auth-and-tenancy',
     '10-observability-and-health',
@@ -514,6 +555,17 @@ function packetCheckResults(dir) {
     ok('mixed spine declares per-phase modes', /mixed_phase_modes:|phase_mode:/i.test(`${blueprint}\n${phaseIndex}`))
   }
   ok('selected spine uses known executable spine', [...Object.keys(spinePhaseRequirements), 'mixed'].includes(selectedSpine))
+  const primarySpineMap = {
+    product: ['product_app_consumer_first'],
+    framework: ['developer_first_framework'],
+    library: ['developer_first_framework'],
+    integration: ['developer_first_framework', 'reliability_first_service'],
+    automation: ['automation_task_loop'],
+    'data-pipeline': ['data_pipeline_quality_loop'],
+    infrastructure: ['infrastructure_operations_loop'],
+    mixed: ['mixed']
+  }
+  ok('blueprint primary uses matching executable spine', (primarySpineMap[blueprintPrimary] || []).includes(selectedSpine))
 
   const knownRoles = new Set(['product-architect', 'ux-ui-craft', 'integration-runtime', 'security-boundary', 'data-persistence'])
   const phaseDir = path.join(dir, '03-phases')
@@ -752,7 +804,11 @@ function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
 async function startBuildprint(manifestRef, targetFolder = cwd) {
   const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
-  const manifestFilePaths = manifest.files.map((file) => file.path).filter(Boolean)
+  const manifestFilePaths = manifest.files
+    .map((file) => typeof file === 'string' ? file : file.path)
+    .filter(Boolean)
+    .map((filePath) => safeManifestPath(filePath))
+    .filter((filePath) => !filePath.includes('*'))
   const hasManifestFile = (filePath) => manifestFilePaths.includes(filePath)
   const isExecutablePacket = hasManifestFile('01-questions.md') && hasManifestFile('02-project-setup.md') && hasManifestFile('blueprint.yaml')
   const baseReadOrder = readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile)
@@ -765,35 +821,38 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
   const downloaded = []
   for (const file of manifest.files) {
-    if (!file.path || file.path.includes('*')) continue
-    let source = resolveManifestUrl(baseUrl, file.siteUrl || file.rawUrl)
+    const rawPath = typeof file === 'string' ? file : file.path
+    if (!rawPath) continue
+    const safePath = safeManifestPath(rawPath)
+    if (safePath.includes('*')) continue
+    let source = resolveManifestUrl(baseUrl, typeof file === 'object' ? file.siteUrl || file.rawUrl : null)
     if (!source && baseUrl.startsWith('file://')) {
       const manifestPath = fileURLToPath(baseUrl)
-      source = `file://${path.resolve(path.dirname(manifestPath), file.path)}`
+      source = pathToFileURL(safePathInside(path.dirname(manifestPath), safePath)).href
     }
-    if (!source) throw new Error(`missing source URL for ${file.path}`)
+    if (!source) throw new Error(`missing source URL for ${safePath}`)
     const text = await fetchTextExact(source)
-    if (!text.trim() && !file.path.endsWith('.gitkeep')) throw new Error(`downloaded empty snapshot for ${file.path}`)
+    if (!text.trim() && !safePath.endsWith('.gitkeep')) throw new Error(`downloaded empty snapshot for ${safePath}`)
     // Minimum content length — suspiciously short files indicate a broken CDN or unpublished asset
     const snapshotBytes = Buffer.byteLength(text)
     const minBytes = 32
-    if (snapshotBytes < minBytes && !file.path.endsWith('.gitkeep') && !file.path.endsWith('.jsonl')) {
-      throw new Error(`downloaded snapshot ${file.path} is suspiciously short (${snapshotBytes} bytes from ${source}) — expected at least ${minBytes} bytes; the file may not be published or the URL is stale`)
+    if (snapshotBytes < minBytes && !safePath.endsWith('.gitkeep') && !safePath.endsWith('.jsonl')) {
+      throw new Error(`downloaded snapshot ${safePath} is suspiciously short (${snapshotBytes} bytes from ${source}) — expected at least ${minBytes} bytes; the file may not be published or the URL is stale`)
     }
     // Key-file content assertions: critical spine files must contain their canonical anchor
-    if (file.path === 'BUILDPRINT.md' && !/^# BUILDPRINT:/im.test(text)) {
+    if (safePath === 'BUILDPRINT.md' && !/^# BUILDPRINT:/im.test(text)) {
       throw new Error(`downloaded BUILDPRINT.md is missing "# BUILDPRINT:" heading — content appears invalid or truncated from ${source}`)
     }
-    if (file.path === 'blueprint.yaml' && !/schema_version:/i.test(text)) {
+    if (safePath === 'blueprint.yaml' && !/schema_version:/i.test(text)) {
       throw new Error(`downloaded blueprint.yaml is missing schema_version: — content appears invalid or truncated from ${source}`)
     }
-    if (file.path === '03-phases/phase-index.yaml' && !/active_phase:/i.test(text)) {
+    if (safePath === '03-phases/phase-index.yaml' && !/active_phase:/i.test(text)) {
       throw new Error(`downloaded 03-phases/phase-index.yaml is missing active_phase: — content appears invalid or truncated from ${source}`)
     }
-    const dest = path.join(snapshotDir, file.path)
+    const dest = safePathInside(snapshotDir, safePath)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
     fs.writeFileSync(dest, text)
-    downloaded.push({ path: file.path, sourceUrl: source, bytes: Buffer.byteLength(text) })
+    downloaded.push({ path: safePath, sourceUrl: redactUrl(source), bytes: Buffer.byteLength(text) })
   }
 
   // Post-download corruption check: if key spine files are missing or broken, fail loudly
@@ -836,11 +895,11 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     category: manifest.category,
     tier: manifest.tier,
     status: manifest.status,
-    manifestUrl: isUrl(manifestRef) ? manifestRef : path.resolve(cwd, manifestRef),
-    agentUrl: resolveManifestUrl(baseUrl, manifest.entrypoints?.agent),
-    promptUrl: resolveManifestUrl(baseUrl, manifest.entrypoints?.prompt),
-    githubUrl: manifest.entrypoints?.github,
-    rawBase: manifest.entrypoints?.rawBase,
+    manifestUrl: redactUrl(isUrl(manifestRef) ? manifestRef : path.resolve(cwd, manifestRef)),
+    agentUrl: redactUrl(resolveManifestUrl(baseUrl, manifest.entrypoints?.agent)),
+    promptUrl: redactUrl(resolveManifestUrl(baseUrl, manifest.entrypoints?.prompt)),
+    githubUrl: redactUrl(manifest.entrypoints?.github),
+    rawBase: redactUrl(manifest.entrypoints?.rawBase),
     snapshotMode: 'download_exact',
     startedAt: now,
     downloaded,

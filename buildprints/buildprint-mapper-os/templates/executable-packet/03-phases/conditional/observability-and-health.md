@@ -48,7 +48,7 @@ Make runtime behavior inspectable so operators can detect failures, triage incid
 
 ## Blocks (integration-runtime)
 
-- Runtime behavior claimed without runtime proof or blocker.
+- Runtime behavior claimed without runtime verification or blocker.
 - External writes without failure semantics and idempotency handling.
 
 ## Required output (product-architect)

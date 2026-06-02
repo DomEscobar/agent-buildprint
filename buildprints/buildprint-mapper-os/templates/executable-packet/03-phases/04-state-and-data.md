@@ -50,7 +50,7 @@ Make product continuity trustworthy: state machines, persistence, sync/cache, im
 ## Blocks (data-persistence)
 
 - In-memory-only behavior where durable continuity is promised.
-- Persistence claims with no restart/readback proof path.
+- Persistence claims with no restart/readback verification path.
 
 ## Required output (integration-runtime)
 

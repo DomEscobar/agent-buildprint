@@ -35,7 +35,7 @@ Verify the product as a user would experience it, then with the smallest useful 
 ## State / runtime touched
 
 - Test artifacts and verification logs.
-- Restart/readback proof outcomes.
+- Restart/readback verification outcomes.
 - Blocked-state and denied-path evidence notes.
 
 ## UX / DX / operator requirements
@@ -57,7 +57,7 @@ Verify the product as a user would experience it, then with the smallest useful 
 
 ## Blocks (integration-runtime)
 
-- Live provider claims without credentials/runtime proof.
+- Live provider claims without credentials/runtime verification.
 
 ## Required output (data-persistence)
 
@@ -89,7 +89,7 @@ Verification should catch the embarrassing failures: unclear first action, canne
 
 ## Do not ship
 
-Only unit tests with no user journey, screenshots ignored after capture, passing build as product proof, or handover that hides visible slop and unresolved blockers.
+Only unit tests with no user journey, screenshots ignored after capture, passing build as product verification, or handover that hides visible slop and unresolved blockers.
 
 ## Repair routing
 

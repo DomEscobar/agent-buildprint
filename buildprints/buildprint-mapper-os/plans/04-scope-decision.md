@@ -9,7 +9,7 @@ Lock selected scope without opening a broad questionnaire.
 - Ask only blocking questions from `questions.md`.
 - Confirm candidate, explicit scope, full-suite target, or discovery-only status.
 - Confirm inclusion/blocking for sensitive surfaces when needed.
-- Record capability readiness separately: ready, needs proof, blocked, risky requiring hardening, test-only mock, and explicitly user-excluded.
+- Record capability readiness separately: ready, needs verification, blocked, risky requiring hardening, test-only mock, and explicitly user-excluded.
 
 ## Exit Criteria
 

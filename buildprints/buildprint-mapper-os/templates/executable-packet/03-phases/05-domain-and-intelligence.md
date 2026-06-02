@@ -45,12 +45,12 @@ Shape the product's domain model and intelligence so outputs are grounded, actio
 ## Required output (integration-runtime)
 
 - Provider/API/runtime boundary includes config, side effects, retries, and errors.
-- Missing credentials block live proof only and remain explicit.
+- Missing credentials block live verification only and remain explicit.
 
 ## Blocks (integration-runtime)
 
 - Fake provider success in production path.
-- Runtime behavior claimed without runtime proof or blocker.
+- Runtime behavior claimed without runtime verification or blocker.
 
 ## Required output (security-boundary)
 

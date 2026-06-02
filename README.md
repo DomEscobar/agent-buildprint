@@ -128,7 +128,7 @@ Buildprints are useful only when implementation claims stay tied to observable b
 - Do not count static UI, dead buttons, placeholder routes, mock-only providers, or in-memory demos as production behavior.
 - Use `04-review.md` to exercise controls, commands, APIs, operator actions, reload/readback, blocked states, and posture-specific operability.
 - Use `05-handover.md` to separate built behavior, verified behavior, blockers, and next atomic actions.
-- Browser, screenshot, worker, security, persistence, and data-lifecycle claims need matching executable proof or honest non-upgrading blocker rows.
+- Browser, screenshot, worker, security, persistence, and data-lifecycle claims need matching observable verification or honest non-upgrading blocker notes in `05-handover.md`.
 - A broad smoke test should not upgrade unrelated claims.
 
 ## Publishing

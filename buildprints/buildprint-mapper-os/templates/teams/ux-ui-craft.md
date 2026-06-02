@@ -55,7 +55,7 @@ Do not ask the user to choose these unless the product intent is genuinely ambig
 
 ### Required Output
 
-- Phase-local UX/UI requirements with screen inventory, workflows, state inventory, component inventory, responsive behavior, accessibility proof, and browser proof plan.
+- Phase-local UX/UI requirements with screen inventory, workflows, state inventory, component inventory, responsive behavior, accessibility verification, and browser verification plan.
 - Phase-local design quality bar with taste variables, product category, density/motion targets, visual hierarchy, forbidden generic patterns, screenshot requirements, accessibility gates, and responsive gates.
 - Browser automation or screenshots for each user-facing flow before UI completion is claimed.
 - Empty, loading, error, blocked, success, and partial-data states for every relevant workflow.
@@ -68,5 +68,5 @@ Do not ask the user to choose these unless the product intent is genuinely ambig
 - Dead buttons, fake success states, or controls without owned behavior.
 - Missing empty/loading/error/blocked/success states.
 - Missing responsive behavior for supported viewports.
-- Missing screenshot/browser proof for major UI states.
+- Missing screenshot/browser verification for major UI states.
 - Text overflow, overlapping UI, unreadable contrast, or invisible focus states.

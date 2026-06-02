@@ -43,7 +43,7 @@ Protect continuity of durable product data through backup, restore, retention, a
 
 ## Required output (data-persistence)
 
-- State/schema lifecycle is explicit with restart/readback proof.
+- State/schema lifecycle is explicit with restart/readback verification.
 - Migration, cleanup, retention, and recovery expectations are defined.
 
 ## Blocks (data-persistence)
@@ -81,7 +81,7 @@ Backup and restore are executable on a clean environment and recover central art
 ## Repair routing
 
 - persistence contradiction -> `02-project-setup.md`
-- missing restore proof -> current phase
+- missing restore verification -> current phase
 - unresolved recovery risk -> `05-handover.md`
 
 ## Unlock condition
