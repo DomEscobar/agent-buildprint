@@ -1,10 +1,10 @@
 # Phase 10 - Observability and health
 
-requires_roles: [integration-runtime]
+requires_roles: [integration-runtime, security-boundary]
 
 ## Product intention
 
-This phase is included but blocked under trusted-local posture.
+This phase is included but blocked under trusted_local posture.
 
 ## Mapped obligations
 
@@ -39,6 +39,15 @@ Add actionable observability around providers, graph memory, and OASIS runtime.
 ## Blocks (integration-runtime)
 
 No generic "failed" state when the boundary is diagnosable.
+
+
+## Required output (security-boundary)
+
+Verify health, diagnostics, logs, and traces do not expose real secrets, uploaded private text, provider keys, graph-memory credentials, raw prompts beyond approved local scope, or tenant/user data when posture is promoted.
+
+## Blocks (security-boundary)
+
+Observability that leaks secrets or uploaded content, or production-shaped diagnostics without access control and retention boundaries.
 
 ## Quality bar
 

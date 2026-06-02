@@ -1,6 +1,6 @@
 # MiroFish Graph-Backed Swarm Simulation Workbench
 
-A Buildprint for rebuilding the spirit of [MiroFish](https://github.com/666ghj/MiroFish) as a polished, graph-backed AI swarm simulation workbench.
+A Buildprint for rebuilding the spirit of [MiroFish](https://github.com/666ghj/MiroFish) at commit `96096ea0ff42b1a30cbc41a1560b8c91090f9968` as a polished, graph-backed AI swarm simulation workbench.
 
 This is not a generic admin dashboard and not a static demo. The target product should feel like a high-craft, Canva-like workspace for turning source material into a simulated world: upload seed content, generate a domain graph, inspect the graph on a real canvas, run a swarm simulation, generate a report, and keep asking questions about the result.
 

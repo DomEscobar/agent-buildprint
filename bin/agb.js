@@ -787,6 +787,7 @@ function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
     'BUILDPRINT.md',
     '01-questions.md',
     'generated/agent-prompt.md',
+    'generated/codex-handoff.md',
     '02-project-setup.md',
     'blueprint.yaml',
     '03-phases/phase-index.yaml',

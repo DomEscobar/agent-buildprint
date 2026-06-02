@@ -24,7 +24,7 @@ Run this as an operational walkthrough, not a self-score.
 - Does state persist after reload/restart?
 - Are missing providers shown as blocked states, not fake success?
 - Are destructive actions explicit?
-- Are public/private production claims absent under trusted-local posture?
+- Are public/private production claims absent under trusted_local posture?
 
 ## Defects To Fix Before Handover
 

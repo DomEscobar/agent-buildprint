@@ -13,7 +13,7 @@ Finish with a skeptical product review and a concise handover that tells the tru
 - Change input and confirm outputs change or provider blocker appears.
 - Review graph controls directly.
 - Review simulation/report/interaction behavior or blockers.
-- Record not-production-grade status for trusted-local posture.
+- Record not-production-grade status for trusted_local posture.
 
 ## Stable vs free
 

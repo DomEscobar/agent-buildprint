@@ -4,7 +4,7 @@ requires_roles: [security-boundary]
 
 ## Product intention
 
-This phase is included but blocked under trusted-local posture.
+This phase is included but blocked under trusted_local posture.
 
 ## Mapped obligations
 
@@ -38,7 +38,7 @@ Implement security review fixes and abuse controls for promoted posture.
 
 ## Blocks (security-boundary)
 
-No public upload surface with trusted-local-only validation.
+No public upload surface with trusted_local-only validation.
 
 ## Quality bar
 

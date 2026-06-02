@@ -12,7 +12,7 @@ Remove accidental complexity and tighten boundaries after the product loop works
 - Consolidate provider config and diagnostics.
 - Separate background task ownership from request handlers where needed.
 - Review simulation process lifecycle.
-- Keep trusted-local security limits explicit.
+- Keep trusted_local security limits explicit.
 
 ## Stable vs free
 

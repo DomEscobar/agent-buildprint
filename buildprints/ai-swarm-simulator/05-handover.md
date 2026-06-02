@@ -2,7 +2,7 @@
 
 ## Current status
 
-Not built yet. This Buildprint packet is ready for downstream implementation of a trusted-local graph-backed swarm simulation workbench.
+Not built yet. This Buildprint packet is ready for downstream implementation of a trusted_local graph-backed swarm simulation workbench.
 
 ## Built surfaces
 
@@ -27,7 +27,7 @@ Required after implementation:
 
 ## Not production-grade
 
-- Auth and tenancy: not included for trusted-local.
+- Auth and tenancy: not included for trusted_local.
 - Observability and health: blocked until posture promotion.
 - Deployment and operability: local only until explicitly promoted.
 - CI and release gates: required before release.

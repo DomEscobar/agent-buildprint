@@ -1,100 +1,160 @@
-# Phase 00 - Foundation skeleton implementation
+# Phase 00 — Product system alignment
 
 requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persistence, security-boundary]
 
 ## Product intention
 
-Implement the running architectural base designed in `02-project-setup.md` for AI Swarm Simulator. Do not re-litigate setup and do not write another alignment essay. Turn the setup decisions into a runnable skeleton that future phases can extend without inventing architecture.
+Turn the setup decisions into the AI Swarm product-system map that all later phases implement: product promise, users, primary loops, feature map, state model, architecture boundaries, and quality bar. Do not reselect the stack and do not reduce this phase to folder creation.
+
+## Product promise
+
+AI Swarm is a trusted_local, MiroFish-style graph-backed simulation workbench: users upload seed material, generate a domain graph through an open-source graph-memory adapter, inspect it on a sleek Canva-like interactive canvas, run or honestly block a swarm simulation, generate a report, and keep interacting with the simulated world.
+
+## Users / consumers
+
+- **Exploration operator**: brings seed material and wants a readable graph, simulation controls, and a report without needing to understand backend internals.
+- **Simulation researcher**: needs graph entities, traces, report sections, and interaction history to be inspectable and reproducible.
+- **Local builder/operator**: configures dynamic OpenAI-compatible LLM providers and local/open-source graph memory, and needs clear blockers when credentials, Graphiti/graph backend, or OASIS runtime are missing.
+
+## Primary loops
+
+1. Upload seed material -> extract text -> persist project state -> show readback.
+2. Generate ontology -> build graph memory through Graphiti/open-source adapter -> read back nodes/edges.
+3. Inspect graph on the canvas -> click/drag/zoom/filter/select nodes and edges -> see details and state changes.
+4. Prepare/run or block simulation -> persist profiles/config/status/traces.
+5. Generate report -> stream/progress sections -> persist final markdown/logs -> continue interaction.
+
+## Feature map
+
+- First value: project upload, extraction, graph-build blocker/readiness, and real graph canvas shell.
+- Core value: graph memory build/readback, canvas inspectability, dynamic provider configuration, OASIS simulation seam, report generation/readback.
+- Hardening: persistence/readback, provider diagnostics, graph-memory diagnostics, simulation/runtime diagnostics, screenshot/visual quality proof, posture-gated auth/observability/deploy/security phases.
+
+## State model
+
+- Empty: no project yet; primary action is upload seed material.
+- Loading: extraction, ontology generation, graph build, graph fetch, simulation, and report generation have visible progress.
+- Ready/success: persisted project, graph, simulation traces, report, and interaction history are readable after reload.
+- Blocked/error: missing LLM credentials, missing open-source graph backend, missing OASIS runtime, parse failure, graph build failure, provider error, or posture-gated production control shows exact recovery path.
+- Interaction state: selected node/edge/detail panel, canvas viewport, filters, simulation run selection, report section selection, and chat/interact context are explicit.
+
+## Architecture boundaries
+
+Carry forward `02-project-setup.md`: Vue/Vite or equivalent product-grade frontend, Python backend or equivalent service, `GraphMemoryAdapter`, `LLMProvider`, upload parser, simulation runtime seam, report generator, persistence/readback layer, and canvas readback contract. Zep Cloud is forbidden as a required dependency; Qwen/OpenAI-specific calls must sit behind a dynamic OpenAI-compatible provider adapter.
 
 ## Mapped obligations
 
-- Consume the `01-questions.md` decisions and `.buildprint/setup-receipt.md` setup artifacts.
-- Keep artifact type, consumer, central loop, deployment posture, and forbidden shortcuts stable.
-- Create the app/runtime skeleton for trusted-local graph-backed swarm simulation workbench.
-- Implement GraphMemoryAdapter, LLMProvider, simulation runtime seam, report generator, upload parser, and canvas readback contract as adapter stubs or precise seams.
-- Show missing LLM credentials, missing open-source graph backend, missing OASIS/simulation runtime, and public deployment controls as honest blockers.
+- Consume `01-questions.md`, `generated/agent-prompt.md`, `generated/codex-handoff.md`, and `.buildprint/setup-receipt.md` setup artifacts.
+- Preserve the MiroFish source signals from upstream commit `96096ea0ff42b1a30cbc41a1560b8c91090f9968`: GraphRAG build, dynamic graph memory update, OASIS-style simulation scripts, report/interaction flow, Vue/Vite frontend, Python backend, and OpenAI-compatible LLM env seams.
+- Replace Zep Cloud with a free open-source graph-memory layer, defaulting to Graphiti unless implementation evidence proves a better open-source option.
+- Keep provider choice dynamic through configurable base URL, model, API key, and provider label.
+- Preserve Canva-like polish: smooth motion, dense-but-clear workbench layout, draggable/zoomable graph canvas, visible progress, and every clickable control either working or showing an honest blocked state.
 
 ## Stable vs free
 
-Stable: setup decisions, central loop, selected stack, domain boundaries, adapter names, persistence ownership, product-craft floor, and blocker semantics from `02-project-setup.md`.
+Stable: product promise, target consumers, primary loops, feature map, state model, setup-selected stack, architecture boundaries, product-craft floor, open-source graph memory requirement, dynamic LLM provider boundary, and blocker semantics from `02-project-setup.md`.
 
-Free: small internal names and file layout details if they do not contradict setup or make later phases harder.
+Free: wording and internal naming details if they do not weaken the product promise, hide a state, remove a click path, or make later phases easier to fake.
 
 ## Implementation scope
 
-Build the foundation skeleton only: graph workbench skeleton with provider readiness, upload/graph/simulation/report routes, adapter stubs, persistence init, health/config endpoint, and smoke command.
+Create or update implementation-project alignment artifacts that phase 01 and phase 02 will use: product promise, consumer/persona summary, primary-loop map, feature map, state model, architecture-boundary summary tied to the setup receipt, visual quality bar, and forbidden shortcuts.
 
 ## Build
 
-Create real files in the implementation project. The result must run or fail with a precise setup blocker. Documentation-only completion is not valid for this phase.
+Create concrete product-system decisions in the implementation project. If setup artifacts, `AGENTS.md`, `UI-IDENTITY.md`, `docs/agent-harness.md`, or the selected skeleton are missing, route that blocker to `02-project-setup.md` or repair the minimal missing artifact before continuing. A generic alignment essay, page list, or folder tree without loops/states is not valid completion.
 
 ## Interfaces touched
 
-Project entrypoints, domain module boundary, provider/integration adapters, persistence layer, configuration loader, readiness/health endpoint or equivalent command surface.
+Product-loop documentation, feature map, domain boundary notes, route/view map, provider/integration boundary notes, persistence/readback expectations, canvas interaction model, and setup receipt references.
 
 ## State / runtime touched
 
-Initial persisted state location, migration/init seam, runtime configuration, provider/deployment blocked-state model, and smoke-test fixture data as needed.
+State model, persisted-state expectations, provider/graph/simulation blocked-state semantics, recovery paths, and verification paths for important states.
 
 ## UX / DX / operator requirements
 
-A future agent can run one setup/dev command and see the correct domain skeleton. The first surface must express project graph, graph canvas, simulation traces, report, and interaction history, not a generic dashboard.
+No UI without state, and no state without UI. Every important state needs copy, one primary action, a recovery path, and test coverage. Canva-like polish means motion and clickability are functional product feedback, not decorative animation.
 
 ## Required output (product-architect)
 
-Verify the skeleton implements the architecture chosen in `02-project-setup.md`, prevent stack/domain drift, and keep the first vertical slice path obvious.
+- Product promise, users, primary loops, feature map, state model, architecture boundaries, and quality bar are explicit and mutually consistent.
+- Architecture boundaries follow `02-project-setup.md` and `.buildprint/setup-receipt.md`.
+- The first vertical slice path is obvious from the loop and feature map.
 
 ## Blocks (product-architect)
 
-Reopening setup debates without updating `02-project-setup.md` and `.buildprint/setup-receipt.md`, or creating a generic folder tree that does not encode the central artifact or loop.
+- Reopening setup debates without updating `02-project-setup.md` and `.buildprint/setup-receipt.md`.
+- Page lists, source-folder mirrors, or feature inventories with no loop/state model.
 
 ## Required output (ux-ui-craft)
 
-Create the framework/design-system base and first domain-shaped screen states: empty, loading, error, blocked, and ready.
+- UI-bearing products define first-run UX, primary action per state, empty/loading/error/blocked/success copy, and screenshot rejection rules.
+- `UI-IDENTITY.md` captures the sleek Canva-like visual identity, motion rules, clickable-control rules, graph canvas affordances, and forbidden generic dashboard patterns.
+- Product-facing copy has no Buildprint/proof/phase/internal harness vocabulary.
 
 ## Blocks (ux-ui-craft)
 
-Generic dashboard shell, single-file hand-rolled UI, raw ids/debug strings, dead controls, or placeholder workbench surfaces.
+- Generic dashboard-first product shape.
+- UI states without owned data/state transitions.
+- Motion that hides latency instead of explaining progress.
+- Clickable-looking controls that do nothing or silently fail.
+- Raw ids/debug strings or internal vocabulary on the product surface.
 
 ## Required output (integration-runtime)
 
-Create adapter interfaces/stubs with live/blocker/error behavior for GraphMemoryAdapter, LLMProvider, simulation runtime seam, report generator, upload parser, and canvas readback contract.
+- Provider, graph memory, OASIS/simulation, report, upload, and canvas-readback boundaries are mapped to product loops and blocked/error states.
+- Live, local, test, and blocked modes are named where relevant.
 
 ## Blocks (integration-runtime)
 
-Direct provider/runtime calls scattered through UI or domain code, or fake success when dependencies are missing.
+- Hidden Zep Cloud dependency.
+- Hard-coded Qwen/OpenAI/vendor calls outside `LLMProvider`.
+- Fake success when credentials or runtime dependencies are missing.
 
 ## Required output (data-persistence)
 
-Create the persistence initialization seam and minimal state model needed for later phases. Define readback behavior before claiming restart safety.
+- State model names what must persist, what can be transient, and how readback proves continuity.
+- Project, graph, simulation, report, and interaction history state are represented.
 
 ## Blocks (data-persistence)
 
-In-memory state presented as durable, or missing storage path/migration/init strategy.
+- In-memory state presented as durable.
+- Missing saved/readback/recovery state for a promised return loop.
 
 ## Required output (security-boundary)
 
-Enforce secret handling, upload/file boundaries, destructive-action blockers, and posture-specific exposure limits in the skeleton.
+- Upload/file, secret, destructive-action, public/private exposure, tenant, and compliance boundaries are attached to loops and states where relevant.
 
 ## Blocks (security-boundary)
 
-Real secrets in `.env.example`, logs, fixtures, docs, or generated artifacts; public/private exposure claims without posture-required controls.
+- Sensitive loop or state has no approval, denial, or recovery behavior.
+- Public/private exposure claims without posture-required controls.
+- Real secrets in examples, docs, logs, generated files, or fixtures.
 
 ## Quality bar
 
-The base runs or fails honestly, encodes the architecture setup, and makes the next phase easier to implement than to fake.
+Phase 01 and phase 02 can be implemented without guessing who the product serves, what the first loop is, which states exist, what features come first, or where the architecture boundaries sit. The mapped product feels like a polished graph/simulation workspace, not an admin dashboard.
 
 ## Do not ship
 
-Documentation-only foundation, generic dashboard/app shell, ignored setup decisions, adapter-free direct integration code, no build/test/smoke command, or hidden provider/runtime/export blockers.
+- Generic alignment prose with no product promise, users, loops, feature map, state model, or quality bar.
+- A page list or source-folder mirror pretending to be product alignment.
+- Skeleton-only completion.
+- UI states without data/state ownership.
+- Hidden provider/runtime/export/security blockers.
+- New stack decisions that contradict setup.
+- Zep Cloud as a required dependency.
+- Hard-coded LLM vendor configuration.
+- Static decorative graph instead of a clickable/readback graph canvas.
 
 ## Repair routing
 
 - setup contradiction -> `02-project-setup.md`
 - unanswered product-defining question -> `01-questions.md`
-- skeleton/runtime failure -> this phase
+- loop/state/feature-map gap -> this phase
 - final-review defect -> `04-review.md`
 
 ## Unlock condition
 
-The implementation has a runnable or precisely blocked skeleton, setup receipt, adapter seams, persistence/config/readiness foundation, and first smoke proof. Only then continue to shell/navigation or core-loop feature work.
+The implementation has a concrete product promise, consumer map, primary loops, feature map, state model, architecture boundaries, quality bar, UI identity, agent-harness artifacts, and honest blockers. Only then continue to shell/navigation or core-loop feature work.

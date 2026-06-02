@@ -4,7 +4,7 @@ requires_roles: [ux-ui-craft, integration-runtime, data-persistence, security-bo
 
 ## Product intention
 
-Prove the trusted-local product loop by direct behavior, not by self-scored notes.
+Prove the trusted_local product loop by direct behavior, not by self-scored notes.
 
 ## Mapped obligations
 
@@ -63,7 +63,7 @@ No claimed history/reload if data disappears after restart.
 
 ## Required output (security-boundary)
 
-Confirm trusted-local warnings and not-production-grade status are present.
+Confirm trusted_local warnings and not-production-grade status are present.
 
 ## Blocks (security-boundary)
 

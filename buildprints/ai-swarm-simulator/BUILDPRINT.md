@@ -1,30 +1,32 @@
 # BUILDPRINT: MiroFish Graph-Backed Swarm Simulation Workbench
 
-Build the MiroFish-style prediction workbench as a usable product, not as a dashboard-shaped demo. The center is the graph-backed simulation workbench: upload seed material, generate a domain graph, inspect it on a real canvas, run a swarm simulation, produce a report, and continue interacting with the simulated world.
+Build the MiroFish-style prediction workbench as a usable product, not as a dashboard-shaped demo. Source reference: `666ghj/MiroFish` commit `96096ea0ff42b1a30cbc41a1560b8c91090f9968`. The center is the graph-backed simulation workbench: upload seed material, generate a domain graph, inspect it on a real canvas, run a swarm simulation, produce a report, and continue interacting with the simulated world.
 
 ## Read Order
 
 1. `BUILDPRINT.md`
 2. `01-questions.md`
 3. `generated/agent-prompt.md`
-4. `02-project-setup.md`
-5. `blueprint.yaml`
-6. `03-phases/phase-index.yaml`
-7. `03-phases/phase-flow.md`
-8. Current phase file
-9. `04-review.md`
-10. `05-handover.md`
+4. `generated/codex-handoff.md`
+5. `02-project-setup.md`
+6. `blueprint.yaml`
+7. `03-phases/phase-index.yaml`
+8. `03-phases/phase-flow.md`
+9. Current phase file
+10. `04-review.md`
+11. `05-handover.md`
 
 ## Engineer Contract
 
-You are acting as a Senior Product Engineer for a trusted-local workbench. Preserve the product promise and graph work surface. Keep provider, memory, upload, and simulation boundaries honest. If a live provider or runtime is unavailable, show a useful blocked state and record it; do not fake success.
+You are acting as a Senior Product Engineer for a trusted_local workbench. Preserve the product promise and graph work surface. Keep provider, memory, upload, and simulation boundaries honest. If a live provider or runtime is unavailable, show a useful blocked state and record it; do not fake success.
 
 ## Non-Negotiables
 
-- The graph canvas is a primary product surface. It must support node/edge inspection, readable labels, refresh, zoom/drag or equivalent navigation, split/workbench layout modes, and responsive review.
-- Replace Zep Cloud with a free open-source graph-memory layer. Default to a Graphiti-backed adapter unless implementation evidence shows a better free open-source option.
-- Keep AI provider choice user-configurable through an OpenAI-compatible adapter. Do not hard-code Qwen, OpenAI, or any one vendor.
+- The graph canvas is a primary product surface. It must feel sleek and Canva-like: polished motion, node/edge inspection, readable labels, refresh, zoom/drag/pan/select or equivalent navigation, split/workbench layout modes, responsive review, and real visual feedback for every interaction.
+- Replace Zep Cloud with a free open-source graph-memory layer. Default to a Graphiti-backed adapter unless implementation evidence shows a better free open-source option. Hidden Zep dependency is a review failure.
+- Keep AI provider choice user-configurable through an OpenAI-compatible adapter with configurable provider label, base URL, model, API key, and status. Do not hard-code Qwen, OpenAI, or any one vendor.
 - Persist project, graph, simulation, report, and interaction state where the UI claims it can be reloaded.
+- Every visible clickable control must work or show an honest blocked state.
 - Do not ship canned reports, no-op graph controls, fake simulations, raw JSON as the main experience, or hidden provider failures.
 
 ## Implementation Loop

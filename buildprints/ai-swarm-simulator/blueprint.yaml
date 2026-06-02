@@ -2,6 +2,7 @@ schema_version: mapper-os/executable-blueprint
 source:
   origin_github_url: https://github.com/666ghj/MiroFish
   origin_label: 666ghj/MiroFish
+  origin_commit: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
@@ -33,11 +34,12 @@ blueprint_mode:
     - mixed
 agent_contract:
   role: Senior Product Engineer
-  rule: Build the trusted-local product loop honestly; report non-production blockers explicitly.
+  rule: Build the trusted_local product loop honestly; report non-production blockers explicitly.
 read_order:
   - BUILDPRINT.md
   - 01-questions.md
   - generated/agent-prompt.md
+  - generated/codex-handoff.md
   - 02-project-setup.md
   - blueprint.yaml
   - 03-phases/phase-index.yaml
@@ -56,11 +58,11 @@ repair_routing:
   review_gap: 04-review.md
   handover_gap: 05-handover.md
 purpose:
-  summary: Build a trusted-local MiroFish-style graph-backed swarm simulation workbench with an open-source graph memory replacement for Zep Cloud.
+  summary: Build a trusted_local MiroFish-style graph-backed swarm simulation workbench with Canva-like motion/clickable UX, dynamic OpenAI-compatible LLM providers, and an open-source graph memory replacement for Zep Cloud.
 runtime:
   app: Vue/Vite frontend plus Python backend or equivalent product-grade stack.
-  graph_memory: Free open-source graph memory adapter, defaulting to Graphiti-backed local runtime.
-  llm_provider: OpenAI-compatible provider selected by user configuration.
+  graph_memory: Free open-source graph memory adapter, defaulting to Graphiti-backed local runtime or another reviewed OSS graph-memory layer; never require Zep Cloud.
+  llm_provider: OpenAI-compatible provider selected dynamically by user configuration: base URL, model, API key, and provider label.
 state:
   durable:
     - uploaded seed files and extracted text
@@ -69,8 +71,8 @@ state:
     - simulation profiles, config, status, and traces
     - report sections, markdown, logs, and interaction history
   local_only:
-    - trusted-local provider credentials
-    - trusted-local simulation process control
+    - trusted_local provider credentials
+    - trusted_local simulation process control
 nodes:
   upload_project:
     input:
@@ -150,8 +152,8 @@ edges:
 acceptance_criteria:
   - Upload creates durable project state and extracted text.
   - Graph build uses a free open-source graph memory adapter rather than Zep Cloud.
-  - Canvas renders real graph nodes and edges with inspectable details.
-  - LLM provider is selected by user configuration and not hard-coded.
+  - Canvas renders real graph nodes and edges with inspectable details, polished motion, drag/zoom, and every visible clickable control either working or showing an honest blocked state.
+  - LLM provider is selected by runtime user configuration and not hard-coded to Qwen, OpenAI, or any one vendor.
   - Simulation and report flows use graph state or show exact blockers.
   - Reload/readback proves persisted project, graph, simulation, and report state.
 forbidden_dependencies:
