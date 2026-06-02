@@ -75,6 +75,7 @@ const requiredFailures = [
   'project setup defines implementation alignment',
   'project setup consumes questions into decisions',
   'project setup requires durable setup artifacts',
+  'project setup requires agent and UI identity contracts',
   'project setup forces architect base not vibes',
   'phase 00 implements skeleton, not duplicate setup',
   'phase index names active phase file',

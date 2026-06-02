@@ -146,7 +146,8 @@ Required behavior:
 5. Never silently assume cost, secrets, public exposure, data loss, destructive actions, compliance, privacy, or product identity.
 6. Design the base project architecture for remaining phases.
 7. Require concrete setup artifacts in the implementation project:
-   - `AGENTS.md` with product invariants, ownership map, commands, forbidden shortcuts, evidence/blocker rules;
+   - `AGENTS.md` with product invariants, Buildprint authority, mandatory read order, ownership map, commands, forbidden shortcuts, evidence/blocker rules, and local `AGENTS.md` boundary rules;
+   - `UI-IDENTITY.md` for UI-bearing artifacts, produced by an explicit UX/UI persona pass and defining visual identity, motion/interaction rules, clickable-control rules, layout/responsive/accessibility standards, component states, screenshot critique rubric, and forbidden generic UI patterns;
    - `.env.example` with no real secrets;
    - `docs/architecture.md`;
    - `docs/product-loop.md` or `docs/artifact-loop.md`;

@@ -63,13 +63,20 @@ Decide and record:
 Create or update these in the implementation project before phase work begins:
 
 1. `AGENTS.md`
-   - product invariant;
+   - product invariant and current Buildprint authority;
    - artifact type and consumer;
+   - mandatory read order for future agents, including `.buildprint/setup-receipt.md`, `docs/architecture.md`, `docs/product-loop.md` or `docs/artifact-loop.md`, and `UI-IDENTITY.md` when UI-bearing;
    - forbidden shortcuts;
    - run/test/build commands;
    - code ownership map;
-   - evidence and blocker rules for future agents.
-2. `.env.example`
+   - evidence and blocker rules for future agents;
+   - local `AGENTS.md` creation rules for real architectural boundaries only.
+2. `UI-IDENTITY.md` for UI-bearing artifacts
+   - must be created by an explicit UX/UI persona pass before UI implementation begins;
+   - must define product-specific visual identity, interaction density, motion principles, clickable-control rules, layout model, responsive behavior, accessibility baseline, component/state matrix, screenshot critique rubric, and forbidden generic/default UI patterns;
+   - must translate source-product feel into implementable design tokens and component behavior without copying branding;
+   - must be listed as a mandatory read in root `AGENTS.md`.
+3. `.env.example`
    - provider keys and base URLs;
    - model names;
    - storage paths;
@@ -138,6 +145,8 @@ You may proceed to phase work only when all hard-stop questions in `01-questions
 - adapter seams exist as code stubs or precise ADRs;
 - the central loop is written in `docs/product-loop.md` or `docs/artifact-loop.md`;
 - run/build/test/smoke commands exist or are explicitly blocked;
+- `AGENTS.md` exists and references the setup receipt plus required architecture/loop/UI identity documents;
+- `UI-IDENTITY.md` exists for UI-bearing artifacts and records the UX/UI persona pass;
 - no setup decision lives only in chat, memory, or vague prose.
 
 ## Forbidden shortcuts

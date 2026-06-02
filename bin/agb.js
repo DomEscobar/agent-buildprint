@@ -414,6 +414,7 @@ function packetCheckResults(dir) {
   ok('project setup defines implementation alignment', /senior development architect|senior product\/developer\/operator engineer/i.test(setup) && /artifact type|central artifact|product loop|first loop|artifact loop/i.test(setup) && /Forbidden shortcuts|Product quality rules|Product-craft floor/i.test(setup))
   ok('project setup consumes questions into decisions', /01-questions\.md/i.test(setup) && /hard-stop/i.test(setup) && /assumable/i.test(setup) && /deferrable/i.test(setup) && /question-to-decision|Answer \/ assumption|architectural impact/i.test(setup) && /Reversible\?|Blocks setup\?/i.test(setup))
   ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /\.env\.example/i.test(setup) && /docs\/(architecture|product-loop|artifact-loop)\.md/i.test(setup) && /setup-receipt\.md/i.test(setup))
+  ok('project setup requires agent and UI identity contracts', /AGENTS\.md/i.test(setup) && /mandatory read/i.test(setup) && /code ownership|ownership map/i.test(setup) && /UI-IDENTITY\.md|ui-identity\.md/i.test(setup) && /UX\/UI persona|UX UI persona|persona pass/i.test(setup) && /screenshot critique|visual identity/i.test(setup))
   ok('project setup forces architect base not vibes', /foundation pour|architectural foundation/i.test(setup) && /selected stack/i.test(setup) && /adapter/i.test(setup) && /persistence/i.test(setup) && /verification commands|smoke/i.test(setup))
 
   const phaseZero = safeReadText(path.join(dir, '03-phases/00-product-system-alignment.md'))

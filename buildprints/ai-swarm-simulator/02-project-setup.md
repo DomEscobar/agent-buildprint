@@ -55,13 +55,14 @@ Decide and record:
 
 Create or update these in the implementation project before phase work begins:
 
-1. `AGENTS.md` with product invariant, artifact type, consumer, code ownership map, commands, forbidden shortcuts, evidence rules, and blocker rules.
-2. `.env.example` with provider/runtime/storage configuration and no real secrets.
-3. `docs/architecture.md` with selected stack, boundaries, domain modules, adapter interfaces, data flow, and blocked production claims.
-4. `docs/product-loop.md` with first usable loop, happy path, blocked states, and acceptance checks.
-5. Initial app/runtime skeleton with real entrypoints, adapter stubs, persistence initialization seam, and health/config/readiness endpoint or equivalent.
-6. Verification commands for install/setup, dev, build, test, and browser/API/operator smoke review.
-7. `.buildprint/setup-receipt.md` with question-to-decision ledger, commands run, files created, architecture decisions, unresolved blockers, why the base is not generic slop, and what future agents must not casually change.
+1. `AGENTS.md` with product invariant, Buildprint authority, artifact type, consumer, mandatory read order, code ownership map, commands, forbidden shortcuts, evidence rules, blocker rules, and local `AGENTS.md` creation rules for real architectural boundaries only.
+2. `UI-IDENTITY.md` because this packet is UI-bearing. It must be produced by an explicit UX/UI persona pass before UI implementation begins and must define a sleek Canva-like graph/simulation workspace: polished motion, clickable canvas interactions, drag/zoom/inspect affordances, dense-but-clear panels, responsive behavior, accessibility baseline, component/state matrix, screenshot critique rubric, and forbidden generic/default dashboard patterns. Root `AGENTS.md` must list it as a mandatory read.
+3. `.env.example` with provider/runtime/storage configuration and no real secrets.
+4. `docs/architecture.md` with selected stack, boundaries, domain modules, adapter interfaces, data flow, and blocked production claims.
+5. `docs/product-loop.md` with first usable loop, happy path, blocked states, and acceptance checks.
+6. Initial app/runtime skeleton with real entrypoints, adapter stubs, persistence initialization seam, and health/config/readiness endpoint or equivalent.
+7. Verification commands for install/setup, dev, build, test, and browser/API/operator smoke review.
+8. `.buildprint/setup-receipt.md` with question-to-decision ledger, commands run, files created, architecture decisions, unresolved blockers, why the base is not generic slop, and what future agents must not casually change.
 
 ## Product-craft floor
 
@@ -71,7 +72,7 @@ For non-UI seams, use idiomatic package/project structure, build/test tooling, c
 
 ## Setup gate
 
-You may proceed to phase work only when all hard-stop questions in `01-questions.md` are answered or explicitly marked non-blocking by the human; the setup artifacts exist or blockers are recorded; selected stack and module boundaries are written down; adapter seams exist as code stubs or precise ADRs; the central loop is written in `docs/product-loop.md`; run/build/test/smoke commands exist or are explicitly blocked; and no setup decision lives only in chat, memory, or vague prose.
+You may proceed to phase work only when all hard-stop questions in `01-questions.md` are answered or explicitly marked non-blocking by the human; the setup artifacts exist or blockers are recorded; `AGENTS.md` exists and references the setup receipt, architecture, product loop, and `UI-IDENTITY.md`; `UI-IDENTITY.md` exists and records the UX/UI persona pass; selected stack and module boundaries are written down; adapter seams exist as code stubs or precise ADRs; the central loop is written in `docs/product-loop.md`; run/build/test/smoke commands exist or are explicitly blocked; and no setup decision lives only in chat, memory, or vague prose.
 
 ## Known blocker classes
 
