@@ -1,44 +1,89 @@
-active_phase: 03-phases/01-project-workspace-loop.md
+active_phase: 00-product-system-alignment
 phases:
-  - phase_id: project-workspace-loop
-    file: 03-phases/01-project-workspace-loop.md
-    title: Project workspace and ontology loop
+  - id: 00-product-system-alignment
+    file: 00-product-system-alignment.md
+    title: Product system alignment
     status: active
-    dependencies: []
-    mode: product
-  - phase_id: graph-and-provider-boundaries
-    file: 03-phases/02-graph-and-provider-boundaries.md
-    title: Graph build and provider boundary
+    depends_on: []
+  - id: 01-shell-and-navigation
+    file: 01-shell-and-navigation.md
+    title: Shell and navigation
     status: pending
-    dependencies: [project-workspace-loop]
-    mode: integration
-  - phase_id: simulation-environment
-    file: 03-phases/03-simulation-environment.md
-    title: Simulation workspace preparation
+    depends_on: [00-product-system-alignment]
+  - id: 02-core-loop-first
+    file: 02-core-loop-first.md
+    title: Core loop first
     status: pending
-    dependencies: [graph-and-provider-boundaries]
-    mode: automation
-  - phase_id: dual-platform-run
-    file: 03-phases/04-dual-platform-run.md
-    title: Dual-platform simulation run
+    depends_on: [01-shell-and-navigation]
+  - id: 03-feature-slices
+    file: 03-feature-slices.md
+    title: Simulation, report, and interaction slices
     status: pending
-    dependencies: [simulation-environment]
-    mode: automation
-  - phase_id: report-and-interaction
-    file: 03-phases/05-report-and-interaction.md
-    title: Prediction report and interaction
+    depends_on: [02-core-loop-first]
+  - id: 04-state-and-data
+    file: 04-state-and-data.md
+    title: State and data
     status: pending
-    dependencies: [dual-platform-run]
-    mode: data-pipeline
-  - phase_id: ops-review-hardening
-    file: 03-phases/06-ops-review-hardening.md
-    title: Runtime, deployment, and hardening pass
+    depends_on: [03-feature-slices]
+  - id: 05-domain-and-intelligence
+    file: 05-domain-and-intelligence.md
+    title: Domain and intelligence
     status: pending
-    dependencies: [report-and-interaction]
-    mode: mixed
-  - phase_id: final-review-handover
-    file: 03-phases/99-final-review-handover.md
+    depends_on: [04-state-and-data]
+  - id: 06-design-system-and-copy
+    file: 06-design-system-and-copy.md
+    title: Design system and copy
+    status: pending
+    depends_on: [05-domain-and-intelligence]
+  - id: 07-architecture-garden
+    file: 07-architecture-garden.md
+    title: Architecture garden
+    status: pending
+    depends_on: [06-design-system-and-copy]
+  - id: 08-verification
+    file: 08-verification.md
+    title: Verification
+    status: pending
+    depends_on: [07-architecture-garden]
+  - id: 09-auth-and-tenancy
+    file: conditional/auth-and-tenancy.md
+    title: Auth and tenancy
+    status: INCLUDED_BLOCKED
+    depends_on: [08-verification]
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 10-observability-and-health
+    file: conditional/observability-and-health.md
+    title: Observability and health
+    status: INCLUDED_BLOCKED
+    depends_on: [08-verification]
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 11-deployment-and-operability
+    file: conditional/deployment-and-operability.md
+    title: Deployment and operability
+    status: INCLUDED_BLOCKED
+    depends_on: [08-verification]
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 12-ci-and-release-gates
+    file: conditional/ci-and-release-gates.md
+    title: CI and release gates
+    status: INCLUDED_BLOCKED
+    depends_on: [08-verification]
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 13-backup-and-recovery
+    file: conditional/backup-and-recovery.md
+    title: Backup and recovery
+    status: INCLUDED_BLOCKED
+    depends_on: [08-verification]
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 14-security-and-abuse-controls
+    file: conditional/security-and-abuse-controls.md
+    title: Security and abuse controls
+    status: INCLUDED_BLOCKED
+    depends_on: [08-verification]
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+  - id: 99-final-review-handover
+    file: 99-final-review-handover.md
     title: Final review and handover
     status: pending
-    dependencies: [ops-review-hardening]
-    mode: mixed
+    depends_on: [08-verification]
+

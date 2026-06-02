@@ -1,24 +1,22 @@
 # Implementation Questions
 
-Use these as an alignment gate before coding. If answers are unavailable, apply the AI-best-judgment default and record the decision in handover.
+Use the defaults unless the user answers differently.
 
-1. Deployment posture: trusted local app, private authenticated webapp, or public webapp?
-   - Default: trusted local or private authenticated webapp. Public deployment blocks until auth, CORS, upload privacy, storage isolation, and rate limits are specified.
+1. Deployment posture?
+   Default: `trusted_local`. This keeps the product local/private and requires explicit not-production-grade blocker reporting.
 
-2. Provider verification: are sandbox credentials and budget available for the OpenAI-compatible dynamic LLM provider, open-source graph-memory runtime, and OASIS/CAMEL runtime?
-   - Default: implement provider adapters and blocked/sandbox states; do not claim live success without credentials.
+2. Execution cadence?
+   Default: `all_remaining`. The requested scope is broad enough that stopping after a single phase would leave the graph/memory replacement incomplete.
 
-3. Persistence posture: should task state be durable across process restarts?
-   - Default: persist project, simulation, report, logs, and outputs durably. Use durable task state if deployment is not trusted-local; otherwise clearly label volatile local task progress.
+3. Open-source graph memory backend?
+   Default: Graphiti-backed local adapter with a clear storage choice. Use Neo4j, FalkorDB, Kuzu, or another supported local backend only if it can be installed and verified in the target environment.
 
-4. Destructive actions: should project deletion, graph deletion, report deletion, reset, stop, and close-environment controls be included?
-   - Default: include stop/close with clear status. Include delete/reset only behind explicit confirmation and visible consequences.
+4. AI provider?
+   Default: OpenAI-compatible provider adapter configured by `LLM_API_KEY`, `LLM_BASE_URL`, and `LLM_MODEL_NAME`, with optional local/provider presets. The UI and backend must not assume one vendor.
 
-5. Simulation defaults: what maximum rounds and agent counts are acceptable for first-run safety?
-   - Default: small demo defaults, visible cost/runtime warning, and ability to increase only deliberately.
+5. First success loop?
+   Default: upload a small text seed, generate an ontology, build a local graph, render nodes/edges on the canvas, open a node/edge detail panel, prepare a small simulation, generate a report stub only if backed by real graph/simulation data.
 
-6. Data privacy: may uploaded seed text be sent to external providers?
-   - Default: yes only after clear local/private deployment assumption and visible provider-boundary notice; otherwise block provider submission until policy is configured.
+6. Sensitive capabilities?
+   Default: keep uploads, deletes, provider keys, and simulation process control local-only. Public exposure, auth, tenancy, upload scanning, rate limits, and abuse controls are blocked until posture is promoted.
 
-7. Bilingual surface: is Chinese/English parity required at launch?
-   - Default: preserve bilingual-ready structure and the main workflow labels in both languages.

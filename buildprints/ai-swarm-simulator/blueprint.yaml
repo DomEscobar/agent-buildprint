@@ -4,22 +4,33 @@ machine_contract: blueprint.yaml
 claim_status: product_build_required
 qualification_label: local_build_requires_review
 setup_tier: typed_product_leadership
+deployment_posture:
+  current: trusted_local
+  allowed_values:
+    - trusted_local
+    - private_authenticated
+    - public_webapp
+execution_cadence:
+  current: all_remaining
+  allowed_values:
+    - one_phase
+    - to_checkpoint
+    - all_remaining
 blueprint_mode:
-  primary: mixed
-  consumer: mixed
-  selected_spine: mixed
-  mixed_phase_modes:
-    - product
-    - integration
-    - automation
-    - data-pipeline
+  primary: product
+  consumer: end_user
+  selected_spine: product_app_consumer_first
+  allowed_spines:
+    - product_app_consumer_first
+    - developer_first_framework
+    - reliability_first_service
+    - automation_task_loop
+    - data_pipeline_quality_loop
+    - infrastructure_operations_loop
+    - mixed
 agent_contract:
-  role: Senior Product/Developer/Operator Engineer
-  rule: Build a usable artifact-type slice; do not produce proof theater.
-source_summary:
-  inspected_repository: https://github.com/666ghj/MiroFish
-  inspected_commit: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
-  selected_scope: full obvious MiroFish product loop
+  role: Senior Product Engineer
+  rule: Build the trusted-local product loop honestly; report non-production blockers explicitly.
 read_order:
   - BUILDPRINT.md
   - 01-questions.md
@@ -32,7 +43,7 @@ read_order:
   - 05-handover.md
 implementation_loop:
   phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/01-project-workspace-loop.md
+  active_phase: 03-phases/00-product-system-alignment.md
   final_review: 04-review.md
   handover: 05-handover.md
 repair_routing:
@@ -41,3 +52,104 @@ repair_routing:
   phase_gap: current_phase
   review_gap: 04-review.md
   handover_gap: 05-handover.md
+purpose:
+  summary: Build a trusted-local MiroFish-style graph-backed swarm simulation workbench with an open-source graph memory replacement for Zep Cloud.
+runtime:
+  app: Vue/Vite frontend plus Python backend or equivalent product-grade stack.
+  graph_memory: Free open-source graph memory adapter, defaulting to Graphiti-backed local runtime.
+  llm_provider: OpenAI-compatible provider selected by user configuration.
+state:
+  durable:
+    - uploaded seed files and extracted text
+    - project metadata
+    - graph memory and graph reference
+    - simulation profiles, config, status, and traces
+    - report sections, markdown, logs, and interaction history
+  local_only:
+    - trusted-local provider credentials
+    - trusted-local simulation process control
+nodes:
+  upload_project:
+    input:
+      reads:
+        - user seed files
+        - prediction requirement
+    output:
+      writes:
+        - persisted project metadata
+        - extracted text
+    side_effects:
+      - stores local user-provided files
+  build_graph:
+    input:
+      reads:
+        - extracted text
+        - ontology
+        - graph memory configuration
+    output:
+      writes:
+        - graph nodes and edges
+        - graph readback metadata
+    side_effects:
+      - calls configured LLM provider
+      - writes to local open-source graph memory store
+  canvas_workbench:
+    input:
+      reads:
+        - graph nodes and edges
+        - project status
+    output:
+      writes:
+        - selected view state
+        - inspected node and edge detail state
+    side_effects:
+      - renders interactive browser graph
+  run_simulation:
+    input:
+      reads:
+        - graph entities
+        - simulation requirement
+        - provider configuration
+    output:
+      writes:
+        - simulation profiles
+        - simulation config
+        - simulation traces
+    side_effects:
+      - starts or blocks local OASIS runtime
+  generate_report:
+    input:
+      reads:
+        - graph memory
+        - simulation traces
+        - report prompt/context
+    output:
+      writes:
+        - report progress
+        - report sections
+        - final markdown report
+        - report logs
+    side_effects:
+      - calls configured LLM provider
+edges:
+  - from: start
+    to: upload_project
+  - from: upload_project
+    to: build_graph
+  - from: build_graph
+    to: canvas_workbench
+  - from: canvas_workbench
+    to: run_simulation
+  - from: run_simulation
+    to: generate_report
+  - from: generate_report
+    to: end
+acceptance_criteria:
+  - Upload creates durable project state and extracted text.
+  - Graph build uses a free open-source graph memory adapter rather than Zep Cloud.
+  - Canvas renders real graph nodes and edges with inspectable details.
+  - LLM provider is selected by user configuration and not hard-coded.
+  - Simulation and report flows use graph state or show exact blockers.
+  - Reload/readback proves persisted project, graph, simulation, and report state.
+forbidden_dependencies:
+  - zep-cloud

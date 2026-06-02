@@ -1,51 +1,41 @@
 # Review
 
-Run this as a skeptical artifact review, not as a paperwork pass.
+Run this as an operational walkthrough, not a self-score.
 
-## Core Loop
+## Core Walkthrough
 
-1. Start from a clean local state.
-2. Open the app and upload a small supported seed file.
-3. Enter a prediction requirement and create the project.
-4. Generate ontology or verify the blocked LLM state.
-5. Build graph or verify the blocked graph-memory state.
-6. Prepare simulation and inspect profiles/config, or verify the blocked provider state.
-7. Run a short simulation and inspect timeline/actions, or verify the blocked runtime state.
-8. Generate a report and open/download it, or verify the blocked report state.
-9. Ask a follow-up question in the interaction surface, or verify blocked chat state.
+1. Start from a fresh local app.
+2. Submit a small seed document and prediction requirement.
+3. Generate or block ontology through the configured LLM provider.
+4. Build graph memory through the open-source graph adapter.
+5. Reload the project and confirm graph state reads back.
+6. Inspect the graph canvas in graph, split, and workbench modes.
+7. Click or select at least one node and one edge.
+8. Refresh graph data.
+9. Prepare a small simulation from graph entities.
+10. Run, stop, or honestly block simulation runtime.
+11. Generate and read back a report or honestly block provider/runtime.
+12. Try report chat or agent interview if runtime state supports it.
 
-## State Readback
+## Observe And Record
 
-- Reload project, simulation, run, and report routes after meaningful transitions.
-- Restart the backend if the chosen persistence posture promises restart recovery.
-- Confirm that project files, ontology, graph id, simulation config, run traces, report sections, and logs are read back from persisted state, not from incidental component memory.
+- Does uploaded input affect ontology/graph output?
+- Are graph controls alive and useful?
+- Does state persist after reload/restart?
+- Are missing providers shown as blocked states, not fake success?
+- Are destructive actions explicit?
+- Are public/private production claims absent under trusted-local posture?
 
-## Vary Inputs
+## Defects To Fix Before Handover
 
-- Try missing prompt, missing file, unsupported file, oversized file, and a second prompt/file combination.
-- Change simulation max rounds and confirm run state reflects it.
-- Ask two different report/chat questions and verify responses or blocked states differ.
+- Generic dashboard smell.
+- Decorative graph that cannot be inspected.
+- Raw JSON as the main user experience.
+- Canned output unrelated to input.
+- Dead controls.
+- Placeholder copy.
+- Hidden Zep dependency.
+- Hard-coded AI provider.
+- Missing persistence/readback for visible history.
+- Secret values in UI, logs, or generated artifacts.
 
-## Controls And Boundaries
-
-- Click graph refresh, layout toggles, start, stop, close environment, report download, chat target changes, and destructive confirmations where included.
-- Trigger provider-missing states by running without credentials.
-- Verify delete/reset controls require confirmation and do not silently remove unrelated state.
-
-## Anti-Fake Review
-
-Look for generic dashboard smell, fake intelligence, raw JSON dumped as the main experience, placeholder copy, dead controls, swallowed errors, undocumented public methods, fake adapter seams, canned output, missing persistence/traces/readback, and absent next actions.
-
-Fix local, safe, central defects before handover. Leave only real blockers such as missing credentials, provider sandbox access, or unresolved deployment policy.
-
-## Blocker Semantics
-
-Provider-live, public-deployment, and production_readiness claims remain blocked until they are directly verified. Local checks can support local confidence; they do not upgrade the claim.
-
-
-## Extra review checks from remap request
-
-- Confirm Source/origin is https://github.com/666ghj/MiroFish, not only the published Buildprint package path.
-- Confirm the UI preserves a sleek, clickable, motion-rich MiroFish/Canva-like product feeling rather than a static dashboard.
-- Confirm Zep Cloud is not required; graph memory goes through an open-source adapter path or an honest local-runtime blocker.
-- Confirm LLM provider settings are dynamic and OpenAI-compatible, not hardcoded to one vendor.

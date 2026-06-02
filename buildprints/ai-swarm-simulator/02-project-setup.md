@@ -1,71 +1,81 @@
 # Project Setup
 
-## Before Coding
+## Role And Mission
 
-You are building a mixed artifact: consumer-facing web product, provider integration boundary, long-running automation task loop, and data/report pipeline. The real consumer is a person who wants to test a "what if" scenario from seed material and inspect the resulting simulated social world.
+Act as a Senior Product Engineer building a trusted-local MiroFish-style workbench. Your job is to make the product loop usable and honest: seed upload, graph memory build, graph canvas inspection, simulation, report, and interaction.
 
-The first loop to make usable is:
+## Artifact Type
 
-1. Upload one small PDF/MD/TXT seed document and enter a prediction requirement.
-2. Create a project workspace and generate an ontology.
-3. Build or honestly block the knowledge graph provider transaction.
-4. Prepare a simulation with generated agents and config.
-5. Run or honestly block a short dual-platform simulation.
-6. Generate/read a prediction report and ask one follow-up question.
+Product webapp with a Python service backend and a graph-memory/simulation runtime. The visible product is not just forms and tables. The graph canvas and report/interaction workbench are the product.
 
-## Central Artifact
+## First Usable Loop
 
-Build around a simulation workspace, not around isolated pages. Every screen, API, and task should read from or write to that workspace:
+1. Start the local app.
+2. Upload a small PDF/MD/TXT seed and enter a prediction requirement.
+3. Generate an ontology.
+4. Build graph memory through the open-source graph adapter.
+5. Render nodes and edges on the canvas.
+6. Inspect node and edge detail panels.
+7. Prepare a small simulation from graph entities.
+8. Generate and read back a report or show an honest blocked state when provider/runtime access is missing.
 
-- project id, name, seed file metadata, extracted text, requirement;
-- ontology, analysis summary, graph id, graph data;
-- simulation id, status, profiles, config, run state, actions, posts/comments, logs;
-- report id, outline, sections, markdown, agent logs, chat/interview history.
+## Central Boundary
 
-## State And Readback
+Replace direct Zep Cloud calls with a `GraphMemoryAdapter` style boundary. The adapter must cover:
 
-Persist enough state that a reload can recover the current workspace. Local files, SQLite, or Postgres are acceptable implementation choices. The source used local JSON/files for projects, simulations, and reports; task progress was in memory. If you keep task progress volatile, make restart behavior explicit and recover from persisted final artifacts.
+- create or open graph;
+- set ontology/entity schema;
+- add text episodes or facts;
+- wait/check ingestion status where applicable;
+- read nodes and edges;
+- search/query graph;
+- get graph statistics;
+- append simulation activity as temporal memory;
+- delete/reset graph only through explicit local controls.
 
-## Provider Boundaries
+Default implementation choice: Graphiti-backed local memory because Graphiti is open source, temporal, graph-shaped, and close to the current Zep graph semantics. A vector-only replacement will not work because the UI and report tools need graph nodes, edges, labels, facts, and temporal readback.
 
-- LLM: OpenAI-compatible chat and JSON responses for ontology, profiles/config, report, chat, and interview behavior.
-- Open-source graph memory: graph creation, ontology set, text ingestion, node/edge retrieval, graph search.
-- OASIS/CAMEL: dual social-platform simulation runtime.
+## Provider Independence
 
-Missing credentials must create a useful blocked state with setup guidance. Do not generate canned "successful" graph, report, or simulation outputs and present them as provider results.
+Keep an OpenAI-compatible `LLMProvider` boundary. All LLM usage must accept base URL, model name, and key from configuration. The product may suggest presets, but user configuration owns provider choice.
+
+## Persistence
+
+Persist at least:
+
+- uploaded files and extracted text;
+- project metadata and graph id/reference;
+- local graph memory data;
+- simulation state, generated profiles, config, and run traces;
+- report metadata, progress, generated sections, markdown, and logs;
+- chat/interview history when displayed as reloadable.
+
+Do not claim restart-safe task progress if progress is only in memory.
 
 ## Local Commands
 
-Use equivalent commands for the chosen stack, but preserve this local developer shape:
+Expected command shape:
 
-- Install frontend/backend dependencies.
-- Start frontend on a local port and backend API on a local port.
-- Run backend health check.
-- Run focused backend contract tests for project, graph, simulation, and report state.
-- Run frontend build and at least one browser smoke through the first loop.
+```powershell
+npm run setup:all
+npm run dev
+npm run build
+cd backend; uv run pytest
+```
 
-## Product Quality Rules
+Adapt commands to the actual implementation, but keep one clear local setup path, one dev path, and one verification path.
 
-- Make the graph, timeline, report, and interaction surfaces readable and inspectable, not raw JSON dumps.
-- Show progress for long tasks and retain enough logs/traces to diagnose failure.
-- Empty, blocked, running, completed, failed, and already-prepared states must each be distinct.
-- Controls must either do real work or be absent.
-- User-visible errors should name the failed boundary and the next action.
-- Uploaded document privacy and provider submission boundaries must be visible where they matter.
+## Craft Floor
+
+Use a real frontend build system and component/styling structure. A single hand-written HTML file or thin mock shell is not acceptable. The graph canvas must be visually usable, inspectable, and responsive enough for browser review.
 
 ## Forbidden Shortcuts
 
-- Fake provider success.
-- Canned report or chat output unrelated to the input prompt/workspace.
-- Dead graph refresh, stop, download, delete, or chat controls.
-- Swallowed backend exceptions that only log server-side.
-- A generic analytics dashboard instead of the five-step simulation workspace.
-- Debug/proof vocabulary in user-facing or operator-facing surfaces.
+- No fake graph generated independently of uploaded input.
+- No Zep Cloud calls hidden behind a "free" label.
+- No provider success when credentials are absent.
+- No canned reports unrelated to graph/simulation state.
+- No dead refresh/maximize/toggle controls.
+- No raw JSON as the primary user surface.
+- No public-webapp claims without auth, upload security, observability, deployment, backup, and abuse controls.
 
-
-## Dom-specific remap constraints
-
-- Preserve the great Canva-like motion/sleek UI/UX feeling from MiroFish: the app should feel interactive, visual, animated, and clickable, not like a static form/report stack.
-- The graph/canvas is a central artifact. It needs selectable nodes/edges, pan/zoom or layout affordances, inspectors, progress states, and visible causal connection to simulation/report output.
-- Replace Zep Cloud with an open-source graph-memory implementation. Default to a Graphiti-compatible temporal graph adapter with local/open graph database backing where practical; keep the adapter swappable.
-- LLM provider setup must be dynamic: OpenAI-compatible base URL/model/key, clear provider status, and feature-level blocked states.

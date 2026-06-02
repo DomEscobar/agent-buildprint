@@ -1,25 +1,63 @@
-# Phase 99 — Final Review And Handover
+# Phase 99 - Final review and handover
+
+requires_roles: [product-architect]
 
 ## Product intention
 
-Before handoff, become a skeptical reviewer of the actual artifact. The goal is to catch central fake-done behavior and leave the next engineer with a concise truthful status.
+Finish with a skeptical product review and a concise handover that tells the truth about what works, what is blocked, and what should happen next.
 
-## Build
+## Mapped obligations
 
-- Run the review in `04-review.md`.
-- Repair local, safe, central defects found during review.
-- Update handover using the structure in `05-handover.md`.
-- Include provider credential/runtime blockers without exposing secret values.
+- Complete the core loop from a fresh start.
+- Reload/read back persisted state.
+- Change input and confirm outputs change or provider blocker appears.
+- Review graph controls directly.
+- Review simulation/report/interaction behavior or blockers.
+- Record not-production-grade status for trusted-local posture.
+
+## Stable vs free
+
+Stable: concise, honest handover with continue options.
+
+Free: exact wording.
+
+## Implementation scope
+
+Final walkthrough, defect repair, handover update.
+
+## Interfaces touched
+
+All selected product surfaces.
+
+## State / runtime touched
+
+All persisted artifacts and runtime blockers.
+
+## UX / DX / operator requirements
+
+Handover should be short enough to be useful and specific enough to resume work.
+
+## Required output (product-architect)
+
+Write a handover that separates built behavior, verification, known blockers, and next atomic actions.
+
+## Blocks (product-architect)
+
+No "done" claim if live providers, runtime proof, or public hardening remain blocked.
 
 ## Quality bar
 
-- The first usable loop has been exercised from a fresh start as far as credentials allow.
-- State is reloaded/read back after at least one meaningful transition.
-- Inputs are changed and output/state changes are verified where possible.
-- Blocked provider and destructive paths are honest and visible.
+A fresh coding agent can continue without reading the original source repo.
 
 ## Do not ship
 
-- A handover that claims production readiness or full validation.
-- Passing tests as a substitute for reviewing graph, simulation, report, and interaction surfaces.
-- Unfixed dead controls or placeholder output in the central loop.
+Vague next steps, missing blocker list, or production-ready language.
+
+## Repair routing
+
+Repair `05-handover.md` or prior phase files if the final review exposes contradictions.
+
+## Unlock condition
+
+Final handover ends with the required continue-from-here menu.
+
