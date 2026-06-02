@@ -1,0 +1,43 @@
+schema_version: mapper-os/executable-blueprint
+execution_start: BUILDPRINT.md
+machine_contract: blueprint.yaml
+claim_status: product_build_required
+qualification_label: local_build_requires_review
+setup_tier: typed_product_leadership
+blueprint_mode:
+  primary: mixed
+  consumer: mixed
+  selected_spine: mixed
+  mixed_phase_modes:
+    - product
+    - integration
+    - automation
+    - data-pipeline
+agent_contract:
+  role: Senior Product/Developer/Operator Engineer
+  rule: Build a usable artifact-type slice; do not produce proof theater.
+source_summary:
+  inspected_repository: https://github.com/666ghj/MiroFish
+  inspected_commit: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
+  selected_scope: full obvious MiroFish product loop
+read_order:
+  - BUILDPRINT.md
+  - 01-questions.md
+  - generated/agent-prompt.md
+  - 02-project-setup.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - 04-review.md
+  - 05-handover.md
+implementation_loop:
+  phase_flow: 03-phases/phase-flow.md
+  active_phase: 03-phases/01-project-workspace-loop.md
+  final_review: 04-review.md
+  handover: 05-handover.md
+repair_routing:
+  product_contradiction: BUILDPRINT.md
+  setup_or_architecture_gap: 02-project-setup.md
+  phase_gap: current_phase
+  review_gap: 04-review.md
+  handover_gap: 05-handover.md

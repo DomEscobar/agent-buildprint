@@ -10,17 +10,19 @@
   "status": "validated",
   "runtime": [
     "Full-stack browser workbench",
+    "Motion-rich clickable product UI",
     "Scenario intake and ontology review",
-    "Graph canvas central artifact",
-    "Simulation worker/runtime lifecycle",
-    "Report and interaction console",
-    "Browser/e2e proof required"
+    "Open-source graph-memory adapter",
+    "Dynamic OpenAI-compatible LLM provider",
+    "OASIS/CAMEL simulation runtime lifecycle",
+    "Report and interaction console"
   ],
   "stack": [
     "Scenario/document intake",
     "Ontology generation/review",
-    "Graph data model and canvas interactions",
-    "Provider adapters and blocked-provider states",
+    "Graphiti-compatible temporal graph adapter seam",
+    "Local/open graph database boundary",
+    "Dynamic LLM provider settings",
     "Simulation preparation and runtime monitor",
     "Prediction report generation",
     "Durable local persistence"
@@ -32,22 +34,23 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "AI Swarm Simulator Buildprint remapped from MiroFish as a social simulation workbench with scenario intake, ontology review, a real graph canvas workbench, simulation runtime monitor, prediction report, and interaction console.",
-  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish as a local-first AI swarm/social simulation workbench. It now uses the review/handover v4 packet shape instead of obsolete proof-ledger theater.",
-  "promise": "Build a credible AI swarm/social simulation workbench without depending on the original source repo: project intake, graph memory, canvas inspection, simulation runtime, report generation, interaction, persistence, and honest provider/runtime blockers.",
+  "summary": "AI Swarm Simulator Buildprint remapped from MiroFish as a sleek, clickable swarm-simulation workbench with scenario intake, open-source graph memory, dynamic LLM providers, simulation runtime, report generation, and interaction console.",
+  "plainDescription": "A source-independent executable Buildprint remapped from MiroFish. It preserves the motion-rich, Canva-like product feel while replacing the original Zep Cloud dependency with an open-source graph-memory adapter path and dynamic OpenAI-compatible LLM provider configuration.",
+  "promise": "Build a credible MiroFish-inspired AI swarm/social simulation workbench: seed intake, ontology, clickable graph/canvas memory, simulation preparation and runtime traces, report generation, interaction, persistence, dynamic provider setup, and honest provider/runtime blockers.",
   "whatYouGet": [
     "Executable Buildprint packet with BUILDPRINT.md canonical start",
     "A generated agent prompt that frames the task as senior product/design alignment, not checklist compliance",
-    "Four feature phases from scenario intake through report interaction plus an explicit final review/handover phase",
-    "Explicit graph-workbench requirements: meaningful nodes/edges, selection, inspectors, layout, pan/zoom, refresh, and downstream simulation effects",
-    "Anti-slop final reviewer requirements for dead controls, placeholders, canned outputs, weak graph substitutes, and non-persistent state"
+    "A v4 review/handover packet shape with 04-review.md and 05-handover.md, not obsolete evidence-ledger proof theater",
+    "Explicit requirements to preserve MiroFish’s sleek, clickable, motion-rich UI/UX instead of flattening it into a static dashboard",
+    "Open-source graph-memory replacement path for the original Zep dependency",
+    "Dynamic OpenAI-compatible LLM provider configuration requirements"
   ],
   "whatYouNeed": [
     "A clean implementation workspace",
-    "LLM provider credentials for live ontology/profile/report proof, or explicit blocked-provider evidence",
-    "Zep-compatible graph-memory credentials for live graph proof, or a deterministic sandbox adapter clearly labeled as such",
+    "LLM provider credentials for live ontology/profile/report proof, or explicit blocked-provider state",
+    "A local/open graph-memory runtime such as a Graphiti-compatible adapter with open graph database backing, or an honest local-runtime blocker",
     "OASIS/CAMEL-compatible runtime or approved local deterministic simulation worker",
-    "Browser/e2e environment for graph interaction, persistence, report, and console proof"
+    "Browser/e2e environment for graph interaction, persistence, report, and console review"
   ],
   "architectureFlow": [
     "Scenario intake",
@@ -62,17 +65,22 @@
     "BUILDPRINT.md canonical start",
     "generated/agent-prompt.md alignment speech",
     "01-questions.md alignment defaults",
-    "02-project-setup.md source-evidenced surface matrix",
+    "02-project-setup.md source-evidenced setup and Dom-specific remap constraints",
     "03-phases/phase-flow.md orchestration contract",
-    "Scenario intake and ontology review phase",
-    "Graph canvas workbench phase with explicit no-token-bubbles constraint",
-    "Simulation preparation and runtime monitor phase",
-    "Prediction report and interaction console phase",
+    "Project workspace loop phase",
+    "Graph and provider boundary phase with open-source graph-memory replacement",
+    "Simulation environment phase",
+    "Dual-platform run phase",
+    "Report and interaction phase",
+    "Ops/review hardening phase",
     "Final critical review and handover phase",
     "04-review.md skeptical product review",
     "05-handover.md concise handover contract"
   ],
   "risks": [
+    "Flattening the MiroFish experience into a static admin dashboard instead of preserving the sleek motion-rich clickable UX",
+    "Requiring Zep Cloud instead of providing an open-source graph-memory adapter path",
+    "Hardcoding a single LLM vendor instead of dynamic OpenAI-compatible provider settings",
     "Collapsing the graph workbench into token bubbles, chips, cards, or static SVG decoration",
     "Canned ontology/report/simulation outputs that do not change with inputs",
     "Dead buttons or fake controls presented as completed product behavior",
@@ -80,13 +88,15 @@
     "Omitting provider adapters because credentials are missing",
     "Raw debug/admin surfaces standing in for product UX",
     "In-memory-only state counted as persistence",
-    "Screenshots without repeatable browser/e2e proof",
-    "Secret leakage through logs, reports, screenshots, or evidence rows"
+    "Secret leakage through logs, reports, screenshots, or handover notes"
   ],
   "checks": [
     "Mapper executable packet check passes",
     "generated/agent-prompt.md is alignment speech and includes anti-slop review",
-    "Graph canvas phase explicitly forbids token bubbles/static SVG/card-list substitutes",
+    "Packet names https://github.com/666ghj/MiroFish as the inspected origin",
+    "Open-source graph-memory replacement is required; Zep Cloud is not required",
+    "Dynamic OpenAI-compatible LLM provider settings are required",
+    "Graph/canvas UX explicitly requires clickable, inspectable, motion-rich behavior",
     "Final critical reviewer checks dead buttons, placeholders, canned outputs, persistence, and graph-workbench quality"
   ],
   "trustBadges": [
@@ -96,8 +106,18 @@
       "tone": "success"
     },
     {
-      "label": "Graph workbench protected",
-      "detail": "The central artifact must be meaningful graph/canvas behavior, not token bubbles or static decoration.",
+      "label": "MiroFish origin",
+      "detail": "The package is remapped from https://github.com/666ghj/MiroFish.",
+      "tone": "info"
+    },
+    {
+      "label": "Open graph memory",
+      "detail": "The implementation must replace Zep Cloud with an open-source graph-memory adapter path.",
+      "tone": "success"
+    },
+    {
+      "label": "Dynamic LLM providers",
+      "detail": "The packet requires dynamic OpenAI-compatible LLM provider configuration.",
       "tone": "success"
     },
     {
@@ -108,9 +128,10 @@
   ],
   "originGithubUrl": "https://github.com/666ghj/MiroFish",
   "originLabel": "666ghj/MiroFish",
-  "copyPrompt": "Use the AI Swarm Simulator Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. The bootstrapped packet is the source of truth \u2014 follow its read order: BUILDPRINT.md, 01-questions.md, generated/agent-prompt.md, 02-project-setup.md, blueprint.yaml, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, 04-review.md, 05-handover.md, and the active phase file.",
+  "copyPrompt": "Use the AI Swarm Simulator Buildprint remapped from https://github.com/666ghj/MiroFish. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Preserve the sleek Canva-like motion/clickable MiroFish UX, replace Zep Cloud with an open-source graph-memory adapter, and make LLM provider configuration dynamic/OpenAI-compatible.",
   "publicStatus": {
-    "label": "v4 review/handover packet",
-    "explanation": "Bootstraps through the current executable packet shape with 04-review.md and 05-handover.md; live providers remain honest blockers when unavailable."
-  }
+    "label": "v4 remapped packet",
+    "explanation": "Fresh v4 review/handover packet remapped from MiroFish with open-source graph-memory replacement and dynamic LLM provider requirements; live providers remain honest blockers when unavailable."
+  },
+  "updatedAt": "2026-06-02T14:55:00.000Z"
 }

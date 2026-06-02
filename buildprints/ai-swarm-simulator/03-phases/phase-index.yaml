@@ -1,0 +1,44 @@
+active_phase: 03-phases/01-project-workspace-loop.md
+phases:
+  - phase_id: project-workspace-loop
+    file: 03-phases/01-project-workspace-loop.md
+    title: Project workspace and ontology loop
+    status: active
+    dependencies: []
+    mode: product
+  - phase_id: graph-and-provider-boundaries
+    file: 03-phases/02-graph-and-provider-boundaries.md
+    title: Graph build and provider boundary
+    status: pending
+    dependencies: [project-workspace-loop]
+    mode: integration
+  - phase_id: simulation-environment
+    file: 03-phases/03-simulation-environment.md
+    title: Simulation workspace preparation
+    status: pending
+    dependencies: [graph-and-provider-boundaries]
+    mode: automation
+  - phase_id: dual-platform-run
+    file: 03-phases/04-dual-platform-run.md
+    title: Dual-platform simulation run
+    status: pending
+    dependencies: [simulation-environment]
+    mode: automation
+  - phase_id: report-and-interaction
+    file: 03-phases/05-report-and-interaction.md
+    title: Prediction report and interaction
+    status: pending
+    dependencies: [dual-platform-run]
+    mode: data-pipeline
+  - phase_id: ops-review-hardening
+    file: 03-phases/06-ops-review-hardening.md
+    title: Runtime, deployment, and hardening pass
+    status: pending
+    dependencies: [report-and-interaction]
+    mode: mixed
+  - phase_id: final-review-handover
+    file: 03-phases/99-final-review-handover.md
+    title: Final review and handover
+    status: pending
+    dependencies: [ops-review-hardening]
+    mode: mixed
