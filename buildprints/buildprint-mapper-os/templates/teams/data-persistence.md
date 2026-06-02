@@ -10,7 +10,7 @@ Purpose: prevent throwaway state from masquerading as product behavior.
 
 ## Blocks
 
-- In-memory-only product state unless tiny trusted-local scope explicitly justifies it.
+- In-memory-only product state unless tiny `trusted_local` scope explicitly justifies it.
 - Persistence claims without restart/readback proof.
 - Import/export/reporting behavior without data lifecycle proof.
 - Graph/model/project data with no ownership or recovery story.

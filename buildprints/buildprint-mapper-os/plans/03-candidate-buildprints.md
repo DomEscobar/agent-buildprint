@@ -2,13 +2,13 @@
 
 ## Goal
 
-Propose selected targets and first implementation slices from promoted capability evidence without losing the requested capability surface.
+Propose selected targets and first implementation slices from source-supported capabilities without losing the requested capability surface.
 
 ## Steps
 
 - Group capabilities by product behavior and dependencies.
 - Preserve the requested capability surface; recommend first implementation slices, but never shrink scope merely to make output look complete.
-- Mark incomplete or risky capabilities `INCLUDED_NEEDS_VERIFICATION`, `INCLUDED_BLOCKED`, or `INCLUDED_RISKY_REQUIRES_HARDENING`; use `OUT_OF_SCOPE_BY_USER_ONLY` only for explicit user exclusions or target boundaries.
+- Classify incomplete or risky capabilities as `needs_verification`, `blocked`, or `risky_requires_hardening`; use `out_of_scope_by_user` only for explicit user exclusions or target boundaries.
 - For full-suite intent, preserve every blocker and require hierarchical output.
 
 ## Exit Criteria

@@ -2,9 +2,9 @@
 
 Executable build contracts for coding agents.
 
-Agent Buildprint packages product intent, source evidence, phase order, quality gates, and proof rules into files that an implementation agent can follow. The CLI, `agb`, bootstraps those packages into a workspace and can inspect packet/evidence files when you need a local sanity check.
+Agent Buildprint packages product intent, source support, phase order, quality gates, review rules, and handover expectations into files that an implementation agent can follow. The CLI, `agb`, bootstraps those packages into a workspace and can inspect packet shape when you need a local sanity check.
 
-It is not a framework generator. It does not choose React, Vue, Python, Rails, or any other runtime for you. A good Buildprint preserves product behavior and proof obligations while leaving implementation technology flexible unless the source evidence or product contract requires a specific stack.
+It is not a framework generator. It does not choose React, Vue, Python, Rails, or any other runtime for you. A good Buildprint preserves product behavior and quality obligations while leaving implementation technology flexible unless source facts or the product contract require a specific stack.
 
 ## Install
 
@@ -24,8 +24,8 @@ node ./bin/agb.js --help
 ## What You Get
 
 - `agb start`: bootstrap an exact Buildprint snapshot into `.buildprint/` for an implementation workspace.
-- `agb packet check`: validate executable packet shape, read order, phase routing, proof/evidence rules, and obsolete-layout rejection.
-- `agb evidence check`: validate runtime evidence ledger rows.
+- `agb packet check`: validate executable packet shape, read order, phase routing, review/handover wiring, and obsolete-layout rejection.
+- `agb evidence check`: validate legacy runtime evidence ledger rows when working with older packets.
 - Published Buildprint packages under `buildprints/`, each with a `publication.json` record and a canonical `BUILDPRINT.md` start file.
 
 ## Quick Start
@@ -48,7 +48,7 @@ That file routes the agent through the exact snapshot files in the required orde
 
 ## Current Executable Packet Contract
 
-The current Mapper OS executable packet baseline is documented in [Buildprint v3 Draft](docs/buildprint/buildprint-v3(DRAFT).html).
+The current Mapper OS executable packet baseline is typed and review-centered. It uses `04-review.md` and `05-handover.md`, not packaged evidence ledgers, as the handoff path.
 
 Typical packet shape:
 
@@ -60,11 +60,11 @@ blueprint.yaml
 03-phases/
   phase-index.yaml
   phase-flow.md
-  01-...phase.md
-04-evaluation.md
-05-evidence/
-  evidence-ledger.jsonl
-  evidence-ledger.schema.json
+  00-...phase.md
+  ...
+  99-final-review-handover.md
+04-review.md
+05-handover.md
 generated/
   agent-prompt.md
 buildprint.json
@@ -75,9 +75,10 @@ The important rule is authority separation:
 
 - `BUILDPRINT.md` is the human router and canonical start file.
 - `blueprint.yaml` and related YAML/JSON files are machine-readable mirrors.
-- `03-phases/phase-flow.md` controls phase execution and required runtime artifacts.
-- Packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
-- Runtime evidence goes to `.buildprint/evidence/evidence-ledger.jsonl` in the implementation workspace.
+- `03-phases/phase-index.yaml` names the active phase and dependency order.
+- `03-phases/phase-flow.md` controls phase execution.
+- `04-review.md` defines skeptical artifact review through observable walkthroughs.
+- `05-handover.md` records status, verification, blockers, and continue options.
 - `.buildprint/next-agent.md` and `.buildprint/state.json` win on resumed runs.
 
 ## Commands
@@ -86,7 +87,7 @@ The important rule is authority separation:
 agb start <buildprint-package-json-url-or-file> [target-folder]
 agb packet check <packet-folder-or-package-json-url>
 agb packet next <packet-folder-or-build-state-folder>
-agb evidence check <evidence-ledger-jsonl>
+agb evidence check <legacy-evidence-ledger-jsonl>
 agb check <blueprint-folder> [--code <generated-code-folder>]
 ```
 
@@ -95,7 +96,6 @@ Examples:
 ```bash
 agb packet check ./buildprints/ai-swarm-simulator
 agb packet next ./buildprints/ai-swarm-simulator
-agb evidence check .buildprint/evidence/evidence-ledger.jsonl
 agb check ./my-buildprint --code ./generated-code
 ```
 
@@ -103,7 +103,7 @@ agb check ./my-buildprint --code ./generated-code
 
 There is no `agb map` command. That old direction is intentionally not the workflow.
 
-To map a source repository, run an agent session with `buildprints/buildprint-mapper-os/` as the governing Buildprint. The mapper workflow is evidence-driven: inspect the source, record observed facts, distinguish inference from proof, select a coherent product scope, and emit a source-independent executable packet.
+To map a source repository, run an agent session with `buildprints/buildprint-mapper-os/` as the governing Buildprint. The mapper workflow is source-supported: inspect the source, record observed facts, distinguish inference from blockers, select a coherent product scope, and emit a source-independent executable packet.
 
 The strict bootstrap path for Mapper OS is:
 
@@ -120,14 +120,14 @@ node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/
 
 After bootstrap, read `.buildprint/next-agent.md` and follow the mapped workflow. Ask for a target repo only if one was not already provided.
 
-## Evidence Rules
+## Review Rules
 
-Buildprints are useful only when claims stay tied to proof.
+Buildprints are useful only when implementation claims stay tied to observable behavior.
 
 - Do not mark a phase complete from code edits alone.
 - Do not count static UI, dead buttons, placeholder routes, mock-only providers, or in-memory demos as production behavior.
-- Do not set `upgrades_claim: true` for blockers, missing credentials, unavailable browser tooling, synthetic checks, or partial proof.
-- Provider adapter/config tests prove adapter seams, not live provider behavior.
+- Use `04-review.md` to exercise controls, commands, APIs, operator actions, reload/readback, blocked states, and posture-specific operability.
+- Use `05-handover.md` to separate built behavior, verified behavior, blockers, and next atomic actions.
 - Browser, screenshot, worker, security, persistence, and data-lifecycle claims need matching executable proof or honest non-upgrading blocker rows.
 - A broad smoke test should not upgrade unrelated claims.
 

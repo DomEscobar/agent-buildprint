@@ -4,8 +4,13 @@ posture_allowed_values:
   - trusted_local
   - private_authenticated
   - public_webapp
+status_allowed_values:
+  - included
+  - included_blocked
+  - conditional
+  - blocked
 conditional_phase_rules:
-  trusted_local: include posture-hardening phases as INCLUDED_BLOCKED with reason "trusted_local posture -- promote to private_authenticated or public_webapp to unlock"
+  trusted_local: include posture-hardening phases as included_blocked with reason "trusted_local posture -- promote to private_authenticated or public_webapp to unlock"
   private_authenticated: include posture-hardening phases as included
   public_webapp: include posture-hardening phases as included with tenant/security depth
 feature_slice_expansion_rule:
@@ -13,6 +18,48 @@ feature_slice_expansion_rule:
   umbrella_phase: 03-feature-slices
   split_phase_id_pattern: 03-feature-slice-NNN-<slice-id>
   dependency_rule: each split slice depends on the prior split slice or 03-feature-slices; 04-state-and-data depends on the final included slice
+spine_phase_catalog:
+  product_app_consumer_first:
+    - 00-product-system-alignment
+    - 01-shell-and-navigation
+    - 02-core-loop-first
+    - 03-feature-slices
+    - 04-state-and-data
+    - 05-domain-and-intelligence
+    - 06-design-system-and-copy
+    - 07-architecture-garden
+    - 08-verification
+  developer_first_framework:
+    - 01-adoption-contract
+    - 02-framework-seams
+    - 03-first-host-action
+    - 04-events-failures-observability
+    - 05-examples-and-docs
+  reliability_first_service:
+    - 01-service-goal-slo
+    - 02-state-machine-data-contracts
+    - 03-happy-transaction
+    - 04-retry-failure-recovery
+    - 05-observability-admin-controls
+    - 06-runbook-regression-verification
+  automation_task_loop:
+    - 01-task-contract
+    - 02-approval-and-inputs
+    - 03-first-task-run
+    - 04-stop-conditions-and-recovery
+    - 05-trace-and-handover
+  data_pipeline_quality_loop:
+    - 01-data-contracts
+    - 02-ingestion-and-lineage
+    - 03-transform-quality-loop
+    - 04-quality-gates-and-recovery
+    - 05-output-reproducibility
+  infrastructure_operations_loop:
+    - 01-operation-contract
+    - 02-plan-apply-boundaries
+    - 03-health-and-drift
+    - 04-rollback-and-recovery
+    - 05-runbook-and-release-gates
 phase_order:
   - phase_id: 00-product-system-alignment
     file: 03-phases/00-product-system-alignment.md
@@ -67,33 +114,52 @@ phase_order:
     status: included
     depends_on:
       - 07-architecture-garden
+  - phase_id: 09-auth-and-tenancy
+    file: 03-phases/conditional/auth-and-tenancy.md
+    title: Auth and tenancy
+    status: included_blocked
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+    depends_on:
+      - 08-verification
+  - phase_id: 10-observability-and-health
+    file: 03-phases/conditional/observability-and-health.md
+    title: Observability and health
+    status: included_blocked
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+    depends_on:
+      - 08-verification
+  - phase_id: 11-deployment-and-operability
+    file: 03-phases/conditional/deployment-and-operability.md
+    title: Deployment and operability
+    status: included_blocked
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+    depends_on:
+      - 08-verification
+  - phase_id: 12-ci-and-release-gates
+    file: 03-phases/conditional/ci-and-release-gates.md
+    title: CI and release gates
+    status: included_blocked
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+    depends_on:
+      - 08-verification
+  - phase_id: 13-backup-and-recovery
+    file: 03-phases/conditional/backup-and-recovery.md
+    title: Backup and recovery
+    status: included_blocked
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+    depends_on:
+      - 08-verification
+  - phase_id: 14-security-and-abuse-controls
+    file: 03-phases/conditional/security-and-abuse-controls.md
+    title: Security and abuse controls
+    status: included_blocked
+    blocked_reason: trusted_local posture -- promote to private_authenticated or public_webapp to unlock
+    depends_on:
+      - 08-verification
   - phase_id: 99-final-review-handover
     file: 03-phases/99-final-review-handover.md
     title: Final review and handover
     status: included
     depends_on:
       - 08-verification
-optional_phase_catalog:
-  # Catalog of posture-conditional hardening phases. When a posture unlocks them, copy the file into
-  # 03-phases/ as the numbered active phase (for example 03-phases/09-auth-and-tenancy.md), add it to
-  # phase_order with its real status, and keep requires_roles embedded. For trusted_local they stay
-  # listed in phase_order as included_blocked with a blocked_reason instead of living only in this catalog.
-  - phase_id: 09-auth-and-tenancy
-    file: 03-phases/conditional/auth-and-tenancy.md
-    default_status: conditional
-  - phase_id: 10-observability-and-health
-    file: 03-phases/conditional/observability-and-health.md
-    default_status: conditional
-  - phase_id: 11-deployment-and-operability
-    file: 03-phases/conditional/deployment-and-operability.md
-    default_status: conditional
-  - phase_id: 12-ci-and-release-gates
-    file: 03-phases/conditional/ci-and-release-gates.md
-    default_status: conditional
-  - phase_id: 13-backup-and-recovery
-    file: 03-phases/conditional/backup-and-recovery.md
-    default_status: conditional
-  - phase_id: 14-security-and-abuse-controls
-    file: 03-phases/conditional/security-and-abuse-controls.md
-    default_status: conditional
 continuation_rule: move to the next phase only when the current slice is usable or honestly blocked; final review and handover are required before completion.

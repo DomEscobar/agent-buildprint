@@ -7,21 +7,48 @@ import { execFileSync } from 'node:child_process'
 const root = path.resolve(import.meta.dirname, '..')
 const template = path.join(root, 'buildprints/buildprint-mapper-os/templates/executable-packet')
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'mapper-overhaul-eval-'))
-const bad = path.join(tmp, 'bad-selected')
-fs.cpSync(template, bad, { recursive: true })
 
-function edit(rel, fn) {
-  const file = path.join(bad, rel)
+function copyTemplate(name) {
+  const target = path.join(tmp, name)
+  fs.cpSync(template, target, { recursive: true })
+  return target
+}
+
+function edit(folder, rel, fn) {
+  const file = path.join(folder, rel)
   fs.writeFileSync(file, fn(fs.readFileSync(file, 'utf8')))
 }
 
-// Simulate a future generated packet that is unbootstrappable or lost the product-leadership alignment layer.
-edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, '').replace(/blueprint_mode:[\s\S]*?agent_contract:/m, 'agent_contract:'))
-edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/00-product-system-alignment.md', 'active_phase: 00-product-system-alignment'))
-edit('generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
-edit('01-questions.md', () => '# Questions\n\nWhat should we build?\n')
-edit('02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
-edit('03-phases/00-product-system-alignment.md', () => `# Phase 00 - Alignment
+function runPacketCheck(folder) {
+  try {
+    return {
+      failed: false,
+      output: execFileSync(process.execPath, [path.join(root, 'bin/agb.js'), 'packet', 'check', folder], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
+    }
+  } catch (error) {
+    return { failed: true, output: `${error.stdout || ''}${error.stderr || ''}` }
+  }
+}
+
+function expectFailures(name, folder, labels) {
+  const { failed, output } = runPacketCheck(folder)
+  const missing = labels.filter((label) => !output.includes(`✗ ${label}`))
+  if (!failed || missing.length) {
+    console.error(output)
+    console.error(`${name} failed; missing expected checker failures: ${missing.join(', ') || '(none)'}`)
+    process.exit(1)
+  }
+  console.log(`✓ ${name}`)
+  console.log(labels.map((label) => `  - ${label}`).join('\n'))
+}
+
+const malformed = copyTemplate('bad-selected')
+edit(malformed, 'blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, '').replace(/blueprint_mode:[\s\S]*?agent_contract:/m, 'agent_contract:'))
+edit(malformed, '03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/00-product-system-alignment.md', 'active_phase: 00-product-system-alignment'))
+edit(malformed, 'generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
+edit(malformed, '01-questions.md', () => '# Questions\n\nWhat should we build?\n')
+edit(malformed, '02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
+edit(malformed, '03-phases/00-product-system-alignment.md', () => `# Phase 00 - Alignment
 
 requires_roles: [product-architect]
 
@@ -53,19 +80,10 @@ Confusion.
 
 Repair here.
 `)
-fs.rmSync(path.join(bad, '04-review.md'))
-fs.rmSync(path.join(bad, '05-handover.md'))
+fs.rmSync(path.join(malformed, '04-review.md'))
+fs.rmSync(path.join(malformed, '05-handover.md'))
 
-let output = ''
-let failed = false
-try {
-  output = execFileSync(process.execPath, [path.join(root, 'bin/agb.js'), 'packet', 'check', bad], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
-} catch (error) {
-  failed = true
-  output = `${error.stdout || ''}${error.stderr || ''}`
-}
-
-const requiredFailures = [
+expectFailures('mapper executable-integrity eval rejected malformed selected packet', malformed, [
   'packet includes review/handover',
   'blueprint declares qualification label',
   'blueprint declares setup tier',
@@ -81,14 +99,59 @@ const requiredFailures = [
   'phase index names active phase file',
   'generated prompt is alignment speech, not authority',
   'generated prompt includes anti-slop/product reviewer when present'
-]
+])
 
-const missing = requiredFailures.filter((label) => !output.includes(`✗ ${label}`))
-if (!failed || missing.length) {
-  console.error(output)
-  console.error(`Mapper overhaul negative eval failed; missing expected checker failures: ${missing.join(', ') || '(none)'}`)
+const missingHardening = copyTemplate('missing-hardening')
+edit(missingHardening, '03-phases/phase-index.yaml', (s) => s.replace(/  - phase_id: 09-auth-and-tenancy[\s\S]*?(?=  - phase_id: 99-final-review-handover)/, ''))
+expectFailures('mapper eval rejected missing hardening phases', missingHardening, [
+  'phase index includes posture hardening phases'
+])
+
+const nonProductWrongSpine = copyTemplate('non-product-wrong-spine')
+edit(nonProductWrongSpine, 'blueprint.yaml', (s) => s.replace('primary: product', 'primary: integration').replace('consumer: end_user', 'consumer: developer').replace('selected_spine: product_app_consumer_first', 'selected_spine: developer_first_framework'))
+expectFailures('mapper eval rejected non-product product-only spine', nonProductWrongSpine, [
+  'developer_first_framework spine uses Developer-First phases'
+])
+
+const unknownSpine = copyTemplate('unknown-spine')
+edit(unknownSpine, 'blueprint.yaml', (s) => s.replace('selected_spine: product_app_consumer_first', 'selected_spine: custom_productish_spine'))
+expectFailures('mapper eval rejected unknown selected spine', unknownSpine, [
+  'selected spine uses known executable spine'
+])
+
+const invalidPosture = copyTemplate('invalid-posture')
+edit(invalidPosture, 'blueprint.yaml', (s) => s.replace('current: trusted_local', 'current: trusted-local'))
+edit(invalidPosture, '03-phases/phase-index.yaml', (s) => s.replace('deployment_posture: trusted_local', 'deployment_posture: trusted-local').replace(/status: included_blocked/g, 'status: INCLUDED_BLOCKED'))
+expectFailures('mapper eval rejected invalid posture and status vocabulary', invalidPosture, [
+  'packet uses canonical posture and phase status values'
+])
+
+const observabilityWithoutSecurity = copyTemplate('observability-without-security')
+edit(observabilityWithoutSecurity, '03-phases/conditional/observability-and-health.md', (s) => s
+  .replace('requires_roles: [integration-runtime, product-architect, security-boundary]', 'requires_roles: [integration-runtime, product-architect]')
+  .replace(/\n## Required output \(security-boundary\)[\s\S]*?(?=\n## Quality bar)/, '\n'))
+expectFailures('mapper eval rejected observability without security-boundary', observabilityWithoutSecurity, [
+  'observability phase embeds security-boundary'
+])
+
+const renamedObservabilityWithoutSecurity = copyTemplate('renamed-observability-without-security')
+edit(renamedObservabilityWithoutSecurity, '03-phases/phase-index.yaml', (s) => s.replace('file: 03-phases/conditional/observability-and-health.md', 'file: 03-phases/conditional/operator-observability.md'))
+fs.renameSync(
+  path.join(renamedObservabilityWithoutSecurity, '03-phases/conditional/observability-and-health.md'),
+  path.join(renamedObservabilityWithoutSecurity, '03-phases/conditional/operator-observability.md')
+)
+edit(renamedObservabilityWithoutSecurity, '03-phases/conditional/operator-observability.md', (s) => s
+  .replace('requires_roles: [integration-runtime, product-architect, security-boundary]', 'requires_roles: [integration-runtime, product-architect]')
+  .replace(/\n## Required output \(security-boundary\)[\s\S]*?(?=\n## Quality bar)/, '\n'))
+expectFailures('mapper eval rejected renamed observability without security-boundary', renamedObservabilityWithoutSecurity, [
+  'observability phase embeds security-boundary'
+])
+
+const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8')
+const staleReadmePatterns = [/Buildprint v3 Draft/i, /04-evaluation\.md/i, /05-evidence\//i]
+const staleReadmeMatches = staleReadmePatterns.filter((pattern) => pattern.test(readme))
+if (staleReadmeMatches.length) {
+  console.error(`Root README still contains stale selected-output packet references: ${staleReadmeMatches.map((pattern) => pattern.toString()).join(', ')}`)
   process.exit(1)
 }
-
-console.log('✓ mapper executable-integrity eval rejected malformed selected packet')
-console.log(requiredFailures.map((label) => `  - ${label}`).join('\n'))
+console.log('✓ mapper eval rejected stale selected-output README references')

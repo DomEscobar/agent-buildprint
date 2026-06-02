@@ -71,7 +71,7 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
     - `ci-and-release-gates`
     - `backup-and-recovery`
     - `security-and-abuse-controls`
-      For `trusted_local`, include these as `INCLUDED_BLOCKED` with reason: `trusted_local posture -- promote to private_authenticated or public_webapp to unlock`.
+      For `trusted_local`, include these in `phase_order` as `included_blocked` with reason: `trusted_local posture -- promote to private_authenticated or public_webapp to unlock`.
 15. Add final review and handover.
 
 ## File guidance
@@ -113,6 +113,7 @@ Useful assumable questions:
 
 - exact framework/component library when reversible;
 - local database/storage engine when reversible;
+- coding-agent runner or harness target when reversible; default to the portable harness unless the implementation environment clearly supports a runner-native location;
 - file/folder naming;
 - minor layout/navigation choices;
 - mainstream test/build tools for the selected stack.
@@ -121,7 +122,7 @@ Useful deferrable questions:
 
 - advanced export formats;
 - optional integrations;
-- nice-to-have observability under trusted-local posture;
+- nice-to-have observability under `trusted_local` posture;
 - future deployment provider when posture is local;
 - advanced permissions before private/public posture.
 
@@ -148,7 +149,7 @@ Required behavior:
 6. Design the base project architecture and coding-agent harness for remaining phases.
 7. Require concrete setup and harness artifacts in the implementation project:
    - `AGENTS.md` as a short, testable repo constitution: product invariant, Buildprint authority, mandatory read order, setup/dev/build/test/smoke commands, ownership and boundary map, generated-file/secret/dependency rules, forbidden shortcuts, approval gates for deploy/migration/payment/external-message/destructive actions, verification/blocker reporting rules, and local `AGENTS.md` boundary rules;
-   - `docs/agent-harness.md` mapping the full harness: root/local `AGENTS.md`, repo-local skills/playbooks, tool permissions, hooks, harness evals, and human review gates. For every important agent rule, decide whether it belongs in prose, a playbook, a permission, a hook, an eval, or human review;
+   - `docs/agent-harness.md` mapping the full harness: root/local `AGENTS.md`, repo-local skills/playbooks, tool permissions, hooks, harness evals, and human review gates. If no runner is specified, default to a portable harness with `AGENTS.md`, `docs/agent-harness.md`, and `.buildprint/harness-evals/`, and record runner-native hooks/permissions as unsupported blockers when needed. For every important agent rule, decide whether it belongs in prose, a playbook, a permission, a hook, an eval, or human review;
    - repo-local skill/playbook files for repeated jobs, scoped by task/path and containing purpose, allowed tools, success criteria, anti-goals, and conflict rules with `AGENTS.md`;
    - runner-native permission and hook configuration where available, or a blocker entry in `docs/agent-harness.md` explaining what cannot be technically enforced yet and which human gate substitutes for it;
    - `.buildprint/harness-evals/` with small drift checks for the failure modes the project must catch, such as generated-file edits, secret reads, unnecessary dependencies, skipped checks, review-mode edits, and unapproved external actions;
@@ -271,6 +272,8 @@ repair_routing:
 
 List phase ids, files, titles, status, dependencies, and the active phase. Include final review/handover as the last phase.
 
+Use canonical phase status values only: `included`, `included_blocked`, `conditional`, or `blocked`. Use canonical deployment posture values only: `trusted_local`, `private_authenticated`, or `public_webapp`.
+
 For `blueprint_mode.primary: product` / `selected_spine: product_app_consumer_first`, use the Buildprint product-app phase sequence unless the user explicitly selected a smaller slice:
 
 1. `00-product-system-alignment`
@@ -288,7 +291,16 @@ Domain-specific phases may augment this set but must not replace it.
 
 Feature slices are explicitly expandable. For small scopes, `03-feature-slices` may be one umbrella phase containing the selected slices. For medium or large scopes, keep `03-feature-slices` as the slice index/contract phase and add N dependency-ordered slice phase files after it, such as `03-feature-slice-001-<slice-id>.md`, `03-feature-slice-002-<slice-id>.md`, and `03-feature-slice-NNN-<slice-id>.md`. Each split slice must appear in `phase-index.yaml`, depend on the prior slice or `03-feature-slices`, embed its own `requires_roles` sections, and carry the reusable slice contract. Make `04-state-and-data` depend on the last included feature-slice phase, not blindly on the umbrella phase.
 
-Include conditional hardening phases when posture or source signals require them:
+For non-product selected spines, replace the product-app `phase_order` with the matching concrete spine. Every listed phase must have a Markdown file, appear in `phase-index.yaml`, embed all `requires_roles`, and use mode-appropriate language:
+
+- `developer_first_framework`: `01-adoption-contract`, `02-framework-seams`, `03-first-host-action`, `04-events-failures-observability`, `05-examples-and-docs`, `99-final-review-handover`.
+- `reliability_first_service`: `01-service-goal-slo`, `02-state-machine-data-contracts`, `03-happy-transaction`, `04-retry-failure-recovery`, `05-observability-admin-controls`, `06-runbook-regression-verification`, `99-final-review-handover`.
+- `automation_task_loop`: `01-task-contract`, `02-approval-and-inputs`, `03-first-task-run`, `04-stop-conditions-and-recovery`, `05-trace-and-handover`, `99-final-review-handover`.
+- `data_pipeline_quality_loop`: `01-data-contracts`, `02-ingestion-and-lineage`, `03-transform-quality-loop`, `04-quality-gates-and-recovery`, `05-output-reproducibility`, `99-final-review-handover`.
+- `infrastructure_operations_loop`: `01-operation-contract`, `02-plan-apply-boundaries`, `03-health-and-drift`, `04-rollback-and-recovery`, `05-runbook-and-release-gates`, `99-final-review-handover`.
+- `mixed`: declare each phase's concrete mode in `phase-index.yaml` and use the relevant spine phases for each mode rather than a single product-app sequence.
+
+Include conditional hardening phases in `phase_order` when posture or source signals require them:
 
 - `09-auth-and-tenancy`
 - `10-observability-and-health`
@@ -296,6 +308,8 @@ Include conditional hardening phases when posture or source signals require them
 - `12-ci-and-release-gates`
 - `13-backup-and-recovery`
 - `14-security-and-abuse-controls`
+
+For `trusted_local`, keep these as `included_blocked` with the unlock reason. For `private_authenticated` and `public_webapp`, mark the applicable hardening phases `included` unless a real external blocker requires `blocked`.
 
 ### 03-phases/phase-flow.md
 
@@ -349,6 +363,9 @@ Recommended phase spines:
 - Buildprint Consumer-First product app: product-system alignment -> shell/navigation -> core loop first -> feature slices -> state/data -> domain/intelligence -> design/copy -> architecture garden -> verification.
 - Developer-First framework/integration: adoption contract -> framework seams -> first host action -> events/failures/observability -> examples/docs -> contract/smoke verification.
 - Reliability-First service: service goal/SLO -> state machine/data contracts -> happy transaction -> retry/failure recovery -> observability/admin controls -> runbook/regression verification.
+- Automation task loop: task contract -> approval/input boundaries -> first real task run -> stop conditions/recovery -> trace/handover.
+- Data pipeline quality loop: data contracts -> ingestion/lineage -> transform quality loop -> quality gates/recovery -> output reproducibility.
+- Infrastructure operations loop: operation contract -> plan/apply boundaries -> health/drift -> rollback/recovery -> runbook/release gates.
 
 ### 04-review.md
 

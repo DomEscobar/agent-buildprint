@@ -10,7 +10,7 @@ Use Mapper OS to perform perfect detailed discovery on a source project.
 - Promote the census into a source feature coverage map before proposing phases; do not collapse many source surfaces into broad buckets.
 - Do not copy secret values.
 - Do not assert product behavior from filenames, manifests, dependencies, or route patterns.
-- Create `CENSUS_HINT` or `PENDING_AGENT_DISCOVERY` claims only until source reading promotes evidence.
+- Create `CENSUS_HINT` or `PENDING_AGENT_DISCOVERY` claims only until source reading promotes source support.
 - Discover source capabilities before file/module boundaries. Use the inferred `blueprint_mode` to name them correctly: primitives for framework/library, boundary transactions for integration, task loops for automation, dataflows for data-pipeline, operations for infrastructure, and outcome flows for product.
 - Record unknowns as `QUESTION` or `BLOCKED`.
 
@@ -23,8 +23,8 @@ discovery/
   CLAIM_REGISTER.md
   SYSTEM_MAP.md
   BUILDPRINT_CANDIDATES.md
-evidence/
-  EVIDENCE_LEDGER.json
+source/
+  SOURCE_SUPPORT_REGISTER.json
   SOURCE_SURFACE_CENSUS.json
 review/
   PROMOTION_GATE.md
@@ -41,7 +41,7 @@ This hint guides extraction-phase mode classification but does not lock it. If e
 
 ## Source Surface Census
 
-Before creating candidate Buildprints, create `evidence/SOURCE_SURFACE_CENSUS.json`.
+Before creating candidate Buildprints, create `source/SOURCE_SURFACE_CENSUS.json`.
 
 The census is mechanical. Do not infer product behavior from it, and do not treat route/function/file parity as a requirement.
 
@@ -53,7 +53,7 @@ Each entry must include:
 - `symbolOrName` when safely available
 - `signalLevel`: `high`, `medium`, or `low`
 - `riskFlags`
-- `evidence`
+- `sourceEvidence`
 - `notes`
 
 Use stable IDs with prefixes such as `routes.*`, `api.*`, `tables.*`, `models.*`, `jobs.*`, `queues.*`, `sockets.*`, `providerAdapters.*`, `auth.*`, `admin.*`, `uploads.*`, `exports.*`, `imports.*`, `fileStores.*`, `env.*`, `deployment.*`, and `docs.*`.
@@ -66,7 +66,7 @@ Before creating candidate Buildprints, promote high-signal census findings into 
 
 Use this compact table:
 
-| Source surface | Source evidence | Mapped obligation | Target disposition | Owning candidate/phase | Required proof |
+| Source surface | Source support | Mapped obligation | Target disposition | Owning candidate/phase | Verification / promotion evidence |
 |---|---|---|---|---|---|
 
 Use "Mapped obligation" as the column label. For non-product modes, the obligation is a primitive, boundary transaction, task loop, dataflow, or operation rather than a product flow. Do not use "Product obligation" as the column label in discovery output.
@@ -77,6 +77,6 @@ Rules:
 - Generic buckets like “simulation”, “dashboard”, “memory”, “reports”, “runtime”, or “core app” are invalid unless decomposed into sub-surfaces with distinct obligations.
 - Every high-signal surface must be assigned exactly one owning candidate/phase, or marked `Dropped`, `Blocked`, or `Needs clarification` with rationale.
 - If a surface needs supporting phases, name one primary owner plus supporting phases; do not create ambiguous shared ownership.
-- Required proof must reference the specific surface, not only “tests pass”, “app builds”, or “feature preserved”.
+- Verification / promotion evidence must reference the specific surface, not only “tests pass”, “app builds”, or “feature preserved”.
 
 Discovery output must use qualification label `DISCOVERY_ONLY`.

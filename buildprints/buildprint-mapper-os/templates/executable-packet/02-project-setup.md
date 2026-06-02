@@ -74,6 +74,7 @@ Create or update these in the implementation project before phase work begins:
    - local `AGENTS.md` creation rules for real architectural boundaries only. Nested `AGENTS.md` files must state their scope, parent inheritance, local commands, local boundaries, and what they override.
 2. `docs/agent-harness.md`
    - map the full coding-agent harness: root/local `AGENTS.md`, repo-local skills/playbooks, tool permissions, hooks, harness evals, and human review gates;
+   - if no runner was selected in `01-questions.md`, use the portable harness default: `AGENTS.md`, `docs/agent-harness.md`, and `.buildprint/harness-evals/`;
    - for every important agent rule, decide whether enforcement belongs in prose, a playbook, a permission, a hook, an eval, or human review;
    - identify any rule that is currently instruction-only and explain the next concrete enforcement step;
    - record runner-native paths for skills, permission files, hook files, and eval files, or record a blocker when the chosen runner cannot support one of those layers.
@@ -161,6 +162,7 @@ Only preserve a source stack or dependency when the mapped behavior genuinely re
 You may proceed to phase work only when all hard-stop questions in `01-questions.md` are answered or explicitly marked non-blocking by the human, and:
 
 - the required setup artifacts exist or blockers are recorded;
+- the coding-agent runner/harness target is recorded, using the portable harness default when unspecified;
 - the selected stack and module boundaries are written down;
 - adapter seams exist as code stubs or precise ADRs;
 - the central loop is written in `docs/product-loop.md` or `docs/artifact-loop.md`;

@@ -25,7 +25,7 @@ Ask after discovery, not before, unless source access or safety boundaries are u
 Every selected Buildprint must carry a pre-implementation gate covering only unresolved decisions that affect output quality:
 
 1. Scope / capability boundary if ambiguous: candidate, explicit scope, or full-suite target?
-2. Deployment posture: trusted-local, private authenticated, or public webapp?
+2. Deployment posture: `trusted_local`, `private_authenticated`, or `public_webapp`?
 3. Sensitive capability policy: include, block, or safe-seam risky capabilities?
 4. Runtime/provider verification: are sandbox credentials, provider test access, or runtime/browser environments available?
 5. Persistence/infra default: source-observed stack, existing stack, SQLite, Postgres, durable queue/object store, local files only when justified, or other?

@@ -338,6 +338,28 @@ function phaseFilesFromIndex(text) {
   return [...text.matchAll(/^\s*file:\s*(03-phases\/[^\s#]+\.md)\s*$/gmi)].map((m) => m[1].trim())
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function phaseEntryBlock(text, phaseId) {
+  const lines = text.split(/\r?\n/)
+  const start = lines.findIndex((line) => new RegExp(`^\\s*-\\s*phase_id:\\s*${escapeRegExp(phaseId)}\\s*$`, 'i').test(line))
+  if (start < 0) return ''
+  const collected = [lines[start]]
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (/^\s*-\s*phase_id:/i.test(line) || /^\S/.test(line)) break
+    collected.push(line)
+  }
+  return collected.join('\n')
+}
+
+function phaseFileForId(text, phaseId) {
+  const block = phaseEntryBlock(text, phaseId)
+  return (block.match(/^\s*file:\s*(03-phases\/[^\s#]+\.md)\s*$/mi) || [])[1] || ''
+}
+
 function packetHasObsoleteRouter(file) {
   return file === 'START_HERE.md' || file === 'PRE_IMPLEMENTATION_QUESTIONS.md' || file === 'AGENTS.md' ||
     file === 'CAPABILITY_INDEX.md' || file === 'CONTEXT_PACKET.json' || file === 'TEAM_STACK.md' ||
@@ -431,26 +453,67 @@ function packetCheckResults(dir) {
   const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
   const phaseIdSet = new Set(phaseIds)
   ok('phase index has unique canonical phase ids', phaseIds.length > 0 && phaseIds.length === phaseIdSet.size)
+  const deploymentPosture = (blueprint.match(/deployment_posture:[\s\S]*?^\s*current:\s*([^\s#]+)/mi) || [])[1] || ''
+  const postureValues = [deploymentPosture, ...[...phaseIndex.matchAll(/^\s*deployment_posture:\s*([^\s#]+)/gmi)].map((m) => m[1])].filter(Boolean).map((value) => value.trim().replace(/^['"]|['"]$/g, ''))
+  const phaseStatuses = [...phaseIndex.matchAll(/^\s*status:\s*([^\s#]+)/gmi)].map((m) => m[1].trim().replace(/^['"]|['"]$/g, ''))
+  const allowedPostures = new Set(['trusted_local', 'private_authenticated', 'public_webapp'])
+  const allowedStatuses = new Set(['included', 'included_blocked', 'conditional', 'blocked'])
+  const contractVocabularyText = `${blueprint}\n${phaseIndex}`
+  const hasInvalidPostureSpelling = /trusted-local|private authenticated|public webapp/i.test(contractVocabularyText)
+  const hasLegacyUppercaseStatus = /\bINCLUDED_BLOCKED\b/.test(contractVocabularyText)
+  ok('packet uses canonical posture and phase status values', postureValues.length > 0 && postureValues.every((value) => allowedPostures.has(value)) && phaseStatuses.every((value) => allowedStatuses.has(value)) && !hasInvalidPostureSpelling && !hasLegacyUppercaseStatus)
   const phaseIndexFiles = phaseFilesFromIndex(phaseIndex)
   const activePhase = (phaseIndex.match(/active_phase:\s*(03-phases\/[^\s#]+\.md)/i) || [])[1]
   ok('phase index active phase exists', !!activePhase && files.has(activePhase))
   ok('phase index referenced phase files exist', phaseIndexFiles.length > 0 && phaseIndexFiles.every((file) => files.has(file)))
 
   const selectedSpine = yamlScalar(blueprint, 'selected_spine')
-  if (/product_app_consumer_first/i.test(selectedSpine)) {
-    const requiredProductSystemPhases = [
-      '00-product-system-alignment',
-      '01-shell-and-navigation',
-      '02-core-loop-first',
-      '03-feature-slices',
-      '04-state-and-data',
-      '05-domain-and-intelligence',
-      '06-design-system-and-copy',
-      '07-architecture-garden',
-      '08-verification'
-    ]
-    ok('product spine uses Buildprint Consumer-First phases', requiredProductSystemPhases.every((phaseId) => phaseIdSet.has(phaseId)))
+  const hardeningPhases = [
+    '09-auth-and-tenancy',
+    '10-observability-and-health',
+    '11-deployment-and-operability',
+    '12-ci-and-release-gates',
+    '13-backup-and-recovery',
+    '14-security-and-abuse-controls'
+  ]
+  ok('phase index includes posture hardening phases', hardeningPhases.every((phaseId) => phaseIdSet.has(phaseId)))
+  ok('included_blocked phases name blocked reasons', phaseIds.every((phaseId) => {
+    const block = phaseEntryBlock(phaseIndex, phaseId)
+    return !/status:\s*included_blocked\b/i.test(block) || /blocked_reason:\s*\S/i.test(block)
+  }))
+  const spinePhaseRequirements = {
+    product_app_consumer_first: {
+      label: 'product spine uses Buildprint Consumer-First phases',
+      phases: ['00-product-system-alignment', '01-shell-and-navigation', '02-core-loop-first', '03-feature-slices', '04-state-and-data', '05-domain-and-intelligence', '06-design-system-and-copy', '07-architecture-garden', '08-verification']
+    },
+    developer_first_framework: {
+      label: 'developer_first_framework spine uses Developer-First phases',
+      phases: ['01-adoption-contract', '02-framework-seams', '03-first-host-action', '04-events-failures-observability', '05-examples-and-docs']
+    },
+    reliability_first_service: {
+      label: 'reliability_first_service spine uses Reliability-First phases',
+      phases: ['01-service-goal-slo', '02-state-machine-data-contracts', '03-happy-transaction', '04-retry-failure-recovery', '05-observability-admin-controls', '06-runbook-regression-verification']
+    },
+    automation_task_loop: {
+      label: 'automation_task_loop spine uses Automation phases',
+      phases: ['01-task-contract', '02-approval-and-inputs', '03-first-task-run', '04-stop-conditions-and-recovery', '05-trace-and-handover']
+    },
+    data_pipeline_quality_loop: {
+      label: 'data_pipeline_quality_loop spine uses Data Pipeline phases',
+      phases: ['01-data-contracts', '02-ingestion-and-lineage', '03-transform-quality-loop', '04-quality-gates-and-recovery', '05-output-reproducibility']
+    },
+    infrastructure_operations_loop: {
+      label: 'infrastructure_operations_loop spine uses Infrastructure phases',
+      phases: ['01-operation-contract', '02-plan-apply-boundaries', '03-health-and-drift', '04-rollback-and-recovery', '05-runbook-and-release-gates']
+    }
   }
+  if (spinePhaseRequirements[selectedSpine]) {
+    const requirement = spinePhaseRequirements[selectedSpine]
+    ok(requirement.label, requirement.phases.every((phaseId) => phaseIdSet.has(phaseId)))
+  } else if (selectedSpine === 'mixed') {
+    ok('mixed spine declares per-phase modes', /mixed_phase_modes:|phase_mode:/i.test(`${blueprint}\n${phaseIndex}`))
+  }
+  ok('selected spine uses known executable spine', [...Object.keys(spinePhaseRequirements), 'mixed'].includes(selectedSpine))
 
   const knownRoles = new Set(['product-architect', 'ux-ui-craft', 'integration-runtime', 'security-boundary', 'data-persistence'])
   const phaseDir = path.join(dir, '03-phases')
@@ -463,6 +526,11 @@ function packetCheckResults(dir) {
     : []
   const phaseFiles = collectPhaseMd(phaseDir).sort()
   ok('packet has at least one phase file', phaseFiles.length > 0)
+  const observabilityFile = phaseFileForId(phaseIndex, '10-observability-and-health') ||
+    (files.has('03-phases/conditional/observability-and-health.md') ? '03-phases/conditional/observability-and-health.md' : '') ||
+    (files.has('03-phases/10-observability-and-health.md') ? '03-phases/10-observability-and-health.md' : '')
+  const observabilityPhase = observabilityFile ? safeReadText(path.join(dir, observabilityFile)) : ''
+  ok('observability phase embeds security-boundary', !!observabilityPhase && /^requires_roles:\s*\[[^\]]*security-boundary[^\]]*\]/mi.test(observabilityPhase) && /##\s*Required output\s*\(security-boundary\)/i.test(observabilityPhase) && /##\s*Blocks\s*\(security-boundary\)/i.test(observabilityPhase))
   for (const fullPath of phaseFiles) {
     const file = path.relative(phaseDir, fullPath).split(path.sep).join('/')
     const text = safeReadText(fullPath)

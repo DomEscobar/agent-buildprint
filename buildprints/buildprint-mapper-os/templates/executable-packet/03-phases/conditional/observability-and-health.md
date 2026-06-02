@@ -1,6 +1,6 @@
 # Phase 10 — Observability and health
 
-requires_roles: [integration-runtime, product-architect]
+requires_roles: [integration-runtime, product-architect, security-boundary]
 
 ## Product intention
 
@@ -59,6 +59,17 @@ Make runtime behavior inspectable so operators can detect failures, triage incid
 
 - Diagram-only architecture without a real vertical path.
 - Runtime paths that bypass domain/service boundaries.
+
+## Required output (security-boundary)
+
+- Logs, metrics, traces, health responses, and screenshots redact secrets, credentials, private payloads, tenant identifiers, and provider raw responses unless explicitly safe.
+- Correlation ids and audit fields remain useful without exposing sensitive values.
+- Retention and export behavior for observability data is bounded by the deployment posture.
+
+## Blocks (security-boundary)
+
+- Plaintext secrets, tokens, private payloads, or provider raw responses in logs, traces, health output, screenshots, or exported diagnostics.
+- Observability surfaces that reveal tenant/user data across boundaries.
 
 ## Quality bar
 

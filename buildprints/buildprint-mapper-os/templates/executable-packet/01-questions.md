@@ -33,6 +33,7 @@ If blank, choose the safest reversible default and record it in `02-project-setu
 4. Minor layout choices and navigation grouping.
 5. Local-only default model/provider placeholders when no live credential is available.
 6. Test runner/build tool when the selected stack has an obvious mainstream default.
+7. Coding-agent runner or harness target. If blank, use the portable harness default: `AGENTS.md`, `docs/agent-harness.md`, `.buildprint/harness-evals/`, and record runner-native hooks/permissions as blockers when unsupported.
 
 ## Deferrable questions
 
