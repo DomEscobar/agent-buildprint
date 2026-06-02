@@ -90,7 +90,7 @@ Selected outputs must classify the dominant blueprint mode before writing setup 
 
 | Mode | `blueprint_mode.primary` | Typical phase emphasis |
 |---|---|---|
-| Product | `product` | Buildprint v4 Consumer-First: product-system alignment, shell/navigation, core loop, feature slices, state/data, domain/intelligence, design/copy, architecture garden, verification |
+| Product | `product` | Buildprint Consumer-First: product-system alignment, shell/navigation, core loop, feature slices, state/data, domain/intelligence, design/copy, architecture garden, verification |
 | Framework | `framework` | Developer-First: adoption, primitives, composition, extension points, misuse |
 | Library | `library` | Developer-First: callable API, examples, compatibility, error behavior |
 | Integration | `integration` | Developer-First: boundary transaction, sandbox/live split, retries/errors |

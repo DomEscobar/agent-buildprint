@@ -23,7 +23,7 @@ For generated selected packages, downstream implementers should not read all Mar
 - Keep output discovery-only until scope is selected.
 - Preserve requested scope; do not hide broad, blocked, or unbuilt behavior.
 - Produce executable Buildprint packets for selected outputs.
-- Shape the downstream agent with posture-aware role/rule (`trusted_local`, `private_authenticated`, `public_webapp`): artifact type, real consumer, central artifact/interface/boundary, first usable loop, v4 product-system spine where relevant, honest boundaries, forbidden shortcuts, skeptical review, concise handover.
+- Shape the downstream agent with posture-aware role/rule (`trusted_local`, `private_authenticated`, `public_webapp`): artifact type, real consumer, central artifact/interface/boundary, first usable loop, product-system spine where relevant, honest boundaries, forbidden shortcuts, skeptical review, concise handover.
 
 ## Selected Output
 

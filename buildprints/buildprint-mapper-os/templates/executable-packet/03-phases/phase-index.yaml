@@ -8,6 +8,11 @@ conditional_phase_rules:
   trusted_local: include posture-hardening phases as INCLUDED_BLOCKED with reason "trusted_local posture -- promote to private_authenticated or public_webapp to unlock"
   private_authenticated: include posture-hardening phases as included
   public_webapp: include posture-hardening phases as included with tenant/security depth
+feature_slice_expansion_rule:
+  mode: umbrella_or_n_split_slices
+  umbrella_phase: 03-feature-slices
+  split_phase_id_pattern: 03-feature-slice-NNN-<slice-id>
+  dependency_rule: each split slice depends on the prior split slice or 03-feature-slices; 04-state-and-data depends on the final included slice
 phase_order:
   - phase_id: 00-product-system-alignment
     file: 03-phases/00-product-system-alignment.md

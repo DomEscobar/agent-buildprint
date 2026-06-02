@@ -77,7 +77,7 @@ const requiredFailures = [
   'project setup requires durable setup artifacts',
   'project setup requires agent and UI identity contracts',
   'project setup forces architect base not vibes',
-  'phase 00 implements skeleton, not duplicate setup',
+  'phase 00 defines product system alignment',
   'phase index names active phase file',
   'generated prompt is alignment speech, not authority',
   'generated prompt includes anti-slop/product reviewer when present'

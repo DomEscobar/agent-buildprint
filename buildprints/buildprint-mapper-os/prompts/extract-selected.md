@@ -35,7 +35,7 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
    - `trusted_local`
    - `private_authenticated`
    - `public_webapp`
-   If posture remains unanswered after one prompt, default to `trusted_local` and record the default in `01-questions.md` and `05-handover.md`.
+     If posture remains unanswered after one prompt, default to `trusted_local` and record the default in `01-questions.md` and `05-handover.md`.
 3. Classify the dominant artifact type: product, framework, library, integration, automation, data-pipeline, infrastructure, or mixed.
 4. Select the matching spine from this canonical list only:
    - `product_app_consumer_first`
@@ -45,7 +45,7 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
    - `data_pipeline_quality_loop`
    - `infrastructure_operations_loop`
    - `mixed`
-   Never invent custom names such as `product_custom_consumer`.
+     Never invent custom names such as `product_custom_consumer`.
 5. Name the primary consumer: end user, developer, operator, maintainer, approver, analyst, or mixed.
 6. Name the promise in mode-appropriate language.
 7. Identify the central artifact, public interface, boundary transaction, work surface, task, dataflow, or operation.
@@ -54,15 +54,16 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
 10. Identify live-provider, credential, deployment, destructive, paid-service, and security boundaries.
 11. Split implementation into usable, type-aware slices.
 12. Route quality capsules for each phase:
-    - UI-bearing -> `ux-ui-craft`
-    - provider/runtime integration -> `integration-runtime`
-    - durable state or restart/readback -> `data-persistence`
-    - auth/uploads/destructive/admin/user-data/public exposure -> `security-boundary`
-    - broad system refactor or many boundaries -> `product-architect`
+    - UI-bearing -> [`ux-ui-craft`](../templates/teams/ux-ui-craft.md)
+    - provider/runtime integration -> [`integration-runtime`](../templates/teams/integration-runtime.md)
+    - durable state or restart/readback -> [`data-persistence`](../templates/teams/data-persistence.md)
+    - auth/uploads/destructive/admin/user-data/public exposure -> [`security-boundary`](../templates/teams/security-boundary.md)
+    - broad system refactor or many boundaries -> [`product-architect`](../templates/teams/product-architect.md)
+      These linked files are extraction-time source capsules only; they are not shipped as separate role files in the generated packet.
 13. Emit each phase with `requires_roles` and embed routed capsule obligations. EVERY role listed in a phase's `requires_roles` MUST have its own pair of sections in that same phase:
     - `## Required output (<role>)`
     - `## Blocks (<role>)`
-    Do not list a role you do not embed, and do not embed a role you did not list. Phases are self-contained: there is no separate roles/capsule file shipped in the packet, so an unembedded role is a dangling token with no definition the downstream agent can resolve. `agb packet check` enforces this ("embeds every requires_roles role").
+      Do not list a role you do not embed, and do not embed a role you did not list. Phases are self-contained: there is no separate roles/capsule file shipped in the packet, so an unembedded role is a dangling token with no definition the downstream agent can resolve. `agb packet check` enforces this ("embeds every requires_roles role").
 14. Add conditional hardening phases:
     - `auth-and-tenancy`
     - `observability-and-health`
@@ -70,7 +71,7 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
     - `ci-and-release-gates`
     - `backup-and-recovery`
     - `security-and-abuse-controls`
-    For `trusted_local`, include these as `INCLUDED_BLOCKED` with reason: `trusted_local posture -- promote to private_authenticated or public_webapp to unlock`.
+      For `trusted_local`, include these as `INCLUDED_BLOCKED` with reason: `trusted_local posture -- promote to private_authenticated or public_webapp to unlock`.
 15. Add final review and handover.
 
 ## File guidance
@@ -79,7 +80,7 @@ Do not emit old routers or fragmented mini-files: `START_HERE.md`, `PRE_IMPLEMEN
 
 Include:
 
-- short product mission;
+- detailed product mission;
 - read order;
 - senior product/developer/operator engineer contract;
 - how to use the packet;
@@ -144,10 +145,14 @@ Required behavior:
 3. If any hard-stop question is unanswered, stop and ask the human before setup.
 4. Create a question-to-decision ledger: question, class, answer/assumption/deferral, architectural impact, reversibility, and setup-blocking status.
 5. Never silently assume cost, secrets, public exposure, data loss, destructive actions, compliance, privacy, or product identity.
-6. Design the base project architecture for remaining phases.
-7. Require concrete setup artifacts in the implementation project:
-   - `AGENTS.md` with product invariants, Buildprint authority, mandatory read order, ownership map, commands, forbidden shortcuts, evidence/blocker rules, and local `AGENTS.md` boundary rules;
-   - `UI-IDENTITY.md` for UI-bearing artifacts, produced by an explicit UX/UI persona pass and defining visual identity, motion/interaction rules, clickable-control rules, layout/responsive/accessibility standards, component states, screenshot critique rubric, and forbidden generic UI patterns;
+6. Design the base project architecture and coding-agent harness for remaining phases.
+7. Require concrete setup and harness artifacts in the implementation project:
+   - `AGENTS.md` as a short, testable repo constitution: product invariant, Buildprint authority, mandatory read order, setup/dev/build/test/smoke commands, ownership and boundary map, generated-file/secret/dependency rules, forbidden shortcuts, approval gates for deploy/migration/payment/external-message/destructive actions, verification/blocker reporting rules, and local `AGENTS.md` boundary rules;
+   - `docs/agent-harness.md` mapping the full harness: root/local `AGENTS.md`, repo-local skills/playbooks, tool permissions, hooks, harness evals, and human review gates. For every important agent rule, decide whether it belongs in prose, a playbook, a permission, a hook, an eval, or human review;
+   - repo-local skill/playbook files for repeated jobs, scoped by task/path and containing purpose, allowed tools, success criteria, anti-goals, and conflict rules with `AGENTS.md`;
+   - runner-native permission and hook configuration where available, or a blocker entry in `docs/agent-harness.md` explaining what cannot be technically enforced yet and which human gate substitutes for it;
+   - `.buildprint/harness-evals/` with small drift checks for the failure modes the project must catch, such as generated-file edits, secret reads, unnecessary dependencies, skipped checks, review-mode edits, and unapproved external actions;
+   - `UI-IDENTITY.md` for UI-bearing artifacts, produced by an explicit UX/UI persona [`ux-ui-craft`](../templates/teams/ux-ui-craft.md) pass and defining visual identity, motion/interaction rules, clickable-control rules, layout/responsive/accessibility standards, component states, screenshot critique rubric, and forbidden generic UI patterns;
    - `.env.example` with no real secrets;
    - `docs/architecture.md`;
    - `docs/product-loop.md` or `docs/artifact-loop.md`;
@@ -166,7 +171,7 @@ The setup file must force the architect to decide and record:
 - configuration model;
 - error, blocked-state, retry, and recovery semantics;
 - test/build/dev/smoke commands;
-- future-agent rules;
+- future-agent harness rules, including which behaviors are enforced by AGENTS prose, skills/playbooks, permissions, hooks, evals, or human review;
 - first vertical slice path.
 
 Include posture-specific obligations:
@@ -185,18 +190,21 @@ Stack ownership:
 
 ### 03-phases/00-product-system-alignment.md
 
-This phase must not duplicate `02-project-setup.md`.
+This phase follows Buildprint Product System Alignment. It is not a second setup file, not a scaffold-only phase, and not a feature phase.
 
-Despite the legacy phase id, its job is foundation skeleton implementation:
+Selected packets use compact phase files, so embed the `00-product-system-alignment/` subfiles as sections inside this one phase file:
 
-- consume `02-project-setup.md` and `.buildprint/setup-receipt.md`;
-- create the real app/package/runtime skeleton;
-- implement adapter stubs, persistence initialization, configuration loader, readiness/health/config surface, and first smoke command;
-- for UI products, create the framework/design-system base and first domain-shaped screen states;
-- for non-UI artifacts, create the first command/API/example skeleton;
-- prove the base runs or fails with a precise blocker.
+- product promise;
+- user segments or consumer/operator personas;
+- primary loops, such as capture, generate, review, return, share/export, or artifact-type equivalents;
+- feature map ordered by loop and first value;
+- state model, including empty, loading, success, blocked/error, recovery, saved/readback, and exported/handed-off states where relevant;
+- architecture boundaries, using the setup receipt instead of reselecting the stack;
+- quality bar and do-not-ship failures.
 
-Do not write another alignment essay. Documentation-only completion is invalid for phase 00.
+For UI-bearing products, include the state invariant: no UI without state, no state without UI. Every important state needs copy, one primary action, a recovery path, and test coverage. For non-UI artifacts, translate this into command/API/operator states, documented actions, recovery paths, and checks.
+
+Phase 00 may repair a missing minimal setup artifact only when `02-project-setup.md` or `.buildprint/setup-receipt.md` is incomplete, but its normal job is to turn setup decisions into the product-system map that phase 01 and phase 02 implement. Do not reduce it to "create folders, stubs, health, smoke." Do not write vague alignment prose with no usable loop/state/feature decisions.
 
 ### blueprint.yaml
 
@@ -263,7 +271,7 @@ repair_routing:
 
 List phase ids, files, titles, status, dependencies, and the active phase. Include final review/handover as the last phase.
 
-For `blueprint_mode.primary: product` / `selected_spine: product_app_consumer_first`, use the Buildprint v4 product-app phase sequence unless the user explicitly selected a smaller slice:
+For `blueprint_mode.primary: product` / `selected_spine: product_app_consumer_first`, use the Buildprint product-app phase sequence unless the user explicitly selected a smaller slice:
 
 1. `00-product-system-alignment`
 2. `01-shell-and-navigation`
@@ -277,6 +285,8 @@ For `blueprint_mode.primary: product` / `selected_spine: product_app_consumer_fi
 10. `99-final-review-handover`
 
 Domain-specific phases may augment this set but must not replace it.
+
+Feature slices are explicitly expandable. For small scopes, `03-feature-slices` may be one umbrella phase containing the selected slices. For medium or large scopes, keep `03-feature-slices` as the slice index/contract phase and add N dependency-ordered slice phase files after it, such as `03-feature-slice-001-<slice-id>.md`, `03-feature-slice-002-<slice-id>.md`, and `03-feature-slice-NNN-<slice-id>.md`. Each split slice must appear in `phase-index.yaml`, depend on the prior slice or `03-feature-slices`, embed its own `requires_roles` sections, and carry the reusable slice contract. Make `04-state-and-data` depend on the last included feature-slice phase, not blindly on the umbrella phase.
 
 Include conditional hardening phases when posture or source signals require them:
 
@@ -318,11 +328,25 @@ Each phase should include:
 - `## Repair routing`
 - `## Unlock condition`
 
+For product-app packets, phase files must preserve the Buildprint phase meanings:
+
+- `00-product-system-alignment`: product promise, users, primary loops, feature map, state model, architecture boundaries, quality bar.
+- `01-shell-and-navigation`: routes/views, app shell, global states, permissions, empty/loading/error states.
+- `02-core-loop-first`: one complete user loop that proves the product end to end.
+- `03-feature-slices`: vertical feature slices across UX, state, data, domain, tests, and handover; not pages, endpoints, or broad shallow panels. This can be one umbrella phase or an index/contract followed by N split slice phase files.
+- `04-state-and-data`: state machines, persistence, sync/cache, import/export, recovery.
+- `05-domain-and-intelligence`: domain model, evidence grounding, provider boundaries, actionability.
+- `06-design-system-and-copy`: visual quality, components, copy quality, progressive disclosure.
+- `07-architecture-garden`: module boundaries, refactor budget, dependency rules, test strategy.
+- `08-verification`: user journeys, smoke/regression tests, screenshot review, release gates.
+
+When writing `03-feature-slices` or any split `03-feature-slice-NNN-*` file, include a reusable slice contract with: user loop, user-visible outcome, views/states, exact primary action, data/domain contracts, copy/evidence rules, tests/gates, and handover facts. Split slices when one feature-slices phase would hide sequencing, dependencies, blockers, or verification.
+
 For non-UI modes, adapt language to the consumer/operator/developer experience: API, library, integration, automation, data pipeline, or infrastructure. Do not force UI language where the product surface is CLI/API/operator workflow.
 
 Recommended phase spines:
 
-- Buildprint v4 Consumer-First product app: product-system alignment -> shell/navigation -> core loop first -> feature slices -> state/data -> domain/intelligence -> design/copy -> architecture garden -> verification.
+- Buildprint Consumer-First product app: product-system alignment -> shell/navigation -> core loop first -> feature slices -> state/data -> domain/intelligence -> design/copy -> architecture garden -> verification.
 - Developer-First framework/integration: adoption contract -> framework seams -> first host action -> events/failures/observability -> examples/docs -> contract/smoke verification.
 - Reliability-First service: service goal/SLO -> state machine/data contracts -> happy transaction -> retry/failure recovery -> observability/admin controls -> runbook/regression verification.
 

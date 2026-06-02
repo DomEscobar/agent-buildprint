@@ -27,7 +27,7 @@ Champion records:
 
 ## Main conclusion
 
-Buildprint v4 should become a **typed Buildprint family** with a shared kernel, not a single Consumer-First product-app structure forced onto every artifact.
+Buildprint should become a **typed Buildprint family** with a shared kernel, not a single Consumer-First product-app structure forced onto every artifact.
 
 The shared kernel should look like:
 
@@ -126,7 +126,7 @@ Do not respond to the eval by:
 
 ## Recommended next build step
 
-Replace the current v4 framing with:
+Replace the current framing with:
 
 1. a shared Buildprint kernel;
 2. explicit artifact-type selection;
@@ -134,7 +134,7 @@ Replace the current v4 framing with:
 4. quality gates that are type-aware;
 5. a short decision rule for when to use each type.
 
-The next proof should not be another tournament. It should be a **single synthesis specimen**: update the public/internal v4 draft to explain the typed family, then run existing syntax/package gates and inspect the rendered artifact.
+The next proof should not be another tournament. It should be a **single synthesis specimen**: update the public/internal draft to explain the typed family, then run existing syntax/package gates and inspect the rendered artifact.
 
 ## Paused work
 

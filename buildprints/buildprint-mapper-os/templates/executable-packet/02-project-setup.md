@@ -55,7 +55,7 @@ Decide and record:
 7. configuration and `.env.example` model;
 8. error, blocked-state, retry, and recovery semantics;
 9. test/build/dev/smoke commands;
-10. future-agent rules and code ownership map;
+10. future-agent harness rules and code ownership map;
 11. first vertical slice path.
 
 ## Required setup artifacts
@@ -63,54 +63,74 @@ Decide and record:
 Create or update these in the implementation project before phase work begins:
 
 1. `AGENTS.md`
+   - keep it short, concrete, and testable; it is the repo constitution, not an architecture essay;
    - product invariant and current Buildprint authority;
    - artifact type and consumer;
    - mandatory read order for future agents, including `.buildprint/setup-receipt.md`, `docs/architecture.md`, `docs/product-loop.md` or `docs/artifact-loop.md`, and `UI-IDENTITY.md` when UI-bearing;
-   - forbidden shortcuts;
-   - run/test/build commands;
-   - code ownership map;
-   - evidence and blocker rules for future agents;
-   - local `AGENTS.md` creation rules for real architectural boundaries only.
-2. `UI-IDENTITY.md` for UI-bearing artifacts
+   - setup, dev, build, test, lint, and smoke commands;
+   - ownership and boundary map, including generated-file, secret, dependency, destructive-action, deploy, migration, payment, and external-message rules;
+   - forbidden shortcuts and approval gates;
+   - verification and blocker-reporting rules for future agents;
+   - local `AGENTS.md` creation rules for real architectural boundaries only. Nested `AGENTS.md` files must state their scope, parent inheritance, local commands, local boundaries, and what they override.
+2. `docs/agent-harness.md`
+   - map the full coding-agent harness: root/local `AGENTS.md`, repo-local skills/playbooks, tool permissions, hooks, harness evals, and human review gates;
+   - for every important agent rule, decide whether enforcement belongs in prose, a playbook, a permission, a hook, an eval, or human review;
+   - identify any rule that is currently instruction-only and explain the next concrete enforcement step;
+   - record runner-native paths for skills, permission files, hook files, and eval files, or record a blocker when the chosen runner cannot support one of those layers.
+3. Repo-local skill/playbook files
+   - create files in the chosen runner's supported skills/playbooks location, or record the unsupported runner blocker in `docs/agent-harness.md`;
+   - scope each playbook by task, path, or phase;
+   - include purpose, allowed tools, success criteria, anti-goals, and conflict rules with `AGENTS.md`;
+   - do not use skills as context dumps or duplicate the whole Buildprint.
+4. Runner-native permissions and hooks
+   - block or gate expensive/dangerous actions where the runner supports it, such as reading real secrets, editing generated files, deploys, migrations, payments, external messages, destructive commands, and unapproved dependency additions;
+   - add post-edit hooks or documented equivalents for touched-package checks where practical;
+   - if enforcement cannot be implemented yet, record the exact gap and substitute human approval gate in `docs/agent-harness.md`.
+5. `.buildprint/harness-evals/`
+   - include small drift checks that test agent behavior, not just app behavior;
+   - cover the project-specific versions of generated-file trap, secret-read trap, dependency-sprawl trap, skipped-check trap, review-mode-edit trap, and external-action trap when relevant;
+   - each eval must name the task, expected files/tools/checks, forbidden actions, and pass/fail observation.
+6. `UI-IDENTITY.md` for UI-bearing artifacts
    - must be created by an explicit UX/UI persona pass before UI implementation begins;
    - must define product-specific visual identity, interaction density, motion principles, clickable-control rules, layout model, responsive behavior, accessibility baseline, component/state matrix, screenshot critique rubric, and forbidden generic/default UI patterns;
    - must translate source-product feel into implementable design tokens and component behavior without copying branding;
    - must be listed as a mandatory read in root `AGENTS.md`.
-3. `.env.example`
+7. `.env.example`
    - provider keys and base URLs;
    - model names;
    - storage paths;
    - runtime/export/deployment configuration;
    - no real secrets.
-3. `docs/architecture.md`
+8. `docs/architecture.md`
    - selected stack;
    - frontend/backend/runtime or non-UI equivalent boundaries;
    - domain modules;
    - adapter interfaces;
    - data flow;
    - blocked production claims.
-4. `docs/product-loop.md` or `docs/artifact-loop.md`
+9. `docs/product-loop.md` or `docs/artifact-loop.md`
    - first usable loop;
    - happy path;
    - blocked states;
    - acceptance checks.
-5. Initial app/runtime skeleton
+10. Initial app/runtime skeleton
    - real project structure for the selected stack;
    - entrypoints;
    - adapter stubs;
    - persistence initialization seam;
    - health/config/readiness endpoint or equivalent.
-6. Verification commands
+11. Verification commands
    - install/setup;
    - dev;
    - build;
    - test;
    - browser/API/CLI/operator smoke path.
-7. `.buildprint/setup-receipt.md`
+12. `.buildprint/setup-receipt.md`
    - question-to-decision ledger;
    - commands run;
    - files created;
    - architecture decisions;
+   - harness decisions, including what is prose-only and what is technically enforced;
    - unresolved blockers;
    - why the base is not a generic dashboard/demo/script;
    - what future agents must not change casually.
@@ -146,6 +166,8 @@ You may proceed to phase work only when all hard-stop questions in `01-questions
 - the central loop is written in `docs/product-loop.md` or `docs/artifact-loop.md`;
 - run/build/test/smoke commands exist or are explicitly blocked;
 - `AGENTS.md` exists and references the setup receipt plus required architecture/loop/UI identity documents;
+- `docs/agent-harness.md` exists and maps `AGENTS.md`, skills/playbooks, permissions, hooks, evals, and human review gates;
+- repo-local harness evals exist, or their absence is recorded as a setup blocker with the exact unsupported runner reason;
 - `UI-IDENTITY.md` exists for UI-bearing artifacts and records the UX/UI persona pass;
 - no setup decision lives only in chat, memory, or vague prose.
 
@@ -156,6 +178,8 @@ You may proceed to phase work only when all hard-stop questions in `01-questions
 - Leaving stack, persistence, provider, or runtime decisions as “TBD” without blocker status.
 - Creating documentation with no runnable skeleton.
 - Creating a skeleton with no architecture/documentation contract.
+- Treating `AGENTS.md` as the entire harness, or turning it into a long prompt dump instead of adding focused playbooks, permissions, hooks, and evals.
+- Leaving expensive agent rules as instruction-only when the chosen runner can enforce them.
 - Generic dashboard/cards/forms as the domain surface.
 - Single-file UI or throwaway script as the product base.
 - Raw JSON as the main product UI unless the artifact is explicitly machine-facing and examples/docs make it usable.

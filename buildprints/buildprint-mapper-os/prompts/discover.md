@@ -1,6 +1,6 @@
 # Discover Prompt
 
-Use Mapper OS to perform lean discovery on a source project.
+Use Mapper OS to perform perfect detailed discovery on a source project.
 
 ## Instructions
 

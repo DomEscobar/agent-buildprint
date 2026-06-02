@@ -1,384 +1,441 @@
-# Mapper OS Requirement
-
-## Summary
-
-Mapper OS must turn an existing source project into a source-independent Buildprint through staged discovery, evidence promotion, selected or full-suite extraction, source distillation, downstream-agent execution planning, and qualification.
-
-The final qualified Buildprint must be implementable by another Codex session or coding agent without needing the original source repository. Source is required during mapping, source distillation, and qualification. Source must not be required for later implementation from a qualified Buildprint.
-
-Qualification means the Buildprint is an evidence-backed, source-independent implementation input for the selected scope. It must not claim perfection. It must expose uncertainty, blockers, and unverified behavior instead of hiding them behind confidence language.
-
-A Buildprint is a scope-complete behavioral contract for the selected scope, not a whole-repo completeness claim and not a source-code clone plan. It must preserve product behavior, user workflows, system workflows, and required integration boundaries while giving the implementing agent freedom to choose architecture, libraries, internal abstractions, and folder structure.
-
-A Buildprint is also a coding-agent execution plan. It must make the next implementation action, verification gate, repair loop, and handoff evidence clear without requiring the original source repository.
-
-For non-trivial scopes, the Buildprint is hierarchical: a small global spine plus focused capability packets. The default answer is not one giant Markdown file and not a broad scaffold tree.
-
-## Primary Goal
-
-- Mapper OS must be usable by a coding agent session against local source folders and Git URLs.
-- Git URL inputs must be cloned or otherwise checked out into a temporary source checkout before discovery when the agent has access.
-- Every mapped package must record source URL or local input, source checkout path, source commit SHA when available, generation timestamp, output mode, discovery status, qualification status, production posture, mock policy, no-fake scan status, team-pack routing, completeness score, and capability readiness counts.
-- Static scanning may guide discovery but must not become product authority.
-- A qualified Buildprint must contain enough feature behavior, boundary contracts, acceptance gates, traceability, and proof instructions to rebuild the selected scope without reopening the original source.
-- Mapper OS must optimize for reconstructable product behavior, not for preserving source internals.
-- Mapper OS must scale package shape by selected scope size.
-- Mapper OS must optimize generated Buildprints for how coding agents actually execute work: bounded context, concrete milestones, verification after each capability, repair loops, fresh-context review, and explicit handoff evidence.
-- A qualified Buildprint must be usable as a living execution plan. It must tell the implementing agent what to build next, what can change, what must remain stable, how to verify each milestone, and when to stop or escalate.
-
-## Required Flow
-
-### Stage 1: Source Acquisition
-
-- Accept a local folder path or Git URL.
-- For Git URLs, perform a shallow temporary clone.
-- Record source URL, local checkout path, commit SHA, and generation timestamp.
-- Treat the source checkout as read-only during mapping.
-
-### Stage 2: Safe Census
-
-- Collect file tree, manifests, package names, config filenames, env variable names, dependency hints, framework hints, script hints, deployment hints, and test file hints.
-- Never copy secret values, private keys, tokens, cookies, or production data.
-- Census output may create only `CENSUS_HINT` or `PENDING_AGENT_DISCOVERY` claims.
-- Census output must not assert product behavior, absence, parity, route completeness, provider completeness, persistence guarantees, or candidate readiness.
-
-### Stage 2.5: Source Surface Census
-
-- Mapper OS must create a mechanical source-surface census before semantic capability mapping.
-- Source surfaces are evidence, not requirements. The Buildprint must not preserve source structure, route count, file layout, function names, or module boundaries unless they encode externally observable behavior or qualification-relevant boundaries.
-- Assign stable source surface IDs for high-signal surfaces, using prefixes such as `routes.*`, `api.*`, `tables.*`, `models.*`, `jobs.*`, `queues.*`, `sockets.*`, `providerAdapters.*`, `auth.*`, `admin.*`, `uploads.*`, `exports.*`, `imports.*`, `fileStores.*`, `env.*`, `deployment.*`, and `docs.*`.
-- Classify each surface signal level as `high`, `medium`, or `low`. High-signal surfaces include user-facing routes, API handlers, persistence models/tables, provider adapters, auth/admin paths, jobs, uploads, imports/exports, file stores, sockets, deployment/runtime config, and source docs that define product workflows.
-- The census may not infer product behavior. It may only record that a surface exists, where it was found, and why it may be relevant.
-- Every high-signal source surface must later receive exactly one disposition in selected output: `OWNED_BY_CAPABILITY`, `MERGED_INTO_CAPABILITY`, `OUT_OF_SCOPE_BY_USER_ONLY`, `BLOCKED_NEEDS_REVIEW`, or `LOW_SIGNAL_IGNORED_WITH_REASON` when the signal classification is downgraded with evidence.
-- The source-surface invariant is: the Buildprint does not need to preserve source structure; it must preserve source-backed product obligations, and every high-signal source surface must either support an obligation, be intentionally merged, or be explicitly blocked/out-of-scope.
-
-### Stage 3: Capability Discovery
-
-- Discover product capabilities first. Files are evidence, not the product boundary.
-- Routes, functions, files, tables, jobs, provider adapters, and configs are evidence for product obligations, not one-to-one Buildprint requirements.
-- Read source entrypoints, manifests, route files, API handlers, models, workflow engines, state stores, provider adapters, tests, docs, deployment files, and security-relevant configs only to understand feature behavior and required boundaries.
-- Promote claims only with source evidence.
-- Use these claim states:
-  - `CENSUS_HINT`
-  - `PENDING_AGENT_DISCOVERY`
-  - `OBSERVED`
-  - `INFERRED`
-  - `QUESTION`
-  - `BLOCKED`
-  - `OUT_OF_SCOPE`
-- Every `OBSERVED` claim must cite source path and line or section evidence.
-- Capabilities must declare owned source surface IDs when they are mapped from source. Ownership is traceability from source evidence to product obligation, not route/function parity.
-- A capability may own many routes, files, tables, jobs, or adapters when they belong to one product boundary.
-- High-signal source surfaces discovered in census must not silently disappear. If they are not owned by a capability, they must be intentionally merged, explicitly user-excluded, or blocked for review.
-- Absence is a claim and requires evidence. Missing scanner hints are not evidence of absence.
-- Internal classes, function names, folder layout, and source architecture are not preserved unless they are required for user-visible behavior, integration compatibility, operational compatibility, or qualification proof.
-
-### Stage 4: Scope Selection
-
-- The default Mapper OS agent run must stay lean discovery.
-- Candidate, scope, and full-suite selection are agent workflow decisions, not a required CLI surface.
-- Mapper OS must preserve the user-requested product scope. It must not shrink scope to make a selected package look more complete, safer, or easier to implement.
-- If no implementation target is selected, remain lean discovery. If a candidate, explicit scope, or full-suite target is selected, represent the full capability surface relevant to that target and classify every capability by readiness.
-- Implementation order may be sliced into small vertical milestones, but slicing is not scope reduction. A first slice must never hide later capabilities, blockers, proof gaps, or risky surfaces.
-- Scope reduction requires an explicit user decision. User-excluded capabilities must be recorded as `OUT_OF_SCOPE_BY_USER_ONLY`, not silently omitted.
-- If a capability lacks a proven production path, it must remain represented as `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, or `INCLUDED_RISKY_REQUIRES_HARDENING`, not placeholder-included and not erased.
-- Scope cuts remove capabilities only when explicitly user-approved and must not be replaced with mocks, placeholders, route-shaped links, no-op controls, skeleton adapters, or in-memory substitutes.
-- Selected implementation output must stay under `selected-buildprint/`.
-- No implementation scaffold may appear at the package root.
-- `--full-suite` is valid when the user intentionally wants the complete feature suite. It still must preserve qualification blockers and must not claim source-independent completeness until source distillation and proof are complete.
-- If selected scope contains auth, uploads, external providers/webhooks, billing, admin actions, or user-data operations, conditional hardening artifacts are mandatory: threat model, data lifecycle, observability, limits/abuse controls, and secret-handling contract.
-- If any required hardening artifact is missing, affected capabilities must remain `INCLUDED_BLOCKED` or `INCLUDED_RISKY_REQUIRES_HARDENING` unless the user explicitly excludes them; the package cannot be promoted to qualified.
-
-### Stage 5: Source Distillation
-
-- Convert source facts into source-independent Buildprint contracts.
-- Distillation must describe what the selected product does, what behavior must be preserved, what can change, and how the rebuild will be accepted.
-- Distillation happens capability by capability.
-- Every included capability packet must have a focused behavior contract and verification oracle.
-- Distill at minimum:
-  - user-visible features and workflows;
-  - system workflows required by those features;
-  - accepted inputs and observable outputs;
-  - important states, transitions, loading states, empty states, and failure behavior;
-  - boundary contracts required to rebuild features without guessing, such as API behavior, artifact/data persistence expectations, provider expectations, runtime workflow lifecycle, and operational setup;
-  - trust boundaries, actors/assets, abuse scenarios, and required mitigations for in-scope sensitive surfaces;
-  - external-surface contracts for APIs/uploads/webhooks/provider/admin paths: authN/authZ, input constraints, rate limits, idempotency/retry behavior, and failure modes;
-  - data lifecycle for persisted or sensitive data: collection, validation, storage, retention, deletion, backup/restore, and export semantics;
-  - observability contract: required logs, metrics, traces/audit events, and alert conditions;
-  - secret contract: required placeholders, source of truth, access scope, rotation expectation, and redaction rules;
-  - allowed implementation freedom and forbidden behavior changes;
-  - tests, acceptance criteria, no-fake checks, and reversal checks.
-- Shared contracts stay in root `CONTRACTS.md`; slice-local contracts stay in that capability packet.
-- Remove generic placeholders from qualified files.
-- Remove `PENDING_AGENT_DISCOVERY` and unresolved `QUESTION` markers from files that claim implementation readiness.
-- Known source defects must be recorded with a preserve-vs-fix decision only when they affect user-visible behavior, integration compatibility, data semantics, operational behavior, or acceptance checks.
-
-### Stage 5.5: Phase Packet Completeness
-
-- Every extraction output (`--candidate`, `--scope`, `--full-suite`) must classify each phase packet with one of these readiness states: `INCLUDED_READY`, `INCLUDED_NEEDS_PROOF`, `INCLUDED_BLOCKED`, `INCLUDED_RISKY_REQUIRES_HARDENING`, `TEST_ONLY_MOCK`, or `OUT_OF_SCOPE_BY_USER_ONLY`.
-- `OUT_OF_SCOPE_BY_USER_ONLY` requires an explicit user decision or selected target boundary; lack of proof alone is not an out-of-scope reason.
-- Completeness is recorded in `03-phases/phase-index.yaml`, each phase packet, `04-review.md`, and `05-handover.md`.
-- `IMPLEMENTATION_COMPLETENESS.md` is an obsolete default file and not part of the final package shape.
-- Each included phase packet must include phase status, source evidence, required contracts, no-fake rules, verification gates, blockers, and qualification state.
-- Any missing phase classification, missing gate applicability declaration, missing evidence link, or missing per-phase verification oracle is a qualification blocker.
-
-### Stage 5.6: Downstream Agent Execution Planning
-
-Source-independent Buildprints must include an execution protocol for the coding agent that will implement them.
-
-Execution planning must be concrete, milestone-based, and verification-driven. It must not be generic architecture prose.
-
-Distill at minimum:
-
-- task intake summary: requested scope, selected target boundary, full capability surface, readiness states, user-excluded capabilities, assumptions, risks, and success criteria;
-- implementation signals that help the downstream harness choose an implementation team, such as user-facing UI, uploads, external providers, long-running jobs, graph persistence, simulation/runtime execution, reporting, auth/admin paths, destructive controls, deployment surface, and required review specialties;
-- implementation order by phase, including dependencies and blocked prerequisites;
-- per-phase agent brief with goal, stable behavior, implementation freedom, first implementation step, first verification gate, no-fake checks, and stop conditions;
-- milestone plan with small vertical slices, not broad layer-first architecture;
-- baseline checks to run before implementation where applicable;
-- verification ladder applicability for static, unit/contract, integration, runtime/API/browser, persistence/restart, security/privacy, no-fake, and clean-room/reversal checks;
-- repair-loop instructions: failed checks must be converted into structured feedback and fed into the next focused implementation pass;
-- fresh-context review instructions for security-sensitive, data-sensitive, persistence, auth, billing, admin, provider, upload, or large refactor surfaces;
-- decision log requirements for implementation choices that affect behavior, data semantics, provider compatibility, or verification;
-- risk register requirements for unresolved ambiguity, weak tests, unverified runtime behavior, missing provider access, or security concerns;
-- handoff requirements for changed behavior, verification evidence, skipped checks, residual risks, and next phase.
-
-The downstream-agent execution flow must follow this default loop unless a phase packet declares a narrower safe loop:
-
-```text
-1. Intake: confirm requested scope, selected target boundary, phase readiness map, risks, and success criteria.
-2. Team-pack routing: infer the builder quality lenses from Buildprint signals before coding. User-facing UI requires `ux-ui-craft`; broad or full-suite surfaces require `product-architect`; every selected output requires an inline proof/evidence gate; provider/runtime surfaces require `integration-runtime`; sensitive surfaces require `security-boundary`; durable state requires `data-persistence`. Users choose scope/product intent, not quality tiers.
-3. Context load: read only the Buildprint spine and relevant phase packet.
-4. Baseline: run declared preflight checks or record why they cannot run.
-5. Implement phase: build the next behaviorally complete vertical slice without erasing later phases from the plan.
-6. Verify phase: run the declared targeted checks and fix failures.
-7. Expand checks: add applicable integration, runtime, browser, persistence, security, and no-fake gates.
-8. Fresh review: use an independent review pass for high-risk, UI/product, architecture, data, provider, or broad changes.
-9. Repair loop: convert failures into focused next actions until gates pass or blockers are recorded.
-10. Handoff: update current state, decisions, risks, commands, evidence, phase readiness, team-pack gate notes, and next phase.
-```
-
-Implementation plans must stay source-independent. They may reference Buildprint files, contracts, fixtures, schemas, and acceptance gates, but must not require reopening the original source checkout.
-
-### Stage 6: Qualification
-
-- Keep mapped packages at `QUALIFICATION_REVIEW_REQUIRED` until evidence proves otherwise.
-- `production_readiness` means posture-appropriate operability controls are exercised in `04-review.md` `## Operability walkthrough`, or explicitly marked as blockers in `05-handover.md` `## Not production-grade`.
-- Run static, build, unit/contract, runtime, browser/API, persistence/restart, no-fake, security/privacy, and clean-room reversal checks where applicable.
-- Record commands run, commands not run, evidence produced, blockers, and remaining unsafe claims.
-- Do not promote a Buildprint when runtime/test proof is missing for included behavior that requires runtime evidence.
-- Do not count mocks, fixtures, placeholder controls, skeleton adapters, no-op paths, or in-memory stores as production behavior unless explicitly scoped as test/demo-only.
-- Do not require source-internal parity. Qualification proves the Buildprint can recreate selected feature behavior and required boundaries, not that it reproduces source code structure.
-- Qualification fails if any `INCLUDED` capability depends on mocked providers in production path, route-shaped links without working handlers/pages, no-op controls, fake success states without real side effects, skeleton adapters, or in-memory-only persistence where persistence is claimed.
-- No-fake implementation scan must pass with zero critical findings before qualification.
-- For capability packets that write product state, persistence/restart checks are mandatory: write/read across restart, migration behavior, and failure-path handling.
-- For capability packets that claim async processing or queues, retry/cancel behavior and restart-survival checks are mandatory.
-- For each `INCLUDED` capability packet, qualification must record required gates, pass/fail result, command/API entry, environment, timestamp, and evidence artifact links.
-- Missing gate result or missing evidence for an `INCLUDED` capability is a qualification failure.
-- For sensitive-surface capabilities, qualification requires mandatory hardening artifacts and runtime verification of their controls.
-- Any unresolved high/critical security risk blocks qualification.
-- Any secret value present in generated outputs, logs, screenshots, or evidence artifacts blocks qualification.
-- Qualification fails if implementation execution planning is missing for an extraction output that claims source-independent readiness.
-- Qualification fails if a capability has behavior contracts but no concrete first implementation step, no applicable verification gate, or no stop/escalation condition.
-- Qualification fails if the Buildprint requires the downstream agent to infer critical order, risk, or acceptance behavior from broad prose.
-
-### Stage 7: Handoff
-
-- Another Codex session or coding agent must be able to implement from the Buildprint alone.
-- The Buildprint must include a root spine, phase packets, and inline contracts sufficient for selected phase risk.
-- Another agent should start at `BUILDPRINT.md`, then `01-questions.md`, `02-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, `03-phases/phase-flow.md`, and exactly one active phase named by `03-phases/phase-index.yaml`.
-- The selected package must not require the implementation agent to read every Markdown file or every phase packet before knowing the next action.
-- `03-phases/phase-index.yaml` must record the active phase, completed phase packets, blocked phase packets, dependencies, and next dependency-ready phase.
-- `03-phases/phase-flow.md` must record phase-entry orchestration, team/review gates, verification gates, and operational walkthrough rules.
-- The handoff must clearly state whether the package is discovery-only, selected with proof pending, or qualified for source-independent implementation.
-- The handoff must state the reimplementation freedom explicitly: what the agent may change internally and which external/product behaviors must remain stable.
-- Qualification label must be exactly one of: `DISCOVERY_ONLY`, `PROOF_REQUIRED`, `QUALIFIED_SOURCE_INDEPENDENT`.
-- Public copy must not use `validated`, `production-ready`, `complete`, or `end-to-end` unless label is `QUALIFIED_SOURCE_INDEPENDENT` and linked evidence is present.
-
-## Required Acceptance Criteria
-
-- A default Mapper OS agent run creates only discovery, evidence, and quality output.
-- A full-suite Mapper OS agent run creates a full-suite selected target under `selected-buildprint/`.
-- No implementation scaffold appears at the root.
-- No scanner-authored product facts are treated as authoritative.
-- Every `OBSERVED` claim has source path and line or section evidence.
-- A qualified Buildprint does not require the original source repo for implementation.
-- A non-qualified Buildprint clearly states what source, runtime, test, provider, persistence, security, or reversal evidence is still missing.
-- Traceability is mandatory before qualification and lives per phase: phase requirement -> source evidence -> Buildprint contract -> implementation check -> QA or reversal check.
-- The Buildprint must not require preservation of internal source structure unless the requirement explains why that structure is externally observable or qualification-relevant.
-- Phase completeness status and production completeness score must be present for extraction outputs.
-- Phase readiness states must be listed separately; no included phase may be placeholder-backed, and no phase may be excluded merely because it is hard to prove or implement.
-- Every included phase packet must have a production contract and at least one runtime or QA gate proving real side effects.
-- Qualification requires zero unresolved no-fake critical findings and a production completeness score that passes the declared threshold.
-- Production completeness score must have a declared rubric, denominator, threshold, blocker overrides, and per-capability contribution. Scores must never override hard blockers such as missing evidence, unresolved critical no-fake findings, unresolved high/critical security risks, missing required hardening artifacts, or secret leakage.
-- If selected scope includes auth, uploads, external providers, billing, admin actions, or user data, `THREAT_MODEL.md`, `DATA_LIFECYCLE.md`, `OBSERVABILITY.md`, limits/abuse controls, and secret-handling requirements are mandatory; absence blocks qualification.
-- Misleading qualification language is a release blocker.
-
-## Mapper Quality Requirements
-
-- Optimize for correctness over impressive-looking output.
-- Fail honest rather than generate generic architecture.
-- Prefer explicit blockers over vague confidence.
-- Detect, report, and block qualification on:
-  - empty traceability;
-  - generic module names;
-  - pending API or UI contracts in selected output;
-  - unresolved `QUESTION` markers in files that claim implementation readiness;
-  - missing source citations for observed claims;
-  - missing runtime proof;
-  - copied secret values;
-  - duplicate candidates;
-  - root and selected scaffold crossover;
-  - placeholder routes or controls in included scope;
-  - fake success states with no durable side effects;
-  - production-path mocks/skeleton adapters;
-  - in-memory persistence claims where persistence is required;
-- missing per-phase gate evidence bundles.
-- Fail selected output with one giant phase file for medium, large, or full-suite scopes.
-- Fail selected output with generic architecture modules instead of phase packets.
-- Fail phase packets without proof gates.
-- Fail full-suite output without `03-phases/phase-index.yaml` and phase Markdown files.
-- Fail UI-bearing selected output without inline UX/UI requirements and `ux-ui-craft` role routing in relevant phase packets.
-- Manual review must cover discovery quality, source-independent extraction readiness, false-claim prevention, product specificity, visual/UI direction, phase routing, and duplicate canonical handoff files.
-
-## Product Contract Model
-
-Mapper OS must model the selected scope as phases and behavior, not as source files.
-
-Each selected phase must answer:
-
-- What can the user or system do?
-- What inputs are accepted?
-- What observable outputs are produced?
-- What state matters to the user or later workflows?
-- What failures, empty states, and blocked states matter?
-- What provider, persistence, runtime, or operational boundary must be preserved?
-- What can the implementing agent change freely?
-- What acceptance check proves the behavior works?
-- What is the first implementation slice?
-- What verification gate must run immediately after that phase?
-- What failure should cause the implementing agent to stop, replan, or escalate?
-
-Boundary contracts are required at every behavior boundary where implementation could otherwise drift. They should capture externally meaningful behavior and operational guarantees, not internal source mechanics.
-
-Each phase must include a stable-vs-free table:
-
-- Stable: product behavior, public routes, API behavior, data semantics, auth and authorization rules, provider contracts, user-visible workflows, operational guarantees, and acceptance gates.
-- Free: internal architecture, module names, component hierarchy, local helper abstractions, folder layout, and library choices unless constrained by a stable contract.
-
-Each phase must include an agent brief:
-
-```text
-Goal:
-Status:
-Dependencies:
-Stable behavior:
-Implementation freedom:
-Forbidden substitutions:
-First implementation phase:
-First verification gate:
-Required evidence:
-No-fake checks:
-Stop or escalate when:
-```
-
-## Buildprint Package Shape
-
-Mapper OS selected output uses one current executable packet shape for small, medium, large, and full-suite scopes. Scope size changes the number and depth of phase packets; it does not switch back to obsolete routing.
-
-Required selected package spine:
-
-```text
-BUILDPRINT.md
-01-questions.md
-02-project-setup.md
-blueprint.yaml
-03-phases/
-  phase-index.yaml
-  phase-flow.md
-  00-<phase-id>.md
-  ...
-  99-final-review-handover.md
-04-review.md
-05-handover.md
-generated/agent-prompt.md
-```
-
-`BUILDPRINT.md` is the only execution start and read-order authority. `blueprint.yaml` is the machine contract. `01-questions.md` and `02-project-setup.md` gate alignment/setup. `03-phases/phase-index.yaml` names the active phase and continuation path. `03-phases/phase-flow.md` owns phase-run orchestration. `04-review.md` owns operational walkthrough verification. `05-handover.md` owns concise blocker-honest handoff.
-
-Each phase packet file must define build target, source evidence refs, required roles and gates, user-visible outcome, architecture obligations, UI obligations where applicable, inputs, outputs, implementation path, stop rules, proof gate, and unlocks.
-
-Team routing is embedded in `02-project-setup.md`, `03-phases/phase-flow.md`, and each phase `requires_roles:` field. It must not ask the user to choose lazy/simple/quick quality. It must embed operational review gates for every selected output and route `product-architect`, `ux-ui-craft`, `integration-runtime`, `security-boundary`, and `data-persistence` whenever product signals require them.
-
-Obsolete selected-output files are invalid: root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `SOURCE_SURFACE_COVERAGE.md`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, `generated/current-buildprint-compat/`, and fragmented per-capability mini-files.
-
-## Output Modes
-
-### Lean Discovery
-
-Default output for a Mapper OS agent run.
-
-Required posture:
-
-- Discovery package only.
-- Source census and discovery queue are allowed.
-- Implementation scaffold is not allowed.
-- Qualification remains review-required.
-
-### Selected Extraction
-
-Output for `--candidate` or `--scope`.
-
-Required posture:
-
-- Root remains discovery/evidence/quality.
-- `selected-buildprint/` contains the selected implementation package.
-- Selected package must still state qualification blockers until source distillation and proof are complete.
-
-### Full-Suite Extraction
-
-Output for `--full-suite`.
-
-Required posture:
-
-- Root remains discovery/evidence/quality.
-- `selected-buildprint/` contains the whole-repo implementation package.
-- Full-suite mode is user intent, not proof of completeness.
-- The package remains proof-required until exact contracts, traceability, and runtime/reversal proof exist.
-
-### Qualified Buildprint
-
-Required posture:
-
-- Source-independent implementation is possible.
-- Required behavior is represented in contracts and acceptance checks.
-- Downstream-agent execution order, implementation slices, verification gates, repair loops, and handoff evidence are represented.
-- Runtime/reversal proof exists for included behavior.
-- Unsafe claims are explicitly prohibited.
-- Internal implementation remains free unless a specific compatibility requirement constrains it.
-
-## Non-Goals
-
-- Mapper OS must not modify the source project during mapping.
-- Mapper OS must not copy secrets or production data.
-- Mapper OS must not claim parity from scanner output.
-- Mapper OS must not treat generated scaffold as qualification.
-- Mapper OS must not hide uncertainty behind generic architecture prose.
-- Mapper OS must not translate source internals into Buildprint requirements unless those internals are externally observable or required for acceptance.
-- Mapper OS must not claim the future implementation is verified merely because the Buildprint is qualified.
-- Mapper OS must not generate implementation plans that depend on preserving proprietary source expression, comments, assets, or unique internal algorithms unless the user has rights and the element is explicitly required behavior.
-
-## Review Plan
-
-Manual review must confirm:
-
-- discovery, selected extraction, source distillation, and qualification are distinct;
-- finished Buildprints are executable without source;
-- static scanning cannot produce qualified behavior;
-- root-level requirements remain suitable as the guiding product requirement for mapper rewrites.
-
-## Assumptions
-
-- Mapper OS is an agent-run Buildprint workflow, not an `agb map` CLI command.
-- Existing Mapper OS docs remain in place and may be reconciled against this root requirement later.
-- This requirement document defines intended product behavior, not the current implementation status.
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buildprint v4 — Typed Product-Quality System</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #faf8f4;
+      --panel: #ffffff;
+      --panel-soft: #f3eee7;
+      --ink: #1d1712;
+      --muted: #6f645b;
+      --line: #e5dbcf;
+      --accent: #d97706;
+      --accent-soft: #fff3d0;
+      --good: #047857;
+      --bad: #b91c1c;
+      --code: #17120d;
+      --code-ink: #f3eadf;
+      --shadow: 0 20px 60px rgba(29, 23, 18, 0.08);
+      --radius: 22px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #11100d;
+        --panel: #1b1814;
+        --panel-soft: #242019;
+        --ink: #f2eadf;
+        --muted: #a99d90;
+        --line: #342e26;
+        --accent: #f59e0b;
+        --accent-soft: #2d2109;
+        --code: #0b0907;
+        --code-ink: #f3eadf;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34rem),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1180px, calc(100% - 36px)); margin: 0 auto; }
+    header { padding: 72px 0 34px; }
+    .eyebrow { color: var(--accent); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: .76rem; }
+    h1 { font-size: clamp(2.35rem, 6vw, 5.4rem); line-height: .96; letter-spacing: -.07em; max-width: 940px; margin: 14px 0 22px; }
+    .lede { font-size: clamp(1.05rem, 2vw, 1.35rem); color: var(--muted); max-width: 820px; }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 22px; margin-top: 34px; }
+    .card, .phase, .rule, .artifact, .callout {
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card { padding: 24px; }
+    .card h2, .card h3, .phase h3 { margin: 0 0 10px; line-height: 1.15; }
+    .muted { color: var(--muted); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .pill { border: 1px solid var(--line); background: var(--panel-soft); border-radius: 999px; padding: 7px 11px; font-size: .86rem; color: var(--muted); }
+    nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(14px); background: color-mix(in srgb, var(--bg) 86%, transparent); border-block: 1px solid var(--line); }
+    nav .wrap { display: flex; gap: 14px; overflow: auto; padding: 10px 0; }
+    nav a { white-space: nowrap; color: var(--muted); font-size: .9rem; padding: 6px 10px; border-radius: 999px; }
+    nav a:hover { background: var(--panel-soft); color: var(--ink); text-decoration: none; }
+    section { padding: 54px 0; border-bottom: 1px solid var(--line); }
+    section h2 { font-size: clamp(1.65rem, 3vw, 2.7rem); line-height: 1.05; letter-spacing: -.04em; margin: 0 0 16px; }
+    section > .wrap > p { max-width: 780px; color: var(--muted); }
+    .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+    .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+    .phase { padding: 22px; position: relative; overflow: hidden; }
+    .num { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 800; font-size: .78rem; margin-bottom: 10px; }
+    ul { margin: 12px 0 0; padding-left: 1.1rem; color: var(--muted); }
+    li + li { margin-top: 6px; }
+    .ok { color: var(--good); font-weight: 700; }
+    .bad { color: var(--bad); font-weight: 700; }
+    pre { margin: 20px 0 0; padding: 22px; overflow: auto; border-radius: 18px; background: var(--code); color: var(--code-ink); font-size: .9rem; line-height: 1.55; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    :not(pre) > code { background: var(--panel-soft); border: 1px solid var(--line); border-radius: 6px; padding: .08em .32em; }
+    .callout { padding: 24px; background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+    .callout strong { color: var(--accent); }
+    .artifact { padding: 20px; }
+    .artifact .path { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-size: .85rem; margin-bottom: 8px; }
+    .matrix { display: grid; gap: 10px; margin-top: 22px; }
+    .row { display: grid; grid-template-columns: 210px 1fr; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+    .row strong { color: var(--ink); }
+    footer { padding: 44px 0 70px; color: var(--muted); }
+    @media (max-width: 820px) {
+      .hero-grid, .two, .three { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr; }
+      header { padding-top: 46px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">Buildprint v4 draft</div>
+      <h1>Typed Product-Quality System</h1>
+      <p class="lede">A Buildprint family for different artifact types: keep the same goal, boundary, quality, and verification kernel, then specialize the execution spine for product apps, integrations, frameworks, services, and automations.</p>
+      <div class="hero-grid">
+        <div class="card">
+          <h2>The v4 invariant</h2>
+          <p class="muted">Every Buildprint must produce a usable artifact for its real consumer. The artifact type changes the spine; the quality contract does not: goal, first loop, boundaries, state/failure honesty, verification, handover.</p>
+          <div class="pill-row">
+            <span class="pill">typed kernel</span>
+            <span class="pill">consumer/operator-first</span>
+            <span class="pill">loop-first</span>
+            <span class="pill">boundary-aware</span>
+            <span class="pill">quality gates</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Why v4 exists</h3>
+          <p class="muted">The evals showed two things at once: Consumer-First wins normal-user product apps, while Developer-First wins plugin/integration slices. v4 should not force one universal phase list; it should select the right spine for the artifact type.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="wrap">
+      <a href="#shift">Shift</a>
+      <a href="#types">Types</a>
+      <a href="#structure">Structure</a>
+      <a href="#phases">Phases</a>
+      <a href="#loops">Loops</a>
+      <a href="#states">States</a>
+      <a href="#slices">Slices</a>
+      <a href="#gates">Gates</a>
+      <a href="#template">Template</a>
+    </div>
+  </nav>
+
+  <section id="shift">
+    <div class="wrap">
+      <h2>From one winning structure to a typed family</h2>
+      <p>Consumer-First v2 worked for normal-user product slices. CheckoutBridge showed a plugin/integration needs a different spine: adoption contract, adapter seams, idempotency, recovery, audit trail. Buildprint v4 keeps the shared quality kernel, but stops pretending every artifact is a product app.</p>
+      <div class="two">
+        <div class="card">
+          <h3>Shared kernel</h3>
+          <pre><code>observable goal
+acceptance criteria
+first successful loop
+state/boundary honesty
+verification evidence
+handover</code></pre>
+        </div>
+        <div class="card">
+          <h3>Typed spine</h3>
+          <pre><code>product app: UX/result/state
+integration: configure/adapter/events
+framework: adoption/seams/examples
+service: state/failure/observability
+automation: task/approval/trace</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="types">
+    <div class="wrap">
+      <h2>Artifact type comes before phase design</h2>
+      <p>The first Buildprint decision is not “which files do we generate?” It is “what kind of artifact is the agent building, and who experiences success?”</p>
+      <div class="three">
+        <div class="phase"><div class="num">APP</div><h3>Product app</h3><p class="muted">Use Consumer-First: first-run UX, result composition, domain state/export, architecture garden, screenshot critique.</p></div>
+        <div class="phase"><div class="num">INT</div><h3>Plugin / integration</h3><p class="muted">Use Developer/Integration-First: install/configure loop, adapter seams, first host action, events, idempotency, recovery, audit trail.</p></div>
+        <div class="phase"><div class="num">SVC</div><h3>Backend service</h3><p class="muted">Use Reliability-First: state machine, transaction path, retry/failure recovery, observability, runbook, regression checks.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="structure">
+    <div class="wrap">
+      <h2>Recommended v4 directory structures</h2>
+      <p>These are typed specializations. Product apps use Consumer-First. Plugins, SDKs, integrations, frameworks, CLIs, and agent tools use Developer-First. Both share the same quality kernel, but the files make different work obvious.</p>
+      <h3>Consumer-First product app</h3>
+      <pre><code>product-app-consumer-first/
+├── BUILDPRINT.md
+├── 00-product-system-alignment/
+│   ├── product-promise.md
+│   ├── user-segments.md
+│   ├── primary-loops.md
+│   ├── feature-map.md
+│   ├── state-model.md
+│   ├── architecture-boundaries.md
+│   └── quality-bar.md
+├── 01-shell-and-navigation/
+│   ├── app-shell.md
+│   ├── routes-and-views.md
+│   ├── empty-loading-error-states.md
+│   └── permission-and-auth-states.md
+├── 02-core-loop-first/
+│   ├── loop-goal.md
+│   ├── first-run-path.md
+│   ├── primary-action.md
+│   ├── data-contracts.md
+│   └── acceptance.md
+├── 03-feature-slices/
+│   ├── slice-template.md
+│   ├── slice-001-*.md
+│   └── slice-002-*.md
+├── 04-state-and-data/
+│   ├── state-machines.md
+│   ├── persistence.md
+│   ├── sync-and-cache.md
+│   ├── import-export.md
+│   └── failure-recovery.md
+├── 05-domain-and-intelligence/
+│   ├── domain-model.md
+│   ├── evidence-grounding.md
+│   ├── provider-boundaries.md
+│   └── actionability-rules.md
+├── 06-design-system-and-copy/
+│   ├── visual-quality-bar.md
+│   ├── components.md
+│   ├── copy-quality-bar.md
+│   └── progressive-disclosure.md
+├── 07-architecture-garden/
+│   ├── module-boundaries.md
+│   ├── refactor-budget.md
+│   ├── test-strategy.md
+│   └── dependency-rules.md
+├── 08-verification/
+│   ├── user-journeys.md
+│   ├── smoke-tests.md
+│   ├── regression-checks.md
+│   ├── screenshot-review.md
+│   └── release-gates.md
+└── HANDOVER.md</code></pre>
+
+      <h3 style="margin-top:28px">Developer-First framework / integration</h3>
+      <p class="muted">Use this when the real consumer is a developer or operator adopting a boundary: plugin, SDK, integration, CLI, framework, agent tool, or backend capability.</p>
+      <pre><code>developer-first-framework/
+├── BUILDPRINT.md
+├── 01-questions.md
+├── 02-project-setup.md
+├── blueprint.yaml
+├── 03-phases/
+│   ├── phase-index.yaml
+│   ├── phase-flow.md
+│   ├── 01-adoption-contract.md
+│   ├── 02-framework-seams.md
+│   ├── 03-first-host-action.md
+│   ├── 04-events-failures-observability.md
+│   ├── 05-examples-and-docs.md
+│   └── 99-final-review-handover.md
+├── 04-review.md
+├── 05-handover.md
+└── generated/
+    └── agent-prompt.md</code></pre>
+
+      <div class="matrix">
+        <div class="row"><strong>01-adoption-contract</strong><span class="muted">Developer persona, install/start/configure path, first success, extension promise.</span></div>
+        <div class="row"><strong>02-framework-seams</strong><span class="muted">Adapter interfaces, provider boundary, event store, persistence, CLI/API/UI seams.</span></div>
+        <div class="row"><strong>03-first-host-action</strong><span class="muted">One real example action: create session, run command, call SDK method, trigger workflow.</span></div>
+        <div class="row"><strong>04-events-failures-observability</strong><span class="muted">Retries, idempotency, recovery states, logs, audit history, export/debug trace.</span></div>
+        <div class="row"><strong>05-examples-and-docs</strong><span class="muted">Seeded examples, README snippets, inline safety notes, how to add one more adapter/event/action.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="phases">
+    <div class="wrap">
+      <h2>The product-app phase sequence</h2>
+      <p>The Consumer-First specialization scales product apps by forcing the agent to stabilize shell, loops, state, slices, and architecture before piling on features.</p>
+      <div class="three">
+        <div class="phase"><div class="num">00</div><h3>Product system alignment</h3><p class="muted">Promise, users, primary loops, feature map, state model, boundaries, quality bar.</p></div>
+        <div class="phase"><div class="num">01</div><h3>Shell + navigation</h3><p class="muted">Routes, app shell, global states, permissions, empty/loading/error states.</p></div>
+        <div class="phase"><div class="num">02</div><h3>Core loop first</h3><p class="muted">One complete user loop that proves the product works end-to-end.</p></div>
+        <div class="phase"><div class="num">03</div><h3>Feature slices</h3><p class="muted">Each feature lands vertically: UX, state, data, domain, tests, handover.</p></div>
+        <div class="phase"><div class="num">04</div><h3>State + data</h3><p class="muted">State machines, persistence, sync/cache, import/export, recovery.</p></div>
+        <div class="phase"><div class="num">05</div><h3>Domain intelligence</h3><p class="muted">Domain model, evidence grounding, provider boundaries, actionability.</p></div>
+        <div class="phase"><div class="num">06</div><h3>Design + copy</h3><p class="muted">Visual quality, components, copy quality, progressive disclosure.</p></div>
+        <div class="phase"><div class="num">07</div><h3>Architecture garden</h3><p class="muted">Refactor budget, module seams, dependency rules, test strategy.</p></div>
+        <div class="phase"><div class="num">08</div><h3>Verification</h3><p class="muted">User journeys, smoke/regression tests, screenshots, release gates.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="loops">
+    <div class="wrap">
+      <h2>Primary loops, not page lists</h2>
+      <p>For larger products, the Buildprint should define the loops a user repeats. Pages are implementation details of those loops.</p>
+      <div class="matrix">
+        <div class="row"><strong>Capture loop</strong><span class="muted">User adds evidence, context, files, notes, or inputs.</span></div>
+        <div class="row"><strong>Generate loop</strong><span class="muted">Product produces analysis, draft, recommendation, or computed output.</span></div>
+        <div class="row"><strong>Review loop</strong><span class="muted">User corrects, accepts, edits, or gives feedback.</span></div>
+        <div class="row"><strong>Return loop</strong><span class="muted">User comes back later and continues without losing state.</span></div>
+        <div class="row"><strong>Share/export loop</strong><span class="muted">User sends, exports, publishes, or hands off the result.</span></div>
+      </div>
+      <pre><code>Each loop must define:
+- trigger
+- user goal
+- primary action
+- success state
+- empty/loading/error states
+- data touched
+- views involved
+- verification path</code></pre>
+    </div>
+  </section>
+
+  <section id="states">
+    <div class="wrap">
+      <h2>State model is a first-class artifact</h2>
+      <p>Agents fail medium products when they invent UI states ad hoc. v4 makes states explicit before feature work.</p>
+      <div class="two">
+        <div class="card">
+          <h3>Example states</h3>
+          <ul>
+            <li>anonymous</li>
+            <li>onboarded</li>
+            <li>project empty</li>
+            <li>project has input</li>
+            <li>analysis pending</li>
+            <li>analysis ready</li>
+            <li>analysis edited</li>
+            <li>exported</li>
+            <li>error / recovery</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>State invariant</h3>
+          <p class="muted">No UI without state. No state without UI. Every important state needs copy, primary action, recovery path, and test coverage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="slices">
+    <div class="wrap">
+      <h2>Feature slices land vertically</h2>
+      <p>A v4 feature is not a page or backend endpoint. It is a complete user-visible slice across UI, state, domain, data, tests, and handover.</p>
+      <div class="three">
+        <div class="artifact"><div class="path">slice-001-create-project.md</div><p class="muted">Create project, empty state, persistence, route, tests.</p></div>
+        <div class="artifact"><div class="path">slice-002-add-evidence.md</div><p class="muted">Input UI, validation, storage, changed-state proof.</p></div>
+        <div class="artifact"><div class="path">slice-003-generate-analysis.md</div><p class="muted">Domain logic, result UI, loading/error states, smoke test.</p></div>
+        <div class="artifact"><div class="path">slice-004-review-analysis.md</div><p class="muted">Edit/accept workflow, state transitions, undo/recovery.</p></div>
+        <div class="artifact"><div class="path">slice-005-export-report.md</div><p class="muted">Export action, payload contract, download-after-reload test.</p></div>
+        <div class="artifact"><div class="path">slice-template.md</div><p class="muted">Reusable contract for future feature drops.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gates">
+    <div class="wrap">
+      <h2>Quality gates from eval lessons</h2>
+      <p>v4 combines the best pieces from Microfish product-app evals and CheckoutBridge plugin/integration evals.</p>
+      <div class="two">
+        <div class="card">
+          <h3 class="ok">Do</h3>
+          <ul>
+            <li>Choose artifact type before choosing phase spine.</li>
+            <li>Product apps: consumer-first UX before expert detail.</li>
+            <li>Integrations: test-mode configure loop and adapter seams before polish.</li>
+            <li>One obvious primary action per state or operator step.</li>
+            <li>Observable idempotency/recovery where the artifact requires it.</li>
+            <li>Real local checks and user/operator journey review before handover.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="bad">Reject</h3>
+          <ul>
+            <li>One universal phase list forced onto every artifact.</li>
+            <li>Expert dashboard first screens for product apps.</li>
+            <li>Fake live-mode success for integrations.</li>
+            <li>Secrets, credentials, retries, or failures handled only in prose.</li>
+            <li>Generic next actions like “check if this matters.”</li>
+            <li>Tests that do not match real selectors, commands, or operator flows.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:22px">
+        <strong>v4 scoring rule:</strong> An artifact is not done because components exist. It is done when the artifact-type loop works, boundaries are honest, failure states are observable, and verification evidence names the exact journeys or operator flows that passed.
+      </div>
+    </div>
+  </section>
+
+  <section id="template">
+    <div class="wrap">
+      <h2>Minimal slice template</h2>
+      <p>Every feature slice in v4 should answer this before implementation starts.</p>
+      <pre><code># Slice: &lt;name&gt;
+
+## User loop
+Which primary loop does this slice complete or improve?
+
+## User-visible outcome
+What can the user do after this slice that they could not do before?
+
+## Views and states
+- routes/views touched
+- empty state
+- loading state
+- success state
+- error/recovery state
+
+## Primary action
+One primary action for this state. Name the button/link exactly.
+
+## Data and domain contracts
+- inputs
+- outputs
+- persistence
+- provider boundaries
+- export/import shape if relevant
+
+## Copy and evidence rules
+- plain-language labels
+- no jargon before value
+- evidence/grounding if intelligence is used
+- concrete next action rule
+
+## Tests and gates
+- unit tests
+- state transition tests
+- smoke/user journey
+- screenshot review
+- npm run check
+
+## Handover evidence
+Commands run, artifacts produced, known blockers, next slice.</code></pre>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>Buildprint v4 draft — synthesized from Consumer-First product-app lessons, CheckoutBridge integration/plugin lessons, and the typed Buildprint family conclusion.</p>
+    </div>
+  </footer>
+</body>
+</html>

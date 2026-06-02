@@ -418,7 +418,7 @@ function packetCheckResults(dir) {
   ok('project setup forces architect base not vibes', /foundation pour|architectural foundation/i.test(setup) && /selected stack/i.test(setup) && /adapter/i.test(setup) && /persistence/i.test(setup) && /verification commands|smoke/i.test(setup))
 
   const phaseZero = safeReadText(path.join(dir, '03-phases/00-product-system-alignment.md'))
-  ok('phase 00 implements skeleton, not duplicate setup', /skeleton/i.test(phaseZero) && /Documentation-only completion is not valid|Do not write another alignment essay|running architectural base/i.test(phaseZero) && /readiness|health|config/i.test(phaseZero) && /smoke/i.test(phaseZero))
+  ok('phase 00 defines product system alignment', /Product system alignment/i.test(phaseZero) && /product promise/i.test(phaseZero) && /user segments|users|consumer/i.test(phaseZero) && /primary loops/i.test(phaseZero) && /feature map/i.test(phaseZero) && /state model/i.test(phaseZero) && /architecture boundaries/i.test(phaseZero) && /quality bar/i.test(phaseZero))
 
   const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
   ok('phase flow defines phase-entry behavior', /For each phase/i.test(phaseFlow) && /smallest real usable slice/i.test(phaseFlow))
@@ -449,7 +449,7 @@ function packetCheckResults(dir) {
       '07-architecture-garden',
       '08-verification'
     ]
-    ok('product spine uses Buildprint v4 Consumer-First phases', requiredProductSystemPhases.every((phaseId) => phaseIdSet.has(phaseId)))
+    ok('product spine uses Buildprint Consumer-First phases', requiredProductSystemPhases.every((phaseId) => phaseIdSet.has(phaseId)))
   }
 
   const knownRoles = new Set(['product-architect', 'ux-ui-craft', 'integration-runtime', 'security-boundary', 'data-persistence'])

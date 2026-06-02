@@ -11,6 +11,7 @@ Add product breadth as vertical feature slices, not as disconnected panels. Each
 - Prioritize slices from feature map by user outcome.
 - Define user goal, entry, action, state/data touched, result, and errors per slice.
 - Preserve cross-slice consistency and explicit blockers for risky/sensitive slices.
+- If the selected scope has multiple substantial slices, split them into N dependency-ordered phase files after this one. Keep this phase as the slice index/contract and name split ids like `03-feature-slice-001-<slice-id>`, `03-feature-slice-002-<slice-id>`, and so on.
 
 ## Stable vs free
 
@@ -23,6 +24,8 @@ Add product breadth as vertical feature slices, not as disconnected panels. Each
 - Track per-slice dependencies, blockers, and verification.
 - Keep copy, navigation, and state semantics consistent across slices.
 - Avoid broad shallow panel additions that skip depth.
+- For every slice, record the slice contract: user loop, user-visible outcome, views/states, exact primary action, data/domain contracts, copy/evidence rules, tests/gates, and handover facts.
+- In `03-phases/phase-index.yaml`, make each split slice depend on the prior slice or this phase. Make `04-state-and-data` depend on the last included feature-slice phase.
 
 ## Interfaces touched
 
@@ -74,7 +77,7 @@ Add product breadth as vertical feature slices, not as disconnected panels. Each
 
 ## Quality bar
 
-Every included slice should be independently demoable and also make the core product loop stronger or more complete.
+Every included slice should be independently demoable and also make the core product loop stronger or more complete. A slice is not a page, endpoint, or card; it is a user-visible change across UX, state, domain, data, tests, and handover.
 
 ## Do not ship
 
@@ -88,4 +91,4 @@ Horizontal layers with no user-visible value, broad shallow panels, duplicate co
 
 ## Unlock condition
 
-Included slices are vertical, demoable, dependency-aware, and explicitly blocked where external constraints apply.
+Included slices are vertical, demoable, dependency-aware, and explicitly blocked where external constraints apply. For multi-slice scope, the phase index shows each slice as its own next-action step instead of burying N slices inside one overloaded phase.
