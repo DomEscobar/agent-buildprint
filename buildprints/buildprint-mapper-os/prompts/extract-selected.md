@@ -89,21 +89,42 @@ Tone: direct and useful. Avoid protocol bloat.
 
 ### 01-questions.md
 
-Ask only questions that change implementation. Prefer defaults for ordinary engineering choices.
+This file is a decision gate, not a survey.
 
-Useful questions:
+Classify questions by blocking power:
+
+- **Hard-stop**: unanswered means stop before `02-project-setup.md`. These affect product/artifact identity, primary consumer, deployment posture, public/private exposure, cost, secrets, destructive/data-loss actions, privacy, compliance, or source fidelity.
+- **Assumable**: unanswered may receive the safest reversible default, but the assumption must be recorded.
+- **Deferrable**: unanswered may be parked for later, but the deferral must be recorded.
+
+Useful hard-stop questions:
 
 - deployment posture;
-- execution cadence (`one_phase`, `to_checkpoint`, or `all_remaining`);
 - primary user/developer/operator/system consumer;
 - central artifact, public interface, boundary transaction, service state, task, dataflow, or operation;
-- first usable loop;
-- persistence/readback requirement;
-- provider/deployment/destructive/paid/privacy boundaries;
-- source behaviors that must be preserved vs implementation details that are free;
-- what would make a 60-second demo, terminal recording, API trace, or operator walkthrough embarrassing.
+- exposure boundary: uploaded files, private data, accounts, public traffic, callbacks;
+- provider credentials, paid APIs, local models, or external services;
+- destructive/data-loss/publish/send/charge actions;
+- privacy/compliance/local-only constraints;
+- source behaviors that must be preserved.
 
-Make the consumption rule explicit: `02-project-setup.md` must turn every answer into an architectural decision and every blank into either a safe reversible assumption or a blocker. Include a question-to-decision ledger shape.
+Useful assumable questions:
+
+- exact framework/component library when reversible;
+- local database/storage engine when reversible;
+- file/folder naming;
+- minor layout/navigation choices;
+- mainstream test/build tools for the selected stack.
+
+Useful deferrable questions:
+
+- advanced export formats;
+- optional integrations;
+- nice-to-have observability under trusted-local posture;
+- future deployment provider when posture is local;
+- advanced permissions before private/public posture.
+
+Make the consumption rule explicit: hard-stop blanks block setup; assumable blanks become reversible assumptions; deferrable blanks become parking-lot entries. Include a question-to-decision ledger shape with `Question`, `Class`, `Answer / assumption / deferral`, `Architectural impact`, `Reversible?`, and `Blocks setup?`.
 
 ### 02-project-setup.md
 
@@ -119,10 +140,12 @@ Induce the implementer into this role:
 Required behavior:
 
 1. Consume `01-questions.md` first.
-2. Create a question-to-decision ledger: question, answer/assumption, architectural impact, reversibility, blocker status.
-3. Never silently assume cost, secrets, public exposure, data loss, destructive actions, compliance, or product identity.
-4. Design the base project architecture for remaining phases.
-5. Require concrete setup artifacts in the implementation project:
+2. Classify each question as hard-stop, assumable, or deferrable.
+3. If any hard-stop question is unanswered, stop and ask the human before setup.
+4. Create a question-to-decision ledger: question, class, answer/assumption/deferral, architectural impact, reversibility, and setup-blocking status.
+5. Never silently assume cost, secrets, public exposure, data loss, destructive actions, compliance, privacy, or product identity.
+6. Design the base project architecture for remaining phases.
+7. Require concrete setup artifacts in the implementation project:
    - `AGENTS.md` with product invariants, ownership map, commands, forbidden shortcuts, evidence/blocker rules;
    - `.env.example` with no real secrets;
    - `docs/architecture.md`;

@@ -406,9 +406,13 @@ function packetCheckResults(dir) {
   ok('BUILDPRINT includes phase loop', /How to use this packet|Implementation loop/i.test(buildprint) && /phase/i.test(buildprint))
   ok('BUILDPRINT includes final reviewer mode', /Final critical reviewer|Final Reviewer|reviewer step|04-review\.md/i.test(buildprint) && /dead buttons|dead controls|placeholder|slop|generic dashboard/i.test(buildprint))
 
+  const questions = safeReadText(path.join(dir, '01-questions.md'))
+  ok('questions classify blocking power', /Hard-stop/i.test(questions) && /Assumable/i.test(questions) && /Deferrable/i.test(questions) && /Do not proceed to `?02-project-setup\.md`?|stop before setup/i.test(questions))
+  ok('questions hard-stop sensitive decisions', /deployment posture/i.test(questions) && /secrets|credentials/i.test(questions) && /destructive|data-loss/i.test(questions) && /privacy|compliance/i.test(questions) && /product\/artifact identity|central artifact/i.test(questions))
+
   const setup = safeReadText(path.join(dir, '02-project-setup.md'))
   ok('project setup defines implementation alignment', /senior development architect|senior product\/developer\/operator engineer/i.test(setup) && /artifact type|central artifact|product loop|first loop|artifact loop/i.test(setup) && /Forbidden shortcuts|Product quality rules|Product-craft floor/i.test(setup))
-  ok('project setup consumes questions into decisions', /01-questions\.md/i.test(setup) && /question-to-decision|Answer \/ assumption|architectural impact/i.test(setup) && /Reversible\?|Blocker\?/i.test(setup))
+  ok('project setup consumes questions into decisions', /01-questions\.md/i.test(setup) && /hard-stop/i.test(setup) && /assumable/i.test(setup) && /deferrable/i.test(setup) && /question-to-decision|Answer \/ assumption|architectural impact/i.test(setup) && /Reversible\?|Blocks setup\?/i.test(setup))
   ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /\.env\.example/i.test(setup) && /docs\/(architecture|product-loop|artifact-loop)\.md/i.test(setup) && /setup-receipt\.md/i.test(setup))
   ok('project setup forces architect base not vibes', /foundation pour|architectural foundation/i.test(setup) && /selected stack/i.test(setup) && /adapter/i.test(setup) && /persistence/i.test(setup) && /verification commands|smoke/i.test(setup))
 

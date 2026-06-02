@@ -1,22 +1,56 @@
-# Implementation Questions
+# Questions
 
-Use the defaults unless the user answers differently.
+These questions are a decision gate, not a survey.
 
-1. Deployment posture?
-   Default: `trusted_local`. This keeps the product local/private and requires explicit not-production-grade blocker reporting.
+Do not proceed to `02-project-setup.md` while any hard-stop question is unanswered. Stop and ask the human, unless the packet already contains a clear answer.
 
-2. Execution cadence?
-   Default: `all_remaining`. The requested scope is broad enough that stopping after a single phase would leave the graph/memory replacement incomplete.
+Every question has one of three classes:
 
-3. Open-source graph memory backend?
-   Default: Graphiti-backed local adapter with a clear storage choice. Use Neo4j, FalkorDB, Kuzu, or another supported local backend only if it can be installed and verified in the target environment.
+- **Hard-stop**: unanswered means stop. These affect identity, exposure, cost, secrets, destructive behavior, privacy, compliance, or deployment posture.
+- **Assumable**: unanswered may receive a safe reversible default, but the assumption must be recorded.
+- **Deferrable**: unanswered may be parked for later, but the deferral must be recorded.
 
-4. AI provider?
-   Default: OpenAI-compatible provider adapter configured by `LLM_API_KEY`, `LLM_BASE_URL`, and `LLM_MODEL_NAME`, with optional local/provider presets. The UI and backend must not assume one vendor.
+## Hard-stop questions
 
-5. First success loop?
-   Default: upload a small text seed, generate an ontology, build a local graph, render nodes/edges on the canvas, open a node/edge detail panel, prepare a small simulation, generate a report stub only if backed by real graph/simulation data.
+If any hard-stop answer is missing, stop before setup. Do not invent an answer.
 
-6. Sensitive capabilities?
-   Default: keep uploads, deletes, provider keys, and simulation process control local-only. Public exposure, auth, tenancy, upload scanning, rate limits, and abuse controls are blocked until posture is promoted.
+1. Deployment posture: `trusted_local`, `private_authenticated`, or `public_webapp`?
+2. Primary consumer: who is this being built for, and what must they accomplish first?
+3. Product/artifact identity: what is the central artifact, public interface, boundary transaction, service state, task, dataflow, or operation?
+4. Exposure boundary: will this handle uploaded files, private data, user accounts, team data, public traffic, or external callbacks?
+5. Secrets and paid services: which provider credentials, paid APIs, local models, or external services may be used?
+6. Destructive or data-loss actions: what actions can delete, overwrite, publish, send, charge money, or affect external systems?
+7. Compliance/privacy constraint: is there any data that must stay local, encrypted, tenant-isolated, auditable, or excluded from providers?
+8. Source fidelity constraint: which source behavior must be preserved because losing it would make the remap wrong?
 
+## Assumable questions
+
+If blank, choose the safest reversible default and record it in `02-project-setup.md`.
+
+1. Exact frontend/component framework or non-UI package framework.
+2. Exact local database/storage engine.
+3. File/folder naming conventions.
+4. Minor layout choices and navigation grouping.
+5. Local-only default model/provider placeholders when no live credential is available.
+6. Test runner/build tool when the selected stack has an obvious mainstream default.
+
+## Deferrable questions
+
+If blank, park these in the setup receipt or handover. They do not block setup unless the human marks them required.
+
+1. Advanced export formats or secondary integrations.
+2. Optional themes, templates, examples, or demo data.
+3. Nice-to-have observability dashboards under `trusted_local` posture.
+4. Future deployment providers when posture is local.
+5. Advanced role/permission models before private/public posture.
+
+## Consumption rule
+
+`02-project-setup.md` must create a question-to-decision ledger from this file:
+
+| Question | Class | Answer / assumption / deferral | Architectural impact | Reversible? | Blocks setup? |
+|---|---|---|---|---|---|
+
+Hard-stop blanks block setup. Assumable blanks become reversible assumptions. Deferrable blanks become parking-lot entries.
+
+Posture changes operability only (auth, deployment, observability, backup, CI). It never lowers the product-craft floor: every UI-bearing product, including `trusted_local`, uses a real component/UI framework with a build step and a design/styling system. No single-file hand-rolled shell at any posture. See `02-project-setup.md`.

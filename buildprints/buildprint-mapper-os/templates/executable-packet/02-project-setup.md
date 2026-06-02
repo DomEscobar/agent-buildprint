@@ -15,15 +15,18 @@ Treat this setup as the foundation pour. If you make vague choices here, every l
 Before designing the base architecture:
 
 1. Read every question and answer in `01-questions.md`.
-2. Convert every answered question into an architectural decision.
-3. For every unanswered question, make the safest reversible assumption or mark it as a blocker.
-4. Do not silently assume decisions involving cost, secrets, public exposure, data loss, destructive actions, compliance, or product identity.
-5. Record the question-to-decision ledger in the setup receipt.
+2. Classify each question as `hard-stop`, `assumable`, or `deferrable` using the question file.
+3. If any hard-stop question is unanswered, stop and ask the human. Do not proceed to setup.
+4. Convert every answered question into an architectural decision.
+5. For every unanswered assumable question, make the safest reversible assumption and record it.
+6. For every unanswered deferrable question, park it for later and record where it will be revisited.
+7. Do not silently assume decisions involving cost, secrets, public exposure, data loss, destructive actions, compliance, privacy, or product identity.
+8. Record the question-to-decision ledger in `.buildprint/setup-receipt.md`.
 
 Required ledger:
 
-| Question | Answer / assumption | Architectural impact | Reversible? | Blocker? |
-|---|---|---|---|---|
+| Question | Class | Answer / assumption / deferral | Architectural impact | Reversible? | Blocks setup? |
+|---|---|---|---|---|---|
 
 ## Standard
 
@@ -128,7 +131,7 @@ Only preserve a source stack or dependency when the mapped behavior genuinely re
 
 ## Setup gate
 
-You may proceed to phase work only when:
+You may proceed to phase work only when all hard-stop questions in `01-questions.md` are answered or explicitly marked non-blocking by the human, and:
 
 - the required setup artifacts exist or blockers are recorded;
 - the selected stack and module boundaries are written down;

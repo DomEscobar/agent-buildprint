@@ -19,6 +19,7 @@ function edit(rel, fn) {
 edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, '').replace(/blueprint_mode:[\s\S]*?agent_contract:/m, 'agent_contract:'))
 edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/00-product-system-alignment.md', 'active_phase: 00-product-system-alignment'))
 edit('generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
+edit('01-questions.md', () => '# Questions\n\nWhat should we build?\n')
 edit('02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
 edit('03-phases/00-product-system-alignment.md', () => `# Phase 00 - Alignment
 
@@ -69,6 +70,8 @@ const requiredFailures = [
   'blueprint declares qualification label',
   'blueprint declares setup tier',
   'blueprint declares artifact mode',
+  'questions classify blocking power',
+  'questions hard-stop sensitive decisions',
   'project setup defines implementation alignment',
   'project setup consumes questions into decisions',
   'project setup requires durable setup artifacts',

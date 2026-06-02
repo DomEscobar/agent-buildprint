@@ -15,15 +15,18 @@ Treat this setup as the foundation pour for AI Presentation Generation. If you m
 Before designing the base architecture:
 
 1. Read every question and answer in `01-questions.md`.
-2. Convert every answered question into an architectural decision.
-3. For every unanswered question, make the safest reversible assumption or mark it as a blocker.
-4. Do not silently assume decisions involving cost, secrets, public exposure, data loss, destructive actions, compliance, or product identity.
-5. Record the question-to-decision ledger in `.buildprint/setup-receipt.md`.
+2. Classify each question as `hard-stop`, `assumable`, or `deferrable` using the question file.
+3. If any hard-stop question is unanswered, stop and ask the human. Do not proceed to setup.
+4. Convert every answered question into an architectural decision.
+5. For every unanswered assumable question, make the safest reversible assumption and record it.
+6. For every unanswered deferrable question, park it for later and record where it will be revisited.
+7. Do not silently assume decisions involving cost, secrets, public exposure, data loss, destructive actions, compliance, privacy, or product identity.
+8. Record the question-to-decision ledger in `.buildprint/setup-receipt.md`.
 
 Required ledger:
 
-| Question | Answer / assumption | Architectural impact | Reversible? | Blocker? |
-|---|---|---|---|---|
+| Question | Class | Answer / assumption / deferral | Architectural impact | Reversible? | Blocks setup? |
+|---|---|---|---|---|---|
 
 ## Standard
 
@@ -68,7 +71,7 @@ For non-UI seams, use idiomatic package/project structure, build/test tooling, c
 
 ## Setup gate
 
-You may proceed to phase work only when the setup artifacts exist or blockers are recorded; selected stack and module boundaries are written down; adapter seams exist as code stubs or precise ADRs; the central loop is written in `docs/product-loop.md`; run/build/test/smoke commands exist or are explicitly blocked; and no setup decision lives only in chat, memory, or vague prose.
+You may proceed to phase work only when all hard-stop questions in `01-questions.md` are answered or explicitly marked non-blocking by the human; the setup artifacts exist or blockers are recorded; selected stack and module boundaries are written down; adapter seams exist as code stubs or precise ADRs; the central loop is written in `docs/product-loop.md`; run/build/test/smoke commands exist or are explicitly blocked; and no setup decision lives only in chat, memory, or vague prose.
 
 ## Known blocker classes
 
