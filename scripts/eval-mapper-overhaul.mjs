@@ -20,6 +20,38 @@ edit('blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replac
 edit('03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/00-product-system-alignment.md', 'active_phase: 00-product-system-alignment'))
 edit('generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
 edit('02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
+edit('03-phases/00-product-system-alignment.md', () => `# Phase 00 - Alignment
+
+requires_roles: [product-architect]
+
+## Product intention
+
+Discuss the product direction.
+
+## Build
+
+Write notes.
+
+## Required output (product-architect)
+
+Summarize alignment.
+
+## Blocks (product-architect)
+
+None.
+
+## Quality bar
+
+Looks aligned.
+
+## Do not ship
+
+Confusion.
+
+## Repair routing
+
+Repair here.
+`)
 fs.rmSync(path.join(bad, '04-review.md'))
 fs.rmSync(path.join(bad, '05-handover.md'))
 
@@ -38,6 +70,10 @@ const requiredFailures = [
   'blueprint declares setup tier',
   'blueprint declares artifact mode',
   'project setup defines implementation alignment',
+  'project setup consumes questions into decisions',
+  'project setup requires durable setup artifacts',
+  'project setup forces architect base not vibes',
+  'phase 00 implements skeleton, not duplicate setup',
   'phase index names active phase file',
   'generated prompt is alignment speech, not authority',
   'generated prompt includes anti-slop/product reviewer when present'

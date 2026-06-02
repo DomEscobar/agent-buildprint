@@ -1,94 +1,100 @@
-# Phase 00 - Product system alignment
+# Phase 00 - Foundation skeleton implementation
 
 requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persistence, security-boundary]
 
 ## Product intention
 
-Define the product spine before coding: a trusted-local graph-backed swarm simulation workbench with provider-neutral LLMs and an open-source graph memory replacement for Zep Cloud.
+Implement the running architectural base designed in `02-project-setup.md` for AI Swarm Simulator. Do not re-litigate setup and do not write another alignment essay. Turn the setup decisions into a runnable skeleton that future phases can extend without inventing architecture.
 
 ## Mapped obligations
 
-- Choose the concrete app stack and local run shape.
-- Define `GraphMemoryAdapter` and `LLMProvider` boundaries before feature work.
-- Decide how Graphiti or another free open-source graph engine will store graph state locally.
-- Preserve the graph canvas as a first-class work surface.
-- Mark public/private hardening as blocked under trusted-local posture.
+- Consume the `01-questions.md` decisions and `.buildprint/setup-receipt.md` setup artifacts.
+- Keep artifact type, consumer, central loop, deployment posture, and forbidden shortcuts stable.
+- Create the app/runtime skeleton for trusted-local graph-backed swarm simulation workbench.
+- Implement GraphMemoryAdapter, LLMProvider, simulation runtime seam, report generator, upload parser, and canvas readback contract as adapter stubs or precise seams.
+- Show missing LLM credentials, missing open-source graph backend, missing OASIS/simulation runtime, and public deployment controls as honest blockers.
 
 ## Stable vs free
 
-Stable: graph workbench, upload-to-graph loop, provider-neutral LLM config, open-source Zep replacement, durable readback.
+Stable: setup decisions, central loop, selected stack, domain boundaries, adapter names, persistence ownership, product-craft floor, and blocker semantics from `02-project-setup.md`.
 
-Free: exact component library, database choice, queue implementation, and API route names if the user workflow stays intact.
+Free: small internal names and file layout details if they do not contradict setup or make later phases harder.
 
 ## Implementation scope
 
-Create project structure, configuration contracts, adapter interfaces, local env examples, and the initial UI/routing shell plan.
+Build the foundation skeleton only: graph workbench skeleton with provider readiness, upload/graph/simulation/report routes, adapter stubs, persistence init, health/config endpoint, and smoke command.
+
+## Build
+
+Create real files in the implementation project. The result must run or fail with a precise setup blocker. Documentation-only completion is not valid for this phase.
 
 ## Interfaces touched
 
-Frontend app shell, backend config, graph memory adapter, LLM provider adapter, persistence initialization.
+Project entrypoints, domain module boundary, provider/integration adapters, persistence layer, configuration loader, readiness/health endpoint or equivalent command surface.
 
 ## State / runtime touched
 
-Local graph store, project metadata store, upload/report/simulation folders or database tables, runtime health/config state.
+Initial persisted state location, migration/init seam, runtime configuration, provider/deployment blocked-state model, and smoke-test fixture data as needed.
 
 ## UX / DX / operator requirements
 
-The first screen should be the usable workbench entry, not a marketing landing page. The operator must see missing provider/memory configuration as actionable blocked state.
+A future agent can run one setup/dev command and see the correct domain skeleton. The first surface must express project graph, graph canvas, simulation traces, report, and interaction history, not a generic dashboard.
 
 ## Required output (product-architect)
 
-Define the central product loop, boundaries, module ownership, and phase sequence so later phases do not fragment into disconnected demos.
+Verify the skeleton implements the architecture chosen in `02-project-setup.md`, prevent stack/domain drift, and keep the first vertical slice path obvious.
 
 ## Blocks (product-architect)
 
-Do not start feature coding with direct provider calls scattered across services.
+Reopening setup debates without updating `02-project-setup.md` and `.buildprint/setup-receipt.md`, or creating a generic folder tree that does not encode the central artifact or loop.
 
 ## Required output (ux-ui-craft)
 
-Set a real frontend craft floor: structured app, responsive workbench layout, graph canvas affordances, and non-placeholder states.
+Create the framework/design-system base and first domain-shaped screen states: empty, loading, error, blocked, and ready.
 
 ## Blocks (ux-ui-craft)
 
-Do not ship a single-file UI, tiny decorative graph, unlabeled controls, or raw JSON as the primary surface.
+Generic dashboard shell, single-file hand-rolled UI, raw ids/debug strings, dead controls, or placeholder workbench surfaces.
 
 ## Required output (integration-runtime)
 
-Define provider-neutral LLM and graph-memory adapters with live/blocker modes and error propagation.
+Create adapter interfaces/stubs with live/blocker/error behavior for GraphMemoryAdapter, LLMProvider, simulation runtime seam, report generator, upload parser, and canvas readback contract.
 
 ## Blocks (integration-runtime)
 
-Do not keep Zep Cloud as the hidden implementation behind a renamed adapter.
+Direct provider/runtime calls scattered through UI or domain code, or fake success when dependencies are missing.
 
 ## Required output (data-persistence)
 
-Define durable readback for projects, graph references, simulation state, reports, logs, and chat/interview history.
+Create the persistence initialization seam and minimal state model needed for later phases. Define readback behavior before claiming restart safety.
 
 ## Blocks (data-persistence)
 
-Do not claim reload or restart safety for in-memory task status.
+In-memory state presented as durable, or missing storage path/migration/init strategy.
 
 ## Required output (security-boundary)
 
-Name trusted-local limits for uploads, provider keys, deletes, and simulation process controls.
+Enforce secret handling, upload/file boundaries, destructive-action blockers, and posture-specific exposure limits in the skeleton.
 
 ## Blocks (security-boundary)
 
-Do not expose this as public-ready without auth, tenancy, upload hardening, and abuse controls.
+Real secrets in `.env.example`, logs, fixtures, docs, or generated artifacts; public/private exposure claims without posture-required controls.
 
 ## Quality bar
 
-The setup makes it impossible to accidentally build a generic dashboard or a Zep-dependent clone.
+The base runs or fails honestly, encodes the architecture setup, and makes the next phase easier to implement than to fake.
 
 ## Do not ship
 
-Ambiguous provider config, no adapter boundary, no graph persistence decision, or no trusted-local blocker list.
+Documentation-only foundation, generic dashboard/app shell, ignored setup decisions, adapter-free direct integration code, no build/test/smoke command, or hidden provider/runtime/export blockers.
 
 ## Repair routing
 
-If the product loop or adapter boundary is unclear, repair `02-project-setup.md` and this phase before moving on.
+- setup contradiction -> `02-project-setup.md`
+- unanswered product-defining question -> `01-questions.md`
+- skeleton/runtime failure -> this phase
+- final-review defect -> `04-review.md`
 
 ## Unlock condition
 
-The implementation has a clear app skeleton, adapter contracts, local config defaults, and blocked-state semantics.
-
+The implementation has a runnable or precisely blocked skeleton, setup receipt, adapter seams, persistence/config/readiness foundation, and first smoke proof. Only then continue to shell/navigation or core-loop feature work.

@@ -1,50 +1,90 @@
 # Project Setup
 
-Before coding, establish the implementation alignment. This is a product artifact, not a documentation exercise.
+## Role
 
-## Artifact type
+You are acting as a highly precise senior development architect.
 
-- Artifact type: trusted-local product app with optional API/desktop/integration surfaces.
-- Central artifact: editable generated presentation deck.
-- First loop: provider readiness -> prompt/document/template input -> outline -> generated slide deck -> browser edit -> export or blocked export.
+Your job is to create the architectural foundation that all later implementation phases will build on. You are not here to sketch ideas, restate the Buildprint, or write motivational alignment prose. You are here to make the future codebase hard to ruin.
 
-## Architecture baseline
+You know modern software architecture, design patterns, frontend/backend separation, domain modeling, adapter boundaries, persistence design, configuration hygiene, test strategy, developer experience, runtime failure modes, and LLM-agent failure modes.
 
-Choose the concrete stack and write it down before phase work. A good default is a browser frontend plus backend API and worker/export runtime, similar in spirit to Presenton's Next.js + FastAPI + desktop wrapper separation, but source copying is not required.
+Treat this setup as the foundation pour for AI Presentation Generation. If you make vague choices here, every later phase will compound the mistake.
 
-Required boundaries:
+## Inputs from `01-questions.md`
 
-- `ProviderAdapter` for text providers, local models, and OpenAI-compatible endpoints.
-- `ImageProviderAdapter` for generated, stock, local, and blocked image modes.
-- `DocumentIngestion` for uploaded PDFs, DOCX, PPTX, text, and extraction blockers.
-- `DeckModel` for persisted outline, slides, layouts, notes, assets, theme, template references, and generation status.
-- `ExportRuntime` for PPTX/PDF generation and dependency blockers.
-- `AutomationBoundary` for API tasks, webhooks, MCP, and desktop packaging seams.
+Before designing the base architecture:
 
-## Product quality rules
+1. Read every question and answer in `01-questions.md`.
+2. Convert every answered question into an architectural decision.
+3. For every unanswered question, make the safest reversible assumption or mark it as a blocker.
+4. Do not silently assume decisions involving cost, secrets, public exposure, data loss, destructive actions, compliance, or product identity.
+5. Record the question-to-decision ledger in `.buildprint/setup-receipt.md`.
 
-- The deck editor must be the main surface, not settings or JSON.
-- Generation output must depend on the user's prompt/document/template input.
-- Slide thumbnails, canvas editing, outline edits, chat iteration, assets, and exports must mutate/read real persisted deck state.
-- Missing providers or export dependencies must appear as precise blocked states.
-- Public/private deployment claims require auth, tenancy, upload limits, secret handling, observability, backup, and abuse controls.
+Required ledger:
+
+| Question | Answer / assumption | Architectural impact | Reversible? | Blocker? |
+|---|---|---|---|---|
+
+## Standard
+
+Create a project setup that a strong engineering team would accept before feature work begins. The setup must be concrete enough for implementation agents to act without inventing architecture, flexible enough not to overfit premature details, and disciplined enough that later agents cannot collapse it into a generic dashboard or fake demo.
+
+## Architect task
+
+Design and create the base project architecture for the remaining phases.
+
+Decide and record:
+
+1. artifact type: trusted-local Presenton-inspired AI presentation generation workbench;
+2. consumer: users or teams generating editable decks with local/BYOK providers;
+3. selected stack and rationale: browser workbench plus backend API/worker/export runtime or equivalent, with provider/image/export/integration adapters kept swappable;
+4. module/app structure;
+5. domain model and central artifact: deck model: prompt/document/template input, outline, slides, layouts, assets, chat iteration, exports, and automation tasks;
+6. adapter interfaces and external seams: ProviderAdapter, ImageProviderAdapter, DocumentIngestion, DeckModel, ExportRuntime, AutomationBoundary, webhook/MCP/desktop seams;
+7. data ownership, persistence, migrations, and readback strategy;
+8. configuration and `.env.example` model;
+9. error, blocked-state, retry, and recovery semantics;
+10. test/build/dev/smoke verification commands;
+11. future-agent rules and code ownership map;
+12. first vertical slice path: configure provider/export readiness -> create deck from prompt/document/template -> generate/edit outline -> generate editable slides -> edit/chat -> export or block honestly.
+
+## Required setup artifacts
+
+Create or update these in the implementation project before phase work begins:
+
+1. `AGENTS.md` with product invariant, artifact type, consumer, code ownership map, commands, forbidden shortcuts, evidence rules, and blocker rules.
+2. `.env.example` with provider/runtime/storage configuration and no real secrets.
+3. `docs/architecture.md` with selected stack, boundaries, domain modules, adapter interfaces, data flow, and blocked production claims.
+4. `docs/product-loop.md` with first usable loop, happy path, blocked states, and acceptance checks.
+5. Initial app/runtime skeleton with real entrypoints, adapter stubs, persistence initialization seam, and health/config/readiness endpoint or equivalent.
+6. Verification commands for install/setup, dev, build, test, and browser/API/operator smoke review.
+7. `.buildprint/setup-receipt.md` with question-to-decision ledger, commands run, files created, architecture decisions, unresolved blockers, why the base is not generic slop, and what future agents must not casually change.
+
+## Product-craft floor
+
+For UI-bearing products, use a mainstream component/UI framework with a build step and a real styling/design system. No single-file hand-rolled HTML/CSS/JS shell, no one-string server HTML product UI, no raw internal ids/debug/proof/phase vocabulary on the product surface, and no cryptic unlabeled controls.
+
+For non-UI seams, use idiomatic package/project structure, build/test tooling, clear command/API ergonomics, examples, and recovery paths. Posture changes operability only; it never lowers craft.
+
+## Setup gate
+
+You may proceed to phase work only when the setup artifacts exist or blockers are recorded; selected stack and module boundaries are written down; adapter seams exist as code stubs or precise ADRs; the central loop is written in `docs/product-loop.md`; run/build/test/smoke commands exist or are explicitly blocked; and no setup decision lives only in chat, memory, or vague prose.
+
+## Known blocker classes
+
+Keep these honest from setup onward: missing provider credentials, parser dependencies, image provider keys, LibreOffice/Chromium/export runtime, webhook receiver, MCP/desktop packaging, and public deployment controls.
 
 ## Forbidden shortcuts
 
-- Hard-coded sample decks presented as generated output.
-- Static SVG or HTML deck previews with dead controls.
-- Fake PPTX/PDF export buttons.
-- Provider calls scattered through UI components.
-- Raw JSON as the primary deck editor.
-- Hidden SaaS lock-in or unannounced document upload to external providers.
-
-## Setup deliverables
-
-Before phases, create or confirm:
-
-- app run commands and env examples;
-- persistent storage choice and migration/initialization plan;
-- provider/image/export adapter interfaces;
-- local privacy and secret-handling rules;
-- AGENTS.md or equivalent implementation notes;
-- first-loop test/build/browser/API verification commands.
+- Restating the Buildprint instead of creating the architecture base.
+- Skipping the `01-questions.md` question-to-decision ledger.
+- Leaving stack, persistence, provider, runtime, or export decisions as `TBD` without blocker status.
+- Creating documentation with no runnable skeleton.
+- Creating a skeleton with no architecture/documentation contract.
+- Generic dashboard/cards/forms as the domain surface.
+- Single-file UI or throwaway script as the product base.
+- Raw JSON as the main product UI.
+- Canned output unrelated to input.
+- Dead controls and no-op settings.
+- Fake provider success.
+- Secret leakage in files, logs, examples, or generated artifacts.

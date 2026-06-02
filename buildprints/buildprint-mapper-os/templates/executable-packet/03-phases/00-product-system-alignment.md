@@ -1,85 +1,126 @@
-# Phase 00 — Product system alignment
+# Phase 00 — Foundation skeleton implementation
 
-requires_roles: [product-architect, ux-ui-craft]
+requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persistence, security-boundary]
 
 ## Product intention
 
-Align promise, consumer, central artifact, first loop, and posture-driven obligations, then choose the concrete stack — within the guardrails `02-project-setup.md` sets. This phase owns the stack decision; `02-project-setup.md` only sets the craft floor and integration constraints.
+Implement the running architectural base designed in `02-project-setup.md`. Do not re-litigate setup and do not write another alignment essay. Turn the setup decisions into a runnable skeleton that future phases can extend without inventing architecture.
 
 ## Mapped obligations
 
-- Name artifact type and real consumer.
-- Name the central artifact/interface/boundary.
-- Name the first usable loop and expected outcome.
-- Name deployment posture (`trusted_local`, `private_authenticated`, or `public_webapp`) and its implications.
-- Choose the concrete stack (language, framework, libraries, tooling) that satisfies the `02-project-setup.md` product-craft floor and integration constraints. Keep the choice source-independent and free, except where a preserved dependency forces a reasoned, swappable constraint (state the reason). Do not inherit a stack just because the source used it.
+- Consume the `01-questions.md` decisions and `.buildprint/setup-receipt.md` setup artifacts.
+- Keep artifact type, consumer, central loop, deployment posture, and forbidden shortcuts stable.
+- Create the app/package/runtime skeleton selected in setup.
+- Implement adapter stubs, persistence initialization seams, readiness/config surfaces, and first smoke command.
+- Show missing providers, credentials, deployment controls, export/runtime dependencies, or destructive operations as honest blockers.
 
 ## Stable vs free
 
-- Stable: product promise, first-loop semantics, posture commitment, boundary honesty, the product-craft floor (real framework + design system, no single-file hand-rolled shell), and any reasoned integration constraint from `02-project-setup.md`.
-- Free: which specific language/framework/library/design-system is chosen, module names, and internal file layout.
+Stable: setup decisions, central loop, selected stack, domain boundaries, adapter names, persistence ownership, product-craft floor, and blocker semantics from `02-project-setup.md`.
+
+Free: small internal names and file layout details if they do not contradict setup or make later phases harder.
 
 ## Implementation scope
 
-- Produce a concise implementation note with mission, loop, and persistence needs.
-- Define boundaries for providers, deployment, credentials, and destructive actions.
-- Identify top fake-feel risks and anti-slop expectations.
+Build the foundation skeleton only:
+
+- project directories and entrypoints;
+- frontend/backend/runtime or non-UI equivalent structure;
+- domain model stubs;
+- adapter interface stubs;
+- persistence initialization seam;
+- configuration loader and `.env.example` compatibility;
+- health/config/readiness surface;
+- first smoke test/build command.
+
+## Build
+
+Create real files in the implementation project. The result must run or fail with a precise setup blocker. Documentation-only completion is not valid for this phase.
 
 ## Interfaces touched
 
-- Main user/operator/developer entrypoints.
-- Core service/domain boundary.
-- Provider and persistence seams.
+Project entrypoints, domain module boundary, provider/integration adapters, persistence layer, configuration loader, readiness/health endpoint or equivalent command surface.
 
 ## State / runtime touched
 
-- Core state model and lifecycle anchors.
-- Required persistence and readback behavior.
-- Runtime ownership assumptions for long-running paths.
+Initial persisted state location, migration/init seam, runtime configuration, provider/export/deployment blocked-state model, and smoke-test fixture data as needed.
 
 ## UX / DX / operator requirements
 
-- First action and first value are obvious.
-- Internal/proof vocabulary is absent from user-facing copy.
+A future agent can run one setup/dev command and see the correct artifact skeleton. For UI-bearing products, the first screen must look like the domain workbench, not a generic dashboard. For non-UI artifacts, the first command/API/example must express the real artifact loop.
 
 ## Required output (product-architect)
 
-- Context, component, and data-flow boundaries are explicit for the first loop.
-- Decision notes capture tradeoffs that affect observable behavior.
+- Verify the skeleton implements the architecture chosen in `02-project-setup.md`.
+- Prevent new stack/domain decisions from drifting away from the setup receipt.
+- Keep the first vertical slice path obvious.
 
 ## Blocks (product-architect)
 
-- UI shell with no real data path.
-- Architecture requiring all markdown files before the next action is clear.
+- Reopening setup debates without updating `02-project-setup.md` and `.buildprint/setup-receipt.md`.
+- Creating a generic folder tree that does not encode the central artifact or loop.
 
 ## Required output (ux-ui-craft)
 
-- A named component/UI framework with a build step and a real styling/design system for UI-bearing products.
-- A first-screen composition plan (workflow-first, not generic dashboard) with defined empty/loading/error/blocked/success states.
+- For UI products, create the framework/design-system base and first domain-shaped screen states: empty, loading, error, blocked, and ready.
+- Ensure product-facing copy has no Buildprint/proof/phase/internal harness vocabulary.
 
 ## Blocks (ux-ui-craft)
 
-- Single-file hand-rolled HTML/CSS/JS shell or one-string server HTML as the product UI.
-- No design/styling system; ad-hoc inline styles only.
-- Raw internal ids or cryptic unlabeled controls on the surface.
+- Generic dashboard shell.
+- Single-file hand-rolled UI.
+- Raw ids/debug strings on the product surface.
+- Dead controls or placeholder workbench surfaces.
+
+## Required output (integration-runtime)
+
+- Create adapter interfaces/stubs for providers, external services, runtime workers, exports, APIs, webhooks, MCP, CLIs, or infrastructure seams as applicable.
+- Surface live/blocker/error modes consistently.
+
+## Blocks (integration-runtime)
+
+- Direct provider calls scattered through UI or domain code.
+- Fake success when credentials or runtime dependencies are missing.
+
+## Required output (data-persistence)
+
+- Create the persistence initialization seam and the minimal state model needed for later phases.
+- Define readback behavior before claiming restart safety.
+
+## Blocks (data-persistence)
+
+- In-memory state presented as durable.
+- Missing storage path/migration/init strategy.
+
+## Required output (security-boundary)
+
+- Enforce secret handling, upload/file boundaries, destructive-action blockers, and posture-specific exposure limits in the skeleton.
+
+## Blocks (security-boundary)
+
+- Real secrets in `.env.example`, logs, fixtures, docs, or generated artifacts.
+- Public/private exposure claims without posture-required controls.
 
 ## Quality bar
 
-A new engineer can describe exactly what to build first, what must remain stable, what can change freely, and which framework + design system satisfies the craft floor.
+The base runs or fails honestly, encodes the architecture setup, and makes the next phase easier to implement than to fake.
 
 ## Do not ship
 
-- Missionless feature list.
-- Missing central artifact/boundary.
-- Posture silently assumed or unresolved.
-- A stack that violates the product-craft floor (single-file hand-rolled shell, no framework, no design system).
+- Documentation-only foundation.
+- Generic dashboard/app shell.
+- Setup decisions ignored or duplicated.
+- Adapter-free direct integration code.
+- No build/test/smoke command.
+- Hidden provider/runtime/export blockers.
 
 ## Repair routing
 
-- product contradiction -> `BUILDPRINT.md`
 - setup contradiction -> `02-project-setup.md`
-- unresolved posture/scope -> `01-questions.md`
+- unanswered product-defining question -> `01-questions.md`
+- skeleton/runtime failure -> this phase
+- final-review defect -> `04-review.md`
 
 ## Unlock condition
 
-Central artifact, first loop, posture, and boundary honesty are explicit before feature implementation begins.
+The implementation has a runnable or precisely blocked skeleton, setup receipt, adapter seams, persistence/config/readiness foundation, and first smoke proof. Only then continue to shell/navigation or core-loop feature work.

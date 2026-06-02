@@ -1,85 +1,90 @@
 # Project Setup
 
-## Before Coding
+## Role
 
-Before coding, align the artifact type, central artifact, product loop, first loop, provider boundaries, persistence model, and forbidden shortcuts. Do not start implementation until the graph-backed workbench promise and blocked-provider semantics are explicit.
+You are acting as a highly precise senior development architect.
 
-## Role And Mission
+Your job is to create the architectural foundation that all later implementation phases will build on. You are not here to sketch ideas, restate the Buildprint, or write motivational alignment prose. You are here to make the future codebase hard to ruin.
 
-Act as a Senior Product Engineer building a trusted-local MiroFish-style workbench. Your job is to make the product loop usable and honest: seed upload, graph memory build, graph canvas inspection, simulation, report, and interaction.
+You know modern software architecture, design patterns, frontend/backend separation, domain modeling, adapter boundaries, persistence design, configuration hygiene, test strategy, developer experience, runtime failure modes, and LLM-agent failure modes.
 
-## Artifact Type
+Treat this setup as the foundation pour for AI Swarm Simulator. If you make vague choices here, every later phase will compound the mistake.
 
-Product webapp with a Python service backend and a graph-memory/simulation runtime. The visible product is not just forms and tables. The graph canvas and report/interaction workbench are the product.
+## Inputs from `01-questions.md`
 
-## First Usable Loop
+Before designing the base architecture:
 
-1. Start the local app.
-2. Upload a small PDF/MD/TXT seed and enter a prediction requirement.
-3. Generate an ontology.
-4. Build graph memory through the open-source graph adapter.
-5. Render nodes and edges on the canvas.
-6. Inspect node and edge detail panels.
-7. Prepare a small simulation from graph entities.
-8. Generate and read back a report or show an honest blocked state when provider/runtime access is missing.
+1. Read every question and answer in `01-questions.md`.
+2. Convert every answered question into an architectural decision.
+3. For every unanswered question, make the safest reversible assumption or mark it as a blocker.
+4. Do not silently assume decisions involving cost, secrets, public exposure, data loss, destructive actions, compliance, or product identity.
+5. Record the question-to-decision ledger in `.buildprint/setup-receipt.md`.
 
-## Central Boundary
+Required ledger:
 
-Replace direct Zep Cloud calls with a `GraphMemoryAdapter` style boundary. The adapter must cover:
+| Question | Answer / assumption | Architectural impact | Reversible? | Blocker? |
+|---|---|---|---|---|
 
-- create or open graph;
-- set ontology/entity schema;
-- add text episodes or facts;
-- wait/check ingestion status where applicable;
-- read nodes and edges;
-- search/query graph;
-- get graph statistics;
-- append simulation activity as temporal memory;
-- delete/reset graph only through explicit local controls.
+## Standard
 
-Default implementation choice: Graphiti-backed local memory because Graphiti is open source, temporal, graph-shaped, and close to the current Zep graph semantics. A vector-only replacement will not work because the UI and report tools need graph nodes, edges, labels, facts, and temporal readback.
+Create a project setup that a strong engineering team would accept before feature work begins. The setup must be concrete enough for implementation agents to act without inventing architecture, flexible enough not to overfit premature details, and disciplined enough that later agents cannot collapse it into a generic dashboard or fake demo.
 
-## Provider Independence
+## Architect task
 
-Keep an OpenAI-compatible `LLMProvider` boundary. All LLM usage must accept base URL, model name, and key from configuration. The product may suggest presets, but user configuration owns provider choice.
+Design and create the base project architecture for the remaining phases.
 
-## Persistence
+Decide and record:
 
-Persist at least:
+1. artifact type: trusted-local graph-backed swarm simulation workbench;
+2. consumer: operators exploring predictive swarm simulations from seed material;
+3. selected stack and rationale: Vue/Vite frontend plus Python service/backend or equivalent, with graph-memory and LLM adapters kept swappable;
+4. module/app structure;
+5. domain model and central artifact: project graph, graph canvas, simulation traces, report, and interaction history;
+6. adapter interfaces and external seams: GraphMemoryAdapter, LLMProvider, simulation runtime seam, report generator, upload parser, and canvas readback contract;
+7. data ownership, persistence, migrations, and readback strategy;
+8. configuration and `.env.example` model;
+9. error, blocked-state, retry, and recovery semantics;
+10. test/build/dev/smoke verification commands;
+11. future-agent rules and code ownership map;
+12. first vertical slice path: upload seed material -> extract text -> build graph memory -> inspect canvas -> run/block simulation -> generate/read report.
 
-- uploaded files and extracted text;
-- project metadata and graph id/reference;
-- local graph memory data;
-- simulation state, generated profiles, config, and run traces;
-- report metadata, progress, generated sections, markdown, and logs;
-- chat/interview history when displayed as reloadable.
+## Required setup artifacts
 
-Do not claim restart-safe task progress if progress is only in memory.
+Create or update these in the implementation project before phase work begins:
 
-## Local Commands
+1. `AGENTS.md` with product invariant, artifact type, consumer, code ownership map, commands, forbidden shortcuts, evidence rules, and blocker rules.
+2. `.env.example` with provider/runtime/storage configuration and no real secrets.
+3. `docs/architecture.md` with selected stack, boundaries, domain modules, adapter interfaces, data flow, and blocked production claims.
+4. `docs/product-loop.md` with first usable loop, happy path, blocked states, and acceptance checks.
+5. Initial app/runtime skeleton with real entrypoints, adapter stubs, persistence initialization seam, and health/config/readiness endpoint or equivalent.
+6. Verification commands for install/setup, dev, build, test, and browser/API/operator smoke review.
+7. `.buildprint/setup-receipt.md` with question-to-decision ledger, commands run, files created, architecture decisions, unresolved blockers, why the base is not generic slop, and what future agents must not casually change.
 
-Expected command shape:
+## Product-craft floor
 
-```powershell
-npm run setup:all
-npm run dev
-npm run build
-cd backend; uv run pytest
-```
+For UI-bearing products, use a mainstream component/UI framework with a build step and a real styling/design system. No single-file hand-rolled HTML/CSS/JS shell, no one-string server HTML product UI, no raw internal ids/debug/proof/phase vocabulary on the product surface, and no cryptic unlabeled controls.
 
-Adapt commands to the actual implementation, but keep one clear local setup path, one dev path, and one verification path.
+For non-UI seams, use idiomatic package/project structure, build/test tooling, clear command/API ergonomics, examples, and recovery paths. Posture changes operability only; it never lowers craft.
 
-## Craft Floor
+## Setup gate
 
-Use a real frontend build system and component/styling structure. A single hand-written HTML file or thin mock shell is not acceptable. The graph canvas must be visually usable, inspectable, and responsive enough for browser review.
+You may proceed to phase work only when the setup artifacts exist or blockers are recorded; selected stack and module boundaries are written down; adapter seams exist as code stubs or precise ADRs; the central loop is written in `docs/product-loop.md`; run/build/test/smoke commands exist or are explicitly blocked; and no setup decision lives only in chat, memory, or vague prose.
 
-## Forbidden Shortcuts
+## Known blocker classes
 
-- No fake graph generated independently of uploaded input.
-- No Zep Cloud calls hidden behind a "free" label.
-- No provider success when credentials are absent.
-- No canned reports unrelated to graph/simulation state.
-- No dead refresh/maximize/toggle controls.
-- No raw JSON as the primary user surface.
-- No public-webapp claims without auth, upload security, observability, deployment, backup, and abuse controls.
+Keep these honest from setup onward: missing LLM credentials, missing open-source graph backend, missing OASIS/simulation runtime, and public deployment controls.
 
+## Forbidden shortcuts
+
+- Restating the Buildprint instead of creating the architecture base.
+- Skipping the `01-questions.md` question-to-decision ledger.
+- Leaving stack, persistence, provider, runtime, or export decisions as `TBD` without blocker status.
+- Creating documentation with no runnable skeleton.
+- Creating a skeleton with no architecture/documentation contract.
+- Generic dashboard/cards/forms as the domain surface.
+- Single-file UI or throwaway script as the product base.
+- Raw JSON as the main product UI.
+- Canned output unrelated to input.
+- Dead controls and no-op settings.
+- Fake provider success.
+- Secret leakage in files, logs, examples, or generated artifacts.

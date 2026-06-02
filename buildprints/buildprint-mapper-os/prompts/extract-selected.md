@@ -95,43 +95,84 @@ Useful questions:
 
 - deployment posture;
 - execution cadence (`one_phase`, `to_checkpoint`, or `all_remaining`);
-- primary user;
+- primary user/developer/operator/system consumer;
 - central artifact, public interface, boundary transaction, service state, task, dataflow, or operation;
 - first usable loop;
 - persistence/readback requirement;
-- provider/deployment/destructive boundaries;
+- provider/deployment/destructive/paid/privacy boundaries;
+- source behaviors that must be preserved vs implementation details that are free;
 - what would make a 60-second demo, terminal recording, API trace, or operator walkthrough embarrassing.
+
+Make the consumption rule explicit: `02-project-setup.md` must turn every answer into an architectural decision and every blank into either a safe reversible assumption or a blocker. Include a question-to-decision ledger shape.
 
 ### 02-project-setup.md
 
-Align the coding agent before code:
+This is not alignment vibes and not a feature phase. It is an LLM-native architect-mode foundation assignment.
 
-- role/mission/craftsmanship;
-- first artifact-type loop to make usable: user loop, adoption loop, boundary transaction, service operation, task, dataflow, or infrastructure operation;
-- central artifact and why it is the right shape;
-- state that must persist;
-- live-provider/deployment boundaries to keep honest;
-- fake-feel risk;
-- local commands for build/test/smoke;
-- product quality rules;
-- forbidden shortcuts.
+Induce the implementer into this role:
 
-Include posture-specific role and rule:
+- highly precise senior development architect;
+- responsible for creating the architectural foundation all later phases build on;
+- expert in modern software architecture, design patterns, frontend/backend separation, domain modeling, adapter boundaries, persistence, configuration hygiene, test strategy, DX, runtime failures, and LLM-agent failure modes;
+- not allowed to merely restate the Buildprint.
 
-- `trusted_local` -> `Senior Product Engineer` with explicit non-production blocker reporting.
-- `private_authenticated` -> `Senior Staff Engineer` with production-shaped obligations.
-- `public_webapp` -> `Staff/Principal Engineer` with production-grade obligations.
+Required behavior:
 
-Include a posture-independent product-craft floor as a quality class (not a vendor): for UI-bearing products a mainstream component/UI framework with a build step plus a real design/styling system; never a single-file hand-rolled HTML/CSS/JS shell, no raw internal ids or cryptic unlabeled controls on the surface; for non-UI artifacts the language-appropriate project/build/test structure. Posture changes operability only, never craft. Route `ux-ui-craft` into phase 00 for UI-bearing products.
+1. Consume `01-questions.md` first.
+2. Create a question-to-decision ledger: question, answer/assumption, architectural impact, reversibility, blocker status.
+3. Never silently assume cost, secrets, public exposure, data loss, destructive actions, compliance, or product identity.
+4. Design the base project architecture for remaining phases.
+5. Require concrete setup artifacts in the implementation project:
+   - `AGENTS.md` with product invariants, ownership map, commands, forbidden shortcuts, evidence/blocker rules;
+   - `.env.example` with no real secrets;
+   - `docs/architecture.md`;
+   - `docs/product-loop.md` or `docs/artifact-loop.md`;
+   - initial app/runtime skeleton;
+   - verification commands;
+   - `.buildprint/setup-receipt.md`.
 
-Stack ownership (critical — do not let `02-project-setup.md` and `00-product-system-alignment.md` collide):
+The setup file must force the architect to decide and record:
 
-- `02-project-setup.md` sets guardrails only: the craft floor (quality class), integration constraints, and persistence/provider boundaries. It must NOT pick the concrete stack.
-- `03-phases/00-product-system-alignment.md` owns the concrete stack/architecture choice, made inside those guardrails.
-- Do not pin a backend language, framework, or library copied from the source as a decision in either file. Stack stays free and source-independent.
-- Only when a preserved external dependency genuinely forces a stack (for example the graph-memory or simulation runtime is a Python library) state it as a reasoned, swappable constraint with an escape hatch (such as a sidecar), never as a bare "X service backend" decision.
+- artifact type and consumer;
+- selected stack and rationale;
+- module/app structure;
+- domain model and central artifact/interface/boundary;
+- adapter interfaces and external seams;
+- data ownership, persistence, migrations, and readback;
+- configuration model;
+- error, blocked-state, retry, and recovery semantics;
+- test/build/dev/smoke commands;
+- future-agent rules;
+- first vertical slice path.
 
-Do not turn this into a long architecture encyclopedia. The point is judgment, not compliance volume.
+Include posture-specific obligations:
+
+- `trusted_local`: credible local artifact with explicit non-production blockers.
+- `private_authenticated`: production-shaped obligations: auth/session, durable state, worker ownership, observability, restart safety, CI.
+- `public_webapp`: private-authenticated obligations plus tenant isolation, abuse controls, deployment/rollback, backup/restore, and security review.
+
+Include a posture-independent craft floor as a quality class, not a vendor: for UI-bearing products a mainstream component/UI framework with a build step plus a real design/styling system; never a single-file hand-rolled shell, no raw internal ids or cryptic unlabeled controls on the surface. For non-UI artifacts, require idiomatic package/project structure, build/test tooling, command/API ergonomics, examples, and recovery paths. Posture changes operability only, never craft.
+
+Stack ownership:
+
+- `02-project-setup.md` owns the selected architectural base and stack rationale.
+- Do not inherit the source stack merely because the source used it.
+- Preserve a source stack/dependency only when mapped behavior genuinely requires it, and state the reason plus an escape hatch such as an adapter or sidecar.
+
+### 03-phases/00-product-system-alignment.md
+
+This phase must not duplicate `02-project-setup.md`.
+
+Despite the legacy phase id, its job is foundation skeleton implementation:
+
+- consume `02-project-setup.md` and `.buildprint/setup-receipt.md`;
+- create the real app/package/runtime skeleton;
+- implement adapter stubs, persistence initialization, configuration loader, readiness/health/config surface, and first smoke command;
+- for UI products, create the framework/design-system base and first domain-shaped screen states;
+- for non-UI artifacts, create the first command/API/example skeleton;
+- prove the base runs or fails with a precise blocker.
+
+Do not write another alignment essay. Documentation-only completion is invalid for phase 00.
 
 ### blueprint.yaml
 
