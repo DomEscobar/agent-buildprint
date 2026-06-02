@@ -1,5 +1,9 @@
 # Project Setup
 
+## Before Coding
+
+Before coding, align the artifact type, central artifact, product loop, first loop, provider boundaries, persistence model, and forbidden shortcuts. Do not start implementation until the graph-backed workbench promise and blocked-provider semantics are explicit.
+
 ## Role And Mission
 
 Act as a Senior Product Engineer building a trusted-local MiroFish-style workbench. Your job is to make the product loop usable and honest: seed upload, graph memory build, graph canvas inspection, simulation, report, and interaction.

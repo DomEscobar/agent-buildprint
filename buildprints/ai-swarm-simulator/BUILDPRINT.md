@@ -1,4 +1,4 @@
-# MiroFish Graph-Backed Swarm Simulation Workbench
+# BUILDPRINT: MiroFish Graph-Backed Swarm Simulation Workbench
 
 Build the MiroFish-style prediction workbench as a usable product, not as a dashboard-shaped demo. The center is the graph-backed simulation workbench: upload seed material, generate a domain graph, inspect it on a real canvas, run a swarm simulation, produce a report, and continue interacting with the simulated world.
 
@@ -27,7 +27,15 @@ You are acting as a Senior Product Engineer for a trusted-local workbench. Prese
 - Persist project, graph, simulation, report, and interaction state where the UI claims it can be reloaded.
 - Do not ship canned reports, no-op graph controls, fake simulations, raw JSON as the main experience, or hidden provider failures.
 
+## Implementation Loop
+
+Use `03-phases/phase-flow.md` for every phase. Enter the active phase from `03-phases/phase-index.yaml`, build the smallest real usable product slice, inspect it directly, repair visible slop, and only then advance. The loop is product-first: prove the graph-backed workbench is becoming usable, not that documents were filled out.
+
 ## Completion Semantics
 
 This packet is an implementation input. It is not proof that the product is already built or production-ready. Completion means the selected local workbench has been built, exercised from a fresh start, reviewed in a browser, and handed over with any real blockers named.
 
+
+## Final Critical Reviewer Mode
+
+Before handover, run the `04-review.md` reviewer step as a skeptical product reviewer. Look for dead buttons, dead controls, placeholder states, canned reports, fake graph data, hidden provider failures, slop, and generic dashboard drift. Repair central local defects before claiming completion.
