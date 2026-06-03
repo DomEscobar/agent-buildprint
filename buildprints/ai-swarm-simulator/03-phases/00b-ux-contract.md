@@ -1,6 +1,6 @@
 # Phase 00b - UX contract
 
-requires_roles: [content-design, ux-ui-craft, product-architect]
+requires_roles: [ux-ui-craft, product-architect]
 
 ## Product intention
 
@@ -71,14 +71,14 @@ None directly. Later phases consume the contract through their `ux_obligations` 
 
 A later-phase author must be able to point at a specific file/section/`ux_ac_id` in `00b-ux-contract/` and use it as a contract; if any phase cannot, the contract is too vague and must be repaired in this phase before continuing.
 
-## Required output (content-design)
+## Required output (ux-ui-craft - content and comprehension)
 
 - Novice persona present with non-empty `knows_on_entry` and `does_not_know` lists.
 - The eight jargon rows above are present with alt-copy.
 - `first-run-path.md` names a "try with sample" path reachable without provider config or user-supplied seed.
 - The four novice acceptance rows above exist in `ux-acceptance.yaml`.
 
-## Blocks (content-design)
+## Blocks (ux-ui-craft - content and comprehension)
 
 - Persona list that contains only operator/researcher/builder.
 - Jargon ban list with no alt-copy column.

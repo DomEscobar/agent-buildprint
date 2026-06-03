@@ -1,6 +1,6 @@
 # Phase 00b — UX contract
 
-requires_roles: [content-design, ux-ui-craft, product-architect]
+requires_roles: [ux-ui-craft, product-architect]
 
 ## Product intention
 
@@ -42,14 +42,14 @@ None directly. Later phases consume the contract through their `ux_obligations` 
 
 The artifacts must let a later phase author mechanically determine which obligations apply to that phase. If a phase cannot point to a specific `ux_ac_id` or to a section of `empty-blocked-loading-states.yaml`, the contract is too vague to use; repair the contract before proceeding.
 
-## Required output (content-design)
+## Required output (ux-ui-craft - content and comprehension)
 
 - A novice persona exists with non-empty `knows_on_entry` and `does_not_know` lists.
 - The jargon ban list names every domain term that appears in the product promise; every banned term has an alt-copy entry.
 - `first-run-path.md` describes a useful result reachable without provider config or user-supplied input, or records why this is impossible and what the no-config landing does instead.
 - `ux-acceptance.yaml` contains at least one novice-bound acceptance row with a measurable outcome and a unique `ux_ac_id`.
 
-## Blocks (content-design)
+## Blocks (ux-ui-craft - content and comprehension)
 
 - Long prose principles in place of typed artifacts.
 - Personas restricted to expert/operator/researcher roles.
