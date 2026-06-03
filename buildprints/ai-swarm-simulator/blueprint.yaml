@@ -62,7 +62,7 @@ purpose:
 runtime:
   app: Vue/Vite frontend plus Python backend or equivalent product-grade stack.
   graph_memory: Free open-source graph memory adapter, defaulting to Graphiti-backed local runtime or another reviewed OSS graph-memory layer; never require Zep Cloud.
-  llm_provider: OpenAI-compatible provider selected dynamically by user configuration: base URL, model, API key, and provider label.
+  llm_provider: "OpenAI-compatible provider selected dynamically by user configuration: base URL, model, API key, and provider label."
 state:
   durable:
     - uploaded seed files and extracted text
