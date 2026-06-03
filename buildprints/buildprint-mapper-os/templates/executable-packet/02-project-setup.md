@@ -91,42 +91,49 @@ Create or update these in the implementation project before phase work begins:
    - include small drift checks that test agent behavior, not just app behavior;
    - cover the project-specific versions of generated-file trap, secret-read trap, dependency-sprawl trap, skipped-check trap, review-mode-edit trap, and external-action trap when relevant;
    - each eval must name the task, expected files/tools/checks, forbidden actions, and pass/fail observation.
-6. `UI-IDENTITY.md` for UI-bearing artifacts
+6. Runtime evidence contract
+   - declare the runtime ledger path `.buildprint/evidence/evidence-ledger.jsonl`, the immutable schema location (such as `08-verification/evidence-ledger.schema.json` inside the packet), and the `upgrades_claim` ceiling;
+   - rows with status `missing|blocked|failed|skipped` or carrying a synthetic, partial, or sandbox-limited `proof_type` or `provider_mode` cannot set `upgrades_claim: true`. Review prose cannot upgrade implementation proof;
+   - declare `.buildprint/traceability.yaml` and `.buildprint/release-gates.yaml` to govern traceability and release criteria.
+7. `UI-IDENTITY.md` for UI-bearing artifacts
    - must be created by an explicit UX/UI persona pass before UI implementation begins;
-   - must define product-specific visual identity, interaction density, motion principles, clickable-control rules, layout model, responsive behavior, accessibility baseline, component/state matrix, screenshot critique rubric, and forbidden generic/default UI patterns;
+   - covers **visual identity only**: interaction density, motion principles, clickable-control rules, layout model, responsive behavior, accessibility baseline, component/state matrix, screenshot critique rubric, and forbidden generic/default UI patterns;
+   - the **consumer-comprehension contract** (novice persona, first-run path, jargon ban list with alt-copy, per-state copy, disclosure plan, novice acceptance) is **not** an `UI-IDENTITY.md` concern; it lives in phase `00b-ux-contract.md` and is consumed by later phases through their `ux_obligations` field;
    - must translate source-product feel into implementable design tokens and component behavior without copying branding;
    - must be listed as a mandatory read in root `AGENTS.md`.
-7. `.env.example`
+8. `.env.example`
    - provider keys and base URLs;
    - model names;
    - storage paths;
    - runtime/export/deployment configuration;
    - no real secrets.
-8. `docs/architecture.md`
+9. `docs/architecture.md`
    - selected stack;
    - frontend/backend/runtime or non-UI equivalent boundaries;
    - domain modules;
    - adapter interfaces;
    - data flow;
    - blocked production claims.
-9. `docs/product-loop.md` or `docs/artifact-loop.md`
-   - first usable loop;
-   - happy path;
-   - blocked states;
-   - acceptance checks.
-10. Initial app/runtime skeleton
-   - real project structure for the selected stack;
-   - entrypoints;
-   - adapter stubs;
-   - persistence initialization seam;
-   - health/config/readiness endpoint or equivalent.
-11. Verification commands
-   - install/setup;
-   - dev;
-   - build;
-   - test;
-   - browser/API/CLI/operator smoke path.
-12. `.buildprint/setup-receipt.md`
+10. `docs/product-loop.md` or `docs/artifact-loop.md`
+    - first usable loop;
+    - happy path;
+    - blocked states;
+    - acceptance checks.
+11. Initial app/runtime skeleton
+    - real project structure for the selected stack;
+    - entrypoints;
+    - adapter stubs;
+    - persistence initialization seam;
+    - health/config/readiness endpoint or equivalent.
+12. Verification commands and stack
+    - install/setup;
+    - the ordered verification stack:
+      1. unit + state-transition tests;
+      2. lint / typecheck;
+      3. slop scan (AI residue: swallowed errors, narrative comments, any-casts, dead stubs, hallucinated imports, oversized functions);
+      4. playtester journey per state in the state model (action-driven, action log + screenshots);
+      5. write runtime ledger rows in `.buildprint/evidence/evidence-ledger.jsonl`.
+13. `.buildprint/setup-receipt.md`
    - question-to-decision ledger;
    - commands run;
    - files created;
@@ -189,3 +196,6 @@ You may proceed to phase work only when all hard-stop questions in `01-questions
 - Dead controls and no-op settings.
 - Fake provider success.
 - Secret leakage in files, logs, examples, or generated artifacts.
+- Claiming a slice or phase passed without runner output, exit code, screenshot path, or evidence ledger row.
+- Building and reviewing the same slice in the same agent session.
+- Marking `upgrades_claim: true` on synthetic, blocked, or skipped proof.

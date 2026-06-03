@@ -2,6 +2,8 @@
 
 requires_roles: [product-architect, ux-ui-craft, integration-runtime, data-persistence]
 
+ux_obligations: declared per slice (see slice front matter below); the phase as a whole has no implicit `ux_obligations`.
+
 ## Product intention
 
 Add product breadth as vertical feature slices, not as disconnected panels. Each slice must carry UX, state, domain behavior, failure states, and verification.
@@ -24,7 +26,10 @@ Add product breadth as vertical feature slices, not as disconnected panels. Each
 - Track per-slice dependencies, blockers, and verification.
 - Keep copy, navigation, and state semantics consistent across slices.
 - Avoid broad shallow panel additions that skip depth.
-- For every slice, record the slice contract: user loop, user-visible outcome, views/states, exact primary action, data/domain contracts, copy/evidence rules, tests/gates, and handover facts.
+- For every slice, record the slice contract including:
+  - typed front matter: `slice_id`, `acceptance_ids` (must exist in `02-core-loop-first/acceptance.md`), `states_covered` (must exist in `04-state-and-data/state-machines`), `regressions_to_rerun`, `allowed_files`, and `ux_obligations` (each entry must resolve to a real file/section/`ux_ac_id` in `00b-ux-contract/`; if the slice has no consumer-facing surface, set `ux_obligations: []` and explain why);
+  - explicit **Builder session** sub-section: implements only, no review, writes evidence ledger rows;
+  - explicit **Reviewer session (separate)** sub-section: reads contract + diff + `.buildprint/evidence/` rows only, never the Builder's chat, returns pass/fail with finding IDs and severity, may not edit files.
 - In `03-phases/phase-index.yaml`, make each split slice depend on the prior slice or this phase. Make `04-state-and-data` depend on the last included feature-slice phase.
 
 ## Interfaces touched
@@ -81,7 +86,7 @@ Every included slice should be independently demoable and also make the core pro
 
 ## Do not ship
 
-Horizontal layers with no user-visible value, broad shallow panels, duplicate components/helpers, hidden broken secondary paths, or slices that silently downgrade scope.
+Horizontal layers with no user-visible value, broad shallow panels, duplicate components/helpers, hidden broken secondary paths, slices that silently downgrade scope, or claims of slice completion without runner output, exit code, screenshot path, or evidence ledger row.
 
 ## Repair routing
 

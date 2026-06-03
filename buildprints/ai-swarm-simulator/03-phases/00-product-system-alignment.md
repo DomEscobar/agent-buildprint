@@ -12,6 +12,9 @@ AI Swarm is a trusted_local, MiroFish-style graph-backed simulation workbench: u
 
 ## Users / consumers
 
+One-line anchors only; the full typed persona model (novice, exploration operator, simulation researcher, `knows_on_entry`, `does_not_know`, first-run path, novice acceptance) lives in `00b-ux-contract.md` and must not be duplicated here.
+
+- **Novice (first-time visitor)**: anyone (including the builder) opening the product without prior knowledge of this specific workbench; has no LLM provider configured and no seed material.
 - **Exploration operator**: brings seed material and wants a readable graph, simulation controls, and a report without needing to understand backend internals.
 - **Simulation researcher**: needs graph entities, traces, report sections, and interaction history to be inspectable and reproducible.
 - **Local builder/operator**: configures dynamic OpenAI-compatible LLM providers and local/open-source graph memory, and needs clear blockers when credentials, Graphiti/graph backend, or OASIS runtime are missing.
@@ -89,9 +92,10 @@ No UI without state, and no state without UI. Every important state needs copy, 
 
 ## Required output (ux-ui-craft)
 
-- UI-bearing products define first-run UX, primary action per state, empty/loading/error/blocked/success copy, and screenshot rejection rules.
-- `UI-IDENTITY.md` captures the sleek Canva-like visual identity, motion rules, clickable-control rules, graph canvas affordances, and forbidden generic dashboard patterns.
+- `UI-IDENTITY.md` captures the sleek Canva-like visual identity, motion rules, clickable-control rules, graph canvas affordances, and forbidden generic dashboard patterns (visual concerns only).
+- The screenshot rejection rule for the product-system level is named (for example "no decorative hero before primary action", "no raw IDs on the product surface", "no provider-config wall before the user sees the canvas").
 - Product-facing copy has no Buildprint/proof/phase/internal harness vocabulary.
+- First-run UX, primary action per state, empty/loading/error/blocked/success copy, jargon ban list, alt-copy mapping, and disclosure plan are explicitly delegated to `00b-ux-contract.md` and not duplicated here.
 
 ## Blocks (ux-ui-craft)
 
@@ -100,6 +104,7 @@ No UI without state, and no state without UI. Every important state needs copy, 
 - Motion that hides latency instead of explaining progress.
 - Clickable-looking controls that do nothing or silently fail.
 - Raw ids/debug strings or internal vocabulary on the product surface.
+- Restating persona/first-run/copy detail that belongs in `00b-ux-contract.md`.
 
 ## Required output (integration-runtime)
 
@@ -157,4 +162,4 @@ Phase 01 and phase 02 can be implemented without guessing who the product serves
 
 ## Unlock condition
 
-The implementation has a concrete product promise, consumer map, primary loops, feature map, state model, architecture boundaries, quality bar, UI identity, agent-harness artifacts, and honest blockers. Only then continue to shell/navigation or core-loop feature work.
+The implementation has a concrete product promise, one-line consumer map (including the novice persona), primary loops, feature map, state model, architecture boundaries, quality bar, UI identity, agent-harness artifacts, and honest blockers. The next phase is `00b-ux-contract.md`; the persona detail, first-run path, jargon ban, and novice acceptance live there, not here. Only then continue to shell/navigation or core-loop feature work.

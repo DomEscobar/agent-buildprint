@@ -2,6 +2,13 @@
 
 requires_roles: [ux-ui-craft, product-architect]
 
+ux_obligations:
+  - 00b-ux-contract/first-run-path.md#landing
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#empty
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#loading
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#blocked
+  - 00b-ux-contract/disclosure-plan.md#default-vs-expert
+
 ## Product intention
 
 Create the product shell that makes the app legible before feature depth: routes/views, navigation, global states, permission/auth states, and empty/loading/error behavior.
@@ -74,4 +81,4 @@ Generic dashboard chrome, nav that mirrors source folders, dead tabs, unexplaine
 
 ## Unlock condition
 
-The shell supports first-loop navigation with explicit global states and no dead primary controls.
+The shell supports first-loop navigation with explicit global states and no dead primary controls, every entry in `ux_obligations` resolves to a real artifact section, and the empty/loading/blocked states named in `00b-ux-contract/empty-blocked-loading-states.yaml` are visible without requiring provider config.

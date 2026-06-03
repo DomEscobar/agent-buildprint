@@ -2,6 +2,12 @@
 
 requires_roles: [ux-ui-craft, product-architect]
 
+ux_obligations:
+  - 00b-ux-contract/copy-quality-bar.md#reading-level
+  - 00b-ux-contract/copy-quality-bar.md#jargon-ban
+  - 00b-ux-contract/copy-quality-bar.md#alt-copy
+  - 00b-ux-contract/disclosure-plan.md
+
 ## Product intention
 
 Raise product taste: components, visual hierarchy, copy, and progressive disclosure should make the product feel deliberate and trustworthy.
@@ -75,4 +81,4 @@ Generic SaaS cards, decorative gradients hiding weak UX, placeholder copy, incon
 
 ## Unlock condition
 
-Core screens are readable, consistent, accessible, and free of placeholder/internal vocabulary.
+Core screens are readable, consistent, accessible, and free of placeholder/internal vocabulary, every term in `00b-ux-contract/copy-quality-bar.md#jargon-ban` either does not appear on the product surface or appears with its alt-copy, and the disclosure plan from `00b-ux-contract/disclosure-plan.md` is honored by what is default vs progressive vs expert.

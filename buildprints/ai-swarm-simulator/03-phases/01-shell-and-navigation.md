@@ -2,6 +2,14 @@
 
 requires_roles: [ux-ui-craft, product-architect]
 
+ux_obligations:
+  - 00b-ux-contract/first-run-path.md#landing
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#empty.no-project
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#empty.no-seed
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#blocked.missing-llm
+  - 00b-ux-contract/disclosure-plan.md#default-vs-progressive
+  - 00b-ux-contract/ux-acceptance.yaml#NOVICE-NO-JARGON-FIRST-SCREEN
+
 ## Product intention
 
 Build the visible workbench shell around the real MiroFish flow: upload, graph build, simulation, report, and interaction, with graph/split/workbench viewing modes.
@@ -66,5 +74,5 @@ If the shell feels generic, repair this phase and re-run browser review.
 
 ## Unlock condition
 
-The shell supports the core navigation and can host a real graph canvas in later phases.
+The shell supports the core navigation and can host a real graph canvas in later phases, every entry in `ux_obligations` resolves to a real artifact section in `00b-ux-contract/`, and the landing screen surfaces the "try with sample" affordance without requiring LLM provider config.
 

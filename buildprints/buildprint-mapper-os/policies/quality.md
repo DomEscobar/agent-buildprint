@@ -10,6 +10,9 @@ Core invariant: Buildprints should make better product implementation more likel
 - Mode-appropriate language and surface, not generic dashboards.
 - State persistence/readback, traces, or reproducible outputs where the artifact needs continuity.
 - A skeptical final review and concise handover.
+- Anti-fabrication: every progress claim must bind to a runner artifact (exit code, ledger row ID, screenshot path, or observed walkthrough note).
+- Builder/Reviewer separation for non-trivial slices: implementation and review run in distinct agent sessions; the Reviewer may not edit files.
+- Consumer-comprehension contract for UI-bearing spines: a typed `00b-ux-contract.md` phase produces persona, first-run path, jargon ban + alt-copy, per-state copy, disclosure plan, and novice acceptance as typed artifacts before any shell or feature work; every later phase carries a `ux_obligations` field whose entries resolve to those artifacts and are observed in a novice playtester journey. Comprehension applies to every posture, including `trusted_local`: even the builder is a novice the first time they open the product.
 
 ## What Mapper OS should avoid
 

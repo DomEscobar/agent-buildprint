@@ -2,6 +2,13 @@
 
 requires_roles: [ux-ui-craft]
 
+ux_obligations:
+  - 00b-ux-contract/copy-quality-bar.md#reading-level
+  - 00b-ux-contract/copy-quality-bar.md#jargon-ban
+  - 00b-ux-contract/copy-quality-bar.md#alt-copy
+  - 00b-ux-contract/disclosure-plan.md
+  - 00b-ux-contract/empty-blocked-loading-states.yaml
+
 ## Product intention
 
 Make the workbench feel like a serious simulation tool: dense enough for repeated use, readable graph interactions, clear progress, and no Buildprint/proof/internal vocabulary in user-facing screens.
@@ -57,5 +64,5 @@ Fix visible defects before moving to architecture cleanup.
 
 ## Unlock condition
 
-Browser review shows usable graph/workbench/report/interaction surfaces at target viewports.
+Browser review shows usable graph/workbench/report/interaction surfaces at target viewports, every term in `00b-ux-contract/copy-quality-bar.md#jargon-ban` is either absent from the product surface or accompanied by its alt-copy, the disclosure plan from `00b-ux-contract/disclosure-plan.md` is honored, and every state row in `00b-ux-contract/empty-blocked-loading-states.yaml` has matching implementation copy.
 

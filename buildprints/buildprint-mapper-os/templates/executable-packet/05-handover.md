@@ -14,11 +14,11 @@ List each major surface/capability as built, partial, blocked, or not started.
 
 ## Verification
 
-Commands run, manual/browser paths checked, screenshots or artifact paths.
+Commands run with exit codes, ledger row IDs written to `.buildprint/evidence/evidence-ledger.jsonl`, manual/browser paths checked with reproducible playtester scripts, screenshot/log paths.
 
 ## Known defects and blockers
 
-Concrete user-visible issues, real blockers, and next repair route.
+Concrete user-visible issues, real blockers, and next repair route. Every claim in this section must have a recorded walkthrough outcome or ledger row; prose-only claims are not handover.
 
 ## Not production-grade
 

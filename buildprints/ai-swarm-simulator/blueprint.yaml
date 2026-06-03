@@ -156,5 +156,10 @@ acceptance_criteria:
   - LLM provider is selected by runtime user configuration and not hard-coded to Qwen, OpenAI, or any one vendor.
   - Simulation and report flows use graph state or show exact blockers.
   - Reload/readback proves persisted project, graph, simulation, and report state.
+  - A novice with no LLM credentials and no seed material reaches an inspectable graph canvas and a sample report within 60 seconds via the "try with sample" affordance defined in 00b-ux-contract/first-run-path.md.
+  - No term from 00b-ux-contract/copy-quality-bar.md#jargon-ban appears on the product surface without its alt-copy.
+ux_contract_dir: 00b-ux-contract/
+ux_acceptance_file: 00b-ux-contract/ux-acceptance.yaml
+ux_traceability_file: .buildprint/ux-traceability.yaml
 forbidden_dependencies:
   - zep-cloud

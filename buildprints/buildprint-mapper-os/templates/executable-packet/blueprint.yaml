@@ -75,6 +75,13 @@ repair_routing:
   phase_gap: current_phase
   review_gap: 04-review.md
   handover_gap: 05-handover.md
+evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
+evidence_schema: 08-verification/evidence-ledger.schema.json
+traceability_file: .buildprint/traceability.yaml
+release_gates_file: .buildprint/release-gates.yaml
+ux_contract_dir: 00b-ux-contract/
+ux_acceptance_file: 00b-ux-contract/ux-acceptance.yaml
+ux_traceability_file: .buildprint/ux-traceability.yaml
 context:
   phase_index: 03-phases/phase-index.yaml
   active_phase: 03-phases/00-product-system-alignment.md

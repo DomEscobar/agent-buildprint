@@ -21,6 +21,7 @@ feature_slice_expansion_rule:
 spine_phase_catalog:
   product_app_consumer_first:
     - 00-product-system-alignment
+    - 00b-ux-contract
     - 01-shell-and-navigation
     - 02-core-loop-first
     - 03-feature-slices
@@ -66,12 +67,19 @@ phase_order:
     title: Product system alignment
     status: included
     depends_on: []
+  - phase_id: 00b-ux-contract
+    file: 03-phases/00b-ux-contract.md
+    title: UX contract
+    status: included
+    applies_when_consumer_facing: true
+    depends_on:
+      - 00-product-system-alignment
   - phase_id: 01-shell-and-navigation
     file: 03-phases/01-shell-and-navigation.md
     title: Shell and navigation
     status: included
     depends_on:
-      - 00-product-system-alignment
+      - 00b-ux-contract
   - phase_id: 02-core-loop-first
     file: 03-phases/02-core-loop-first.md
     title: Core loop first

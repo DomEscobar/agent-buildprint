@@ -4,6 +4,10 @@ Review the artifact before you explain it. Use the artifact type and deployment 
 
 Do not self-score claims. Use observable walkthrough steps and record what you actually observed.
 
+## Reviewer role contract
+
+The reviewer is a separate agent session. Read only this packet, the implementation diff, and `.buildprint/evidence/evidence-ledger.jsonl` rows. Do not read the Builder's chat. Do not edit files. Each finding must record file/line, observed step, severity, and exit code or screenshot path. A finding without observed evidence is not a finding.
+
 ## Core loop walkthrough
 
 1. Start from a fresh state and complete the core loop for the real consumer.
@@ -26,6 +30,33 @@ Do not self-score claims. Use observable walkthrough steps and record what you a
    - Do: run missing-input, invalid-input, provider-blocked, and reset/delete paths where safe.
    - Observe: user/operator gets clear state language and recovery options.
    - Record: unclear copy, hidden failures, or irreversible unsafe defaults.
+
+## Novice walkthrough (UI-bearing spines)
+
+Pretend you have never seen this product. You have not read the source repo, the buildprint, or the docs. You have no provider credentials. You have no sample input.
+
+1. First useful result without configuration
+   - Do: open a fresh app instance; touch only what is visible on the landing screen.
+   - Observe: is there a way to reach a useful first result without configuring a provider or supplying input? Does the `00b-ux-contract/first-run-path.md` description match what you see?
+   - Record: time to first useful result, or the exact missing affordance.
+2. Domain vocabulary check
+   - Do: scan every visible label, button, tooltip, empty-state copy, and blocked-state copy on the first three screens.
+   - Observe: does every term in `00b-ux-contract/copy-quality-bar.md#jargon-ban` appear with its alt-copy (or not appear at all)? Are there technical terms not in the ban list that you cannot understand?
+   - Record: each un-aliased jargon appearance with file/line and screenshot.
+3. State legibility
+   - Do: trigger empty, loading, error, and blocked states (remove credentials, send invalid input).
+   - Observe: do the user-facing copy and primary action match `00b-ux-contract/empty-blocked-loading-states.yaml`? Could a novice recover without docs?
+   - Record: each state where copy or recovery path differs from the contract.
+4. Disclosure check
+   - Do: count visible primary controls on the first screen, then look for the expert/power surface.
+   - Observe: does the default surface match `00b-ux-contract/disclosure-plan.md`? Are experts able to reach power without forcing novices into it?
+   - Record: any default surface that exposes expert-only controls or any progressive surface that hides default behavior.
+5. Novice acceptance
+   - Do: for every novice-targeted `ux_ac_id` in `00b-ux-contract/ux-acceptance.yaml`, try to satisfy the measurable outcome as a novice.
+   - Observe: did the outcome occur within the stated budget? Was a ledger row written and cited in `.buildprint/ux-traceability.yaml`?
+   - Record: pass/fail per `ux_ac_id` with screenshot/log path.
+
+A finding in this section is recorded the same way as any other reviewer finding: file/line or screen, observed step, severity, exit code or screenshot path. A finding without observed evidence is not a finding.
 
 ## Operability walkthrough
 

@@ -2,6 +2,12 @@
 
 requires_roles: [product-architect, integration-runtime, data-persistence]
 
+ux_obligations:
+  - 00b-ux-contract/first-run-path.md#primary-action
+  - 00b-ux-contract/copy-quality-bar.md#jargon-ban
+  - 00b-ux-contract/copy-quality-bar.md#alt-copy
+  - 00b-ux-contract/ux-acceptance.yaml#NOVICE-FIRST-RESULT
+
 ## Product intention
 
 Build one complete normal-user loop that proves the product promise end to end before expanding secondary features.
@@ -82,4 +88,4 @@ Canned output, raw JSON as the experience, fake provider success, a form that do
 
 ## Unlock condition
 
-One core loop is fully usable end-to-end with honest blocked states and durable readback where promised.
+One core loop is fully usable end-to-end with honest blocked states and durable readback where promised, every entry in `ux_obligations` resolves, no term from the `00b-ux-contract/copy-quality-bar.md#jargon-ban` list appears on the product surface without its alt-copy, and the novice acceptance row(s) named in `ux_obligations` are reachable in the slice.

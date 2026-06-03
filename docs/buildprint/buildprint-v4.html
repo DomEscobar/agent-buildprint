@@ -136,6 +136,7 @@
       <a href="#states">States</a>
       <a href="#slices">Slices</a>
       <a href="#gates">Gates</a>
+      <a href="#harness">Harness</a>
       <a href="#template">Template</a>
     </div>
   </nav>
@@ -152,6 +153,8 @@ acceptance criteria
 first successful loop
 state/boundary honesty
 verification evidence
+evidence ledger (typed, executed)
+anti-fabrication contract
 handover</code></pre>
         </div>
         <div class="card">
@@ -171,7 +174,7 @@ automation: task/approval/trace</code></pre>
       <h2>Artifact type comes before phase design</h2>
       <p>The first Buildprint decision is not “which files do we generate?” It is “what kind of artifact is the agent building, and who experiences success?”</p>
       <div class="three">
-        <div class="phase"><div class="num">APP</div><h3>Product app</h3><p class="muted">Use Consumer-First: first-run UX, result composition, domain state/export, architecture garden, screenshot critique.</p></div>
+        <div class="phase"><div class="num">APP</div><h3>Product app</h3><p class="muted">Use Consumer-First: first-run UX, result composition, domain state/export, architecture garden, playtester journeys.</p></div>
         <div class="phase"><div class="num">INT</div><h3>Plugin / integration</h3><p class="muted">Use Developer/Integration-First: install/configure loop, adapter seams, first host action, events, idempotency, recovery, audit trail.</p></div>
         <div class="phase"><div class="num">SVC</div><h3>Backend service</h3><p class="muted">Use Reliability-First: state machine, transaction path, retry/failure recovery, observability, runbook, regression checks.</p></div>
       </div>
@@ -183,6 +186,7 @@ automation: task/approval/trace</code></pre>
       <h2>Recommended v4 directory structures</h2>
       <p>These are typed specializations. Product apps use Consumer-First. Plugins, SDKs, integrations, frameworks, CLIs, and agent tools use Developer-First. Both share the same quality kernel, but the files make different work obvious.</p>
       <h3>Consumer-First product app</h3>
+      <p class="muted" style="margin-bottom:8px">Runtime evidence ledger rows are written to <code>.buildprint/evidence/evidence-ledger.jsonl</code> in the implementation workspace; the schema in <code>08-verification/</code> serves as the immutable packet contract.</p>
       <pre><code>product-app-consumer-first/
 ├── BUILDPRINT.md
 ├── 00-product-system-alignment/
@@ -233,8 +237,10 @@ automation: task/approval/trace</code></pre>
 │   ├── user-journeys.md
 │   ├── smoke-tests.md
 │   ├── regression-checks.md
-│   ├── screenshot-review.md
-│   └── release-gates.md
+│   ├── playtester-journeys.md
+│   ├── traceability.yaml
+│   ├── release-gates.yaml
+│   └── evidence-ledger.schema.json
 └── HANDOVER.md</code></pre>
 
       <h3 style="margin-top:28px">Developer-First framework / integration</h3>
@@ -281,7 +287,7 @@ automation: task/approval/trace</code></pre>
         <div class="phase"><div class="num">05</div><h3>Domain intelligence</h3><p class="muted">Domain model, evidence grounding, provider boundaries, actionability.</p></div>
         <div class="phase"><div class="num">06</div><h3>Design + copy</h3><p class="muted">Visual quality, components, copy quality, progressive disclosure.</p></div>
         <div class="phase"><div class="num">07</div><h3>Architecture garden</h3><p class="muted">Refactor budget, module seams, dependency rules, test strategy.</p></div>
-        <div class="phase"><div class="num">08</div><h3>Verification</h3><p class="muted">User journeys, smoke/regression tests, screenshots, release gates.</p></div>
+        <div class="phase"><div class="num">08</div><h3>Verification</h3><p class="muted">Playtester journeys with action logs, smoke/regression tests, AC→test traceability matrix, release-gates.yaml.</p></div>
       </div>
     </div>
   </section>
@@ -305,7 +311,7 @@ automation: task/approval/trace</code></pre>
 - empty/loading/error states
 - data touched
 - views involved
-- verification path</code></pre>
+- verification path + evidence ledger row</code></pre>
     </div>
   </section>
 
@@ -330,7 +336,7 @@ automation: task/approval/trace</code></pre>
         </div>
         <div class="card">
           <h3>State invariant</h3>
-          <p class="muted">No UI without state. No state without UI. Every important state needs copy, primary action, recovery path, and test coverage.</p>
+          <p class="muted">No UI without state. No state without UI. Every important state needs copy, primary action, recovery path, test coverage, and one evidence ledger row.</p>
         </div>
       </div>
     </div>
@@ -376,11 +382,64 @@ automation: task/approval/trace</code></pre>
             <li>Secrets, credentials, retries, or failures handled only in prose.</li>
             <li>Generic next actions like “check if this matters.”</li>
             <li>Tests that do not match real selectors, commands, or operator flows.</li>
+            <li>Claiming a slice passed without runner output, exit code, screenshot path, or evidence ledger row.</li>
+            <li>Building and reviewing the same slice in the same agent session.</li>
+            <li>Marking <code>upgrades_claim: true</code> on synthetic, blocked, or skipped proof.</li>
           </ul>
         </div>
       </div>
       <div class="callout" style="margin-top:22px">
-        <strong>v4 scoring rule:</strong> An artifact is not done because components exist. It is done when the artifact-type loop works, boundaries are honest, failure states are observable, and verification evidence names the exact journeys or operator flows that passed.
+        <strong>v4 scoring rule:</strong> An artifact is done when (a) every acceptance ID has an evidence ledger row with <code>status: passed|proven</code> and <code>upgrades_claim: true</code>, (b) <code>traceability.yaml</code> has no missing rows, (c) every playtester journey listed in <code>release-gates.yaml</code> passed, (d) builder and reviewer were separate agent sessions.
+      </div>
+    </div>
+  </section>
+
+  <section id="harness">
+    <div class="wrap">
+      <h2>The v4 harness: making "done" computable</h2>
+      <p>Evidence and QA in v4 are not prose sections. They are four concrete mechanisms. Each one converts a claim into a verifiable artifact. All four are required before a slice or artifact may be marked done.</p>
+      <div class="two">
+        <div class="card">
+          <h3>Typed evidence ledger</h3>
+          <p class="muted">The immutable contract schema is declared at <code>08-verification/evidence-ledger.schema.json</code>. Every phase and slice writes runtime JSONL rows to <code>.buildprint/evidence/evidence-ledger.jsonl</code> in the implementation workspace. Each row must carry:</p>
+          <pre><code>artifact_id   type          phase_id
+status        source        proves[]
+proof_type    provider_mode upgrades_claim</code></pre>
+          <p class="muted" style="margin-top:14px">The ceiling rule: <code>upgrades_claim</code> must be <code>false</code> when <code>status</code> is <code>missing|blocked|failed|skipped</code>, or when <code>proof_type</code> or <code>provider_mode</code> is synthetic, partial, or sandbox-limited. Review prose cannot upgrade implementation proof by itself.</p>
+        </div>
+        <div class="card">
+          <h3>Traceability matrix</h3>
+          <p class="muted">One file, <code>08-verification/traceability.yaml</code>, maps every acceptance criterion to at least one ledger row and at least one state from the state model:</p>
+          <pre><code>- ac_id: AC-001
+  ledger_artifact_id: slice-001-unit-pass
+  test_id: test/create-project.spec.ts
+  state_covered: project-empty
+  status: passed</code></pre>
+          <p class="muted" style="margin-top:14px">A missing row in <code>traceability.yaml</code> blocks release. Every acceptance ID in <code>acceptance.md</code> must appear. Every important state in the state model must be covered by at least one row.</p>
+        </div>
+        <div class="card">
+          <h3>Playtester loop</h3>
+          <p class="muted">Passive screenshot review is replaced by an active playtester: a separate browser agent session that drives the artifact, records an action log and screenshots per named <code>state_id</code>, and produces a reproducible bug report when a flow breaks. After repairs the same script reruns and a ledger row is written.</p>
+          <pre><code>playtester-journeys.md defines:
+- journey_id
+- states_to_visit[]
+- action_script
+- expected_outcome per state
+- evidence: log_path + screenshot_path</code></pre>
+          <p class="muted" style="margin-top:14px">Replaces <code>screenshot-review.md</code>. A journey in <code>release-gates.yaml</code> that has not run is an open gate, not a clean bill of health.</p>
+        </div>
+        <div class="card">
+          <h3>Builder / Reviewer split</h3>
+          <p class="muted">One slice = two agent sessions. The Builder implements the contract. The Reviewer reads only the contract, the diff, and the <code>.buildprint/evidence/</code> rows — never the Builder's chat. The Reviewer returns pass or fail with finding IDs.</p>
+          <p class="muted" style="margin-top:10px">Verification runs in a fixed order before the Reviewer session:</p>
+          <pre><code>1. unit + state-transition tests
+2. lint / typecheck
+3. slop scan (AI residue: swallowed errors,
+   narrative comments, any-casts, dead stubs)
+4. playtester journey per state_id
+5. write ledger rows</code></pre>
+          <p class="muted" style="margin-top:14px">The Reviewer may not edit files. Findings must include file/line evidence and severity. A finding without evidence is not a finding.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -388,8 +447,13 @@ automation: task/approval/trace</code></pre>
   <section id="template">
     <div class="wrap">
       <h2>Minimal slice template</h2>
-      <p>Every feature slice in v4 should answer this before implementation starts.</p>
+      <p>Every feature slice in v4 is a typed contract. Fill in the header fields before implementation starts; the Reviewer reads only this contract, the diff, and the evidence rows.</p>
       <pre><code># Slice: &lt;name&gt;
+slice_id: slice-00X
+acceptance_ids: [AC-001, AC-002]   # must exist in 02-core-loop-first/acceptance.md
+states_covered: [state-id, ...]    # from 04-state-and-data/state-machines
+regressions_to_rerun: [slice-001, ...]
+allowed_files: [src/..., tests/...]
 
 ## User loop
 Which primary loop does this slice complete or improve?
@@ -420,21 +484,37 @@ One primary action for this state. Name the button/link exactly.
 - evidence/grounding if intelligence is used
 - concrete next action rule
 
-## Tests and gates
-- unit tests
-- state transition tests
-- smoke/user journey
-- screenshot review
-- npm run check
+## Builder session
+Implements the contract only. Does not review own work.
+Writes ledger rows after each verification step.
+Does not set upgrades_claim: true on synthetic proof.
+
+## Reviewer session (separate)
+Reads: this contract + diff + .buildprint/evidence/ rows only.
+Does not see Builder session chat.
+Returns: pass | fail with finding IDs, file/line evidence, severity.
+May not edit files.
+
+## Verification stack (run in order before Reviewer)
+1. unit + state-transition tests
+2. lint / typecheck
+3. slop scan — swallowed errors, narrative comments, any-casts, dead stubs
+4. playtester journey for each state_id in states_covered
+5. write ledger rows (one per AC, one per state, one per journey)
+
+## Evidence ledger entries (paste output inline)
+- AC-001 → artifact_id / proof_type / exit_code / log_path
+- state-empty → journey_id / screenshot_path / status
 
 ## Handover evidence
-Commands run, artifacts produced, known blockers, next slice.</code></pre>
+Commands run (with exit codes), ledger row IDs written,
+regressions rerun (pass/fail), known blockers, next slice.</code></pre>
     </div>
   </section>
 
   <footer>
     <div class="wrap">
-      <p>Buildprint v4 draft — synthesized from Consumer-First product-app lessons, CheckoutBridge integration/plugin lessons, and the typed Buildprint family conclusion.</p>
+      <p>Buildprint v4 draft — synthesized from Consumer-First product-app lessons, CheckoutBridge integration/plugin lessons, and the typed Buildprint family conclusion. Reference implementation of the harness primitives (evidence ledger schema, <code>upgrades_claim</code> ceiling, phase-flow continuation gates) lives in <code>buildprints/*/05-evidence/evidence-ledger.schema.json</code> and <code>.buildprint/evidence/evidence-ledger.jsonl</code> at runtime until a canonical Consumer-First skeleton ships.</p>
     </div>
   </footer>
 </body>

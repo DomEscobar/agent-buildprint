@@ -2,6 +2,20 @@
 
 requires_roles: [integration-runtime, data-persistence, ux-ui-craft]
 
+ux_obligations:
+  - 00b-ux-contract/first-run-path.md#try-with-sample
+  - 00b-ux-contract/copy-quality-bar.md#jargon-ban
+  - 00b-ux-contract/copy-quality-bar.md#alt-copy
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#loading.extraction
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#loading.ontology
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#loading.graph-build
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#ready.graph-canvas
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#blocked.missing-llm
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#blocked.missing-graph-backend
+  - 00b-ux-contract/ux-acceptance.yaml#NOVICE-FIRST-RESULT-60S
+  - 00b-ux-contract/ux-acceptance.yaml#NOVICE-CANVAS-DISCOVERABLE
+  - 00b-ux-contract/ux-acceptance.yaml#NOVICE-BLOCKED-PROVIDER-LEGIBLE
+
 ## Product intention
 
 Make the first real loop work: upload seed text, generate ontology, build graph memory through the open-source adapter, read graph data back, and render it on the canvas.
@@ -75,5 +89,5 @@ If graph build fails, repair adapter/config first; if canvas is unreadable, repa
 
 ## Unlock condition
 
-A local user can complete upload -> ontology -> graph -> canvas detail inspection or see an honest provider blocker.
+A local user can complete upload -> ontology -> graph -> canvas detail inspection or see an honest provider blocker, AND a novice with no LLM credentials and no seed material can complete the "try with sample" path from `00b-ux-contract/first-run-path.md#try-with-sample` to an inspectable canvas and a sample report, AND no term in `00b-ux-contract/copy-quality-bar.md#jargon-ban` appears on the product surface without its alt-copy.
 

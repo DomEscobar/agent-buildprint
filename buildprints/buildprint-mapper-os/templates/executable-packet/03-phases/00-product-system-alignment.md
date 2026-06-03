@@ -11,10 +11,10 @@ Turn the setup decisions into the Buildprint product-system map that all later p
 - Consume the `01-questions.md` decisions and `.buildprint/setup-receipt.md` setup artifacts.
 - Keep artifact type, consumer, central loop, deployment posture, and forbidden shortcuts stable.
 - Record the product promise in user/consumer language.
-- Define user segments or consumer/operator personas and what success means for each.
+- Name user segments or consumer/operator personas at the level of one line each, enough to anchor the product promise; the full typed persona model (`knows_on_entry`, `does_not_know`, first-run path) lives in `00b-ux-contract.md` for UI-bearing spines and must not be duplicated here.
 - Define primary loops, such as capture, generate, review, return, share/export, or artifact-type equivalents.
 - Build the feature map around loops and first value, not source folders or pages.
-- Define the state model for empty, loading, success, blocked/error, recovery, saved/readback, and exported/handed-off states where relevant.
+- Define the state model for empty, loading, success, blocked/error, recovery, saved/readback, and exported/handed-off states where relevant. `00b-ux-contract.md` consumes this state model to write the per-state user-facing copy contract.
 - Carry forward architecture boundaries from setup without reopening stack decisions.
 - State the quality bar and do-not-ship failures that later phases must obey.
 - Show missing providers, credentials, deployment controls, export/runtime dependencies, or destructive operations as honest blockers.
@@ -65,8 +65,9 @@ For UI-bearing products: no UI without state, and no state without UI. Every imp
 
 ## Required output (ux-ui-craft)
 
-- UI-bearing products define first-run UX, primary action per state, empty/loading/error/blocked/success copy, and screenshot rejection rules.
+- UI-bearing products name a screenshot rejection rule at the product-system level (for example "no decorative hero before primary action", "no raw IDs on the product surface").
 - Product-facing copy has no Buildprint/proof/phase/internal harness vocabulary.
+- For UI-bearing spines, this phase explicitly hands off persona detail, first-run UX, per-state copy, jargon ban, and disclosure plan to `00b-ux-contract.md`; do not duplicate them here.
 
 ## Blocks (ux-ui-craft)
 
@@ -74,6 +75,7 @@ For UI-bearing products: no UI without state, and no state without UI. Every imp
 - UI states without owned data/state transitions.
 - Raw ids/debug strings or internal vocabulary on the product surface.
 - Dead controls or placeholder workbench surfaces in the planned loop.
+- Restating persona/first-run/copy detail that belongs in `00b-ux-contract.md`.
 
 ## Required output (integration-runtime)
 
@@ -126,4 +128,4 @@ Phase 01 and phase 02 can be implemented without guessing who the product serves
 
 ## Unlock condition
 
-The implementation has a concrete product promise, consumer map, primary loops, feature map, state model, architecture boundaries, quality bar, and honest blockers. Only then continue to shell/navigation or core-loop feature work.
+The implementation has a concrete product promise, one-line consumer map, primary loops, feature map, state model, architecture boundaries, quality bar, and honest blockers. For UI-bearing spines, the next phase is `00b-ux-contract.md`; the persona, first-run, and copy artifacts live there, not here. Only then continue.

@@ -6,11 +6,16 @@ phases:
     title: Product system alignment
     status: included
     depends_on: []
+  - phase_id: 00b-ux-contract
+    file: 03-phases/00b-ux-contract.md
+    title: UX contract
+    status: included
+    depends_on: [00-product-system-alignment]
   - phase_id: 01-shell-and-navigation
     file: 03-phases/01-shell-and-navigation.md
     title: Shell and navigation
     status: included
-    depends_on: [00-product-system-alignment]
+    depends_on: [00b-ux-contract]
   - phase_id: 02-core-loop-first
     file: 03-phases/02-core-loop-first.md
     title: Core loop first

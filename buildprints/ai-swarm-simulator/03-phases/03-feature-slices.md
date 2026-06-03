@@ -2,6 +2,16 @@
 
 requires_roles: [integration-runtime, data-persistence, ux-ui-craft, product-architect]
 
+ux_obligations:
+  - 00b-ux-contract/copy-quality-bar.md#jargon-ban
+  - 00b-ux-contract/copy-quality-bar.md#alt-copy
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#loading.simulation
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#loading.report
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#ready.simulation-traces
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#ready.report
+  - 00b-ux-contract/empty-blocked-loading-states.yaml#blocked.missing-oasis
+  - 00b-ux-contract/disclosure-plan.md#progressive
+
 ## Product intention
 
 Extend the graph loop into MiroFish's user-visible value: prepare simulation entities, run or block a small OASIS simulation, generate/read a report, and interact with report or agent outputs.
