@@ -68,129 +68,103 @@ function expectAgbFailure(name, args, snippets) {
 }
 
 const malformed = copyTemplate('bad-selected')
-edit(malformed, 'blueprint.yaml', (s) => s.replace(/^qualification_label:.*\n/m, '').replace(/^claim_status:.*\n/m, '').replace(/^setup_tier:.*\n/m, '').replace(/blueprint_mode:[\s\S]*?agent_contract:/m, 'agent_contract:'))
-edit(malformed, '03-phases/phase-index.yaml', (s) => s.replace('active_phase: 03-phases/00-product-system-alignment.md', 'active_phase: 00-product-system-alignment'))
-edit(malformed, 'generated/agent-prompt.md', () => '# Agent prompt\n\nGenerated from: blueprint.yaml\n\nBuild the requested files.\n')
-edit(malformed, '01-questions.md', () => '# Questions\n\nWhat should we build?\n')
-edit(malformed, '02-project-setup.md', () => '# Setup\n\nRun the tests.\n')
-edit(malformed, '03-phases/00-product-system-alignment.md', () => `# Phase 00 - Alignment
+edit(malformed, 'blueprint.yaml', (s) => s
+  .replace(/^slices_dir:.*\n/m, '')
+  .replace(/^gates_dir:.*\n/m, '')
+  .replace(/^capsules_dir:.*\n/m, '')
+  .replace(/state_json_path:.*\n/m, '')
+  .replace(/Agent must never write \.buildprint\/state\.json manually\.\n/m, '')
+  .replace(/Build the product loop honestly[\s\S]*?Blockers are partial, not done\.\n/m, ''))
+edit(malformed, '03-ux-contract.md', () => '# UX Contract\n\nNice UI.\n')
+edit(malformed, '02-architecture.md', () => '# Architecture\n\nUse good code.\n')
+edit(malformed, '04-handover.md', () => '# Handover\n\nDone.\n')
+edit(malformed, 'slices/_template/slice.yaml', () => 'id: example\n')
+fs.rmSync(path.join(malformed, 'gates/gate-index.yaml'))
 
-requires_roles: [product-architect]
-
-## Product intention
-
-Discuss the product direction.
-
-## Build
-
-Write notes.
-
-## Required output (product-architect)
-
-Summarize alignment.
-
-## Blocks (product-architect)
-
-None.
-
-## Quality bar
-
-Looks aligned.
-
-## Do not ship
-
-Confusion.
-
-## Repair routing
-
-Repair here.
-`)
-fs.rmSync(path.join(malformed, '04-review.md'))
-fs.rmSync(path.join(malformed, '05-handover.md'))
-
-expectFailures('mapper executable-integrity eval rejected malformed selected packet', malformed, [
-  'packet includes review/handover',
-  'blueprint declares qualification label',
-  'blueprint declares setup tier',
-  'blueprint declares artifact mode',
-  'questions classify blocking power',
-  'questions hard-stop sensitive decisions',
-  'project setup defines implementation alignment',
-  'project setup consumes questions into decisions',
-  'project setup requires durable setup artifacts',
-  'project setup requires agent and UI identity contracts',
-  'project setup forces architect base not vibes',
-  'phase 00 defines product system alignment',
-  'phase index names active phase file',
-  'generated prompt is alignment speech, not authority',
-  'generated prompt includes anti-slop/product reviewer when present'
+expectFailures('mapper v2 integrity eval rejected malformed selected packet', malformed, [
+  'v2 packet has gate index',
+  'v2 blueprint declares slices_dir',
+  'v2 blueprint declares gates_dir',
+  'v2 blueprint declares capsules_dir',
+  'v2 blueprint derived-state rule present',
+  'v2 blueprint agent_contract has partial-not-complete rule',
+  'v2 ux-contract has Path Map',
+  'v2 ux-contract has operator acceptance rows (sample_can_satisfy: false)',
+  'v2 ux-contract has novice acceptance rows',
+  'v2 architecture defines stack',
+  'v2 architecture defines persistence',
+  'v2 handover template has slice status section',
+  'v2 handover template has overall readiness block',
+  'v2 gate index has active_when_posture entries',
+  'v2 gate index has human signoff gate',
+  'v2 slice template has paths field',
+  'v2 slice template has core_proof_required field',
+  'v2 slice template has persona field'
 ])
 
-const missingHardening = copyTemplate('missing-hardening')
-edit(missingHardening, '03-phases/phase-index.yaml', (s) => s.replace(/  - phase_id: 09-auth-and-tenancy[\s\S]*?(?=  - phase_id: 99-final-review-handover)/, ''))
-expectFailures('mapper eval rejected missing hardening phases', missingHardening, [
-  'phase index includes posture hardening phases'
+const missingSliceTemplate = copyTemplate('missing-slice-template')
+fs.rmSync(path.join(missingSliceTemplate, 'slices/_template/slice.yaml'))
+expectFailures('mapper v2 eval rejected missing slice template', missingSliceTemplate, [
+  'v2 packet has slices template'
 ])
 
-const nonProductWrongSpine = copyTemplate('non-product-wrong-spine')
-edit(nonProductWrongSpine, 'blueprint.yaml', (s) => s.replace('primary: product', 'primary: integration').replace('consumer: end_user', 'consumer: developer').replace('selected_spine: product_app_consumer_first', 'selected_spine: developer_first_framework'))
-expectFailures('mapper eval rejected non-product product-only spine', nonProductWrongSpine, [
-  'developer_first_framework spine uses Developer-First phases'
+const missingGateIndex = copyTemplate('missing-gate-index')
+fs.rmSync(path.join(missingGateIndex, 'gates/gate-index.yaml'))
+expectFailures('mapper v2 eval rejected missing gate index', missingGateIndex, [
+  'v2 packet has gate index',
+  'v2 gate index has active_when_posture entries',
+  'v2 gate index has human signoff gate'
 ])
 
-const nonProductProductSpine = copyTemplate('non-product-product-spine')
-edit(nonProductProductSpine, 'blueprint.yaml', (s) => s.replace('primary: product', 'primary: integration').replace('consumer: end_user', 'consumer: developer'))
-expectFailures('mapper eval rejected non-product primary with product spine', nonProductProductSpine, [
-  'blueprint primary uses matching executable spine'
+const obsoleteRouter = copyTemplate('obsolete-router')
+fs.writeFileSync(path.join(obsoleteRouter, 'START_HERE.md'), '# Legacy router\n', { flag: 'wx' })
+expectFailures('mapper v2 eval rejected obsolete phase router', obsoleteRouter, [
+  'v2 packet avoids obsolete routers/files recursively'
 ])
 
-const unknownSpine = copyTemplate('unknown-spine')
-edit(unknownSpine, 'blueprint.yaml', (s) => s.replace('selected_spine: product_app_consumer_first', 'selected_spine: custom_productish_spine'))
-expectFailures('mapper eval rejected unknown selected spine', unknownSpine, [
-  'selected spine uses known executable spine'
+const weakUx = copyTemplate('weak-ux-contract')
+edit(weakUx, '03-ux-contract.md', (s) => s
+  .replace(/##\s*Path Map/ig, '## Paths')
+  .replace(/sample_can_satisfy:\s*false/ig, 'sample_can_satisfy: true')
+  .replace(/novice/ig, 'new user'))
+expectFailures('mapper v2 eval rejected weak UX contract', weakUx, [
+  'v2 ux-contract has Path Map',
+  'v2 ux-contract has operator acceptance rows (sample_can_satisfy: false)',
+  'v2 ux-contract has novice acceptance rows'
 ])
 
-const invalidPosture = copyTemplate('invalid-posture')
-edit(invalidPosture, 'blueprint.yaml', (s) => s.replace('current: trusted_local', 'current: trusted-local'))
-edit(invalidPosture, '03-phases/phase-index.yaml', (s) => s.replace('deployment_posture: trusted_local', 'deployment_posture: trusted-local'))
-expectFailures('mapper eval rejected invalid posture spelling', invalidPosture, [
-  'packet uses canonical posture and phase status values'
+const weakArchitecture = copyTemplate('weak-architecture')
+edit(weakArchitecture, '02-architecture.md', () => '# Architecture\n\nDecide later.\n')
+expectFailures('mapper v2 eval rejected weak architecture contract', weakArchitecture, [
+  'v2 architecture defines stack',
+  'v2 architecture defines persistence'
 ])
 
-const invalidStatus = copyTemplate('invalid-status')
-edit(invalidStatus, '03-phases/phase-index.yaml', (s) => s.replace(/status: included_blocked/g, 'status: INCLUDED_BLOCKED'))
-expectFailures('mapper eval rejected invalid phase status spelling', invalidStatus, [
-  'packet uses canonical posture and phase status values'
+const weakHandover = copyTemplate('weak-handover')
+edit(weakHandover, '04-handover.md', () => '# Handover\n\nShip it.\n')
+expectFailures('mapper v2 eval rejected weak handover template', weakHandover, [
+  'v2 handover template has slice status section',
+  'v2 handover template has overall readiness block'
 ])
 
-const observabilityWithoutRole = copyTemplate('observability-without-role')
-edit(observabilityWithoutRole, '03-phases/conditional/observability-and-health.md', (s) => s.replace('requires_roles: [integration-runtime, product-architect, security-boundary]', 'requires_roles: [integration-runtime, product-architect]'))
-expectFailures('mapper eval rejected observability without security-boundary role', observabilityWithoutRole, [
-  'observability phase embeds security-boundary'
+const weakGateIndex = copyTemplate('weak-gate-index')
+edit(weakGateIndex, 'gates/gate-index.yaml', (s) => s
+  .replace(/active_when_posture:/ig, 'active_when:')
+  .replace(/requires_human_signoff:\s*true/ig, 'requires_human_signoff: false'))
+expectFailures('mapper v2 eval rejected weak gate index', weakGateIndex, [
+  'v2 gate index has active_when_posture entries',
+  'v2 gate index has human signoff gate'
 ])
 
-const observabilityWithoutOutput = copyTemplate('observability-without-output')
-edit(observabilityWithoutOutput, '03-phases/conditional/observability-and-health.md', (s) => s.replace(/\n## Required output \(security-boundary\)[\s\S]*?(?=\n## Blocks \(security-boundary\))/, '\n'))
-expectFailures('mapper eval rejected observability without security-boundary output', observabilityWithoutOutput, [
-  'observability phase embeds security-boundary'
-])
-
-const observabilityWithoutBlocks = copyTemplate('observability-without-blocks')
-edit(observabilityWithoutBlocks, '03-phases/conditional/observability-and-health.md', (s) => s.replace(/\n## Blocks \(security-boundary\)[\s\S]*?(?=\n## Quality bar)/, '\n'))
-expectFailures('mapper eval rejected observability without security-boundary blocks', observabilityWithoutBlocks, [
-  'observability phase embeds security-boundary'
-])
-
-const renamedObservabilityWithoutSecurity = copyTemplate('renamed-observability-without-security')
-edit(renamedObservabilityWithoutSecurity, '03-phases/phase-index.yaml', (s) => s.replace('file: 03-phases/conditional/observability-and-health.md', 'file: 03-phases/conditional/operator-observability.md'))
-fs.renameSync(
-  path.join(renamedObservabilityWithoutSecurity, '03-phases/conditional/observability-and-health.md'),
-  path.join(renamedObservabilityWithoutSecurity, '03-phases/conditional/operator-observability.md')
-)
-edit(renamedObservabilityWithoutSecurity, '03-phases/conditional/operator-observability.md', (s) => s
-  .replace('requires_roles: [integration-runtime, product-architect, security-boundary]', 'requires_roles: [integration-runtime, product-architect]'))
-expectFailures('mapper eval rejected renamed observability without security-boundary', renamedObservabilityWithoutSecurity, [
-  'observability phase embeds security-boundary'
+const weakSliceTemplate = copyTemplate('weak-slice-template')
+edit(weakSliceTemplate, 'slices/_template/slice.yaml', (s) => s
+  .replace(/^paths:.*\n/m, '')
+  .replace(/core_proof_required/g, 'core-proof-required')
+  .replace(/^persona:.*\n/m, ''))
+expectFailures('mapper v2 eval rejected weak slice template', weakSliceTemplate, [
+  'v2 slice template has paths field',
+  'v2 slice template has core_proof_required field',
+  'v2 slice template has persona field'
 ])
 
 const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8')
