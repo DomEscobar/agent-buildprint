@@ -1,88 +1,85 @@
-schema_version: mapper-os/executable-blueprint
+schema_version: mapper-os/executable-blueprint/v2
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
 qualification_label: local_build_requires_review
-setup_tier: typed_product_leadership
+
 deployment_posture:
   current: trusted_local
   allowed_values:
     - trusted_local
     - private_authenticated
     - public_webapp
-  note: Set this before extraction. Posture changes role, required phases, and operability review depth.
-execution_cadence:
-  current: one_phase
-  allowed_values:
-    - one_phase
-    - to_checkpoint
-    - all_remaining
-  note: How the agent advances across phases. one_phase stops after each phase and presents the continue menu; to_checkpoint runs through verification then final review; all_remaining runs every dependency-ready phase to completion, stopping only on real blockers.
-blueprint_mode:
-  primary: product
-  consumer: end_user
-  selected_spine: product_app_consumer_first
-  allowed_spines:
-    - product_app_consumer_first
-    - developer_first_framework
-    - reliability_first_service
-    - automation_task_loop
-    - data_pipeline_quality_loop
-    - infrastructure_operations_loop
-    - mixed
-  allowed_values:
-    - product
-    - framework
-    - library
-    - integration
-    - automation
-    - data-pipeline
-    - infrastructure
-    - mixed
-  note: Replace primary, consumer, and selected_spine during extraction. Do not force non-product artifacts into product-app phases or invent custom spine names.
+  note: Set this before extraction. Posture activates gates and changes agent_contract role.
+
 agent_contract:
   role: Senior Product Engineer
-  rule: Build a credible local workbench. Name operability gaps in 05-handover.md and do not fake production readiness.
-  note: role and rule above must equal posture_role_map[deployment_posture.current]. The map is the source of truth; keep the top-level pair in sync when posture changes.
+  rule: >
+    Build the product loop honestly. A slice with a blocked core_proof_required path is
+    status: partial, not status: complete. Blockers are partial, not done.
+    Never write state.json directly — the runner derives it from acceptance-result.json.
+    "trusted_local" lowers operability bars, not product-loop bars.
   posture_role_map:
     trusted_local:
       role: Senior Product Engineer
-      rule: Build a credible local workbench. Name operability gaps as blockers in 05-handover.md and do not fake production readiness.
+      rule: >
+        Build a credible local workbench. Name operability gaps as partial slices.
+        Do not fake production readiness. Gates are inactive; record inactive_reason.
     private_authenticated:
       role: Senior Staff Engineer
-      rule: Build a production-shaped artifact. Auth/session, durable persistence, worker ownership, observability, recovery, and CI gates must be implemented or explicitly blocked.
+      rule: >
+        Build a production-shaped artifact. Auth, persistence, observability, recovery,
+        and CI gates must be implemented or explicitly blocked.
     public_webapp:
       role: Staff/Principal Engineer
-      rule: Build a production-grade artifact. All private-authenticated obligations plus tenant isolation, abuse controls, deployment shape, backup/restore, and security controls must be implemented or explicitly blocked.
+      rule: >
+        Build a production-grade artifact. All private_authenticated obligations plus
+        tenant isolation, abuse controls, deployment, backup, and security gates.
+
 read_order:
   - BUILDPRINT.md
   - 01-questions.md
-  - generated/agent-prompt.md
-  - 02-project-setup.md
+  - 02-architecture.md
   - blueprint.yaml
-  - 03-phases/phase-index.yaml
-  - 03-phases/phase-flow.md
-  - 04-review.md
-  - 05-handover.md
-implementation_loop:
-  phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/00-product-system-alignment.md
-  final_review: 04-review.md
-  handover: 05-handover.md
-repair_routing:
-  product_contradiction: BUILDPRINT.md
-  setup_or_architecture_gap: 02-project-setup.md
-  phase_gap: current_phase
-  review_gap: 04-review.md
-  handover_gap: 05-handover.md
-evidence_ledger: .buildprint/evidence/evidence-ledger.jsonl
-evidence_schema: 08-verification/evidence-ledger.schema.json
-traceability_file: .buildprint/traceability.yaml
-release_gates_file: .buildprint/release-gates.yaml
-ux_contract_dir: 00b-ux-contract/
-ux_acceptance_file: 00b-ux-contract/ux-acceptance.yaml
+  - 03-ux-contract.md
+  - slices/<active-slice>/slice.yaml
+  - 04-handover.md
+
+# Slice system
+slices_dir: slices/
+slice_template: slices/_template/slice.yaml
+slice_capsule_field: persona
+slice_secondary_capsules_field: secondary_personas
+slice_dependency_field: depends_on
+slice_paths_field: paths
+slice_core_proof_field: core_proof_required
+slice_acceptance_result: acceptance-result.json
+slice_self_check: slice-self-check.yaml
+
+# Gates
+gates_dir: gates/
+gate_index: gates/gate-index.yaml
+
+# Team capsules (injected as system prompts by runner)
+capsules_dir: ../../teams/
+
+# Runner
+runner_dir: ../../runner/
+runner_spec: ../../runner/RUNNER-SPEC.md
+
+# Derived state — agb state derive writes, agents never write
+state_json_path: .buildprint/state.json
+
+# UX contract (single truth for paths and acceptance)
+ux_contract_file: 03-ux-contract.md
+ux_contract_path_map_anchor: "## Path Map"
 ux_traceability_file: .buildprint/ux-traceability.yaml
-context:
-  phase_index: 03-phases/phase-index.yaml
-  active_phase: 03-phases/00-product-system-alignment.md
-  agent_prompt: generated/agent-prompt.md
+
+# Evidence
+upgrades_claim_rule: >
+  upgrades_claim: true requires observed evidence with a real exit code and
+  non-synthetic proof. Sample-only paths, review prose, and blocked paths
+  cannot set upgrades_claim: true.
+
+# Architecture
+setup_receipt: .buildprint/setup-receipt.md

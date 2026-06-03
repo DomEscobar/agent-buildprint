@@ -10,8 +10,9 @@ For product/UI-bearing output, synthesize the product vision into:
 
 - `BUILDPRINT.md` mission and senior product/developer/operator engineer contract;
 - `02-project-setup.md` artifact type, first loop, central artifact/interface/boundary, fake-feel risk, quality rules, and forbidden shortcuts;
-- phase `## Product intention`, `## Build`, `## Quality bar`, and `## Do not ship` sections;
-- `04-review.md` screenshot/browser/product-review rejection rules where UI matters.
+- `02-architecture.md` stack, adapter seams, persistence (the architect persona);
+- `03-ux-contract.md` Path Map with novice and operator acceptance rows (the ux-ui-craft persona authors this);
+- per-slice `build-brief.md` and `acceptance-spec.md`, plus the `acceptance-hostile-reviewer` capsule for screenshot/browser/product-review rejection rules where UI matters.
 
 Do not create a packet-level `vision.md`. The vision must be embedded into files agents read early.
 

@@ -7,232 +7,52 @@
   "mode": "agent-run-mapper-workflow",
   "bindingSlice": [
     "source acquisition with read-only boundary",
-    "safe census with CENSUS_HINT-only authority",
-    "source-surface census with high-signal disposition tracking",
+    "safe census with hint-only authority",
     "behavior discovery with source evidence promotion",
     "scope selection before selected extraction",
-    "source-independent executable-blueprint distillation",
-    "selected-buildprint executable Buildprint shape",
-    "downstream-agent execution planning",
+    "source-independent v2 packet emission (slices + gates)",
+    "team capsule references for persona injection",
+    "agb runner contract for derived state and drift checks",
     "qualification gates and no-fake blockers",
     "handoff without source dependency"
   ],
   "files": [
-    {
-      "path": "buildprint.json",
-      "role": "source"
-    },
-    {
-      "path": "BUILDPRINT.md",
-      "role": "source"
-    },
-    {
-      "path": "CONTRACTS.md",
-      "role": "source"
-    },
-    {
-      "path": "phases.yaml",
-      "role": "source"
-    },
-    {
-      "path": "PLAN.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/00-safety-boundaries.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/01-repo-census.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/02-system-map.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/03-candidate-buildprints.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/04-scope-decision.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/05-single-extraction.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/06-system-extraction.md",
-      "role": "source"
-    },
-    {
-      "path": "plans/07-validation-submission.md",
-      "role": "source"
-    },
-    {
-      "path": "policies/quality.md",
-      "role": "source"
-    },
-    {
-      "path": "policies/questions.md",
-      "role": "source"
-    },
-    {
-      "path": "policies/safety.md",
-      "role": "source"
-    },
-    {
-      "path": "prompts/discover.md",
-      "role": "source"
-    },
-    {
-      "path": "prompts/extract-selected.md",
-      "role": "source"
-    },
-    {
-      "path": "questions.md",
-      "role": "source"
-    },
-    {
-      "path": "README.md",
-      "role": "source"
-    },
-    {
-      "path": "schemas/candidate.schema.json",
-      "role": "source"
-    },
-    {
-      "path": "SPEC.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/01-questions.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/02-project-setup.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/00-product-system-alignment.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/01-shell-and-navigation.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/02-core-loop-first.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/03-feature-slices.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/04-state-and-data.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/05-domain-and-intelligence.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/06-design-system-and-copy.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/07-architecture-garden.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/08-verification.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/conditional/auth-and-tenancy.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/conditional/observability-and-health.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/conditional/deployment-and-operability.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/conditional/ci-and-release-gates.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/conditional/backup-and-recovery.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/conditional/security-and-abuse-controls.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/phase-flow.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/phase-index.yaml",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/blueprint.yaml",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/BUILDPRINT.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/generated/agent-prompt.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/teams/data-persistence.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/teams/integration-runtime.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/teams/product-architect.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/teams/security-boundary.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/teams/ux-ui-craft.md",
-      "role": "source"
-    },
-    {
-      "path": "vision.md",
-      "role": "source"
-    },
-    {
-      "path": "templates/executable-packet/03-phases/99-final-review-handover.md",
-      "purpose": "Buildprint package file",
-      "required": true
-    },
-    {
-      "path": "templates/executable-packet/04-review.md",
-      "purpose": "Buildprint package file",
-      "required": true
-    },
-    {
-      "path": "templates/executable-packet/05-handover.md",
-      "purpose": "Buildprint package file",
-      "required": true
-    }
+    { "path": "buildprint.json", "role": "source" },
+    { "path": "BUILDPRINT.md", "role": "source" },
+    { "path": "CONTRACTS.md", "role": "source" },
+    { "path": "SPEC.md", "role": "source" },
+    { "path": "README.md", "role": "source" },
+    { "path": "questions.md", "role": "source" },
+    { "path": "vision.md", "role": "source" },
+    { "path": "policies/quality.md", "role": "source" },
+    { "path": "policies/questions.md", "role": "source" },
+    { "path": "policies/safety.md", "role": "source" },
+    { "path": "templates/executable-packet/BUILDPRINT.md", "role": "source" },
+    { "path": "templates/executable-packet/README.md", "role": "source" },
+    { "path": "templates/executable-packet/01-questions.md", "role": "source" },
+    { "path": "templates/executable-packet/02-project-setup.md", "role": "source" },
+    { "path": "templates/executable-packet/02-architecture.md", "role": "source" },
+    { "path": "templates/executable-packet/03-ux-contract.md", "role": "source" },
+    { "path": "templates/executable-packet/04-handover.md", "role": "source" },
+    { "path": "templates/executable-packet/blueprint.yaml", "role": "source" },
+    { "path": "templates/executable-packet/slices/_template/slice.yaml", "role": "source" },
+    { "path": "templates/executable-packet/slices/_template/build-brief.md", "role": "source" },
+    { "path": "templates/executable-packet/slices/_template/acceptance-spec.md", "role": "source" },
+    { "path": "templates/executable-packet/gates/gate-index.yaml", "role": "source" },
+    { "path": "templates/executable-packet/gates/security.md", "role": "source" },
+    { "path": "templates/executable-packet/gates/observability.md", "role": "source" },
+    { "path": "templates/executable-packet/gates/migration.md", "role": "source" },
+    { "path": "templates/executable-packet/gates/deploy.md", "role": "source" },
+    { "path": "templates/executable-packet/gates/compliance.md", "role": "source" },
+    { "path": "templates/executable-packet/gates/performance.md", "role": "source" },
+    { "path": "templates/teams/product-architect.md", "role": "source" },
+    { "path": "templates/teams/ux-ui-craft.md", "role": "source" },
+    { "path": "templates/teams/data-persistence.md", "role": "source" },
+    { "path": "templates/teams/integration-runtime.md", "role": "source" },
+    { "path": "templates/teams/security-boundary.md", "role": "source" },
+    { "path": "templates/teams/acceptance-hostile-reviewer.md", "role": "source" },
+    { "path": "templates/teams/state-writer.md", "role": "source" },
+    { "path": "templates/runner/RUNNER-SPEC.md", "role": "source" }
   ],
   "forbiddenDefaults": [
     "agb map CLI entrypoint",
@@ -241,34 +61,27 @@
     "secret value copying",
     "scanner-authored product facts",
     "selected extraction without scope decision",
-    "root implementation scaffold",
-    "obsolete selected-output template spine",
-    "one giant execution file for medium/large/full-suite scopes",
+    "obsolete v1 selected-output template spine (03-phases/, 04-review.md, 05-handover.md, generated/agent-prompt.md)",
+    "phase chain with OR-escape unlock conditions",
+    "agent-written state.json",
+    "self-certification by builder",
+    "novice-only acceptance for paths that require operator validation",
     "mocks or fixtures counted as product implementation",
     "validation or parity claims without evidence",
-    "route/function parity as a selected-output requirement",
-    "high-signal source surfaces disappearing without disposition",
-    "selected-output router drift",
-    "typo alias files such as VERFICATION.md, IMPLEMENATION.md, or CAPABILTY_INDEX.md",
-    "duplicate canonical handoff files such as both HANDOFF.md and HANDOVER.md",
-    "downstream agent required to read all markdown files before first action",
-    "obsolete selected-output files: CAPABILITY_INDEX.md, CONTEXT_PACKET.json, TEAM_STACK.md, UX_CONTRACT.md, DESIGN_QUALITY_BAR.md, CURRENT_STATE.md, EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md, manifest.json, 02-context/active-slice.yaml, 07-execution/phases/, capabilities/, generated/current-buildprint-compat/",
-    "obsolete default selected files: AGENT_EXECUTION_BRIEF.md, agent-contract.xml, TRACEABILITY_MATRIX.md, IMPLEMENTATION_COMPLETENESS.md",
-    "fragmented per-capability mini-files such as capability.yaml, source-evidence.md, product-contract.md, implementation-workflow.md, or proof-contract.yaml"
+    "fragmented per-capability mini-files",
+    "obsolete selected-output files: CAPABILITY_INDEX.md, CONTEXT_PACKET.json, TEAM_STACK.md, UX_CONTRACT.md, DESIGN_QUALITY_BAR.md, CURRENT_STATE.md, EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md, manifest.json"
   ],
   "authoritySpine": "BUILDPRINT.md",
   "mirrorFiles": [
-    "buildprint.json",
-    "phases.yaml"
+    "buildprint.json"
   ],
   "requiredDetailFiles": [
     "questions.md",
     "policies/safety.md",
     "policies/quality.md",
     "policies/questions.md",
-    "prompts/discover.md",
-    "prompts/extract-selected.md"
+    "templates/runner/RUNNER-SPEC.md"
   ],
-  "schemaVersion": "mapper-os/executable-blueprint",
+  "schemaVersion": "mapper-os/executable-blueprint/v2",
   "keywords": []
 }

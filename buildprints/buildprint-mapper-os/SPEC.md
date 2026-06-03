@@ -15,7 +15,7 @@ A selected Buildprint should make the downstream artifact better. It should shap
 - Promote source facts by reading behavior-relevant files.
 - Preserve requested scope; do not silently shrink it.
 
-## Selected packet requirements
+## Selected packet requirements (v2 Slice/Gate)
 
 A selected packet must contain:
 
@@ -23,33 +23,46 @@ A selected packet must contain:
 BUILDPRINT.md
 01-questions.md
 02-project-setup.md
+02-architecture.md
+03-ux-contract.md
 blueprint.yaml
-03-phases/phase-index.yaml
-03-phases/phase-flow.md
-03-phases/<phase>.md
-03-phases/99-final-review-handover.md
-04-review.md
-05-handover.md
-generated/agent-prompt.md
+slices/
+  _template/
+    slice.yaml
+    build-brief.md
+    acceptance-spec.md
+  <id>/                     ← at least one populated slice
+    slice.yaml
+    build-brief.md
+    acceptance-spec.md
+gates/
+  gate-index.yaml
+  <gate>.md                 ← per gate active under any allowed posture
+04-handover.md              ← template; runner generates the populated handover
 ```
+
+The packet ships alongside `templates/teams/*.md` capsule files (referenced by `slice.yaml#persona`) and is operated by `bin/agb.js` per `templates/runner/RUNNER-SPEC.md`.
 
 Required properties:
 
 - `BUILDPRINT.md` is the execution start and owns read order.
-- `blueprint.yaml` declares `schema_version: mapper-os/executable-blueprint`, `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, a status/qualification label, setup tier, `deployment_posture`, `blueprint_mode`, implementation loop, and repair routing.
+- `blueprint.yaml` declares `schema_version: mapper-os/executable-blueprint/v2`, `execution_start: BUILDPRINT.md`, `machine_contract: blueprint.yaml`, a qualification label, `deployment_posture` (with `current` and `allowed_values`), `agent_contract` (with the partial-not-complete rule), `slices_dir`, `gates_dir`, `capsules_dir`, and `state_json_path`.
 - `01-questions.md` asks only implementation-changing questions.
-- `02-project-setup.md` aligns the implementation around artifact type, deployment posture, real consumer, first success loop, central artifact/interface/boundary, persistence/traces/readback, live-boundary honesty, fake-feel risks, commands, quality rules, and forbidden shortcuts.
-- `03-phases/phase-index.yaml` names the active phase and ordered phase files.
-- `03-phases/phase-flow.md` tells the coding agent how to work each phase: restate product intention, apply `requires_roles`, build a real usable slice, improve the obvious next action, run checks, remove slop, and record useful handover facts.
-- Phase files describe mode-appropriate intention, mapped obligations, stable-vs-free boundaries, implementation scope, interfaces touched, runtime/state touched, quality bar, do-not-ship failures, repair routing, and unlock conditions. Product phases use the Buildprint Consumer-First product-system spine as the base; developer-facing phases read Developer-First; service/operator phases read Reliability-First.
-- `04-review.md` is a skeptical artifact review and operational walkthrough with explicit Do/Observe/Record steps, including posture-gated operability checks.
-- `05-handover.md` is concise and honest: current status, built surfaces, verification, known defects/blockers, required `Not production-grade` status block, next atomic actions, and a `Continue from here` options menu (continue one phase, continue to checkpoint, do all remaining phases, or stop) so the developer always has a concrete choice.
-- `blueprint.yaml` also declares `execution_cadence` (`one_phase`, `to_checkpoint`, or `all_remaining`) to control how the agent advances across phases.
-- `generated/agent-prompt.md` is alignment speech, not authority.
+- `02-project-setup.md` aligns artifact type, deployment posture, real consumer, first success loop, central artifact/interface/boundary, persistence/traces/readback, live-boundary honesty, fake-feel risks, commands, quality rules, and forbidden shortcuts.
+- `02-architecture.md` defines the chosen stack, adapter seams, persistence model, and architecture invariants (the `product-architect` persona authors this).
+- `03-ux-contract.md` provides the global Path Map (every user-facing path with id), copy quality bar, state language, and acceptance rows. Each path needs at least one row with `sample_can_satisfy: false` for OPERATOR validation.
+- Each `slices/<id>/slice.yaml` declares `id`, `persona` (file reference into `templates/teams/`), `paths:` (subset of Path Map), `core_proof_required:` (subset of paths), and optional `depends_on:`.
+- `gates/gate-index.yaml` declares each gate's `active_when_posture:` list and `requires_human_signoff:` flag.
+- `04-handover.md` ships as a template; the runner fills it via `agb slice status` from the derived `state.json`.
 
 ## Forbidden selected-output shapes
 
-Do not emit obsolete router/scaffold files: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, root `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`, `02-context/active-slice.yaml`, `07-execution/phases/`, `capabilities/`, and fragmented mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`.
+Do not emit:
+
+- the legacy v1 phase chain: `03-phases/`, `04-review.md`, `05-handover.md`, `generated/agent-prompt.md`, `99-final-review-handover.md`;
+- obsolete router/scaffold files: `START_HERE.md`, `PRE_IMPLEMENTATION_QUESTIONS.md`, packet `AGENTS.md`, `03-capabilities/`, `04-interfaces/`, `05-state-runtime/`, `06-safety/`, `08-evaluation/`, `09-evidence/`, `CAPABILITY_INDEX.md`, `CONTEXT_PACKET.json`, `TEAM_STACK.md`, `UX_CONTRACT.md`, `DESIGN_QUALITY_BAR.md`, `CURRENT_STATE.md`, `EXECUTION_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md`, `manifest.json`;
+- fragmented per-capability mini-files such as `capability.yaml`, `source-evidence.md`, `product-contract.md`, `implementation-workflow.md`, or `proof-contract.yaml`;
+- agent-written `state.json` (must be derived by `agb state derive`).
 
 ## Quality constraints
 
@@ -76,6 +89,16 @@ Mapper OS should avoid:
 ## Qualification labels
 
 Use conservative labels. A packet can be `product_build_required` or `local_build_requires_review` before a downstream implementation exists. Do not claim validated production completeness from the packet alone.
+
+## Anti-fabrication invariants
+
+- A slice is `complete` only when every `core_proof_required` path has `upgrades_claim: true` in its `acceptance-result.json`. Blocked, sample-satisfied, or stale-contract paths force `partial`. No OR-escape.
+- `state.json` is always written by `agb state derive`, never by an agent. `derived_by: "agb state derive"` is validated by `agb drift check`.
+- Every acceptance session loads `agb persona --role acceptance`, which injects the `acceptance-hostile-reviewer` capsule from `templates/teams/`.
+- Every build session loads `agb persona --role build`, which injects the slice's named capsule from `templates/teams/`.
+- Every `acceptance-result.json` carries a `contract_version` hash of `03-ux-contract.md`; mismatch forces `stale`.
+- Every path id in any `slice.yaml#paths` must exist in `03-ux-contract.md` Path Map.
+- Gates with `requires_human_signoff: true` require a non-agent `signoff_by` value before the gate counts as `passed`.
 
 ## Validation philosophy
 

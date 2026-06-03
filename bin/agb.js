@@ -30,6 +30,10 @@ Usage:
   agb packet check <packet-folder-or-package-json-url>
   agb packet next <packet-folder-or-build-state-folder>
   agb evidence check <evidence-ledger-jsonl>
+  agb persona --slice <slice-yaml> --role build|acceptance [--packet-dir <path>]
+  agb state derive [--project-dir <path>] [--packet-dir <path>]
+  agb drift check [--project-dir <path>] [--packet-dir <path>]
+  agb slice status [--project-dir <path>]
 
 Examples:
   agb check ./my-buildprint
@@ -38,6 +42,11 @@ Examples:
   agb packet check ./buildprints/ai-swarm-simulator
   agb packet next ./buildprints/ai-swarm-simulator
   agb evidence check .buildprint/evidence/evidence-ledger.jsonl
+  agb persona --slice slices/01-onboarding/slice.yaml --role build
+  agb persona --slice slices/01-onboarding/slice.yaml --role acceptance
+  agb state derive
+  agb drift check
+  agb slice status
 
 Mapper note:
   The old agb map CLI has been removed. To map a source project, run an agent
@@ -426,6 +435,63 @@ function evidenceRowsFromText(text) {
   })
 }
 
+function packetCheckResultsV2(dir, files, allFiles, isMapperTemplatePacket) {
+  const checks = []
+  const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
+
+  // v2 spine files
+  const needV2 = ['BUILDPRINT.md', 'blueprint.yaml', '01-questions.md', '02-project-setup.md', '02-architecture.md', '03-ux-contract.md', '04-handover.md']
+  for (const file of needV2) ok(`v2 packet file exists: ${file}`, files.has(file))
+  ok('v2 packet has slices template', files.has('slices/_template/slice.yaml'))
+  ok('v2 packet has gate index', files.has('gates/gate-index.yaml'))
+  ok('v2 packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
+
+  const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
+  ok('v2 blueprint declares v2 schema', /schema_version:\s*mapper-os\/executable-blueprint\/v2/i.test(blueprint))
+  ok('v2 blueprint declares slices_dir', /slices_dir:/i.test(blueprint))
+  ok('v2 blueprint declares gates_dir', /gates_dir:/i.test(blueprint))
+  ok('v2 blueprint declares capsules_dir', /capsules_dir:/i.test(blueprint))
+  ok('v2 blueprint derived-state rule present', /state_json_path:/i.test(blueprint) && /agent.*never.*write|never.*write.*state|agb state derive/i.test(blueprint))
+  ok('v2 blueprint declares posture', /deployment_posture:/i.test(blueprint))
+  ok('v2 blueprint agent_contract has partial-not-complete rule', /partial.*not.*complete|blocked.*partial/i.test(blueprint))
+
+  const uxText = safeReadText(path.join(dir, '03-ux-contract.md'))
+  ok('v2 ux-contract has Path Map', /##\s*Path Map/i.test(uxText))
+  ok('v2 ux-contract has operator acceptance rows (sample_can_satisfy: false)', /sample_can_satisfy:\s*false/i.test(uxText))
+  ok('v2 ux-contract has novice acceptance rows', /novice/i.test(uxText))
+
+  const archText = safeReadText(path.join(dir, '02-architecture.md'))
+  ok('v2 architecture defines stack', /stack|framework|language|runtime/i.test(archText))
+  ok('v2 architecture defines persistence', /persist|database|storage|db/i.test(archText))
+
+  const handoverText = safeReadText(path.join(dir, '04-handover.md'))
+  ok('v2 handover template has slice status section', /slice status|## Slice/i.test(handoverText))
+  ok('v2 handover template has overall readiness block', /overall readiness|overall_status|not.*complete|partial.*status/i.test(handoverText))
+
+  // Gate index check
+  const gateIndex = safeReadText(path.join(dir, 'gates', 'gate-index.yaml'))
+  ok('v2 gate index has active_when_posture entries', /active_when_posture:/i.test(gateIndex))
+  ok('v2 gate index has human signoff gate', /requires_human_signoff:\s*true/i.test(gateIndex))
+
+  // Slice template check
+  const sliceTemplate = safeReadText(path.join(dir, 'slices', '_template', 'slice.yaml'))
+  ok('v2 slice template has paths field', /^paths:/mi.test(sliceTemplate))
+  ok('v2 slice template has core_proof_required field', /core_proof_required:/i.test(sliceTemplate))
+  ok('v2 slice template has persona field', /^persona:/mi.test(sliceTemplate))
+
+  // BUILDPRINT sanity
+  const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
+  ok('v2 BUILDPRINT has slice system section', /slice|slices/i.test(buildprint))
+
+  ok('v2 no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
+    if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false
+    const text = safeReadText(path.join(dir, file)).replace(/<phase-id>/g, '')
+    return /MAPPER_REQUIRED_|<mapped-app>|<capability name/i.test(text)
+  }))
+
+  return checks
+}
+
 function packetCheckResults(dir) {
   dir = packetCheckRoot(dir)
   const checks = []
@@ -434,6 +500,12 @@ function packetCheckResults(dir) {
   const allFiles = Array.from(files)
   const normalizedPacketDir = dir.split(path.sep).join('/')
   const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') || normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet')
+
+  // Detect v2 packet (Slice/Gate structure)
+  const blueprint0 = safeReadText(path.join(dir, 'blueprint.yaml'))
+  const isV2Packet = /schema_version:\s*mapper-os\/executable-blueprint\/v2/i.test(blueprint0) ||
+    (files.has('slices/_template/slice.yaml') && files.has('gates/gate-index.yaml'))
+  if (isV2Packet) return packetCheckResultsV2(dir, files, allFiles, isMapperTemplatePacket)
 
   // Keep this checker as an executable-packet smoke alarm, not a product-quality theology gate.
   // Product taste lives in generated/agent-prompt.md and the Buildprint prose; this check only
@@ -1042,6 +1114,491 @@ if (args[0] === 'map') {
   console.error('agb map has been removed.')
   console.error('Use an agent session with buildprints/buildprint-mapper-os/ to map a source project into a Buildprint.')
   process.exit(1)
+}
+
+// ─── Slice/Gate runner commands ───────────────────────────────────────────────
+
+function findProjectRoot(start) {
+  // Walk up from `start` until we find a dir that has either .buildprint/ or slices/ as a child.
+  let current = path.resolve(start)
+  for (let i = 0; i < 10; i++) {
+    if (exists(path.join(current, '.buildprint')) || exists(path.join(current, 'slices'))) return current
+    const parent = path.dirname(current)
+    if (parent === current) break
+    current = parent
+  }
+  return path.resolve(start)
+}
+
+function findPacketDir(projectDir) {
+  const root = findProjectRoot(projectDir)
+  const sourceJson = path.join(root, '.buildprint', 'source.json')
+  if (exists(sourceJson)) {
+    try {
+      const data = readJsonFile(sourceJson)
+      if (data.packet_dir && exists(data.packet_dir)) return data.packet_dir
+    } catch { /* fall through */ }
+  }
+  for (const candidate of [
+    path.join(root, 'packet'),
+    path.join(root, '.buildprint', 'snapshots'),
+    root,
+  ]) {
+    if (exists(path.join(candidate, 'blueprint.yaml'))) return candidate
+  }
+  return null
+}
+
+function findCapsuleDir(packetDir) {
+  // Read capsules_dir from blueprint.yaml; resolve relative to packet. Fall back to common locations.
+  const blueprint = safeReadText(path.join(packetDir, 'blueprint.yaml'))
+  const capsulesDirField = (blueprint.match(/^\s*capsules_dir:\s*([^\s#]+)/m) || [])[1]
+  const candidates = []
+  if (capsulesDirField) candidates.push(path.resolve(packetDir, capsulesDirField))
+  candidates.push(
+    path.join(packetDir, 'teams'),
+    path.join(packetDir, '..', 'teams'),
+    path.join(packetDir, '..', '..', 'teams'),
+  )
+  for (const c of candidates) if (exists(c)) return c
+  return null
+}
+
+function readYamlLite(file) {
+  // Reuse safeReadText; returns raw text, callers extract what they need
+  return safeReadText(file)
+}
+
+function yamlListField(text, key) {
+  // Extract a YAML list field. Supports inline (paths: [a, b]) and block (paths:\n  - a\n  - b).
+  // The block form stops at the next sibling key (^\w[\w-]*:) so it doesn't bleed into the next field.
+  const inlineMatch = text.match(new RegExp(`^\\s*${key}:\\s*\\[([^\\]]+)\\]`, 'm'))
+  if (inlineMatch) return inlineMatch[1].split(',').map(s => s.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean)
+  const lines = text.split(/\r?\n/)
+  const startIdx = lines.findIndex(line => new RegExp(`^\\s*${key}:\\s*$`).test(line))
+  if (startIdx < 0) return []
+  const items = []
+  for (let i = startIdx + 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line.trim()) continue
+    const sibling = line.match(/^[A-Za-z_][\w-]*:/)
+    if (sibling) break
+    const itemMatch = line.match(/^\s+-\s+(\S+)/)
+    if (itemMatch) items.push(itemMatch[1].trim().replace(/^['"]|['"]$/g, ''))
+  }
+  return items
+}
+
+function extractUxPathSection(uxText, pathIds) {
+  const lines = uxText.split(/\r?\n/)
+  let inPathMap = false
+  const collected = []
+  let currentId = null
+  let currentBlock = []
+  for (const line of lines) {
+    if (/^##\s+Path Map/.test(line)) { inPathMap = true; continue }
+    if (inPathMap && /^##\s/.test(line)) {
+      if (currentId && pathIds.includes(currentId)) collected.push(...currentBlock)
+      break
+    }
+    if (inPathMap) {
+      const idMatch = line.match(/^\s+-\s+id:\s+(\S+)/)
+      if (idMatch) {
+        if (currentId && pathIds.includes(currentId)) collected.push(...currentBlock)
+        currentId = idMatch[1]
+        currentBlock = [line]
+      } else if (currentBlock.length) {
+        currentBlock.push(line)
+      }
+    }
+  }
+  if (currentId && pathIds.includes(currentId) && inPathMap) collected.push(...currentBlock)
+  return collected.length ? collected.join('\n') : '(No matching paths found in ux-contract Path Map)'
+}
+
+function hashFileSync(filePath) {
+  if (!exists(filePath)) return 'unknown'
+  // Simple non-crypto hash for contract versioning (file content hash)
+  const content = readText(filePath)
+  let h = 0
+  for (let i = 0; i < content.length; i++) { h = (Math.imul(31, h) + content.charCodeAt(i)) | 0 }
+  return Math.abs(h).toString(16).padStart(8, '0')
+}
+
+function buildPersonaPrompt(sliceYamlPath, role, packetDir) {
+  const sliceText = safeReadText(sliceYamlPath)
+  const sliceId = (sliceText.match(/^id:\s*(\S+)/m) || [])[1] || path.basename(path.dirname(sliceYamlPath))
+  const persona = role === 'acceptance' ? 'acceptance-hostile-reviewer' : ((sliceText.match(/^persona:\s*(\S+)/m) || [])[1] || 'ux-ui-craft')
+  const paths = yamlListField(sliceText, 'paths')
+  const coreProof = yamlListField(sliceText, 'core_proof_required')
+
+  const capsuleDir = findCapsuleDir(packetDir)
+  if (!capsuleDir) throw new Error(`Capsule directory not found. Looked at packetDir/teams, ../teams, ../../teams, and capsules_dir from blueprint.yaml. packetDir=${packetDir}`)
+  const capsuleFile = path.join(capsuleDir, `${persona}.md`)
+  const capsuleText = safeReadText(capsuleFile)
+  if (!capsuleText) throw new Error(`Capsule file not found: ${capsuleFile}\nAvailable capsules in ${capsuleDir}: ${exists(capsuleDir) ? fs.readdirSync(capsuleDir).filter(f => f.endsWith('.md')).join(', ') : '(none)'}`)
+
+  const archText = safeReadText(path.join(packetDir, '02-architecture.md'))
+  const uxContractPath = path.join(packetDir, '03-ux-contract.md')
+  const uxText = safeReadText(uxContractPath)
+  const uxSections = uxText ? extractUxPathSection(uxText, paths) : '(03-ux-contract.md not found)'
+  const contractVersion = hashFileSync(uxContractPath)
+
+  const lines = [
+    '## System Identity',
+    '',
+    capsuleText.trim(),
+    '',
+    '---',
+    '',
+    '## Required Reading',
+    '',
+    '### Architecture (02-architecture.md)',
+    '',
+    archText ? archText.slice(0, 2000) + (archText.length > 2000 ? '\n...(truncated — read full file)' : '') : '(02-architecture.md not found)',
+    '',
+    '### UX Contract paths for this slice (03-ux-contract.md)',
+    '',
+    uxSections,
+    '',
+    '---',
+    '',
+    '## Scope',
+    '',
+    `Slice: \`${sliceId}\``,
+    `Role: \`${role}\``,
+    `UX contract version: \`${contractVersion}\``,
+    '',
+    'Paths to implement/test:',
+    ...paths.map(p => `  - \`${p}\`${coreProof.includes(p) ? '  [CORE PROOF REQUIRED]' : ''}`),
+    '',
+    'Core proof required (observed end-to-end, not proxied by sample or blocker):',
+    ...coreProof.map(p => `  - \`${p}\``),
+  ]
+
+  if (role === 'build') {
+    lines.push(
+      '', '---', '',
+      '## Self-Check Instruction',
+      '',
+      `Before handoff, produce \`slices/${sliceId}/slice-self-check.yaml\` with one row per Blocks entry: id, result (clean/violated/n.a.), note.`,
+      '',
+      '## State Rule',
+      '',
+      'Never write \`state.json\`. Never write \`acceptance-result.json\`. The runner derives state from your acceptance result.',
+    )
+  } else {
+    lines.push(
+      '', '---', '',
+      '## Acceptance Output',
+      '',
+      `Write \`slices/${sliceId}/acceptance-result.json\`.`,
+      'A blocked core_proof_required path makes the slice \`partial\`, not \`complete\`.',
+      'Never write \`state.json\`.',
+    )
+  }
+
+  return lines.join('\n')
+}
+
+function deriveState(projectDir, packetDir) {
+  const blueprintText = safeReadText(path.join(packetDir, 'blueprint.yaml'))
+  const posture = (blueprintText.match(/deployment_posture:[\s\S]*?^\s*current:\s*(\S+)/m) || [])[1] || 'trusted_local'
+  const slicesDir = path.join(projectDir, 'slices')
+  const gatesDir = path.join(packetDir, 'gates')
+  const uxContractPath = path.join(packetDir, '03-ux-contract.md')
+  const archPath = path.join(packetDir, '02-architecture.md')
+  const contractHash = hashFileSync(uxContractPath)
+  const archHash = hashFileSync(archPath)
+
+  const slices = {}
+  if (exists(slicesDir)) {
+    for (const entry of fs.readdirSync(slicesDir, { withFileTypes: true })) {
+      if (!entry.isDirectory() || entry.name === '_template') continue
+      const sliceId = entry.name
+      const arPath = path.join(slicesDir, sliceId, 'acceptance-result.json')
+      if (!exists(arPath)) {
+        slices[sliceId] = { status: 'not-started', evidence: [], reasons: ['no acceptance-result.json'] }
+        continue
+      }
+      let result
+      try { result = readJsonFile(arPath) } catch (e) {
+        slices[sliceId] = { status: 'fail', evidence: [arPath], reasons: [`invalid JSON: ${e.message}`] }
+        continue
+      }
+      const fileHash = result.contract_version || ''
+      if (fileHash && fileHash !== contractHash) {
+        slices[sliceId] = { status: 'stale', evidence: [arPath], reasons: [`contract changed (was ${fileHash}, now ${contractHash})`] }
+        continue
+      }
+      const overall = result.overall_slice_status || ''
+      const paths = result.paths || []
+      if (overall === 'complete') {
+        const badCore = paths.filter(p => p.is_core_proof && !p.upgrades_claim).map(p => `${p.path_id} missing upgrades_claim:true`)
+        slices[sliceId] = badCore.length
+          ? { status: 'partial', evidence: [arPath], reasons: badCore }
+          : { status: 'complete', evidence: [arPath], reasons: [] }
+      } else if (overall === 'partial') {
+        const reasons = paths.filter(p => p.is_core_proof && p.status !== 'pass').map(p => `${p.path_id}: ${p.observed || 'blocked'}`)
+        slices[sliceId] = { status: 'partial', evidence: [arPath], reasons: reasons.length ? reasons : [result.reason || 'partial'] }
+      } else if (overall === 'fail') {
+        slices[sliceId] = { status: 'fail', evidence: [arPath], reasons: [result.reason || 'failed'] }
+      } else {
+        slices[sliceId] = { status: 'partial', evidence: [arPath], reasons: ['unknown overall_slice_status'] }
+      }
+    }
+  }
+
+  const gates = {}
+  const gateIndexPath = path.join(gatesDir, 'gate-index.yaml')
+  if (exists(gateIndexPath)) {
+    const gateText = readText(gateIndexPath)
+    const gateBlocks = [...gateText.matchAll(/^\s*-\s+id:\s+(\S+)([\s\S]*?)(?=^\s*-\s+id:|\Z)/gm)]
+    for (const [, gateId, block] of gateBlocks) {
+      const activePostures = (block.match(/active_when_posture:\s*\[([^\]]+)\]/) || [])[1]?.split(',').map(s => s.trim()) || []
+      const requiresSignoff = /requires_human_signoff:\s*true/i.test(block)
+      const resultPath = path.join(projectDir, 'gates', gateId, 'result.json')
+      if (!activePostures.includes(posture)) {
+        gates[gateId] = { status: 'inactive', inactive_reason: `${posture} posture`, signoff: null }
+        continue
+      }
+      if (!exists(resultPath)) {
+        gates[gateId] = { status: 'pending', inactive_reason: null, signoff: null }
+        continue
+      }
+      let gResult
+      try { gResult = readJsonFile(resultPath) } catch (e) {
+        gates[gateId] = { status: 'failed', inactive_reason: null, signoff: `invalid JSON: ${e.message}` }
+        continue
+      }
+      if (gResult.status === 'inactive') {
+        gates[gateId] = { status: 'inactive', inactive_reason: gResult.inactive_reason || 'not specified', signoff: null }
+      } else if (gResult.status === 'passed') {
+        if (requiresSignoff && (!gResult.signoff_by || ['agent', 'auto', 'generated', ''].includes(gResult.signoff_by.toLowerCase()))) {
+          gates[gateId] = { status: 'failed', inactive_reason: null, signoff: `requires human signoff but signoff_by='${gResult.signoff_by}'` }
+        } else {
+          gates[gateId] = { status: 'passed', inactive_reason: null, signoff: gResult.signoff_by || 'auto-test' }
+        }
+      } else {
+        gates[gateId] = { status: gResult.status || 'pending', inactive_reason: null, signoff: null }
+      }
+    }
+  }
+
+  const allComplete = Object.values(slices).length > 0 && Object.values(slices).every(s => s.status === 'complete')
+  const allGatesOk = Object.values(gates).every(g => ['passed', 'inactive'].includes(g.status))
+  const overall = Object.values(slices).length === 0 ? 'not-started' : (allComplete && allGatesOk ? 'complete' : 'partial')
+
+  return {
+    schema_version: '2',
+    posture,
+    slices,
+    gates,
+    overall_status: overall,
+    contract_versions: { '03-ux-contract.md': contractHash, '02-architecture.md': archHash },
+    derived_at: new Date().toISOString(),
+    derived_by: 'agb state derive',
+  }
+}
+
+function runDriftChecks(projectDir, packetDir) {
+  const results = []
+  const ok = (id, pass, reason = '') => results.push({ id, pass, reason })
+  const slicesDir = path.join(projectDir, 'slices')
+  const uxContractPath = path.join(packetDir, '03-ux-contract.md')
+  const uxText = safeReadText(uxContractPath)
+  const stateJsonPath = path.join(projectDir, '.buildprint', 'state.json')
+
+  // no-slice-without-path-map
+  if (exists(slicesDir)) {
+    const missing = fs.readdirSync(slicesDir, { withFileTypes: true })
+      .filter(e => e.isDirectory() && e.name !== '_template' && !exists(path.join(slicesDir, e.name, 'slice.yaml')))
+      .map(e => e.name)
+    ok('no-slice-without-path-map', missing.length === 0, missing.length ? `Missing slice.yaml: ${missing.join(', ')}` : '')
+  } else {
+    ok('no-slice-without-path-map', true, 'SKIP: no slices/ directory')
+  }
+
+  // every-path-id-traces
+  if (uxText && exists(slicesDir)) {
+    const knownIds = new Set([...uxText.matchAll(/^\s*-\s+id:\s+(\S+)/gm)].map(m => m[1]))
+    const unknown = []
+    for (const e of fs.readdirSync(slicesDir, { withFileTypes: true })) {
+      if (!e.isDirectory() || e.name === '_template') continue
+      const st = safeReadText(path.join(slicesDir, e.name, 'slice.yaml'))
+      for (const pid of yamlListField(st, 'paths')) {
+        if (!knownIds.has(pid)) unknown.push(`${e.name}/${pid}`)
+      }
+    }
+    ok('every-path-id-traces', unknown.length === 0, unknown.length ? `Unknown path ids: ${unknown.join(', ')}` : '')
+  } else {
+    ok('every-path-id-traces', true, 'SKIP: ux-contract or slices/ not found')
+  }
+
+  // operator-acceptance-present
+  if (uxText) {
+    const operatorRows = [...uxText.matchAll(/ux_ac_id:\s+(\S+)[\s\S]*?sample_can_satisfy:\s*false/g)].map(m => m[1])
+    ok('operator-acceptance-present', operatorRows.length > 0, operatorRows.length ? '' : 'No OPERATOR acceptance rows (sample_can_satisfy: false) in ux-contract')
+  } else {
+    ok('operator-acceptance-present', true, 'SKIP: 03-ux-contract.md not found')
+  }
+
+  // no-state-self-write
+  if (exists(stateJsonPath)) {
+    let derivedBy = ''
+    try { derivedBy = readJsonFile(stateJsonPath).derived_by || '' } catch { /* */ }
+    ok('no-state-self-write', derivedBy.includes('agb state derive'), derivedBy.includes('agb') ? '' : `state.json derived_by='${derivedBy}'; must be 'agb state derive'`)
+  } else {
+    ok('no-state-self-write', true, 'SKIP: state.json not found')
+  }
+
+  // contract-version-current
+  if (uxText && exists(slicesDir)) {
+    const currentHash = hashFileSync(uxContractPath)
+    const stale = []
+    for (const f of walk(slicesDir).filter(f => f.endsWith('acceptance-result.json'))) {
+      try {
+        const data = readJsonFile(f)
+        if (data.contract_version && data.contract_version !== currentHash) stale.push(path.relative(slicesDir, path.dirname(f)))
+      } catch { /* */ }
+    }
+    ok('contract-version-current', stale.length === 0, stale.length ? `Stale acceptance results: ${stale.join(', ')}` : '')
+  } else {
+    ok('contract-version-current', true, 'SKIP')
+  }
+
+  // no-fake-provider
+  const fakePatterns = /simulate_success|fake_provider|mock_llm|hardcoded_response/i
+  const nonTestFiles = walk(projectDir).filter(f =>
+    /\.(py|js|ts|vue|svelte)$/.test(f) &&
+    !f.includes('/tests/') && !f.includes('/test/') && !f.includes('node_modules') && !f.includes('.buildprint')
+  )
+  const fakeMatches = nonTestFiles.filter(f => fakePatterns.test(safeReadText(f))).map(f => path.relative(projectDir, f))
+  ok('no-fake-provider', fakeMatches.length === 0, fakeMatches.length ? `Possible fake provider in: ${fakeMatches.slice(0, 5).join(', ')}` : '')
+
+  // no-plaintext-secrets
+  const secretPattern = /sk-[A-Za-z0-9]{20,}|api_key\s*=\s*['"][A-Za-z0-9]{8,}/
+  const secretMatches = walk(projectDir).filter(f =>
+    !/\.env($|\.example)|fixture|test_data/.test(f) && !f.includes('node_modules') && !f.includes('.git') && !f.includes('.buildprint') && /\.(env|json|yaml|yml|py|js|ts)$/.test(f)
+  ).filter(f => secretPattern.test(safeReadText(f))).map(f => path.relative(projectDir, f))
+  ok('no-plaintext-secrets', secretMatches.length === 0, secretMatches.length ? `Possible secrets in: ${secretMatches.slice(0, 5).join(', ')}` : '')
+
+  return results
+}
+
+if (args[0] === 'persona') {
+  if (isHelp(args[1])) usage(0)
+  const sliceArg = optionValue('--slice')
+  const roleArg = optionValue('--role')
+  const packetDirArg = optionValue('--packet-dir')
+  if (!sliceArg || !roleArg) {
+    console.error('Usage: agb persona --slice <slice-yaml> --role build|acceptance [--packet-dir <path>]')
+    process.exit(1)
+  }
+  if (!['build', 'acceptance'].includes(roleArg)) {
+    console.error('--role must be build or acceptance')
+    process.exit(1)
+  }
+  const slicePath = path.resolve(cwd, sliceArg)
+  if (!exists(slicePath)) { console.error(`slice.yaml not found: ${slicePath}`); process.exit(1) }
+  const resolvedPacketDir = packetDirArg
+    ? path.resolve(cwd, packetDirArg)
+    : findPacketDir(cwd) || findPacketDir(path.dirname(slicePath)) || (() => { console.error('Cannot find packet dir. Pass --packet-dir'); process.exit(1) })()
+  try {
+    console.log(buildPersonaPrompt(slicePath, roleArg, resolvedPacketDir))
+    process.exit(0)
+  } catch (error) {
+    console.error(`persona failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
+if (args[0] === 'state') {
+  const sub = args[1]
+  if (!sub || isHelp(sub)) usage(0)
+  if (sub !== 'derive') { console.error(`unknown state subcommand: ${sub}`); process.exit(1) }
+  const projectDirArg = optionValue('--project-dir') || cwd
+  const packetDirArg = optionValue('--packet-dir')
+  const projectDir = path.resolve(cwd, projectDirArg)
+  const packetDir = packetDirArg
+    ? path.resolve(cwd, packetDirArg)
+    : findPacketDir(projectDir) || (() => { console.error('Cannot find packet dir. Pass --packet-dir'); process.exit(1) })()
+  try {
+    const state = deriveState(projectDir, packetDir)
+    const outPath = path.join(projectDir, '.buildprint', 'state.json')
+    fs.mkdirSync(path.dirname(outPath), { recursive: true })
+    writeJson(outPath, state)
+    console.log(`✓ state.json written to ${outPath}`)
+    console.log(`  Overall status: ${state.overall_status}`)
+    const partials = Object.entries(state.slices).filter(([, v]) => v.status !== 'complete' && v.status !== 'not-started')
+    if (partials.length) console.log(`  Partial/blocked: ${partials.map(([k]) => k).join(', ')}`)
+    process.exit(0)
+  } catch (error) {
+    console.error(`state derive failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
+if (args[0] === 'drift') {
+  const sub = args[1]
+  if (!sub || isHelp(sub)) usage(0)
+  if (sub !== 'check') { console.error(`unknown drift subcommand: ${sub}`); process.exit(1) }
+  const projectDirArg = optionValue('--project-dir') || cwd
+  const packetDirArg = optionValue('--packet-dir')
+  const projectDir = path.resolve(cwd, projectDirArg)
+  const packetDir = packetDirArg
+    ? path.resolve(cwd, packetDirArg)
+    : findPacketDir(projectDir) || projectDir
+  try {
+    const results = runDriftChecks(projectDir, packetDir)
+    let failed = 0
+    for (const r of results) {
+      const sym = r.pass ? '✓' : '✗'
+      console.log(`${sym} ${r.pass ? 'PASS' : 'FAIL'} ${r.id}${r.reason ? `  — ${r.reason}` : ''}`)
+      if (!r.pass) failed++
+    }
+    console.log(`\ndrift check: ${failed ? 'FAIL' : 'PASS'} (${failed} rule${failed === 1 ? '' : 's'} violated)`)
+    process.exit(failed ? 1 : 0)
+  } catch (error) {
+    console.error(`drift check failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
+if (args[0] === 'slice') {
+  const sub = args[1]
+  if (!sub || isHelp(sub)) usage(0)
+  if (sub !== 'status') { console.error(`unknown slice subcommand: ${sub}`); process.exit(1) }
+  const projectDirArg = optionValue('--project-dir') || cwd
+  const projectDir = path.resolve(cwd, projectDirArg)
+  const stateFile = path.join(projectDir, '.buildprint', 'state.json')
+  if (!exists(stateFile)) {
+    console.error(`state.json not found at ${stateFile}\nRun: agb state derive`)
+    process.exit(1)
+  }
+  try {
+    const state = readJsonFile(stateFile)
+    const line = '─'.repeat(60)
+    console.log(`\nSlice status  (derived ${state.derived_at || 'unknown'})`)
+    console.log(line)
+    for (const [id, s] of Object.entries(state.slices || {})) {
+      const sym = s.status === 'complete' ? '✓' : s.status === 'not-started' ? '○' : '✗'
+      const reason = s.reasons?.length ? `  — ${s.reasons[0]}` : ''
+      console.log(`${sym} ${id.padEnd(36)} ${s.status}${reason}`)
+    }
+    console.log(`\nGate status`)
+    console.log(line)
+    for (const [id, g] of Object.entries(state.gates || {})) {
+      const sym = g.status === 'passed' ? '✓' : g.status === 'inactive' ? '~' : '✗'
+      const note = g.inactive_reason ? `(${g.inactive_reason})` : (g.signoff ? `(signed: ${g.signoff})` : '')
+      console.log(`${sym} ${id.padEnd(36)} ${g.status} ${note}`)
+    }
+    console.log(`\nOverall: ${state.overall_status?.toUpperCase() || 'UNKNOWN'}`)
+    process.exit(state.overall_status === 'complete' ? 0 : 1)
+  } catch (error) {
+    console.error(`slice status failed: ${error.message}`)
+    process.exit(1)
+  }
 }
 
 if (args[0] === 'check') {

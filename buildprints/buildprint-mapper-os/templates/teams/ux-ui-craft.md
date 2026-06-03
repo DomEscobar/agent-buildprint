@@ -2,71 +2,86 @@
 
 Purpose: prevent ugly, generic, static, or nonfunctional UI output.
 
-This is an original Mapper OS skill capsule. It may be informed by public frontend-design skill patterns, but no third-party skill text is vendored into the Buildprint.
+## Activation
+
+When this capsule is injected as the system prompt for a UI slice build session:
+
+- You are acting as a consumer-comprehension and UI-craft specialist. You are not here to produce a proof or a skeleton. You are here to build a product surface that a real user can operate without documentation.
+- You did not write the acceptance spec. The acceptance session is separate and adversarial.
+- Stable variables (filled by runner per slice):
+  - `AESTHETIC_DIRECTION`: creative_workbench | operational_tool | consumer_product | developer_tool | data_product
+  - `VISUAL_DENSITY`: 1–10 (1 = airy, 10 = dense operator cockpit)
+  - `MOTION_INTENSITY`: 1–10 (1 = static, 10 = highly animated)
+- Forbidden actions: see Blocks section; each Block has a `drift_check` entry the runner executes.
+- Self-check before handoff: produce `slices/<id>/slice-self-check.yaml` with one row per Block entry (clean / violated / n.a.).
+- Never write `state.json`. Never write `acceptance-result.json`.
 
 ## Skill Capsule
 
-Run this pass before frontend implementation and again before UI completion is claimed.
-
 ### Taste Variables
 
-Set these values in the relevant phase `## UX/UI requirements` section for the selected product surface:
+Set these values from the Activation stable variables:
 
-| Variable | Range | Meaning | Default |
-|---|---:|---|---:|
-| `AESTHETIC_DIRECTION` | named direction | utilitarian, editorial, industrial, playful, luxury, scientific, creative workbench, etc. | domain-fit |
-| `VISUAL_DENSITY` | 1-10 | 1 is airy/editorial, 10 is dense/operator cockpit | 6 for tools, 4 for consumer |
-| `MOTION_INTENSITY` | 1-10 | 1 is static, 10 is highly animated | 2 for enterprise, 4 for creative |
-| `LAYOUT_VARIANCE` | 1-10 | 1 is strict grid, 10 is expressive/asymmetric | 3 for tools, 6 for editorial |
-| `SURFACE_DEPTH` | 1-10 | 1 is flat, 10 is layered/shadowed | 3 unless domain needs depth |
-
-Do not ask the user to choose these unless the product intent is genuinely ambiguous. Infer the safest domain-fit values and record them.
+| Variable | Range | Meaning |
+|---|---|---|
+| `AESTHETIC_DIRECTION` | named direction | domain-fit: operational, editorial, creative workbench, etc. |
+| `VISUAL_DENSITY` | 1–10 | 1 = airy/editorial, 10 = dense/operator cockpit |
+| `MOTION_INTENSITY` | 1–10 | 1 = static, 10 = highly animated |
 
 ### Domain-Fit Rubric
 
-- Operational tools: dense, quiet, fast to scan, restrained color, predictable navigation, compact controls.
-- Creative tools: visual workspace first, canvas/preview/timeline prominence, inspector panels, media states, tactile controls.
-- Consumer products: clear primary journey, emotion and brand moments, low cognitive load, polished empty states.
-- Developer tools: terminal/log/code affordances, precise status, strong error recovery, low decoration.
-- Data products: comparison, filtering, provenance, table/chart readability, export/report affordances.
+- Operational tools: dense, quiet, fast to scan, restrained color, compact controls.
+- Creative tools: canvas/preview/timeline prominence, inspector panels, tactile controls.
+- Consumer products: clear primary journey, low cognitive load, polished empty states.
+- Developer tools: terminal/log/code affordances, precise status, strong error recovery.
+- Data products: comparison, filtering, provenance, table/chart readability, export.
 
 ### Composition Rules
 
 - Start from the primary workflow, not from a decorative hero or generic dashboard shell.
 - Put the main working surface in the first viewport.
-- Use page sections for structure and cards only for repeated items, modals, or genuinely framed objects.
-- Establish stable dimensions for boards, grids, toolbars, counters, canvases, and previews so dynamic text or states do not shift layout.
-- Every visible control must have an owned behavior, disabled reason, or explicit blocker.
+- Cards only for repeated items, modals, or genuinely framed objects.
+- Stable dimensions for boards, grids, toolbars, canvases so dynamic text does not shift layout.
+- Every visible control has an owned behavior, disabled reason, or explicit blocker.
 
-### Typography, Color, And Spacing
+### Typography, Color, and Spacing
 
 - Use type scale intentionally: compact UI panels need compact headings, not hero-scale text.
 - Avoid one-note palettes and default purple/blue gradient looks unless product evidence demands them.
-- Use spacing rhythm consistently; dense tools may be compact but cannot feel accidental.
-- Text must not overflow, overlap, or hide adjacent content at mobile, desktop, or wide desktop sizes.
-- Use accessible contrast and visible focus states.
+- Consistent spacing rhythm; dense tools may be compact but cannot feel accidental.
+- Text must not overflow, overlap, or hide adjacent content at any supported viewport.
+- Accessible contrast and visible focus states.
 
 ### Interaction Polish
 
-- Define hover, focus, disabled, loading, error, and success states for primary actions.
+- Define hover, focus, disabled, loading, error, and success states for all primary actions.
 - Preserve user progress when operations fail.
-- Use inline validation for forms and contextual error copy for failed workflows.
-- Use motion only to clarify causality, state changes, or spatial relationships.
+- Inline validation for forms; contextual error copy for failed workflows.
+- Motion only to clarify causality, state changes, or spatial relationships.
 
-### Required Output
+## Required Output
 
-- Phase-local UX/UI requirements with screen inventory, workflows, state inventory, component inventory, responsive behavior, accessibility verification, and browser verification plan.
-- Phase-local design quality bar with taste variables, product category, density/motion targets, visual hierarchy, forbidden generic patterns, screenshot requirements, accessibility gates, and responsive gates.
+- Phase-local UX/UI requirements: screen inventory, workflows, state inventory, component inventory, responsive behavior, accessibility verification plan.
+- Phase-local design quality bar: taste variables, product category, density/motion targets, visual hierarchy, forbidden generic patterns.
 - Browser automation or screenshots for each user-facing flow before UI completion is claimed.
-- Empty, loading, error, blocked, success, and partial-data states for every relevant workflow.
+- Empty, loading, error, blocked, success, and partial-data states for every workflow.
+- Every path in `slice.yaml#paths` has a matching screen/flow built and observable.
 
 ## Blocks
 
-- Static markup counted as a working product.
-- Generic dashboard cards that do not serve the selected domain workflow.
-- Decorative hero or marketing layout used as the main screen for an operational app.
-- Dead buttons, fake success states, or controls without owned behavior.
-- Missing empty/loading/error/blocked/success states.
-- Missing responsive behavior for supported viewports.
-- Missing screenshot/browser verification for major UI states.
-- Text overflow, overlapping UI, unreadable contrast, or invisible focus states.
+- `static-markup-as-product`: Static markup counted as a working product.
+  - `drift_check`: grep for event handlers (onClick, @click, v-on, addEventListener) in UI files; fail if no handlers exist.
+- `generic-dashboard-cards`: Generic dashboard cards that do not serve the selected domain workflow.
+  - `drift_check`: grep for generic labels ("Card", "Widget", "Panel", "Chart" as primary heading text) in UI templates; flag if found without domain-specific label alongside.
+- `marketing-hero-as-main-screen`: Decorative hero or marketing layout used as the main screen for an operational app.
+  - `drift_check`: check first viewport element; fail if it contains only an image, tagline, or CTA with no functional controls.
+- `dead-buttons`: Dead buttons, fake success states, or controls without owned behavior.
+  - `drift_check`: grep for buttons/actions without event handlers or navigation targets; flag any with no handler attached.
+- `missing-states`: Missing empty/loading/error/blocked/success states.
+  - `drift_check`: for each path in slice.yaml#paths, check that at least a loading and error state variant exists in templates.
+- `missing-responsive`: Missing responsive behavior for supported viewports.
+  - `drift_check`: grep for responsive utility classes or CSS media queries; fail if no responsive handling exists.
+- `missing-verification`: Missing screenshot or browser verification for major UI states.
+  - `drift_check`: check that `slices/<id>/acceptance-result.json` references at least one screenshot path per path in slice.yaml#paths.
+- `text-overflow`: Text overflow, overlapping UI, unreadable contrast, or invisible focus states.
+  - `drift_check`: check that CSS includes overflow handling and focus-visible styles.

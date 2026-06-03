@@ -1,0 +1,54 @@
+gates:
+  - id: security
+    title: Security boundary review
+    active_when_posture: [private_authenticated, public_webapp]
+    auto_test: optional
+    requires_human_signoff: true
+    signoff_file: gates/security/result.json
+    capsule: security-boundary
+
+  - id: observability
+    title: Observability and health
+    active_when_posture: [private_authenticated, public_webapp]
+    auto_test: required
+    requires_human_signoff: false
+    signoff_file: gates/observability/result.json
+    capsule: null
+
+  - id: migration
+    title: Schema migration and data recovery
+    active_when_posture: [private_authenticated, public_webapp]
+    auto_test: optional
+    requires_human_signoff: true
+    signoff_file: gates/migration/result.json
+    capsule: data-persistence
+
+  - id: deploy
+    title: CI / CD and release gates
+    active_when_posture: [private_authenticated, public_webapp]
+    auto_test: required
+    requires_human_signoff: false
+    signoff_file: gates/deploy/result.json
+    capsule: null
+
+  - id: compliance
+    title: Regulatory and audit compliance
+    active_when_posture: [public_webapp]
+    auto_test: optional
+    requires_human_signoff: true
+    signoff_file: gates/compliance/result.json
+    capsule: security-boundary
+
+  - id: performance
+    title: Load, latency, and scalability
+    active_when_posture: [public_webapp]
+    auto_test: required
+    requires_human_signoff: false
+    signoff_file: gates/performance/result.json
+    capsule: null
+
+# Rule: inactive gates must have inactive_reason in result.json.
+# Active gates must have result.json with status: passed | failed.
+# A gate without result.json blocks promotion.
+# Human signoff: result.json must include signoff_by (name/handle) and signoff_at (ISO timestamp).
+# Auto-tests: result.json must include test_command and exit_code.
