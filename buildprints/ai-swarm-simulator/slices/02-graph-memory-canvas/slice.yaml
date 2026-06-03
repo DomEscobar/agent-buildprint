@@ -1,0 +1,11 @@
+id: 02-graph-memory-canvas
+title: Open-source graph memory and clickable canvas
+depends_on: ["01-intake-provider-sample"]
+parallelizable_with: []
+contract_version: ""
+persona: integration-runtime
+secondary_personas: ["ux-ui-craft","data-persistence"]
+paths: ["novice-canvas-click-inspect","operator-input-to-graph"]
+core_proof_required: ["novice-canvas-click-inspect","operator-input-to-graph"]
+notes: >
+  Implement Graphiti/default OSS graph-memory adapter, write/readback, real graph nodes/edges, and clickable canvas interactions.

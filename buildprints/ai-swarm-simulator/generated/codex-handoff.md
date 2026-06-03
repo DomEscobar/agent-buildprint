@@ -1,83 +1,45 @@
 # Codex Handoff — AI Swarm Simulator Remap
 
-Use this as the Codex-facing implementation handoff after bootstrapping the package. This file is generated handoff context, not the authority; the Buildprint packet is authoritative.
+Start here after reading `BUILDPRINT.md` and `generated/agent-prompt.md`. This handoff converts the agent prompt into concrete Codex execution guidance.
 
-## Bootstrap
+## Immediate mission
 
-```bash
-agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json
-cd <created-project>
-cat .buildprint/next-agent.md
+Implement or continue the Mapper OS v2 packet as a local-first MiroFish-style graph-backed swarm simulation workbench. The current packet is authoritative; do not resurrect old `03-phases/` routers.
+
+## Read first
+
+1. `BUILDPRINT.md`
+2. `01-questions.md`
+3. `generated/agent-prompt.md`
+4. `generated/codex-handoff.md`
+5. `02-project-setup.md`
+6. `02-architecture.md`
+7. `blueprint.yaml`
+8. `03-ux-contract.md`
+9. Active `slices/<id>/slice.yaml`
+
+## Codex execution contract
+
+- Treat Graphiti/open-source graph memory as the default replacement for Zep Cloud. If Graphiti cannot be installed, build the adapter seam plus explicit blocker; never require Zep.
+- Implement provider config as OpenAI-compatible and runtime-selectable. Do not hard-code Qwen/OpenAI/one model.
+- Prioritize product proof over broad scaffolding: sample path to graph/report, then real input to graph readback, then simulation/report.
+- For UI work, make the graph canvas actually interactive. Clicking, selecting, dragging/zooming/panning, and inspecting details must either work or visibly block.
+- Keep secrets out of commits, logs, screenshots, and handoff.
+
+## Suggested Codex task prompt
+
+```text
+Read BUILDPRINT.md, generated/agent-prompt.md, generated/codex-handoff.md, 02-project-setup.md, 02-architecture.md, blueprint.yaml, 03-ux-contract.md, and the active slice yaml.
+
+Build the next smallest real slice of the AI Swarm Simulator. Preserve Canva-like motion/clickable graph UX. Replace required Zep with an open-source graph-memory adapter defaulting to Graphiti. Keep LLM provider dynamic through OpenAI-compatible runtime config. Do not fake graph/simulation/report success; blocked is partial, not complete.
+
+Before final response, run the project gates and report exact evidence: commands, outputs, screenshots/API proofs, blockers, and which path ids are complete/partial.
 ```
 
-Then read the snapshot files in this order:
+## First acceptance proof to seek
 
-1. `.buildprint/snapshots/BUILDPRINT.md`
-2. `.buildprint/snapshots/01-questions.md`
-3. `.buildprint/snapshots/generated/agent-prompt.md`
-4. `.buildprint/snapshots/generated/codex-handoff.md`
-5. `.buildprint/snapshots/02-project-setup.md`
-6. `.buildprint/snapshots/blueprint.yaml`
-7. `.buildprint/snapshots/03-phases/phase-index.yaml`
-8. `.buildprint/snapshots/03-phases/phase-flow.md`
-9. `.buildprint/snapshots/04-review.md`
-10. `.buildprint/snapshots/05-handover.md`
-
-## Codex task prompt
-
-You are Codex implementing the Mapper OS remap for AI Swarm Simulator.
-
-Your first job is not feature coding. Your first job is setup:
-
-1. Read the packet in the order above.
-2. Resolve hard-stop questions in `01-questions.md`. If any are unanswered, stop and ask the human.
-3. Complete `02-project-setup.md` before phase work.
-4. Create the implementation-project setup artifacts:
-   - `AGENTS.md` as a concise repo constitution with Buildprint authority, mandatory read order, commands, ownership map, forbidden shortcuts, blocker/evidence rules, and local `AGENTS.md` boundary rules.
-   - `docs/agent-harness.md` mapping AGENTS/local AGENTS, repo-local skills/playbooks, permissions/hooks, harness evals, and human review gates.
-   - repo-local playbooks/skills where the chosen runner supports them.
-   - runner permissions/hooks where supported, or exact blocker + human gate where unsupported.
-   - `.buildprint/harness-evals/` checks for hidden Zep, hard-coded LLM vendor, generic dashboard, static fake graph, dead click control, skipped screenshot proof, skipped provider/graph blocked-state proof, generated-file edit trap, secret-read trap, dependency-sprawl trap, skipped-check trap, review-mode-edit trap, and external-action trap.
-   - `UI-IDENTITY.md`, produced by an explicit UX/UI persona pass.
-   - `.env.example`, `docs/architecture.md`, `docs/product-loop.md`, initial skeleton, verification commands, and `.buildprint/setup-receipt.md`.
-5. Only then enter the active phase from `03-phases/phase-index.yaml`.
-
-## Product constraints Codex must preserve
-
-- Source reference: `666ghj/MiroFish` at commit `96096ea0ff42b1a30cbc41a1560b8c91090f9968`.
-- Product feel: sleek Canva-like graph/simulation workbench with polished motion and real clickable interactions.
-- UX rule: every visible clickable control either works or shows an honest blocked state.
-- Graph memory: replace Zep Cloud with a free open-source graph-memory layer; default to Graphiti unless implementation evidence proves a better OSS fit.
-- Provider: dynamic OpenAI-compatible LLM adapter with configurable provider label, base URL, model, API key, and status. No Qwen/OpenAI hard-code.
-- Core loop: upload seed material -> extract -> ontology -> graph memory build/readback -> canvas inspect -> simulation run/block -> report readback -> interaction.
-- Honesty: missing credentials, missing graph backend, missing OASIS runtime, unavailable export/deploy controls, or public-posture gaps must be visible blockers, not fake success.
-
-## UX/UI persona call requirement
-
-Before coding UI, run a deliberate UX/UI persona pass and write `UI-IDENTITY.md` with:
-
-- visual promise and product metaphor;
-- motion principles;
-- graph canvas interaction model;
-- clickability contract;
-- layout and responsive rules;
-- accessibility baseline;
-- component/state matrix;
-- screenshot critique rubric;
-- forbidden generic dashboard/default-MVP patterns.
-
-Do not treat this as optional polish. It is a setup gate.
-
-## Completion evidence
-
-Report:
-
-- setup artifacts created;
-- hard-stop question status;
-- graph-memory adapter decision and why it is open-source;
-- dynamic LLM provider adapter surface;
-- UI identity persona output path;
-- harness evals created;
-- commands run and results;
-- screenshot/browser proof status for UI work;
-- blockers, if any.
+- Empty launch shows sample CTA and provider blocker.
+- Sample path produces inspectable graph canvas and sample report.
+- At least one node/edge click opens a detail panel.
+- Missing provider blocks live graph/report calls legibly.
+- Real input path either writes/reads graph memory through OSS adapter or marks exact blocker.

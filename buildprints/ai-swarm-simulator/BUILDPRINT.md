@@ -1,43 +1,52 @@
-# BUILDPRINT: MiroFish Graph-Backed Swarm Simulation Workbench
+# BUILDPRINT: AI Swarm Simulator
 
-Build the MiroFish-style prediction workbench as a usable product, not as a dashboard-shaped demo. Source reference: `666ghj/MiroFish` commit `96096ea0ff42b1a30cbc41a1560b8c91090f9968`. The center is the graph-backed simulation workbench: upload seed material, generate a domain graph, inspect it on a real canvas, run a swarm simulation, produce a report, and continue interacting with the simulated world.
+This packet is a Mapper OS v2 executable Buildprint for remapping `666ghj/MiroFish` into a graph-backed AI swarm simulation workbench.
 
-## Read Order
+It is an implementation input for a coding agent. Its job is to shape product judgment before coding: preserve the MiroFish workflow, make the graph/simulation/report loop real, and prevent fake product polish.
+
+## Typed product-quality contract
+
+You are the posture-aware senior product engineer for a trusted-local product build. Build the artifact for its real consumer: a user who wants to upload/inspect seed material, see a graph-backed swarm simulation workbench, run or understand the simulation state, and read/continue from a report.
+
+Non-negotiables:
+
+- Keep the Canva-like sleek motion UI/UX: flowing canvas motion, clickable graph nodes/edges, drag/zoom/pan/select/inspect, progressive panels, smooth state transitions, and polished empty/loading/blocked states.
+- Replace Zep as a required dependency with open-source graph memory. Default to Graphiti unless implementation evidence proves a better OSS adapter. Zep Cloud can never be required for the product loop.
+- Keep LLM provider dynamic via OpenAI-compatible runtime configuration: provider label, base URL, model, API key, status/test button, and clear missing-provider blocker.
+- Preserve MiroFish source signal: GraphRAG ingestion, dynamic graph memory update/readback, OASIS-style simulation scripts/runtime seam, report generation, and interaction flow.
+- Every visible clickable control either works or shows an honest blocked state. No dead buttons, decorative-only graph, canned report, fake provider success, or silent graph/simulation failure.
+
+## Read order
 
 1. `BUILDPRINT.md`
 2. `01-questions.md`
 3. `generated/agent-prompt.md`
 4. `generated/codex-handoff.md`
 5. `02-project-setup.md`
-6. `blueprint.yaml`
-7. `03-phases/phase-index.yaml`
-8. `03-phases/phase-flow.md`
-9. Current phase file
-10. `04-review.md`
-11. `05-handover.md`
+6. `02-architecture.md`
+7. `blueprint.yaml`
+8. `03-ux-contract.md`
+9. Active slice files under `slices/<id>/slice.yaml`
+10. `gates/gate-index.yaml`
 
-## Engineer Contract
+`04-handover.md` is the human-readable handover/status template. Do not use it to self-certify incomplete work.
 
-You are acting as a Senior Product Engineer for a trusted_local workbench. Preserve the product promise and graph work surface. Keep provider, memory, upload, and simulation boundaries honest. If a live provider or runtime is unavailable, show a useful blocked state and record it; do not fake success.
+## Product loop
 
-## Non-Negotiables
+Upload or choose sample seed material → extract text/entities → configure dynamic provider or see blocked state → build graph memory through OSS adapter → read back graph nodes/edges → inspect on a real graph canvas → run or honestly block swarm simulation → generate/read report → continue interaction.
 
-- The graph canvas is a primary product surface. It must feel sleek and Canva-like: polished motion, node/edge inspection, readable labels, refresh, zoom/drag/pan/select or equivalent navigation, split/workbench layout modes, responsive review, and real visual feedback for every interaction.
-- Replace Zep Cloud with a free open-source graph-memory layer. Default to a Graphiti-backed adapter unless implementation evidence shows a better free open-source option. Hidden Zep dependency is a review failure.
-- Keep AI provider choice user-configurable through an OpenAI-compatible adapter with configurable provider label, base URL, model, API key, and status. Do not hard-code Qwen, OpenAI, or any one vendor.
-- Persist project, graph, simulation, report, and interaction state where the UI claims it can be reloaded.
-- Every visible clickable control must work or show an honest blocked state.
-- Do not ship canned reports, no-op graph controls, fake simulations, raw JSON as the main experience, or hidden provider failures.
+## Per-slice loop
 
-## Implementation Loop
+For each slice:
 
-Use `03-phases/phase-flow.md` for every phase. Enter the active phase from `03-phases/phase-index.yaml`, build the smallest real usable product slice, inspect it directly, repair visible slop, and only then advance. The loop is product-first: prove the graph-backed workbench is becoming usable, not that documents were filled out.
+1. Read the slice yaml and matching UX path ids from `03-ux-contract.md`.
+2. Build the smallest real product slice that advances the product loop.
+3. Record blockers as partial, not complete.
+4. Run acceptance in a fresh mindset: sample paths cannot prove real-input/operator paths.
+5. Use `agb state derive` for state; do not write `.buildprint/state.json` by hand.
 
-## Completion Semantics
+## Completion semantics
 
-This packet is an implementation input. It is not proof that the product is already built or production-ready. Completion means the selected local workbench has been built, exercised from a fresh start, reviewed in a browser, and handed over with any real blockers named.
+A slice is complete only when every `core_proof_required` path has observed, non-synthetic proof. A graph screenshot with fake nodes is not proof. A report that ignores uploaded input is not proof. A simulation button that always returns success is not proof.
 
-
-## Final Critical Reviewer Mode
-
-Before handover, run the `04-review.md` reviewer step as a skeptical product reviewer. Look for dead buttons, dead controls, placeholder states, canned reports, fake graph data, hidden provider failures, slop, and generic dashboard drift. Repair central local defects before claiming completion.
+Trusted-local posture lowers production operability obligations; it does not lower the product-craft floor for the visible workbench.

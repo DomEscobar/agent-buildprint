@@ -1,0 +1,11 @@
+id: 04-report-interaction
+title: Report generation and continued interaction
+depends_on: ["02-graph-memory-canvas"]
+parallelizable_with: []
+contract_version: ""
+persona: product-architect
+secondary_personas: ["integration-runtime","ux-ui-craft"]
+paths: ["operator-report-interaction"]
+core_proof_required: ["operator-report-interaction"]
+notes: >
+  Generate report sections from graph memory, simulation traces/blockers, and input references; support continued interaction without canned output.
