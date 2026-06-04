@@ -486,9 +486,9 @@ function packetCheckResults(dir) {
   ok('blueprint declares canonical deployment posture', /deployment_posture:[\s\S]*current:\s*trusted_local/i.test(blueprint) && !/trusted-local|private authenticated|public webapp/i.test(blueprint))
 
   ok('BUILDPRINT owns v3 read order', /00-questions\.md[\s\S]*01-project-setup\.md[\s\S]*02-uiux-decision\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i.test(buildprint))
-  ok('BUILDPRINT frames execution manual not schema', /execution manual for an AI builder/i.test(buildprint) && /not a schema/i.test(buildprint))
-  ok('BUILDPRINT includes product identity and golden path', /Product identity/i.test(buildprint) && /Golden path/i.test(buildprint) && /Central artifact/i.test(buildprint))
-  ok('BUILDPRINT includes required constants and binding implementation contract', /Required constants/i.test(buildprint) && /Binding implementation contract/i.test(buildprint))
+  ok('BUILDPRINT is an AI builder briefing', /responsible builder/i.test(buildprint) && /senior product engineer/i.test(buildprint))
+  ok('BUILDPRINT defines role, responsibility, and perfection alignment', /Your role/i.test(buildprint) && /Your responsibility/i.test(buildprint) && /Perfection alignment/i.test(buildprint))
+  ok('BUILDPRINT avoids product-specific mapped-source briefing', !/MiroFish|mapped from|previous repository|original repo|source project/i.test(buildprint))
   ok('BUILDPRINT forbids fake-success paths', /functionless buttons|dead controls|mocked\/sample data|fake provider|raw JSON/i.test(buildprint))
 
   const questions = safeReadText(path.join(dir, '00-questions.md'))
