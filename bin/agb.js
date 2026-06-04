@@ -501,6 +501,8 @@ function packetCheckResults(dir) {
   ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
 
   const uiux = safeReadText(path.join(dir, '02-uiux-decision.md'))
+  ok('ui/ux decision opens with UX importance and understandability', /UX is a must/i.test(uiux) && /must be understandable|experience must be understandable/i.test(uiux) && /not a finished product/i.test(uiux))
+  ok('ui/ux decision includes a small pre-style checklist', /Small checklist/i.test(uiux) && /first-time user/i.test(uiux) && /what to do first/i.test(uiux) && /all visible controls/i.test(uiux))
   ok('ui/ux decision is a detailed style constitution', uiux.trim().length >= (isMapperTemplatePacket ? 4500 : 6000) && /style constitution/i.test(uiux))
   ok('ui/ux decision defines concrete visual schema', /Design thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Color system/i.test(uiux) && /Typography system/i.test(uiux) && /Layout and spatial rhythm/i.test(uiux))
   ok('ui/ux decision defines components, motion, and states', /Component language/i.test(uiux) && /Motion and interaction feel/i.test(uiux) && /Empty, loading, error, and blocked states/i.test(uiux))

@@ -1,5 +1,16 @@
 # 02 UI/UX Decision
 
+UX is a must. It matters as much as the implementation because the user only experiences the artifact through its surfaces, states, copy, controls, motion, and feedback. A powerful backend hidden behind a confusing, generic, or ugly interface is not a finished product. The experience must be understandable, intentional, and coherent before later phases claim progress.
+
+Small checklist before writing the style constitution:
+
+- Can a first-time user understand what this artifact is, what to do first, and what state it is in?
+- Does the visual direction feel intentionally designed for this artifact rather than copied from a generic dashboard?
+- Are colors, typography, spacing, components, and motion defined concretely enough for another agent to implement consistently?
+- Are empty, loading, error, and blocked states understandable without reading logs or source code?
+- Are all visible controls expected to work, validate, navigate, or explain a blocker?
+- Would a demanding human call this product surface polished, or just “technically present”?
+
 This file is the style constitution for every human-facing surface. It must force a clear visual world before implementation starts. Do not write short phrases like “clean UI” or “modern dashboard.” Write a detailed design schema that later phases can obey without guessing.
 
 For non-UI libraries/services, write `not-ui-bearing` and describe the developer/operator experience with the same level of specificity: command shape, output formatting, error tone, docs style, and interaction rhythm.
