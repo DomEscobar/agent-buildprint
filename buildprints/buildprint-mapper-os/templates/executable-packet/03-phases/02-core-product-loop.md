@@ -9,11 +9,13 @@ Before writing code, read:
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
 - `01-project-setup.md`
-- `02-uiux-decision.md` if this phase touches UI
+- `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product slice. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
+
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, inspectors, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
 Build the first complete golden-path loop named in `BUILDPRINT.md`. This is the main product slice: the user/operator/developer should move from initial input/configuration to a useful result and visible/readable state.
 

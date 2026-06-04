@@ -1,6 +1,6 @@
 # Phase Flow
 
-Use active phase only. Do not read every phase upfront. Start from `.buildprint/next-agent.md`, local `AGENTS.md`, `00-questions.md`, `01-project-setup.md`, `02-uiux-decision.md`, and this file, then load only the active phase named in `03-phases/phase-index.yaml`.
+Use active phase only. Do not read every phase upfront. Start from `.buildprint/next-agent.md`, local `AGENTS.md`, `00-questions.md`, `01-project-setup.md`, `02-uiux-decision.md`, and this file before every active phase, then load only the active phase named in `03-phases/phase-index.yaml`. `02-uiux-decision.md` is the standing design/style responsibility for all UI-bearing work, not an optional polish pass.
 
 ## Active phase loop
 

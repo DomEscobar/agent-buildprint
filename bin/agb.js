@@ -537,7 +537,7 @@ function packetCheckResults(dir) {
     const objective = (text.match(/##\s*Building objective\s*\n([\s\S]*?)(?=\n##\s*DO NOT)/i) || [])[1] || ''
     ok(`${file} has comprehensive phase headings`, /##\s*How to implement this phase/i.test(text) && /##\s*Building objective/i.test(text) && /##\s*DO NOT/i.test(text) && /##\s*Minimum proof before moving on/i.test(text) && /##\s*Handoff note/i.test(text))
     ok(`${file} has substantial building objective`, objective.trim().length >= (isMapperTemplatePacket ? 500 : 700), `objective length ${objective.trim().length}`)
-    ok(`${file} reads required phase context`, /03-phases\/phase-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text))
+    ok(`${file} reads required phase context`, /03-phases\/phase-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text) && /02-uiux-decision\.md/i.test(text))
     ok(`${file} forbids placeholders/functionless/mocks`, /placeholders/i.test(text) && /functionless buttons/i.test(text) && /mocked\/sample data/i.test(text))
     ok(`${file} does not use decomposed v2/schema machinery`, !/slice\.yaml|acceptance-spec|build-brief|requires_roles|capability_id|proof_contract|evidence-ledger\.jsonl/i.test(text))
   }
@@ -863,7 +863,7 @@ This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stal
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read \`.buildprint/snapshots/00-questions.md\`; stop only for true hard-stop decisions.
 4. Read and complete \`.buildprint/snapshots/01-project-setup.md\` before phase work.
-5. Read \`.buildprint/snapshots/02-uiux-decision.md\` when the artifact has UI or human-facing interaction.
+5. Read \`.buildprint/snapshots/02-uiux-decision.md\` before every phase as the standing design/style responsibility for UI-bearing artifacts.
 6. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
 7. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
 8. Execute the phase-flow loop: restate the smallest real vertical product path, build it, verify it, repair visible slop/fake-success shortcuts, and record useful handover facts.

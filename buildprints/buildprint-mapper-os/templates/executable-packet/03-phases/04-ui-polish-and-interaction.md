@@ -9,11 +9,13 @@ Before writing code, read:
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
 - `01-project-setup.md`
-- `02-uiux-decision.md` if this phase touches UI
+- `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product slice. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
+
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, inspectors, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
 Repair the human-facing experience until it feels like the product described in `02-uiux-decision.md`. This is not a cosmetic pass. It is the phase that catches generic dashboards, dead controls, unclear empty states, invisible errors, weak motion, confusing hierarchy, and interactions that do not teach the user what is happening.
 
