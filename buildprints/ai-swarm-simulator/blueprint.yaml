@@ -1,13 +1,33 @@
-schema_version: mapper-os/executable-blueprint/v2
-source:
-  origin_github_url: https://github.com/666ghj/MiroFish
-  origin_label: 666ghj/MiroFish
-  origin_commit: 96096ea0ff42b1a30cbc41a1560b8c91090f9968
-  mapped_from: MiroFish GraphRAG + swarm simulation + report workbench
+schema_version: mapper-os/executable-blueprint/v3
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
-claim_status: product_build_required
-qualification_label: local_build_requires_review
+schema_role: "YAML routes; markdown teaches and builds"
+
+product:
+  name: AI Swarm Simulator
+  central_artifact: graph-backed swarm simulation workbench
+  golden_path: upload seed material -> graph memory -> canvas inspection -> simulation -> report -> continued interaction
+
+required_files:
+  - BUILDPRINT.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-uiux-decision.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - HANDOVER.md
+
+forbidden_shapes:
+  - slices/
+  - gates/
+  - generated/agent-prompt.md
+  - generated/codex-handoff.md
+  - templates/runner/
+  - templates/teams/
+  - 02-architecture.md
+  - 03-ux-contract.md
+  - 04-handover.md
 
 deployment_posture:
   current: trusted_local
@@ -15,117 +35,13 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
-  note: trusted_local is the default for the first working product loop; provider credentials remain local-only.
 
-agent_contract:
-  role: Senior Product Engineer
-  rule: >
-    Build the MiroFish-style graph-backed swarm simulation product honestly. A slice with a blocked
-    core_proof_required path is status: partial, not status: complete. Blockers are partial, not done.
-    Never write state.json directly — the runner derives it from acceptance-result.json.
-    Keep the Canva-like motion/clickable graph UX, replace required Zep with open-source graph memory,
-    and keep LLM provider selection dynamic through OpenAI-compatible runtime configuration.
-  posture_role_map:
-    trusted_local:
-      role: Senior Product Engineer
-      rule: >
-        Build a credible local workbench. Graph memory, provider config, simulation runtime, and report
-        generation may be local-first, but the visible product loop must be real or honestly blocked.
-    private_authenticated:
-      role: Senior Staff Engineer
-      rule: >
-        Add authenticated project ownership, durable persistence, observability, recovery, and CI gates.
-    public_webapp:
-      role: Staff/Principal Engineer
-      rule: >
-        Add tenant isolation, abuse controls, provider key safety, deployment, backup, and public-web security gates.
+runtime_contract:
+  graph_memory: open-source adapter, Graphiti default, Zep Cloud not required
+  provider: OpenAI-compatible runtime config with status/test behavior
+  simulation: local OASIS-style seam or honest blocked state
+  ui: polished graph canvas with working controls and clear blocked/error states
 
-read_order:
-  - BUILDPRINT.md
-  - 01-questions.md
-  - generated/agent-prompt.md
-  - generated/codex-handoff.md
-  - 02-project-setup.md
-  - 02-architecture.md
-  - blueprint.yaml
-  - 03-ux-contract.md
-  - slices/01-intake-provider-sample/slice.yaml
-  - slices/02-graph-memory-canvas/slice.yaml
-  - slices/03-simulation-runtime/slice.yaml
-  - slices/04-report-interaction/slice.yaml
-  - gates/gate-index.yaml
-  - 04-handover.md
-
-purpose:
-  summary: >
-    Build a trusted_local MiroFish-style AI swarm simulation workbench: upload or sample seed material,
-    extract/structure knowledge, build an open-source graph-memory-backed canvas, run or honestly block
-    swarm simulation, and generate an inspectable report with continued interaction.
-  non_negotiables:
-    - Sleek Canva-like motion, graph canvas, drag/zoom/pan/select/inspect, and clear visual hierarchy.
-    - Every visible clickable control works or shows an honest blocked state.
-    - No required Zep Cloud dependency; default to Graphiti or another reviewed open-source graph-memory adapter.
-    - LLM provider is dynamic via OpenAI-compatible config: provider label, base URL, model, API key, status.
-    - Preserve MiroFish source signal: GraphRAG, graph memory update/readback, OASIS-style simulation, report generation, interaction loop.
-
-runtime:
-  frontend: Vue/Vite or equivalent component framework with canvas/SVG/WebGL graph interaction and build step.
-  backend: Python service or equivalent typed service exposing ingestion, graph memory, simulation, report, and provider APIs.
-  graph_memory: Open-source graph memory adapter; default Graphiti local runtime; Zep Cloud forbidden as a required dependency.
-  llm_provider: OpenAI-compatible dynamic provider config selected at runtime, never hard-coded to one vendor.
-  simulation: Local OASIS-style runtime seam; missing runtime must produce explicit blocked state, not fake success.
-
-state_model:
-  durable:
-    - project metadata and uploaded/extracted seed material
-    - provider profile metadata without secret leakage
-    - graph memory nodes, edges, embeddings/reference ids, and readback metadata
-    - canvas view state, selected node/edge, layout settings
-    - simulation config, profiles, status, traces, and blockers
-    - report sections, markdown, citations/source links, logs, and interaction history
-  local_only:
-    - provider API keys
-    - local graph-memory credentials or endpoints
-    - local simulation process control
-
-forbidden_dependencies:
-  - zep-cloud
-  - hidden required Zep service
-
-# Slice system
-slices_dir: slices/
-slice_template: slices/_template/slice.yaml
-slice_capsule_field: persona
-slice_secondary_capsules_field: secondary_personas
-slice_dependency_field: depends_on
-slice_paths_field: paths
-slice_core_proof_field: core_proof_required
-slice_acceptance_result: acceptance-result.json
-slice_self_check: slice-self-check.yaml
-
-# Gates
-gates_dir: gates/
-gate_index: gates/gate-index.yaml
-
-# Team capsules (injected as system prompts by runner)
-capsules_dir: ../../teams/
-
-# Runner
-runner_dir: ../../runner/
-runner_spec: ../../runner/RUNNER-SPEC.md
-
-# Derived state — agb state derive writes, agents never write
-state_json_path: .buildprint/state.json
-
-# UX contract (single truth for paths and acceptance)
-ux_contract_file: 03-ux-contract.md
-ux_contract_path_map_anchor: "## Path Map"
-ux_traceability_file: .buildprint/ux-traceability.yaml
-
-# Evidence
-upgrades_claim_rule: >
-  upgrades_claim: true requires observed evidence with a real exit code and non-synthetic proof.
-  Sample-only paths, review prose, and blocked paths cannot set upgrades_claim: true.
-
-# Architecture
-setup_receipt: .buildprint/setup-receipt.md
+phase_flow: 03-phases/phase-flow.md
+phase_index: 03-phases/phase-index.yaml
+handover: HANDOVER.md

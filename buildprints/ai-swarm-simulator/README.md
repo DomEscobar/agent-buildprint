@@ -1,11 +1,7 @@
-# AI Swarm Simulator Buildprint
+# AI Swarm Simulator
 
-Mapper OS v2 executable Buildprint for remapping MiroFish into a graph-backed swarm simulation workbench.
+A Mapper OS v3 phase-driven executable packet for building a trusted-local graph-backed AI swarm simulation workbench.
 
-- Source origin: https://github.com/666ghj/MiroFish
-- Required UX: sleek Canva-like motion/clickable graph workbench.
-- Required graph memory: open-source adapter, default Graphiti; no required Zep Cloud.
-- Required LLM config: dynamic OpenAI-compatible provider settings.
-- Start: read `BUILDPRINT.md`, then `generated/agent-prompt.md` and `generated/codex-handoff.md`.
+Start with `BUILDPRINT.md`, answer only the true hard stops in `00-questions.md`, complete `01-project-setup.md`, make the UI/UX decisions in `02-uiux-decision.md`, then follow the active phase loop in `03-phases/phase-flow.md`.
 
-Use `agb start https://agent-buildprint.com/buildprints/ai-swarm-simulator/package.json` after publication to download exact snapshots.
+The packet intentionally does not ship `slices/`, `gates/`, `generated/`, team capsules, or runner files. The work is organized as comprehensive product phases.
