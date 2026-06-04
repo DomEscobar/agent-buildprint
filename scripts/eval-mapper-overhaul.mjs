@@ -20,16 +20,9 @@ function edit(folder, rel, fn) {
   fs.writeFileSync(file, fn(fs.readFileSync(file, 'utf8')))
 }
 
-function runPacketCheck(folder) {
-  return runAgb(['packet', 'check', folder])
-}
-
 function runAgb(args) {
   try {
-    return {
-      failed: false,
-      output: execFileSync(process.execPath, [path.join(root, 'bin/agb.js'), ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 30000 })
-    }
+    return { failed: false, output: execFileSync(process.execPath, [path.join(root, 'bin/agb.js'), ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 30000 }) }
   } catch (error) {
     return { failed: true, output: `${error.stdout || ''}${error.stderr || ''}` }
   }
@@ -43,19 +36,18 @@ function runAgbAsync(args) {
   })
 }
 
-function expectFailures(name, folder, labels) {
-  const { failed, output } = runPacketCheck(folder)
-  const missing = labels.filter((label) => !output.includes(`✗ ${label}`))
-  if (!failed || missing.length) {
+function expectPass(name, args, snippets = []) {
+  const { failed, output } = runAgb(args)
+  const missing = snippets.filter((snippet) => !output.includes(snippet))
+  if (failed || missing.length) {
     console.error(output)
-    console.error(`${name} failed; missing expected checker failures: ${missing.join(', ') || '(none)'}`)
+    console.error(`${name} failed; missing expected output: ${missing.join(', ') || '(none)'}`)
     process.exit(1)
   }
   console.log(`✓ ${name}`)
-  console.log(labels.map((label) => `  - ${label}`).join('\n'))
 }
 
-function expectAgbFailure(name, args, snippets) {
+function expectFailure(name, args, snippets) {
   const { failed, output } = runAgb(args)
   const missing = snippets.filter((snippet) => !output.includes(snippet))
   if (!failed || missing.length) {
@@ -67,122 +59,53 @@ function expectAgbFailure(name, args, snippets) {
   console.log(snippets.map((snippet) => `  - ${snippet}`).join('\n'))
 }
 
-const malformed = copyTemplate('bad-selected')
-edit(malformed, 'blueprint.yaml', (s) => s
-  .replace(/^slices_dir:.*\n/m, '')
-  .replace(/^gates_dir:.*\n/m, '')
-  .replace(/^capsules_dir:.*\n/m, '')
-  .replace(/state_json_path:.*\n/m, '')
-  .replace(/Agent must never write \.buildprint\/state\.json manually\.\n/m, '')
-  .replace(/Build the product loop honestly[\s\S]*?Blockers are partial, not done\.\n/m, ''))
-edit(malformed, '03-ux-contract.md', () => '# UX Contract\n\nNice UI.\n')
-edit(malformed, '02-architecture.md', () => '# Architecture\n\nUse good code.\n')
-edit(malformed, '04-handover.md', () => '# Handover\n\nDone.\n')
-edit(malformed, 'slices/_template/slice.yaml', () => 'id: example\n')
-fs.rmSync(path.join(malformed, 'gates/gate-index.yaml'))
+expectPass('mapper v3 template packet passes', ['packet', 'check', template], ['Packet check: PASS'])
 
-expectFailures('mapper v2 integrity eval rejected malformed selected packet', malformed, [
-  'v2 packet has gate index',
-  'v2 blueprint declares slices_dir',
-  'v2 blueprint declares gates_dir',
-  'v2 blueprint declares capsules_dir',
-  'v2 blueprint derived-state rule present',
-  'v2 blueprint agent_contract has partial-not-complete rule',
-  'v2 ux-contract has Path Map',
-  'v2 ux-contract has operator acceptance rows (sample_can_satisfy: false)',
-  'v2 ux-contract has novice acceptance rows',
-  'v2 architecture defines stack',
-  'v2 architecture defines persistence',
-  'v2 handover template has slice status section',
-  'v2 handover template has overall readiness block',
-  'v2 gate index has active_when_posture entries',
-  'v2 gate index has human signoff gate',
-  'v2 slice template has paths field',
-  'v2 slice template has core_proof_required field',
-  'v2 slice template has persona field'
-])
+const legacy = copyTemplate('legacy-slice-gate')
+fs.mkdirSync(path.join(legacy, 'slices/_template'), { recursive: true })
+fs.writeFileSync(path.join(legacy, 'slices/_template/slice.yaml'), 'id: legacy\npaths: []\n')
+fs.mkdirSync(path.join(legacy, 'gates'), { recursive: true })
+fs.writeFileSync(path.join(legacy, 'gates/gate-index.yaml'), 'gates: []\n')
+edit(legacy, 'blueprint.yaml', (s) => s.replace('schema_version: mapper-os/executable-blueprint/v3', 'schema_version: mapper-os/executable-blueprint/v2\nslices_dir: slices\ngates_dir: gates\ncapsules_dir: teams'))
+expectFailure('mapper eval rejects legacy slice/gate packet', ['packet', 'check', legacy], ['✗ packet rejects legacy v2 slice/gate shape', '✗ packet has no legacy useless files'])
 
-const missingSliceTemplate = copyTemplate('missing-slice-template')
-fs.rmSync(path.join(missingSliceTemplate, 'slices/_template/slice.yaml'))
-expectFailures('mapper v2 eval rejected missing slice template', missingSliceTemplate, [
-  'v2 packet has slices template'
-])
+const staleFiles = copyTemplate('stale-files')
+fs.writeFileSync(path.join(staleFiles, '04-review.md'), '# Review\n')
+fs.writeFileSync(path.join(staleFiles, '05-handover.md'), '# Old handover\n')
+expectFailure('mapper eval rejects obsolete review/handover files', ['packet', 'check', staleFiles], ['✗ packet has no legacy useless files'])
 
-const missingGateIndex = copyTemplate('missing-gate-index')
-fs.rmSync(path.join(missingGateIndex, 'gates/gate-index.yaml'))
-expectFailures('mapper v2 eval rejected missing gate index', missingGateIndex, [
-  'v2 packet has gate index',
-  'v2 gate index has active_when_posture entries',
-  'v2 gate index has human signoff gate'
-])
+const missingQuestions = copyTemplate('missing-questions')
+fs.rmSync(path.join(missingQuestions, '00-questions.md'))
+expectFailure('mapper eval requires 00-questions', ['packet', 'check', missingQuestions], ['✗ packet file exists: 00-questions.md'])
 
-const obsoleteRouter = copyTemplate('obsolete-router')
-fs.writeFileSync(path.join(obsoleteRouter, 'START_HERE.md'), '# Legacy router\n', { flag: 'wx' })
-expectFailures('mapper v2 eval rejected obsolete phase router', obsoleteRouter, [
-  'v2 packet avoids obsolete routers/files recursively'
-])
+const weakObjective = copyTemplate('weak-objective')
+edit(weakObjective, '03-phases/02-core-product-loop.md', (s) => s.replace(/## Building objective[\s\S]*?## DO NOT/, '## Building objective\n\nBuild stuff.\n\n## DO NOT'))
+expectFailure('mapper eval rejects tiny phase objectives', ['packet', 'check', weakObjective], ['✗ 03-phases/02-core-product-loop.md has substantial building objective'])
 
-const weakUx = copyTemplate('weak-ux-contract')
-edit(weakUx, '03-ux-contract.md', (s) => s
-  .replace(/##\s*Path Map/ig, '## Paths')
-  .replace(/sample_can_satisfy:\s*false/ig, 'sample_can_satisfy: true')
-  .replace(/novice/ig, 'new user'))
-expectFailures('mapper v2 eval rejected weak UX contract', weakUx, [
-  'v2 ux-contract has Path Map',
-  'v2 ux-contract has operator acceptance rows (sample_can_satisfy: false)',
-  'v2 ux-contract has novice acceptance rows'
-])
+const missingHeading = copyTemplate('missing-phase-heading')
+edit(missingHeading, '03-phases/03-state-runtime-and-integrations.md', (s) => s.replace('## Handoff note', '## Notes'))
+expectFailure('mapper eval rejects missing comprehensive phase heading', ['packet', 'check', missingHeading], ['✗ 03-phases/03-state-runtime-and-integrations.md has comprehensive phase headings'])
 
-const weakArchitecture = copyTemplate('weak-architecture')
-edit(weakArchitecture, '02-architecture.md', () => '# Architecture\n\nDecide later.\n')
-expectFailures('mapper v2 eval rejected weak architecture contract', weakArchitecture, [
-  'v2 architecture defines stack',
-  'v2 architecture defines persistence'
-])
+const weakFlow = copyTemplate('weak-flow')
+edit(weakFlow, '03-phases/phase-flow.md', () => '# Phase Flow\n\nJust code all phases.\n')
+expectFailure('mapper eval rejects weak phase flow', ['packet', 'check', weakFlow], ['✗ phase flow defines active phase loop', '✗ phase flow rejects proof theater', '✗ phase flow defines repair routing'])
 
-const weakHandover = copyTemplate('weak-handover')
-edit(weakHandover, '04-handover.md', () => '# Handover\n\nShip it.\n')
-expectFailures('mapper v2 eval rejected weak handover template', weakHandover, [
-  'v2 handover template has slice status section',
-  'v2 handover template has overall readiness block'
-])
-
-const weakGateIndex = copyTemplate('weak-gate-index')
-edit(weakGateIndex, 'gates/gate-index.yaml', (s) => s
-  .replace(/active_when_posture:/ig, 'active_when:')
-  .replace(/requires_human_signoff:\s*true/ig, 'requires_human_signoff: false'))
-expectFailures('mapper v2 eval rejected weak gate index', weakGateIndex, [
-  'v2 gate index has active_when_posture entries',
-  'v2 gate index has human signoff gate'
-])
-
-const weakSliceTemplate = copyTemplate('weak-slice-template')
-edit(weakSliceTemplate, 'slices/_template/slice.yaml', (s) => s
-  .replace(/^paths:.*\n/m, '')
-  .replace(/core_proof_required/g, 'core-proof-required')
-  .replace(/^persona:.*\n/m, ''))
-expectFailures('mapper v2 eval rejected weak slice template', weakSliceTemplate, [
-  'v2 slice template has paths field',
-  'v2 slice template has core_proof_required field',
-  'v2 slice template has persona field'
-])
-
-const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8')
-const staleReadmePatterns = [/Buildprint v3 Draft/i, /04-evaluation\.md/i, /05-evidence\//i]
-const staleReadmeMatches = staleReadmePatterns.filter((pattern) => pattern.test(readme))
-if (staleReadmeMatches.length) {
-  console.error(`Root README still contains stale selected-output packet references: ${staleReadmeMatches.map((pattern) => pattern.toString()).join(', ')}`)
-  process.exit(1)
+const cliHelp = runAgb(['--help']).output
+for (const stale of ['persona --slice', 'state derive', 'slice status']) {
+  if (cliHelp.includes(stale)) {
+    console.error(cliHelp)
+    console.error(`cli eval failed; help still exposes legacy command: ${stale}`)
+    process.exit(1)
+  }
 }
-console.log('✓ mapper eval rejected stale selected-output README references')
+console.log('✓ cli help no longer exposes legacy slice/gate runner commands')
+expectFailure('cli eval rejects removed persona command', ['persona', '--slice', 'slices/x/slice.yaml', '--role', 'build'], ['Usage:'])
 
 const traversalPackage = path.join(tmp, 'traversal-package')
 fs.mkdirSync(traversalPackage, { recursive: true })
 const traversalManifest = path.join(traversalPackage, 'package.json')
 fs.writeFileSync(traversalManifest, JSON.stringify({ files: [{ path: '../escape.txt' }] }, null, 2))
-expectAgbFailure('cli eval rejected manifest path traversal during packet check', ['packet', 'check', traversalManifest], [
-  'unsafe manifest file path'
-])
+expectFailure('cli eval rejects manifest path traversal during packet check', ['packet', 'check', traversalManifest], ['unsafe manifest file path'])
 if (fs.existsSync(path.join(tmp, 'escape.txt'))) {
   console.error('cli eval failed; packet check wrote outside the manifest materialization directory')
   process.exit(1)
@@ -191,13 +114,8 @@ if (fs.existsSync(path.join(tmp, 'escape.txt'))) {
 const traversalStartPackage = path.join(tmp, 'traversal-start-package')
 fs.mkdirSync(traversalStartPackage, { recursive: true })
 const traversalStartManifest = path.join(traversalStartPackage, 'package.json')
-fs.writeFileSync(traversalStartManifest, JSON.stringify({
-  slug: 'traversal-start',
-  files: [{ path: '../escape.txt', rawUrl: 'escape.txt' }]
-}, null, 2))
-expectAgbFailure('cli eval rejected manifest path traversal during start', ['start', traversalStartManifest, path.join(tmp, 'traversal-target')], [
-  'unsafe manifest file path'
-])
+fs.writeFileSync(traversalStartManifest, JSON.stringify({ slug: 'traversal-start', files: [{ path: '../escape.txt', rawUrl: 'escape.txt' }] }, null, 2))
+expectFailure('cli eval rejects manifest path traversal during start', ['start', traversalStartManifest, path.join(tmp, 'traversal-target')], ['unsafe manifest file path'])
 if (fs.existsSync(path.join(tmp, 'escape.txt'))) {
   console.error('cli eval failed; start wrote outside the snapshot directory')
   process.exit(1)
@@ -209,8 +127,13 @@ const redactionFiles = {
     title: 'Redaction Package',
     files: [
       { path: 'BUILDPRINT.md', rawUrl: 'BUILDPRINT.md?fileToken=leaksecret' },
+      { path: '00-questions.md', rawUrl: '00-questions.md?fileToken=leaksecret' },
+      { path: '01-project-setup.md', rawUrl: '01-project-setup.md?fileToken=leaksecret' },
       { path: 'blueprint.yaml', rawUrl: 'blueprint.yaml?fileToken=leaksecret' },
-      { path: '03-phases/phase-index.yaml', rawUrl: '03-phases/phase-index.yaml?fileToken=leaksecret' }
+      { path: '03-phases/phase-index.yaml', rawUrl: '03-phases/phase-index.yaml?fileToken=leaksecret' },
+      { path: '03-phases/phase-flow.md', rawUrl: '03-phases/phase-flow.md?fileToken=leaksecret' },
+      { path: '03-phases/01-start.md', rawUrl: '03-phases/01-start.md?fileToken=leaksecret' },
+      { path: 'HANDOVER.md', rawUrl: 'HANDOVER.md?fileToken=leaksecret' }
     ],
     entrypoints: {
       agent: 'agent.md?agentToken=leaksecret',
@@ -219,9 +142,14 @@ const redactionFiles = {
       rawBase: 'https://example.invalid/raw?rawToken=leaksecret'
     }
   }, null, 2),
-  '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks.\n',
-  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint\nexecution_start: BUILDPRINT.md\n',
-  '/03-phases/phase-index.yaml': 'active_phase: 03-phases/00-start.md\nphase_order:\n  - phase_id: 00-start\n    file: 03-phases/00-start.md\n'
+  '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-project-setup.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
+  '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions.\n',
+  '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks.\n',
+  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\n',
+  '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
+  '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',
+  '/03-phases/01-start.md': '# Phase 01\n\n## How to implement this phase\n\nRead phase-flow.\n\n## Building objective\n\nBuild a real path.\n\n## DO NOT\n\nNo placeholders.\n\n## Minimum proof before moving on\n\nRun checks.\n\n## Handoff note\n\nRecord proof.\n',
+  '/HANDOVER.md': '# Handover\n\nBuilt, verified, blocked, not proven, next.\n'
 }
 const redactionServer = http.createServer((req, res) => {
   const pathname = new URL(req.url, 'http://127.0.0.1').pathname
@@ -252,20 +180,26 @@ try {
   }
   const sourceJson = fs.readFileSync(path.join(redactionTarget, '.buildprint/source.json'), 'utf8')
   const source = JSON.parse(sourceJson)
-  const urlFields = [
-    source.manifestUrl,
-    source.agentUrl,
-    source.promptUrl,
-    source.githubUrl,
-    source.rawBase,
-    ...source.downloaded.map((file) => file.sourceUrl)
-  ]
+  const urlFields = [source.manifestUrl, source.agentUrl, source.promptUrl, source.githubUrl, source.rawBase, ...source.downloaded.map((file) => file.sourceUrl)]
   if (/leaksecret|manifestToken|fileToken|agentToken|promptToken|githubToken|rawToken/.test(sourceJson) || !urlFields.every((value) => typeof value === 'string' && value.includes('redacted=1'))) {
     console.error(sourceJson)
     console.error('cli eval failed to redact tokenized source metadata')
     process.exit(1)
   }
-  console.log('✓ cli eval redacted tokenized source metadata')
+  const nextAgent = fs.readFileSync(path.join(redactionTarget, '.buildprint/next-agent.md'), 'utf8')
+  for (const expected of ['00-questions.md', '01-project-setup.md', '03-phases/phase-flow.md', 'HANDOVER.md']) {
+    if (!nextAgent.includes(expected)) {
+      console.error(nextAgent)
+      console.error(`cli eval failed; next-agent missing v3 read order item: ${expected}`)
+      process.exit(1)
+    }
+  }
+  if (/02-project-setup\.md|04-review\.md|05-handover\.md|smallest real usable slice/.test(nextAgent)) {
+    console.error(nextAgent)
+    console.error('cli eval failed; next-agent still references obsolete v2 files/language')
+    process.exit(1)
+  }
+  console.log('✓ cli eval redacted tokenized source metadata and wrote v3 next-agent')
 } finally {
   for (const socket of redactionSockets) socket.destroy()
   await new Promise((resolve) => redactionServer.close(resolve))

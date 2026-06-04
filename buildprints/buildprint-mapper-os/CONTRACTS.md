@@ -1,113 +1,54 @@
 # CONTRACTS: Buildprint Mapper OS
 
-## Source contract
+## Root contract
 
-- Source repositories are read-only during mapping.
-- Scanner output is a hint, not authority.
-- Secrets, tokens, private keys, cookies, and production data must not be copied.
-- Observable product behavior matters more than internal file names.
-- Selected scope must not silently shrink.
+Mapper OS maps source projects into source-independent Buildprints. It must preserve product scope, observable behavior, artifact type, runtime boundaries, state/readback expectations, provider constraints, and proof obligations without requiring the downstream builder to open the original source.
 
-## Selected packet contract (v2)
+## Selected packet contract
 
-The selected packet is an implementation input for a future coding agent. It must help that agent build a better artifact for its real consumer, not produce better-looking compliance notes.
+A selected packet must contain:
 
-Required selected packet spine:
+```text
+BUILDPRINT.md
+00-questions.md
+01-project-setup.md
+02-uiux-decision.md
+blueprint.yaml
+03-phases/
+  phase-index.yaml
+  phase-flow.md
+  <phase>.md
+HANDOVER.md
+```
 
-- `BUILDPRINT.md`
-- `01-questions.md`
-- `02-project-setup.md`
-- `02-architecture.md`
-- `03-ux-contract.md`
-- `blueprint.yaml` (with `schema_version: mapper-os/executable-blueprint/v2`)
-- `slices/_template/` (template) and at least one populated `slices/<id>/`
-- `gates/gate-index.yaml` and gate definition files
-- `04-handover.md` (template; runner generates the populated handover)
+## Phase contract
 
-The packet ships alongside `templates/teams/` capsule files referenced by `slice.yaml#persona`, and is operated by the `agb` runner whose contract is `templates/runner/RUNNER-SPEC.md`.
+Each phase file must include:
 
-## Downstream role contract
+- `How to implement this phase`
+- `Building objective`
+- `DO NOT`
+- `Minimum proof before moving on`
+- `Handoff note`
 
-The downstream role is deployment-posture aware:
+The `Building objective` must be comprehensive and product-specific. It should read like a senior product-engineering assignment, not a decomposed schema or checklist fragment.
 
-- `trusted_local` → **Senior Product Engineer**
-- `private_authenticated` → **Senior Staff Engineer**
-- `public_webapp` → **Staff/Principal Engineer**
+## Machine contract
 
-This is a responsibility contract:
+`blueprint.yaml` routes files and declares policy. It must not become implementation guidance. Implementation guidance belongs in Markdown.
 
-- preserve artifact intent and type;
-- identify the central artifact/interface/boundary;
-- build the first usable loop for the real consumer;
-- keep provider/deployment/destructive/security boundaries honest;
-- reject generic dashboard shells and fake controls;
-- run relevant local checks;
-- accept slices in a separate adversarial session;
-- write a concise handover.
+## Validation contract
 
-Role language is not proof. The built artifact behavior is what matters.
+`agb packet check` must reject:
 
-## Slice contract
+- retired v2 slice/gate structures;
+- obsolete selected packet filenames;
+- generated prompt/handoff files as packet authority;
+- tiny or missing phase objectives;
+- missing required phase headings;
+- phase index references to missing files;
+- placeholder/fake-success leakage outside Mapper templates.
 
-Each slice is an implementable vertical unit. Its `slice.yaml` declares:
+## Completion contract
 
-- `id` — unique identifier;
-- `persona` — file reference into `templates/teams/` (e.g. `ux-ui-craft`);
-- `paths:` — list of path ids that exist in `03-ux-contract.md` Path Map;
-- `core_proof_required:` — subset of paths that must be observed end-to-end with `upgrades_claim: true`;
-- `depends_on:` — optional list of slice ids that must be `complete` first.
-
-The build/acceptance loop is mechanically enforced by the runner:
-
-1. `agb persona --slice <path> --role build` produces the build session prompt (capsule + architecture + UX paths).
-2. Builder implements the slice and writes `slice-self-check.yaml`.
-3. `agb persona --slice <path> --role acceptance` produces the acceptance session prompt (hostile reviewer capsule).
-4. Acceptance writes `acceptance-result.json` with per-path observations.
-5. `agb state derive` reads acceptance results and writes `state.json`.
-
-A slice is `complete` only when every `core_proof_required` path has `upgrades_claim: true`. Blocked or sample-satisfied paths force `partial`. There is no OR-escape.
-
-## Gate contract
-
-Gates are horizontal, posture-conditional checks. Each gate file declares:
-
-- `id`, `active_when_posture:` (list), `requires_human_signoff:` (bool), and the rules to verify.
-
-Gate states: `inactive` (with `inactive_reason`), `pending`, `passed`, `failed`. A `passed` gate with `requires_human_signoff: true` is rejected unless `signoff_by` is non-agent.
-
-## Acceptance contract
-
-Acceptance must inspect behavior directly:
-
-- complete the core loop from a fresh start;
-- reload/read back required state, traces, or outputs;
-- vary inputs/config/events and verify outputs or behavior change;
-- click visible primary controls or run documented commands/API calls/operator actions;
-- test empty/error/blocked states where possible;
-- look for generic dashboard smell, fake intelligence, raw JSON dumped as the experience, placeholders, dead controls, undocumented public methods, fake adapter seams, canned output, internal/proof vocabulary, missing persistence, and absent next actions.
-
-Fix local, safe, central defects before handover. Leave only real blockers.
-
-## Handover contract
-
-Handover is generated by `agb slice status` from the derived `state.json`. Manual handover authoring is forbidden because it bypasses the derive-from-evidence rule. The generated `04-handover.md` always includes:
-
-- slice status table with reasons for each `partial`/`stale`;
-- gate status table with signoff or inactive_reason;
-- overall readiness label;
-- contract version hash;
-- explicit `Continue from here` options menu (continue one slice, continue to next checkpoint, do all remaining slices, or stop).
-
-## Drift contract
-
-`agb drift check` runs mechanical tripwires before any slice can be promoted to `complete`:
-
-- `no-slice-without-path-map` — every slice has a `slice.yaml`.
-- `every-path-id-traces` — slice path ids exist in `03-ux-contract.md` Path Map.
-- `operator-acceptance-present` — at least one `sample_can_satisfy: false` row exists.
-- `no-state-self-write` — `state.json` was written by `agb state derive`.
-- `contract-version-current` — every `acceptance-result.json#contract_version` matches the current ux-contract hash.
-- `no-fake-provider` — non-test files contain no hardcoded fake-provider success patterns.
-- `no-plaintext-secrets` — no plaintext secret patterns outside `.env` files.
-
-Any drift failure blocks promotion until the underlying issue is fixed in code, not in self-reported prose.
+A downstream implementation can only claim done when the real product path is checked. Packet structure alone never proves product completion.

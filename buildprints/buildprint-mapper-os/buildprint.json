@@ -10,49 +10,108 @@
     "safe census with hint-only authority",
     "behavior discovery with source evidence promotion",
     "scope selection before selected extraction",
-    "source-independent v2 packet emission (slices + gates)",
-    "team capsule references for persona injection",
-    "agb runner contract for derived state and drift checks",
-    "qualification gates and no-fake blockers",
-    "handoff without source dependency"
+    "source-independent v3 phase-driven packet emission",
+    "comprehensive phase objectives instead of slices/gates",
+    "project setup and UI/operator decision before phase work",
+    "forbidden fake-success paths and concise handover"
   ],
   "files": [
-    { "path": "buildprint.json", "role": "source" },
-    { "path": "BUILDPRINT.md", "role": "source" },
-    { "path": "CONTRACTS.md", "role": "source" },
-    { "path": "SPEC.md", "role": "source" },
-    { "path": "README.md", "role": "source" },
-    { "path": "questions.md", "role": "source" },
-    { "path": "vision.md", "role": "source" },
-    { "path": "policies/quality.md", "role": "source" },
-    { "path": "policies/questions.md", "role": "source" },
-    { "path": "policies/safety.md", "role": "source" },
-    { "path": "templates/executable-packet/BUILDPRINT.md", "role": "source" },
-    { "path": "templates/executable-packet/README.md", "role": "source" },
-    { "path": "templates/executable-packet/01-questions.md", "role": "source" },
-    { "path": "templates/executable-packet/02-project-setup.md", "role": "source" },
-    { "path": "templates/executable-packet/02-architecture.md", "role": "source" },
-    { "path": "templates/executable-packet/03-ux-contract.md", "role": "source" },
-    { "path": "templates/executable-packet/04-handover.md", "role": "source" },
-    { "path": "templates/executable-packet/blueprint.yaml", "role": "source" },
-    { "path": "templates/executable-packet/slices/_template/slice.yaml", "role": "source" },
-    { "path": "templates/executable-packet/slices/_template/build-brief.md", "role": "source" },
-    { "path": "templates/executable-packet/slices/_template/acceptance-spec.md", "role": "source" },
-    { "path": "templates/executable-packet/gates/gate-index.yaml", "role": "source" },
-    { "path": "templates/executable-packet/gates/security.md", "role": "source" },
-    { "path": "templates/executable-packet/gates/observability.md", "role": "source" },
-    { "path": "templates/executable-packet/gates/migration.md", "role": "source" },
-    { "path": "templates/executable-packet/gates/deploy.md", "role": "source" },
-    { "path": "templates/executable-packet/gates/compliance.md", "role": "source" },
-    { "path": "templates/executable-packet/gates/performance.md", "role": "source" },
-    { "path": "templates/teams/product-architect.md", "role": "source" },
-    { "path": "templates/teams/ux-ui-craft.md", "role": "source" },
-    { "path": "templates/teams/data-persistence.md", "role": "source" },
-    { "path": "templates/teams/integration-runtime.md", "role": "source" },
-    { "path": "templates/teams/security-boundary.md", "role": "source" },
-    { "path": "templates/teams/acceptance-hostile-reviewer.md", "role": "source" },
-    { "path": "templates/teams/state-writer.md", "role": "source" },
-    { "path": "templates/runner/RUNNER-SPEC.md", "role": "source" }
+    {
+      "path": "buildprint.json",
+      "role": "source"
+    },
+    {
+      "path": "BUILDPRINT.md",
+      "role": "source"
+    },
+    {
+      "path": "CONTRACTS.md",
+      "role": "source"
+    },
+    {
+      "path": "SPEC.md",
+      "role": "source"
+    },
+    {
+      "path": "README.md",
+      "role": "source"
+    },
+    {
+      "path": "questions.md",
+      "role": "source"
+    },
+    {
+      "path": "vision.md",
+      "role": "source"
+    },
+    {
+      "path": "policies/quality.md",
+      "role": "source"
+    },
+    {
+      "path": "policies/questions.md",
+      "role": "source"
+    },
+    {
+      "path": "policies/safety.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/BUILDPRINT.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/README.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/00-questions.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/01-project-setup.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/02-uiux-decision.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/blueprint.yaml",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/phase-index.yaml",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/phase-flow.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/01-foundation-and-first-loop.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/02-core-product-loop.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/03-state-runtime-and-integrations.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/04-ui-polish-and-interaction.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/03-phases/05-verification-and-handover.md",
+      "role": "source"
+    },
+    {
+      "path": "templates/executable-packet/HANDOVER.md",
+      "role": "source"
+    }
   ],
   "forbiddenDefaults": [
     "agb map CLI entrypoint",
@@ -61,15 +120,11 @@
     "secret value copying",
     "scanner-authored product facts",
     "selected extraction without scope decision",
-    "obsolete v1 selected-output template spine (03-phases/, 04-review.md, 05-handover.md, generated/agent-prompt.md)",
-    "phase chain with OR-escape unlock conditions",
-    "agent-written state.json",
-    "self-certification by builder",
-    "novice-only acceptance for paths that require operator validation",
+    "v2 slice/gate selected-output shape",
+    "tiny YAML implementation guidance",
+    "agent-written proof theater",
     "mocks or fixtures counted as product implementation",
-    "validation or parity claims without evidence",
-    "fragmented per-capability mini-files",
-    "obsolete selected-output files: CAPABILITY_INDEX.md, CONTEXT_PACKET.json, TEAM_STACK.md, UX_CONTRACT.md, DESIGN_QUALITY_BAR.md, CURRENT_STATE.md, EXECUTION_PROTOCOL.md, IMPLEMENTATION_PLAN.md, manifest.json"
+    "validation or parity claims without evidence"
   ],
   "authoritySpine": "BUILDPRINT.md",
   "mirrorFiles": [
@@ -80,8 +135,8 @@
     "policies/safety.md",
     "policies/quality.md",
     "policies/questions.md",
-    "templates/runner/RUNNER-SPEC.md"
+    "templates/executable-packet/03-phases/phase-flow.md"
   ],
-  "schemaVersion": "mapper-os/executable-blueprint/v2",
+  "schemaVersion": "mapper-os/executable-blueprint/v3",
   "keywords": []
 }

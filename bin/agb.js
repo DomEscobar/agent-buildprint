@@ -30,10 +30,6 @@ Usage:
   agb packet check <packet-folder-or-package-json-url>
   agb packet next <packet-folder-or-build-state-folder>
   agb evidence check <evidence-ledger-jsonl>
-  agb persona --slice <slice-yaml> --role build|acceptance [--packet-dir <path>]
-  agb state derive [--project-dir <path>] [--packet-dir <path>]
-  agb drift check [--project-dir <path>] [--packet-dir <path>]
-  agb slice status [--project-dir <path>]
 
 Examples:
   agb check ./my-buildprint
@@ -42,11 +38,6 @@ Examples:
   agb packet check ./buildprints/ai-swarm-simulator
   agb packet next ./buildprints/ai-swarm-simulator
   agb evidence check .buildprint/evidence/evidence-ledger.jsonl
-  agb persona --slice slices/01-onboarding/slice.yaml --role build
-  agb persona --slice slices/01-onboarding/slice.yaml --role acceptance
-  agb state derive
-  agb drift check
-  agb slice status
 
 Mapper note:
   The old agb map CLI has been removed. To map a source project, run an agent
@@ -435,63 +426,6 @@ function evidenceRowsFromText(text) {
   })
 }
 
-function packetCheckResultsV2(dir, files, allFiles, isMapperTemplatePacket) {
-  const checks = []
-  const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
-
-  // v2 spine files
-  const needV2 = ['BUILDPRINT.md', 'blueprint.yaml', '01-questions.md', '02-project-setup.md', '02-architecture.md', '03-ux-contract.md', '04-handover.md']
-  for (const file of needV2) ok(`v2 packet file exists: ${file}`, files.has(file))
-  ok('v2 packet has slices template', files.has('slices/_template/slice.yaml'))
-  ok('v2 packet has gate index', files.has('gates/gate-index.yaml'))
-  ok('v2 packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
-
-  const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
-  ok('v2 blueprint declares v2 schema', /schema_version:\s*mapper-os\/executable-blueprint\/v2/i.test(blueprint))
-  ok('v2 blueprint declares slices_dir', /slices_dir:/i.test(blueprint))
-  ok('v2 blueprint declares gates_dir', /gates_dir:/i.test(blueprint))
-  ok('v2 blueprint declares capsules_dir', /capsules_dir:/i.test(blueprint))
-  ok('v2 blueprint derived-state rule present', /state_json_path:/i.test(blueprint) && /agent.*never.*write|never.*write.*state|agb state derive/i.test(blueprint))
-  ok('v2 blueprint declares posture', /deployment_posture:/i.test(blueprint))
-  ok('v2 blueprint agent_contract has partial-not-complete rule', /partial.*not.*complete|blocked.*partial/i.test(blueprint))
-
-  const uxText = safeReadText(path.join(dir, '03-ux-contract.md'))
-  ok('v2 ux-contract has Path Map', /##\s*Path Map/i.test(uxText))
-  ok('v2 ux-contract has operator acceptance rows (sample_can_satisfy: false)', /sample_can_satisfy:\s*false/i.test(uxText))
-  ok('v2 ux-contract has novice acceptance rows', /novice/i.test(uxText))
-
-  const archText = safeReadText(path.join(dir, '02-architecture.md'))
-  ok('v2 architecture defines stack', /stack|framework|language|runtime/i.test(archText))
-  ok('v2 architecture defines persistence', /persist|database|storage|db/i.test(archText))
-
-  const handoverText = safeReadText(path.join(dir, '04-handover.md'))
-  ok('v2 handover template has slice status section', /slice status|## Slice/i.test(handoverText))
-  ok('v2 handover template has overall readiness block', /overall readiness|overall_status|not.*complete|partial.*status/i.test(handoverText))
-
-  // Gate index check
-  const gateIndex = safeReadText(path.join(dir, 'gates', 'gate-index.yaml'))
-  ok('v2 gate index has active_when_posture entries', /active_when_posture:/i.test(gateIndex))
-  ok('v2 gate index has human signoff gate', /requires_human_signoff:\s*true/i.test(gateIndex))
-
-  // Slice template check
-  const sliceTemplate = safeReadText(path.join(dir, 'slices', '_template', 'slice.yaml'))
-  ok('v2 slice template has paths field', /^paths:/mi.test(sliceTemplate))
-  ok('v2 slice template has core_proof_required field', /core_proof_required:/i.test(sliceTemplate))
-  ok('v2 slice template has persona field', /^persona:/mi.test(sliceTemplate))
-
-  // BUILDPRINT sanity
-  const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
-  ok('v2 BUILDPRINT has slice system section', /slice|slices/i.test(buildprint))
-
-  ok('v2 no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
-    if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false
-    const text = safeReadText(path.join(dir, file)).replace(/<phase-id>/g, '')
-    return /MAPPER_REQUIRED_|<mapped-app>|<capability name/i.test(text)
-  }))
-
-  return checks
-}
-
 function packetCheckResults(dir) {
   dir = packetCheckRoot(dir)
   const checks = []
@@ -501,146 +435,90 @@ function packetCheckResults(dir) {
   const normalizedPacketDir = dir.split(path.sep).join('/')
   const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') || normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet')
 
-  // Detect v2 packet (Slice/Gate structure)
-  const blueprint0 = safeReadText(path.join(dir, 'blueprint.yaml'))
-  const isV2Packet = /schema_version:\s*mapper-os\/executable-blueprint\/v2/i.test(blueprint0) ||
-    (files.has('slices/_template/slice.yaml') && files.has('gates/gate-index.yaml'))
-  if (isV2Packet) return packetCheckResultsV2(dir, files, allFiles, isMapperTemplatePacket)
+  const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
+  const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
+  const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
+  const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
 
-  // Keep this checker as an executable-packet smoke alarm, not a product-quality theology gate.
-  // Product taste lives in generated/agent-prompt.md and the Buildprint prose; this check only
-  // rejects packets that are structurally unbootstrappable, stale, or obviously placeholder-filled.
+  const obsoleteFiles = allFiles.filter((file) =>
+    file === '02-architecture.md' ||
+    file === '03-ux-contract.md' ||
+    file === '04-handover.md' ||
+    file === '04-review.md' ||
+    file === '05-handover.md' ||
+    file.startsWith('slices/') ||
+    file.startsWith('gates/') ||
+    file.startsWith('teams/') ||
+    file.startsWith('runner/') ||
+    file.startsWith('generated/') ||
+    file.startsWith('05-evidence/') ||
+    file.includes('/slice.yaml') ||
+    file.includes('/gate-index.yaml') ||
+    packetHasObsoleteRouter(file)
+  )
+
+  const isLegacySliceGatePacket = /schema_version:\s*mapper-os\/executable-blueprint\/v2/i.test(blueprint) ||
+    files.has('slices/_template/slice.yaml') ||
+    files.has('gates/gate-index.yaml') ||
+    /slices_dir:|gates_dir:|capsules_dir:/i.test(blueprint)
+
+  ok('packet rejects legacy v2 slice/gate shape', !isLegacySliceGatePacket, isLegacySliceGatePacket ? 'found v2 schema, slices/gates, or slices_dir/gates_dir/capsules_dir' : '')
+
   const need = [
-    'BUILDPRINT.md', 'blueprint.yaml', '01-questions.md', '02-project-setup.md',
-    '03-phases/phase-index.yaml', '03-phases/phase-flow.md'
+    'BUILDPRINT.md',
+    '00-questions.md',
+    '01-project-setup.md',
+    '02-uiux-decision.md',
+    'blueprint.yaml',
+    '03-phases/phase-index.yaml',
+    '03-phases/phase-flow.md',
+    'HANDOVER.md'
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
-  const hasProductReviewHandover = files.has('04-review.md') && files.has('05-handover.md')
-  const hasLegacyEvidenceLedger = files.has('05-evidence/evidence-ledger.schema.json') || files.has('05-evidence/evidence-ledger.jsonl')
-  ok('packet includes review/handover', hasProductReviewHandover)
-  ok('packet avoids legacy evidence ledger', !hasLegacyEvidenceLedger)
-  ok('packet file exists: 04-review.md', files.has('04-review.md'))
-  ok('packet file exists: 05-handover.md', files.has('05-handover.md'))
-  ok('packet does not ship project AGENTS.md', !files.has('AGENTS.md') && !allFiles.some((file) => file.startsWith('docs/')))
+  ok('packet has no legacy useless files', obsoleteFiles.length === 0, obsoleteFiles.length ? obsoleteFiles.join(', ') : '')
   ok('packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
 
-  const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
-  ok('blueprint declares executable Buildprint authority', /schema_version:\s*mapper-os\/executable-blueprint\s*$/im.test(blueprint) && /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
-  ok('blueprint includes project setup gate', /01-questions\.md/i.test(blueprint) && /02-project-setup\.md/i.test(blueprint))
-  ok('blueprint source fields are nested under source', !/\nsource:\s*\ninput:/i.test(`\n${blueprint}`))
-  ok('blueprint includes implementation loop', /phase_flow:\s*03-phases\/phase-flow\.md/i.test(blueprint) || /observe[\s\S]*plan[\s\S]*execute[\s\S]*verify[\s\S]*reflect[\s\S]*record/i.test(blueprint))
-  ok('blueprint includes repair routing', /repair_routing:/i.test(blueprint) && /02-project-setup\.md/i.test(blueprint))
-  const qualificationLabel = yamlScalar(blueprint, 'qualification_label') || yamlScalar(blueprint, 'claim_status')
-  ok('blueprint declares qualification label', ['DISCOVERY_ONLY', 'PROOF_REQUIRED', 'QUALIFIED_SOURCE_INDEPENDENT', 'product_build_required', 'local_build_requires_review'].includes(qualificationLabel))
-  ok('blueprint declares setup tier', /setup_tier:\s*(compact_setup|full_setup|product_leadership|typed_product_leadership|<compact_setup\|full_setup>)/i.test(blueprint))
-  ok('blueprint declares artifact mode', /blueprint_mode:\s*\n[\s\S]*primary:\s*(product|framework|library|integration|automation|data-pipeline|infrastructure|mixed)/i.test(blueprint))
+  ok('blueprint declares v3 phase-driven schema', /schema_version:\s*mapper-os\/executable-blueprint\/v3/i.test(blueprint))
+  ok('blueprint starts at BUILDPRINT and uses blueprint.yaml as machine contract', /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
+  ok('blueprint routes only, markdown teaches/builds', /YAML routes; markdown teaches and builds/i.test(blueprint) || /phase_driven_comprehensive/i.test(blueprint))
+  ok('blueprint declares required v3 packet files', need.every((file) => blueprint.includes(file)))
+  ok('blueprint forbids obsolete selected shapes', /forbidden_shapes:/i.test(blueprint) && /slices\//i.test(blueprint) && /gates\//i.test(blueprint) && /generated\/agent-prompt\.md/i.test(blueprint))
+  ok('blueprint declares canonical deployment posture', /deployment_posture:[\s\S]*current:\s*trusted_local/i.test(blueprint) && !/trusted-local|private authenticated|public webapp/i.test(blueprint))
 
-  const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
-  ok('BUILDPRINT owns read order', /01-questions\.md[\s\S]*(generated\/agent-prompt\.md[\s\S]*)?02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md/i.test(buildprint))
-  ok('BUILDPRINT includes phase loop', /How to use this packet|Implementation loop/i.test(buildprint) && /phase/i.test(buildprint))
-  ok('BUILDPRINT includes final reviewer mode', /Final critical reviewer|Final Reviewer|reviewer step|04-review\.md/i.test(buildprint) && /dead buttons|dead controls|placeholder|slop|generic dashboard/i.test(buildprint))
+  ok('BUILDPRINT owns v3 read order', /00-questions\.md[\s\S]*01-project-setup\.md[\s\S]*02-uiux-decision\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i.test(buildprint))
+  ok('BUILDPRINT frames execution manual not schema', /execution manual for an AI builder/i.test(buildprint) && /not a schema/i.test(buildprint))
+  ok('BUILDPRINT includes product identity and golden path', /Product identity/i.test(buildprint) && /Golden path/i.test(buildprint) && /Central artifact/i.test(buildprint))
+  ok('BUILDPRINT includes required constants and binding implementation contract', /Required constants/i.test(buildprint) && /Binding implementation contract/i.test(buildprint))
+  ok('BUILDPRINT forbids fake-success paths', /functionless buttons|dead controls|mocked\/sample data|fake provider|raw JSON/i.test(buildprint))
 
-  const questions = safeReadText(path.join(dir, '01-questions.md'))
-  ok('questions classify blocking power', /Hard-stop/i.test(questions) && /Assumable/i.test(questions) && /Deferrable/i.test(questions) && /Do not proceed to `?02-project-setup\.md`?|stop before setup/i.test(questions))
-  ok('questions hard-stop sensitive decisions', /deployment posture/i.test(questions) && /secrets|credentials/i.test(questions) && /destructive|data-loss/i.test(questions) && /privacy|compliance/i.test(questions) && /product\/artifact identity|central artifact/i.test(questions))
+  const questions = safeReadText(path.join(dir, '00-questions.md'))
+  ok('questions classify blocking power', /Hard-stop questions/i.test(questions) && /Assumable defaults/i.test(questions) && /Deferrable questions/i.test(questions) && /stop before `?01-project-setup\.md`?/i.test(questions))
+  ok('questions hard-stop sensitive decisions', /Deployment posture/i.test(questions) && /Secrets and provider policy/i.test(questions) && /Destructive\/data-loss behavior/i.test(questions) && /Privacy\/compliance exposure/i.test(questions) && /Product\/artifact identity/i.test(questions))
 
-  const setup = safeReadText(path.join(dir, '02-project-setup.md'))
-  ok('project setup defines implementation alignment', /senior development architect|senior product\/developer\/operator engineer/i.test(setup) && /artifact type|central artifact|product loop|first loop|artifact loop/i.test(setup) && /Forbidden shortcuts|Product quality rules|Product-craft floor/i.test(setup))
-  ok('project setup consumes questions into decisions', /01-questions\.md/i.test(setup) && /hard-stop/i.test(setup) && /assumable/i.test(setup) && /deferrable/i.test(setup) && /question-to-decision|Answer \/ assumption|architectural impact/i.test(setup) && /Reversible\?|Blocks setup\?/i.test(setup))
-  ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /\.env\.example/i.test(setup) && /docs\/(architecture|product-loop|artifact-loop)\.md/i.test(setup) && /setup-receipt\.md/i.test(setup))
-  ok('project setup requires agent and UI identity contracts', /AGENTS\.md/i.test(setup) && /mandatory read/i.test(setup) && /code ownership|ownership map/i.test(setup) && /UI-IDENTITY\.md|ui-identity\.md/i.test(setup) && /UX\/UI persona|UX UI persona|persona pass/i.test(setup) && /screenshot critique|visual identity/i.test(setup))
-  ok('project setup forces architect base not vibes', /foundation pour|architectural foundation/i.test(setup) && /selected stack/i.test(setup) && /adapter/i.test(setup) && /persistence/i.test(setup) && /verification commands|smoke/i.test(setup))
+  const setup = safeReadText(path.join(dir, '01-project-setup.md'))
+  ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && /Do not start `?03-phases\/\*`?/i.test(setup))
+  ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /docs\/product-loop\.md/i.test(setup) && /docs\/proof-strategy\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
+  ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
 
-  const phaseZero = safeReadText(path.join(dir, '03-phases/00-product-system-alignment.md'))
-  ok('phase 00 defines product system alignment', /Product system alignment/i.test(phaseZero) && /product promise/i.test(phaseZero) && /user segments|users|consumer/i.test(phaseZero) && /primary loops/i.test(phaseZero) && /feature map/i.test(phaseZero) && /state model/i.test(phaseZero) && /architecture boundaries/i.test(phaseZero) && /quality bar/i.test(phaseZero))
+  const uiux = safeReadText(path.join(dir, '02-uiux-decision.md'))
+  ok('ui/ux decision defines interaction and state coverage', /visual hierarchy/i.test(uiux) && /interaction model/i.test(uiux) && /empty, error, and blocked state|empty\/loading\/error\/blocked/i.test(uiux))
+  ok('ui/ux decision rejects generic dead UI', /functionless buttons|inert tabs|decorative charts|sample data|optimistic success/i.test(uiux))
 
-  const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
-  ok('phase flow defines phase-entry behavior', /For each phase/i.test(phaseFlow) && /smallest real usable slice/i.test(phaseFlow))
-  ok('phase flow requires explicit product intention or planning', /product intention|restate|plan|intention/i.test(phaseFlow))
-  ok('phase flow defines quality or blocker behavior', /slop|blocked|blocker|dead|fake|usable/i.test(phaseFlow))
-  ok('phase flow avoids self-proof theater', !/evidence-ledger\.jsonl/i.test(phaseFlow) || /hondo|handover|blocker/i.test(phaseFlow))
+  ok('phase flow defines active phase loop', /active phase only/i.test(phaseFlow) && /Do not read every phase upfront/i.test(phaseFlow) && /Restate the smallest real vertical path/i.test(phaseFlow))
+  ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
+  ok('phase flow defines repair routing', /return to `?01-project-setup\.md`?/i.test(phaseFlow) && /return to `?00-questions\.md`?/i.test(phaseFlow) && /return to `?02-uiux-decision\.md`?/i.test(phaseFlow))
+  ok('phase flow has no evidence-ledger bureaucracy', !/evidence-ledger\.jsonl|proof_contract|capability_id/i.test(phaseFlow))
 
-  const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
-  ok('phase index names active phase file', /active_phase:\s*03-phases\/[^\s#]+\.md/i.test(phaseIndex))
-  const phaseIds = [...phaseIndex.matchAll(/^\s*-?\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
+  ok('phase index declares v3 schema and active phase', /schema_version:\s*mapper-os\/phase-index\/v3/i.test(phaseIndex) && /active_phase:\s*03-phases\/[\w.-]+\.md/i.test(phaseIndex))
+  const phaseIds = [...phaseIndex.matchAll(/^\s*-\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
   const phaseIdSet = new Set(phaseIds)
-  ok('phase index has unique canonical phase ids', phaseIds.length > 0 && phaseIds.length === phaseIdSet.size)
-  const deploymentPosture = (blueprint.match(/deployment_posture:[\s\S]*?^\s*current:\s*([^\s#]+)/mi) || [])[1] || ''
-  const postureValues = [deploymentPosture, ...[...phaseIndex.matchAll(/^\s*deployment_posture:\s*([^\s#]+)/gmi)].map((m) => m[1])].filter(Boolean).map((value) => value.trim().replace(/^['"]|['"]$/g, ''))
-  const phaseStatuses = [...phaseIndex.matchAll(/^\s*status:\s*([^\s#]+)/gmi)].map((m) => m[1].trim().replace(/^['"]|['"]$/g, ''))
-  const allowedPostures = new Set(['trusted_local', 'private_authenticated', 'public_webapp'])
-  const allowedStatuses = new Set(['included', 'included_blocked', 'conditional', 'blocked'])
-  const contractVocabularyText = `${blueprint}\n${phaseIndex}`
-  const hasInvalidPostureSpelling = /trusted-local|private authenticated|public webapp/i.test(contractVocabularyText)
-  const hasLegacyUppercaseStatus = /\bINCLUDED_BLOCKED\b/.test(contractVocabularyText)
-  ok('packet uses canonical posture and phase status values', postureValues.length > 0 && postureValues.every((value) => allowedPostures.has(value)) && phaseStatuses.every((value) => allowedStatuses.has(value)) && !hasInvalidPostureSpelling && !hasLegacyUppercaseStatus)
   const phaseIndexFiles = phaseFilesFromIndex(phaseIndex)
-  const activePhase = (phaseIndex.match(/active_phase:\s*(03-phases\/[^\s#]+\.md)/i) || [])[1]
-  ok('phase index active phase exists', !!activePhase && files.has(activePhase))
+  ok('phase index has unique phase ids', phaseIds.length > 0 && phaseIds.length === phaseIdSet.size)
   ok('phase index referenced phase files exist', phaseIndexFiles.length > 0 && phaseIndexFiles.every((file) => files.has(file)))
+  const activePhase = (phaseIndex.match(/active_phase:\s*(03-phases\/[\w.-]+\.md)/i) || [])[1]
+  ok('phase index active phase exists', !!activePhase && files.has(activePhase))
+  ok('phase index routes only without role/gate/slice machinery', !/requires_roles|gate|slice|capsule|runner/i.test(phaseIndex))
 
-  const selectedSpine = yamlScalar(blueprint, 'selected_spine')
-  const blueprintPrimary = ((blueprint.match(/blueprint_mode:[\s\S]*?^\s*primary:\s*([^\s#]+)/mi) || [])[1] || '').trim().replace(/^['"]|['"]$/g, '')
-  const hardeningPhases = [
-    '09-auth-and-tenancy',
-    '10-observability-and-health',
-    '11-deployment-and-operability',
-    '12-ci-and-release-gates',
-    '13-backup-and-recovery',
-    '14-security-and-abuse-controls'
-  ]
-  ok('phase index includes posture hardening phases', hardeningPhases.every((phaseId) => phaseIdSet.has(phaseId)))
-  ok('included_blocked phases name blocked reasons', phaseIds.every((phaseId) => {
-    const block = phaseEntryBlock(phaseIndex, phaseId)
-    return !/status:\s*included_blocked\b/i.test(block) || /blocked_reason:\s*\S/i.test(block)
-  }))
-  const spinePhaseRequirements = {
-    product_app_consumer_first: {
-      label: 'product spine uses Buildprint Consumer-First phases',
-      phases: ['00-product-system-alignment', '01-shell-and-navigation', '02-core-loop-first', '03-feature-slices', '04-state-and-data', '05-domain-and-intelligence', '06-design-system-and-copy', '07-architecture-garden', '08-verification']
-    },
-    developer_first_framework: {
-      label: 'developer_first_framework spine uses Developer-First phases',
-      phases: ['01-adoption-contract', '02-framework-seams', '03-first-host-action', '04-events-failures-observability', '05-examples-and-docs']
-    },
-    reliability_first_service: {
-      label: 'reliability_first_service spine uses Reliability-First phases',
-      phases: ['01-service-goal-slo', '02-state-machine-data-contracts', '03-happy-transaction', '04-retry-failure-recovery', '05-observability-admin-controls', '06-runbook-regression-verification']
-    },
-    automation_task_loop: {
-      label: 'automation_task_loop spine uses Automation phases',
-      phases: ['01-task-contract', '02-approval-and-inputs', '03-first-task-run', '04-stop-conditions-and-recovery', '05-trace-and-handover']
-    },
-    data_pipeline_quality_loop: {
-      label: 'data_pipeline_quality_loop spine uses Data Pipeline phases',
-      phases: ['01-data-contracts', '02-ingestion-and-lineage', '03-transform-quality-loop', '04-quality-gates-and-recovery', '05-output-reproducibility']
-    },
-    infrastructure_operations_loop: {
-      label: 'infrastructure_operations_loop spine uses Infrastructure phases',
-      phases: ['01-operation-contract', '02-plan-apply-boundaries', '03-health-and-drift', '04-rollback-and-recovery', '05-runbook-and-release-gates']
-    }
-  }
-  if (spinePhaseRequirements[selectedSpine]) {
-    const requirement = spinePhaseRequirements[selectedSpine]
-    ok(requirement.label, requirement.phases.every((phaseId) => phaseIdSet.has(phaseId)))
-  } else if (selectedSpine === 'mixed') {
-    ok('mixed spine declares per-phase modes', /mixed_phase_modes:|phase_mode:/i.test(`${blueprint}\n${phaseIndex}`))
-  }
-  ok('selected spine uses known executable spine', [...Object.keys(spinePhaseRequirements), 'mixed'].includes(selectedSpine))
-  const primarySpineMap = {
-    product: ['product_app_consumer_first'],
-    framework: ['developer_first_framework'],
-    library: ['developer_first_framework'],
-    integration: ['developer_first_framework', 'reliability_first_service'],
-    automation: ['automation_task_loop'],
-    'data-pipeline': ['data_pipeline_quality_loop'],
-    infrastructure: ['infrastructure_operations_loop'],
-    mixed: ['mixed']
-  }
-  ok('blueprint primary uses matching executable spine', (primarySpineMap[blueprintPrimary] || []).includes(selectedSpine))
-
-  const knownRoles = new Set(['product-architect', 'ux-ui-craft', 'integration-runtime', 'security-boundary', 'data-persistence'])
-  const phaseDir = path.join(dir, '03-phases')
   const collectPhaseMd = (root) => exists(root)
     ? fs.readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
         const full = path.join(root, entry.name)
@@ -648,54 +526,29 @@ function packetCheckResults(dir) {
         return entry.name.endsWith('.md') && entry.name !== 'phase-flow.md' ? [full] : []
       })
     : []
-  const phaseFiles = collectPhaseMd(phaseDir).sort()
-  ok('packet has at least one phase file', phaseFiles.length > 0)
-  const observabilityFile = phaseFileForId(phaseIndex, '10-observability-and-health') ||
-    (files.has('03-phases/conditional/observability-and-health.md') ? '03-phases/conditional/observability-and-health.md' : '') ||
-    (files.has('03-phases/10-observability-and-health.md') ? '03-phases/10-observability-and-health.md' : '')
-  const observabilityPhase = observabilityFile ? safeReadText(path.join(dir, observabilityFile)) : ''
-  ok('observability phase embeds security-boundary', !!observabilityPhase && /^requires_roles:\s*\[[^\]]*security-boundary[^\]]*\]/mi.test(observabilityPhase) && /##\s*Required output\s*\(security-boundary\)/i.test(observabilityPhase) && /##\s*Blocks\s*\(security-boundary\)/i.test(observabilityPhase))
+  const phaseFiles = collectPhaseMd(path.join(dir, '03-phases')).sort()
+  ok('packet has comprehensive phase files', phaseFiles.length >= 1)
   for (const fullPath of phaseFiles) {
-    const file = path.relative(phaseDir, fullPath).split(path.sep).join('/')
+    const file = path.relative(dir, fullPath).split(path.sep).join('/')
     const text = safeReadText(fullPath)
-    ok(`${file} has implementable phase contract`, /Product intention|Product outcome|Capability outcome|Operation outcome|Phase mode contract/i.test(text) && /## Build|## Implementation scope|## Review/i.test(text) && /Quality bar|Do not ship|Handover|Repair routing/i.test(text))
-    ok(`${file} uses phase_id not capability_id for proof rows`, !/capability_id\s*:/i.test(text))
-    ok(`${file} does not reference missing shared UX context`, !/02-context\/ux-contract\.md|design-quality-bar\.md/i.test(text))
-    const rolesMatch = text.match(/^\s*requires_roles\s*:\s*\[([^\]]*)\]/m)
-    if (rolesMatch) {
-      const declaredRoles = rolesMatch[1].split(',').map((role) => role.trim()).filter(Boolean)
-      const embeddedRoles = (text.match(/##\s*Required output\s*\(([^)]+)\)/gi) || []).map((heading) => heading.replace(/##\s*Required output\s*\(/i, '').replace(/\)\s*$/, '').trim())
-      const unresolved = declaredRoles.filter((role) => !embeddedRoles.includes(role))
-      ok(`${file} embeds every requires_roles role (no dangling role tokens)`, unresolved.length === 0, unresolved.length ? `missing embedded "## Required output (<role>)" for: ${unresolved.join(', ')}` : '')
-      const unknown = declaredRoles.filter((role) => !knownRoles.has(role))
-      ok(`${file} requires_roles names known capsules`, unknown.length === 0, unknown.length ? `unknown role(s): ${unknown.join(', ')} (allowed: ${Array.from(knownRoles).join(', ')})` : '')
-    }
+    const objective = (text.match(/##\s*Building objective\s*\n([\s\S]*?)(?=\n##\s*DO NOT)/i) || [])[1] || ''
+    ok(`${file} has comprehensive phase headings`, /##\s*How to implement this phase/i.test(text) && /##\s*Building objective/i.test(text) && /##\s*DO NOT/i.test(text) && /##\s*Minimum proof before moving on/i.test(text) && /##\s*Handoff note/i.test(text))
+    ok(`${file} has substantial building objective`, objective.trim().length >= (isMapperTemplatePacket ? 500 : 700), `objective length ${objective.trim().length}`)
+    ok(`${file} reads required phase context`, /03-phases\/phase-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text))
+    ok(`${file} forbids placeholders/functionless/mocks`, /placeholders/i.test(text) && /functionless buttons/i.test(text) && /mocked\/sample data/i.test(text))
+    ok(`${file} does not use decomposed v2/schema machinery`, !/slice\.yaml|acceptance-spec|build-brief|requires_roles|capability_id|proof_contract|evidence-ledger\.jsonl/i.test(text))
   }
 
-  const rules = files.has('04-evaluation.md') ? safeReadText(path.join(dir, '04-evaluation.md')) : safeReadText(path.join(dir, '04-review.md'))
-  ok('evaluation/review includes anti-fake product quality', /no_fake|fake|dead controls|generic dashboard|slop/i.test(rules))
-  ok('evaluation/review includes honest blocker or boundary semantics', /production_readiness|blocker|blocked|boundary|credentials/i.test(rules))
-
-  if (hasLegacyEvidenceLedger) {
-    const schema = safeReadText(path.join(dir, '05-evidence/evidence-ledger.schema.json'))
-    for (const key of ['phase_id', 'proof_type', 'provider_mode', 'upgrades_claim', 'claim_type', 'blocks_continuation']) ok(`evidence schema includes ${key}`, schema.includes(key))
-    ok('evidence schema constrains proof/provider/claim types', /unit_contract/i.test(schema) && /provider_live/i.test(schema) && /claim_upgrade/i.test(schema))
-    const seedText = safeReadText(path.join(dir, '05-evidence/evidence-ledger.jsonl'))
-    const seedParse = evidenceRowsFromText(seedText)
-    const seedRows = seedParse.filter((item) => item.row).map((item) => item.row)
-    ok('seed evidence JSONL parses', seedParse.every((item) => !item.error))
-    ok('seed evidence phase ids match phase index', seedRows.every((row) => !row.phase_id || phaseIdSet.has(row.phase_id)))
-    ok('seed evidence cannot upgrade claims', seedRows.every((row) => row.upgrades_claim !== true))
-    ok('seed evidence rows use phase_id not capability_id', seedRows.every((row) => !('capability_id' in row) || 'phase_id' in row))
-  }
+  const handover = safeReadText(path.join(dir, 'HANDOVER.md'))
+  ok('handover captures built/verified/blocked/not-proven/next', /##\s*Built/i.test(handover) && /##\s*Verified/i.test(handover) && /##\s*Blocked/i.test(handover) && /##\s*Not proven/i.test(handover) && /##\s*Next/i.test(handover))
+  ok('handover warns against overclaiming', /Do not claim completion beyond the evidence/i.test(handover))
 
   ok('no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
     if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false
-    const text = safeReadText(path.join(dir, file)).replace(/<phase-id>/g, '')
+    const text = safeReadText(path.join(dir, file)).replace(/<phase>/g, '').replace(/<phase-id>/g, '')
     return /MAPPER_REQUIRED_|<mapped-app>|<capability name/i.test(text)
   }))
-  ok('generated prompt is alignment speech, not authority', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || (/not a checklist|senior product engineer|senior product engineer|product engineer|checklist executor/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))) && !/start here|read first|source of truth|override|canonical/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md')).replace(/Generated from:[^\n]+/gi, '').replace(/not source of truth|not authoritative|not a substitute/gi, ''))))
-  ok('generated prompt includes anti-slop/product reviewer when present', isMapperTemplatePacket || !files.has('generated/agent-prompt.md') || /anti-slop|ai-slop|slop gate|skeptical reviewer|dead buttons|generic dashboards/i.test(safeReadText(path.join(dir, 'generated/agent-prompt.md'))))
+
   return checks
 }
 
@@ -836,7 +689,7 @@ function readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile) {
   if (Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length) return manifest.instructions.readOrder
   if (Array.isArray(manifest.readOrder) && manifest.readOrder.length) return manifest.readOrder
   return isExecutablePacket
-    ? ['BUILDPRINT.md', '01-questions.md', 'generated/agent-prompt.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', '04-review.md', '05-handover.md', '04-evaluation.md', '05-evidence/evidence-ledger.jsonl'].filter(hasManifestFile)
+    ? ['BUILDPRINT.md', '00-questions.md', '01-project-setup.md', '02-uiux-decision.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', 'HANDOVER.md'].filter(hasManifestFile)
     : ['BUILDPRINT.md'].filter(hasManifestFile)
 }
 
@@ -857,19 +710,15 @@ function phaseIndexActiveInfo(phaseIndexText) {
 function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
   const canonical = [
     'BUILDPRINT.md',
-    '01-questions.md',
-    'generated/agent-prompt.md',
-    'generated/codex-handoff.md',
-    '02-project-setup.md',
+    '00-questions.md',
+    '01-project-setup.md',
+    '02-uiux-decision.md',
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
     activePhase,
-    '04-review.md',
-    '05-handover.md',
-    '04-evaluation.md',
-    '05-evidence/evidence-ledger.jsonl'
-  ].filter((file) => file && hasManifestFile(file))
+    'HANDOVER.md'
+  ].filter((file, index, arr) => file && hasManifestFile(file) && arr.indexOf(file) === index)
   const extras = baseReadOrder.filter((file) => hasManifestFile(file) && !canonical.includes(file))
   return uniqueStrings([...canonical, ...extras])
 }
@@ -883,7 +732,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     .map((filePath) => safeManifestPath(filePath))
     .filter((filePath) => !filePath.includes('*'))
   const hasManifestFile = (filePath) => manifestFilePaths.includes(filePath)
-  const isExecutablePacket = hasManifestFile('01-questions.md') && hasManifestFile('02-project-setup.md') && hasManifestFile('blueprint.yaml')
+  const isExecutablePacket = hasManifestFile('00-questions.md') && hasManifestFile('01-project-setup.md') && hasManifestFile('blueprint.yaml')
   const baseReadOrder = readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile)
 
   const targetRoot = path.resolve(cwd, targetFolder)
@@ -1005,30 +854,31 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
 Start here.
 
-This is a Mapper OS executable Buildprint. Local runtime state wins over stale assumptions, but package snapshots remain read-only.
+This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stale assumptions, but package snapshots remain read-only.
 
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
-3. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work.
-4. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
-5. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
-6. Execute the phase-flow loop: restate product intention, build the smallest real usable slice, improve the obvious next user action, run relevant checks, remove visible slop, and record useful handover facts.
-7. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
-8. Advance according to \`execution_cadence\` in \`.buildprint/snapshots/blueprint.yaml\` (default \`one_phase\`): \`one_phase\` stops after each phase, \`to_checkpoint\` runs through verification then final review, \`all_remaining\` runs every dependency-ready phase to completion. Stop only on a real blocker.
-9. Before completion, run \`.buildprint/snapshots/04-review.md\` and write the handover described in \`.buildprint/snapshots/05-handover.md\`.
+3. Read \`.buildprint/snapshots/00-questions.md\`; stop only for true hard-stop decisions.
+4. Read and complete \`.buildprint/snapshots/01-project-setup.md\` before phase work.
+5. Read \`.buildprint/snapshots/02-uiux-decision.md\` when the artifact has UI or human-facing interaction.
+6. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
+7. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
+8. Execute the phase-flow loop: restate the smallest real vertical product path, build it, verify it, repair visible slop/fake-success shortcuts, and record useful handover facts.
+9. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
+10. Before completion or stopping, write the handover described in \`.buildprint/snapshots/HANDOVER.md\`.
 
 Whenever you stop, end your handover with this menu so the developer has a concrete choice (fill in real phase ids from \`03-phases/phase-index.yaml\`):
 
 1. Continue one phase — implement the next phase only, then stop and show this menu again.
 2. Continue to the next checkpoint — implement through verification, pausing only on a real blocker.
-3. Do all remaining phases — implement every dependency-ready phase through final review/handover, stopping only on real blockers.
+3. Do all remaining phases — implement every dependency-ready phase through final handover, stopping only on real blockers.
 4. Stop here.
 
 Rules:
 
 - Do not read every phase upfront.
 - Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
-- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created from \`02-project-setup.md\`, not shipped in the packet.
+- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created from \`01-project-setup.md\`, not shipped in the packet.
 - Keep claims scoped until the built product has been checked directly.
 - Do not create proof theater; local checks and product review are useful only insofar as they catch real defects.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
@@ -1116,490 +966,7 @@ if (args[0] === 'map') {
   process.exit(1)
 }
 
-// ─── Slice/Gate runner commands ───────────────────────────────────────────────
-
-function findProjectRoot(start) {
-  // Walk up from `start` until we find a dir that has either .buildprint/ or slices/ as a child.
-  let current = path.resolve(start)
-  for (let i = 0; i < 10; i++) {
-    if (exists(path.join(current, '.buildprint')) || exists(path.join(current, 'slices'))) return current
-    const parent = path.dirname(current)
-    if (parent === current) break
-    current = parent
-  }
-  return path.resolve(start)
-}
-
-function findPacketDir(projectDir) {
-  const root = findProjectRoot(projectDir)
-  const sourceJson = path.join(root, '.buildprint', 'source.json')
-  if (exists(sourceJson)) {
-    try {
-      const data = readJsonFile(sourceJson)
-      if (data.packet_dir && exists(data.packet_dir)) return data.packet_dir
-    } catch { /* fall through */ }
-  }
-  for (const candidate of [
-    path.join(root, 'packet'),
-    path.join(root, '.buildprint', 'snapshots'),
-    root,
-  ]) {
-    if (exists(path.join(candidate, 'blueprint.yaml'))) return candidate
-  }
-  return null
-}
-
-function findCapsuleDir(packetDir) {
-  // Read capsules_dir from blueprint.yaml; resolve relative to packet. Fall back to common locations.
-  const blueprint = safeReadText(path.join(packetDir, 'blueprint.yaml'))
-  const capsulesDirField = (blueprint.match(/^\s*capsules_dir:\s*([^\s#]+)/m) || [])[1]
-  const candidates = []
-  if (capsulesDirField) candidates.push(path.resolve(packetDir, capsulesDirField))
-  candidates.push(
-    path.join(packetDir, 'teams'),
-    path.join(packetDir, '..', 'teams'),
-    path.join(packetDir, '..', '..', 'teams'),
-  )
-  for (const c of candidates) if (exists(c)) return c
-  return null
-}
-
-function readYamlLite(file) {
-  // Reuse safeReadText; returns raw text, callers extract what they need
-  return safeReadText(file)
-}
-
-function yamlListField(text, key) {
-  // Extract a YAML list field. Supports inline (paths: [a, b]) and block (paths:\n  - a\n  - b).
-  // The block form stops at the next sibling key (^\w[\w-]*:) so it doesn't bleed into the next field.
-  const inlineMatch = text.match(new RegExp(`^\\s*${key}:\\s*\\[([^\\]]+)\\]`, 'm'))
-  if (inlineMatch) return inlineMatch[1].split(',').map(s => s.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean)
-  const lines = text.split(/\r?\n/)
-  const startIdx = lines.findIndex(line => new RegExp(`^\\s*${key}:\\s*$`).test(line))
-  if (startIdx < 0) return []
-  const items = []
-  for (let i = startIdx + 1; i < lines.length; i++) {
-    const line = lines[i]
-    if (!line.trim()) continue
-    const sibling = line.match(/^[A-Za-z_][\w-]*:/)
-    if (sibling) break
-    const itemMatch = line.match(/^\s+-\s+(\S+)/)
-    if (itemMatch) items.push(itemMatch[1].trim().replace(/^['"]|['"]$/g, ''))
-  }
-  return items
-}
-
-function extractUxPathSection(uxText, pathIds) {
-  const lines = uxText.split(/\r?\n/)
-  let inPathMap = false
-  const collected = []
-  let currentId = null
-  let currentBlock = []
-  for (const line of lines) {
-    if (/^##\s+Path Map/.test(line)) { inPathMap = true; continue }
-    if (inPathMap && /^##\s/.test(line)) {
-      if (currentId && pathIds.includes(currentId)) collected.push(...currentBlock)
-      break
-    }
-    if (inPathMap) {
-      const idMatch = line.match(/^\s+-\s+id:\s+(\S+)/)
-      if (idMatch) {
-        if (currentId && pathIds.includes(currentId)) collected.push(...currentBlock)
-        currentId = idMatch[1]
-        currentBlock = [line]
-      } else if (currentBlock.length) {
-        currentBlock.push(line)
-      }
-    }
-  }
-  if (currentId && pathIds.includes(currentId) && inPathMap) collected.push(...currentBlock)
-  return collected.length ? collected.join('\n') : '(No matching paths found in ux-contract Path Map)'
-}
-
-function hashFileSync(filePath) {
-  if (!exists(filePath)) return 'unknown'
-  // Simple non-crypto hash for contract versioning (file content hash)
-  const content = readText(filePath)
-  let h = 0
-  for (let i = 0; i < content.length; i++) { h = (Math.imul(31, h) + content.charCodeAt(i)) | 0 }
-  return Math.abs(h).toString(16).padStart(8, '0')
-}
-
-function buildPersonaPrompt(sliceYamlPath, role, packetDir) {
-  const sliceText = safeReadText(sliceYamlPath)
-  const sliceId = (sliceText.match(/^id:\s*(\S+)/m) || [])[1] || path.basename(path.dirname(sliceYamlPath))
-  const persona = role === 'acceptance' ? 'acceptance-hostile-reviewer' : ((sliceText.match(/^persona:\s*(\S+)/m) || [])[1] || 'ux-ui-craft')
-  const paths = yamlListField(sliceText, 'paths')
-  const coreProof = yamlListField(sliceText, 'core_proof_required')
-
-  const capsuleDir = findCapsuleDir(packetDir)
-  if (!capsuleDir) throw new Error(`Capsule directory not found. Looked at packetDir/teams, ../teams, ../../teams, and capsules_dir from blueprint.yaml. packetDir=${packetDir}`)
-  const capsuleFile = path.join(capsuleDir, `${persona}.md`)
-  const capsuleText = safeReadText(capsuleFile)
-  if (!capsuleText) throw new Error(`Capsule file not found: ${capsuleFile}\nAvailable capsules in ${capsuleDir}: ${exists(capsuleDir) ? fs.readdirSync(capsuleDir).filter(f => f.endsWith('.md')).join(', ') : '(none)'}`)
-
-  const archText = safeReadText(path.join(packetDir, '02-architecture.md'))
-  const uxContractPath = path.join(packetDir, '03-ux-contract.md')
-  const uxText = safeReadText(uxContractPath)
-  const uxSections = uxText ? extractUxPathSection(uxText, paths) : '(03-ux-contract.md not found)'
-  const contractVersion = hashFileSync(uxContractPath)
-
-  const lines = [
-    '## System Identity',
-    '',
-    capsuleText.trim(),
-    '',
-    '---',
-    '',
-    '## Required Reading',
-    '',
-    '### Architecture (02-architecture.md)',
-    '',
-    archText ? archText.slice(0, 2000) + (archText.length > 2000 ? '\n...(truncated — read full file)' : '') : '(02-architecture.md not found)',
-    '',
-    '### UX Contract paths for this slice (03-ux-contract.md)',
-    '',
-    uxSections,
-    '',
-    '---',
-    '',
-    '## Scope',
-    '',
-    `Slice: \`${sliceId}\``,
-    `Role: \`${role}\``,
-    `UX contract version: \`${contractVersion}\``,
-    '',
-    'Paths to implement/test:',
-    ...paths.map(p => `  - \`${p}\`${coreProof.includes(p) ? '  [CORE PROOF REQUIRED]' : ''}`),
-    '',
-    'Core proof required (observed end-to-end, not proxied by sample or blocker):',
-    ...coreProof.map(p => `  - \`${p}\``),
-  ]
-
-  if (role === 'build') {
-    lines.push(
-      '', '---', '',
-      '## Self-Check Instruction',
-      '',
-      `Before handoff, produce \`slices/${sliceId}/slice-self-check.yaml\` with one row per Blocks entry: id, result (clean/violated/n.a.), note.`,
-      '',
-      '## State Rule',
-      '',
-      'Never write \`state.json\`. Never write \`acceptance-result.json\`. The runner derives state from your acceptance result.',
-    )
-  } else {
-    lines.push(
-      '', '---', '',
-      '## Acceptance Output',
-      '',
-      `Write \`slices/${sliceId}/acceptance-result.json\`.`,
-      'A blocked core_proof_required path makes the slice \`partial\`, not \`complete\`.',
-      'Never write \`state.json\`.',
-    )
-  }
-
-  return lines.join('\n')
-}
-
-function deriveState(projectDir, packetDir) {
-  const blueprintText = safeReadText(path.join(packetDir, 'blueprint.yaml'))
-  const posture = (blueprintText.match(/deployment_posture:[\s\S]*?^\s*current:\s*(\S+)/m) || [])[1] || 'trusted_local'
-  const slicesDir = path.join(projectDir, 'slices')
-  const gatesDir = path.join(packetDir, 'gates')
-  const uxContractPath = path.join(packetDir, '03-ux-contract.md')
-  const archPath = path.join(packetDir, '02-architecture.md')
-  const contractHash = hashFileSync(uxContractPath)
-  const archHash = hashFileSync(archPath)
-
-  const slices = {}
-  if (exists(slicesDir)) {
-    for (const entry of fs.readdirSync(slicesDir, { withFileTypes: true })) {
-      if (!entry.isDirectory() || entry.name === '_template') continue
-      const sliceId = entry.name
-      const arPath = path.join(slicesDir, sliceId, 'acceptance-result.json')
-      if (!exists(arPath)) {
-        slices[sliceId] = { status: 'not-started', evidence: [], reasons: ['no acceptance-result.json'] }
-        continue
-      }
-      let result
-      try { result = readJsonFile(arPath) } catch (e) {
-        slices[sliceId] = { status: 'fail', evidence: [arPath], reasons: [`invalid JSON: ${e.message}`] }
-        continue
-      }
-      const fileHash = result.contract_version || ''
-      if (fileHash && fileHash !== contractHash) {
-        slices[sliceId] = { status: 'stale', evidence: [arPath], reasons: [`contract changed (was ${fileHash}, now ${contractHash})`] }
-        continue
-      }
-      const overall = result.overall_slice_status || ''
-      const paths = result.paths || []
-      if (overall === 'complete') {
-        const badCore = paths.filter(p => p.is_core_proof && !p.upgrades_claim).map(p => `${p.path_id} missing upgrades_claim:true`)
-        slices[sliceId] = badCore.length
-          ? { status: 'partial', evidence: [arPath], reasons: badCore }
-          : { status: 'complete', evidence: [arPath], reasons: [] }
-      } else if (overall === 'partial') {
-        const reasons = paths.filter(p => p.is_core_proof && p.status !== 'pass').map(p => `${p.path_id}: ${p.observed || 'blocked'}`)
-        slices[sliceId] = { status: 'partial', evidence: [arPath], reasons: reasons.length ? reasons : [result.reason || 'partial'] }
-      } else if (overall === 'fail') {
-        slices[sliceId] = { status: 'fail', evidence: [arPath], reasons: [result.reason || 'failed'] }
-      } else {
-        slices[sliceId] = { status: 'partial', evidence: [arPath], reasons: ['unknown overall_slice_status'] }
-      }
-    }
-  }
-
-  const gates = {}
-  const gateIndexPath = path.join(gatesDir, 'gate-index.yaml')
-  if (exists(gateIndexPath)) {
-    const gateText = readText(gateIndexPath)
-    const gateBlocks = [...gateText.matchAll(/^\s*-\s+id:\s+(\S+)([\s\S]*?)(?=^\s*-\s+id:|\Z)/gm)]
-    for (const [, gateId, block] of gateBlocks) {
-      const activePostures = (block.match(/active_when_posture:\s*\[([^\]]+)\]/) || [])[1]?.split(',').map(s => s.trim()) || []
-      const requiresSignoff = /requires_human_signoff:\s*true/i.test(block)
-      const resultPath = path.join(projectDir, 'gates', gateId, 'result.json')
-      if (!activePostures.includes(posture)) {
-        gates[gateId] = { status: 'inactive', inactive_reason: `${posture} posture`, signoff: null }
-        continue
-      }
-      if (!exists(resultPath)) {
-        gates[gateId] = { status: 'pending', inactive_reason: null, signoff: null }
-        continue
-      }
-      let gResult
-      try { gResult = readJsonFile(resultPath) } catch (e) {
-        gates[gateId] = { status: 'failed', inactive_reason: null, signoff: `invalid JSON: ${e.message}` }
-        continue
-      }
-      if (gResult.status === 'inactive') {
-        gates[gateId] = { status: 'inactive', inactive_reason: gResult.inactive_reason || 'not specified', signoff: null }
-      } else if (gResult.status === 'passed') {
-        if (requiresSignoff && (!gResult.signoff_by || ['agent', 'auto', 'generated', ''].includes(gResult.signoff_by.toLowerCase()))) {
-          gates[gateId] = { status: 'failed', inactive_reason: null, signoff: `requires human signoff but signoff_by='${gResult.signoff_by}'` }
-        } else {
-          gates[gateId] = { status: 'passed', inactive_reason: null, signoff: gResult.signoff_by || 'auto-test' }
-        }
-      } else {
-        gates[gateId] = { status: gResult.status || 'pending', inactive_reason: null, signoff: null }
-      }
-    }
-  }
-
-  const allComplete = Object.values(slices).length > 0 && Object.values(slices).every(s => s.status === 'complete')
-  const allGatesOk = Object.values(gates).every(g => ['passed', 'inactive'].includes(g.status))
-  const overall = Object.values(slices).length === 0 ? 'not-started' : (allComplete && allGatesOk ? 'complete' : 'partial')
-
-  return {
-    schema_version: '2',
-    posture,
-    slices,
-    gates,
-    overall_status: overall,
-    contract_versions: { '03-ux-contract.md': contractHash, '02-architecture.md': archHash },
-    derived_at: new Date().toISOString(),
-    derived_by: 'agb state derive',
-  }
-}
-
-function runDriftChecks(projectDir, packetDir) {
-  const results = []
-  const ok = (id, pass, reason = '') => results.push({ id, pass, reason })
-  const slicesDir = path.join(projectDir, 'slices')
-  const uxContractPath = path.join(packetDir, '03-ux-contract.md')
-  const uxText = safeReadText(uxContractPath)
-  const stateJsonPath = path.join(projectDir, '.buildprint', 'state.json')
-
-  // no-slice-without-path-map
-  if (exists(slicesDir)) {
-    const missing = fs.readdirSync(slicesDir, { withFileTypes: true })
-      .filter(e => e.isDirectory() && e.name !== '_template' && !exists(path.join(slicesDir, e.name, 'slice.yaml')))
-      .map(e => e.name)
-    ok('no-slice-without-path-map', missing.length === 0, missing.length ? `Missing slice.yaml: ${missing.join(', ')}` : '')
-  } else {
-    ok('no-slice-without-path-map', true, 'SKIP: no slices/ directory')
-  }
-
-  // every-path-id-traces
-  if (uxText && exists(slicesDir)) {
-    const knownIds = new Set([...uxText.matchAll(/^\s*-\s+id:\s+(\S+)/gm)].map(m => m[1]))
-    const unknown = []
-    for (const e of fs.readdirSync(slicesDir, { withFileTypes: true })) {
-      if (!e.isDirectory() || e.name === '_template') continue
-      const st = safeReadText(path.join(slicesDir, e.name, 'slice.yaml'))
-      for (const pid of yamlListField(st, 'paths')) {
-        if (!knownIds.has(pid)) unknown.push(`${e.name}/${pid}`)
-      }
-    }
-    ok('every-path-id-traces', unknown.length === 0, unknown.length ? `Unknown path ids: ${unknown.join(', ')}` : '')
-  } else {
-    ok('every-path-id-traces', true, 'SKIP: ux-contract or slices/ not found')
-  }
-
-  // operator-acceptance-present
-  if (uxText) {
-    const operatorRows = [...uxText.matchAll(/ux_ac_id:\s+(\S+)[\s\S]*?sample_can_satisfy:\s*false/g)].map(m => m[1])
-    ok('operator-acceptance-present', operatorRows.length > 0, operatorRows.length ? '' : 'No OPERATOR acceptance rows (sample_can_satisfy: false) in ux-contract')
-  } else {
-    ok('operator-acceptance-present', true, 'SKIP: 03-ux-contract.md not found')
-  }
-
-  // no-state-self-write
-  if (exists(stateJsonPath)) {
-    let derivedBy = ''
-    try { derivedBy = readJsonFile(stateJsonPath).derived_by || '' } catch { /* */ }
-    ok('no-state-self-write', derivedBy.includes('agb state derive'), derivedBy.includes('agb') ? '' : `state.json derived_by='${derivedBy}'; must be 'agb state derive'`)
-  } else {
-    ok('no-state-self-write', true, 'SKIP: state.json not found')
-  }
-
-  // contract-version-current
-  if (uxText && exists(slicesDir)) {
-    const currentHash = hashFileSync(uxContractPath)
-    const stale = []
-    for (const f of walk(slicesDir).filter(f => f.endsWith('acceptance-result.json'))) {
-      try {
-        const data = readJsonFile(f)
-        if (data.contract_version && data.contract_version !== currentHash) stale.push(path.relative(slicesDir, path.dirname(f)))
-      } catch { /* */ }
-    }
-    ok('contract-version-current', stale.length === 0, stale.length ? `Stale acceptance results: ${stale.join(', ')}` : '')
-  } else {
-    ok('contract-version-current', true, 'SKIP')
-  }
-
-  // no-fake-provider
-  const fakePatterns = /simulate_success|fake_provider|mock_llm|hardcoded_response/i
-  const nonTestFiles = walk(projectDir).filter(f =>
-    /\.(py|js|ts|vue|svelte)$/.test(f) &&
-    !f.includes('/tests/') && !f.includes('/test/') && !f.includes('node_modules') && !f.includes('.buildprint')
-  )
-  const fakeMatches = nonTestFiles.filter(f => fakePatterns.test(safeReadText(f))).map(f => path.relative(projectDir, f))
-  ok('no-fake-provider', fakeMatches.length === 0, fakeMatches.length ? `Possible fake provider in: ${fakeMatches.slice(0, 5).join(', ')}` : '')
-
-  // no-plaintext-secrets
-  const secretPattern = /sk-[A-Za-z0-9]{20,}|api_key\s*=\s*['"][A-Za-z0-9]{8,}/
-  const secretMatches = walk(projectDir).filter(f =>
-    !/\.env($|\.example)|fixture|test_data/.test(f) && !f.includes('node_modules') && !f.includes('.git') && !f.includes('.buildprint') && /\.(env|json|yaml|yml|py|js|ts)$/.test(f)
-  ).filter(f => secretPattern.test(safeReadText(f))).map(f => path.relative(projectDir, f))
-  ok('no-plaintext-secrets', secretMatches.length === 0, secretMatches.length ? `Possible secrets in: ${secretMatches.slice(0, 5).join(', ')}` : '')
-
-  return results
-}
-
-if (args[0] === 'persona') {
-  if (isHelp(args[1])) usage(0)
-  const sliceArg = optionValue('--slice')
-  const roleArg = optionValue('--role')
-  const packetDirArg = optionValue('--packet-dir')
-  if (!sliceArg || !roleArg) {
-    console.error('Usage: agb persona --slice <slice-yaml> --role build|acceptance [--packet-dir <path>]')
-    process.exit(1)
-  }
-  if (!['build', 'acceptance'].includes(roleArg)) {
-    console.error('--role must be build or acceptance')
-    process.exit(1)
-  }
-  const slicePath = path.resolve(cwd, sliceArg)
-  if (!exists(slicePath)) { console.error(`slice.yaml not found: ${slicePath}`); process.exit(1) }
-  const resolvedPacketDir = packetDirArg
-    ? path.resolve(cwd, packetDirArg)
-    : findPacketDir(cwd) || findPacketDir(path.dirname(slicePath)) || (() => { console.error('Cannot find packet dir. Pass --packet-dir'); process.exit(1) })()
-  try {
-    console.log(buildPersonaPrompt(slicePath, roleArg, resolvedPacketDir))
-    process.exit(0)
-  } catch (error) {
-    console.error(`persona failed: ${error.message}`)
-    process.exit(1)
-  }
-}
-
-if (args[0] === 'state') {
-  const sub = args[1]
-  if (!sub || isHelp(sub)) usage(0)
-  if (sub !== 'derive') { console.error(`unknown state subcommand: ${sub}`); process.exit(1) }
-  const projectDirArg = optionValue('--project-dir') || cwd
-  const packetDirArg = optionValue('--packet-dir')
-  const projectDir = path.resolve(cwd, projectDirArg)
-  const packetDir = packetDirArg
-    ? path.resolve(cwd, packetDirArg)
-    : findPacketDir(projectDir) || (() => { console.error('Cannot find packet dir. Pass --packet-dir'); process.exit(1) })()
-  try {
-    const state = deriveState(projectDir, packetDir)
-    const outPath = path.join(projectDir, '.buildprint', 'state.json')
-    fs.mkdirSync(path.dirname(outPath), { recursive: true })
-    writeJson(outPath, state)
-    console.log(`✓ state.json written to ${outPath}`)
-    console.log(`  Overall status: ${state.overall_status}`)
-    const partials = Object.entries(state.slices).filter(([, v]) => v.status !== 'complete' && v.status !== 'not-started')
-    if (partials.length) console.log(`  Partial/blocked: ${partials.map(([k]) => k).join(', ')}`)
-    process.exit(0)
-  } catch (error) {
-    console.error(`state derive failed: ${error.message}`)
-    process.exit(1)
-  }
-}
-
-if (args[0] === 'drift') {
-  const sub = args[1]
-  if (!sub || isHelp(sub)) usage(0)
-  if (sub !== 'check') { console.error(`unknown drift subcommand: ${sub}`); process.exit(1) }
-  const projectDirArg = optionValue('--project-dir') || cwd
-  const packetDirArg = optionValue('--packet-dir')
-  const projectDir = path.resolve(cwd, projectDirArg)
-  const packetDir = packetDirArg
-    ? path.resolve(cwd, packetDirArg)
-    : findPacketDir(projectDir) || projectDir
-  try {
-    const results = runDriftChecks(projectDir, packetDir)
-    let failed = 0
-    for (const r of results) {
-      const sym = r.pass ? '✓' : '✗'
-      console.log(`${sym} ${r.pass ? 'PASS' : 'FAIL'} ${r.id}${r.reason ? `  — ${r.reason}` : ''}`)
-      if (!r.pass) failed++
-    }
-    console.log(`\ndrift check: ${failed ? 'FAIL' : 'PASS'} (${failed} rule${failed === 1 ? '' : 's'} violated)`)
-    process.exit(failed ? 1 : 0)
-  } catch (error) {
-    console.error(`drift check failed: ${error.message}`)
-    process.exit(1)
-  }
-}
-
-if (args[0] === 'slice') {
-  const sub = args[1]
-  if (!sub || isHelp(sub)) usage(0)
-  if (sub !== 'status') { console.error(`unknown slice subcommand: ${sub}`); process.exit(1) }
-  const projectDirArg = optionValue('--project-dir') || cwd
-  const projectDir = path.resolve(cwd, projectDirArg)
-  const stateFile = path.join(projectDir, '.buildprint', 'state.json')
-  if (!exists(stateFile)) {
-    console.error(`state.json not found at ${stateFile}\nRun: agb state derive`)
-    process.exit(1)
-  }
-  try {
-    const state = readJsonFile(stateFile)
-    const line = '─'.repeat(60)
-    console.log(`\nSlice status  (derived ${state.derived_at || 'unknown'})`)
-    console.log(line)
-    for (const [id, s] of Object.entries(state.slices || {})) {
-      const sym = s.status === 'complete' ? '✓' : s.status === 'not-started' ? '○' : '✗'
-      const reason = s.reasons?.length ? `  — ${s.reasons[0]}` : ''
-      console.log(`${sym} ${id.padEnd(36)} ${s.status}${reason}`)
-    }
-    console.log(`\nGate status`)
-    console.log(line)
-    for (const [id, g] of Object.entries(state.gates || {})) {
-      const sym = g.status === 'passed' ? '✓' : g.status === 'inactive' ? '~' : '✗'
-      const note = g.inactive_reason ? `(${g.inactive_reason})` : (g.signoff ? `(signed: ${g.signoff})` : '')
-      console.log(`${sym} ${id.padEnd(36)} ${g.status} ${note}`)
-    }
-    console.log(`\nOverall: ${state.overall_status?.toUpperCase() || 'UNKNOWN'}`)
-    process.exit(state.overall_status === 'complete' ? 0 : 1)
-  } catch (error) {
-    console.error(`slice status failed: ${error.message}`)
-    process.exit(1)
-  }
-}
+// Legacy slice/gate runner commands were removed with the Mapper OS v3 phase-driven packet.
 
 if (args[0] === 'check') {
   if (isHelp(args[1])) usage(0)

@@ -1,4 +1,4 @@
-schema_version: mapper-os/executable-blueprint/v2
+schema_version: mapper-os/executable-blueprint/v3
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
@@ -10,76 +10,54 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
-  note: Set this before extraction. Posture activates gates and changes agent_contract role.
-
-agent_contract:
-  role: Senior Product Engineer
-  rule: >
-    Build the product loop honestly. A slice with a blocked core_proof_required path is
-    status: partial, not status: complete. Blockers are partial, not done.
-    Never write state.json directly — the runner derives it from acceptance-result.json.
-    "trusted_local" lowers operability bars, not product-loop bars.
-  posture_role_map:
-    trusted_local:
-      role: Senior Product Engineer
-      rule: >
-        Build a credible local workbench. Name operability gaps as partial slices.
-        Do not fake production readiness. Gates are inactive; record inactive_reason.
-    private_authenticated:
-      role: Senior Staff Engineer
-      rule: >
-        Build a production-shaped artifact. Auth, persistence, observability, recovery,
-        and CI gates must be implemented or explicitly blocked.
-    public_webapp:
-      role: Staff/Principal Engineer
-      rule: >
-        Build a production-grade artifact. All private_authenticated obligations plus
-        tenant isolation, abuse controls, deployment, backup, and security gates.
 
 read_order:
   - BUILDPRINT.md
-  - 01-questions.md
-  - 02-architecture.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-uiux-decision.md
   - blueprint.yaml
-  - 03-ux-contract.md
-  - slices/<active-slice>/slice.yaml
-  - 04-handover.md
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - HANDOVER.md
 
-# Slice system
-slices_dir: slices/
-slice_template: slices/_template/slice.yaml
-slice_capsule_field: persona
-slice_secondary_capsules_field: secondary_personas
-slice_dependency_field: depends_on
-slice_paths_field: paths
-slice_core_proof_field: core_proof_required
-slice_acceptance_result: acceptance-result.json
-slice_self_check: slice-self-check.yaml
+packet_shape:
+  style: phase_driven_comprehensive
+  principle: YAML routes; markdown teaches and builds.
+  required_files:
+    - BUILDPRINT.md
+    - 00-questions.md
+    - 01-project-setup.md
+    - 02-uiux-decision.md
+    - blueprint.yaml
+    - 03-phases/phase-index.yaml
+    - 03-phases/phase-flow.md
+    - HANDOVER.md
 
-# Gates
-gates_dir: gates/
-gate_index: gates/gate-index.yaml
+phase_contract:
+  required_headings:
+    - How to implement this phase
+    - Building objective
+    - DO NOT
+    - Minimum proof before moving on
+    - Handoff note
+  rule: Each phase must contain one comprehensive, product-specific building objective. Do not decompose phase guidance into tiny schema sections or slice YAML.
+  forbidden_shapes:
+    - slices/
+    - gates/
+    - 02-architecture.md
+    - 03-ux-contract.md
+    - 04-handover.md
+    - 04-review.md
+    - 05-handover.md
+    - generated/agent-prompt.md
+    - generated/codex-handoff.md
 
-# Team capsules (injected as system prompts by runner)
-capsules_dir: ../../teams/
+agent_contract:
+  role: Senior Product Engineer
+  rule: Build the product loop honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; live/provider/deployment claims require matching proof.
 
-# Runner
-runner_dir: ../../runner/
-runner_spec: ../../runner/RUNNER-SPEC.md
-
-# Derived state — agb state derive writes, agents never write
-state_json_path: .buildprint/state.json
-
-# UX contract (single truth for paths and acceptance)
-ux_contract_file: 03-ux-contract.md
-ux_contract_path_map_anchor: "## Path Map"
-ux_traceability_file: .buildprint/ux-traceability.yaml
-
-# Evidence
-upgrades_claim_rule: >
-  upgrades_claim: true requires observed evidence with a real exit code and
-  non-synthetic proof. Sample-only paths, review prose, and blocked paths
-  cannot set upgrades_claim: true.
-
-# Architecture
-setup_receipt: .buildprint/setup-receipt.md
+state_and_handoff:
+  local_state_dir: .buildprint/
+  setup_receipt: .buildprint/setup-receipt.md
+  handover_template: HANDOVER.md

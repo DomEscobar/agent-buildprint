@@ -15,13 +15,10 @@
   "stack": [
     "Repository census",
     "Artifact-mode classification",
-    "v2 Slice/Gate packet extraction",
-    "Path Map traceability (UX contract)",
-    "Persona injection via templates/teams capsules",
-    "agb runner: persona, state derive, drift check, slice status",
-    "Hostile-reviewer acceptance",
-    "Derived state.json (no agent self-certification)",
-    "Concise generated handover"
+    "v3 phase-driven packet extraction",
+    "Comprehensive product phase objectives",
+    "Project setup and UI/operator decision",
+    "Concise handover"
   ],
   "iconKeys": [
     "md",
@@ -30,17 +27,15 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Agent-session workflow for mapping an existing repo into an executable, source-independent v2 Slice/Gate Buildprint packet that resists agent self-certification through persona injection, derived state, and mechanical drift checks.",
-  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable, anti-fabrication Buildprint: map the source, classify the artifact type, choose a scope, then extract a v2 packet of vertical slices and horizontal gates that a fresh coding agent (using the agb runner) can implement with product judgment, hostile-reviewer acceptance, derived state, and honest blockers — without reading the original code.",
-  "promise": "A repo-to-Buildprint workflow that preserves scope fidelity, classifies artifact type, emits a v2 Slice/Gate packet, and ships the agb runner contract that mechanically blocks self-certification, fake providers, and stale acceptance results.",
+  "summary": "Agent-session workflow for mapping an existing repo into a source-independent phase-driven Buildprint packet with comprehensive AI-readable phase objectives instead of tiny slice/gate schema fragments.",
+  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable Buildprint: map the source, classify the artifact, choose scope, then emit a phase-driven execution manual with BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, 03-phases, and HANDOVER.md.",
+  "promise": "A repo-to-Buildprint workflow that preserves scope fidelity and emits a readable phase-driven packet that makes agents build real product loops instead of schema-shaped slop.",
   "whatYouGet": [
-    "A selected-buildprint/ v2 executable packet: BUILDPRINT.md, 01-questions.md, 02-project-setup.md, 02-architecture.md, 03-ux-contract.md, blueprint.yaml, slices/, gates/, 04-handover.md",
-    "Typed setup that names artifact mode, real consumer, central artifact/interface/boundary, first usable loop, persistence/traces/readback, boundaries, fake-feel risks, local commands, and forbidden shortcuts",
-    "03-ux-contract.md as the single Path Map truth, with novice and operator (sample_can_satisfy: false) acceptance rows",
-    "Vertical slices with paths, core_proof_required, and persona references into templates/teams/ capsules",
-    "Horizontal gates with active_when_posture rules and human-signoff requirements",
-    "agb runner commands: persona (system-prompt builder), state derive (no agent self-write), drift check (mechanical tripwires), slice status (human-readable report)",
-    "Concise generated handover with derived overall status and continue-from-here menu"
+    "A selected-buildprint/ v3 executable packet: BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "Comprehensive phase files with How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
+    "Hard-stop/assumable/deferrable question model",
+    "Setup foundation and UI/operator decision before phase work",
+    "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
   ],
   "whatYouNeed": [
     "Nothing for public repos",
@@ -52,26 +47,19 @@
     "Repo",
     "System map",
     "Mode classification",
-    "Candidates",
-    "v2 packet (slices + gates)",
-    "Persona injection (agb persona)",
-    "Build session per slice",
-    "Hostile-reviewer acceptance",
-    "Derived state (agb state derive)",
-    "Drift check (agb drift check)",
-    "Generated handover"
+    "Scope choice",
+    "v3 packet",
+    "Project setup",
+    "Comprehensive phases",
+    "Verification",
+    "Handover"
   ],
   "includes": [
-    "BUILDPRINT.md execution start and read order",
-    "01-questions.md implementation-changing questions only",
-    "02-project-setup.md artifact mode, consumer, first loop, central artifact/interface/boundary, persistence/traces/readback, boundaries, fake-feel risks, commands, quality rules, and forbidden shortcuts",
-    "02-architecture.md stack, adapter seams, persistence",
-    "03-ux-contract.md global Path Map and acceptance rows (novice + operator)",
-    "blueprint.yaml v2 schema with posture-aware agent_contract",
-    "slices/ vertical work units with paths, core_proof_required, persona ref",
-    "gates/ horizontal posture-conditional checks with human signoff",
-    "templates/teams/ capsule files used as persona system prompts",
-    "templates/runner/RUNNER-SPEC.md the agb command contract"
+    "A selected-buildprint/ v3 executable packet: BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "Comprehensive phase files with How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
+    "Hard-stop/assumable/deferrable question model",
+    "Setup foundation and UI/operator decision before phase work",
+    "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
   ],
   "risks": [
     "Selected scope silently shrinks",
@@ -82,73 +70,64 @@
     "Non-product artifacts are forced into product-app UI phases"
   ],
   "checks": [
-    "Selected output uses v2 packet with BUILDPRINT.md, 01-questions.md, 02-project-setup.md, 02-architecture.md, 03-ux-contract.md, blueprint.yaml, slices/, gates/, 04-handover.md",
-    "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v2, deployment_posture, slices_dir, gates_dir, capsules_dir, and the partial-not-complete agent_contract rule",
-    "03-ux-contract.md provides a Path Map and at least one operator (sample_can_satisfy: false) acceptance row",
-    "Every slice.yaml#paths id traces to 03-ux-contract.md Path Map",
-    "Packet avoids the v1 phase chain (03-phases/, 04-review.md, 05-handover.md, generated/agent-prompt.md)",
-    "agb drift check passes (no state self-write, no fake provider, no stale contract version, no plaintext secrets)",
-    "Gates with requires_human_signoff: true block promotion until a non-agent signoff_by is recorded"
+    "Selected output uses v3 phase-driven packet files",
+    "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v3",
+    "No slices/, gates/, templates/teams/, templates/runner/, 02-architecture.md, 03-ux-contract.md, 04-handover.md, 04-review.md, or 05-handover.md in selected packet",
+    "Every phase has required comprehensive headings and a substantial Building objective",
+    "Phase flow rejects placeholders, functionless buttons, mocks-as-proof, and fake success",
+    "HANDOVER.md names built, verified, blocked, not proven, and next actions"
   ],
   "trustBadges": [
     {
-      "label": "Anti-self-certification",
-      "detail": "state.json is derived by agb state derive from acceptance results; agents that try to write it directly are blocked by drift check.",
+      "label": "Phase-driven execution",
+      "detail": "Selected packets use comprehensive phase objectives instead of tiny schema fragments.",
       "tone": "success"
     },
     {
-      "label": "Hostile reviewer",
-      "detail": "Acceptance runs in a separate session loaded with the acceptance-hostile-reviewer capsule; sample paths and blockers cannot satisfy core_proof_required.",
+      "label": "Anti-fake-success",
+      "detail": "The packet requires explicit bans on placeholders, dead controls, mocks-as-proof, fake provider success, and overclaiming.",
       "tone": "success"
     },
     {
-      "label": "Persona injection",
-      "detail": "Each slice session is opened with a capsule from templates/teams/ via agb persona, anchoring the agent's identity to a stable file reference.",
+      "label": "Setup before phases",
+      "detail": "Project architecture, proof strategy, env contract, and UI/operator identity are established before phase implementation.",
       "tone": "success"
     },
     {
-      "label": "Path Map traceability",
-      "detail": "03-ux-contract.md is the single source for path ids; agb drift check rejects any slice that invents paths.",
-      "tone": "success"
-    },
-    {
-      "label": "Posture-aware gates",
-      "detail": "Horizontal gates activate per deployment posture; gates with human signoff need a non-agent signoff_by before passing.",
+      "label": "Scope-preserving mapper",
+      "detail": "Mapper OS separates source facts from guesses and asks for a human scope choice when multiple artifacts are plausible.",
       "tone": "warning"
     }
   ],
   "howToUse": [
     {
       "title": "1. Point it at a repo",
-      "detail": "Open the source repo in your coding agent, or give the agent a repo URL/local path. If the target is unclear, Mapper OS must ask exactly: Which repo URL or local path should I map?"
+      "detail": "Open the source repo in your coding agent, or give the agent a repo URL/local path. If the target is unclear, Mapper OS asks which repo URL or local path to map."
     },
     {
-      "title": "2. Bootstrap the Mapper OS package",
+      "title": "2. Bootstrap Mapper OS",
       "detail": "Run agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json and follow .buildprint/next-agent.md. Do not use an agb map command."
     },
     {
       "title": "3. Discover, then choose scope",
-      "detail": "The agent inspects the repo and proposes candidates. For broad repos, it stops and asks which candidate to extract. Smaller scope is fine; vague whole-repo sludge is not."
+      "detail": "The agent inspects the repo and proposes candidates. For broad repos, it stops and asks which candidate to extract."
     },
     {
-      "title": "4. Extract the v2 packet",
-      "detail": "The selected packet contains BUILDPRINT.md, 02-architecture.md, 03-ux-contract.md, blueprint.yaml, slices/, gates/, and 04-handover.md. Path ids in slices must trace to the ux-contract Path Map."
+      "title": "4. Emit the v3 packet",
+      "detail": "The selected packet contains BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, blueprint.yaml, 03-phases/, and HANDOVER.md."
     },
     {
-      "title": "5. Drive implementation with agb",
-      "detail": "Per slice: agb persona --role build, builder implements, agb persona --role acceptance, acceptance writes acceptance-result.json, agb state derive, agb drift check, agb slice status."
+      "title": "5. Build phase by phase",
+      "detail": "A downstream builder reads the active phase only, builds the smallest real product path, verifies it, repairs fake-success shortcuts, and records handoff facts."
     }
   ],
   "resultChecklist": [
-    "Selected scope and source-independent artifact promise",
-    "Artifact mode, real consumer, central artifact/interface/boundary, and first usable loop",
-    "02-project-setup.md typed alignment and forbidden shortcuts",
-    "02-architecture.md stack, adapter seams, persistence",
-    "03-ux-contract.md Path Map with at least one operator (sample_can_satisfy: false) acceptance row per user-facing path",
-    "slices/<id>/slice.yaml with paths, core_proof_required, persona reference",
-    "gates/gate-index.yaml with active_when_posture rules and human signoff requirements",
-    "Mode-appropriate handling for UI, API/library, integration, automation, data-pipeline, and infrastructure surfaces",
-    "Honest blockers for credentials, deployment, destructive actions, paid services, and security review"
+    "Selected output uses v3 phase-driven packet files",
+    "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v3",
+    "No slices/, gates/, templates/teams/, templates/runner/, 02-architecture.md, 03-ux-contract.md, 04-handover.md, 04-review.md, or 05-handover.md in selected packet",
+    "Every phase has required comprehensive headings and a substantial Building objective",
+    "Phase flow rejects placeholders, functionless buttons, mocks-as-proof, and fake success",
+    "HANDOVER.md names built, verified, blocked, not proven, and next actions"
   ],
-  "copyPrompt": "Use the Buildprint Mapper OS Buildprint to map a target repo in the current agent session. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Before discovery, resolve the target: if no repository URL, local path, or already-opened working repo is given, ask exactly one blocking question \u2014 'Which repo URL or local path should I map?' \u2014 and do not start until it is explicit."
+  "copyPrompt": "Use the Buildprint Mapper OS Buildprint to map a target repo in the current agent session. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md. Emit a v3 phase-driven packet, not slices or gates."
 }
