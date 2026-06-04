@@ -1,19 +1,144 @@
 # 02 UI/UX Decision
 
-AI Swarm Simulator is human-facing and graph-heavy, so the UI contract is mandatory.
+This file is the style constitution for the artifact. Every later phase that touches human-facing UI must obey it before claiming progress.
 
-## Visual hierarchy
+This artifact is UI-bearing. Its interface must not become a generic SaaS dashboard or a raw technical demo. The UI is a premium simulation workbench: a place where the user feels they are controlling a living intelligence system with clarity, depth, and precision.
 
-The primary surface is a sleek canvas workbench: seed/input panel, provider status, graph canvas, simulation controls, report/inspector panel, and run history. The graph canvas should feel closer to a polished Canva-like interaction surface than an admin table: smooth motion, readable clusters, selected node/edge affordances, and clear empty/loading/error/blocked states.
+## 1. Design thesis
 
-## Interaction model
+The product should feel like a dark glassmorphism intelligence lab: calm, precise, cinematic, and deeply interactive. It should communicate that complex graph/simulation activity is happening under the surface, but the user remains in control through clear panels, readable states, and elegant interaction feedback. The experience should feel closer to a polished creative command canvas than to an admin CRUD dashboard.
 
-Required interactions: upload or select seed material, configure provider, test provider status, trigger graph extraction, pan/zoom graph, select/inspect nodes and edges, run or block simulation, view simulation trace, generate report, and continue from report. Every visible button must either execute, validate, navigate, or show a specific blocker. Functionless buttons, inert tabs, decorative charts, sample data masquerading as real output, and optimistic success toasts are rejected.
+The first impression must be: “this is a serious AI simulation workbench with a beautiful control surface.” It must not feel like a Tailwind starter, Bootstrap admin screen, academic notebook, plain file uploader, static graph screenshot, or generic purple-gradient AI demo. The interface should invite exploration while staying disciplined enough for operator work.
 
-## State coverage
+## 2. Chosen style direction
 
-Cover empty/loading/error/blocked states for provider config, graph memory, simulation runtime, report generation, and persistence. Missing provider keys, missing graph adapter, failed extraction, simulation runtime unavailable, and report generation failure must be visible and recoverable.
+Use **dark glassmorphism command canvas** as the style direction.
 
-## Product copy
+The visual world is a deep navy/black spatial canvas with layered translucent control panels, luminous graph accents, soft blur, thin borders, restrained gradients, and precise status chips. Panels should feel like frosted instruments floating over a dark simulation field. The graph/canvas area is the hero, not a decoration. Inspector panels, provider status, run controls, and report sections should feel like modular instruments surrounding the canvas.
 
-Prefer honest operator language: “Provider not configured,” “Graph memory unavailable,” “Simulation runtime blocked,” “Report generated from current graph,” not vague success language.
+The style should be creative and premium, but not chaotic. No candy colors everywhere. No random neon. Accent light should be used to clarify hierarchy: primary action, selected node, active run, provider status, blocked state, and report highlight.
+
+## 3. Color system
+
+Use concrete tokens and keep them consistent:
+
+```txt
+background-deep: #05070D
+background-canvas: #080D19
+background-gradient-a: #0B1020
+background-gradient-b: #111827
+surface-glass: rgba(255, 255, 255, 0.06)
+surface-glass-strong: rgba(255, 255, 255, 0.10)
+surface-panel: rgba(15, 23, 42, 0.72)
+surface-panel-solid: #111827
+border-subtle: rgba(255, 255, 255, 0.12)
+border-strong: rgba(148, 163, 184, 0.28)
+primary: #7C5CFF
+primary-glow: rgba(124, 92, 255, 0.42)
+accent-cyan: #22D3EE
+accent-cyan-glow: rgba(34, 211, 238, 0.34)
+accent-violet: #A78BFA
+success: #34D399
+warning: #FBBF24
+danger: #FB7185
+blocked: #F97316
+text-main: #F8FAFC
+text-secondary: #CBD5E1
+text-muted: #94A3B8
+text-faint: #64748B
+focus-ring: rgba(34, 211, 238, 0.72)
+```
+
+The background should use subtle radial gradients and optional fine noise/grain so it feels atmospheric, not flat. Main panels use translucent glass with blur and thin borders. Primary action uses violet; live graph/selection energy uses cyan; success/warning/danger/blocked colors are semantic and should not be reused as decoration. Text must stay high contrast. Never place muted gray text on low-contrast glass.
+
+Forbidden color behavior: bright white full-page backgrounds, random rainbow gradients, default blue links/buttons, unrelated pastel cards, red/green status without labels, and color-only state communication.
+
+## 4. Typography system
+
+Typography should feel technical, elegant, and controlled. Use a distinctive modern display face for major headings if available, paired with a highly readable sans-serif for body text. If exact fonts are not installed, choose fonts with a geometric/technical character rather than default browser typography.
+
+Headings should be confident and spacious: large title, tight line-height, slightly negative tracking, strong weight. Body copy should be readable with generous line-height. Metadata, provider details, run ids, node ids, and trace labels may use a mono or technical font, but avoid making the whole interface look like a terminal.
+
+Suggested scale:
+
+```txt
+hero-title: 40-56px / 0.95-1.05 line-height / 700-800 weight
+section-title: 18-24px / 1.15 line-height / 650-750 weight
+panel-title: 13-15px uppercase or compact title / 600-700 weight
+body: 14-16px / 1.5-1.65 line-height / 400-500 weight
+metadata: 11-13px / 1.35 line-height / mono or technical sans
+button-label: 13-14px / 600-700 weight
+```
+
+Avoid cramped labels, inconsistent font sizes, and generic “dashboard card title + paragraph” rhythm. Important state labels should be short, sharp, and readable at a glance.
+
+## 5. Layout and spatial rhythm
+
+The primary layout is a **command canvas workbench**:
+
+- Left rail or top-left panel: seed/input and provider readiness.
+- Center: large graph/simulation canvas as the dominant surface.
+- Right inspector: selected node/edge, simulation trace, or report section details.
+- Bottom or secondary panel: run timeline, logs, blockers, and report actions.
+
+The first screen must expose the product loop. It should not open with a marketing hero or blank upload card alone. A user should immediately understand: input enters here, graph appears here, simulation runs here, report/inspector lives here.
+
+Use generous spacing and controlled density: 8px micro spacing, 12/16px component spacing, 24/32px panel spacing, 48px major layout breathing room. Panels should align to a clear grid but may overlap subtly to create depth. The graph canvas can break the grid visually; controls should remain predictable.
+
+Responsive behavior: on smaller screens, stack panels into a command flow while preserving the graph as the primary surface. Do not collapse critical controls into hidden menus without clear affordances.
+
+## 6. Component language
+
+Panels/cards: frosted glass, 16-24px radius, thin translucent border, soft shadow, backdrop blur, subtle inner highlight. Dense data panels can be slightly more solid for readability.
+
+Buttons: pill or rounded-rectangle controls with clear hierarchy. Primary buttons use violet with soft glow only on hover/focus/active. Secondary buttons are glass outlines. Disabled buttons must explain why when hovered/clicked or adjacent to blocker text.
+
+Inputs: dark translucent fields with visible border, strong focus ring, clear labels, helper text, and error text. API/provider key fields must signal secrecy and never echo secrets plainly.
+
+Status chips: compact pills with icon/dot, label, and semantic color. Examples: `Provider missing`, `Graph ready`, `Simulation blocked`, `Report stale`, `Live run`. Status must never rely on color alone.
+
+Graph nodes/edges: nodes should feel luminous and selectable, with selected state using cyan glow and a clear inspector link. Edges should be readable but not overpowering. Hover should reveal relationship labels or concise metadata. Empty graph should show an inviting structured placeholder explaining the next action.
+
+Inspector/report panels: use layered sections, collapsible details only where useful, and clear source/simulation references. Reports should read like polished analysis, not raw markdown dumped into a box.
+
+Modals/toasts: use sparingly. Prefer inline blocked/error panels when the user needs to act. Toasts are for confirmation, not for hiding important failure details.
+
+## 7. Motion and interaction feel
+
+Motion should feel smooth, deliberate, and state-driven. Use fade/slide for panel appearance, gentle hover lift for interactive cards, cyan pulse for selected graph nodes, shimmer/skeleton for extraction/report generation, and timeline progress for simulation runs.
+
+Motion must clarify what changed: input processed, graph updated, node selected, simulation started, report generated, blocker appeared. Do not add random loops or decorative bouncing. Use easing that feels premium and calm. Respect reduced-motion preferences: replace animated movement with opacity/state changes when needed.
+
+Interactive controls must provide feedback within the same surface: pressed state, loading state, success/error/blocker state. A click with no visible response is a defect.
+
+## 8. Empty, loading, error, and blocked states
+
+Empty states should teach the next action: “Add seed material to build the first graph,” not “No data.” Loading states should name the process: extracting entities, writing graph memory, testing provider, running simulation, generating report. Error states should say what failed and what the user can try next. Blocked states should be honest about missing provider keys, unavailable graph adapter, missing simulation runtime, failed persistence, or deployment limitations.
+
+Blocked state visual language: amber/orange accent, glass warning panel, concise reason, next action, and affected capability. Do not show green success while a provider/runtime is missing. Do not hide blockers in logs only.
+
+## 9. Anti-generic rules
+
+Forbidden:
+
+- generic white SaaS dashboard;
+- default Tailwind starter look;
+- Bootstrap/admin-template layout;
+- unstyled browser inputs or default buttons;
+- random purple gradients without system logic;
+- inconsistent border radius, shadows, or spacing;
+- static decorative graph bubbles;
+- dead tabs, inert filters, fake toggles, or functionless buttons;
+- fake activity feeds or canned reports presented as real output;
+- raw JSON dumps as the main user experience;
+- optimistic success toasts without runtime proof;
+- low-contrast gray text on glass;
+- visual polish that does not preserve real state and interaction behavior.
+
+If the UI starts drifting into any of these, stop feature work and repair the style/schema violation before advancing.
+
+## 10. Phase obligation
+
+Every later phase that touches UI must obey this style schema. New components must use these tokens, typography rules, layout rhythm, component language, motion principles, and state treatments. If a phase adds backend behavior that affects the user, it must also add or update the visible state in this design language.
+
+A phase cannot claim UI progress if it adds functionality behind a generic or broken interface. The product must become more visually coherent and more operationally honest with each phase.

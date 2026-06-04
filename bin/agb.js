@@ -501,8 +501,11 @@ function packetCheckResults(dir) {
   ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
 
   const uiux = safeReadText(path.join(dir, '02-uiux-decision.md'))
-  ok('ui/ux decision defines interaction and state coverage', /visual hierarchy/i.test(uiux) && /interaction model/i.test(uiux) && /empty, error, and blocked state|empty\/loading\/error\/blocked/i.test(uiux))
-  ok('ui/ux decision rejects generic dead UI', /functionless buttons|inert tabs|decorative charts|sample data|optimistic success/i.test(uiux))
+  ok('ui/ux decision is a detailed style constitution', uiux.trim().length >= (isMapperTemplatePacket ? 4500 : 6000) && /style constitution/i.test(uiux))
+  ok('ui/ux decision defines concrete visual schema', /Design thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Color system/i.test(uiux) && /Typography system/i.test(uiux) && /Layout and spatial rhythm/i.test(uiux))
+  ok('ui/ux decision defines components, motion, and states', /Component language/i.test(uiux) && /Motion and interaction feel/i.test(uiux) && /Empty, loading, error, and blocked states/i.test(uiux))
+  ok('ui/ux decision forbids generic short-phrase design', /Do not write only short phrases|short phrases/i.test(uiux) || /generic white SaaS dashboard/i.test(uiux))
+  ok('ui/ux decision rejects generic dead UI', /functionless buttons|inert tabs|decorative charts|sample data|optimistic success|dead tabs/i.test(uiux))
 
   ok('phase flow defines active phase loop', /active phase only/i.test(phaseFlow) && /Do not read every phase upfront/i.test(phaseFlow) && /Restate the smallest real vertical path/i.test(phaseFlow))
   ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
