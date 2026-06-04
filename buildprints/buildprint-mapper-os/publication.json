@@ -27,14 +27,16 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "Agent-session workflow for mapping an existing repo into a source-independent phase-driven Buildprint packet with comprehensive AI-readable phase objectives instead of tiny slice/gate schema fragments.",
-  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable Buildprint: map the source, classify the artifact, choose scope, then emit a phase-driven execution manual with BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, 03-phases, and HANDOVER.md.",
-  "promise": "A repo-to-Buildprint workflow that preserves scope fidelity and emits a readable phase-driven packet that makes agents build real product loops instead of schema-shaped slop.",
+  "summary": "Agent-session workflow for mapping an existing repo into a source-independent v3 Buildprint packet with a generic AI-builder briefing, product-contract mirror, mandatory UI/style constitution, and comprehensive phase objectives.",
+  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable Buildprint: map the source, classify the artifact, choose scope, then emit a v3 phase-driven execution packet with generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md, detailed 02-uiux-decision.md, blueprint.yaml, 03-phases, and HANDOVER.md.",
+  "promise": "A repo-to-Buildprint workflow that preserves scope fidelity and emits a readable packet that makes agents build real product loops with design responsibility instead of generic slop.",
   "whatYouGet": [
-    "A selected-buildprint/ v3 executable packet: BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, blueprint.yaml, 03-phases/, HANDOVER.md",
-    "Comprehensive phase files with How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
+    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md, detailed 02-uiux-decision.md, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
+    "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
+    "A mandatory UX/style constitution with UX importance, understandability checklist, design thesis, color tokens, typography, layout, component language, motion, states, and anti-generic rules",
+    "Comprehensive phase files that read 02-uiux-decision.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
     "Hard-stop/assumable/deferrable question model",
-    "Setup foundation and UI/operator decision before phase work",
     "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
   ],
   "whatYouNeed": [
@@ -55,42 +57,55 @@
     "Handover"
   ],
   "includes": [
-    "A selected-buildprint/ v3 executable packet: BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, blueprint.yaml, 03-phases/, HANDOVER.md",
-    "Comprehensive phase files with How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
+    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md, detailed 02-uiux-decision.md, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
+    "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
+    "A mandatory UX/style constitution with UX importance, understandability checklist, design thesis, color tokens, typography, layout, component language, motion, states, and anti-generic rules",
+    "Comprehensive phase files that read 02-uiux-decision.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
     "Hard-stop/assumable/deferrable question model",
-    "Setup foundation and UI/operator decision before phase work",
     "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
   ],
   "risks": [
     "Selected scope silently shrinks",
     "Packet overfits source internals instead of observable behavior",
-    "Generated phases become generic dashboard work",
+    "Product-specific source baggage leaks into selected BUILDPRINT.md",
+    "02-uiux-decision.md becomes a weak moodboard instead of a style constitution",
+    "Generated phases become generic dashboard work or skip design responsibility",
     "Agent writes proof-looking prose instead of building a usable loop",
     "Provider/deployment/security boundaries are hidden instead of named",
     "Non-product artifacts are forced into product-app UI phases"
   ],
   "checks": [
     "Selected output uses v3 phase-driven packet files",
+    "BUILDPRINT.md is a generic AI-builder briefing with no mapped-source product specifics",
+    "02-uiux-decision.md starts with UX importance/understandability and includes a small checklist",
+    "02-uiux-decision.md contains a detailed style constitution, not short phrases",
+    "Every phase references 02-uiux-decision.md as standing design/style responsibility",
     "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v3",
-    "No slices/, gates/, templates/teams/, templates/runner/, 02-architecture.md, 03-ux-contract.md, 04-handover.md, 04-review.md, or 05-handover.md in selected packet",
+    "Obsolete v2 packet folders/files are absent from the selected packet",
     "Every phase has required comprehensive headings and a substantial Building objective",
     "Phase flow rejects placeholders, functionless buttons, mocks-as-proof, and fake success",
     "HANDOVER.md names built, verified, blocked, not proven, and next actions"
   ],
   "trustBadges": [
     {
+      "label": "Generic builder briefing",
+      "detail": "BUILDPRINT.md orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only.",
+      "tone": "success"
+    },
+    {
+      "label": "Mandatory UX constitution",
+      "detail": "02-uiux-decision.md makes UX understandable, detailed, style-specific, and binding on every UI-bearing phase.",
+      "tone": "success"
+    },
+    {
       "label": "Phase-driven execution",
-      "detail": "Selected packets use comprehensive phase objectives instead of tiny schema fragments.",
+      "detail": "Selected packets use comprehensive phase objectives and active-phase flow instead of tiny schema fragments.",
       "tone": "success"
     },
     {
       "label": "Anti-fake-success",
-      "detail": "The packet requires explicit bans on placeholders, dead controls, mocks-as-proof, fake provider success, and overclaiming.",
-      "tone": "success"
-    },
-    {
-      "label": "Setup before phases",
-      "detail": "Project architecture, proof strategy, env contract, and UI/operator identity are established before phase implementation.",
+      "detail": "The packet bans placeholders, dead controls, mocks-as-proof, fake provider success, and overclaiming.",
       "tone": "success"
     },
     {
@@ -114,20 +129,24 @@
     },
     {
       "title": "4. Emit the v3 packet",
-      "detail": "The selected packet contains BUILDPRINT.md, 00-questions.md, 01-project-setup.md, 02-uiux-decision.md, blueprint.yaml, 03-phases/, and HANDOVER.md."
+      "detail": "The selected packet contains generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md, detailed 02-uiux-decision.md, blueprint.yaml, 03-phases/, and HANDOVER.md."
     },
     {
       "title": "5. Build phase by phase",
-      "detail": "A downstream builder reads the active phase only, builds the smallest real product path, verifies it, repairs fake-success shortcuts, and records handoff facts."
+      "detail": "A downstream builder reads the active phase only, keeps 02-uiux-decision.md open as design responsibility, builds the smallest real product path, verifies it, repairs fake-success shortcuts, and records handoff facts."
     }
   ],
   "resultChecklist": [
     "Selected output uses v3 phase-driven packet files",
+    "BUILDPRINT.md is a generic AI-builder briefing with no mapped-source product specifics",
+    "02-uiux-decision.md starts with UX importance/understandability and includes a small checklist",
+    "02-uiux-decision.md contains a detailed style constitution, not short phrases",
+    "Every phase references 02-uiux-decision.md as standing design/style responsibility",
     "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v3",
-    "No slices/, gates/, templates/teams/, templates/runner/, 02-architecture.md, 03-ux-contract.md, 04-handover.md, 04-review.md, or 05-handover.md in selected packet",
+    "Obsolete v2 packet folders/files are absent from the selected packet",
     "Every phase has required comprehensive headings and a substantial Building objective",
     "Phase flow rejects placeholders, functionless buttons, mocks-as-proof, and fake success",
     "HANDOVER.md names built, verified, blocked, not proven, and next actions"
   ],
-  "copyPrompt": "Use the Buildprint Mapper OS Buildprint to map a target repo in the current agent session. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md. Emit a v3 phase-driven packet, not slices or gates."
+  "copyPrompt": "Use the Buildprint Mapper OS Buildprint to map a target repo in the current agent session. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md. Emit a v3 phase-driven packet with generic BUILDPRINT.md, detailed 02-uiux-decision.md, blueprint.yaml product contract, and comprehensive phases."
 }

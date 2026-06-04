@@ -2,7 +2,7 @@
 
 Mapper OS is an agent-session workflow for mapping an existing source repo into a source-independent executable Buildprint.
 
-The selected packet is now **v3 phase-driven**. The old slice/gate/team/runner model is retired because it was too compressed and runner-shaped. Mapper OS now emits readable implementation manuals: YAML routes; Markdown teaches and builds.
+The selected packet is **v3 phase-driven**. Obsolete runner-shaped abstractions are gone. Mapper OS now emits readable implementation manuals: YAML routes; Markdown teaches and builds.
 
 ## Use it
 
@@ -35,18 +35,23 @@ HANDOVER.md
 
 ## Packet principles
 
-- `BUILDPRINT.md` owns product identity, golden path, constants, implementation contract, read order, and done criteria.
-- `00-questions.md` asks only implementation-changing questions.
-- `01-project-setup.md` creates the project foundation before phase work.
-- `02-uiux-decision.md` defines UI/operator experience when relevant.
+- `BUILDPRINT.md` is the generic AI-builder briefing: role, responsibility, perfection alignment, fake-success intolerance, and read order. It must not carry product specifics or names from the mapped source.
+- `00-questions.md` asks only implementation-changing hard stops, assumptions, and deferrable decisions.
+- `01-project-setup.md` creates the project foundation before phase work: stack, docs, local `AGENTS.md`, architecture/product loop/proof strategy, env contract, and setup receipt.
+- `02-uiux-decision.md` is the style constitution. It opens with “UX is a must,” explains understandability, includes a small checklist, then writes a detailed design schema: thesis, style direction, color tokens, typography, layout, components, motion, state behavior, anti-generic rules, and phase obligation.
+- `blueprint.yaml` is the machine route and product-contract mirror: product name, central artifact, golden path, runtime/posture constraints, required files, forbidden shapes, phase index, and phase flow.
 - `03-phases/phase-index.yaml` routes only.
-- `03-phases/phase-flow.md` defines the active-phase loop and repair routing.
-- Every phase file is a comprehensive product-engineering assignment with a detailed `Building objective`.
+- `03-phases/phase-flow.md` defines the active-phase loop and requires `02-uiux-decision.md` before every phase for UI-bearing artifacts.
+- Every phase file is a comprehensive product-engineering assignment with a detailed `Building objective`, required context, proof, handoff, and standing design/style responsibility.
 - `HANDOVER.md` captures built, verified, blocked, not-proven, and next actions.
+
+## Why this split matters
+
+The downstream coding agent needs a simple start file and a strong packet. If `BUILDPRINT.md` contains product-specific source baggage, the first thing the builder reads becomes noisy and stale. If `02-uiux-decision.md` is weak, later phases build generic slop even when the backend works. If phases do not reload the UI/style constitution, design responsibility disappears during “backend” work and resurfaces too late.
 
 ## Forbidden selected-output shapes
 
-Do not emit the retired slice/gate packet shape, team capsules, runner specs, generated prompt handoffs, evidence-ledger bureaucracy, tiny YAML implementation briefs, or stale v2 file names.
+Do not emit obsolete v2 packet shapes, team capsules, runner specs, generated prompt handoffs, evidence-ledger bureaucracy, tiny YAML implementation briefs, product-specific `BUILDPRINT.md` briefings, weak UI moodboards, or stale v2 file names.
 
 ## Validate
 

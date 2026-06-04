@@ -11,8 +11,11 @@
     "behavior discovery with source evidence promotion",
     "scope selection before selected extraction",
     "source-independent v3 phase-driven packet emission",
-    "comprehensive phase objectives instead of slices/gates",
-    "project setup and UI/operator decision before phase work",
+    "generic AI-builder BUILDPRINT briefing without mapped-source product specifics",
+    "blueprint.yaml product-contract mirror and route file",
+    "mandatory detailed 02-uiux-decision style constitution for UI-bearing artifacts",
+    "every phase reads UI/style responsibilities before building",
+    "comprehensive phase objectives instead of obsolete v2 packet fragments",
     "forbidden fake-success paths and concise handover"
   ],
   "files": [
@@ -120,7 +123,10 @@
     "secret value copying",
     "scanner-authored product facts",
     "selected extraction without scope decision",
-    "v2 slice/gate selected-output shape",
+    "product-specific selected BUILDPRINT.md briefing",
+    "weak or phrase-only 02-uiux-decision.md",
+    "phases that skip 02-uiux-decision.md design responsibility",
+    "obsolete v2 selected-output packet shape",
     "tiny YAML implementation guidance",
     "agent-written proof theater",
     "mocks or fixtures counted as product implementation",
@@ -135,6 +141,7 @@
     "policies/safety.md",
     "policies/quality.md",
     "policies/questions.md",
+    "templates/executable-packet/02-uiux-decision.md",
     "templates/executable-packet/03-phases/phase-flow.md"
   ],
   "schemaVersion": "mapper-os/executable-blueprint/v3",

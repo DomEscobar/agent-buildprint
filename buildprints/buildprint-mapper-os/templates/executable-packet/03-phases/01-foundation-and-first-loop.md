@@ -11,7 +11,7 @@ Before writing code, read:
 - `01-project-setup.md`
 - `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
 
-Then implement this phase as one coherent product slice. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 

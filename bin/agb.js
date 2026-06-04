@@ -462,7 +462,7 @@ function packetCheckResults(dir) {
     files.has('gates/gate-index.yaml') ||
     /slices_dir:|gates_dir:|capsules_dir:/i.test(blueprint)
 
-  ok('packet rejects legacy v2 slice/gate shape', !isLegacySliceGatePacket, isLegacySliceGatePacket ? 'found v2 schema, slices/gates, or slices_dir/gates_dir/capsules_dir' : '')
+  ok('packet rejects obsolete v2 packet shape', !isLegacySliceGatePacket, isLegacySliceGatePacket ? 'found v2 schema, slices/gates, or slices_dir/gates_dir/capsules_dir' : '')
 
   const need = [
     'BUILDPRINT.md',
@@ -475,7 +475,7 @@ function packetCheckResults(dir) {
     'HANDOVER.md'
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
-  ok('packet has no legacy useless files', obsoleteFiles.length === 0, obsoleteFiles.length ? obsoleteFiles.join(', ') : '')
+  ok('packet has no obsolete useless files', obsoleteFiles.length === 0, obsoleteFiles.length ? obsoleteFiles.join(', ') : '')
   ok('packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
 
   ok('blueprint declares v3 phase-driven schema', /schema_version:\s*mapper-os\/executable-blueprint\/v3/i.test(blueprint))
@@ -971,7 +971,7 @@ if (args[0] === 'map') {
   process.exit(1)
 }
 
-// Legacy slice/gate runner commands were removed with the Mapper OS v3 phase-driven packet.
+// Obsolete runner commands were removed with the Mapper OS v3 phase-driven packet.
 
 if (args[0] === 'check') {
   if (isHelp(args[1])) usage(0)

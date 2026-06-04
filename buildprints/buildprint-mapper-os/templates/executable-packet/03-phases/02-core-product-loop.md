@@ -11,13 +11,13 @@ Before writing code, read:
 - `01-project-setup.md`
 - `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
 
-Then implement this phase as one coherent product slice. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
 Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, inspectors, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
-Build the first complete golden-path loop named in `BUILDPRINT.md`. This is the main product slice: the user/operator/developer should move from initial input/configuration to a useful result and visible/readable state.
+Build the first complete golden-path loop mirrored in `blueprint.yaml` and elaborated by the phase objectives. This is the main product path: the user/operator/developer should move from initial input/configuration to a useful result and visible/readable state.
 
 The loop must include real validation, meaningful state transition, and output that depends on the input. If live dependencies are unavailable, build the adapter seam and blocked state, but do not substitute canned success. The path should be small enough to finish, but complete enough that a skeptical reviewer can see the product starting to work.
 

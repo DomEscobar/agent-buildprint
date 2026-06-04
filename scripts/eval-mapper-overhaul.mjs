@@ -61,18 +61,55 @@ function expectFailure(name, args, snippets) {
 
 expectPass('mapper v3 template packet passes', ['packet', 'check', template], ['Packet check: PASS'])
 
-const legacy = copyTemplate('legacy-slice-gate')
-fs.mkdirSync(path.join(legacy, 'slices/_template'), { recursive: true })
-fs.writeFileSync(path.join(legacy, 'slices/_template/slice.yaml'), 'id: legacy\npaths: []\n')
-fs.mkdirSync(path.join(legacy, 'gates'), { recursive: true })
-fs.writeFileSync(path.join(legacy, 'gates/gate-index.yaml'), 'gates: []\n')
-edit(legacy, 'blueprint.yaml', (s) => s.replace('schema_version: mapper-os/executable-blueprint/v3', 'schema_version: mapper-os/executable-blueprint/v2\nslices_dir: slices\ngates_dir: gates\ncapsules_dir: teams'))
-expectFailure('mapper eval rejects legacy slice/gate packet', ['packet', 'check', legacy], ['✗ packet rejects legacy v2 slice/gate shape', '✗ packet has no legacy useless files'])
+const mapperDocs = [
+  'BUILDPRINT.md',
+  'SPEC.md',
+  'CONTRACTS.md',
+  'README.md',
+  'vision.md',
+  'policies/quality.md'
+].map((rel) => [rel, fs.readFileSync(path.join(root, 'buildprints/buildprint-mapper-os', rel), 'utf8')])
+const docCorpus = mapperDocs.map(([rel, text]) => `\n--- ${rel} ---\n${text}`).join('\n')
+for (const required of [
+  /BUILDPRINT\.md`? is (the )?(execution start and )?AI-builder briefing only/i,
+  /UX is a must/i,
+  /style constitution/i,
+  /Every phase (file )?must read `?02-uiux-decision\.md`?/i,
+  /blueprint\.yaml`? (is|mirrors|routes).*product[- ]contract/i,
+]) {
+  if (!required.test(docCorpus)) {
+    console.error(docCorpus)
+    console.error(`mapper docs invariant missing: ${required}`)
+    process.exit(1)
+  }
+}
+for (const forbidden of [
+  /BUILDPRINT\.md`? owns product identity/i,
+  /BUILDPRINT\.md`? owns .*golden path/i,
+  /artifact named in `BUILDPRINT\.md`/i,
+  /if this phase touches UI/i,
+  /only as needed for the active phase/i,
+]) {
+  if (forbidden.test(docCorpus)) {
+    console.error(docCorpus.match(forbidden)?.[0] || forbidden)
+    console.error(`mapper docs invariant violated: ${forbidden}`)
+    process.exit(1)
+  }
+}
+console.log('✓ mapper root docs teach v3 responsibility split')
+
+const obsoletePacket = copyTemplate('obsolete-v2-packet')
+fs.mkdirSync(path.join(obsoletePacket, 'slices/_template'), { recursive: true })
+fs.writeFileSync(path.join(obsoletePacket, 'slices/_template/slice.yaml'), 'id: obsolete\npaths: []\n')
+fs.mkdirSync(path.join(obsoletePacket, 'gates'), { recursive: true })
+fs.writeFileSync(path.join(obsoletePacket, 'gates/gate-index.yaml'), 'gates: []\n')
+edit(obsoletePacket, 'blueprint.yaml', (s) => s.replace('schema_version: mapper-os/executable-blueprint/v3', 'schema_version: mapper-os/executable-blueprint/v2\nslices_dir: slices\ngates_dir: gates\ncapsules_dir: teams'))
+expectFailure('mapper eval rejects obsolete v2 packet', ['packet', 'check', obsoletePacket], ['✗ packet rejects obsolete v2 packet shape', '✗ packet has no obsolete useless files'])
 
 const staleFiles = copyTemplate('stale-files')
 fs.writeFileSync(path.join(staleFiles, '04-review.md'), '# Review\n')
 fs.writeFileSync(path.join(staleFiles, '05-handover.md'), '# Old handover\n')
-expectFailure('mapper eval rejects obsolete review/handover files', ['packet', 'check', staleFiles], ['✗ packet has no legacy useless files'])
+expectFailure('mapper eval rejects obsolete review/handover files', ['packet', 'check', staleFiles], ['✗ packet has no obsolete useless files'])
 
 const missingQuestions = copyTemplate('missing-questions')
 fs.rmSync(path.join(missingQuestions, '00-questions.md'))
@@ -94,11 +131,11 @@ const cliHelp = runAgb(['--help']).output
 for (const stale of ['persona --slice', 'state derive', 'slice status']) {
   if (cliHelp.includes(stale)) {
     console.error(cliHelp)
-    console.error(`cli eval failed; help still exposes legacy command: ${stale}`)
+    console.error(`cli eval failed; help still exposes obsolete command: ${stale}`)
     process.exit(1)
   }
 }
-console.log('✓ cli help no longer exposes legacy slice/gate runner commands')
+console.log('✓ cli help no longer exposes obsolete runner commands')
 expectFailure('cli eval rejects removed persona command', ['persona', '--slice', 'slices/x/slice.yaml', '--role', 'build'], ['Usage:'])
 
 const traversalPackage = path.join(tmp, 'traversal-package')
@@ -129,6 +166,7 @@ const redactionFiles = {
       { path: 'BUILDPRINT.md', rawUrl: 'BUILDPRINT.md?fileToken=leaksecret' },
       { path: '00-questions.md', rawUrl: '00-questions.md?fileToken=leaksecret' },
       { path: '01-project-setup.md', rawUrl: '01-project-setup.md?fileToken=leaksecret' },
+      { path: '02-uiux-decision.md', rawUrl: '02-uiux-decision.md?fileToken=leaksecret' },
       { path: 'blueprint.yaml', rawUrl: 'blueprint.yaml?fileToken=leaksecret' },
       { path: '03-phases/phase-index.yaml', rawUrl: '03-phases/phase-index.yaml?fileToken=leaksecret' },
       { path: '03-phases/phase-flow.md', rawUrl: '03-phases/phase-flow.md?fileToken=leaksecret' },
@@ -145,6 +183,7 @@ const redactionFiles = {
   '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-project-setup.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions.\n',
   '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks.\n',
+  '/02-uiux-decision.md': '# 02 UI/UX Decision\n\nUX is a must. The experience must be understandable. Small checklist before applying this style constitution: first-time user, what to do first, all visible controls.\n',
   '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
   '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',
@@ -187,7 +226,7 @@ try {
     process.exit(1)
   }
   const nextAgent = fs.readFileSync(path.join(redactionTarget, '.buildprint/next-agent.md'), 'utf8')
-  for (const expected of ['00-questions.md', '01-project-setup.md', '03-phases/phase-flow.md', 'HANDOVER.md']) {
+  for (const expected of ['00-questions.md', '01-project-setup.md', '02-uiux-decision.md', '03-phases/phase-flow.md', 'HANDOVER.md']) {
     if (!nextAgent.includes(expected)) {
       console.error(nextAgent)
       console.error(`cli eval failed; next-agent missing v3 read order item: ${expected}`)
