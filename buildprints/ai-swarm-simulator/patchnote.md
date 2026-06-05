@@ -285,12 +285,69 @@ npm run check:blueprint-yaml
 
 Result: passed.
 
+## Published Source Patch
+
+The source Buildprint patch was committed and pushed to `origin/main`.
+
+Published commit:
+
+```txt
+fdd3a68 Require multi-view example-first swarm UX
+```
+
+This commit is the source packet used for the fresh rerun, not a local-only draft.
+
+## Fresh Rerun Proof Status
+
+A fresh Codex worker was started from the pushed Buildprint packet and generated a new app in:
+
+```txt
+/tmp/agb-ai-swarm-simulator-rerun-multiview
+```
+
+Current implemented result in that rerun:
+
+- separate task views: `Start`, `Map`, `Run`, `Report`, `Projects`
+- example-first onboarding with no typing required
+- built-in examples for product launch, hiring risk, and support incident scenarios
+- local dry-run path when live AI provider is unavailable
+- report generated from the mapped example and deterministic local run
+- saved local project state with resume/export/delete actions
+- 500-item large graph stress view
+- honest blocked state for missing live AI provider
+
+Current proof screenshots captured:
+
+```txt
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/empty-blocked-run.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/start.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/map.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/run-before-local.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/run-after-local.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/report.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/projects.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/large-graph.png
+/tmp/agb-ai-swarm-simulator-rerun-multiview/proof/screenshots/mobile-navigation.png
+```
+
+Additional local verification run against the fresh rerun:
+
+```bash
+npm run build
+```
+
+Result: passed after the in-progress worker repaired the TypeScript type-only import issue.
+
+Known remaining issue from visual inspection:
+
+- mobile bottom navigation currently overlaps part of the first example card; the direction is correct, but this needs cleanup before the rerun should be called final-passed
+
 ## Current State
 
-The Buildprint is patched locally in:
+The Buildprint is patched and published in:
 
 ```txt
 /root/agent-buildprint/buildprints/ai-swarm-simulator
 ```
 
-The changes have not been pushed to GitHub yet.
+The latest source Buildprint changes are on GitHub `origin/main`. The fresh rerun is still in progress until the worker finishes final proof and handoff.
