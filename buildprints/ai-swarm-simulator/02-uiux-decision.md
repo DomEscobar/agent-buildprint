@@ -5,6 +5,8 @@ UX is a must. It matters as much as the implementation because the user only exp
 Small checklist before applying this style constitution:
 
 - Can a first-time user understand what this artifact is, what to do first, and what state it is in?
+- Can a first-time user complete the example scenario without reading documentation, logs, or technical detail drawers?
+- Is the screen split into clear task views instead of one giant cockpit of every possible panel?
 - Does the visual direction feel intentionally designed for this artifact rather than copied from a generic dashboard?
 - Are colors, typography, spacing, components, and motion defined concretely enough for another agent to implement consistently?
 - Are empty, loading, error, and blocked states understandable without reading logs or source code?
@@ -21,7 +23,7 @@ Clarity outranks atmosphere. The default user is a first-time, non-technical use
 
 The product should feel like a dark glassmorphism intelligence lab: calm, precise, cinematic, and deeply interactive. It should communicate that complex graph/simulation activity is happening under the surface, but the user remains in control through clear panels, readable states, and elegant interaction feedback. The experience should feel closer to a polished creative command canvas than to an admin CRUD dashboard.
 
-The first impression must be: “I know what to do first, I know what the system understood, and I can see whether a real swarm can run.” It must not feel like a Tailwind starter, Bootstrap admin screen, academic notebook, plain file uploader, static graph screenshot, or generic purple-gradient AI demo. The interface should invite exploration while staying disciplined enough for operator work.
+The first impression must be: “I know what to do first, I can try a realistic example immediately, I know what the system understood, and I can see whether a real swarm can run.” It must not feel like a Tailwind starter, Bootstrap admin screen, academic notebook, plain file uploader, static graph screenshot, generic purple-gradient AI demo, or one massive control room where every subsystem competes for attention. The interface should invite exploration while staying disciplined enough for operator work.
 
 ## 2. Chosen style direction
 
@@ -87,14 +89,17 @@ Avoid cramped labels, inconsistent font sizes, and generic “dashboard card tit
 
 ## 5. Layout and spatial rhythm
 
-The primary layout is a **command canvas workbench**:
+The primary layout is a **multi-view command workbench**, not a single endless dashboard. Users must be able to move between focused task views while preserving shared project state:
 
-- Left rail or top-left panel: seed/input and provider readiness.
-- Center: large graph/simulation canvas as the dominant surface.
-- Right inspector: selected node/edge, simulation trace, or report section details.
-- Bottom or secondary panel: run timeline, logs, blockers, and report actions.
+- **Start**: example scenario picker, custom scenario input, current readiness summary, and one obvious next action.
+- **Map**: graph/canvas as the dominant surface with a plain-language summary and optional inspector.
+- **Run**: local or provider-backed swarm run controls, agent roles, readiness blockers, and step log.
+- **Report**: draft report, source/provenance references, continue-from-section actions, and limitations.
+- **Projects**: saved local projects, export/delete/resume, storage state, and advanced details.
 
-The first screen must expose the product loop. It should not open with a marketing hero or blank upload card alone. A user should immediately understand: add scenario here, see what the system understood here, check whether a real swarm can run here, read the report here, then continue from the result.
+Desktop can show a compact top or left navigation plus one secondary side panel for context. Mobile must use the same task views as a segmented control or bottom navigation; it must not stack every panel into a long technical scroll by default.
+
+The first screen must expose the product loop through the Start view. It should not open with a marketing hero, blank upload card alone, or a giant all-panels workbench. A user should immediately understand: choose an example or add a scenario here, then move through Map, Run, Report, and Projects as needed.
 
 Use generous spacing and controlled density: 8px micro spacing, 12/16px component spacing, 24/32px panel spacing, 48px major layout breathing room. Panels should align to a clear grid but may overlap subtly to create depth. The graph canvas can break the grid visually; controls should remain predictable.
 
@@ -104,7 +109,7 @@ Responsive behavior: on smaller screens, stack panels into the same beginner flo
 
 The default visible workflow is:
 
-1. **Add scenario** — seed material input, upload, or example scenario.
+1. **Start** — example scenario picker, seed material input, upload, and a plain explanation of what will happen.
 2. **See what the system understood** — graph/canvas readback with a plain summary before technical node/edge details.
 3. **Check readiness** — one top-level status banner answering: can I run a real swarm yet, why not, and what should I do next?
 4. **Read the report** — structured findings with source, graph, and run references in human-readable language.
@@ -121,6 +126,40 @@ Every stage needs one primary action. Secondary controls can exist, but they mus
 - Blocked -> Needs setup
 
 Blocked copy must sound like user guidance, not implementation notes. Use "Real simulation unavailable: connect an AI service or run the local runtime setup" instead of "runtime/provider blocked". Advanced detail panels may include the exact adapter, provider, runtime, run id, trace id, and storage path.
+
+## 5b. Example-first onboarding
+
+The product must include at least three built-in example scenarios that demonstrate the app without pretending they prove live provider success. Examples should be realistic, short, and named by user intent, not system internals:
+
+- **Improve a product launch plan**
+- **Find risks in a hiring process**
+- **Coordinate a support incident**
+
+The Start view must show what each example will demonstrate: map the situation, find the main risk, run the local dry run, and produce a draft report. A user should be able to select an example and land in the Map view with the app explaining what changed.
+
+Example data must be labeled as sample/local. It may prove parsing, graph rendering, local runtime, reports, persistence, and navigation. It must not prove real AI service connection, external graph memory, or production deployment.
+
+## 5c. Information architecture rules
+
+Do not show all major surfaces at once. At most one primary task view and one contextual side panel should dominate the viewport.
+
+Required navigation labels:
+
+- `Start`
+- `Map`
+- `Run`
+- `Report`
+- `Projects`
+
+Required view responsibilities:
+
+- Start owns scenario input, examples, current status, and first-run guidance.
+- Map owns graph exploration and "what the system understood."
+- Run owns readiness, swarm controls, agents, and step log.
+- Report owns findings, continuation, provenance, and limitations.
+- Projects owns saved work, export/delete, resume, and storage detail.
+
+Technical details belong in expandable panels inside the relevant view. A user should never need to understand adapter names, run ids, trace ids, storage paths, or provider base URLs to complete the example path.
 
 ## 6. Component language
 

@@ -20,13 +20,17 @@ Missing:
 - the first screen is too easy to read as a technical demo
 - technical terms appear before the user has earned them
 - panels compete for attention instead of guiding a simple workflow
+- the app can collapse into one giant dashboard where graph, run log, report, project history, and technical status all compete
+- examples are not strong enough as the default learning path
 - blocked states can sound like implementation status instead of user-facing next steps
 
 Enhance with:
-- beginner workflow labels: add scenario, see what the system understood, check readiness, read report, continue
+- multi-view task navigation: Start, Map, Run, Report, Projects
+- example-first onboarding with at least three realistic built-in scenarios
+- beginner workflow labels: start, see what the system understood, check readiness, read report, continue
 - top-level readiness banner that answers whether a real swarm can run, why not, and what to do next
 - progressive disclosure for graph memory, provider, runtime, readback, trace, local report, and storage detail
-- browser checks proving beginner copy and actionable blocked guidance are visible on desktop and mobile
+- browser checks proving task navigation, example flow, beginner copy, and actionable blocked guidance are visible on desktop and mobile
 
 ## Gap 03 — Server boundary and secrets
 
@@ -85,12 +89,14 @@ Enhance with:
 Missing:
 - no proof the product survives novice use, mobile constraints, keyboard access, or large graphs
 - no required empty/error/loading stress cases beyond prototype states
+- no proof the UI avoids the all-panels-at-once cockpit failure mode under 100-500 node stress
 
 Enhance with:
 - setup/status panel for provider/runtime/memory adapters
 - error states for provider failure, runtime failure, graph extraction failure, and storage failure
 - keyboard/focus checks
 - graph scaling behavior for 25, 100, and 500 nodes
+- focused large-graph navigation with overview, selected item, list/search/filter or equivalent, and a way back to run/report context
 
 ## Gap 08 — Quality, evals, and trust
 

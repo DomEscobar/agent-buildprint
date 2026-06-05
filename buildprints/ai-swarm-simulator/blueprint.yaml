@@ -6,9 +6,19 @@ schema_role: "YAML routes; markdown teaches and builds"
 product:
   name: AI Swarm Simulator
   central_artifact: graph-backed swarm simulation workbench
-  golden_path: upload seed material -> graph memory -> canvas inspection -> simulation -> report -> continued interaction
+  golden_path: choose example or add scenario -> map what the swarm understood -> run local/provider swarm -> read report -> save/continue project
   primary_audience_default: non-technical first-time user
-  novice_workflow: add scenario -> see what the system understood -> check readiness -> read report -> continue
+  novice_workflow: start -> map -> run -> report -> projects
+  required_views:
+    - Start
+    - Map
+    - Run
+    - Report
+    - Projects
+  required_example_scenarios:
+    - Improve a product launch plan
+    - Find risks in a hiring process
+    - Coordinate a support incident
 
 required_files:
   - BUILDPRINT.md
@@ -43,7 +53,7 @@ runtime_contract:
   graph_memory: open-source adapter, Graphiti default, Zep Cloud not required
   provider: OpenAI-compatible runtime config with status/test behavior
   simulation: local OASIS-style seam or honest blocked state
-  ui: novice-readable workbench with polished graph canvas, working controls, progressive technical details, and clear blocked/error states
+  ui: example-first multi-view workbench with polished graph canvas, working controls, progressive technical details, and clear blocked/error states
 
 production_quality_gates:
   server_secret_boundary: required before provider-backed production claims

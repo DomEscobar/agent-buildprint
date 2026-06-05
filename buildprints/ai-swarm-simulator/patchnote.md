@@ -4,6 +4,8 @@ Date: 2026-06-05
 
 This patch updates the source Buildprint at `buildprints/ai-swarm-simulator` so the packet no longer stops at a trusted-local prototype. It now includes explicit enhancement gaps, novice-first UX requirements, and production-hardening phases.
 
+Latest update: after proof showed the app still defaulting to an overwhelming all-panels-at-once cockpit, the Buildprint now requires example-first onboarding and focused task views.
+
 ## Summary
 
 The original Buildprint had five phases:
@@ -17,6 +19,7 @@ The original Buildprint had five phases:
 That was enough for a local prototype, but not enough for production quality. This patch adds the missing tracks:
 
 - novice/plain-language UX
+- example-first onboarding and multi-view navigation
 - server-side provider and secret boundary
 - durable persistence
 - real deterministic runtime
@@ -77,13 +80,27 @@ Patched the UI/UX constitution heavily.
 
 The new rule is: clarity outranks atmosphere.
 
+Latest patch adds that the app must not default to one giant cockpit. It now requires focused task views:
+
+- `Start`
+- `Map`
+- `Run`
+- `Report`
+- `Projects`
+
+It also requires example-first onboarding with at least three built-in scenarios:
+
+- Improve a product launch plan
+- Find risks in a hiring process
+- Coordinate a support incident
+
 Added the novice workflow contract:
 
-1. Add scenario
-2. See what the system understood
-3. Check readiness
-4. Read the report
-5. Continue
+1. Start
+2. Map
+3. Run
+4. Report
+5. Projects
 
 Added required terminology mapping:
 
@@ -104,7 +121,9 @@ Added browser-proof requirement for beginner copy and actionable blocked-state g
 Added machine-readable product defaults:
 
 - `primary_audience_default: non-technical first-time user`
-- `novice_workflow: add scenario -> see what the system understood -> check readiness -> read report -> continue`
+- `novice_workflow: start -> map -> run -> report -> projects`
+- `required_views: Start, Map, Run, Report, Projects`
+- `required_example_scenarios`
 
 Added `enhancement-gaps.md` to `required_files`.
 
@@ -135,6 +154,13 @@ It documents the missing Buildprint tracks:
 9. Observability and operations
 
 It also records the recommended hardening order from Phase 06 through Phase 13.
+
+Latest patch expands Gap 02 and Gap 07 to call out the exact failure shown in the proof screenshot:
+
+- all major panels shown at once
+- technical statuses competing with the beginner path
+- weak example-led onboarding
+- large graph proof that shows node count but not user comprehension
 
 ### `03-phases/phase-index.yaml`
 
@@ -185,6 +211,14 @@ Adds the novice UX repair phase.
 
 Requires beginner-readable workflow, top-level readiness banner, progressive technical details, desktop/mobile screenshots, and browser proof that blocked states give actionable next steps.
 
+Latest patch strengthens this phase to require:
+
+- the multi-view structure: Start, Map, Run, Report, Projects
+- three built-in realistic examples
+- an example path that works without typing
+- density repair so desktop does not show every major subsystem as equal panels at once
+- mobile task navigation instead of one endless stacked technical scroll
+
 ### `03-phases/07-backend-provider-probe-and-secret-boundary.md`
 
 Adds backend/service provider boundary.
@@ -220,6 +254,8 @@ Requires adapter contract tests, local fallback, optional Graphiti/external adap
 Adds production UX stress phase.
 
 Requires mobile/tablet/desktop checks, keyboard/focus checks, contrast/reduced-motion checks, empty/loading/error/blocked states, and graph scaling proof for 25, 100, and 500 nodes.
+
+Latest patch adds an explicit rejection criterion: 500-node proof is not enough if the user cannot navigate the graph, inspect one thing, and return to Run or Report without losing context.
 
 ### `03-phases/13-production-deployment-auth-privacy-observability.md`
 
