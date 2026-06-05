@@ -297,19 +297,28 @@ fdd3a68 Require multi-view example-first swarm UX
 
 This commit is the source packet used for the fresh rerun, not a local-only draft.
 
-## Fresh Rerun Proof Status
+## Fresh Rerun Final Proof Status
 
-A fresh Codex worker was started from the pushed Buildprint packet and generated a new app in:
+A fresh Codex worker reran the pushed Buildprint packet and generated a new app in:
 
 ```txt
 /tmp/agb-ai-swarm-simulator-rerun-multiview
 ```
 
-Current implemented result in that rerun:
+The dev server was left running at:
+
+```txt
+http://localhost:5187
+```
+
+The rerun now passes the requested example-first "dummy can use it" test for the local/proven scope:
 
 - separate task views: `Start`, `Map`, `Run`, `Report`, `Projects`
 - example-first onboarding with no typing required
 - built-in examples for product launch, hiring risk, and support incident scenarios
+- complete example path: choose example -> Map -> local dry run -> Report -> Projects
+- no default all-panels cockpit
+- technical provider/memory/runtime details hidden behind progressive disclosure
 - local dry-run path when live AI provider is unavailable
 - report generated from the mapped example and deterministic local run
 - saved local project state with resume/export/delete actions
@@ -333,14 +342,34 @@ Current proof screenshots captured:
 Additional local verification run against the fresh rerun:
 
 ```bash
-npm run build
+npm run lint
+npm run verify
+curl http://localhost:5187/api/health
+curl http://localhost:5187/api/provider/status
+APP_URL=http://localhost:5187 npm run screenshots
 ```
 
-Result: passed after the in-progress worker repaired the TypeScript type-only import issue.
+Result:
 
-Known remaining issue from visual inspection:
+```txt
+PASS
+```
 
-- mobile bottom navigation currently overlaps part of the first example card; the direction is correct, but this needs cleanup before the rerun should be called final-passed
+`npm run verify` includes Vitest, TypeScript/Vite build, and frontend secret scan. The provider status proof honestly reports `missing`, so live provider success is not claimed.
+
+Completed/proven locally:
+
+- phases 01-09
+- phase 12
+- phase 07 for server-side provider boundary and missing-key proof
+
+Still blocked or not proven:
+
+- live AI provider-backed runs and reports
+- external Graphiti/Zep graph memory
+- production deployment/auth/privacy/observability readiness
+- full manual screen-reader audit
+- live provider cost/token metadata
 
 ## Current State
 
@@ -350,4 +379,4 @@ The Buildprint is patched and published in:
 /root/agent-buildprint/buildprints/ai-swarm-simulator
 ```
 
-The latest source Buildprint changes are on GitHub `origin/main`. The fresh rerun is still in progress until the worker finishes final proof and handoff.
+The latest source Buildprint changes are on GitHub `origin/main`. The fresh rerun completed with local proof, while provider-backed, external-memory, and production-readiness claims remain honestly blocked until configured and proven.
