@@ -4,21 +4,28 @@ machine_contract: blueprint.yaml
 schema_role: "YAML routes; markdown teaches and builds"
 
 product:
-  name: AI Swarm Simulator
-  central_artifact: graph-backed swarm simulation workbench
-  golden_path: choose example or add scenario -> map what the swarm understood -> run local/provider swarm -> read report -> save/continue project
+  name: MiroFish Social Simulation Studio
+  inspiration: MiroFish / Microfish 666 social simulation engine
+  central_artifact: graph-backed social simulation studio with postable outcome artifacts
+  golden_path: choose seed scenario -> map the social world -> run local/provider social simulation -> inspect simulated posts/feed -> generate story/report -> export postable thread/artifact -> save/continue project
   primary_audience_default: non-technical first-time user
-  novice_workflow: start -> map -> run -> report -> projects
+  novice_workflow: start -> map -> run -> feed -> story -> projects
   required_views:
     - Start
     - Map
     - Run
-    - Report
+    - Feed
+    - Story
     - Projects
   required_example_scenarios:
-    - Improve a product launch plan
-    - Find risks in a hiring process
-    - Coordinate a support incident
+    - Simulate a breaking-news public reaction
+    - Simulate a startup launch going viral
+    - Simulate a fictional-world controversy
+  required_social_platform_surfaces:
+    - Twitter-style agent feed
+    - Reddit-style discussion thread
+    - timeline of agent actions
+    - postable thread/story export
 
 required_files:
   - BUILDPRINT.md
@@ -52,13 +59,17 @@ deployment_posture:
 runtime_contract:
   graph_memory: open-source adapter, Graphiti default, Zep Cloud not required
   provider: OpenAI-compatible runtime config with status/test behavior
-  simulation: local OASIS-style seam or honest blocked state
-  ui: example-first multi-view workbench with polished graph canvas, working controls, progressive technical details, and clear blocked/error states
+  simulation: local OASIS-style social simulation seam or honest blocked state
+  social_feed: simulated posts, comments, reactions, reposts, agent stances, and timeline events derived from the active run
+  publishing: exportable post/thread/story artifact; real X/Twitter posting only behind explicit user-controlled config and honest proof
+  ui: example-first multi-view social simulation studio with polished graph canvas, working feed/story controls, progressive technical details, and clear blocked/error states
 
 production_quality_gates:
   server_secret_boundary: required before provider-backed production claims
   provider_probe: required before live AI service claims
-  real_runtime: required before real swarm simulation claims
+  real_runtime: required before real social simulation claims
+  social_feed_truthfulness: required before claiming simulated social behavior
+  post_export: required before claiming content/publishing value
   durable_persistence: required before durable project claims
   external_graph_memory: required before Graphiti/external memory claims
   accessibility_large_graph_stress: required before production UX claims

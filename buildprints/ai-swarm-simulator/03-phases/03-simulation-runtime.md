@@ -6,7 +6,7 @@ Read `.buildprint/next-agent.md`, local `AGENTS.md`, `03-phases/phase-flow.md`, 
 
 ## Building objective
 
-Connect the swarm simulation runtime seam to the graph workbench. The user should be able to configure or review agents/roles derived from graph context, start a simulation run when prerequisites exist, watch status/trace updates, and receive an honest blocker when provider credentials, graph context, or local runtime support are missing. Preserve the MiroFish/OASIS-style source signal without pretending the full original runtime is available if it is not. The simulation state model should include run id, config, participant/agent profiles, provider status, graph snapshot reference, logs/traces, result status, and blockers. UI controls must not be dead: start, stop/cancel where supported, inspect trace, and retry should either work or explain exactly why they cannot. Provider test/status should be reusable by this phase and should never log secrets. The workbench should make clear whether a run is simulated locally, provider-backed, deterministic, blocked, failed, or complete.
+Connect the social simulation runtime seam to the graph workbench. The user should be able to configure or review agents/roles derived from graph context, start a simulation run when prerequisites exist, watch status/trace updates, inspect simulated posts/replies/reactions, and receive an honest blocker when provider credentials, graph context, or local runtime support are missing. Preserve the MiroFish/OASIS-style Twitter/Reddit source signal without pretending the full original runtime is available if it is not. The simulation state model should include run id, config, participant/agent profiles, platform mode, provider status, graph snapshot reference, feed events, logs/traces, result status, and blockers. UI controls must not be dead: start, stop/cancel where supported, inspect trace, inspect feed item, and retry should either work or explain exactly why they cannot. Provider test/status should be reusable by this phase and should never log secrets. The workbench should make clear whether a run is simulated locally, provider-backed, deterministic, blocked, failed, or complete.
 
 ## DO NOT
 
@@ -14,7 +14,7 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 
 ## Minimum proof before moving on
 
-Run unit/API/browser smoke checks for simulation status transitions. Verify missing provider or runtime produces a blocked state. Inspect that trace/result UI uses runtime state and graph references rather than canned success text.
+Run unit/API/browser smoke checks for simulation status transitions. Verify missing provider or runtime produces a blocked state. Inspect that trace/feed/result UI uses runtime state and graph references rather than canned success text.
 
 ## Handoff note
 

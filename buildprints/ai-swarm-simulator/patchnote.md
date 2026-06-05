@@ -4,6 +4,8 @@ Date: 2026-06-05
 
 This patch updates the source Buildprint at `buildprints/ai-swarm-simulator` so the packet no longer stops at a trusted-local prototype. It now includes explicit enhancement gaps, novice-first UX requirements, and production-hardening phases.
 
+Latest product realignment: after inspecting the original `666ghj/MiroFish` repository, the packet is no longer framed as a generic AI swarm or business-workflow simulator. It is now aligned to the MiroFish/Microfish 666 thesis: seed material -> graph-backed social world -> Twitter/Reddit-style agent simulation -> simulated feed -> story/report -> exportable post/thread artifact.
+
 Latest update: after proof showed the app still defaulting to an overwhelming all-panels-at-once cockpit, the Buildprint now requires example-first onboarding and focused task views.
 
 ## Summary
@@ -20,6 +22,9 @@ That was enough for a local prototype, but not enough for production quality. Th
 
 - novice/plain-language UX
 - example-first onboarding and multi-view navigation
+- MiroFish-style social simulation identity
+- Twitter/Reddit-style simulated feed and timeline
+- story/thread export as a first-class product surface
 - server-side provider and secret boundary
 - durable persistence
 - real deterministic runtime
@@ -29,6 +34,55 @@ That was enough for a local prototype, but not enough for production quality. Th
 - deployment, auth, privacy, observability, and operations
 
 ## Files Patched
+
+## MiroFish/Microfish 666 Realignment
+
+The original MiroFish repository shows a sharper product than the generic Buildprint had captured:
+
+- seed documents or scenarios are uploaded as source material
+- graph/entity memory is built from the seed
+- personas/agents are generated from that world
+- OASIS-style Twitter and Reddit simulations run as social environments
+- agent actions include posts, replies/comments, reactions, reposts, follows/mentions, and no-action steps
+- reports and interviews are generated after the run
+
+The Buildprint now treats that as the core product loop. The target artifact is a social simulation studio, not merely a graph-backed swarm dashboard.
+
+New default golden path:
+
+```txt
+choose seed scenario
+-> map the social world
+-> run local/provider social simulation
+-> inspect simulated posts/feed
+-> generate story/report
+-> export postable thread/artifact
+-> save/continue project
+```
+
+New required views:
+
+- `Start`
+- `Map`
+- `Run`
+- `Feed`
+- `Story`
+- `Projects`
+
+New built-in examples:
+
+- Simulate a breaking-news public reaction
+- Simulate a startup launch going viral
+- Simulate a fictional-world controversy
+
+New required social surfaces:
+
+- Twitter-style agent feed
+- Reddit-style discussion thread
+- timeline of agent actions
+- postable thread/story export
+
+Important boundary: the packet now explicitly separates simulated feed/export from real public X/Twitter/Reddit posting. Real posting is a hard stop unless explicit user-controlled config, confirmation UX, rate limits, audit logs, abuse controls, and proof are added.
 
 ### `README.md`
 
@@ -44,11 +98,19 @@ The Buildprint now says a phase is incomplete if a first-time user cannot tell:
 
 - what to do first
 - what the app understood
-- whether a real swarm can run
+- whether a real social simulation can run
 - why it cannot run
+- what simulated agents posted
+- what to export/share next
 - what to do next
 
 Also added `enhancement-gaps.md` to the required read order.
+
+Latest MiroFish realignment:
+
+- added an explicit product anchor for MiroFish/Microfish 666
+- forbids shrinking the packet back into a graph-only workbench or business-process planner
+- changes the novice-success test so the user must understand the social simulation, agent posts, and export/postable output
 
 ### `00-questions.md`
 
@@ -58,11 +120,18 @@ Default assumption is now: build for a non-technical first-time user, then revea
 
 Also added the default visible workflow language:
 
-- add scenario
-- see what the system understood
-- check readiness
-- read the report
+- add seed
+- see the social world
+- run the simulation
+- read the feed
+- export the story
 - continue
+
+Latest MiroFish realignment:
+
+- added a publishing-boundary hard stop
+- default is export/share only
+- real X/Twitter/Reddit posting requires explicit config, confirmation UX, rate limits, audit logs, abuse controls, and proof
 
 ### `01-project-setup.md`
 
@@ -85,32 +154,36 @@ Latest patch adds that the app must not default to one giant cockpit. It now req
 - `Start`
 - `Map`
 - `Run`
-- `Report`
+- `Feed`
+- `Story`
 - `Projects`
 
 It also requires example-first onboarding with at least three built-in scenarios:
 
-- Improve a product launch plan
-- Find risks in a hiring process
-- Coordinate a support incident
+- Simulate a breaking-news public reaction
+- Simulate a startup launch going viral
+- Simulate a fictional-world controversy
 
 Added the novice workflow contract:
 
 1. Start
-2. Map
-3. Run
-4. Report
-5. Projects
+2. See the social world
+3. Run the simulation
+4. Read the feed
+5. Export the story
+6. Continue
 
 Added required terminology mapping:
 
-- `Graph memory` -> `What the swarm remembers`
+- `Graph memory` -> `What the social world remembers`
 - `Provider missing` -> `AI service not connected`
-- `Runtime blocked` -> `Real simulation unavailable`
+- `Runtime blocked` -> `Real social simulation unavailable`
 - `Readback state` -> `Saved locally`
 - `Trace` -> `Step log`
-- `Local report` -> `Draft report`
+- `Local report` -> `Draft story/report`
 - `Blocked` -> `Needs setup`
+- `Social feed` -> `Simulated posts`
+- `Publishing` -> `Export/share`
 
 Changed status examples from technical labels to user-facing labels.
 
@@ -121,9 +194,10 @@ Added browser-proof requirement for beginner copy and actionable blocked-state g
 Added machine-readable product defaults:
 
 - `primary_audience_default: non-technical first-time user`
-- `novice_workflow: start -> map -> run -> report -> projects`
-- `required_views: Start, Map, Run, Report, Projects`
+- `novice_workflow: start -> map -> run -> feed -> story -> projects`
+- `required_views: Start, Map, Run, Feed, Story, Projects`
 - `required_example_scenarios`
+- `required_social_platform_surfaces`
 
 Added `enhancement-gaps.md` to `required_files`.
 
@@ -132,6 +206,8 @@ Added production quality gates:
 - `server_secret_boundary`
 - `provider_probe`
 - `real_runtime`
+- `social_feed_truthfulness`
+- `post_export`
 - `durable_persistence`
 - `external_graph_memory`
 - `accessibility_large_graph_stress`
@@ -162,6 +238,14 @@ Latest patch expands Gap 02 and Gap 07 to call out the exact failure shown in th
 - weak example-led onboarding
 - large graph proof that shows node count but not user comprehension
 
+Latest MiroFish realignment:
+
+- adds `Gap 02a — Social feed and postable simulation output`
+- requires a Feed view with simulated posts, replies, reactions, reposts, comments, and timeline events
+- requires agent cards with stance, memory/context, influence, recent actions, and interview affordance
+- requires a Story view that turns simulation output into a postable thread, short report, and image/text export
+- requires proof that feed/story output is derived from the active run, not static canned content
+
 ### `03-phases/phase-index.yaml`
 
 Extended the Buildprint phase list from five phases to thirteen phases.
@@ -182,6 +266,24 @@ Added:
 Updated the active phase loop so agents must repair beginner confusion, not only visual or runtime slop.
 
 Expanded proof-theater rejection to include jargon-heavy screens that only developers can decode.
+
+### `03-phases/03-simulation-runtime.md`
+
+Realigned the early runtime seam from a generic swarm run toward MiroFish/OASIS-style social simulation.
+
+The runtime state now needs:
+
+- platform mode
+- agent profiles
+- simulated feed events
+- posts, replies/comments, reactions, reposts, follows/mentions, stance shifts, and no-action steps
+- trace/feed/result UI tied to runtime state
+
+### `03-phases/04-report-and-continued-interaction.md`
+
+Renamed the phase intent to story/report and continued interaction.
+
+Reports must now be generated from the current graph, social feed, and simulation state. The phase requires a postable thread/story draft, feed references, graph references, run references, continuation controls, export controls, and honest deterministic/provider-backed labels.
 
 ### `03-phases/05-verification-and-handover.md`
 
@@ -213,9 +315,11 @@ Requires beginner-readable workflow, top-level readiness banner, progressive tec
 
 Latest patch strengthens this phase to require:
 
-- the multi-view structure: Start, Map, Run, Report, Projects
-- three built-in realistic examples
+- the multi-view structure: Start, Map, Run, Feed, Story, Projects
+- three built-in realistic social simulation examples
 - an example path that works without typing
+- simulated feed inspection after the run
+- story/thread export after the feed
 - density repair so desktop does not show every major subsystem as equal panels at once
 - mobile task navigation instead of one endless stacked technical scroll
 
@@ -235,13 +339,25 @@ Requires saved source material, graph snapshots, runs, reports, continuation pro
 
 Adds real local deterministic runtime.
 
-Requires run ids, agent roles derived from graph context, state machine, trace events, cancellation or explicit non-support, deterministic tests, and report-ready output.
+Requires run ids, agent roles derived from graph context, state machine, trace events, cancellation or explicit non-support, deterministic tests, and feed/story/report-ready output.
+
+Latest MiroFish realignment adds a minimum local action vocabulary:
+
+- create_post
+- reply/comment
+- react/like/dislike
+- repost/quote
+- follow/mention
+- stance_shift
+- no_action
 
 ### `03-phases/10-provider-backed-runtime-and-reports.md`
 
-Adds optional provider-backed runs and reports.
+Adds optional provider-backed runs, feed enrichment, stories, and reports.
 
-Requires backend-only provider calls, provenance, limitations, token/cost metadata where available, provider failure handling, and no fake provider success.
+Requires backend-only provider calls, provenance, limitations, token/cost metadata where available, provider failure handling, export/share draft labeling, and no fake provider success.
+
+Also adds an explicit public-posting boundary: do not post to real X/Twitter or any public social platform without explicit user-controlled configuration, confirmation, and proof.
 
 ### `03-phases/11-external-graph-memory-adapter.md`
 
@@ -253,7 +369,7 @@ Requires adapter contract tests, local fallback, optional Graphiti/external adap
 
 Adds production UX stress phase.
 
-Requires mobile/tablet/desktop checks, keyboard/focus checks, contrast/reduced-motion checks, empty/loading/error/blocked states, and graph scaling proof for 25, 100, and 500 nodes.
+Requires mobile/tablet/desktop checks, keyboard/focus checks, contrast/reduced-motion checks, empty/loading/error/blocked states, feed/story navigation proof, and graph scaling proof for 25, 100, and 500 nodes.
 
 Latest patch adds an explicit rejection criterion: 500-node proof is not enough if the user cannot navigate the graph, inspect one thing, and return to Run or Report without losing context.
 

@@ -1,6 +1,6 @@
 # Buildprint Enhancement Gaps
 
-The Buildprint must not stop at a trusted-local prototype if the requested outcome is a production-quality AI swarm simulator. These gaps define the missing tracks that later phases must close with proof gates.
+The Buildprint must not stop at a trusted-local prototype if the requested outcome is a production-quality MiroFish social simulation studio. These gaps define the missing tracks that later phases must close with proof gates.
 
 ## Gap 01 — Product contract
 
@@ -10,7 +10,7 @@ Missing:
 - MVP, beta, and production boundaries are not separated
 
 Enhance with:
-- named user roles and top workflows
+- named user roles and top workflows for simulation creators, social analysts, and narrative/content operators
 - acceptance criteria for graph quality, simulation quality, and report usefulness
 - clear non-goals so agents do not overbuild or fake completion
 
@@ -22,15 +22,31 @@ Missing:
 - panels compete for attention instead of guiding a simple workflow
 - the app can collapse into one giant dashboard where graph, run log, report, project history, and technical status all compete
 - examples are not strong enough as the default learning path
+- examples do not yet teach the MiroFish social-simulation loop: seed -> world -> feed -> story/export
 - blocked states can sound like implementation status instead of user-facing next steps
 
 Enhance with:
-- multi-view task navigation: Start, Map, Run, Report, Projects
-- example-first onboarding with at least three realistic built-in scenarios
-- beginner workflow labels: start, see what the system understood, check readiness, read report, continue
-- top-level readiness banner that answers whether a real swarm can run, why not, and what to do next
-- progressive disclosure for graph memory, provider, runtime, readback, trace, local report, and storage detail
+- multi-view task navigation: Start, Map, Run, Feed, Story, Projects
+- example-first onboarding with at least three realistic built-in social simulation scenarios
+- beginner workflow labels: start, see the social world, run the simulation, read the feed, export the story, continue
+- top-level readiness banner that answers whether a real social simulation can run, why not, and what to do next
+- progressive disclosure for graph memory, provider, runtime, readback, trace, local report, social platform adapter, and storage detail
 - browser checks proving task navigation, example flow, beginner copy, and actionable blocked guidance are visible on desktop and mobile
+
+## Gap 02a — Social feed and postable simulation output
+
+Missing:
+- the product can show graphs and reports without showing the simulated internet that makes MiroFish distinctive
+- Twitter/Reddit-style activity can remain hidden in logs instead of becoming the primary product surface
+- reports can be useful internally but not shaped into shareable posts, threads, or artifacts
+- real X/Twitter posting is not separated cleanly from simulated feed export
+
+Enhance with:
+- a Feed view that renders simulated posts, replies, reactions, reposts, comments, and timeline events from the active run
+- agent cards with stance, memory/context, influence, recent actions, and interview affordance
+- a Story view that turns simulation output into a postable thread, short report, and image/text export
+- explicit labels: simulated feed, draft thread, export/share, real posting unavailable unless configured
+- proof that feed/story output is derived from the active run, not static canned content
 
 ## Gap 03 — Server boundary and secrets
 
@@ -52,11 +68,13 @@ Missing:
 - no executable multi-agent run loop is required before early handover
 - start/stop/cancel can remain UI-only without later hardening
 - trace/result lifecycle is not strongly tied to runtime output
+- local runtime does not yet require social actions such as posts, replies, comments, likes, reposts, follows, or stance shifts
 
 Enhance with:
 - runtime service phase with run ids, run state, cancellation, retries, and trace streaming
 - deterministic local runtime before provider-backed runtime
 - proof that traces and reports come from runtime output, not static derivation
+- proof that the simulated social feed and story/export come from the same run state
 
 ## Gap 05 — Graph memory adapter
 
@@ -128,7 +146,7 @@ Enhance with:
 2. Phase 07 — Backend Provider Probe and Secret Boundary
 3. Phase 08 — Durable Project Persistence
 4. Phase 09 — Real Deterministic Simulation Runtime
-5. Phase 10 — Provider-Backed Runtime and Reports
+5. Phase 10 — Provider-Backed Runtime, Feed, Stories, and Reports
 6. Phase 11 — External Graph Memory Adapter
 7. Phase 12 — UX Stress, Accessibility, and Large Graph Handling
 8. Phase 13 — Production Deployment, Auth, Privacy, and Observability

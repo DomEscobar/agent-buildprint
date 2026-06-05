@@ -18,7 +18,7 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 
 ## Minimum proof before moving on
 
-Run build/test/smoke checks plus browser checks across desktop and mobile. Run automated accessibility checks if available and manual keyboard/focus inspection. Capture screenshots for Start, Map, Run, Report, Projects, normal, empty, blocked, error, and large-graph states. Verify text does not overlap or clip. Verify mobile uses navigable task views rather than one endless stacked cockpit.
+Run build/test/smoke checks plus browser checks across desktop and mobile. Run automated accessibility checks if available and manual keyboard/focus inspection. Capture screenshots for Start, Map, Run, Feed, Story, Projects, normal, empty, blocked, error, and large-graph states. Verify text does not overlap or clip. Verify mobile uses navigable task views rather than one endless stacked cockpit.
 
 ## Handoff note
 

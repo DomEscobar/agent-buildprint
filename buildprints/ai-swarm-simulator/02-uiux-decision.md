@@ -6,6 +6,7 @@ Small checklist before applying this style constitution:
 
 - Can a first-time user understand what this artifact is, what to do first, and what state it is in?
 - Can a first-time user complete the example scenario without reading documentation, logs, or technical detail drawers?
+- Can a first-time user see the simulated social world as posts, replies, reactions, and a narrative outcome rather than only graph nodes?
 - Is the screen split into clear task views instead of one giant cockpit of every possible panel?
 - Does the visual direction feel intentionally designed for this artifact rather than copied from a generic dashboard?
 - Are colors, typography, spacing, components, and motion defined concretely enough for another agent to implement consistently?
@@ -15,15 +16,15 @@ Small checklist before applying this style constitution:
 
 This file is the style constitution for the artifact. Every later phase that touches human-facing UI must obey it before claiming progress.
 
-This artifact is UI-bearing. Its interface must not become a generic SaaS dashboard or a raw technical demo. The UI is a premium simulation workbench: a place where the user feels they are controlling a living intelligence system with clarity, depth, and precision.
+This artifact is UI-bearing. Its interface must not become a generic SaaS dashboard or a raw technical demo. The UI is a premium social simulation studio: a place where the user feels they are seeding, running, inspecting, and publishing the output of a living simulated internet with clarity, depth, and precision.
 
 Clarity outranks atmosphere. The default user is a first-time, non-technical user who does not know what graph memory, providers, runtimes, traces, readback, blockers, or local report history mean. The product may expose those technical terms in detail views, docs, logs, and advanced mode, but the primary UI must explain the workflow in everyday language.
 
 ## 1. Design thesis
 
-The product should feel like a dark glassmorphism intelligence lab: calm, precise, cinematic, and deeply interactive. It should communicate that complex graph/simulation activity is happening under the surface, but the user remains in control through clear panels, readable states, and elegant interaction feedback. The experience should feel closer to a polished creative command canvas than to an admin CRUD dashboard.
+The product should feel like a dark glassmorphism intelligence lab: calm, precise, cinematic, and deeply interactive. It should communicate that complex graph/social-simulation activity is happening under the surface, but the user remains in control through clear panels, readable states, and elegant interaction feedback. The experience should feel closer to a polished creative command canvas and simulation publishing desk than to an admin CRUD dashboard.
 
-The first impression must be: “I know what to do first, I can try a realistic example immediately, I know what the system understood, and I can see whether a real swarm can run.” It must not feel like a Tailwind starter, Bootstrap admin screen, academic notebook, plain file uploader, static graph screenshot, generic purple-gradient AI demo, or one massive control room where every subsystem competes for attention. The interface should invite exploration while staying disciplined enough for operator work.
+The first impression must be: “I know what to do first, I can try a realistic simulation immediately, I know what social world the system built, I can see what agents posted, and I can export a story/thread from the result.” It must not feel like a Tailwind starter, Bootstrap admin screen, academic notebook, plain file uploader, static graph screenshot, generic purple-gradient AI demo, or one massive control room where every subsystem competes for attention. The interface should invite exploration while staying disciplined enough for operator work.
 
 ## 2. Chosen style direction
 
@@ -89,17 +90,18 @@ Avoid cramped labels, inconsistent font sizes, and generic “dashboard card tit
 
 ## 5. Layout and spatial rhythm
 
-The primary layout is a **multi-view command workbench**, not a single endless dashboard. Users must be able to move between focused task views while preserving shared project state:
+The primary layout is a **multi-view social simulation studio**, not a single endless dashboard. Users must be able to move between focused task views while preserving shared project state:
 
-- **Start**: example scenario picker, custom scenario input, current readiness summary, and one obvious next action.
-- **Map**: graph/canvas as the dominant surface with a plain-language summary and optional inspector.
-- **Run**: local or provider-backed swarm run controls, agent roles, readiness blockers, and step log.
-- **Report**: draft report, source/provenance references, continue-from-section actions, and limitations.
+- **Start**: example seed picker, custom scenario input, current readiness summary, and one obvious next action.
+- **Map**: social world graph/canvas as the dominant surface with a plain-language summary and optional inspector.
+- **Run**: local or provider-backed social simulation controls, agent roles, readiness blockers, and step log.
+- **Feed**: Twitter/Reddit-style simulated posts, replies, reactions, reposts, agent stances, and timeline events from the active run.
+- **Story**: postable thread/story, draft report, source/provenance references, continuation actions, and limitations.
 - **Projects**: saved local projects, export/delete/resume, storage state, and advanced details.
 
 Desktop can show a compact top or left navigation plus one secondary side panel for context. Mobile must use the same task views as a segmented control or bottom navigation; it must not stack every panel into a long technical scroll by default.
 
-The first screen must expose the product loop through the Start view. It should not open with a marketing hero, blank upload card alone, or a giant all-panels workbench. A user should immediately understand: choose an example or add a scenario here, then move through Map, Run, Report, and Projects as needed.
+The first screen must expose the product loop through the Start view. It should not open with a marketing hero, blank upload card alone, or a giant all-panels workbench. A user should immediately understand: choose an example or add a seed here, then move through Map, Run, Feed, Story, and Projects as needed.
 
 Use generous spacing and controlled density: 8px micro spacing, 12/16px component spacing, 24/32px panel spacing, 48px major layout breathing room. Panels should align to a clear grid but may overlap subtly to create depth. The graph canvas can break the grid visually; controls should remain predictable.
 
@@ -109,21 +111,24 @@ Responsive behavior: on smaller screens, stack panels into the same beginner flo
 
 The default visible workflow is:
 
-1. **Start** — example scenario picker, seed material input, upload, and a plain explanation of what will happen.
-2. **See what the system understood** — graph/canvas readback with a plain summary before technical node/edge details.
-3. **Check readiness** — one top-level status banner answering: can I run a real swarm yet, why not, and what should I do next?
-4. **Read the report** — structured findings with source, graph, and run references in human-readable language.
-5. **Continue** — refine the scenario, focus the graph, change run settings, or continue from a report section.
+1. **Start** — example seed picker, source input/upload, and a plain explanation of what will happen.
+2. **See the social world** — graph/canvas readback with a plain summary before technical node/edge details.
+3. **Run the simulation** — one top-level status banner answering: can I run a real social simulation yet, why not, and what should I do next?
+4. **Read the feed** — simulated posts/replies/reactions showing how agents behaved over time.
+5. **Export the story** — structured findings, postable thread/report, source/run references, and limitations.
+6. **Continue** — refine the seed, focus the graph, change run settings, or continue from a story/report section.
 
 Every stage needs one primary action. Secondary controls can exist, but they must not compete with the next obvious step. Technical names must be paired with or hidden behind plain names:
 
-- Graph memory -> What the swarm remembers
+- Graph memory -> What the social world remembers
 - Provider missing -> AI service not connected
-- Runtime blocked -> Real simulation unavailable
+- Runtime blocked -> Real social simulation unavailable
 - Readback state -> Saved locally
 - Trace -> Step log
-- Local report -> Draft report
+- Local report -> Draft story/report
 - Blocked -> Needs setup
+- Social feed -> Simulated posts
+- Publishing -> Export/share
 
 Blocked copy must sound like user guidance, not implementation notes. Use "Real simulation unavailable: connect an AI service or run the local runtime setup" instead of "runtime/provider blocked". Advanced detail panels may include the exact adapter, provider, runtime, run id, trace id, and storage path.
 
@@ -131,11 +136,11 @@ Blocked copy must sound like user guidance, not implementation notes. Use "Real 
 
 The product must include at least three built-in example scenarios that demonstrate the app without pretending they prove live provider success. Examples should be realistic, short, and named by user intent, not system internals:
 
-- **Improve a product launch plan**
-- **Find risks in a hiring process**
-- **Coordinate a support incident**
+- **Simulate a breaking-news public reaction**
+- **Simulate a startup launch going viral**
+- **Simulate a fictional-world controversy**
 
-The Start view must show what each example will demonstrate: map the situation, find the main risk, run the local dry run, and produce a draft report. A user should be able to select an example and land in the Map view with the app explaining what changed.
+The Start view must show what each example will demonstrate: map the social world, create agents, run a local social dry run, inspect simulated posts/replies/reactions, and produce a postable story/thread plus a draft report. A user should be able to select an example and land in the Map view with the app explaining what changed.
 
 Example data must be labeled as sample/local. It may prove parsing, graph rendering, local runtime, reports, persistence, and navigation. It must not prove real AI service connection, external graph memory, or production deployment.
 
@@ -148,15 +153,17 @@ Required navigation labels:
 - `Start`
 - `Map`
 - `Run`
-- `Report`
+- `Feed`
+- `Story`
 - `Projects`
 
 Required view responsibilities:
 
 - Start owns scenario input, examples, current status, and first-run guidance.
 - Map owns graph exploration and "what the system understood."
-- Run owns readiness, swarm controls, agents, and step log.
-- Report owns findings, continuation, provenance, and limitations.
+- Run owns readiness, social simulation controls, agents, and step log.
+- Feed owns simulated posts, replies, reactions, reposts, timeline events, and agent stance inspection.
+- Story owns postable thread/report generation, findings, continuation, provenance, and limitations.
 - Projects owns saved work, export/delete, resume, and storage detail.
 
 Technical details belong in expandable panels inside the relevant view. A user should never need to understand adapter names, run ids, trace ids, storage paths, or provider base URLs to complete the example path.
@@ -169,11 +176,11 @@ Buttons: pill or rounded-rectangle controls with clear hierarchy. Primary button
 
 Inputs: dark translucent fields with visible border, strong focus ring, clear labels, helper text, and error text. API/provider key fields must signal secrecy and never echo secrets plainly.
 
-Status chips: compact pills with icon/dot, label, and semantic color. Examples: `AI service not connected`, `Scenario understood`, `Real simulation unavailable`, `Report needs refresh`, `Live run`. Status must never rely on color alone.
+Status chips: compact pills with icon/dot, label, and semantic color. Examples: `AI service not connected`, `Social world ready`, `Real social simulation unavailable`, `Feed ready`, `Story needs refresh`, `Live run`. Status must never rely on color alone.
 
 Graph nodes/edges: nodes should feel luminous and selectable, with selected state using cyan glow and a clear inspector link. Edges should be readable but not overpowering. Hover should reveal relationship labels or concise metadata. Empty graph should show an inviting structured placeholder explaining the next action.
 
-Inspector/report panels: use layered sections, collapsible details only where useful, and clear source/simulation references. Reports should read like polished analysis, not raw markdown dumped into a box.
+Inspector/story/report panels: use layered sections, collapsible details only where useful, and clear source/simulation references. Stories should read like postable simulation content and reports should read like polished analysis, not raw markdown dumped into a box.
 
 Modals/toasts: use sparingly. Prefer inline blocked/error panels when the user needs to act. Toasts are for confirmation, not for hiding important failure details.
 
@@ -187,7 +194,7 @@ Interactive controls must provide feedback within the same surface: pressed stat
 
 ## 8. Empty, loading, error, and blocked states
 
-Empty states should teach the next action: “Add a scenario to show what the swarm should inspect,” not “No data.” Loading states should name the user-visible process: reading scenario, saving what the swarm remembers, checking AI service, running simulation, generating report. Error states should say what failed and what the user can try next. Blocked states should be honest about missing provider keys, unavailable graph adapter, missing simulation runtime, failed persistence, or deployment limitations.
+Empty states should teach the next action: “Add a seed to build the social world,” not “No data.” Loading states should name the user-visible process: reading seed material, saving what the social world remembers, checking AI service, running social simulation, generating feed, generating story. Error states should say what failed and what the user can try next. Blocked states should be honest about missing provider keys, unavailable graph adapter, missing simulation runtime, disabled real posting, failed persistence, or deployment limitations.
 
 Blocked state visual language: amber/orange accent, glass warning panel, concise reason, next action, and affected capability. Do not show green success while a provider/runtime is missing. Do not hide blockers in logs only.
 

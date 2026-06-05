@@ -12,7 +12,9 @@ Build the real thing the packet asks for. Preserve the required behavior, intera
 
 Functionless buttons, dead controls, placeholder screens, decorative-only UI, mocked/sample data counted as real proof, fake provider success, raw JSON in place of a product surface, swallowed errors, and unchecked happy-path claims are failures. Do not ship them. Do not call them done.
 
-Confusing novice UX is also a product failure. If a first-time user cannot tell what to do, what the app understood, whether a real swarm can run, why it cannot run, and what to do next, the phase is not complete even if the code works. Technical terms may exist behind detail views, but the primary flow must use plain product language.
+Confusing novice UX is also a product failure. If a first-time user cannot tell what to do, what the app understood, whether a real social simulation can run, why it cannot run, what the simulated agents posted, and what to publish/export next, the phase is not complete even if the code works. Technical terms may exist behind detail views, but the primary flow must use plain product language.
+
+The product-specific identity and runtime contract live in `blueprint.yaml`, `02-uiux-decision.md`, and the phase files. Keep this start file as the builder briefing, then follow the required read order for the artifact details.
 
 ## Perfection alignment
 

@@ -1,4 +1,4 @@
-# Phase 04 — Report and continued interaction
+# Phase 04 — Story/report and continued interaction
 
 ## How to implement this phase
 
@@ -6,7 +6,7 @@ Read `.buildprint/next-agent.md`, local `AGENTS.md`, `03-phases/phase-flow.md`, 
 
 ## Building objective
 
-Build the report generation and continuation loop. A report must be generated from the current graph and simulation state, not from a canned markdown fixture. It should include sections, findings, graph/simulation references, citations or source links where available, blockers, and next suggested actions. The user should be able to inspect report sections, jump back to related graph nodes or simulation traces, and continue the interaction by refining seed material, graph focus, simulation settings, or report prompts. If provider-backed summarization is unavailable, deterministic/local report generation may exist but must be labeled honestly and must not claim live LLM reasoning. Persist report history locally so a refresh does not erase the user’s path. The UI should avoid raw JSON dumps; use polished panels, status, and actionable controls. This phase closes the core product promise: graph-backed swarm simulation becomes an inspectable report users can continue from.
+Build the story/report generation and continuation loop. A story/report must be generated from the current graph, social feed, and simulation state, not from a canned markdown fixture. It should include a postable thread/story draft, sections, findings, graph/feed/simulation references, citations or source links where available, blockers, and next suggested actions. The user should be able to inspect story/report sections, jump back to related graph nodes, feed entries, or simulation traces, and continue the interaction by refining seed material, graph focus, simulation settings, feed focus, or story/report prompts. If provider-backed summarization is unavailable, deterministic/local story/report generation may exist but must be labeled honestly and must not claim live LLM reasoning. Persist story/report history locally so a refresh does not erase the user’s path. The UI should avoid raw JSON dumps; use polished panels, status, and actionable controls. This phase closes the core product promise: graph-backed social simulation becomes an inspectable feed plus story/report users can export and continue from.
 
 ## DO NOT
 
@@ -14,7 +14,7 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 
 ## Minimum proof before moving on
 
-Run a report generation smoke path from real current graph/simulation state. Verify report links or references connect back to graph/simulation artifacts. Browser-inspect empty/error/blocked/provider-missing states and ensure continuation controls work or block honestly.
+Run a story/report generation smoke path from real current graph/feed/simulation state. Verify story/report links or references connect back to graph, feed, and simulation artifacts. Browser-inspect empty/error/blocked/provider-missing states and ensure continuation and export controls work or block honestly.
 
 ## Handoff note
 
