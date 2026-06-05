@@ -1,4 +1,4 @@
-# Phase 05 — Verification and handover
+# Phase 05 — Trusted-local verification and handover
 
 ## How to implement this phase
 
@@ -6,7 +6,9 @@ Read `.buildprint/next-agent.md`, local `AGENTS.md`, `03-phases/phase-flow.md`, 
 
 ## Building objective
 
-Perform a hostile product verification pass and produce an honest handover. Re-run the real local build/test/smoke path, then inspect the workbench as a user: seed input, provider status, graph canvas, selection/inspection, simulation controls/status, report generation, persistence/refresh behavior, and blocked/error states. Look specifically for fake-success shortcuts: dead buttons, decorative graphs, canned reports, provider success without credentials, raw JSON UI, and claims that outpace evidence. Fix small visible defects directly when safe; route larger failures to the responsible earlier phase. The final handover must separate built, verified, blocked, not proven, and next. It should not claim production readiness unless public/private gates were actually built and tested. The product is done only to the scope that survived real checks.
+Perform a hostile trusted-local product verification pass and produce an honest handover. Re-run the real local build/test/smoke path, then inspect the workbench as a user: seed input, provider status, graph canvas, selection/inspection, simulation controls/status, report generation, persistence/refresh behavior, and blocked/error states. Look specifically for fake-success shortcuts: dead buttons, decorative graphs, canned reports, provider success without credentials, raw JSON UI, confusing beginner flow, and claims that outpace evidence. Fix small visible defects directly when safe; route larger failures to the responsible earlier phase.
+
+This phase is no longer the final production handover. It closes the trusted-local prototype loop and must route the next agent into Phase 06 unless a hard blocker prevents continuing. The handover must separate built, verified, blocked, not proven, and next. It should not claim production readiness unless later public/private gates were actually built and tested.
 
 ## DO NOT
 
@@ -14,7 +16,7 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 
 ## Minimum proof before moving on
 
-Run build/test/lint/typecheck as available, plus a browser or API smoke path through the full product loop. Record exact commands, pass/fail, screenshots or paths if available, known blockers, and proof gaps. Confirm `HANDOVER.md` is filled honestly.
+Run build/test/lint/typecheck as available, plus a browser or API smoke path through the full trusted-local product loop. Record exact commands, pass/fail, screenshots or paths if available, known blockers, and proof gaps. Confirm `HANDOVER.md` is filled honestly and names Phase 06 as the next active hardening phase.
 
 ## Handoff note
 

@@ -7,6 +7,8 @@ product:
   name: AI Swarm Simulator
   central_artifact: graph-backed swarm simulation workbench
   golden_path: upload seed material -> graph memory -> canvas inspection -> simulation -> report -> continued interaction
+  primary_audience_default: non-technical first-time user
+  novice_workflow: add scenario -> see what the system understood -> check readiness -> read report -> continue
 
 required_files:
   - BUILDPRINT.md
@@ -14,6 +16,7 @@ required_files:
   - 01-project-setup.md
   - 02-uiux-decision.md
   - blueprint.yaml
+  - enhancement-gaps.md
   - 03-phases/phase-index.yaml
   - 03-phases/phase-flow.md
   - HANDOVER.md
@@ -40,7 +43,16 @@ runtime_contract:
   graph_memory: open-source adapter, Graphiti default, Zep Cloud not required
   provider: OpenAI-compatible runtime config with status/test behavior
   simulation: local OASIS-style seam or honest blocked state
-  ui: polished graph canvas with working controls and clear blocked/error states
+  ui: novice-readable workbench with polished graph canvas, working controls, progressive technical details, and clear blocked/error states
+
+production_quality_gates:
+  server_secret_boundary: required before provider-backed production claims
+  provider_probe: required before live AI service claims
+  real_runtime: required before real swarm simulation claims
+  durable_persistence: required before durable project claims
+  external_graph_memory: required before Graphiti/external memory claims
+  accessibility_large_graph_stress: required before production UX claims
+  auth_privacy_observability_deployment: required before private or public deployment claims
 
 phase_flow: 03-phases/phase-flow.md
 phase_index: 03-phases/phase-index.yaml

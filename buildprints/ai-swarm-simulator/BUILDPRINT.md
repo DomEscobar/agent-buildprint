@@ -12,6 +12,8 @@ Build the real thing the packet asks for. Preserve the required behavior, intera
 
 Functionless buttons, dead controls, placeholder screens, decorative-only UI, mocked/sample data counted as real proof, fake provider success, raw JSON in place of a product surface, swallowed errors, and unchecked happy-path claims are failures. Do not ship them. Do not call them done.
 
+Confusing novice UX is also a product failure. If a first-time user cannot tell what to do, what the app understood, whether a real swarm can run, why it cannot run, and what to do next, the phase is not complete even if the code works. Technical terms may exist behind detail views, but the primary flow must use plain product language.
+
 ## Perfection alignment
 
 Aim for a result that a demanding human would recognize as intentionally built: coherent structure, tight feedback loops, visible state, graceful empty/error/blocked paths, consistent copy, and no hidden fake-success shortcuts. Every phase should leave the artifact more real, more usable, and easier for the next agent to continue.
@@ -25,9 +27,10 @@ Be precise. Be skeptical of your own claims. Prefer direct verification over con
 3. `01-project-setup.md`
 4. `02-uiux-decision.md`
 5. `blueprint.yaml`
-6. `03-phases/phase-index.yaml`
-7. `03-phases/phase-flow.md`
-8. The active phase file named by `03-phases/phase-index.yaml`
-9. `HANDOVER.md` before stopping or claiming completion
+6. `enhancement-gaps.md`
+7. `03-phases/phase-index.yaml`
+8. `03-phases/phase-flow.md`
+9. The active phase file named by `03-phases/phase-index.yaml`
+10. `HANDOVER.md` before stopping or claiming completion
 
 Read sequentially. Do not inventory every phase before the active phase is known.

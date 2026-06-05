@@ -9,6 +9,7 @@ Use this file to separate real blockers from assumable defaults. Do not turn it 
 3. **Destructive/data-loss behavior** — May uploaded seed material, graph memory, simulation runs, and reports be deleted or overwritten? If destructive behavior is allowed, require confirmation and recovery semantics.
 4. **Privacy/compliance exposure** — Will users upload private, regulated, client, or third-party material? If yes, stop for retention, redaction, export, and local-only boundaries.
 5. **Product/artifact identity** — Is the central artifact a local workbench, embeddable library, hosted app, or research demo? The default is local workbench; changing that changes architecture and proof.
+6. **Audience and language level** — Is the user expected to understand graph memory, providers, runtimes, traces, and local persistence? The default is no: build for a non-technical first-time user, then reveal technical details progressively.
 
 ## Assumable defaults
 
@@ -17,6 +18,7 @@ Use this file to separate real blockers from assumable defaults. Do not turn it 
 - Provider config is OpenAI-compatible and runtime-editable.
 - Seed material can use a local uploaded/sample fixture for first loop, but the UI must label sample-only proof honestly.
 - Persistence can begin with local files or a lightweight local database if the interfaces can later harden.
+- Primary UX labels default to plain-language workflow copy: add scenario, see what the system understood, check readiness, read the report, continue.
 
 ## Deferrable questions
 

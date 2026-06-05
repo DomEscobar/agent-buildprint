@@ -8,12 +8,12 @@ Use active phase only. Do not read every phase upfront. Start from `.buildprint/
 2. Build that path against the real project, preserving provider, graph memory, simulation, report, and UI boundaries.
 3. Verify the path with the most direct local command/browser/API check available.
 4. Inspect the product result, not just the code diff.
-5. Repair visible slop, dead controls, fake provider success, decorative graph output, and any mismatch between UI claims and runtime evidence.
+5. Repair visible slop, beginner confusion, dead controls, fake provider success, decorative graph output, and any mismatch between UI claims and runtime evidence.
 6. Update handover facts before stopping.
 
 ## Proof theater rejection
 
-Edits alone, placeholder screens, mocked data, functionless buttons, fake provider success, canned reports, or decorative graph nodes are not proof. If a live provider, graph adapter, or simulation runtime is unavailable, do not fake live success; show a precise blocked state and record the blocker.
+Edits alone, placeholder screens, mocked data, functionless buttons, fake provider success, canned reports, decorative graph nodes, or jargon-heavy screens that only developers can decode are not proof. If a live provider, graph adapter, or simulation runtime is unavailable, do not fake live success; show a precise blocked state and record the blocker.
 
 ## Repair routing
 

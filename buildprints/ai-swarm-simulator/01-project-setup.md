@@ -9,13 +9,14 @@ Create or update these in the implementation project, not inside `.buildprint/sn
 - `AGENTS.md` with mandatory read rules, ownership boundaries, quality bar, and stop conditions.
 - `docs/architecture.md` describing frontend, backend/service, graph memory adapter, provider config, simulation seam, persistence, and report generation.
 - `docs/product-loop.md` describing the upload → graph → simulation → report → continue loop and visible states.
+- `docs/plain-language-ux.md` mapping technical terms to user-facing labels, defining the beginner workflow, and listing empty/loading/error/blocked copy for non-technical users.
 - `docs/proof-strategy.md` listing local commands, smoke paths, browser checks, provider-blocked checks, and what cannot be proven without live credentials/runtime.
 - `.env.example` with provider base URL/model/key names, graph memory settings, storage path, and simulation runtime flags; never include real secrets.
 - `.buildprint/setup-receipt.md` summarizing chosen stack, created files, verification commands, blockers, and any assumptions from `00-questions.md`.
 
 ## Foundation decisions
 
-Pick a stack that can actually deliver a polished graph workbench quickly. Vue/Vite plus a lightweight local API is acceptable; another framework is acceptable only if it has equivalent build/test/browser proof. Define the graph-memory port before writing UI. Define provider status/test behavior before simulation buttons. Define persistence paths before report generation.
+Pick a stack that can actually deliver a polished graph workbench quickly. Vue/Vite plus a lightweight local API is acceptable; another framework is acceptable only if it has equivalent build/test/browser proof. Define the graph-memory port before writing UI. Define provider status/test behavior before simulation buttons. Define persistence paths before report generation. Define the plain-language UX glossary before naming visible controls, panels, status chips, blockers, or reports.
 
 ## DO NOT
 

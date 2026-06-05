@@ -17,6 +17,7 @@ Use this when stopping or claiming progress. Do not claim completion beyond the 
 ## Not proven
 
 - List claims that remain unverified, especially provider-live, simulation-runtime, persistence, deployment, auth, privacy, and public-web readiness.
+- List UX claims that remain unverified, especially beginner comprehension, mobile readability, keyboard access, screen-reader labels, and large-graph usability.
 
 ## Next
 

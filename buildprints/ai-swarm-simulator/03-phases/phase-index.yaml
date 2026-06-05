@@ -16,3 +16,27 @@ phases:
   - phase_id: 05-verification-and-handover
     file: 03-phases/05-verification-and-handover.md
     status: included
+  - phase_id: 06-novice-product-ux
+    file: 03-phases/06-novice-product-ux.md
+    status: included
+  - phase_id: 07-backend-provider-probe-and-secret-boundary
+    file: 03-phases/07-backend-provider-probe-and-secret-boundary.md
+    status: included
+  - phase_id: 08-durable-project-persistence
+    file: 03-phases/08-durable-project-persistence.md
+    status: included
+  - phase_id: 09-real-deterministic-simulation-runtime
+    file: 03-phases/09-real-deterministic-simulation-runtime.md
+    status: included
+  - phase_id: 10-provider-backed-runtime-and-reports
+    file: 03-phases/10-provider-backed-runtime-and-reports.md
+    status: included
+  - phase_id: 11-external-graph-memory-adapter
+    file: 03-phases/11-external-graph-memory-adapter.md
+    status: included
+  - phase_id: 12-ux-stress-accessibility-and-large-graph
+    file: 03-phases/12-ux-stress-accessibility-and-large-graph.md
+    status: included
+  - phase_id: 13-production-deployment-auth-privacy-observability
+    file: 03-phases/13-production-deployment-auth-privacy-observability.md
+    status: included

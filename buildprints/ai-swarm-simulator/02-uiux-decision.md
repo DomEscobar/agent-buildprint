@@ -15,11 +15,13 @@ This file is the style constitution for the artifact. Every later phase that tou
 
 This artifact is UI-bearing. Its interface must not become a generic SaaS dashboard or a raw technical demo. The UI is a premium simulation workbench: a place where the user feels they are controlling a living intelligence system with clarity, depth, and precision.
 
+Clarity outranks atmosphere. The default user is a first-time, non-technical user who does not know what graph memory, providers, runtimes, traces, readback, blockers, or local report history mean. The product may expose those technical terms in detail views, docs, logs, and advanced mode, but the primary UI must explain the workflow in everyday language.
+
 ## 1. Design thesis
 
 The product should feel like a dark glassmorphism intelligence lab: calm, precise, cinematic, and deeply interactive. It should communicate that complex graph/simulation activity is happening under the surface, but the user remains in control through clear panels, readable states, and elegant interaction feedback. The experience should feel closer to a polished creative command canvas than to an admin CRUD dashboard.
 
-The first impression must be: “this is a serious AI simulation workbench with a beautiful control surface.” It must not feel like a Tailwind starter, Bootstrap admin screen, academic notebook, plain file uploader, static graph screenshot, or generic purple-gradient AI demo. The interface should invite exploration while staying disciplined enough for operator work.
+The first impression must be: “I know what to do first, I know what the system understood, and I can see whether a real swarm can run.” It must not feel like a Tailwind starter, Bootstrap admin screen, academic notebook, plain file uploader, static graph screenshot, or generic purple-gradient AI demo. The interface should invite exploration while staying disciplined enough for operator work.
 
 ## 2. Chosen style direction
 
@@ -68,7 +70,7 @@ Forbidden color behavior: bright white full-page backgrounds, random rainbow gra
 
 Typography should feel technical, elegant, and controlled. Use a distinctive modern display face for major headings if available, paired with a highly readable sans-serif for body text. If exact fonts are not installed, choose fonts with a geometric/technical character rather than default browser typography.
 
-Headings should be confident and spacious: large title, tight line-height, slightly negative tracking, strong weight. Body copy should be readable with generous line-height. Metadata, provider details, run ids, node ids, and trace labels may use a mono or technical font, but avoid making the whole interface look like a terminal.
+Headings should be confident and spacious: large title, tight line-height, normal letter spacing, strong weight. Body copy should be readable with generous line-height. Metadata, provider details, run ids, node ids, and trace labels may use a mono or technical font, but avoid making the whole interface look like a terminal.
 
 Suggested scale:
 
@@ -92,11 +94,33 @@ The primary layout is a **command canvas workbench**:
 - Right inspector: selected node/edge, simulation trace, or report section details.
 - Bottom or secondary panel: run timeline, logs, blockers, and report actions.
 
-The first screen must expose the product loop. It should not open with a marketing hero or blank upload card alone. A user should immediately understand: input enters here, graph appears here, simulation runs here, report/inspector lives here.
+The first screen must expose the product loop. It should not open with a marketing hero or blank upload card alone. A user should immediately understand: add scenario here, see what the system understood here, check whether a real swarm can run here, read the report here, then continue from the result.
 
 Use generous spacing and controlled density: 8px micro spacing, 12/16px component spacing, 24/32px panel spacing, 48px major layout breathing room. Panels should align to a clear grid but may overlap subtly to create depth. The graph canvas can break the grid visually; controls should remain predictable.
 
-Responsive behavior: on smaller screens, stack panels into a command flow while preserving the graph as the primary surface. Do not collapse critical controls into hidden menus without clear affordances.
+Responsive behavior: on smaller screens, stack panels into the same beginner flow while preserving the graph as the primary surface once seed material exists. Do not collapse critical controls into hidden menus without clear affordances.
+
+## 5a. Novice workflow contract
+
+The default visible workflow is:
+
+1. **Add scenario** — seed material input, upload, or example scenario.
+2. **See what the system understood** — graph/canvas readback with a plain summary before technical node/edge details.
+3. **Check readiness** — one top-level status banner answering: can I run a real swarm yet, why not, and what should I do next?
+4. **Read the report** — structured findings with source, graph, and run references in human-readable language.
+5. **Continue** — refine the scenario, focus the graph, change run settings, or continue from a report section.
+
+Every stage needs one primary action. Secondary controls can exist, but they must not compete with the next obvious step. Technical names must be paired with or hidden behind plain names:
+
+- Graph memory -> What the swarm remembers
+- Provider missing -> AI service not connected
+- Runtime blocked -> Real simulation unavailable
+- Readback state -> Saved locally
+- Trace -> Step log
+- Local report -> Draft report
+- Blocked -> Needs setup
+
+Blocked copy must sound like user guidance, not implementation notes. Use "Real simulation unavailable: connect an AI service or run the local runtime setup" instead of "runtime/provider blocked". Advanced detail panels may include the exact adapter, provider, runtime, run id, trace id, and storage path.
 
 ## 6. Component language
 
@@ -106,7 +130,7 @@ Buttons: pill or rounded-rectangle controls with clear hierarchy. Primary button
 
 Inputs: dark translucent fields with visible border, strong focus ring, clear labels, helper text, and error text. API/provider key fields must signal secrecy and never echo secrets plainly.
 
-Status chips: compact pills with icon/dot, label, and semantic color. Examples: `Provider missing`, `Graph ready`, `Simulation blocked`, `Report stale`, `Live run`. Status must never rely on color alone.
+Status chips: compact pills with icon/dot, label, and semantic color. Examples: `AI service not connected`, `Scenario understood`, `Real simulation unavailable`, `Report needs refresh`, `Live run`. Status must never rely on color alone.
 
 Graph nodes/edges: nodes should feel luminous and selectable, with selected state using cyan glow and a clear inspector link. Edges should be readable but not overpowering. Hover should reveal relationship labels or concise metadata. Empty graph should show an inviting structured placeholder explaining the next action.
 
@@ -124,7 +148,7 @@ Interactive controls must provide feedback within the same surface: pressed stat
 
 ## 8. Empty, loading, error, and blocked states
 
-Empty states should teach the next action: “Add seed material to build the first graph,” not “No data.” Loading states should name the process: extracting entities, writing graph memory, testing provider, running simulation, generating report. Error states should say what failed and what the user can try next. Blocked states should be honest about missing provider keys, unavailable graph adapter, missing simulation runtime, failed persistence, or deployment limitations.
+Empty states should teach the next action: “Add a scenario to show what the swarm should inspect,” not “No data.” Loading states should name the user-visible process: reading scenario, saving what the swarm remembers, checking AI service, running simulation, generating report. Error states should say what failed and what the user can try next. Blocked states should be honest about missing provider keys, unavailable graph adapter, missing simulation runtime, failed persistence, or deployment limitations.
 
 Blocked state visual language: amber/orange accent, glass warning panel, concise reason, next action, and affected capability. Do not show green success while a provider/runtime is missing. Do not hide blockers in logs only.
 
@@ -153,3 +177,5 @@ If the UI starts drifting into any of these, stop feature work and repair the st
 Every later phase that touches UI must obey this style schema. New components must use these tokens, typography rules, layout rhythm, component language, motion principles, and state treatments. If a phase adds backend behavior that affects the user, it must also add or update the visible state in this design language.
 
 A phase cannot claim UI progress if it adds functionality behind a generic or broken interface. The product must become more visually coherent and more operationally honest with each phase.
+
+Browser proof must include checks for beginner copy and actionable blocked-state guidance, not only node counts or build success.
