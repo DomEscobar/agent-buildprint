@@ -40,13 +40,39 @@ Missing:
 - Twitter/Reddit-style activity can remain hidden in logs instead of becoming the primary product surface
 - reports can be useful internally but not shaped into shareable posts, threads, or artifacts
 - real X/Twitter posting is not separated cleanly from simulated feed export
+- the feed can technically be derived from a seed while still reading like one repeated sentence template
+- graph nodes can exist without explaining actor motives, risks, influence paths, or the public fault line
+- story/export can summarize the run without giving a useful publishing brief
 
 Enhance with:
 - a Feed view that renders simulated posts, replies, reactions, reposts, comments, and timeline events from the active run
-- agent cards with stance, memory/context, influence, recent actions, and interview affordance
+- agent cards with stance, motive, risk, channel, memory/context, influence, recent actions, and interview affordance
+- a Map view that shows named actors, relationship labels, influence weights, active tensions, dominant fault line, and publishing angle
+- differentiated post types instead of one repeated content template
+- run insights that identify dominant fault line, highest-leverage actor, and best publishing move
 - a Story view that turns simulation output into a postable thread, short report, and image/text export
+- a Story publishing brief with lead, proof to include, provenance, limitations, and do-not-claim boundaries
 - explicit labels: simulated feed, draft thread, export/share, real posting unavailable unless configured
 - proof that feed/story output is derived from the active run, not static canned content
+- proof that a critical user can explain what changed in the world, which actor mattered, why the feed moved, and what to publish next
+
+## Gap 02b — Source-fidelity loss during Mapper OS remapping
+
+Missing:
+- the friendlier Start/Map/Run/Feed/Story/Projects wrapper can accidentally flatten the original Microfish pipeline into a local social-post generator
+- uploaded seed documents and explicit prediction requirements can become example scenarios only, losing file ingestion and requirement grounding
+- ontology generation and Zep-style GraphRAG can be reduced to a decorative graph
+- entity-to-agent profile/config generation can be reduced to actor cards with no source uuid, entity type, persona, stance, activity, influence, or platform settings
+- OASIS action-log semantics can be reduced to a feed with no round, platform, action type, args, result, or success trail
+- ReportAgent provenance and deep interaction can be reduced to a postable story with no graph/feed/action evidence
+
+Enhance with:
+- a source-fidelity contract in `blueprint.yaml` that preserves upload -> ontology -> graph -> entity-agent config -> simulation action logs -> report -> interaction
+- graph proof that shows which source facts became entity types, relation types, nodes, edges, facts, and relationship chains
+- environment setup proof that shows which graph entities became agents and why
+- action-log proof using platform, round, timestamp, agent identity, action type, action args, result, and success
+- report proof that marks which claims come from graph facts, feed/action logs, and provider/tool calls
+- blocked-state proof for missing LLM, Zep, OASIS, ReportAgent, public posting, auth, privacy, and deployment
 
 ## Gap 03 — Server boundary and secrets
 

@@ -39,7 +39,7 @@ HANDOVER.md
 - `00-questions.md` asks only implementation-changing hard stops, assumptions, and deferrable decisions.
 - `01-project-setup.md` creates the project foundation before phase work: stack, docs, local `AGENTS.md`, architecture/product loop/proof strategy, env contract, and setup receipt.
 - `02-uiux-decision.md` is the style constitution. It opens with “UX is a must,” explains understandability, includes a small checklist, then writes a detailed design schema: thesis, style direction, color tokens, typography, layout, components, motion, state behavior, anti-generic rules, and phase obligation.
-- `blueprint.yaml` is the machine route and product-contract mirror: product name, central artifact, golden path, runtime/posture constraints, required files, forbidden shapes, phase index, and phase flow.
+- `blueprint.yaml` is the machine route and product-contract mirror: product name, central artifact, golden path, central output contract, runtime/posture constraints, required files, forbidden shapes, phase index, and phase flow.
 - `03-phases/phase-index.yaml` routes only.
 - `03-phases/phase-flow.md` defines the active-phase loop and requires `02-uiux-decision.md` before every phase for UI-bearing artifacts.
 - Every phase file is a comprehensive product-engineering assignment with a detailed `Building objective`, required context, proof, handoff, and standing design/style responsibility.
@@ -47,7 +47,7 @@ HANDOVER.md
 
 ## Why this split matters
 
-The downstream coding agent needs a simple start file and a strong packet. If `BUILDPRINT.md` contains product-specific source baggage, the first thing the builder reads becomes noisy and stale. If `02-uiux-decision.md` is weak, later phases build generic slop even when the backend works. If phases do not reload the UI/style constitution, design responsibility disappears during “backend” work and resurfaces too late.
+The downstream coding agent needs a simple start file and a strong packet. If `BUILDPRINT.md` contains product-specific source baggage, the first thing the builder reads becomes noisy and stale. If `02-uiux-decision.md` is weak, later phases build generic slop even when the backend works. If the central output contract is missing, the app can technically process input while producing bland or interchangeable results. If phases do not reload the UI/style constitution, design responsibility disappears during “backend” work and resurfaces too late.
 
 ## Forbidden selected-output shapes
 

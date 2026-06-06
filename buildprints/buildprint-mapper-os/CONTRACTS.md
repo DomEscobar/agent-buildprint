@@ -38,6 +38,21 @@ Product identity, artifact shape, central interface, golden path, runtime postur
 
 `blueprint.yaml` is the machine-readable mirror. It routes and declares concise product contract facts. It must not become a full implementation manual.
 
+## Central output contract
+
+Every selected packet must identify the artifact's central output and the minimum quality bar for that output. This belongs in `blueprint.yaml` as concise machine-readable routing and in Markdown as buildable guidance.
+
+The mapper must extract, from source evidence and product behavior:
+
+- the central output the user/operator actually values;
+- the output primitives or units that compose it;
+- the quality signals that make it useful, credible, publishable, actionable, correct, or otherwise domain-appropriate;
+- the generic-output failure modes that would look plausible but fail the product;
+- reviewer acceptance questions that a skeptical human can use after one real example path;
+- claim gates that must remain blocked until the output quality is proven.
+
+Output existence is not enough. Input-derived output is not enough. A selected packet must reject technically generated but domain-generic results.
+
 ## UX/style contract
 
 `02-uiux-decision.md` is mandatory for every UI-bearing artifact and must be detailed enough to guide later implementation without guessing. It must:
@@ -80,6 +95,7 @@ The `Building objective` must be comprehensive and product-specific. It should r
 - missing required phase headings;
 - phase index references to missing files;
 - placeholder/fake-success leakage outside Mapper templates.
+- missing central output quality contracts in selected packets.
 
 ## Completion contract
 

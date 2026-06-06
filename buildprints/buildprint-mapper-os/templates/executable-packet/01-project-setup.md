@@ -25,6 +25,7 @@ Create these in the implementation project unless the project already has equiva
 - `AGENTS.md` — local implementation constitution, mandatory read order, ownership map, no-fake rules, and verification expectations.
 - `docs/architecture.md` — selected stack, runtime topology, adapters, persistence, deployment posture, and state ownership.
 - `docs/product-loop.md` — golden path and primary user/operator journey.
+- `docs/output-quality.md` — central output, output primitives, quality signals, unacceptable generic substitutes, reviewer acceptance questions, and claim gates.
 - `docs/proof-strategy.md` — commands/tests/browser/API proof, screenshot criteria, provider blocker semantics, and what cannot upgrade claims.
 - `docs/ui-identity.md` or `UI-IDENTITY.md` — required for UI-bearing products; visual identity, interaction model, motion, accessibility, empty/loading/error/blocked states.
 - `.env.example` — exact env names with blank secrets and no mock/test mode enabled by default.
@@ -44,6 +45,7 @@ Create these in the implementation project unless the project already has equiva
 - setup artifacts exist and are specific to this product;
 - package/build/test commands are named, even if some are currently blocked;
 - `.env.example` has blank secrets only;
+- `docs/output-quality.md` or an equivalent artifact-specific output contract exists;
 - UI-bearing artifacts have `UI-IDENTITY.md` or equivalent;
 - `.buildprint/setup-receipt.md` records assumptions and blockers;
 - next active phase can start without guessing the architecture.

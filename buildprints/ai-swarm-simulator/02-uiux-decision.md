@@ -168,6 +168,43 @@ Required view responsibilities:
 
 Technical details belong in expandable panels inside the relevant view. A user should never need to understand adapter names, run ids, trace ids, storage paths, or provider base URLs to complete the example path.
 
+## 5d. Simulation output quality rules
+
+The product must prove more than data plumbing. A generated run is not good enough if it only shows that an active seed can be copied into posts, reports, or cards. The simulated internet must feel meaningfully differentiated, inspectable, and useful.
+
+The Map view must make the social world diagnostic, not merely decorative. A graph with unlabeled people icons and anonymous edges is insufficient. The user must be able to see or inspect:
+
+- named actors
+- actor role
+- motive
+- risk
+- stance
+- preferred channel/surface
+- influence score or equivalent weight
+- memory/context from the seed or graph
+- relationship labels between actors
+- active tensions flowing through relationships
+- the dominant fault line: what the public is really arguing about
+- the likely publishing angle that follows from that world
+
+The Feed view must avoid repeated sentence templates. It should render differentiated post types and platform-native behavior. A useful run should include at least:
+
+- multiple post styles such as field signal, source check, institutional response, expert translation, organizing turn, satire, critique, or counterframe, depending on scenario
+- Twitter-style posts with author, handle, minute/timestamp, role, stance, evidence/source, ask/next move, reactions, replies, and reposts
+- Reddit-style discussion with nested comments, score, disagreement over proof thresholds, and useful synthesis
+- timeline events showing how agents changed emphasis, stance, or next action after seeing other agents
+- run insights that summarize the dominant fault line, highest-leverage actor, and best publishing move
+
+The Story view must feel like a usable publishing artifact, not a report-shaped afterthought. It should include:
+
+- a postable thread or story derived from the active run
+- a publishing brief with lead, proof to include, and recommended framing
+- provenance that links the artifact to source seed, run id, graph/world state, and feed events
+- limitations and explicit do-not-claim boundaries
+- clear export/share behavior while real posting remains blocked unless configured and proven
+
+Acceptance test: after one example run, a critical reviewer should be able to say what changed in the social world, which actor mattered most, why the feed escalated or cooled, and what should be published next. If the output merely sounds polished but could fit any scenario, the phase is incomplete.
+
 ## 6. Component language
 
 Panels/cards: frosted glass, 16-24px radius, thin translucent border, soft shadow, backdrop blur, subtle inner highlight. Dense data panels can be slightly more solid for readability.

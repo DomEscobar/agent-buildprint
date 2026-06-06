@@ -6,7 +6,7 @@ Read `.buildprint/next-agent.md`, local `AGENTS.md`, `03-phases/phase-flow.md`, 
 
 ## Building objective
 
-Build the story/report generation and continuation loop. A story/report must be generated from the current graph, social feed, and simulation state, not from a canned markdown fixture. It should include a postable thread/story draft, sections, findings, graph/feed/simulation references, citations or source links where available, blockers, and next suggested actions. The user should be able to inspect story/report sections, jump back to related graph nodes, feed entries, or simulation traces, and continue the interaction by refining seed material, graph focus, simulation settings, feed focus, or story/report prompts. If provider-backed summarization is unavailable, deterministic/local story/report generation may exist but must be labeled honestly and must not claim live LLM reasoning. Persist story/report history locally so a refresh does not erase the user’s path. The UI should avoid raw JSON dumps; use polished panels, status, and actionable controls. This phase closes the core product promise: graph-backed social simulation becomes an inspectable feed plus story/report users can export and continue from.
+Build the story/report generation and continuation loop as a grounded prediction artifact, not only a postable thread. A story/report must be generated from the current graph, source-derived agents, social feed, action logs, and simulation state, not from a canned markdown fixture. It should include a report outline, sections, findings, graph/feed/simulation references, action-log evidence, citations or source links where available, blockers, uncertainty, do-not-claim boundaries, and next suggested actions. The user should be able to inspect story/report sections, jump back to related graph nodes, source facts, agent profiles, feed entries, action-log events, or simulation traces, and continue the interaction by refining seed material, graph focus, simulation settings, feed focus, report questions, or selected-agent questions. If provider-backed ReportAgent/ReACT behavior is unavailable, deterministic/local story/report generation may exist but must be labeled honestly and must not claim live LLM reasoning or tool-backed analysis. Persist story/report history locally so a refresh does not erase the user’s path. The UI should avoid raw JSON dumps; use polished panels, status, provenance chips, and actionable controls. This phase closes the core product promise: graph-backed social simulation becomes an inspectable feed plus grounded report/story users can export, critique, and continue from.
 
 ## DO NOT
 
@@ -14,7 +14,7 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 
 ## Minimum proof before moving on
 
-Run a story/report generation smoke path from real current graph/feed/simulation state. Verify story/report links or references connect back to graph, feed, and simulation artifacts. Browser-inspect empty/error/blocked/provider-missing states and ensure continuation and export controls work or block honestly.
+Run a story/report generation smoke path from real current graph/feed/simulation state and action logs. Verify story/report links or references connect back to graph, agents, feed, action logs, and simulation artifacts. Verify at least one follow-up interaction can use report, graph, simulation, or named-agent context. Browser-inspect empty/error/blocked/provider-missing states and ensure continuation and export controls work or block honestly.
 
 ## Handoff note
 

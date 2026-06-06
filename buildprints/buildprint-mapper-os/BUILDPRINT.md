@@ -23,7 +23,7 @@ The obsolete v2 abstraction is gone. It was too compressed and runner-shaped. Ma
 2. Safe census — hints only, never product authority.
 3. Behavior discovery — read behavior-relevant files and separate observed facts from guesses.
 4. Scope selection — stop for a human choice when multiple products/scopes are plausible.
-5. Source distillation — define artifact identity, golden path, central artifact/interface/boundary, runtime posture, state/readback, provider/security/destructive boundaries, and UI/operator experience obligations.
+5. Source distillation — define artifact identity, golden path, central artifact/interface/boundary, central output quality contract, runtime posture, state/readback, provider/security/destructive boundaries, and UI/operator experience obligations.
 6. Responsibility placement — put the generic AI-builder briefing in selected `BUILDPRINT.md`; put product contract facts in `blueprint.yaml`, setup, UI/style decision, and phase objectives.
 7. Packet emission — write the v3 phase-driven packet: `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, `02-uiux-decision.md`, `blueprint.yaml`, `03-phases/`, and `HANDOVER.md`.
 8. Qualification — keep claims conservative until a downstream implementation is built and checked.

@@ -8,6 +8,246 @@ Latest product realignment: after inspecting the original `666ghj/MiroFish` repo
 
 Latest update: after proof showed the app still defaulting to an overwhelming all-panels-at-once cockpit, the Buildprint now requires example-first onboarding and focused task views.
 
+2026-06-06 output-quality update: after reviewing the fresh MiroFish rerun screenshots, the Buildprint now rejects a subtler failure mode: a polished multi-view shell whose simulated feed still reads like a repeated template. The packet now requires diagnostic social-world maps, differentiated social posts, run insights, and a publishing brief that make the simulation useful rather than merely present.
+
+2026-06-06 Mapper OS remap comparison update: after patching Mapper OS with a central output contract and remapping the original Microfish source, the Buildprint now also rejects source-fidelity loss. The friendly Start/Map/Run/Feed/Story/Projects wrapper remains useful, but future builds must preserve the original pipeline: seed upload and prediction requirement -> ontology/GraphRAG -> entity-to-agent setup -> OASIS-style dual-platform action logs -> ReportAgent-style grounded report -> deep interaction.
+
+## 2026-06-06 Comprehensive Blueprint Patch
+
+### Trigger
+
+A verified rerun at `/tmp/agb-mirofish-social-simulation-rerun` proved the current Buildprint could generate the right views and honest local/provider boundaries, but the first version still had a weak core artifact:
+
+- the feed posts repeated the same sentence shape with different agent names
+- the map proved a graph existed but did not explain actor motives, risks, or influence paths
+- the story output summarized the run but did not feel like a strong publishing artifact
+- the UI repeatedly emphasized blocked provider/posting states, sometimes more than the value of local mode
+- mobile feed layout worked technically but became a long wall of similar text
+
+The rerun was patched locally to validate the fix direction before updating this source Buildprint. The durable Buildprint now captures those lessons so future generated apps inherit the stronger product standard.
+
+### Product Standard Added
+
+The Buildprint now requires generated output to answer four questions after one example run:
+
+1. What is the simulated public really arguing about?
+2. Which actor has the most leverage, and why?
+3. Which posts or comments changed other agents' emphasis or stance?
+4. What should the user publish next, with what proof and limitations?
+
+If a future app can only show that seed text flowed into a graph, feed, and report, it is not complete. The output must be specific enough that a critical reviewer can tell the difference between a breaking-news reaction, startup launch, and fictional-world controversy without reading the scenario title.
+
+### Files Patched In This Update
+
+#### `blueprint.yaml`
+
+Added machine-readable `required_simulation_quality`, then extended it with a `source_fidelity_contract` after the Mapper OS remap comparison.
+
+The contract now requires:
+
+- uploaded or selected seed material plus explicit prediction requirement
+- source-derived ontology, graph facts, entity-to-agent mapping, simulation config, action logs, report provenance, and interaction context
+- social-world maps with named actors, roles, motives, risks, stances, channels, influence, memory/context, relationship labels, edge weights, active tensions, a public fault line, and a publishing angle
+- feed output with differentiated post types, author/handle/role/minute/stance/evidence/ask/reaction/reply/repost fields, Reddit-style nested discussion, timeline events, and run insights
+- story output with a postable thread, publishing brief, provenance, limitations, do-not-claim boundaries, and explicit separation from real posting
+
+Added production gates:
+
+- `social_output_quality`
+- `source_graph_quality`
+- `entity_agent_mapping_quality`
+- `action_log_quality`
+- `report_provenance_quality`
+
+These gates are required before claiming the app simulates an internet reaction usefully or preserves the original Microfish source mechanics.
+
+#### `README.md`
+
+Added the explicit output-quality bar:
+
+- future implementations must show actor motives, risks, influence paths, differentiated posts, Reddit-style disagreement, timeline shifts, run insights, and a concrete publishing brief
+- a polished shell with repetitive template posts is not enough
+
+#### `02-uiux-decision.md`
+
+Added `5d. Simulation output quality rules`.
+
+This section defines the human-readable quality standard for:
+
+- Map: diagnostic social world, not decorative graph
+- Feed: differentiated platform-native behavior, not repeated post templates
+- Story: usable publishing artifact, not report-shaped afterthought
+
+Acceptance test added:
+
+```txt
+After one example run, a critical reviewer should be able to say what changed in the social world, which actor mattered most, why the feed escalated or cooled, and what should be published next. If the output merely sounds polished but could fit any scenario, the phase is incomplete.
+```
+
+#### `enhancement-gaps.md`
+
+Expanded `Gap 02a — Social feed and postable simulation output`.
+
+New missing gaps recorded:
+
+- technically derived feed output can still read like one repeated sentence template
+- graph nodes can exist without explaining motives, risks, influence paths, or the public fault line
+- story/export can summarize without giving a useful publishing brief
+
+New enhancement requirements:
+
+- Map view with relationship labels, influence weights, active tensions, dominant fault line, and publishing angle
+- differentiated post types
+- run insights for dominant fault line, highest-leverage actor, and publishing move
+- Story publishing brief with lead, proof to include, provenance, limitations, and do-not-claim boundaries
+- proof that a critical user can explain what changed, which actor mattered, why the feed moved, and what to publish next
+
+Added `Gap 02b — Source-fidelity loss during Mapper OS remapping`.
+
+This records the precise gap found by comparing the patched buildprint with a fresh Mapper OS remap:
+
+- the novice wrapper can flatten Microfish into a local social-post generator
+- uploaded seed documents and explicit prediction requirements can disappear into example scenarios
+- ontology and GraphRAG can become decorative graph output
+- entity-to-agent profile/config generation can become actor cards
+- OASIS action-log semantics can become a generic feed
+- ReportAgent provenance and deep interaction can become a story/export surface only
+
+New proof requirements require source-fact-to-graph, graph-entity-to-agent, action-log, report-provenance, and blocked-capability evidence.
+
+#### `remap-comparison.md`
+
+Added a comparison note explaining what the current buildprint already does well, what the fresh Mapper OS remap recovered from source, which gap was proven, what patch was applied, and which acceptance questions future reruns must answer.
+
+#### `03-phases/06-novice-product-ux.md`
+
+Strengthened the focused-view phase.
+
+Map now must show:
+
+- named actors
+- motives
+- risks
+- stances
+- channels
+- influence paths
+- dominant public fault line
+- likely publishing angle
+
+Feed now must show:
+
+- differentiated post types
+- run insights
+- timeline events from the active run
+- platform-native behavior rather than one repeated generated sentence shape
+
+Story now must show:
+
+- publishing brief
+- sources/provenance
+- limitations
+- do-not-claim boundaries
+
+Proof now includes:
+
+- actor labels do not clip
+- Feed content is not template-repetitive
+- Story includes a publishing brief
+- local simulated output is clearly separated from real public posting
+
+#### `03-phases/09-real-deterministic-simulation-runtime.md`
+
+Strengthened the deterministic runtime phase so runtime quality drives UI quality.
+
+Local runs must model agents with:
+
+- role
+- motive
+- risk
+- stance
+- preferred channel/surface
+- influence
+- memory/context
+
+Runtime edges must include:
+
+- labels
+- weights
+- tensions
+
+Feed output must include differentiated post types and fields for author, handle, role, minute/timestamp, stance, evidence/source, ask/next move, reactions, replies, and reposts.
+
+Story/report input must include:
+
+- dominant fault line
+- highest-leverage actor and why
+- proof/source gap most likely to calm or escalate the feed
+- best publishing move
+- explicit limitations and do-not-claim boundaries
+
+Tests must prove different scenarios produce meaningfully different actors, tensions, post types, asks, run insights, and story outputs.
+
+#### `03-phases/10-provider-backed-runtime-and-reports.md`
+
+Strengthened provider-backed behavior so provider generation cannot erase run provenance.
+
+Provider output must enrich or critique the inspected social world:
+
+- actors
+- motives
+- risks
+- channels
+- influence paths
+- feed events
+- Reddit-style disagreement
+- timeline shifts
+- dominant fault line
+- publishing angle
+
+If provider output changes a recommendation, the UI must show what changed and why. Unsupported provider claims must be labeled uncertain or omitted.
+
+#### `03-phases/12-ux-stress-accessibility-and-large-graph.md`
+
+Expanded UX stress beyond layout and graph scale.
+
+The stress pass must inspect:
+
+- graph node labels and relationship labels at desktop/tablet/mobile widths
+- long actor names, tensions, seeds, and publishing angles
+- feed readability with at least five top-level posts, nested discussion, insights, and timeline events
+- mobile feed fatigue
+- story usefulness as a publishing artifact
+- whether blocked-state warnings crowd out local-mode value
+
+Added required reviewer-style proof note:
+
+- what the app now makes clear
+- what still feels generic
+- what a user can publish next
+- which claims remain unproven
+
+### Local Proof That Informed This Patch
+
+The rerun app was patched before the Buildprint source update to validate the critique:
+
+- agent model gained motives, risks, channels, stances, influence edges, and memory/context
+- Map gained highlighted influence paths, fault line, and publishing angle
+- Feed gained run insights and differentiated post types
+- Story gained a publishing brief and do-not-claim provenance
+- mobile/feed layout was checked after screenshots
+- graph label clipping was spotted and repaired
+
+Verification on the rerun passed:
+
+```bash
+npm run build
+npm run lint
+npm run screenshots
+npm test
+```
+
+This source Buildprint patch does not claim provider-backed AI, real X/Twitter or Reddit posting, external Graphiti/Zep memory, production auth/privacy/observability, or full manual accessibility proof. Those remain later-phase claims requiring explicit configuration and evidence.
+
 ## Summary
 
 The original Buildprint had five phases:

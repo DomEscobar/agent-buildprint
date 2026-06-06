@@ -8,6 +8,7 @@ product:
   inspiration: MiroFish / Microfish 666 social simulation engine
   central_artifact: graph-backed social simulation studio with postable outcome artifacts
   golden_path: choose seed scenario -> map the social world -> run local/provider social simulation -> inspect simulated posts/feed -> generate story/report -> export postable thread/artifact -> save/continue project
+  source_fidelity_note: The Mapper OS remap comparison shows the stronger Microfish source contract is seed upload plus prediction requirement -> ontology/GraphRAG -> entity-to-agent environment setup -> OASIS-style dual-platform action logs -> ReportAgent-style grounded report -> deep interaction. Future implementations may keep the novice Start/Map/Run/Feed/Story/Projects wrapper, but must not erase these source mechanics.
   primary_audience_default: non-technical first-time user
   novice_workflow: start -> map -> run -> feed -> story -> projects
   required_views:
@@ -26,6 +27,79 @@ product:
     - Reddit-style discussion thread
     - timeline of agent actions
     - postable thread/story export
+  central_output_contract:
+    central_output: graph-backed simulated social reaction plus postable story/report artifact, grounded in uploaded or selected seed material, ontology/graph extraction, entity-to-agent setup, platform action logs, and report/interaction provenance
+    output_primitives:
+      - uploaded or selected seed material plus explicit prediction requirement
+      - source-derived ontology entity types, relationship types, graph nodes, graph edges, facts, and relationship chains
+      - entity-to-agent profile/config mapping with persona, stance, activity, influence, and platform settings
+      - social world map with named actors and influence paths
+      - simulated Twitter-style posts with replies, reactions, and reposts
+      - Reddit-style discussion thread with nested disagreement
+      - timeline of agent actions and stance shifts with platform, round, timestamp, agent identity, action type, arguments, result, and success
+      - postable thread/story, grounded draft report, and follow-up interaction context
+    quality_signals:
+      - ontology, graph, and agent configuration visibly reflect source material and prediction requirement
+      - actor motives, risks, stances, channels, influence, and memory/context are inspectable
+      - platform action vocabulary preserves the Microfish/OASIS source signal rather than generic chat messages
+      - feed uses differentiated post types rather than repeated sentence templates
+      - story/report derives from active run state, graph context, and feed events
+      - publishing brief identifies lead, proof to include, provenance, limitations, uncertainty, and do-not-claim boundaries
+      - reviewer can explain what source facts became graph facts, which entities became agents, what actions occurred, what changed, which actor mattered, why the feed moved, what the report claims, and what to publish or ask next
+    unacceptable_generic_substitutes:
+      - upload-to-summary app with no ontology, graph, entity-to-agent mapping, action log, or grounded report
+      - graph nodes without motives, risks, relationship labels, or public fault line
+      - personas not tied to source entities
+      - seed text copied into repetitive posts
+      - report summary that could fit any scenario and does not cite graph/feed/action evidence
+      - real posting or provider success implied without configured proof
+    reviewer_acceptance_questions:
+      - What is the simulated public really arguing about?
+      - Which actor has the most leverage, and why?
+      - Which seed facts became graph facts, and which graph entities became simulation agents?
+      - Which posts or comments changed other agents' emphasis or stance?
+      - Which action-log events and report claims are backed by graph/feed evidence?
+      - What should the user publish or ask next, with what proof, uncertainty, and limitations?
+    claim_gates:
+      - social_output_quality required before claiming useful simulated internet reaction
+      - source_graph_quality required before claiming source-grounded ontology or GraphRAG output
+      - entity_agent_mapping_quality required before claiming high-fidelity parallel world agents
+      - action_log_quality required before claiming useful OASIS-style dual-platform simulation
+      - report_provenance_quality required before claiming prediction report usefulness
+      - provider_probe required before live AI service claims
+      - external_graph_memory required before Graphiti/external memory claims
+      - auth_privacy_observability_deployment required before production claims
+  source_fidelity_contract:
+    source_steps_to_preserve:
+      - upload seed documents and prediction requirement
+      - generate ontology entity and edge types from source material
+      - build/read graph memory with nodes, edges, facts, and relationship chains
+      - filter graph entities and generate OASIS-compatible profiles
+      - generate simulation configuration with time, events, platform weights, narrative direction, and per-agent activity settings
+      - run or honestly stand in for Info Plaza and Topic Community social-platform simulations
+      - parse action logs by round, timestamp, platform, agent, action type, arguments, result, and success
+      - generate a report with outline, sections, provenance/tool-call trail, uncertainty, and saved report state
+      - support follow-up interaction with report context or selected agents
+    not_optional:
+      - do not reduce Microfish to a generic local swarm visualizer
+      - do not reduce the report to a postable marketing thread unless it remains graph/feed/action grounded
+      - do not claim real Zep, OASIS, provider-backed report, or public posting without proof
+  required_simulation_quality:
+    social_world_map:
+      - named actors with role, motive, risk, stance, channel, influence, and memory/context
+      - visible influence relationships with relationship labels, weights, and active tensions
+      - plain-language fault line explaining what the simulated public is actually arguing about
+      - publishing angle derived from the seed, actors, and tensions
+    feed_output:
+      - distinct platform-native post types, not one repeated sentence template
+      - posts with author, handle, role, timestamp/minute, stance, evidence/source, ask/next move, reactions, replies, and reposts
+      - Reddit-style discussion with nested comments and proof-threshold disagreement
+      - timeline events that explain how agents changed emphasis or stance over time
+      - run insights that identify dominant fault line, highest-leverage actor, and best publishing move
+    story_output:
+      - postable thread derived from the active run rather than static canned copy
+      - publishing brief with lead, proof to include, provenance, limitations, and do-not-claim boundaries
+      - export/share draft labeling distinct from real public posting
 
 required_files:
   - BUILDPRINT.md
@@ -68,7 +142,12 @@ production_quality_gates:
   server_secret_boundary: required before provider-backed production claims
   provider_probe: required before live AI service claims
   real_runtime: required before real social simulation claims
+  source_graph_quality: required before claiming uploaded seed material became useful graph memory
+  entity_agent_mapping_quality: required before claiming high-fidelity source-derived agents
+  action_log_quality: required before claiming useful OASIS-style platform simulation
+  report_provenance_quality: required before claiming useful prediction reports
   social_feed_truthfulness: required before claiming simulated social behavior
+  social_output_quality: required before claiming the app simulates an internet reaction usefully
   post_export: required before claiming content/publishing value
   durable_persistence: required before durable project claims
   external_graph_memory: required before Graphiti/external memory claims

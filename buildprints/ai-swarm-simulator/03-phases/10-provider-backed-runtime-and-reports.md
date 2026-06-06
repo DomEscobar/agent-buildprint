@@ -10,6 +10,10 @@ Add optional provider-backed simulation, social-feed enrichment, and story/repor
 
 The provider-backed path must improve the real product loop rather than bypass it. Provider output should be grounded in the graph snapshot, run configuration, simulated feed, and source material; stored with redacted metadata; and recoverable after reload. The story/report should show where provider reasoning was used, where deterministic evidence was used, and where the system is uncertain. Exportable thread/story output must remain editable and clearly labeled as draft/generated content.
 
+Provider-backed generation must not flatten the product back into generic AI copy. Use the provider to enrich or critique the same inspected social world: actors, motives, risks, channels, influence paths, feed events, Reddit-style disagreement, timeline shifts, dominant fault line, and publishing angle. Provider reports should point back to concrete run artifacts instead of replacing them with unsupported prose.
+
+If provider output changes the story, the UI must show what changed and why: which actor, edge, post, proof gap, or timeline event caused the new recommendation. If the provider cannot ground a claim in run state, label it as uncertain or omit it.
+
 ## DO NOT
 
 Do not use placeholders, functionless buttons, mocked/sample data counted as real product behavior, fake provider success, canned simulation success, decorative graph output, raw JSON as the main UI, or vague “done” claims. Do not call a provider from the browser. Do not hide costs, rate limits, failures, retries, or partial output. Do not overwrite deterministic runtime behavior. Do not claim provider-backed quality without a real successful provider call or clearly recorded blocker. Do not post to real X/Twitter or any public social platform without explicit user-controlled configuration, confirmation, and proof.
@@ -17,6 +21,8 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 ## Minimum proof before moving on
 
 Run build/test/smoke checks. If credentials are available, execute a redacted provider-backed run, feed enrichment, and story/report generation path. If credentials are unavailable, prove the UI blocks with actionable setup guidance and deterministic mode still works. Verify cost/token or unavailable-cost state, provenance, limitations, export/share draft labeling, and error handling.
+
+Verify provider-backed output does not erase local provenance, does not invent real public sentiment, and does not claim real X/Twitter or Reddit posting. Compare the provider-backed story against deterministic run artifacts and record the exact source references shown in the UI.
 
 ## Handoff note
 

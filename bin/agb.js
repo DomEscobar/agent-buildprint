@@ -484,6 +484,15 @@ function packetCheckResults(dir) {
   ok('blueprint declares required v3 packet files', need.every((file) => blueprint.includes(file)))
   ok('blueprint forbids obsolete selected shapes', /forbidden_shapes:/i.test(blueprint) && /slices\//i.test(blueprint) && /gates\//i.test(blueprint) && /generated\/agent-prompt\.md/i.test(blueprint))
   ok('blueprint declares canonical deployment posture', /deployment_posture:[\s\S]*current:\s*trusted_local/i.test(blueprint) && !/trusted-local|private authenticated|public webapp/i.test(blueprint))
+  ok('blueprint declares central output quality contract',
+    /central_output_contract:/i.test(blueprint) &&
+    /central_output:/i.test(blueprint) &&
+    /output_primitives:/i.test(blueprint) &&
+    /quality_signals:/i.test(blueprint) &&
+    /unacceptable_generic_substitutes:/i.test(blueprint) &&
+    /reviewer_acceptance_questions:/i.test(blueprint) &&
+    /claim_gates:/i.test(blueprint)
+  )
 
   ok('BUILDPRINT owns v3 read order', /00-questions\.md[\s\S]*01-project-setup\.md[\s\S]*02-uiux-decision\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i.test(buildprint))
   ok('BUILDPRINT is an AI builder briefing', /responsible builder/i.test(buildprint) && /senior product engineer/i.test(buildprint))

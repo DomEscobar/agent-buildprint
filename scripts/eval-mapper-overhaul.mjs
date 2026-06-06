@@ -115,6 +115,10 @@ const missingQuestions = copyTemplate('missing-questions')
 fs.rmSync(path.join(missingQuestions, '00-questions.md'))
 expectFailure('mapper eval requires 00-questions', ['packet', 'check', missingQuestions], ['✗ packet file exists: 00-questions.md'])
 
+const missingCentralOutput = copyTemplate('missing-central-output-contract')
+edit(missingCentralOutput, 'blueprint.yaml', (s) => s.replace(/\ncentral_output_contract:\n[\s\S]*?\nstate_and_handoff:/, '\nstate_and_handoff:'))
+expectFailure('mapper eval requires central output quality contract', ['packet', 'check', missingCentralOutput], ['✗ blueprint declares central output quality contract'])
+
 const weakObjective = copyTemplate('weak-objective')
 edit(weakObjective, '03-phases/02-core-product-loop.md', (s) => s.replace(/## Building objective[\s\S]*?## DO NOT/, '## Building objective\n\nBuild stuff.\n\n## DO NOT'))
 expectFailure('mapper eval rejects tiny phase objectives', ['packet', 'check', weakObjective], ['✗ 03-phases/02-core-product-loop.md has substantial building objective'])

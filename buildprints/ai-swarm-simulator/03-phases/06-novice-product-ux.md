@@ -13,10 +13,10 @@ Replace or pair technical labels with plain product language. Keep technical det
 Build the required view model:
 
 - **Start**: example seed picker, custom scenario input, current readiness summary, and one obvious next action.
-- **Map**: graph/canvas with the plain summary "the social world we built" before technical node/edge details.
+- **Map**: graph/canvas with the plain summary "the social world we built" before technical node/edge details. The map must show named actors, motives, risks, stances, channels, influence paths, a dominant public fault line, and a likely publishing angle.
 - **Run**: readiness, local dry-run controls, real-social-simulation blocker, agent roles, and step log.
-- **Feed**: simulated Twitter/Reddit-style posts, replies, comments, reactions, reposts, agent stances, and timeline events from the current run.
-- **Story**: postable thread/story, draft report, continue-from-section controls, sources/provenance, export/share controls, and limitations.
+- **Feed**: simulated Twitter/Reddit-style posts, replies, comments, reactions, reposts, agent stances, run insights, and timeline events from the current run. The feed must use differentiated post types and platform-native behavior instead of one repeated generated sentence shape.
+- **Story**: postable thread/story, publishing brief, draft report, continue-from-section controls, sources/provenance, export/share controls, limitations, and do-not-claim boundaries.
 - **Projects**: saved local work, resume/export/delete, storage state, and advanced details.
 
 Add at least three built-in example scenarios:
@@ -27,6 +27,16 @@ Add at least three built-in example scenarios:
 
 The example path must be usable without typing anything: choose an example, inspect the Map view, run the labeled local social dry run if real AI is unavailable, inspect the simulated Feed, generate/read/export a draft Story, then see saved project state. Sample/example behavior must be labeled honestly and must not be counted as live provider proof, external graph memory proof, or real X/Twitter posting proof.
 
+One example run must produce output specific enough that a reviewer can identify:
+
+- what the simulated public is really arguing about
+- which actor has the highest leverage and why
+- which posts changed other agents' emphasis or stance
+- what proof or source would calm or escalate the feed
+- what should be published next
+
+If every post could be swapped into another scenario with only the seed text changed, the UX phase is not complete.
+
 Do a density repair pass. The default desktop screen must not show Start input, graph, readiness, run log, agents, report, continuation, and project history all as equal panels at once. Desktop may show one secondary contextual panel. Mobile must use the same task views via segmented or bottom navigation and must not degrade into a confusing wall of stacked technical panels.
 
 ## DO NOT
@@ -36,6 +46,8 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 ## Minimum proof before moving on
 
 Run build/smoke checks and a browser proof on desktop and mobile. Verify the task navigation exists, the Start example path works without user typing, each view has one obvious primary action, the readiness banner gives an actionable next step, disabled run controls explain the setup needed, simulated feed/story output is visibly tied to the active run, and technical details are still available without dominating the screen. Save screenshots for Start, Map, Run, Feed, Story, Projects, and mobile navigation. Record exact proof.
+
+Also verify that Map actor labels do not clip, Feed content is not template-repetitive, Story includes a publishing brief, and the app clearly separates local simulated output from real public posting.
 
 ## Handoff note
 

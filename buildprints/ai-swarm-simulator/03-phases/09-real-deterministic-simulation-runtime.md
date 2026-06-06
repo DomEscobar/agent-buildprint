@@ -10,6 +10,18 @@ Implement a real local deterministic social simulation runtime before relying on
 
 The runtime should make the social model inspectable: which agents were created, what graph context each received, what each step did, what posts/comments/reactions/reposts/follows or stance shifts were emitted, what conflicts or blockers were found, and how the final feed/story result was assembled. It should be deterministic enough for tests and regression snapshots. It should also give the UI enough state to show progress, failure, retry, cancellation, feed readiness, and story/report readiness without guessing.
 
+The deterministic runtime must model actors as more than names. Each generated agent should carry at least role, motive, risk, stance, preferred channel/surface, influence, and memory/context from the current seed or graph. The runtime should create relationship edges with labels, weights, and tensions so the Map view can explain why one actor affects another.
+
+Feed output must be content-quality tested, not only shape-tested. Do not generate five posts by filling the same sentence template with different actor names. A local run should include differentiated post types such as field signal, source check, institutional response, expert translation, organizing turn, satire, critique, counterframe, or scenario-specific equivalents. Each top-level post should expose author, handle, role, minute/timestamp, stance, evidence/source, ask/next move, reactions, replies, and reposts.
+
+Story/report input must include synthesized insights from the same run state:
+
+- dominant fault line
+- highest-leverage actor and why
+- proof/source gap most likely to calm or escalate the feed
+- best publishing move
+- explicit limitations and do-not-claim boundaries
+
 Minimum local action vocabulary:
 
 - create_post
@@ -27,6 +39,8 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 ## Minimum proof before moving on
 
 Run build/test/smoke checks. Verify start, progress/trace, completion, cancellation or explicit non-support, retry, and failure states. Prove traces, simulated feed entries, and local story/report inputs are derived from the current graph and run config. Browser-check that graph references, feed inspection, and trace inspection work.
+
+Add or update deterministic tests proving that two different scenarios produce meaningfully different actors, tensions, post types, asks, run insights, and story outputs. Snapshot tests may be used, but they must fail if the feed regresses into static canned copy or a single repeated sentence template.
 
 ## Handoff note
 

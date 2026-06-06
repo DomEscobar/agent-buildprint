@@ -6,7 +6,7 @@ Read `.buildprint/next-agent.md`, local `AGENTS.md`, `03-phases/phase-flow.md`, 
 
 ## Building objective
 
-Build the graph-memory and canvas interaction loop. Seed material must become structured graph data through an open-source adapter seam or a clearly separated local fallback, then the UI must read back nodes and edges from that seam and render them in a real interactive canvas. The graph must support pan, zoom, select, inspect, and stateful empty/loading/error/blocked views. A decorative SVG with static sample nodes does not satisfy the phase. The adapter should make future Graphiti or alternative OSS graph memory integration straightforward while preserving local trusted execution. Store enough metadata to connect graph nodes/edges back to seed material and future simulation/report phases. Selection should drive an inspector panel, and failures should say whether extraction, persistence, adapter availability, or provider configuration is responsible. Keep the design polished enough that users can understand graph structure without reading raw JSON.
+Build the graph-memory and canvas interaction loop without losing the original Microfish source pipeline. Seed material and a prediction requirement must become structured graph data through an open-source adapter seam or a clearly separated local fallback, then the UI must read back ontology entity types, relation types, nodes, edges, facts, and relationship chains from that seam and render them in a real interactive canvas. The graph must support pan, zoom, select, inspect, and stateful empty/loading/error/blocked views. A decorative SVG with static sample nodes does not satisfy the phase. The adapter should make future Graphiti, Zep-style GraphRAG, or alternative OSS graph memory integration straightforward while preserving local trusted execution. Store enough metadata to connect graph nodes/edges back to source snippets, prediction requirement, future entity-to-agent mapping, future simulation action logs, and report provenance. Selection should drive an inspector panel that shows source evidence, node/entity type, relationship labels, facts, and what later simulation agent/profile this entity can become. Failures should say whether upload, extraction, ontology generation, graph build, persistence, adapter availability, or provider configuration is responsible. Keep the design polished enough that users can understand graph structure without reading raw JSON.
 
 ## DO NOT
 
@@ -14,7 +14,7 @@ Do not use placeholders, functionless buttons, mocked/sample data counted as rea
 
 ## Minimum proof before moving on
 
-Run graph extraction/readback tests or a local smoke path that creates nodes/edges and renders them. Browser-check pan/zoom/select/inspect if possible. Confirm missing adapter/provider cases produce blocked/error states, not fake graph success.
+Run graph extraction/readback tests or a local smoke path that creates ontology types, nodes, edges, facts, and relationship chains from seed material and renders them. Browser-check pan/zoom/select/inspect if possible. Confirm missing adapter/provider cases produce blocked/error states, not fake graph success. Record which source facts became graph facts.
 
 ## Handoff note
 

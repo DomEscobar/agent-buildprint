@@ -6,6 +6,7 @@ Mapper OS quality is judged by whether a downstream AI builder can build the map
 
 - Preserve artifact identity and golden path before file structure.
 - Preserve observable behavior, not source internals for their own sake.
+- Preserve the central output quality bar, not only that an output exists.
 - Keep selected `BUILDPRINT.md` generic: AI-builder role, responsibility, perfection alignment, read order; no product-specific mapped-source details.
 - Put product contract facts in `blueprint.yaml`, `01-project-setup.md`, `02-uiux-decision.md`, and phase objectives.
 - YAML routes; Markdown teaches/builds.
@@ -25,6 +26,8 @@ Selected packets must explicitly reject:
 - fake provider success when credentials/runtime/network did not run;
 - raw JSON as the main user experience when a product surface is required;
 - generic dashboards that name capabilities but implement no loop;
+- technically input-derived output that remains domain-generic, interchangeable, or useless;
+- polished shells whose central artifact could fit unrelated inputs with superficial text swaps;
 - confusing/generic/ugly UI treated as finished product;
 - weak UI moodboards with only phrases like “clean, modern, intuitive”;
 - completion from prose, screenshots alone, or unchecked happy paths.
@@ -36,6 +39,10 @@ For UI-bearing artifacts, `02-uiux-decision.md` must open with UX importance and
 ## Phase quality bar
 
 Every phase must name a concrete building objective, the context to read, `02-uiux-decision.md` design responsibility, forbidden shortcuts, proof before moving on, and handoff facts. A phase can stop on a real blocker, but it cannot pass from edits alone.
+
+## Output quality bar
+
+Every selected packet must define the central output contract for the mapped artifact. That contract should name the central output, its primitives, quality signals, unacceptable generic substitutes, reviewer acceptance questions, and claim gates. If these are missing, downstream agents can build something structurally correct but semantically weak.
 
 ## Review stance
 

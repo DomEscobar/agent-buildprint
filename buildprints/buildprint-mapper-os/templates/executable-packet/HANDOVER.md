@@ -12,6 +12,10 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - `<command>` — <result>
 - Screenshot/browser/API/readback evidence:
   - <what was inspected>
+- Central output quality evidence:
+  - <what the output makes clear>
+  - <what still feels generic or weak>
+  - <what a user/operator can do next from the output>
 
 ## Blocked
 
@@ -20,6 +24,7 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 ## Not proven
 
 - <claim that should not be made yet>
+- <central output quality claim that should not be made yet>
 
 ## Next
 
@@ -28,4 +33,4 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 ## Handoff warning
 
-Do not claim completion beyond the evidence above. Visible controls must work or block honestly; provider/deployment/security claims require matching proof.
+Do not claim completion beyond the evidence above. Visible controls must work or block honestly; provider/deployment/security claims require matching proof. Do not treat technically input-derived but domain-generic output as product completion.

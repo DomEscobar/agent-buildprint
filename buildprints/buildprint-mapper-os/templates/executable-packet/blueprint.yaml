@@ -57,6 +57,23 @@ agent_contract:
   role: Senior Product Engineer
   rule: Build the product loop honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; live/provider/deployment claims require matching proof.
 
+central_output_contract:
+  rule: Replace this template-level rule with the selected artifact's source-derived central output contract before implementation begins.
+  central_output: source-derived artifact output that the user/operator actually values
+  output_primitives:
+    - source-derived unit of useful output
+  quality_signals:
+    - source-derived signal that output is useful, correct, credible, publishable, actionable, or domain-appropriate
+  unacceptable_generic_substitutes:
+    - technically input-derived but domain-generic output
+  reviewer_acceptance_questions:
+    - What does the output make clear that a generic shell would not?
+    - What can the user/operator do next from the output?
+    - Which quality claim remains unproven?
+  claim_gates:
+    - do not claim central output quality until reviewer acceptance questions are answered with proof
+  minimum_standard: The product path must produce output that reaches the mapped artifact's quality bar, not merely output that depends on input.
+
 state_and_handoff:
   local_state_dir: .buildprint/
   setup_receipt: .buildprint/setup-receipt.md

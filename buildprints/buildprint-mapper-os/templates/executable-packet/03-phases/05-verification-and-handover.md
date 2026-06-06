@@ -17,9 +17,11 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, inspectors, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
-Verify the artifact from a fresh-start mindset and write the final handover. Run the real commands a next agent or human would use. Exercise the golden path, negative cases, blocked dependency paths, persistence/readback, and visible/operator experience.
+Verify the artifact from a fresh-start mindset and write the final handover. Run the real commands a next agent or human would use. Exercise the golden path, negative cases, blocked dependency paths, persistence/readback, central output quality, and visible/operator experience.
 
 The goal is not to create a long proof ledger. The goal is to find lies before handoff: fake provider success, dead UI, missing state, placeholder modules, stale docs, commands that do not run, tests that pass while the product path fails, and claims that are broader than evidence.
+
+Also find blandness before handoff. A product can pass structural checks while its central output is still generic, interchangeable, or not useful. Compare the observed output against the `central_output_contract` in `blueprint.yaml` and `docs/output-quality.md` or equivalent. If the artifact's main output only proves that input flowed through the system, record the quality gap instead of calling it complete.
 
 Update `HANDOVER.md` with exactly what was built, commands run, observed results, blockers, unproven claims, and recommended next actions.
 
@@ -39,6 +41,7 @@ Update `HANDOVER.md` with exactly what was built, commands run, observed results
 - Inspect the product path through UI/API/CLI/runtime, not only source files.
 - Prove persistence/readback when this phase creates durable state.
 - Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Capture reviewer-style evidence for central output quality: what the artifact makes clear, what still feels generic, what the user/operator can do next, and which output-quality claims remain unproven.
 - Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note
