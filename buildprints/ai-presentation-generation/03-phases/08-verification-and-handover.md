@@ -10,13 +10,15 @@ Run final verification across the full presentation loop: configure readiness, p
 
 Also find blandness before handoff. A product can pass structural checks while its central output is still generic, interchangeable, or not useful. Compare the observed deck against the `central_output_contract` in `blueprint.yaml` and `docs/output-quality.md` or equivalent. If the artifact's main output only proves that input flowed through the system, record the quality gap instead of calling it complete.
 
+Also inspect the visual proof, not just its existence. The desktop Deck screenshot must show a real wide workbench and a readable slide canvas. If the main slide preview has overlapping title/body/provenance text, clipped labels, unreadable compressed content, or collapsed mobile-style stacking at desktop width, mark desktop workbench quality as blocked and regenerate after fixing the buildprint or implementation.
+
 ## DO NOT
 
-Do not claim live provider generation, document extraction, editable deck quality, export success, API/webhook/MCP/desktop readiness, production auth/privacy, or public deployment without direct proof. Do not hide missing tests, screenshots, or blocked states. Do not use placeholders, functionless buttons, or mocked/sample data as real verification proof.
+Do not claim live provider generation, document extraction, editable deck quality, desktop workbench quality, export success, API/webhook/MCP/desktop readiness, production auth/privacy, or public deployment without direct proof. Do not hide missing tests, screenshots, visual defects, or blocked states. Do not use placeholders, functionless buttons, or mocked/sample data as real verification proof.
 
 ## Minimum proof before moving on
 
-Run the strongest available command suite: install, build/typecheck, lint, tests, smoke, screenshots, packet checks, and API/export checks where available. Verify at least one deck path in the browser if the app has a frontend. Inspect screenshots for overlap, dead controls, unclear blockers, and static-demo behavior.
+Run the strongest available command suite: install, build/typecheck, lint, tests, smoke, screenshots, packet checks, and API/export checks where available. Verify at least one deck path in the browser if the app has a frontend. Inspect screenshots for overlap, dead controls, unclear blockers, and static-demo behavior. Include a wide desktop Deck proof at 1440px or wider; screenshot-only proof fails if the Deck view is narrow, stacked, or visually overlapping.
 
 ## Handoff note
 

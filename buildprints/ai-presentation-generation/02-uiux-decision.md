@@ -76,6 +76,10 @@ Do not use viewport-width font scaling. Do not let labels overflow buttons, thum
 
 The app is a focused multi-view workbench, not a single endless page. Use a stable shell with a compact navigation rail or top segmented navigation, a primary work area, and one contextual panel when needed. The deck canvas should sit in the visual center with predictable 16:9 dimensions; thumbnail rails, inspector panels, and chat/export drawers must not resize the canvas unpredictably.
 
+Desktop proof is not satisfied by a narrow stacked responsive layout. At desktop width, the Deck view must read as an editor: slide thumbnails on one side, a large stable 16:9 canvas in the center, and inspector/chat/export context in adjacent panels or drawers. It is acceptable for mobile to stack, but desktop screenshots must show the wide workbench composition.
+
+The slide canvas is the central output surface. Text, chips, icons, divider bars, chart labels, source tags, and speaker-note affordances must fit within their slide regions without overlap, clipping, or unreadable compression. If generated content is too long, the UI should summarize, wrap, clamp with an intentional affordance, or expose the full value in the editor inspector. Accidental overlap inside the main slide preview is a failed deck proof, even if build and Playwright tests pass.
+
 Use generous but efficient spacing: 8px micro spacing, 12/16px component spacing, 24px panel spacing, and 32/40px major workbench breathing room. Avoid nested cards, floating hero panels, and marketing-style sections. On mobile, preserve the same workflow with horizontal view tabs or bottom navigation, then stack secondary panels under the active work surface.
 
 ## 6. Required views

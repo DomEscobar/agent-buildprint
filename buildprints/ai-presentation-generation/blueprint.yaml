@@ -48,6 +48,8 @@ product:
       - generated outline follows source prompt/documents and user controls instead of generic presentation filler
       - slide layouts are selected because they fit slide content, tables, charts, images, or table-of-contents needs
       - slide content matches each layout's expected data shape and remains editable after generation
+      - desktop Deck view uses a wide editor composition with thumbnail rail, 16:9 canvas, inspector, and chat/export context visible without collapsing into a stacked mobile layout at desktop widths
+      - slide canvas renders every generated title, subtitle, body, chart/table label, asset caption, and provenance chip without overlap, clipping, or unreadable compression
       - deck canvas, thumbnails, theme, notes, assets, and chat all point at the same persisted deck id
       - export status reflects real runtime readiness rather than a fake download button
       - provider/image/parser errors are visible as precise blockers with next action
@@ -57,6 +59,8 @@ product:
       - markdown summary shown as a deck without layout/template assignment
       - fake PPTX/PDF download or export success without runtime proof
       - hard-coded thumbnails or example decks counted as generation
+      - narrow stacked layout presented as desktop workbench proof
+      - slide canvas text, chips, dividers, icons, or bars overlapping inside the main deck preview
       - provider/API/webhook/MCP/desktop labels with no working seam or blocker
       - raw JSON dumped into the UI instead of outline, deck, and export surfaces
       - template gallery that does not affect generated layouts or slide schemas
@@ -65,6 +69,8 @@ product:
       - Which outline slides were generated, edited, or accepted?
       - Which layout/template was selected for each slide, and why does it fit?
       - Which slide fields, assets, theme, and notes are editable after generation?
+      - Does the desktop Deck view look like a real editor at 1440px width, with stable regions rather than a stretched mobile stack?
+      - Does the primary slide canvas render without text overlap, clipped labels, or unreadable compressed content?
       - What is the deck id/readback state, and can the user resume or save it?
       - Is PPTX/PDF export real, blocked, or failed with a precise runtime reason?
       - Which API, webhook, MCP, or desktop claims are proven versus only exposed as seams?
@@ -73,6 +79,7 @@ product:
       - outline_quality required before claiming content-grounded deck planning
       - layout_template_quality required before claiming Presenton-style template/layout fidelity
       - editable_workbench_quality required before claiming a deck editor
+      - desktop_visual_acceptance required before claiming desktop workbench quality
       - export_runtime_probe required before claiming PPTX/PDF export
       - provider_probe required before live AI generation claims
       - document_parser_probe required before uploaded document extraction claims
@@ -142,6 +149,7 @@ production_quality_gates:
   outline_quality: required before claiming source-grounded planning
   layout_template_quality: required before claiming template/layout fidelity
   editable_workbench_quality: required before claiming a deck editor
+  desktop_visual_acceptance: required before claiming desktop workbench quality; needs a 1440px-or-wider Deck proof with thumbnail rail, canvas, inspector, stable 16:9 canvas, and no visible overlap/clipping in slide text or controls
   deck_output_quality: required before claiming useful presentation generation
   export_runtime_probe: required before claiming PPTX/PDF export
   api_webhook_mcp_probe: required before automation claims

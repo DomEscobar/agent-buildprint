@@ -66,3 +66,19 @@ The packet now refuses to claim these without proof:
 - MCP tool use;
 - desktop packaging;
 - private/public deployment readiness.
+
+## 2026-06-06 desktop visual acceptance patch
+
+The first generated Presenton-style rerun exposed a real quality gap: the buildprint required screenshots and a deck editor, but did not hard-fail a narrow desktop composition or visible text overlap inside the primary slide canvas. That allowed a generated app to pass structural verification while the Deck view still looked unready.
+
+Patched now:
+
+- `blueprint.yaml` adds `desktop_visual_acceptance` as a production quality gate.
+- The central output contract now rejects narrow stacked layouts presented as desktop proof.
+- The central output contract now rejects slide canvas text/chip/icon overlap or clipping.
+- `02-uiux-decision.md` now defines a real desktop Deck composition: thumbnail rail, central stable 16:9 canvas, inspector/edit controls, and contextual chat/export surface.
+- Phase 04 now requires at least one 1440px-or-wider desktop Deck screenshot and one mobile Deck screenshot.
+- Phase 08 now requires screenshot inspection, not only screenshot capture.
+- `HANDOVER.md` now requires an explicit desktop visual acceptance result.
+
+Builder implication: if the generated app shows overlapping deck preview content, compressed unreadable slide text, or a mobile stack masquerading as desktop, the build is incomplete even if build, lint, and Playwright pass.

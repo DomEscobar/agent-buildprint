@@ -11,10 +11,12 @@ Use this when stopping or claiming progress. Do not claim completion beyond the 
 
 - List commands, browser checks, API checks, screenshots, export attempts, provider probes, and observed results.
 - Include any clean install or generated-deck proof.
+- Include the wide desktop Deck screenshot path and state whether it passed desktop visual acceptance: thumbnail rail, central 16:9 canvas, inspector/edit controls, and no slide-canvas overlap/clipping.
 
 ## Blocked
 
 - List blockers with owner and next repair route: provider keys, document parser, image provider, export runtime, API/webhook, MCP, desktop, auth/privacy, or deployment.
+- Treat desktop visual defects as blockers when the Deck canvas overlaps, clips, or collapses into a narrow stacked layout in desktop proof.
 
 ## Not proven
 
