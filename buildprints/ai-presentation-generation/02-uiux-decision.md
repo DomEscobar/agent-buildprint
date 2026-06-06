@@ -12,6 +12,8 @@ Small checklist before applying this style constitution:
 - Does the UI feel like a serious deck workbench rather than a generic AI prompt page?
 - Are all visible controls functional, validating, navigational, or tied to precise blocked states?
 - Would a reviewer trust the deck as a product artifact, or only as a demo of generated text?
+- Are the generated slide plans and body fields specific to each slide, or did the app repeat the same generic paragraph under different titles?
+- Does the mobile Deck proof keep tabs, thumbnails, toolbar, canvas, inspector, and action buttons readable without accidental horizontal clipping?
 
 This file is the style constitution for the artifact. Every later phase that touches human-facing UI must obey it before claiming progress.
 
@@ -80,6 +82,10 @@ Desktop proof is not satisfied by a narrow stacked responsive layout. At desktop
 
 The slide canvas is the central output surface. Text, chips, icons, divider bars, chart labels, source tags, and speaker-note affordances must fit within their slide regions without overlap, clipping, or unreadable compression. If generated content is too long, the UI should summarize, wrap, clamp with an intentional affordance, or expose the full value in the editor inspector. Accidental overlap inside the main slide preview is a failed deck proof, even if build and Playwright tests pass.
 
+Mobile proof is not satisfied by "the page scrolls somewhere." At phone width, the user must still be able to see and reach the main view tabs, slide thumbnail selection, deck toolbar actions, slide canvas, inspector fields, chat/export controls, and primary actions. Horizontal overflow is acceptable only for an intentional scroller with visible affordance and contained content; clipped tab labels, half-visible thumbnails, cut-off buttons, or controls reachable only by accidental page overflow are failed responsive workbench proof.
+
+Long-copy behavior is part of the layout contract, not an edge case. The implementation must prove at least one stress deck with a long slide title, long bullet/body fields, long provenance/source label, and long speaker notes. Desktop and mobile screenshots must show intentional wrapping, clamping, or inspector overflow behavior; accidental clipping or overlap blocks editor quality claims.
+
 Use generous but efficient spacing: 8px micro spacing, 12/16px component spacing, 24px panel spacing, and 32/40px major workbench breathing room. Avoid nested cards, floating hero panels, and marketing-style sections. On mobile, preserve the same workflow with horizontal view tabs or bottom navigation, then stack secondary panels under the active work surface.
 
 ## 6. Required views
@@ -109,6 +115,8 @@ The product is incomplete if it only shows generated markdown, static images, fa
 - chat iteration tied to the active deck or selected slide;
 - export readiness and task state for PPTX/PDF;
 - clear limitations when provider, image, parser, template, export, API, webhook, MCP, or desktop behavior is not proven.
+
+Content specificity is required even in deterministic/local sample mode. The outline, slide body fields, speaker notes, and layout reasons must change per slide purpose and source input. A deck where "Executive snapshot", "What changed", "Operating signals", "Risk register", and "Root causes" share substantially the same body paragraph is not useful presentation generation; it only proves plumbing. If live AI is blocked, use a deterministic content planner that still derives different slide-specific bullets from prompt terms, scenario, requested tone, and section role.
 
 Acceptance test: after one example deck, a critical reviewer should be able to identify the input source, outline decisions, selected layouts, edited slide state, asset provenance, export status, and what is not proven. If the artifact could be replaced by generic slide cards with marketing copy, the phase is incomplete.
 
