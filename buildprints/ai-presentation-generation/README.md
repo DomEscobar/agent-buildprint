@@ -2,25 +2,27 @@
 
 A Buildprint for rebuilding the spirit of [Presenton](https://github.com/presenton/presenton): a self-hosted AI presentation generator with web, API, desktop, MCP, template, export, and bring-your-own-provider boundaries.
 
-This is not a wrapper around Presenton and not a static deck demo. It is an executable product packet for building a real trusted-local presentation workbench: configure providers, ingest prompts or documents, generate an outline, build editable slides, manage templates/assets, iterate with chat, and export PPTX/PDF through honest runtime seams.
+This is not a wrapper around Presenton and not a static deck demo. It is an executable v3 product packet for building a real trusted-local presentation workbench: configure providers, ingest prompts or documents, generate/edit an outline, choose templates/layouts, build editable slides, manage themes/assets, iterate with chat, and export PPTX/PDF through honest runtime seams.
 
 ## Product standard
 
 Build the product loop first:
 
-1. Configure runtime, persistence, provider, image source, export engine, and local privacy mode.
-2. Start a deck from prompt, document, or imported template.
-3. Generate an outline with visible streaming/progress and editable structure.
-4. Generate a persisted slide deck with layout, theme, speaker-note/content metadata, and assets.
-5. Edit slides in a polished browser workbench instead of showing static HTML.
-6. Iterate with chat over the selected deck/slide while preserving memory boundaries.
-7. Export PPTX/PDF and expose API/webhook/MCP/desktop boundaries only when they are real or honestly blocked.
+1. Configure text provider, image provider, parser, storage, export runtime, privacy, and automation readiness.
+2. Start a deck from prompt, uploaded documents, slides markdown, built-in template, or imported/custom template.
+3. Generate and edit an outline with visible progress and controls for slide count, language, tone, verbosity, title slide, table of contents, web search, and instructions.
+4. Assign layouts/templates because they fit slide content, tables, charts, images, or table-of-contents needs.
+5. Generate a persisted slide deck with layout, theme, speaker-note/content metadata, assets, and autosave/readback state.
+6. Edit slides in a polished browser workbench instead of showing static HTML or static thumbnails.
+7. Iterate with chat over the selected deck/slide while preserving conversation and deck context.
+8. Export PPTX/PDF and expose API/webhook/MCP/desktop boundaries only when they are real or honestly blocked.
 
 ## UX craft floor
 
 The implementation should feel like a serious presentation product, closer to a local Gamma/Canva-style deck editor than an admin dashboard.
 
 - The deck canvas is the hero surface.
+- Configure, Create, Outline, Deck, Templates, and Exports must be focused workbench views.
 - Slides, outline, assets, chat, generation status, and export controls should be visible as a coherent workbench.
 - Every clickable control must either work or reveal a precise blocked state.
 - Provider errors, missing LibreOffice/Chromium/export dependencies, missing image keys, or local-model setup gaps must be honest user-visible blockers.
@@ -28,15 +30,16 @@ The implementation should feel like a serious presentation product, closer to a 
 
 ## Presenton signals preserved
 
-Mapped from Presenton at `493aff5c764c13f7249a9a908fe41aa85c19b7c3`:
+Mapped from Presenton at `9acd4a6f22e7b621aacdad69bc93b3e548e0b651`:
 
 - self-hosted Docker/web deployment and desktop app posture;
 - Next.js frontend plus FastAPI backend shape;
-- BYOK provider support including OpenAI, Gemini, Vertex AI, Azure OpenAI, Amazon Bedrock, Fireworks, Together AI, Anthropic, LM Studio, Ollama, and OpenAI-compatible endpoints;
-- prompt/document-to-presentation generation;
-- editable decks, custom HTML/Tailwind templates, themes, image/icon/chart assets;
-- PPTX/PDF export and export-runtime dependencies;
-- async API, webhook delivery, MCP server, and desktop packaging boundaries;
+- BYOK provider support including OpenAI, Gemini/Google, Vertex AI, Azure OpenAI, Amazon Bedrock, Fireworks, Together AI, Anthropic, LM Studio, Ollama, custom endpoints, OpenAI-compatible endpoints, and related model readiness checks;
+- prompt/document/slides-markdown-to-presentation generation;
+- structured outline generation, layout selection, slide content generation, and speaker notes;
+- editable decks, custom HTML/Tailwind templates, themes, font handling, image/icon/chart assets, and generated/uploaded image stores;
+- PPTX/PDF export and bundled export-runtime/converter dependencies;
+- async API, webhook delivery, MCP server, Electron desktop export bridge, and desktop packaging boundaries;
 - local privacy / no SaaS lock-in promise.
 
 ## Non-goals

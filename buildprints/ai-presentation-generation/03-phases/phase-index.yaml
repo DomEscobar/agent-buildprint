@@ -1,43 +1,27 @@
-schema_version: mapper-os/phase-index
-active_phase: 03-phases/00-product-system-alignment.md
+schema_version: mapper-os/phase-index/v3
+active_phase: 03-phases/01-foundation-and-first-loop.md
 phases:
-  - phase_id: 00-product-system-alignment
-    file: 03-phases/00-product-system-alignment.md
-    depends_on: []
-    proof_gate: product system alignment proof
-  - phase_id: 01-shell-and-navigation
-    file: 03-phases/01-shell-and-navigation.md
-    depends_on: []
-    proof_gate: shell and navigation proof
-  - phase_id: 02-core-loop-first
-    file: 03-phases/02-core-loop-first.md
-    depends_on: []
-    proof_gate: core loop first proof
-  - phase_id: 03-feature-slices
-    file: 03-phases/03-feature-slices.md
-    depends_on: []
-    proof_gate: feature slices proof
-  - phase_id: 04-state-and-data
-    file: 03-phases/04-state-and-data.md
-    depends_on: []
-    proof_gate: state and data proof
-  - phase_id: 05-domain-and-intelligence
-    file: 03-phases/05-domain-and-intelligence.md
-    depends_on: []
-    proof_gate: domain and intelligence proof
-  - phase_id: 06-design-system-and-copy
-    file: 03-phases/06-design-system-and-copy.md
-    depends_on: []
-    proof_gate: design system and copy proof
-  - phase_id: 07-architecture-garden
-    file: 03-phases/07-architecture-garden.md
-    depends_on: []
-    proof_gate: architecture garden proof
-  - phase_id: 08-verification
-    file: 03-phases/08-verification.md
-    depends_on: []
-    proof_gate: verification proof
-  - phase_id: 99-final-review-handover
-    file: 03-phases/99-final-review-handover.md
-    depends_on: []
-    proof_gate: final review handover proof
+  - phase_id: 01-foundation-and-first-loop
+    file: 03-phases/01-foundation-and-first-loop.md
+    status: included
+  - phase_id: 02-provider-and-upload-readiness
+    file: 03-phases/02-provider-and-upload-readiness.md
+    status: included
+  - phase_id: 03-outline-and-layout-generation
+    file: 03-phases/03-outline-and-layout-generation.md
+    status: included
+  - phase_id: 04-editable-deck-workbench
+    file: 03-phases/04-editable-deck-workbench.md
+    status: included
+  - phase_id: 05-templates-assets-and-theme
+    file: 03-phases/05-templates-assets-and-theme.md
+    status: included
+  - phase_id: 06-chat-iteration-and-memory
+    file: 03-phases/06-chat-iteration-and-memory.md
+    status: included
+  - phase_id: 07-export-api-webhook-mcp-desktop
+    file: 03-phases/07-export-api-webhook-mcp-desktop.md
+    status: included
+  - phase_id: 08-verification-and-handover
+    file: 03-phases/08-verification-and-handover.md
+    status: included

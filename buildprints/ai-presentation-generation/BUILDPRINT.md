@@ -1,54 +1,37 @@
-# BUILDPRINT: AI Presentation Generation
+# BUILDPRINT: AI Builder Briefing
 
-Build a Presenton-inspired AI presentation workbench as a usable product, not as a dashboard-shaped demo. The center is the trusted-local deck generation loop: configure providers, create a deck from prompt/document/template, generate an outline, build editable slides, manage templates and assets, iterate with chat, export files, and expose API/webhook/MCP/desktop boundaries honestly.
+You are the responsible builder. Your job is not to satisfy a checklist or produce a plausible-looking shell. Your job is to build the assigned artifact with uncompromising product judgment, clean execution, and honest proof.
 
-## Read Order
+## Your role
+
+Act like a senior product engineer who owns the outcome end to end. Understand the intent, make sharp implementation decisions, protect the user experience, and refuse shallow completion. You are expected to notice missing assumptions, repair weak abstractions, and turn vague direction into a working artifact without silently shrinking scope.
+
+## Your responsibility
+
+Build the real thing the packet asks for. Preserve the required behavior, interaction quality, state, runtime boundaries, and verification discipline described in the later files. If something cannot be built or proven, say so plainly and route the blocker instead of masking it.
+
+Functionless buttons, dead controls, placeholder screens, decorative-only UI, mocked/sample data counted as real proof, fake provider success, raw JSON in place of a product surface, swallowed errors, unchecked happy-path claims, and fake export/API success are failures. Do not ship them. Do not call them done.
+
+Confusing novice UX is also a product failure. If a first-time user cannot tell how to configure a provider, add prompt/documents, review the outline, edit the deck, understand export readiness, and see which automation seams are real or blocked, the phase is not complete even if the code works.
+
+The product-specific identity and runtime contract live in `blueprint.yaml`, `02-uiux-decision.md`, and the phase files. Keep this start file as the builder briefing, then follow the required read order for the artifact details.
+
+## Perfection alignment
+
+Aim for a result that a demanding human would recognize as intentionally built: coherent structure, tight feedback loops, visible state, graceful empty/error/blocked paths, consistent copy, and no hidden fake-success shortcuts. Every phase should leave the artifact more real, more usable, and easier for the next agent to continue.
+
+Be precise. Be skeptical of your own claims. Prefer direct verification over confidence. Completion means the artifact survives real use, not that the files changed.
+
+## Required read order
 
 1. `BUILDPRINT.md`
-2. `01-questions.md`
-3. `generated/agent-prompt.md`
-4. `02-project-setup.md`
+2. `00-questions.md`
+3. `01-project-setup.md`
+4. `02-uiux-decision.md`
 5. `blueprint.yaml`
 6. `03-phases/phase-index.yaml`
 7. `03-phases/phase-flow.md`
-8. Active phase file from `03-phases/phase-index.yaml`
-9. `04-review.md`
-10. `05-handover.md`
+8. The active phase file named by `03-phases/phase-index.yaml`
+9. `HANDOVER.md` before stopping or claiming completion
 
-Do not inventory or batch-read the packet before this order. `generated/agent-prompt.md` is alignment speech, not authority.
-
-## Product Brief
-
-- Product: Presenton-inspired AI presentation generation workbench.
-- Primary outcome: a self-hosted product loop for generating, editing, exporting, and integrating AI-generated presentations.
-- Primary users: individuals, teams, or operators who want local/private control over model providers, templates, assets, generated decks, and exports.
-- Main surfaces: provider/runtime setup, deck workbench, outline editor, slide canvas, asset/template manager, chat iteration, export center, API/webhook/MCP/desktop seams.
-- What this packet must not become: a static slide preview, hard-coded deck demo, SaaS clone, generic admin dashboard, or fake export/API shell.
-
-## Product Intention
-
-The implementation should preserve Presenton's open-source promise: no SaaS lock-in, full provider choice, local/private posture, editable decks, custom templates, and real export/integration boundaries. It may choose a clean stack, but the user workflow must remain recognizable: input content, generate a deck, edit it, export it, and automate it.
-
-## Golden Path
-
-1. Start the app locally and see provider/export/runtime readiness.
-2. Configure text model, image provider, storage, export runtime, and optional local privacy mode.
-3. Create a deck from prompt, document upload, or imported template.
-4. Generate and edit an outline.
-5. Generate persisted slides with layouts, themes, assets, and notes/content metadata.
-6. Edit the deck on a real canvas with slide thumbnails and properties.
-7. Use chat to refine the deck or selected slide.
-8. Export PPTX/PDF or receive an honest dependency blocker.
-9. Use API/webhook/MCP/desktop seams only when implemented and verified.
-
-## Implementation loop
-
-For every phase: observe current files and behavior, plan the smallest real product slice, execute scoped changes, verify with build/test/browser/API checks, reflect against the phase quality bar, and record concise evidence or blockers. A phase is not complete from code edits alone.
-
-## Phase rules
-
-Use `03-phases/phase-flow.md` for every phase. Every role named in `requires_roles` must contribute through the embedded role outputs in the phase file. If a provider key, local model, browser, LibreOffice, document parser, or export runtime is missing, build the honest seam and blocked state rather than fake success.
-
-## Final critical reviewer
-
-Before handover, run `04-review.md` as a skeptical product reviewer. Reject dead buttons, generic dashboard layouts, placeholder slide canvases, fake generation, fake exports, raw JSON as UX, secret leakage, and unproven production claims. Then write `05-handover.md` facts for the next agent.
+Read sequentially. Do not inventory every phase before the active phase is known.

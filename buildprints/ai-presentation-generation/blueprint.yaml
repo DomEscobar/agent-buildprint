@@ -1,90 +1,155 @@
-schema_version: mapper-os/executable-blueprint
-source:
-  origin_github_url: https://github.com/presenton/presenton
-  origin_label: presenton/presenton
-  observed_commit: 493aff5c764c13f7249a9a908fe41aa85c19b7c3
+schema_version: mapper-os/executable-blueprint/v3
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
-claim_status: product_build_required
-qualification_label: local_build_requires_review
-setup_tier: typed_product_leadership
+schema_role: "YAML routes; markdown teaches and builds"
+
+product:
+  name: AI Presentation Generation Workbench
+  inspiration: Presenton self-hosted AI presentation generator and API
+  central_artifact: editable, export-ready presentation deck generated from prompt, documents, templates, provider configuration, and deck iteration state
+  golden_path: configure provider/runtime -> add prompt or documents -> generate/edit outline -> select template/layout/theme -> build editable deck -> iterate with chat -> export PPTX/PDF or use API/webhook/MCP/desktop seams
+  source_fidelity_note: Presenton current main at 9acd4a6f22e7b621aacdad69bc93b3e548e0b651 exposes a Next.js workbench plus FastAPI backend with prompt/document ingestion, structured outline generation, layout selection, slide content generation, editable slide canvas, custom templates, provider and image configuration, chat iteration, PPTX/PDF export runtime, async API, webhooks, MCP server, and Electron desktop packaging. Future implementations may simplify stack, but must not reduce the artifact to a static markdown-to-slides demo.
+  primary_audience_default: non-technical first-time user who wants a self-hosted deck generator with local/provider control
+  novice_workflow: configure -> create -> outline -> deck -> templates -> exports
+  required_views:
+    - Configure
+    - Create
+    - Outline
+    - Deck
+    - Templates
+    - Exports
+  required_example_scenarios:
+    - Build a startup launch pitch deck from a short prompt
+    - Turn an uploaded report excerpt into an executive briefing deck
+    - Import or choose a template and regenerate a product update deck
+  required_presentation_surfaces:
+    - provider and image readiness panel
+    - prompt and document upload surface
+    - editable outline stream
+    - slide thumbnail rail
+    - main slide canvas with editable content/assets
+    - speaker notes and layout/theme controls
+    - chat iteration panel tied to deck/slide context
+    - PPTX/PDF export center with task state
+    - API/webhook/MCP/desktop seam status
+  central_output_contract:
+    central_output: editable presentation deck with source-grounded outline, layout/template assignment, slide content, assets, speaker notes, deck state, export readiness, and iteration provenance
+    output_primitives:
+      - runtime readiness across text provider, image provider, parser, storage, export runtime, API, webhook, MCP, and desktop seams
+      - prompt and uploaded document/file references with extraction/decomposition status
+      - generation request fields for slide count, language, tone, verbosity, web search, title slide, table of contents, template, instructions, export format, and webhook trigger
+      - streamed or loaded outline with per-slide markdown content and editable structure
+      - layout/template model with available layouts, custom template metadata, fonts, theme, and per-slide layout indexes
+      - persisted deck with id, title, slides, layouts, theme, speaker notes, assets, and autosave/readback status
+      - chat messages and tool/trace context scoped to active deck or selected slide
+      - export task state with PPTX/PDF format, runtime dependency status, output path/download, and failure detail
+      - API async task, webhook event, MCP server, and desktop export states when implemented or precisely blocked
+    quality_signals:
+      - generated outline follows source prompt/documents and user controls instead of generic presentation filler
+      - slide layouts are selected because they fit slide content, tables, charts, images, or table-of-contents needs
+      - slide content matches each layout's expected data shape and remains editable after generation
+      - deck canvas, thumbnails, theme, notes, assets, and chat all point at the same persisted deck id
+      - export status reflects real runtime readiness rather than a fake download button
+      - provider/image/parser errors are visible as precise blockers with next action
+      - reviewer can identify the input source, generated outline, layout decisions, editable slide state, asset provenance, export state, and unproven claims
+    unacceptable_generic_substitutes:
+      - prompt-to-static-slide-card demo with no editable deck model
+      - markdown summary shown as a deck without layout/template assignment
+      - fake PPTX/PDF download or export success without runtime proof
+      - hard-coded thumbnails or example decks counted as generation
+      - provider/API/webhook/MCP/desktop labels with no working seam or blocker
+      - raw JSON dumped into the UI instead of outline, deck, and export surfaces
+      - template gallery that does not affect generated layouts or slide schemas
+    reviewer_acceptance_questions:
+      - What input source and instructions shaped this deck?
+      - Which outline slides were generated, edited, or accepted?
+      - Which layout/template was selected for each slide, and why does it fit?
+      - Which slide fields, assets, theme, and notes are editable after generation?
+      - What is the deck id/readback state, and can the user resume or save it?
+      - Is PPTX/PDF export real, blocked, or failed with a precise runtime reason?
+      - Which API, webhook, MCP, or desktop claims are proven versus only exposed as seams?
+    claim_gates:
+      - deck_output_quality required before claiming useful presentation generation
+      - outline_quality required before claiming content-grounded deck planning
+      - layout_template_quality required before claiming Presenton-style template/layout fidelity
+      - editable_workbench_quality required before claiming a deck editor
+      - export_runtime_probe required before claiming PPTX/PDF export
+      - provider_probe required before live AI generation claims
+      - document_parser_probe required before uploaded document extraction claims
+      - api_webhook_mcp_probe required before automation claims
+      - desktop_runtime_probe required before desktop packaging claims
+      - auth_privacy_observability_deployment required before private/public deployment claims
+  source_fidelity_contract:
+    source_steps_to_preserve:
+      - configure BYOK or local model provider and image provider with visible readiness
+      - accept prompt plus optional uploaded documents or slides markdown
+      - decompose uploaded files before using them as generation context
+      - generate structured outline using slide count, language, tone, verbosity, title-slide, table-of-contents, web-search, and instructions
+      - select layouts from available/custom templates based on slide content and layout rules
+      - generate structured slide content according to the chosen layout data shape, including speaker notes when supported
+      - persist presentations, slides, themes, generated/uploaded images, templates, fonts, chat history, and export state
+      - support editing slide content/assets/layouts and chat iteration against active deck/slide context
+      - export through a real presentation-export runtime/converter or show an exact runtime blocker
+      - expose async API, webhook delivery, MCP server, and Electron desktop boundaries only when implemented or honestly blocked
+    not_optional:
+      - do not reduce Presenton to a single prompt box and static deck preview
+      - do not claim editable PPTX/PDF export without a working export runtime or precise blocked state
+      - do not erase provider/image/parser/template/API/webhook/MCP/desktop seams
+      - do not treat screenshots of example decks as proof of generated, persisted, editable decks
+
+required_files:
+  - BUILDPRINT.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-uiux-decision.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - HANDOVER.md
+
+forbidden_shapes:
+  - slices/
+  - gates/
+  - generated/agent-prompt.md
+  - generated/codex-handoff.md
+  - templates/runner/
+  - templates/teams/
+  - 02-architecture.md
+  - 03-ux-contract.md
+  - 04-handover.md
+  - 04-review.md
+  - 05-handover.md
+
 deployment_posture:
   current: trusted_local
   allowed_values:
     - trusted_local
     - private_authenticated
     - public_webapp
-execution_cadence:
-  current: all_remaining
-  allowed_values:
-    - one_phase
-    - to_checkpoint
-    - all_remaining
-blueprint_mode:
-  primary: product
-  consumer: end_user
-  selected_spine: product_app_consumer_first
-  allowed_spines:
-    - product_app_consumer_first
-    - developer_first_framework
-    - reliability_first_service
-    - automation_task_loop
-    - data_pipeline_quality_loop
-    - infrastructure_operations_loop
-    - mixed
-agent_contract:
-  role: Senior Product Engineer
-  rule: Build the trusted-local presentation product loop honestly; report provider/export/API blockers explicitly.
-read_order:
-  - BUILDPRINT.md
-  - 01-questions.md
-  - generated/agent-prompt.md
-  - 02-project-setup.md
-  - blueprint.yaml
-  - 03-phases/phase-index.yaml
-  - 03-phases/phase-flow.md
-  - 04-review.md
-  - 05-handover.md
-implementation_loop:
-  phase_flow: 03-phases/phase-flow.md
-  active_phase: 03-phases/00-product-system-alignment.md
-  final_review: 04-review.md
-  handover: 05-handover.md
-repair_routing:
-  product_contradiction: BUILDPRINT.md
-  setup_or_architecture_gap: 02-project-setup.md
-  phase_gap: current_phase
-  review_gap: 04-review.md
-  handover_gap: 05-handover.md
-purpose:
-  summary: Build a trusted-local Presenton-inspired AI presentation generator with editable deck workbench, BYOK providers, templates/assets, export, API, webhooks, MCP, and desktop boundaries.
-runtime:
-  frontend: Browser workbench with deck canvas, thumbnails, outline, assets, chat, and export center.
-  backend: API plus worker/export runtime for generation, parsing, storage, export, webhooks, and MCP seams.
-  providers: OpenAI-compatible text provider first, with explicit seams for Gemini, Anthropic, Azure, Bedrock, Vertex, Fireworks, Together, LM Studio, Ollama, and custom endpoints.
-state:
-  durable:
-    - provider/image/export configuration metadata without secret leakage
-    - uploaded source documents and extraction status
-    - deck outline, slides, layouts, notes, assets, themes, templates
-    - chat iterations and generation traces scoped to the deck
-    - export tasks, files, API tasks, and webhook delivery attempts
-  local_only:
-    - provider credentials
-    - local model endpoints
-    - export runtime paths
-nodes:
-  configure_runtime:
-    output: provider, image, storage, export, and privacy readiness
-  ingest_content:
-    input: prompt, document, or template
-    output: extracted content, outline candidates, and blockers
-  generate_deck:
-    input: outline, template, theme, provider config
-    output: persisted editable deck model
-  edit_workbench:
-    input: deck state
-    output: slide edits, asset changes, chat revisions
-  export_integrate:
-    input: deck state
-    output: PPTX/PDF files, API task status, webhook events, MCP/desktop seams
+
+runtime_contract:
+  frontend: workbench UI with configure/create/outline/deck/templates/exports views, slide thumbnails, canvas, chat, and export center
+  backend: local API/service with provider config, document ingestion, outline generation, layout selection, slide content generation, persistence, chat, export tasks, and automation seams
+  providers: bring-your-own text and image providers including OpenAI-compatible, OpenAI, Gemini/Google, Vertex, Azure, Bedrock, Fireworks, Together, Anthropic, LM Studio, Ollama, custom endpoints, and optional ChatGPT/Codex account flows when proven
+  storage: local persisted deck state, uploaded files, themes, templates, fonts, image assets, chat history, export outputs, and task state
+  export: PPTX/PDF only after runtime/converter proof; otherwise precise blocked state
+  automation: async API, webhooks, MCP, and desktop bridges must be working or visibly blocked
+  ui: focused presentation workbench with stable slide dimensions, editable deck surfaces, provider/export blockers, and no dead controls
+
+production_quality_gates:
+  provider_probe: required before live generation claims
+  document_parser_probe: required before uploaded document extraction claims
+  outline_quality: required before claiming source-grounded planning
+  layout_template_quality: required before claiming template/layout fidelity
+  editable_workbench_quality: required before claiming a deck editor
+  deck_output_quality: required before claiming useful presentation generation
+  export_runtime_probe: required before claiming PPTX/PDF export
+  api_webhook_mcp_probe: required before automation claims
+  desktop_runtime_probe: required before desktop claims
+  durable_persistence: required before resume/history claims
+  accessibility_responsive_editor: required before production UX claims
+  auth_privacy_observability_deployment: required before private or public deployment claims
+
+phase_flow: 03-phases/phase-flow.md
+phase_index: 03-phases/phase-index.yaml
+handover: HANDOVER.md
