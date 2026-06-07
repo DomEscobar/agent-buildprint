@@ -64,6 +64,20 @@ Output existence is not enough. Input-derived output is not enough. A selected p
 
 For non-UI artifacts, it must explicitly say `not-ui-bearing` and define the developer/operator experience with equivalent specificity.
 
+When the source provides no precise visual direction, the mapper must not leave blanks for the implementation agent. The packet must require an autonomous design decision before UI work: choose style direction, color tokens, typography scale, layout model, component language, responsive behavior, and state treatment from the artifact type and user workflow. Vague adjectives are not a valid contract.
+
+## Typed proof contract
+
+The mapper must select proof obligations that fit the artifact instead of forcing one generic proof list:
+
+- UI-bearing artifacts: screenshot/browser inspection of the real path, interaction-state proof, no-overlap/no-clipping/no-horizontal-overflow checks when practical, and accessibility/focus sanity.
+- Responsive artifacts: desktop and mobile proof, or an explicit reason the artifact is single-viewport.
+- Editor/workbench/canvas artifacts: fixed-surface framing, long-content stress fixtures, edit/readback proof, and inspector/control reachability.
+- AI/generative artifacts: central output specificity proof, repeated-generic-output rejection, provider/blocker honesty, and sample output review against the output contract.
+- Integration/plugin/service/CLI artifacts: install/configure/first-action proof, idempotency/retry/failure proof, operator logs/errors, and audit/recovery proof.
+
+Selected packets should put concise routing facts in `blueprint.yaml`, buildable proof setup in `01-project-setup.md`, phase-specific inspection in phase objectives, and final evidence fields in `HANDOVER.md`.
+
 ## Phase contract
 
 Each phase file must include:
@@ -96,6 +110,8 @@ The `Building objective` must be comprehensive and product-specific. It should r
 - phase index references to missing files;
 - placeholder/fake-success leakage outside Mapper templates.
 - missing central output quality contracts in selected packets.
+- missing selected proof obligations for obvious visual, responsive, editor, generative, or integration artifact types.
+- missing critical-review-pushback phase in serious executable packets.
 
 ## Completion contract
 

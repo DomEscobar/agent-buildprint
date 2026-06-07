@@ -45,6 +45,10 @@ The selected `BUILDPRINT.md` must be generic and transferable. It should say “
 
 `02-uiux-decision.md` must be written in strong detail, not phrases. It is not a “make it nice” note. It is the visual constitution that later phases obey. The mapper should force the downstream agent to know the artifact’s aesthetic world before coding: simplicity or density, glassmorphism or editorial minimalism, color schema, typography, spacing, component behavior, motion, state copy, and anti-generic boundaries.
 
+The mapper should not solve vague UI direction by adding endless style prose. It should route uncertainty into explicit decisions before implementation. If the source has no brand, palette, typography, or layout system, the selected packet must require the builder to reason from artifact type, audience, density, workflow, risk, and review proof, then write a concrete local UI identity before UI code.
+
+For visual/editor/workbench artifacts, the selected packet must also declare viewport and stress proof obligations. A screenshot path is weaker than screenshot inspection: the packet should say what must be inspected, such as primary surface framing, no overlap, no clipped controls, no page-level horizontal overflow, readable text, and reachable actions on desktop and mobile when responsive use is in scope.
+
 ## Central output anti-regression rule
 
 Every selected packet must state what makes the mapped artifact's central output valuable. It is not enough to preserve a golden path where output technically depends on input. The mapper must extract the source-specific output primitives, quality signals, failure modes, and reviewer acceptance questions that distinguish useful output from generic or interchangeable output.
@@ -57,6 +61,17 @@ Examples:
 - a document/report tool must define what makes the draft publishable or decision-grade, not only that text is generated.
 
 If a selected packet can produce a polished shell whose main output could fit any unrelated input with superficial text swaps, the mapper failed. Put the machine-readable summary in `blueprint.yaml`, the implementation guidance in setup and phase objectives, and the human-facing review criteria in verification/handover.
+
+## Typed proof routing rule
+
+Mapper OS should choose proof obligations by artifact type instead of hammering every packet with the same text.
+
+- UI-bearing apps need design-decision precision, desktop/mobile visual inspection when responsive use is expected, interaction-state proof, and accessibility/overflow checks.
+- Editor/workbench/canvas tools need fixed-format surface proof, long-content stress fixtures, selection/edit/readback proof, and no-overlap inspection.
+- AI/generative products need semantic output-specificity proof, repeated-output rejection, provider/blocker honesty, and reviewer acceptance questions.
+- Integrations/plugins/CLIs/services may be `not-ui-bearing`, but they still need operator/developer experience decisions: command shape, logs, errors, idempotency, retries, audit trail, and recovery proof.
+
+The selected packet should expose these obligations in concise machine-readable routing plus focused Markdown proof requirements. Do not copy every possible gate into every packet. Select the gates that match the artifact type and mark irrelevant gates as not applicable or omitted.
 
 ## Forbidden selected-output shapes
 

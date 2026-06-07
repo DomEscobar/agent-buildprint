@@ -23,6 +23,8 @@ The goal is not to create a long proof ledger. The goal is to find lies before h
 
 Also find blandness before handoff. A product can pass structural checks while its central output is still generic, interchangeable, or not useful. Compare the observed output against the `central_output_contract` in `blueprint.yaml` and `docs/output-quality.md` or equivalent. If the artifact's main output only proves that input flowed through the system, record the quality gap instead of calling it complete.
 
+Verify the selected typed gates from `blueprint.yaml` and `docs/proof-matrix.md`; do not invent irrelevant gates at the end. For each applicable gate, record the command, browser path, screenshot inspection, API/CLI check, fixture, or blocker. For each non-applicable gate, leave a short reason. The handover should make it obvious why desktop/mobile visual proof, long-content stress, semantic output specificity, or integration/operator proof did or did not apply.
+
 Update `HANDOVER.md` with exactly what was built, commands run, observed results, blockers, unproven claims, and recommended next actions.
 
 ## DO NOT
@@ -42,6 +44,7 @@ Update `HANDOVER.md` with exactly what was built, commands run, observed results
 - Prove persistence/readback when this phase creates durable state.
 - Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
 - Capture reviewer-style evidence for central output quality: what the artifact makes clear, what still feels generic, what the user/operator can do next, and which output-quality claims remain unproven.
+- Record selected typed quality gate results: applicable/not applicable, proof command or inspection path, result, and blocker.
 - Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note

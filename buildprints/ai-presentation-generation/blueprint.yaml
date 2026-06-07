@@ -49,6 +49,7 @@ product:
       - outline and slide content are specific to each slide title, source input, requested tone, and instructions; repeated generic body text across multiple slides is a failed content proof
       - slide layouts are selected because they fit slide content, tables, charts, images, or table-of-contents needs
       - slide content matches each layout's expected data shape and remains editable after generation
+      - generated code includes executable proof scripts for deck behavior, desktop/mobile screenshots, content specificity, and long-text stress rather than relying on manual visual claims alone
       - desktop Deck view uses a wide editor composition with thumbnail rail, 16:9 canvas, inspector, and chat/export context visible without collapsing into a stacked mobile layout at desktop widths
       - slide canvas renders every generated title, subtitle, body, chart/table label, asset caption, and provenance chip without overlap, clipping, or unreadable compression
       - mobile Deck view preserves readable navigation, slide thumbnail selection, canvas preview, and inspector fields without horizontally clipped tabs, rails, or controls
@@ -63,6 +64,7 @@ product:
       - fake PPTX/PDF download or export success without runtime proof
       - hard-coded thumbnails or example decks counted as generation
       - repeated slide plan/body copy that only proves data flow and does not distinguish executive summary, risks, operating signals, root causes, or requested sections
+      - generated app with no automated screenshot/geometry/content-specificity/long-text proof path
       - narrow stacked layout presented as desktop workbench proof
       - slide canvas text, chips, dividers, icons, or bars overlapping inside the main deck preview
       - mobile screenshots with horizontally clipped view tabs, thumbnail rails, inspector controls, or deck toolbar actions
@@ -153,6 +155,28 @@ runtime_contract:
   export: PPTX/PDF only after runtime/converter proof; otherwise precise blocked state
   automation: async API, webhooks, MCP, and desktop bridges must be working or visibly blocked
   ui: focused presentation workbench with stable slide dimensions, editable deck surfaces, provider/export blockers, and no dead controls
+
+verification_artifacts:
+  required_generated_app_scripts:
+    - install
+    - build_or_typecheck
+    - lint_or_static_check
+    - unit_or_smoke_tests
+    - screenshot_capture
+  required_screenshot_proofs:
+    - configure_view
+    - create_view
+    - outline_view
+    - deck_desktop_1440_or_wider
+    - deck_mobile_phone_width
+    - templates_view
+    - exports_view
+    - long_text_desktop
+    - long_text_mobile
+  required_semantic_proofs:
+    - content specificity across at least four non-title slides
+    - same deck id across canvas thumbnails inspector notes export and chat context
+    - blocked states for unproven provider parser export API webhook MCP desktop auth privacy and deployment claims
 
 production_quality_gates:
   provider_probe: required before live generation claims

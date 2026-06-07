@@ -17,6 +17,22 @@ Small checklist before applying this style constitution:
 
 This file is the style constitution for the artifact. Every later phase that touches human-facing UI must obey it before claiming progress.
 
+## 0. Autonomous design decision protocol
+
+If no upstream visual direction exists, do not leave the UI undecided and do not ask the implementation phase to improvise silently. The builder must reason from product purpose, user workflow, artifact type, audience, density, risk, and expected review proof, then write the resulting decisions into the implementation project's local design notes before implementation. A missing brand guide, missing color palette, missing typography choice, or missing layout reference is a prompt to decide precisely, not permission to ship a generic interface.
+
+Before building UI, record at least these decisions in local project notes or the phase handoff:
+
+- product mood in one concrete sentence, tied to the task the user is trying to finish;
+- chosen style direction, including what adjacent styles are rejected and why;
+- color tokens with hex values for background, surfaces, borders, main text, secondary text, primary action, secondary accent, success, warning, danger, blocked, and focus;
+- typography tokens with exact sizes, line heights, weights, and where each token is used;
+- layout model for desktop and mobile, including navigation, primary work surface, secondary panels, scroll ownership, fixed aspect-ratio regions, and overflow behavior;
+- component language for controls, cards, tables/lists, thumbnails, inspector panels, modals/drawers, empty states, loading states, blocked states, and errors;
+- proof obligations: screenshots, viewport assertions, no-overlap checks, long-text fixtures, and content-specificity checks.
+
+These decisions must be written before implementation because the first UI pass should already be aiming at a coherent product, not discovering the design accidentally through patches.
+
 ## 1. Design thesis
 
 The product should feel like a focused self-hosted presentation studio: calm, visual, precise, and editable. The deck canvas is the hero surface. The surrounding UI should support making a deck, not showing off a backend. The experience should feel closer to a local Gamma/Canva-style workbench with operator-grade readiness states than to a SaaS dashboard or one-screen prompt toy.
@@ -85,6 +101,8 @@ The slide canvas is the central output surface. Text, chips, icons, divider bars
 Mobile proof is not satisfied by "the page scrolls somewhere." At phone width, the user must still be able to see and reach the main view tabs, slide thumbnail selection, deck toolbar actions, slide canvas, inspector fields, chat/export controls, and primary actions. Horizontal overflow is acceptable only for an intentional scroller with visible affordance and contained content; clipped tab labels, half-visible thumbnails, cut-off buttons, or controls reachable only by accidental page overflow are failed responsive workbench proof.
 
 Long-copy behavior is part of the layout contract, not an edge case. The implementation must prove at least one stress deck with a long slide title, long bullet/body fields, long provenance/source label, and long speaker notes. Desktop and mobile screenshots must show intentional wrapping, clamping, or inspector overflow behavior; accidental clipping or overlap blocks editor quality claims.
+
+The generated app should carry these layout claims in tests or screenshot scripts. A good implementation includes deterministic viewport checks for a wide desktop Deck view, a phone-width Deck view, and long-text states, plus semantic assertions that the visible deck body differs across slide roles. Manual screenshots are useful evidence, but they are not a substitute for repeatable commands that fail when page-level horizontal overflow, overlapping canvas regions, repeated generic slide content, or missing stress fixtures return.
 
 Use generous but efficient spacing: 8px micro spacing, 12/16px component spacing, 24px panel spacing, and 32/40px major workbench breathing room. Avoid nested cards, floating hero panels, and marketing-style sections. On mobile, preserve the same workflow with horizontal view tabs or bottom navigation, then stack secondary panels under the active work surface.
 

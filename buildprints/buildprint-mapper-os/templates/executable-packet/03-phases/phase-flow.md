@@ -12,6 +12,7 @@ Use this loop for the active phase only. Do not read every phase upfront. Do not
 6. Verify with the most meaningful available command, API/runtime check, browser/screenshot inspection, or persistence/readback proof.
 7. Repair visible slop and fake-success shortcuts before continuing.
 8. Record what works, what is blocked, what was verified, and what the next phase may trust.
+9. Before final completion, run `03-phases/critical-review-pushback.md`; if the rubric does not pass, fix the named ad hoc flaws and rerun the relevant proof before claiming done.
 
 ## Completion rule
 

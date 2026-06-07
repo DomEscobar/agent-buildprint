@@ -15,6 +15,24 @@ This file is the style constitution for every human-facing surface. It must forc
 
 For non-UI libraries/services, write `not-ui-bearing` and describe the developer/operator experience with the same level of specificity: command shape, output formatting, error tone, docs style, and interaction rhythm.
 
+## 0. Autonomous design decision protocol
+
+If no upstream visual direction exists, do not leave the UI undecided and do not ask the implementation phase to improvise silently. The builder must reason from product purpose, user workflow, artifact type, audience, density, risk, and expected review proof, then write the resulting decisions into the implementation project's local design notes before implementation. A missing brand guide, missing color palette, missing typography choice, or missing layout reference is a prompt to decide precisely, not permission to ship a generic interface.
+
+Before building UI, the generated packet must force the implementing agent to record at least these decisions in local project notes or the phase handoff:
+
+- product mood in one concrete sentence, tied to the task the user is trying to finish;
+- chosen style direction, including what adjacent styles are rejected and why;
+- color tokens with exact values for background, surfaces, borders, main text, secondary text, primary action, secondary accent, success, warning, danger, blocked, and focus;
+- typography tokens with exact sizes, line heights, weights, and where each token is used;
+- layout model for desktop and mobile, including navigation, primary work surface, secondary panels, scroll ownership, fixed-format regions, and overflow behavior;
+- component language for controls, cards, tables/lists, graphs/charts, inspector panels, modals/drawers, empty states, loading states, blocked states, and errors;
+- proof obligations: screenshots, viewport assertions, no-overlap checks, long-text fixtures, and content-specificity checks.
+
+These decisions must be written before implementation because the first UI pass should already be aiming at a coherent product, not discovering the design accidentally through patches.
+
+Use the proof obligations selectively. A CLI may need operator output, error, and recovery style instead of screenshots. A single-viewport kiosk may need fixed-size framing instead of mobile proof. A generative editor may need long-content and content-specificity stress. The rule is precise fit: choose the proof that would reveal the artifact's most likely quality failure, and record why omitted UI proofs are not applicable.
+
 ## How to implement this decision
 
 Before UI code, read:
@@ -74,6 +92,7 @@ State that every later phase touching UI must preserve this style schema. If a p
 - The style constitution is detailed enough to guide implementation without guessing.
 - Concrete color tokens and typography rules are recorded.
 - Main layout, component language, motion, and state behavior are specified.
+- Applicable typed UI proofs from `blueprint.yaml` are selected: viewport, no-overlap/no-clipping, long-content stress, semantic output specificity, or operator/developer experience.
 - Anti-generic rules are explicit.
 - Later phases are instructed to obey this style schema before claiming progress.
 

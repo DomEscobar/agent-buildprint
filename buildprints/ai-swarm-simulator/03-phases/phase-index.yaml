@@ -40,3 +40,6 @@ phases:
   - phase_id: 13-production-deployment-auth-privacy-observability
     file: 03-phases/13-production-deployment-auth-privacy-observability.md
     status: included
+  - phase_id: critical-review-pushback
+    file: 03-phases/critical-review-pushback.md
+    status: included

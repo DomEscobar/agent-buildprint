@@ -74,6 +74,46 @@ central_output_contract:
     - do not claim central output quality until reviewer acceptance questions are answered with proof
   minimum_standard: The product path must produce output that reaches the mapped artifact's quality bar, not merely output that depends on input.
 
+typed_quality_gates:
+  rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
+  ui_decision_precision:
+    applies_when: artifact has human-facing UI, reports, dashboards, editors, visual workflows, or operator surfaces
+    requires:
+      - explicit style direction and rejected adjacent styles
+      - exact color tokens and status semantics
+      - typography scale and usage
+      - desktop/mobile layout model when responsive use is in scope
+      - component and state language before UI implementation
+  visual_viewport_acceptance:
+    applies_when: artifact has responsive or browser/app UI
+    requires:
+      - desktop proof for the primary workflow
+      - mobile or narrow-viewport proof when users may operate there
+      - screenshot inspection for overlap, clipping, unreadable text, unreachable actions, and page-level horizontal overflow
+  editor_stress_acceptance:
+    applies_when: artifact renders editable, generated, document-like, canvas, timeline, deck, notes, or report content
+    requires:
+      - long-title and long-body fixtures
+      - fixed-surface framing or scroll ownership proof
+      - edit/readback or state persistence proof when editing exists
+  semantic_output_acceptance:
+    applies_when: artifact generates, transforms, recommends, summarizes, analyzes, or composes output
+    requires:
+      - output-specificity check against central_output_contract
+      - repeated-generic-output rejection
+      - sample output review that states what the user/operator can do next
+  integration_operator_acceptance:
+    applies_when: artifact is a plugin, integration, CLI, service, worker, automation, API, or background job
+    requires:
+      - install/configure/first-action proof
+      - error, retry, idempotency, logging, audit, and recovery expectations where relevant
+      - explicit live-provider or external-side-effect blockers
+  critical_review_pushback:
+    applies_when: serious executable packet or user-facing artifact
+    phase: 03-phases/critical-review-pushback.md
+    pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"
+    repair_loop: "up to five flaw -> fix -> proof -> rescore iterations unless externally blocked"
+
 state_and_handoff:
   local_state_dir: .buildprint/
   setup_receipt: .buildprint/setup-receipt.md

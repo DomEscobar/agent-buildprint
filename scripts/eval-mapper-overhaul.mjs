@@ -76,6 +76,8 @@ for (const required of [
   /style constitution/i,
   /Every phase (file )?must read `?02-uiux-decision\.md`?/i,
   /blueprint\.yaml`? (is|mirrors|routes).*product[- ]contract/i,
+  /Typed proof/i,
+  /proof obligations by artifact type/i,
 ]) {
   if (!required.test(docCorpus)) {
     console.error(docCorpus)
@@ -118,6 +120,18 @@ expectFailure('mapper eval requires 00-questions', ['packet', 'check', missingQu
 const missingCentralOutput = copyTemplate('missing-central-output-contract')
 edit(missingCentralOutput, 'blueprint.yaml', (s) => s.replace(/\ncentral_output_contract:\n[\s\S]*?\nstate_and_handoff:/, '\nstate_and_handoff:'))
 expectFailure('mapper eval requires central output quality contract', ['packet', 'check', missingCentralOutput], ['✗ blueprint declares central output quality contract'])
+
+const missingTypedGates = copyTemplate('missing-typed-quality-gates')
+edit(missingTypedGates, 'blueprint.yaml', (s) => s.replace(/\ntyped_quality_gates:\n[\s\S]*?\nstate_and_handoff:/, '\nstate_and_handoff:'))
+expectFailure('mapper eval requires typed quality gate routing', ['packet', 'check', missingTypedGates], ['✗ blueprint declares typed quality gate routing'])
+
+const missingProofMatrix = copyTemplate('missing-proof-matrix')
+edit(missingProofMatrix, '01-project-setup.md', (s) => s.replace(/- `docs\/proof-matrix\.md`[\s\S]*?\n/, ''))
+expectFailure('mapper eval requires typed proof matrix setup', ['packet', 'check', missingProofMatrix], ['✗ project setup requires typed proof matrix'])
+
+const weakHandoverTypedGates = copyTemplate('weak-handover-typed-gates')
+edit(weakHandoverTypedGates, 'HANDOVER.md', (s) => s.replace(/- Typed quality gates:[\s\S]*?(?=- Central output quality evidence:)/, ''))
+expectFailure('mapper eval requires typed gate handover', ['packet', 'check', weakHandoverTypedGates], ['✗ handover captures typed quality gate results'])
 
 const weakObjective = copyTemplate('weak-objective')
 edit(weakObjective, '03-phases/02-core-product-loop.md', (s) => s.replace(/## Building objective[\s\S]*?## DO NOT/, '## Building objective\n\nBuild stuff.\n\n## DO NOT'))

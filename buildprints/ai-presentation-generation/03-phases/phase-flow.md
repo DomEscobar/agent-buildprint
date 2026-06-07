@@ -10,6 +10,7 @@ Use active phase only. Do not read every phase upfront. Start from `.buildprint/
 4. Inspect the product result, not just the code diff.
 5. Repair visible slop, beginner confusion, dead controls, fake provider success, fake export success, static slide demos, and any mismatch between UI claims and runtime evidence.
 6. Update handover facts before stopping.
+7. Before final completion, run `03-phases/critical-review-pushback.md`; if the rubric does not pass, fix the named ad hoc flaws and rerun the relevant proof before claiming done.
 
 ## Proof theater rejection
 

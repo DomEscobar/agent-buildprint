@@ -18,6 +18,8 @@ Create the real base project structure for the artifact described by `blueprint.
 
 The setup output should make the first phase obvious: where code goes, what commands run, how state persists, what is mocked in tests, what is blocked in live mode, and what good enough to continue means.
 
+Use `typed_quality_gates` in `blueprint.yaml` as a selector, not as decoration. During setup, decide which gates apply to this artifact and write a short proof matrix: applicable, not applicable, command/proof path, and blocker if missing. Do not add irrelevant gates just to look thorough. If the artifact is UI-bearing, generative, editor-like, or integration/operator-facing, the corresponding gate needs a real proof path or an honest blocker.
+
 ## Required setup artifacts
 
 Create these in the implementation project unless the project already has equivalent stronger files:
@@ -27,6 +29,7 @@ Create these in the implementation project unless the project already has equiva
 - `docs/product-loop.md` — golden path and primary user/operator journey.
 - `docs/output-quality.md` — central output, output primitives, quality signals, unacceptable generic substitutes, reviewer acceptance questions, and claim gates.
 - `docs/proof-strategy.md` — commands/tests/browser/API proof, screenshot criteria, provider blocker semantics, and what cannot upgrade claims.
+- `docs/proof-matrix.md` — selected typed quality gates from `blueprint.yaml`, each marked applicable/not applicable, with command or inspection path and current blocker.
 - `docs/ui-identity.md` or `UI-IDENTITY.md` — required for UI-bearing products; visual identity, interaction model, motion, accessibility, empty/loading/error/blocked states.
 - `.env.example` — exact env names with blank secrets and no mock/test mode enabled by default.
 - `.buildprint/setup-receipt.md` — decisions made, assumptions, blockers, commands discovered, and first phase readiness.
@@ -46,6 +49,7 @@ Create these in the implementation project unless the project already has equiva
 - package/build/test commands are named, even if some are currently blocked;
 - `.env.example` has blank secrets only;
 - `docs/output-quality.md` or an equivalent artifact-specific output contract exists;
+- `docs/proof-matrix.md` or equivalent names selected typed quality gates, proof commands/inspection paths, and non-applicable gates;
 - UI-bearing artifacts have `UI-IDENTITY.md` or equivalent;
 - `.buildprint/setup-receipt.md` records assumptions and blockers;
 - next active phase can start without guessing the architecture.

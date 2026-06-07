@@ -36,6 +36,8 @@ Selected packets must explicitly reject:
 
 For UI-bearing artifacts, `02-uiux-decision.md` must open with UX importance and understandability, include a small checklist, and then define a strong style schema: design thesis, style direction, color tokens, typography, layout/spatial rhythm, component language, motion, empty/loading/error/blocked states, anti-generic rules, and phase obligation. If the style constitution could fit ten unrelated products unchanged, it is too generic.
 
+If the source lacks style direction, the mapper should force a decision protocol, not a longer moodboard. The builder must infer a precise design system from product purpose, audience, workflow density, risk, and artifact type, then record the chosen and rejected directions before building UI.
+
 ## Phase quality bar
 
 Every phase must name a concrete building objective, the context to read, `02-uiux-decision.md` design responsibility, forbidden shortcuts, proof before moving on, and handoff facts. A phase can stop on a real blocker, but it cannot pass from edits alone.
@@ -43,6 +45,18 @@ Every phase must name a concrete building objective, the context to read, `02-ui
 ## Output quality bar
 
 Every selected packet must define the central output contract for the mapped artifact. That contract should name the central output, its primitives, quality signals, unacceptable generic substitutes, reviewer acceptance questions, and claim gates. If these are missing, downstream agents can build something structurally correct but semantically weak.
+
+## Typed proof bar
+
+Quality gates should be selected, not sprayed everywhere.
+
+- Add desktop/mobile visual inspection only when the artifact has human-facing responsive surfaces.
+- Add long-text or long-content stress only when the artifact renders editable/generated/document-like content.
+- Add content-specificity checks only when the artifact generates, transforms, summarizes, recommends, or composes output.
+- Add install/configure/idempotency/retry/audit proof when the artifact is an integration, plugin, service, CLI, or automation.
+- Mark irrelevant proof paths as not applicable instead of bloating the packet.
+
+The handover should still name what proof was selected, what ran, what failed, and what remains unproven.
 
 ## Review stance
 

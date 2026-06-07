@@ -11,10 +11,11 @@ Use this when stopping or claiming progress. Do not claim completion beyond the 
 
 - List commands, browser checks, API checks, screenshots, export attempts, provider probes, and observed results.
 - Include any clean install or generated-deck proof.
-- Include the wide desktop Deck screenshot path and state whether it passed desktop visual acceptance: thumbnail rail, central 16:9 canvas, inspector/edit controls, and no slide-canvas overlap/clipping.
-- Include the mobile Deck screenshot path and state whether it passed mobile visual acceptance: readable/reachable tabs, thumbnail rail, toolbar actions, slide canvas, inspector fields, chat/export controls, and no accidental horizontal clipping.
+- Include the wide desktop Deck screenshot path and desktop visual acceptance result: thumbnail rail, central 16:9 canvas, inspector/edit controls, and no slide-canvas overlap/clipping.
+- Include the mobile Deck screenshot path and mobile visual acceptance result: readable/reachable tabs, thumbnail rail, toolbar actions, slide canvas, inspector fields, chat/export controls, and no accidental horizontal clipping.
 - Include content-specificity proof: cite at least four non-title slides and whether their outline plans, body fields, notes, and layout reasons differ by slide purpose rather than repeating generic filler.
 - Include long-text stress proof: cite the seeded/generated long title, long bullet/body, long provenance/source label, and long notes case, with desktop and mobile screenshot or manual inspection result.
+- Include generated-app proof commands or scripts for desktop/mobile screenshots, content-specificity assertions, and long-text stress. If these are missing, list that as a blocker rather than relying on prose review.
 
 ## Blocked
 

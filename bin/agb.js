@@ -85,6 +85,64 @@ function extractRelativeRefs(text) {
   return [...refs]
 }
 
+function countMatches(text, pattern) {
+  return [...text.matchAll(pattern)].length
+}
+
+function hasDetailedDesignDecisionProtocol(text) {
+  return /Autonomous design decision protocol/i.test(text) &&
+    /If no upstream visual direction exists/i.test(text) &&
+    /reason from product purpose/i.test(text) &&
+    /write the resulting decisions/i.test(text) &&
+    /before implementation/i.test(text)
+}
+
+function hasPreciseColorSystem(text) {
+  const colorSection = (text.match(/#{2,3}\s*\d+\.\s*Color system\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
+  return countMatches(colorSection, /#[0-9a-f]{6}\b|rgba?\(/gi) >= 10 &&
+    /background/i.test(colorSection) &&
+    /surface/i.test(colorSection) &&
+    /border/i.test(colorSection) &&
+    /text/i.test(colorSection) &&
+    /primary/i.test(colorSection) &&
+    /success/i.test(colorSection) &&
+    /warning/i.test(colorSection) &&
+    /danger|blocked/i.test(colorSection) &&
+    /never rely on color alone/i.test(colorSection)
+}
+
+function hasPreciseStyleDirection(text) {
+  const styleSection = (text.match(/#{2,3}\s*\d+\.\s*Chosen style direction\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
+  return styleSection.trim().length >= 350 &&
+    /Use[\s\S]{0,80}\*\*|Use\s+[A-Za-z][\w\s-]+style direction/i.test(styleSection) &&
+    /not|Avoid|No /i.test(styleSection) &&
+    /specific|artifact|product|user|workflow|canvas|workbench|studio|surface/i.test(styleSection)
+}
+
+function hasPreciseTypographySystem(text) {
+  const typeSection = (text.match(/#{2,3}\s*\d+\.\s*Typography system\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
+  return countMatches(typeSection, /\b\d{2}(?:-\d{2})?px\b/gi) >= 5 &&
+    /line-height|\/\s*1\./i.test(typeSection) &&
+    /weight|\/\s*\d{3}/i.test(typeSection) &&
+    /workspace-title|hero-title|heading/i.test(typeSection) &&
+    /section-title/i.test(typeSection) &&
+    /panel-title/i.test(typeSection) &&
+    /body/i.test(typeSection) &&
+    /button-label/i.test(typeSection)
+}
+
+function hasPreciseLayoutSystem(text) {
+  const layoutSection = (text.match(/#{2,3}\s*\d+\.\s*Layout and spatial rhythm\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
+  return /layout|view|shell|canvas|workbench|split|panel/i.test(layoutSection) &&
+    /desktop/i.test(layoutSection) &&
+    /mobile/i.test(layoutSection) &&
+    /responsive/i.test(layoutSection) &&
+    /dominant|primary|first screen/i.test(layoutSection) &&
+    /8px/i.test(layoutSection) &&
+    /12\/16px/i.test(layoutSection) &&
+    /24/i.test(layoutSection)
+}
+
 function extractForbiddenDeps(text) {
   const lines = text.split(/\r?\n/)
   const start = lines.findIndex((line) => /^\s{2}forbidden_dependencies:\s*$/.test(line) || /^forbidden_dependencies:\s*$/.test(line))
@@ -433,12 +491,20 @@ function packetCheckResults(dir) {
   const files = new Set(packetFiles(dir))
   const allFiles = Array.from(files)
   const normalizedPacketDir = dir.split(path.sep).join('/')
-  const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') || normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet')
 
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
   const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
   const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
   const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
+  const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') ||
+    normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet') ||
+    /Replace this template-level rule with the selected artifact's source-derived central output contract/i.test(blueprint)
+  const requiresTypedQualityRouting = isMapperTemplatePacket
+  const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint) ||
+    normalizedPacketDir.endsWith('buildprints/ai-presentation-generation')
+  const requiresCriticalReviewPushback = isMapperTemplatePacket ||
+    isPresentationPacket ||
+    normalizedPacketDir.endsWith('buildprints/ai-swarm-simulator')
 
   const obsoleteFiles = allFiles.filter((file) =>
     file === '02-architecture.md' ||
@@ -493,6 +559,17 @@ function packetCheckResults(dir) {
     /reviewer_acceptance_questions:/i.test(blueprint) &&
     /claim_gates:/i.test(blueprint)
   )
+  ok('blueprint declares typed quality gate routing',
+    !requiresTypedQualityRouting ||
+    /typed_quality_gates:/i.test(blueprint) &&
+    /ui_decision_precision:/i.test(blueprint) &&
+    /visual_viewport_acceptance:/i.test(blueprint) &&
+    /editor_stress_acceptance:/i.test(blueprint) &&
+    /semantic_output_acceptance:/i.test(blueprint) &&
+    /integration_operator_acceptance:/i.test(blueprint) &&
+    /critical_review_pushback:/i.test(blueprint) &&
+    /Select only the gates that match the artifact type/i.test(blueprint)
+  )
 
   ok('BUILDPRINT owns v3 read order', /00-questions\.md[\s\S]*01-project-setup\.md[\s\S]*02-uiux-decision\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i.test(buildprint))
   ok('BUILDPRINT is an AI builder briefing', /responsible builder/i.test(buildprint) && /senior product engineer/i.test(buildprint))
@@ -507,6 +584,14 @@ function packetCheckResults(dir) {
   const setup = safeReadText(path.join(dir, '01-project-setup.md'))
   ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && /Do not start `?03-phases\/\*`?/i.test(setup))
   ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /docs\/product-loop\.md/i.test(setup) && /docs\/proof-strategy\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
+  ok('project setup requires typed proof matrix',
+    !requiresTypedQualityRouting ||
+    /typed_quality_gates/i.test(setup) &&
+    /docs\/proof-matrix\.md/i.test(setup) &&
+    /applicable\/not applicable/i.test(setup) &&
+    /command\/proof path/i.test(setup) &&
+    /not applicable/i.test(setup)
+  )
   ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
 
   const uiux = safeReadText(path.join(dir, '02-uiux-decision.md'))
@@ -514,6 +599,17 @@ function packetCheckResults(dir) {
   ok('ui/ux decision includes a small pre-style checklist', /Small checklist/i.test(uiux) && /first-time user/i.test(uiux) && /what to do first/i.test(uiux) && /all visible controls/i.test(uiux))
   ok('ui/ux decision is a detailed style constitution', uiux.trim().length >= (isMapperTemplatePacket ? 4500 : 6000) && /style constitution/i.test(uiux))
   ok('ui/ux decision defines concrete visual schema', /Design thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Color system/i.test(uiux) && /Typography system/i.test(uiux) && /Layout and spatial rhythm/i.test(uiux))
+  ok('ui/ux decision requires autonomous design reasoning when direction is missing', hasDetailedDesignDecisionProtocol(uiux))
+  ok('ui/ux decision selects typed proof obligations without gate spam',
+    !requiresTypedQualityRouting ||
+    /Use the proof obligations selectively/i.test(uiux) &&
+    /choose the proof that would reveal the artifact's most likely quality failure/i.test(uiux) &&
+    /omitted UI proofs are not applicable/i.test(uiux)
+  )
+  ok('ui/ux decision has a specific chosen style direction', isMapperTemplatePacket ? /Pick one strong direction and commit to it/i.test(uiux) && /specific to the artifact/i.test(uiux) : hasPreciseStyleDirection(uiux))
+  ok('ui/ux decision has precise color tokens and status semantics', isMapperTemplatePacket ? /Define concrete color tokens/i.test(uiux) && /background, surface, elevated surface, border, primary, accent, success, warning, danger, text-main, text-muted, and focus ring/i.test(uiux) : hasPreciseColorSystem(uiux))
+  ok('ui/ux decision has precise typography scale', isMapperTemplatePacket ? /Define heading, body, metadata\/code, and label treatment/i.test(uiux) && /scale, weight, line-height/i.test(uiux) : hasPreciseTypographySystem(uiux))
+  ok('ui/ux decision has precise layout and responsive rules', isMapperTemplatePacket ? /Define the main layout model/i.test(uiux) && /spacing rhythm, density, grid behavior, hierarchy, and responsive behavior/i.test(uiux) : hasPreciseLayoutSystem(uiux))
   ok('ui/ux decision defines components, motion, and states', /Component language/i.test(uiux) && /Motion and interaction feel/i.test(uiux) && /Empty, loading, error, and blocked states/i.test(uiux))
   ok('ui/ux decision forbids generic short-phrase design', /Do not write only short phrases|short phrases/i.test(uiux) || /generic white SaaS dashboard/i.test(uiux))
   ok('ui/ux decision rejects generic dead UI', /functionless buttons|inert tabs|decorative charts|sample data|optimistic success|dead tabs/i.test(uiux))
@@ -532,6 +628,27 @@ function packetCheckResults(dir) {
   const activePhase = (phaseIndex.match(/active_phase:\s*(03-phases\/[\w.-]+\.md)/i) || [])[1]
   ok('phase index active phase exists', !!activePhase && files.has(activePhase))
   ok('phase index routes only without role/gate/slice machinery', !/requires_roles|gate|slice|capsule|runner/i.test(phaseIndex))
+  if (requiresCriticalReviewPushback) {
+    const criticalReviewPhase = phaseFileForId(phaseIndex, 'critical-review-pushback')
+    const criticalReviewText = criticalReviewPhase ? safeReadText(path.join(dir, criticalReviewPhase)) : ''
+    ok('phase index includes critical-review-pushback phase', criticalReviewPhase === '03-phases/critical-review-pushback.md' && files.has(criticalReviewPhase))
+    ok('phase flow requires critical-review-pushback before final completion', /critical-review-pushback\.md/i.test(phaseFlow) && /rubric does not pass/i.test(phaseFlow) && /fix .*ad hoc flaws/i.test(phaseFlow))
+    ok('critical-review-pushback defines scored rubric and pass threshold',
+      /Score each category 0 to 5/i.test(criticalReviewText) &&
+      /total score out of 50/i.test(criticalReviewText) &&
+      /at least 42\/50/i.test(criticalReviewText) &&
+      /no category below 4/i.test(criticalReviewText) &&
+      /no unresolved high-severity finding/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback defines repair loop for failed score',
+      /repair loop/i.test(criticalReviewText) &&
+      /name the flaw and severity/i.test(criticalReviewText) &&
+      /patch the smallest real fix/i.test(criticalReviewText) &&
+      /rerun the relevant proof/i.test(criticalReviewText) &&
+      /rescore/i.test(criticalReviewText) &&
+      /five iterations/i.test(criticalReviewText)
+    )
+  }
 
   const collectPhaseMd = (root) => exists(root)
     ? fs.readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
@@ -555,7 +672,99 @@ function packetCheckResults(dir) {
 
   const handover = safeReadText(path.join(dir, 'HANDOVER.md'))
   ok('handover captures built/verified/blocked/not-proven/next', /##\s*Built/i.test(handover) && /##\s*Verified/i.test(handover) && /##\s*Blocked/i.test(handover) && /##\s*Not proven/i.test(handover) && /##\s*Next/i.test(handover))
+  ok('handover captures typed quality gate results',
+    !requiresTypedQualityRouting ||
+    /Typed quality gates/i.test(handover) &&
+    /UI decision precision/i.test(handover) &&
+    /Visual viewport acceptance/i.test(handover) &&
+    /Editor\/content stress acceptance/i.test(handover) &&
+    /Semantic output acceptance/i.test(handover) &&
+    /Integration\/operator acceptance/i.test(handover) &&
+    /Critical review pushback/i.test(handover)
+  )
   ok('handover warns against overclaiming', /Do not claim completion beyond the evidence/i.test(handover))
+
+  if (isPresentationPacket) {
+    const setup = safeReadText(path.join(dir, '01-project-setup.md'))
+    const uiux = safeReadText(path.join(dir, '02-uiux-decision.md'))
+    const phase04 = safeReadText(path.join(dir, '03-phases/04-editable-deck-workbench.md'))
+    const phase08 = safeReadText(path.join(dir, '03-phases/08-verification-and-handover.md'))
+
+    for (const gate of [
+      'deck_output_quality',
+      'outline_quality',
+      'layout_template_quality',
+      'editable_workbench_quality',
+      'desktop_visual_acceptance',
+      'mobile_visual_acceptance',
+      'content_specificity_acceptance',
+      'long_text_stress_acceptance',
+      'export_runtime_probe',
+      'provider_probe',
+      'document_parser_probe',
+      'api_webhook_mcp_probe',
+      'desktop_runtime_probe',
+      'auth_privacy_observability_deployment'
+    ]) {
+      ok(`presentation blueprint declares gate: ${gate}`, blueprint.includes(gate))
+    }
+
+    ok('presentation blueprint declares verification artifacts',
+      /verification_artifacts:/i.test(blueprint) &&
+      /required_generated_app_scripts:/i.test(blueprint) &&
+      /required_screenshot_proofs:/i.test(blueprint) &&
+      /required_semantic_proofs:/i.test(blueprint) &&
+      /screenshot_capture/i.test(blueprint) &&
+      /deck_desktop_1440_or_wider/i.test(blueprint) &&
+      /deck_mobile_phone_width/i.test(blueprint) &&
+      /long_text_desktop/i.test(blueprint) &&
+      /long_text_mobile/i.test(blueprint)
+    )
+
+    ok('presentation setup requires generated proof commands',
+      /desktop screenshot/i.test(setup) &&
+      /mobile screenshot/i.test(setup) &&
+      /content-specificity/i.test(setup) &&
+      /long-text stress/i.test(setup) &&
+      /proven runtime behavior/i.test(setup) &&
+      /intentionally blocked/i.test(setup)
+    )
+
+    ok('presentation UI requires repeatable viewport and semantic checks',
+      /repeatable commands/i.test(uiux) &&
+      /page-level horizontal overflow/i.test(uiux) &&
+      /overlapping canvas regions/i.test(uiux) &&
+      /repeated generic slide content/i.test(uiux) &&
+      /missing stress fixtures/i.test(uiux)
+    )
+
+    ok('presentation phase 04 requires geometry and overflow assertions',
+      /1440px or wider/i.test(phase04) &&
+      /mobile Deck screenshot/i.test(phase04) &&
+      /same deck id/i.test(phase04) &&
+      /page-level horizontal overflow/i.test(phase04) &&
+      /stable 16:9 canvas bounds/i.test(phase04) &&
+      /long-text stress states/i.test(phase04)
+    )
+
+    ok('presentation phase 08 requires repeatable proof assertions',
+      /desktop geometry/i.test(phase08) &&
+      /mobile overflow/i.test(phase08) &&
+      /content-specificity/i.test(phase08) &&
+      /long-text stress/i.test(phase08) &&
+      /test runner/i.test(phase08)
+    )
+
+    ok('presentation handover requires proof paths and pass/fail status',
+      /wide desktop Deck screenshot path/i.test(handover) &&
+      /desktop visual acceptance result/i.test(handover) &&
+      /mobile Deck screenshot path/i.test(handover) &&
+      /mobile visual acceptance/i.test(handover) &&
+      /content-specificity proof/i.test(handover) &&
+      /long-text stress proof/i.test(handover) &&
+      /generated-app proof commands/i.test(handover)
+    )
+  }
 
   ok('no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
     if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false

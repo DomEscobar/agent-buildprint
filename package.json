@@ -11,6 +11,7 @@
     "check:packet:mapper": "node bin/agb.js packet check buildprints/buildprint-mapper-os",
     "check:packet:swarm": "node bin/agb.js packet check buildprints/ai-swarm-simulator",
     "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs",
+    "eval:presentation-packet": "node scripts/eval-presentation-packet.mjs",
     "eval:buildprint-variants": "node scripts/eval-buildprint-variants.mjs",
     "eval:buildprint-structures": "node scripts/eval-buildprint-structure-slices.mjs --help",
     "check:blueprint-yaml": "python3 -c \"import pathlib, yaml; [yaml.safe_load(p.read_text()) for p in pathlib.Path('buildprints').rglob('blueprint.yaml')]\""

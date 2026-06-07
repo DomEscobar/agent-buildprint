@@ -21,6 +21,8 @@ Repair the human-facing experience until it feels like the product described in 
 
 For UI products, inspect the app like a hostile product reviewer. Click every visible control in the golden path. Try empty input, blocked provider/runtime, success, error, reload, and mobile/narrow layout where relevant. Make the primary surface feel intentional. Motion, spacing, copy, panels, and state transitions should help comprehension rather than decorate placeholders.
 
+Use the selected gates in `docs/proof-matrix.md` or equivalent to decide what to inspect. If viewport proof applies, inspect real desktop and mobile/narrow screenshots for overlap, clipping, unreadable text, unreachable actions, and page-level horizontal overflow. If editor stress applies, test long labels/content/notes or artifact-specific stress data. If semantic output proof applies, review whether the output is specific and useful rather than repeated generic copy. If the artifact is non-UI, inspect the operator/developer surface with the same severity: help text, logs, errors, retries, idempotency, and recovery.
+
 For non-UI products, polish the operator/developer experience: CLI help, API error bodies, logs, docs, examples, and handoff commands.
 
 ## DO NOT
@@ -40,6 +42,7 @@ For non-UI products, polish the operator/developer experience: CLI help, API err
 - Inspect the product path through UI/API/CLI/runtime, not only source files.
 - Prove persistence/readback when this phase creates durable state.
 - Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Run or record selected typed proof paths from `docs/proof-matrix.md`, especially viewport, stress, semantic-output, or operator/integration proof when applicable.
 - Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note

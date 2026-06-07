@@ -114,3 +114,22 @@ Detailed Mapper OS lesson:
 - Handover templates should force negative evidence. Builders must state what passed, what was blocked, and what was not proven for mobile readability, content specificity, and long-text robustness.
 
 Builder implication: the next regenerate should not be called a clean improvement unless it shows a mobile Deck screenshot with readable tabs/thumbnails/toolbar/inspector/actions, a content-specific outline/deck where non-title slides are meaningfully distinct, and a long-text stress proof that does not break desktop or mobile layout.
+
+## 2026-06-06 regression enforcement patch
+
+The v3 rerun passed the intended proof set, but the source packet still relied too much on cooperative agents reading prose carefully. The next failure mode would be a future packet edit that keeps the broad section names while deleting the actual acceptance gates, or a generated app that includes screenshots without repeatable checks.
+
+Patched now:
+
+- `blueprint.yaml` adds `verification_artifacts` for generated app scripts, screenshot proofs, and semantic proofs.
+- The central output contract now treats missing automated screenshot/geometry/content-specificity/long-text proof paths as an unacceptable substitute.
+- `01-project-setup.md` now requires generated proof docs and setup receipts to name desktop/mobile screenshot, content-specificity, and long-text commands.
+- `02-uiux-decision.md` now says manual screenshots are useful evidence but not a replacement for repeatable viewport and semantic checks.
+- Phase 04 now requires generated-app geometry assertions where practical, including no page-level horizontal overflow and stable 16:9 canvas bounds.
+- Phase 08 now requires repeatable desktop geometry, mobile overflow, content-specificity, and long-text stress assertions when a test runner exists.
+- `HANDOVER.md` now requires generated-app proof command/script names; missing commands are blockers.
+- `bin/agb.js` now performs presentation-specific packet checks for the acceptance gates, proof sections, handover evidence, and generated-app proof obligations.
+- `scripts/eval-presentation-packet.mjs` adds mutation tests that remove the key proof gates and expects packet check failure.
+- `package.json` adds `eval:presentation-packet`.
+
+Builder implication: a future regenerate should fail earlier if the packet loses desktop/mobile/content/long-text/export/provider/parser gates, if Phase 04 or Phase 08 stop demanding repeatable proof, or if the handover stops separating screenshot paths, pass/fail status, and generated proof commands.

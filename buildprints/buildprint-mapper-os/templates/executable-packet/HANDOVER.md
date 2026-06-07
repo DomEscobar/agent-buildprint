@@ -12,6 +12,13 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - `<command>` — <result>
 - Screenshot/browser/API/readback evidence:
   - <what was inspected>
+- Typed quality gates:
+  - UI decision precision — <applicable/not applicable> — <proof or reason>
+  - Visual viewport acceptance — <applicable/not applicable> — <desktop/mobile/overflow proof or reason>
+  - Editor/content stress acceptance — <applicable/not applicable> — <fixture/proof or reason>
+  - Semantic output acceptance — <applicable/not applicable> — <output-specificity proof or reason>
+  - Integration/operator acceptance — <applicable/not applicable> — <install/configure/first-action/retry/audit proof or reason>
+  - Critical review pushback — <score/result or blocker>
 - Central output quality evidence:
   - <what the output makes clear>
   - <what still feels generic or weak>
@@ -25,6 +32,7 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 - <claim that should not be made yet>
 - <central output quality claim that should not be made yet>
+- <selected typed quality gate that did not run or did not pass>
 
 ## Next
 

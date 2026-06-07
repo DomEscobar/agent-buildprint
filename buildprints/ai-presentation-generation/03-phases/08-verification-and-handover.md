@@ -16,7 +16,7 @@ Also inspect responsive proof, not just mobile screenshot existence. The mobile 
 
 Also inspect content specificity. Compare the outline and deck body fields across at least four non-title slides. If the app repeats the same generic plan or bullet structure under different slide titles, mark deck output quality as blocked. A deterministic local fallback can be acceptable only when it produces differentiated slide-specific content and clearly labels itself as sample/local.
 
-Also inspect long-text stress behavior. Use a generated or seeded deck with long title, long bullets, long provenance/source labels, and long notes. Capture or manually inspect desktop and mobile states. If long content breaks the canvas, thumbnails, toolbar, inspector, or action buttons, mark editor layout quality as blocked.
+Also inspect long-text stress behavior. Use a generated or seeded deck with long title, long bullets, long provenance/source labels, and long notes. Capture or manually inspect desktop and mobile states. If long content breaks the canvas, thumbnails, toolbar, inspector, or action buttons, mark editor layout quality as blocked. Confirm the full long values remain editable in inspector fields when the slide canvas clamps or summarizes them.
 
 ## DO NOT
 
@@ -24,7 +24,7 @@ Do not claim live provider generation, document extraction, editable deck qualit
 
 ## Minimum proof before moving on
 
-Run the strongest available command suite: install, build/typecheck, lint, tests, smoke, screenshots, packet checks, and API/export checks where available. Verify at least one deck path in the browser if the app has a frontend. Inspect screenshots for overlap, dead controls, unclear blockers, mobile clipping, repeated generic content, long-text breakage, and static-demo behavior. Include a wide desktop Deck proof at 1440px or wider; screenshot-only proof fails if the Deck view is narrow, stacked, or visually overlapping. Include a mobile Deck proof; screenshot-only proof fails if navigation, thumbnails, toolbar, inspector, or actions are clipped. Include content-specificity and long-text stress results in the handover.
+Run the strongest available command suite: install, build/typecheck, lint, tests, smoke, screenshots, packet checks, and API/export checks where available. Verify at least one deck path in the browser if the app has a frontend. Inspect screenshots for overlap, dead controls, unclear blockers, mobile clipping, repeated generic content, long-text breakage, and static-demo behavior. Include a wide desktop Deck proof at 1440px or wider; screenshot-only proof fails if the Deck view is narrow, stacked, or visually overlapping. Include a mobile Deck proof; screenshot-only proof fails if navigation, thumbnails, toolbar, inspector, or actions are clipped. Include content-specificity and long-text stress results in the handover. When the generated app has a test runner, add or run repeatable assertions for desktop geometry, mobile overflow, content specificity, and long-text stress instead of relying only on manual screenshot review.
 
 ## Handoff note
 

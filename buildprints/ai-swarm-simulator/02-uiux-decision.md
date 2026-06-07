@@ -20,6 +20,22 @@ This artifact is UI-bearing. Its interface must not become a generic SaaS dashbo
 
 Clarity outranks atmosphere. The default user is a first-time, non-technical user who does not know what graph memory, providers, runtimes, traces, readback, blockers, or local report history mean. The product may expose those technical terms in detail views, docs, logs, and advanced mode, but the primary UI must explain the workflow in everyday language.
 
+## 0. Autonomous design decision protocol
+
+If no upstream visual direction exists, do not leave the UI undecided and do not ask the implementation phase to improvise silently. The builder must reason from product purpose, user workflow, artifact type, audience, density, risk, and expected review proof, then write the resulting decisions into the implementation project's local design notes before implementation. A missing brand guide, missing color palette, missing typography choice, or missing layout reference is a prompt to decide precisely, not permission to ship a generic interface.
+
+Before building UI, record at least these decisions in local project notes or the phase handoff:
+
+- product mood in one concrete sentence, tied to the task the user is trying to finish;
+- chosen style direction, including what adjacent styles are rejected and why;
+- color tokens with hex values for background, surfaces, borders, main text, secondary text, primary action, secondary accent, success, warning, danger, blocked, and focus;
+- typography tokens with exact sizes, line heights, weights, and where each token is used;
+- layout model for desktop and mobile, including navigation, primary work surface, secondary panels, scroll ownership, fixed-format regions, and overflow behavior;
+- component language for controls, cards, tables/lists, graph nodes, feed items, inspector panels, modals/drawers, empty states, loading states, blocked states, and errors;
+- proof obligations: screenshots, viewport assertions, no-overlap checks, long-text fixtures, and content-specificity checks.
+
+These decisions must be written before implementation because the first UI pass should already be aiming at a coherent product, not discovering the design accidentally through patches.
+
 ## 1. Design thesis
 
 The product should feel like a dark glassmorphism intelligence lab: calm, precise, cinematic, and deeply interactive. It should communicate that complex graph/social-simulation activity is happening under the surface, but the user remains in control through clear panels, readable states, and elegant interaction feedback. The experience should feel closer to a polished creative command canvas and simulation publishing desk than to an admin CRUD dashboard.
@@ -66,6 +82,8 @@ focus-ring: rgba(34, 211, 238, 0.72)
 ```
 
 The background should use subtle radial gradients and optional fine noise/grain so it feels atmospheric, not flat. Main panels use translucent glass with blur and thin borders. Primary action uses violet; live graph/selection energy uses cyan; success/warning/danger/blocked colors are semantic and should not be reused as decoration. Text must stay high contrast. Never place muted gray text on low-contrast glass.
+
+Status and readiness must never rely on color alone. Pair every semantic color with readable text, an icon/dot/shape, and a concrete next action where the state is blocked or degraded.
 
 Forbidden color behavior: bright white full-page backgrounds, random rainbow gradients, default blue links/buttons, unrelated pastel cards, red/green status without labels, and color-only state communication.
 

@@ -14,7 +14,7 @@ Desktop must be treated as its own acceptance target. At 1440px width or wider, 
 
 Mobile must also be treated as its own acceptance target. At phone width, the Deck view may stack, but the user must still be able to read and reach view tabs, thumbnail selection, deck toolbar actions, the slide canvas, inspector fields, chat/export controls, and primary actions. Do not let the page create accidental horizontal clipping where active tab labels, thumbnail cards, or buttons are cut off. Use contained horizontal scrollers only when they are intentional, sized, and visually readable.
 
-Add long-text stress handling before claiming the editor is robust. Seed or generate at least one deck state with a long title, long bullets, long provenance/source label, and long speaker notes. The canvas and inspector must use stable regions, wrapping, intentional line clamps, scrollable textareas, or inspector-only full values so both desktop and mobile remain readable. Passing short happy-path screenshots is not enough.
+Add long-text stress handling before claiming the editor is robust. Seed or generate at least one deck state with a long title, long bullets, long provenance/source label, and long speaker notes. The canvas and inspector must use stable regions, wrapping, intentional line clamps, scrollable textareas, or inspector-only full values so both desktop and mobile remain readable. Passing short happy-path screenshots is not enough. The full editable long values must remain reachable in the inspector even when the canvas intentionally clamps or summarizes them.
 
 ## DO NOT
 
@@ -22,7 +22,7 @@ Do not show generated markdown as a deck. Do not use static screenshots or fake 
 
 ## Minimum proof before moving on
 
-Run build/typecheck and browser smoke for opening a generated/sample deck, selecting slides, editing content, seeing save/readback state, and checking no major layout overlap on desktop/mobile. Capture at least one wide desktop Deck screenshot at 1440px or wider and one mobile Deck screenshot. Verify the desktop proof shows thumbnail rail, central 16:9 canvas, inspector/edit controls, and no visible canvas text/control overlap. Verify the mobile proof shows readable tabs, thumbnails, toolbar, canvas, inspector, and actions without accidental horizontal clipping. Capture or inspect one long-text stress deck on desktop and mobile. Verify the slide canvas and thumbnails have stable dimensions.
+Run build/typecheck and browser smoke for opening a generated/sample deck, selecting slides, editing content, seeing save/readback state, and checking no major layout overlap on desktop/mobile. Capture at least one wide desktop Deck screenshot at 1440px or wider and one mobile Deck screenshot. Verify the desktop proof shows thumbnail rail, central 16:9 canvas, inspector/edit controls, same deck id context, and no visible canvas text/control overlap. Verify the mobile proof shows readable tabs, thumbnails, toolbar, canvas, inspector, and actions without accidental horizontal clipping. Capture or inspect one long-text stress deck on desktop and mobile. Verify the slide canvas and thumbnails have stable dimensions. Prefer automated Playwright or equivalent geometry assertions for viewport width, page-level horizontal overflow, stable 16:9 canvas bounds, selected slide behavior, and long-text stress states so future reruns fail loudly.
 
 ## Handoff note
 
