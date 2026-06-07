@@ -73,8 +73,8 @@ expectFailure('presentation eval rejects missing verification artifacts', ['pack
 
 const missingCriticalReviewPhase = copyPacket('missing-critical-review-phase')
 fs.rmSync(path.join(missingCriticalReviewPhase, '03-phases/critical-review-pushback.md'))
-edit(missingCriticalReviewPhase, '03-phases/phase-index.yaml', (s) => s.replace(/\n\s+- phase_id: critical-review-pushback[\s\S]*?status: included\n/, '\n'))
-expectFailure('presentation eval rejects missing critical review phase', ['packet', 'check', missingCriticalReviewPhase], ['✗ phase index includes critical-review-pushback phase'])
+edit(missingCriticalReviewPhase, '03-phases/phase-index.yaml', (s) => s.replace(/\n\s+- phase_id: 99-critical-review-pushback[\s\S]*?status: included\n/, '\n'))
+expectFailure('presentation eval rejects missing critical review phase', ['packet', 'check', missingCriticalReviewPhase], ['✗ phase index includes 99-critical-review-pushback final phase'])
 
 const weakCriticalReviewRubric = copyPacket('weak-critical-review-rubric')
 edit(weakCriticalReviewRubric, '03-phases/critical-review-pushback.md', (s) => s

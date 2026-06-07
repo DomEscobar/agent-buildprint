@@ -611,7 +611,22 @@ function packetCheckResults(dir) {
   ok('ui identity defines components, motion/states, stress fixtures, and proof', /Component language/i.test(uiux) && /empty\/loading\/error\/blocked|Empty, loading, error, and blocked/i.test(uiux) && /Content stress fixtures/i.test(uiux) && /Proof obligations/i.test(uiux))
   ok('ui identity rejects generic dead UI and proof jargon', /functionless buttons|dead controls/i.test(uiux) && /raw JSON/i.test(uiux) && /proof.*labels|proof terms|evaluator language/i.test(uiux))
 
-  ok('phase flow defines active phase loop', /active phase only/i.test(phaseFlow) && /Do not read every phase upfront/i.test(phaseFlow) && /Restate the smallest real vertical path/i.test(phaseFlow))
+  ok('phase flow defines active phase loop',
+    /active phase only/i.test(phaseFlow) &&
+    /Do not read every phase upfront/i.test(phaseFlow) &&
+    /thinking checkpoint/i.test(phaseFlow) &&
+    /smallest real vertical user\/operator path/i.test(phaseFlow) &&
+    /3-7 likely failure modes/i.test(phaseFlow) &&
+    /proof plan/i.test(phaseFlow) &&
+    /claim ceiling/i.test(phaseFlow)
+  )
+  ok('phase flow activates agentic review without paperwork',
+    /not a deliverable file/i.test(phaseFlow) &&
+    /Do not create phase-run paperwork by default/i.test(phaseFlow) &&
+    /Compare the result against the predicted failure modes/i.test(phaseFlow) &&
+    /one concrete weakness repair/i.test(phaseFlow) &&
+    /what the proof does not prove/i.test(phaseFlow)
+  )
   ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
   ok('phase flow defines repair routing', /return to `?02-project-setup\.md`?/i.test(phaseFlow) && /return to `?00-questions\.md`?/i.test(phaseFlow) && /return to `?01-ui-identity\.md`?/i.test(phaseFlow))
   ok('phase flow has no evidence-ledger bureaucracy', !/evidence-ledger\.jsonl|proof_contract|capability_id/i.test(phaseFlow))
@@ -626,10 +641,10 @@ function packetCheckResults(dir) {
   ok('phase index active phase exists', !!activePhase && files.has(activePhase))
   ok('phase index routes only without role/gate/slice machinery', !/requires_roles|gate|slice|capsule|runner/i.test(phaseIndex))
   if (requiresCriticalReviewPushback) {
-    const criticalReviewPhase = phaseFileForId(phaseIndex, 'critical-review-pushback')
+    const criticalReviewPhase = phaseFileForId(phaseIndex, '99-critical-review-pushback')
     const criticalReviewText = criticalReviewPhase ? safeReadText(path.join(dir, criticalReviewPhase)) : ''
-    ok('phase index includes critical-review-pushback phase', criticalReviewPhase === '03-phases/critical-review-pushback.md' && files.has(criticalReviewPhase))
-    ok('phase flow requires critical-review-pushback before final completion', /critical-review-pushback\.md/i.test(phaseFlow) && /rubric does not pass/i.test(phaseFlow) && /fix .*ad hoc flaws/i.test(phaseFlow))
+    ok('phase index includes 99-critical-review-pushback final phase', criticalReviewPhase === '03-phases/critical-review-pushback.md' && files.has(criticalReviewPhase))
+    ok('phase flow requires 99-critical-review-pushback before final completion', /99-critical-review-pushback/i.test(phaseFlow) && /critical-review-pushback\.md/i.test(phaseFlow) && /Final mandatory phase/i.test(phaseFlow) && /rubric does not pass/i.test(phaseFlow) && /fix .*ad hoc flaws/i.test(phaseFlow))
     ok('critical-review-pushback defines scored rubric and pass threshold',
       /Score each category 0 to 5/i.test(criticalReviewText) &&
       /total score out of 50/i.test(criticalReviewText) &&

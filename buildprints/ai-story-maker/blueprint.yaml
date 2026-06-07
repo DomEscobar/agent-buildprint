@@ -144,6 +144,7 @@ typed_quality_gates:
       - error, retry, idempotency, logging, audit, and recovery expectations where relevant
   critical_review_pushback:
     applies_when: serious executable packet or user-facing artifact
+    phase_id: 99-critical-review-pushback
     phase: 03-phases/critical-review-pushback.md
     pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"
     repair_loop: "up to five flaw -> fix -> proof -> rescore iterations unless externally blocked"

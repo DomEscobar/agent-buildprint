@@ -10,7 +10,10 @@ Use active phase only. Do not read every phase upfront. Start from `.buildprint/
 4. Inspect the product result, not just the code diff.
 5. Repair visible slop, beginner confusion, dead controls, fake provider success, fake export success, static slide demos, and any mismatch between UI claims and runtime evidence.
 6. Update handover facts before stopping.
-7. Before final completion, run `03-phases/critical-review-pushback.md`; if the rubric does not pass, fix the named ad hoc flaws and rerun the relevant proof before claiming done.
+7. Continue through the dependency-ready implementation phases in `03-phases/phase-index.yaml`.
+99. Final mandatory phase: run `03-phases/critical-review-pushback.md` as `99-critical-review-pushback`; if the rubric does not pass, fix the named ad hoc flaws and rerun the relevant proof before claiming done.
+
+Final completion is impossible until phase `99-critical-review-pushback` has run and either passed or recorded an external blocker. Treat it as the last phase in the phase graph, not as optional review prose.
 
 ## Proof theater rejection
 
