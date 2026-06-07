@@ -4,7 +4,7 @@
 
 Run a hostile, evidence-led review of AI Story Maker before any final completion claim. This phase exists because story tools are easy to fake: generic outlines look plausible, static scene cards look useful until edited, provider blockers get hidden behind canned copy, exports are announced before they can be opened, and a pretty board can mask dead controls. The reviewer stance here is deliberately skeptical. Find the flaws that would embarrass the product in front of a demanding writer and force repairs while the context is fresh.
 
-Read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, project `AGENTS.md`, `02-uiux-decision.md`, and `HANDOVER.md` before this phase. Then inspect the actual running product, generated story package, command output, screenshots, logs, exports, persistence/readback evidence, and handoff notes. Score the result with the rubric below. A score below the pass threshold triggers an immediate repair loop. Fix the flaws in the implementation or route back to the responsible phase, rerun the proof, and rescore.
+Read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, project `AGENTS.md`, `01-ui-identity.md`, and `HANDOVER.md` before this phase. Then inspect the actual running product, generated story package, command output, screenshots, logs, exports, persistence/readback evidence, and handoff notes. Score the result with the rubric below. A score below the pass threshold triggers an immediate repair loop. Fix the flaws in the implementation or route back to the responsible phase, rerun the proof, and rescore.
 
 The phase passes only when the artifact earns a credible pass score and no high-severity blocker remains hidden behind optimistic language.
 
@@ -31,7 +31,7 @@ Score each category 0 to 5.
 
 - Product intent fit: the artifact clearly helps a writer make and revise a story package, not just generate text in a generic form.
 - UX clarity: a first-time user can understand what to do first, where story state lives, and what is blocked.
-- Visual/design execution: style direction, color, typography, layout, spacing, and component language match `02-uiux-decision.md`.
+- Visual/design execution: style direction, color, typography, layout, spacing, and component language match `01-ui-identity.md`.
 - Interaction completeness: visible controls work, validate, navigate, regenerate, export, ask, save, reload, or explain blockers.
 - State honesty: empty, loading, error, blocked, success, provider, export, persistence, and privacy states are honest and actionable.
 - Core output quality: the story package is specific, causally structured, inspectable, editable, and not canned text, repeated copy, static cards, or raw JSON.

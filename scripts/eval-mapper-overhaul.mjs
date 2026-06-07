@@ -73,8 +73,8 @@ const docCorpus = mapperDocs.map(([rel, text]) => `\n--- ${rel} ---\n${text}`).j
 for (const required of [
   /BUILDPRINT\.md`? is (the )?(execution start and )?AI-builder briefing only/i,
   /UX is a must/i,
-  /style constitution/i,
-  /Every phase (file )?must read `?02-uiux-decision\.md`?/i,
+  /UI identity/i,
+  /Every phase (file )?must read `?01-ui-identity\.md`?/i,
   /blueprint\.yaml`? (is|mirrors|routes).*product[- ]contract/i,
   /Typed proof/i,
   /proof obligations by artifact type/i,
@@ -126,7 +126,7 @@ edit(missingTypedGates, 'blueprint.yaml', (s) => s.replace(/\ntyped_quality_gate
 expectFailure('mapper eval requires typed quality gate routing', ['packet', 'check', missingTypedGates], ['✗ blueprint declares typed quality gate routing'])
 
 const missingProofMatrix = copyTemplate('missing-proof-matrix')
-edit(missingProofMatrix, '01-project-setup.md', (s) => s.replace(/- `docs\/proof-matrix\.md`[\s\S]*?\n/, ''))
+edit(missingProofMatrix, '02-project-setup.md', (s) => s.replace(/- `docs\/proof-matrix\.md`[\s\S]*?\n/, ''))
 expectFailure('mapper eval requires typed proof matrix setup', ['packet', 'check', missingProofMatrix], ['✗ project setup requires typed proof matrix'])
 
 const weakHandoverTypedGates = copyTemplate('weak-handover-typed-gates')
@@ -183,8 +183,8 @@ const redactionFiles = {
     files: [
       { path: 'BUILDPRINT.md', rawUrl: 'BUILDPRINT.md?fileToken=leaksecret' },
       { path: '00-questions.md', rawUrl: '00-questions.md?fileToken=leaksecret' },
-      { path: '01-project-setup.md', rawUrl: '01-project-setup.md?fileToken=leaksecret' },
-      { path: '02-uiux-decision.md', rawUrl: '02-uiux-decision.md?fileToken=leaksecret' },
+      { path: '02-project-setup.md', rawUrl: '02-project-setup.md?fileToken=leaksecret' },
+      { path: '01-ui-identity.md', rawUrl: '01-ui-identity.md?fileToken=leaksecret' },
       { path: 'blueprint.yaml', rawUrl: 'blueprint.yaml?fileToken=leaksecret' },
       { path: '03-phases/phase-index.yaml', rawUrl: '03-phases/phase-index.yaml?fileToken=leaksecret' },
       { path: '03-phases/phase-flow.md', rawUrl: '03-phases/phase-flow.md?fileToken=leaksecret' },
@@ -198,10 +198,10 @@ const redactionFiles = {
       rawBase: 'https://example.invalid/raw?rawToken=leaksecret'
     }
   }, null, 2),
-  '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-project-setup.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
+  '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-ui-identity.md, 02-project-setup.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions.\n',
-  '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks.\n',
-  '/02-uiux-decision.md': '# 02 UI/UX Decision\n\nUX is a must. The experience must be understandable. Small checklist before applying this style constitution: first-time user, what to do first, all visible controls.\n',
+  '/02-project-setup.md': '# 02 Project Setup\n\nThis project setup file is long enough for snapshot checks.\n',
+  '/01-ui-identity.md': '# 01 UI Identity\n\nUX is a must. The experience must be understandable. Small checklist before applying this UI identity: first-time user, what to do first, all visible controls.\n',
   '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
   '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',
@@ -244,14 +244,14 @@ try {
     process.exit(1)
   }
   const nextAgent = fs.readFileSync(path.join(redactionTarget, '.buildprint/next-agent.md'), 'utf8')
-  for (const expected of ['00-questions.md', '01-project-setup.md', '02-uiux-decision.md', '03-phases/phase-flow.md', 'HANDOVER.md']) {
+  for (const expected of ['00-questions.md', '01-ui-identity.md', '02-project-setup.md', '03-phases/phase-flow.md', 'HANDOVER.md']) {
     if (!nextAgent.includes(expected)) {
       console.error(nextAgent)
       console.error(`cli eval failed; next-agent missing v3 read order item: ${expected}`)
       process.exit(1)
     }
   }
-  if (/02-project-setup\.md|04-review\.md|05-handover\.md|smallest real usable slice/.test(nextAgent)) {
+  if (/01-project-setup\.md|02-uiux-decision\.md|04-review\.md|05-handover\.md|smallest real usable slice/.test(nextAgent)) {
     console.error(nextAgent)
     console.error('cli eval failed; next-agent still references obsolete v2 files/language')
     process.exit(1)

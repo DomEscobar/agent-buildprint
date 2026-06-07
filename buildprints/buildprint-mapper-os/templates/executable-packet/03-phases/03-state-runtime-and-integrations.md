@@ -8,14 +8,14 @@ Before writing code, read:
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
-- `01-project-setup.md`
-- `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
+- `02-project-setup.md`
+- `01-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
 Make the product loop durable and honest across runtime boundaries. Implement the persistence, adapter seams, provider configuration, integration boundaries, retry/error states, and readback behavior required by the artifact.
 

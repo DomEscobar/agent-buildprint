@@ -14,9 +14,9 @@ The obsolete model failed because tiny implementation documents compressed judgm
 
 A downstream builder needs the first file to orient their behavior: you are responsible, perfection matters, fake success is not allowed, read in this order. Product-specific details belong after that orientation. If the first file carries mapped-source names, old repo names, or source-specific implementation trivia, it teaches the builder to imitate stale source context instead of building the selected artifact cleanly.
 
-## Why 02-uiux-decision.md is mandatory
+## Why 01-ui-identity.md is mandatory
 
-UX is not polish after the “real work.” The user experiences the artifact through surfaces, states, copy, controls, motion, and feedback. A confusing or generic interface is an implementation failure. Mapper OS therefore forces a detailed style constitution early, then requires every phase to read it so design responsibility survives backend/runtime/report/verification work.
+UX is not polish after the “real work.” The user experiences the artifact through surfaces, states, copy, controls, motion, and feedback. A confusing or generic interface is an implementation failure. Mapper OS therefore forces a detailed UI identity early, then requires every phase to read it so design responsibility survives backend/runtime/report/verification work.
 
 ## Desired downstream behavior
 
@@ -25,9 +25,9 @@ A fresh coding agent should:
 1. read the generic AI-builder briefing and read order;
 2. answer only hard-stop questions;
 3. create the setup foundation;
-4. read the UX/style constitution and understand why UX matters;
+4. read the UI identity and understand why UX matters;
 5. load only the active phase;
-6. keep `02-uiux-decision.md` open as design responsibility;
+6. keep `01-ui-identity.md` open as design responsibility;
 7. build the smallest real product path for that phase;
 8. verify directly, including visible UX/state behavior when relevant;
 9. record a concise, honest handover.

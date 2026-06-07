@@ -1,10 +1,10 @@
 # 00 Questions
 
-Ask only questions that change implementation. Do not turn mapping into a long interview. If a hard-stop question is unanswered, stop before `01-project-setup.md`.
+Ask only questions that change implementation. Do not turn mapping into a long interview. If a hard-stop question is unanswered, stop before `01-ui-identity.md`.
 
 ## Hard-stop questions
 
-These require explicit human confirmation before setup or implementation:
+These require explicit human confirmation before UI identity, setup, or implementation:
 
 1. **Deployment posture** — trusted local, private authenticated, or public web? This changes auth, secrets, abuse controls, persistence, and deployment gates.
 2. **Secrets and provider policy** — Which paid/live providers may be used, and where may credentials live? Never guess secret handling.
@@ -26,7 +26,7 @@ If not answered, the agent may choose a reversible default and record it in setu
 
 Record these, but do not block setup:
 
-- exact color palette after `02-uiux-decision.md` sets the visual direction;
+- exact color palette after `01-ui-identity.md` sets the visual direction;
 - deployment target when posture remains trusted local;
 - advanced analytics, billing, or admin polish not required by the golden path;
 - secondary integrations not needed for the first real loop.

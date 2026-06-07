@@ -533,8 +533,8 @@ function packetCheckResults(dir) {
   const need = [
     'BUILDPRINT.md',
     '00-questions.md',
-    '01-project-setup.md',
-    '02-uiux-decision.md',
+    '02-project-setup.md',
+    '01-ui-identity.md',
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
@@ -571,17 +571,17 @@ function packetCheckResults(dir) {
     /Select only the gates that match the artifact type/i.test(blueprint)
   )
 
-  ok('BUILDPRINT owns v3 read order', /00-questions\.md[\s\S]*01-project-setup\.md[\s\S]*02-uiux-decision\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i.test(buildprint))
+  ok('BUILDPRINT owns v3 read order', /00-questions\.md[\s\S]*01-ui-identity\.md[\s\S]*02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i.test(buildprint))
   ok('BUILDPRINT is an AI builder briefing', /responsible builder/i.test(buildprint) && /senior product engineer/i.test(buildprint))
   ok('BUILDPRINT defines role, responsibility, and perfection alignment', /Your role/i.test(buildprint) && /Your responsibility/i.test(buildprint) && /Perfection alignment/i.test(buildprint))
   ok('BUILDPRINT avoids product-specific mapped-source briefing', !/MiroFish|mapped from|previous repository|original repo|source project/i.test(buildprint))
   ok('BUILDPRINT forbids fake-success paths', /functionless buttons|dead controls|mocked\/sample data|fake provider|raw JSON/i.test(buildprint))
 
   const questions = safeReadText(path.join(dir, '00-questions.md'))
-  ok('questions classify blocking power', /Hard-stop questions/i.test(questions) && /Assumable defaults/i.test(questions) && /Deferrable questions/i.test(questions) && /stop before `?01-project-setup\.md`?/i.test(questions))
+  ok('questions classify blocking power', /Hard-stop questions/i.test(questions) && /Assumable defaults/i.test(questions) && /Deferrable questions/i.test(questions) && /stop before `?01-ui-identity\.md`?/i.test(questions))
   ok('questions hard-stop sensitive decisions', /Deployment posture/i.test(questions) && /Secrets and provider policy/i.test(questions) && /Destructive\/data-loss behavior/i.test(questions) && /Privacy\/compliance exposure/i.test(questions) && /Product\/artifact identity/i.test(questions))
 
-  const setup = safeReadText(path.join(dir, '01-project-setup.md'))
+  const setup = safeReadText(path.join(dir, '02-project-setup.md'))
   ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && /Do not start `?03-phases\/\*`?/i.test(setup))
   ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /docs\/product-loop\.md/i.test(setup) && /docs\/proof-strategy\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
   ok('project setup requires typed proof matrix',
@@ -594,29 +594,26 @@ function packetCheckResults(dir) {
   )
   ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
 
-  const uiux = safeReadText(path.join(dir, '02-uiux-decision.md'))
-  ok('ui/ux decision opens with UX importance and understandability', /UX is a must/i.test(uiux) && /must be understandable|experience must be understandable/i.test(uiux) && /not a finished product/i.test(uiux))
-  ok('ui/ux decision includes a small pre-style checklist', /Small checklist/i.test(uiux) && /first-time user/i.test(uiux) && /what to do first/i.test(uiux) && /all visible controls/i.test(uiux))
-  ok('ui/ux decision is a detailed style constitution', uiux.trim().length >= (isMapperTemplatePacket ? 4500 : 6000) && /style constitution/i.test(uiux))
-  ok('ui/ux decision defines concrete visual schema', /Design thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Color system/i.test(uiux) && /Typography system/i.test(uiux) && /Layout and spatial rhythm/i.test(uiux))
-  ok('ui/ux decision requires autonomous design reasoning when direction is missing', hasDetailedDesignDecisionProtocol(uiux))
-  ok('ui/ux decision selects typed proof obligations without gate spam',
+  const uiux = safeReadText(path.join(dir, '01-ui-identity.md'))
+  ok('ui identity opens with UX importance and understandability', /UX is a must/i.test(uiux) && /understand/i.test(uiux) && /not a finished product/i.test(uiux))
+  ok('ui identity runs before project setup', /before project setup/i.test(uiux) && /before `?02-project-setup\.md`?/i.test(uiux))
+  ok('ui identity requires generated local identity artifact', /docs\/ui-identity\.md/i.test(uiux) && /UI-IDENTITY\.md/i.test(uiux) && /generated UI identity|generate a local/i.test(uiux))
+  ok('ui identity requires first-run comprehension and user-language control', /First-run comprehension contract/i.test(uiux) && /User-language map/i.test(uiux) && /internal.*terms|proof terms|evaluator language/i.test(uiux))
+  ok('ui identity is substantial enough to guide generation', uiux.trim().length >= (isMapperTemplatePacket ? 3500 : 4500))
+  ok('ui identity defines generated identity sections', /Product identity thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Layout model/i.test(uiux) && /Interaction model/i.test(uiux) && /Component language/i.test(uiux) && /Color and typography tokens/i.test(uiux))
+  ok('ui identity requires autonomous product reasoning before setup', /reason from the artifact|Think through the product|think deeply/i.test(uiux) && /golden path/i.test(uiux) && /central output/i.test(uiux) && /before setup/i.test(uiux))
+  ok('ui identity selects typed proof obligations without gate spam',
     !requiresTypedQualityRouting ||
-    /Use the proof obligations selectively/i.test(uiux) &&
-    /choose the proof that would reveal the artifact's most likely quality failure/i.test(uiux) &&
-    /omitted UI proofs are not applicable/i.test(uiux)
+    /Proof obligations/i.test(uiux) &&
+    /most likely UI failure|most likely quality failure/i.test(uiux)
   )
-  ok('ui/ux decision has a specific chosen style direction', isMapperTemplatePacket ? /Pick one strong direction and commit to it/i.test(uiux) && /specific to the artifact/i.test(uiux) : hasPreciseStyleDirection(uiux))
-  ok('ui/ux decision has precise color tokens and status semantics', isMapperTemplatePacket ? /Define concrete color tokens/i.test(uiux) && /background, surface, elevated surface, border, primary, accent, success, warning, danger, text-main, text-muted, and focus ring/i.test(uiux) : hasPreciseColorSystem(uiux))
-  ok('ui/ux decision has precise typography scale', isMapperTemplatePacket ? /Define heading, body, metadata\/code, and label treatment/i.test(uiux) && /scale, weight, line-height/i.test(uiux) : hasPreciseTypographySystem(uiux))
-  ok('ui/ux decision has precise layout and responsive rules', isMapperTemplatePacket ? /Define the main layout model/i.test(uiux) && /spacing rhythm, density, grid behavior, hierarchy, and responsive behavior/i.test(uiux) : hasPreciseLayoutSystem(uiux))
-  ok('ui/ux decision defines components, motion, and states', /Component language/i.test(uiux) && /Motion and interaction feel/i.test(uiux) && /Empty, loading, error, and blocked states/i.test(uiux))
-  ok('ui/ux decision forbids generic short-phrase design', /Do not write only short phrases|short phrases/i.test(uiux) || /generic product shell/i.test(uiux))
-  ok('ui/ux decision rejects generic dead UI', /functionless buttons|inert tabs|decorative charts|sample data|optimistic success|dead tabs/i.test(uiux))
+  ok('ui identity requires exact generated visual tokens', /exact semantic color/i.test(uiux) && /typography/i.test(uiux) && /state colors|focus/i.test(uiux))
+  ok('ui identity defines components, motion/states, stress fixtures, and proof', /Component language/i.test(uiux) && /empty\/loading\/error\/blocked|Empty, loading, error, and blocked/i.test(uiux) && /Content stress fixtures/i.test(uiux) && /Proof obligations/i.test(uiux))
+  ok('ui identity rejects generic dead UI and proof jargon', /functionless buttons|dead controls/i.test(uiux) && /raw JSON/i.test(uiux) && /proof.*labels|proof terms|evaluator language/i.test(uiux))
 
   ok('phase flow defines active phase loop', /active phase only/i.test(phaseFlow) && /Do not read every phase upfront/i.test(phaseFlow) && /Restate the smallest real vertical path/i.test(phaseFlow))
   ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
-  ok('phase flow defines repair routing', /return to `?01-project-setup\.md`?/i.test(phaseFlow) && /return to `?00-questions\.md`?/i.test(phaseFlow) && /return to `?02-uiux-decision\.md`?/i.test(phaseFlow))
+  ok('phase flow defines repair routing', /return to `?02-project-setup\.md`?/i.test(phaseFlow) && /return to `?00-questions\.md`?/i.test(phaseFlow) && /return to `?01-ui-identity\.md`?/i.test(phaseFlow))
   ok('phase flow has no evidence-ledger bureaucracy', !/evidence-ledger\.jsonl|proof_contract|capability_id/i.test(phaseFlow))
 
   ok('phase index declares v3 schema and active phase', /schema_version:\s*mapper-os\/phase-index\/v3/i.test(phaseIndex) && /active_phase:\s*03-phases\/[\w.-]+\.md/i.test(phaseIndex))
@@ -665,7 +662,7 @@ function packetCheckResults(dir) {
     const objective = (text.match(/##\s*Building objective\s*\n([\s\S]*?)(?=\n##\s*DO NOT)/i) || [])[1] || ''
     ok(`${file} has comprehensive phase headings`, /##\s*How to implement this phase/i.test(text) && /##\s*Building objective/i.test(text) && /##\s*DO NOT/i.test(text) && /##\s*Minimum proof before moving on/i.test(text) && /##\s*Handoff note/i.test(text))
     ok(`${file} has substantial building objective`, objective.trim().length >= (isMapperTemplatePacket ? 500 : 700), `objective length ${objective.trim().length}`)
-    ok(`${file} reads required phase context`, /03-phases\/phase-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text) && /02-uiux-decision\.md/i.test(text))
+    ok(`${file} reads required phase context`, /03-phases\/phase-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text) && /01-ui-identity\.md/i.test(text))
     ok(`${file} forbids placeholders/functionless/mocks`, /placeholders/i.test(text) && /functionless buttons/i.test(text) && /mocked\/sample data/i.test(text))
     ok(`${file} does not use decomposed v2/schema machinery`, !/slice\.yaml|acceptance-spec|build-brief|requires_roles|capability_id|proof_contract|evidence-ledger\.jsonl/i.test(text))
   }
@@ -685,8 +682,8 @@ function packetCheckResults(dir) {
   ok('handover warns against overclaiming', /Do not claim completion beyond the evidence/i.test(handover))
 
   if (isPresentationPacket) {
-    const setup = safeReadText(path.join(dir, '01-project-setup.md'))
-    const uiux = safeReadText(path.join(dir, '02-uiux-decision.md'))
+    const setup = safeReadText(path.join(dir, '02-project-setup.md'))
+    const uiux = safeReadText(path.join(dir, '01-ui-identity.md'))
     const phase04 = safeReadText(path.join(dir, '03-phases/04-editable-deck-workbench.md'))
     const phase08 = safeReadText(path.join(dir, '03-phases/08-verification-and-handover.md'))
 
@@ -912,7 +909,7 @@ function readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile) {
   if (Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length) return manifest.instructions.readOrder
   if (Array.isArray(manifest.readOrder) && manifest.readOrder.length) return manifest.readOrder
   return isExecutablePacket
-    ? ['BUILDPRINT.md', '00-questions.md', '01-project-setup.md', '02-uiux-decision.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', 'HANDOVER.md'].filter(hasManifestFile)
+    ? ['BUILDPRINT.md', '00-questions.md', '01-ui-identity.md', '02-project-setup.md', 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', 'HANDOVER.md'].filter(hasManifestFile)
     : ['BUILDPRINT.md'].filter(hasManifestFile)
 }
 
@@ -934,8 +931,8 @@ function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
   const canonical = [
     'BUILDPRINT.md',
     '00-questions.md',
-    '01-project-setup.md',
-    '02-uiux-decision.md',
+    '01-ui-identity.md',
+    '02-project-setup.md',
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
@@ -955,7 +952,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     .map((filePath) => safeManifestPath(filePath))
     .filter((filePath) => !filePath.includes('*'))
   const hasManifestFile = (filePath) => manifestFilePaths.includes(filePath)
-  const isExecutablePacket = hasManifestFile('00-questions.md') && hasManifestFile('01-project-setup.md') && hasManifestFile('blueprint.yaml')
+  const isExecutablePacket = hasManifestFile('00-questions.md') && hasManifestFile('02-project-setup.md') && hasManifestFile('blueprint.yaml')
   const baseReadOrder = readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile)
 
   const targetRoot = path.resolve(cwd, targetFolder)
@@ -1062,14 +1059,14 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     blocked: false,
     lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
     nextAction: isExecutablePacket
-      ? 'read .buildprint/next-agent.md, complete project setup, then follow the active phase loop'
+      ? 'read .buildprint/next-agent.md, generate UI identity, complete project setup, then follow the active phase loop'
       : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
     runtimeEvidenceLedger: hasLegacyRuntimeEvidence ? '.buildprint/evidence/evidence-ledger.jsonl' : null,
     updatedAt: now,
   })
 
   fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
-    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared product-led phase-flow state.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, complete product setup, then execute the active phase loop.\n`
+    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared product-led phase-flow state.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, generate UI identity, complete product setup, then execute the active phase loop.\n`
     : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
@@ -1082,8 +1079,8 @@ This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stal
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read \`.buildprint/snapshots/00-questions.md\`; stop only for true hard-stop decisions.
-4. Read and complete \`.buildprint/snapshots/01-project-setup.md\` before phase work.
-5. Read \`.buildprint/snapshots/02-uiux-decision.md\` before every phase as the standing design/style responsibility for UI-bearing artifacts.
+4. Read \`.buildprint/snapshots/01-ui-identity.md\`; for UI-bearing artifacts, generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before setup.
+5. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work, preserving the generated UI identity.
 6. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
 7. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
 8. Execute the phase-flow loop: restate the smallest real vertical product path, build it, verify it, repair visible slop/fake-success shortcuts, and record useful handover facts.
@@ -1101,7 +1098,7 @@ Rules:
 
 - Do not read every phase upfront.
 - Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
-- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created from \`01-project-setup.md\`, not shipped in the packet.
+- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created from \`02-project-setup.md\`, not shipped in the packet.
 - Keep claims scoped until the built product has been checked directly.
 - Do not create proof theater; local checks and product review are useful only insofar as they catch real defects.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.

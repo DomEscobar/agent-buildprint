@@ -1,10 +1,10 @@
 # 00 Questions
 
-Ask only questions that change implementation. Do not turn this packet into a long interview. If a hard-stop question is unanswered, stop before `01-project-setup.md`.
+Ask only questions that change implementation. Do not turn this packet into a long interview. If a hard-stop question is unanswered, stop before `01-ui-identity.md`.
 
 ## Hard-stop questions
 
-These require explicit human confirmation before setup or implementation:
+These require explicit human confirmation before UI identity, setup, or implementation:
 
 1. **Deployment posture** - Is this trusted local, private authenticated, or public-facing? Public-facing use changes auth, upload screening, abuse controls, persistence, cost controls, and deployment proof.
 2. **Secrets and provider policy** - Which AI providers, model tiers, or paid generation services may be used, and where may credentials live? Never guess secret handling.

@@ -22,8 +22,8 @@ deployment_posture:
 read_order:
   - BUILDPRINT.md
   - 00-questions.md
-  - 01-project-setup.md
-  - 02-uiux-decision.md
+  - 01-ui-identity.md
+  - 02-project-setup.md
   - blueprint.yaml
   - 03-phases/phase-index.yaml
   - 03-phases/phase-flow.md
@@ -35,8 +35,8 @@ packet_shape:
   required_files:
     - BUILDPRINT.md
     - 00-questions.md
-    - 01-project-setup.md
-    - 02-uiux-decision.md
+    - 01-ui-identity.md
+    - 02-project-setup.md
     - blueprint.yaml
     - 03-phases/phase-index.yaml
     - 03-phases/phase-flow.md

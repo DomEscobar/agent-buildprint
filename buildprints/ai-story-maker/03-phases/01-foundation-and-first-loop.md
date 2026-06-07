@@ -8,18 +8,18 @@ Before writing code, read:
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
-- `01-project-setup.md`
-- `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
+- `02-project-setup.md`
+- `01-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Create the implementation foundation and the first visible story-making loop for AI Story Maker. The first loop should let a writer start a story package from a premise and optional seed notes, validate the input, create durable local package state, and see an initial story-making surface with story package status, cast/world placeholders that are honestly empty or fixture-labeled, and a clear next action to build the outline. This is not a marketing page or a chat demo. The first screen after setup should already feel like the warm editorial story-making product described in `02-uiux-decision.md`.
+Create the implementation foundation and the first visible story-making loop for AI Story Maker. The first loop should let a writer start a story package from a premise and optional seed notes, validate the input, create durable local package state, and see an initial story-making surface with story package status, cast/world placeholders that are honestly empty or sample- or demo-labeled, and a clear next action to build the outline. This is not a marketing page or a chat demo. The first screen after setup should already feel like the generated story-making identity created from `01-ui-identity.md`.
 
-The implementation foundation must include architecture docs, local commands, env contract, proof strategy, proof matrix, UI identity, and setup receipt from `01-project-setup.md`. The domain model should start with story package, premise, seed note, character placeholder, relationship, outline beat, scene card, generation run, provider status, export artifact, and audit/log event, even if some fields are not fully used yet. The path should prove that the product can create and reload a project shell without pretending that live AI generation has happened.
+The implementation foundation must include architecture docs, local commands, env contract, proof strategy, proof matrix, UI identity, and setup receipt from `02-project-setup.md`. The domain model should start with story package, premise, seed note, character placeholder, relationship, outline beat, scene card, generation run, provider status, export artifact, and audit/log event, even if some fields are not fully used yet. The path should prove that the product can create and reload a project shell without pretending that live AI generation has happened.
 
 The phase should leave the next phase with a stable place to add story-world graph and outline generation. A skeptical reviewer should be able to run the app or API, submit a premise, see validation errors for empty input, see provider status as configured or blocked, reload the created package, and inspect that no visible controls promise generation/export/chat unless they work or explain the blocker.
 

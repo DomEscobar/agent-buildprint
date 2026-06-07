@@ -8,12 +8,12 @@ Mapper OS quality is judged by whether a downstream AI builder can build the map
 - Preserve observable behavior, not source internals for their own sake.
 - Preserve the central output quality bar, not only that an output exists.
 - Keep selected `BUILDPRINT.md` generic: AI-builder role, responsibility, perfection alignment, read order; no product-specific mapped-source details.
-- Put product contract facts in `blueprint.yaml`, `01-project-setup.md`, `02-uiux-decision.md`, and phase objectives.
+- Put product contract facts in `blueprint.yaml`, `02-project-setup.md`, `01-ui-identity.md`, and phase objectives.
 - YAML routes; Markdown teaches/builds.
 - Phase files are comprehensive product objectives, not mini schemas.
 - Setup and UI/operator decisions happen before phase implementation.
-- `02-uiux-decision.md` is a mandatory style constitution for UI-bearing artifacts, not a cosmetic note.
-- Every phase reads `02-uiux-decision.md` as standing design/style responsibility.
+- `01-ui-identity.md` is a mandatory UI identity for UI-bearing artifacts, not a cosmetic note.
+- Every phase reads `01-ui-identity.md` as standing comprehension, user-language, and visual identity responsibility.
 - Claims stay conservative until the built product path is verified.
 
 ## Anti-slop requirements
@@ -34,13 +34,13 @@ Selected packets must explicitly reject:
 
 ## UI/style quality bar
 
-For UI-bearing artifacts, `02-uiux-decision.md` must open with UX importance and understandability, include a small checklist, and then define a strong style schema: design thesis, style direction, color tokens, typography, layout/spatial rhythm, component language, motion, empty/loading/error/blocked states, anti-generic rules, and phase obligation. If the style constitution could fit ten unrelated products unchanged, it is too generic.
+For UI-bearing artifacts, `01-ui-identity.md` must open with UX importance and understandability, include a small checklist, and then define a strong style schema: design thesis, style direction, color tokens, typography, layout/spatial rhythm, component language, motion, empty/loading/error/blocked states, anti-generic rules, and phase obligation. If the UI identity could fit ten unrelated products unchanged, it is too generic.
 
 If the source lacks style direction, the mapper should force a decision protocol, not a longer moodboard. The builder must infer a precise design system from product purpose, audience, workflow density, risk, and artifact type, then record the chosen and rejected directions before building UI.
 
 ## Phase quality bar
 
-Every phase must name a concrete building objective, the context to read, `02-uiux-decision.md` design responsibility, forbidden shortcuts, proof before moving on, and handoff facts. A phase can stop on a real blocker, but it cannot pass from edits alone.
+Every phase must name a concrete building objective, the context to read, `01-ui-identity.md` design responsibility, forbidden shortcuts, proof before moving on, and handoff facts. A phase can stop on a real blocker, but it cannot pass from edits alone.
 
 ## Output quality bar
 
@@ -60,4 +60,4 @@ The handover should still name what proof was selected, what ran, what failed, a
 
 ## Review stance
 
-The checker is a smoke alarm for structure and stale artifacts. Product quality is enforced by the Buildprint prose, phase objectives, direct runtime/browser/API checks, design review against the style constitution, and honest handoff.
+The checker is a smoke alarm for structure and stale artifacts. Product quality is enforced by the Buildprint prose, phase objectives, direct runtime/browser/API checks, design review against the UI identity, and honest handoff.

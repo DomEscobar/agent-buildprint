@@ -8,16 +8,16 @@ Before writing code, read:
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
-- `01-project-setup.md`
-- `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
+- `02-project-setup.md`
+- `01-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Repair the human-facing story-making product until it feels like the warm editorial experience described in the style constitution. This is not cosmetic cleanup. It is where generic product shells, dead controls, unclear empty states, weak motion, clipped scene cards, unreadable long generated text, hidden provider failures, and confusing hierarchy get found and fixed. The primary writer workflow should remain visible: story package status, cast/world structure, outline/storyboard, selected scene drafting, continuity review, and export or provider state.
+Repair the human-facing story-making product until it feels like the warm editorial experience described in the generated identity contract. This is not cosmetic cleanup. It is where generic product shells, dead controls, unclear empty states, weak motion, clipped scene cards, unreadable long generated text, hidden provider failures, and confusing hierarchy get found and fixed. The primary writer workflow should remain visible: story package status, cast/world structure, outline/storyboard, selected scene drafting, continuity review, and export or provider state.
 
 Inspect the app like a skeptical product reviewer. Try empty premise, long premise, long chapter title, many characters, dense outline, blocked provider, failed generation, successful save, reload, export, and mobile/narrow layout. Board cards must keep stable dimensions. Drawers and detail regions must own their scroll. Long generated scenes must remain readable without pushing controls off screen. Every visible CTA must work, validate, navigate, regenerate, export, or explain a blocker.
 

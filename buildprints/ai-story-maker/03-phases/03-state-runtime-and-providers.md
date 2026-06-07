@@ -8,14 +8,14 @@ Before writing code, read:
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
-- `01-project-setup.md`
-- `02-uiux-decision.md` as the standing design/style responsibility for every UI-bearing artifact
+- `02-project-setup.md`
+- `01-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
 Make AI Story Maker durable and honest across runtime boundaries. Implement the provider adapter boundary, generation run state, retries, cancellations, failure mapping, export artifact tracking, and readback behavior required by a generative story-making product. The writer should be able to reload a package, inspect generation history, see whether live provider configuration is available, retry a failed scene generation, and understand exactly when an output is deterministic fixture content rather than live generated story material.
 

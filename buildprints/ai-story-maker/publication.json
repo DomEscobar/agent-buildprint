@@ -35,8 +35,8 @@
   "whatYouGet": [
     "Generic AI-builder briefing in BUILDPRINT.md",
     "Hard-stop and assumable defaults in 00-questions.md",
-    "Architecture, proof matrix, output quality, UI identity, env, and setup receipt requirements in 01-project-setup.md",
-    "Concrete editorial story-room style constitution in 02-uiux-decision.md",
+    "Dynamic UI identity generation contract in 01-ui-identity.md before setup",
+    "Architecture, proof matrix, output quality, env, and setup receipt requirements in 02-project-setup.md",
     "blueprint.yaml with central output contract and typed quality gates",
     "Five comprehensive implementation phases plus critical-review-pushback",
     "HANDOVER.md template that forces built/verified/blocked/not-proven reporting"
@@ -63,8 +63,8 @@
   "includes": [
     "BUILDPRINT.md",
     "00-questions.md",
-    "01-project-setup.md",
-    "02-uiux-decision.md",
+    "01-ui-identity.md",
+    "02-project-setup.md",
     "blueprint.yaml",
     "03-phases/phase-index.yaml",
     "03-phases/phase-flow.md",
