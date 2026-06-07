@@ -1,0 +1,118 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "fileExcludes": [],
+  "slug": "ai-story-maker",
+  "title": "AI Story Maker",
+  "creator": "Agent Buildprint",
+  "category": "App / Product",
+  "tier": "agent-grade",
+  "status": "proof-required",
+  "runtime": [
+    "Executable Buildprint packet",
+    "Browser story studio",
+    "Provider adapter seam",
+    "Local persistence",
+    "Export/readback proof"
+  ],
+  "stack": [
+    "BUILDPRINT.md",
+    "blueprint.yaml",
+    "phase-driven packet",
+    "typed quality gates",
+    "critical review pushback"
+  ],
+  "iconKeys": [
+    "typescript",
+    "json",
+    "md"
+  ],
+  "difficulty": "Advanced",
+  "featured": true,
+  "summary": "A Mapper OS v3 executable packet for building an AI story-making studio with premise intake, story world graph, cast and relationship model, outline board, scene storyboard, editable generation loop, continuity review, provider boundaries, persistence, and export proof.",
+  "plainDescription": "AI Story Maker turns seed ideas or notes into a structured, editable story package: premise, world rules, cast, relationships, outline, storyboard cards, draft scenes, continuity notes, and exportable artifacts. The packet requires honest provider blocked states, durable state, semantic output review, viewport/editor stress proof, and final critical review before any completion claim.",
+  "promise": "A source-independent, proof-gated implementation packet for a serious creative-writing workbench. It does not claim live AI, deployment, story quality, export quality, or production readiness until matching evidence exists.",
+  "whatYouGet": [
+    "Generic AI-builder briefing in BUILDPRINT.md",
+    "Hard-stop and assumable defaults in 00-questions.md",
+    "Architecture, proof matrix, output quality, UI identity, env, and setup receipt requirements in 01-project-setup.md",
+    "Concrete editorial story-room style constitution in 02-uiux-decision.md",
+    "blueprint.yaml with central output contract and typed quality gates",
+    "Five comprehensive implementation phases plus critical-review-pushback",
+    "HANDOVER.md template that forces built/verified/blocked/not-proven reporting"
+  ],
+  "whatYouNeed": [
+    "A target implementation repo or empty app directory",
+    "A production-capable browser app stack",
+    "Provider credentials only when upgrading beyond deterministic fixture proof",
+    "Browser/screenshot proof for the story studio",
+    "Persistence and export readback proof before durable/export claims",
+    "Security and privacy review before public deployment"
+  ],
+  "architectureFlow": [
+    "Premise Intake",
+    "Story World",
+    "Cast Graph",
+    "Outline Board",
+    "Scene Storyboard",
+    "Draft Editor",
+    "Continuity Review",
+    "Export Package",
+    "Character Coach"
+  ],
+  "includes": [
+    "BUILDPRINT.md",
+    "00-questions.md",
+    "01-project-setup.md",
+    "02-uiux-decision.md",
+    "blueprint.yaml",
+    "03-phases/phase-index.yaml",
+    "03-phases/phase-flow.md",
+    "03-phases/01-foundation-and-first-loop.md",
+    "03-phases/02-story-world-and-outline-loop.md",
+    "03-phases/03-state-runtime-and-providers.md",
+    "03-phases/04-storyboard-editor-polish.md",
+    "03-phases/05-verification-and-handover.md",
+    "03-phases/critical-review-pushback.md",
+    "HANDOVER.md"
+  ],
+  "risks": [
+    "Building a generic writing prompt form instead of a story studio",
+    "Shipping static outline cards that cannot be edited or regenerated",
+    "Counting deterministic fixture text as live provider or story-quality proof",
+    "Hiding missing provider, persistence, export, or deployment blockers behind optimistic success UI",
+    "Producing repeated generic story beats that do not use cast, relationships, or continuity state",
+    "Letting mobile/editor stress fail through clipped scene text, hidden controls, or page-level overflow"
+  ],
+  "checks": [
+    "node bin/agb.js packet check buildprints/ai-story-maker",
+    "npm run check:syntax",
+    "npm run check:blueprint-yaml",
+    "Website sync/build after publication update when publishing"
+  ],
+  "trustBadges": [
+    {
+      "label": "Mapper OS v3",
+      "detail": "Phase-driven packet with YAML routing and Markdown implementation objectives.",
+      "tone": "success"
+    },
+    {
+      "label": "Typed quality gates",
+      "detail": "Viewport, editor stress, semantic output, provider/operator, and critical-review proof are selected by artifact type.",
+      "tone": "success"
+    },
+    {
+      "label": "Story-output contract",
+      "detail": "Central output quality is defined around premise, cast, relationships, beats, scenes, continuity, revision handles, and export.",
+      "tone": "info"
+    },
+    {
+      "label": "Proof required",
+      "detail": "Live provider, persistence, export, deployment, security, and story-quality claims remain blocked until evidence exists.",
+      "tone": "warning"
+    }
+  ],
+  "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
+  "originLabel": "HBAI-Ltd/Toonflow-app",
+  "copyPrompt": "Use the AI Story Maker Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-story-maker/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-story-maker/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Follow the packet read order, typed quality gates, central output contract, and critical-review-pushback phase before claiming completion."
+}

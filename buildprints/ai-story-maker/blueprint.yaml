@@ -1,0 +1,154 @@
+schema_version: mapper-os/executable-blueprint/v3
+execution_start: BUILDPRINT.md
+machine_contract: blueprint.yaml
+claim_status: product_build_required
+qualification_label: local_build_requires_review
+
+product:
+  slug: ai-story-maker
+  name: AI Story Maker
+  artifact_type: responsive generative story workbench
+  primary_user: writers, game masters, educators, and creative teams shaping long-form stories from seed ideas
+  central_interface: browser studio with intake, world graph, outline board, scene storyboard, review/export, and character conversation panels
+  golden_path: A user enters a premise or uploads seed notes, receives a structured story world graph, develops a chapter/scene outline, generates a storyboard with beats and character arcs, edits and regenerates specific scenes, exports a coherent story package, and can ask characters or the story coach targeted follow-up questions.
+
+deployment_posture:
+  current: trusted_local
+  allowed_values:
+    - trusted_local
+    - private_authenticated
+    - public_webapp
+
+read_order:
+  - BUILDPRINT.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-uiux-decision.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - HANDOVER.md
+
+packet_shape:
+  style: phase_driven_comprehensive
+  principle: YAML routes; markdown teaches and builds.
+  required_files:
+    - BUILDPRINT.md
+    - 00-questions.md
+    - 01-project-setup.md
+    - 02-uiux-decision.md
+    - blueprint.yaml
+    - 03-phases/phase-index.yaml
+    - 03-phases/phase-flow.md
+    - 03-phases/critical-review-pushback.md
+    - HANDOVER.md
+
+phase_contract:
+  required_headings:
+    - How to implement this phase
+    - Building objective
+    - DO NOT
+    - Minimum proof before moving on
+    - Handoff note
+  rule: Each phase must contain one comprehensive, product-specific building objective. Do not decompose phase guidance into tiny schema sections or slice YAML.
+  forbidden_shapes:
+    - slices/
+    - gates/
+    - 02-architecture.md
+    - 03-ux-contract.md
+    - 04-handover.md
+    - 04-review.md
+    - 05-handover.md
+    - generated/agent-prompt.md
+    - generated/codex-handoff.md
+
+agent_contract:
+  role: Senior Product Engineer
+  rule: Build the story studio honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; provider, export, and deployment claims require matching proof.
+
+source_distillation:
+  origin_context_only: >
+    The prior packet described a graph-backed simulation and report workbench.
+    AI Story Maker preserves the useful behavior pattern as a
+    creative-writing studio: intake creates structured memory, graph
+    relationships shape a scenario, runtime transforms drive story beats,
+    reports become editable story packages, and post-output interaction
+    becomes character/story-coach conversation.
+  stale_branding_policy: Do not surface old product names, old slugs, or unrelated repository labels in builder-facing instructions except as explicit origin context in metadata or migration notes.
+
+central_output_contract:
+  central_output: a coherent, editable story package containing premise, world rules, cast, relationship graph, chapter outline, scene storyboard, character arcs, tension map, continuity notes, and exportable draft material
+  output_primitives:
+    - premise and genre promise
+    - world rules and constraints
+    - character cards with goals, wounds, voice, relationship edges, and arc state
+    - chapter and scene beats with purpose, conflict, turn, and consequence
+    - storyboard cards with visual/action notes, dialogue seeds, emotional temperature, and continuity references
+    - critique notes, unresolved threads, and regeneration targets
+  quality_signals:
+    - story beats escalate causally instead of forming a disconnected list
+    - character decisions reflect goals, relationships, and prior scene state
+    - generated scenes have distinct voice, stakes, conflict, and revision handles
+    - continuity notes catch contradictions in names, locations, timeline, and motivations
+    - export output is useful to a writer as a next drafting step, not merely a summary
+  unacceptable_generic_substitutes:
+    - a generic outline that repeats the user's premise without causal progression
+    - canned chapter cards with interchangeable conflict labels
+    - static character profiles that never influence generated scenes
+    - raw JSON dumps or provider transcripts as the main story experience
+    - fake success when provider credentials, persistence, or export runtime did not run
+  reviewer_acceptance_questions:
+    - What story decision can the writer make next from the generated package?
+    - Which beat, character relationship, or continuity note proves the output is specific to this premise?
+    - What changed when a scene or character was regenerated?
+    - Which output claim remains unproven because provider, persistence, export, or browser proof did not run?
+  claim_gates:
+    - do not claim story quality until at least one generated package is reviewed against the central output contract
+    - do not claim character interaction quality until conversation responses cite story state and change the user's next action
+    - do not claim export quality until exported files are opened or parsed back successfully
+  minimum_standard: The product path must produce a story package a writer can revise from, not just text that depends on a prompt.
+
+typed_quality_gates:
+  rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
+  ui_decision_precision:
+    applies_when: browser studio, story editor, outline board, or export review surface exists
+    requires:
+      - explicit style direction and rejected adjacent styles
+      - exact color tokens and status semantics
+      - typography scale and usage
+      - desktop and mobile layout model
+      - component and state language before UI implementation
+  visual_viewport_acceptance:
+    applies_when: responsive browser studio is implemented
+    requires:
+      - desktop proof for intake, story board, editor, and export review
+      - narrow viewport proof for the primary story path
+      - screenshot inspection for overlap, clipping, unreadable text, unreachable actions, and page-level horizontal overflow
+  editor_stress_acceptance:
+    applies_when: story cards, generated scenes, notes, outlines, or editable draft text render
+    requires:
+      - long-title, long-scene, long-character-name, and dense-outline fixtures
+      - scroll ownership proof for board/editor panels
+      - edit, regenerate, save, reload, and readback proof
+  semantic_output_acceptance:
+    applies_when: story package, scene, outline, critique, or character response is generated
+    requires:
+      - output-specificity check against central_output_contract
+      - repeated-generic-output rejection
+      - sample output review stating what the writer can do next
+  integration_operator_acceptance:
+    applies_when: provider, file import/export, background generation, or automation runs
+    requires:
+      - install, configure, and first-generation proof
+      - provider blocked-state proof when credentials are missing
+      - error, retry, idempotency, logging, audit, and recovery expectations where relevant
+  critical_review_pushback:
+    applies_when: serious executable packet or user-facing artifact
+    phase: 03-phases/critical-review-pushback.md
+    pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"
+    repair_loop: "up to five flaw -> fix -> proof -> rescore iterations unless externally blocked"
+
+state_and_handoff:
+  local_state_dir: .buildprint/
+  setup_receipt: .buildprint/setup-receipt.md
+  handover_template: HANDOVER.md
