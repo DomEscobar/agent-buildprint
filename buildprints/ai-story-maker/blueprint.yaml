@@ -7,9 +7,9 @@ qualification_label: local_build_requires_review
 product:
   slug: ai-story-maker
   name: AI Story Maker
-  artifact_type: responsive generative story workbench
+  artifact_type: responsive generative story-making product
   primary_user: writers, game masters, educators, and creative teams shaping long-form stories from seed ideas
-  central_interface: browser studio with intake, world graph, outline board, scene storyboard, review/export, and character conversation panels
+  central_interface: browser story-making surface with intake, world graph, outline board, scene storyboard, review/export, and character conversation regions
   golden_path: A user enters a premise or uploads seed notes, receives a structured story world graph, develops a chapter/scene outline, generates a storyboard with beats and character arcs, edits and regenerates specific scenes, exports a coherent story package, and can ask characters or the story coach targeted follow-up questions.
 
 deployment_posture:
@@ -64,13 +64,13 @@ phase_contract:
 
 agent_contract:
   role: Senior Product Engineer
-  rule: Build the story studio honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; provider, export, and deployment claims require matching proof.
+  rule: Build the story-making product honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; provider, export, and deployment claims require matching proof.
 
 source_distillation:
   origin_context_only: >
-    The prior packet described a graph-backed simulation and report workbench.
+    The prior packet described a graph-backed simulation and report product.
     AI Story Maker preserves the useful behavior pattern as a
-    creative-writing studio: intake creates structured memory, graph
+    creative-writing product: intake creates structured memory, graph
     relationships shape a scenario, runtime transforms drive story beats,
     reports become editable story packages, and post-output interaction
     becomes character/story-coach conversation.
@@ -111,7 +111,7 @@ central_output_contract:
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
   ui_decision_precision:
-    applies_when: browser studio, story editor, outline board, or export review surface exists
+    applies_when: browser story-making surface, drafting surface, outline board, or export review surface exists
     requires:
       - explicit style direction and rejected adjacent styles
       - exact color tokens and status semantics
@@ -119,7 +119,7 @@ typed_quality_gates:
       - desktop and mobile layout model
       - component and state language before UI implementation
   visual_viewport_acceptance:
-    applies_when: responsive browser studio is implemented
+    applies_when: responsive browser story-making surface is implemented
     requires:
       - desktop proof for intake, story board, editor, and export review
       - narrow viewport proof for the primary story path

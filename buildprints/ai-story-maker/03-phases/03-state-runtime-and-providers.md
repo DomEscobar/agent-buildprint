@@ -15,9 +15,9 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, inspectors, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
-Make AI Story Maker durable and honest across runtime boundaries. Implement the provider adapter seam, generation run state, retries, cancellations, failure mapping, export artifact tracking, and readback behavior required by a generative story studio. The writer should be able to reload a package, inspect generation history, see whether live provider configuration is available, retry a failed scene generation, and understand exactly when an output is deterministic fixture content rather than live generated story material.
+Make AI Story Maker durable and honest across runtime boundaries. Implement the provider adapter boundary, generation run state, retries, cancellations, failure mapping, export artifact tracking, and readback behavior required by a generative story-making product. The writer should be able to reload a package, inspect generation history, see whether live provider configuration is available, retry a failed scene generation, and understand exactly when an output is deterministic fixture content rather than live generated story material.
 
 This phase should add or harden the operations behind scene drafting, regeneration, continuity review, character conversation, and export. Provider calls must be bounded, safe, and logged enough for operator understanding without leaking secret values or private manuscript content. Missing credentials must produce a blocked state with recovery instructions after adapters/config checks exist. Do not let the UI imply that a scene, character answer, continuity scan, or export ran when the runtime could not run.
 

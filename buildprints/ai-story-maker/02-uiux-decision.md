@@ -5,13 +5,13 @@ UX is a must. It matters as much as the implementation because the user only exp
 Small checklist before writing the style constitution:
 
 - Can a first-time user understand what this artifact is, what to do first, and what state it is in?
-- Does the visual direction feel intentionally designed for a writer shaping a story package rather than copied from a generic dashboard?
+- Does the visual direction feel intentionally designed for a writer shaping a story package rather than copied from a generic product shell?
 - Are colors, typography, spacing, components, and motion defined concretely enough for another agent to implement consistently?
 - Are empty, loading, error, and blocked states understandable without reading logs or source code?
 - Are all visible controls expected to work, validate, navigate, regenerate, export, or explain a blocker?
 - Would a demanding human call this product surface polished, or just technically present?
 
-This file is the style constitution for every human-facing surface. It must force a clear visual world before implementation starts. Do not write short phrases like "clean UI" or "modern dashboard." Write a detailed design schema that later phases can obey without guessing.
+This file is the style constitution for every human-facing surface. It must force a clear visual world before implementation starts. Do not write short phrases like "clean UI" or "modern app." Write a detailed design schema that later phases can obey without guessing.
 
 ## 0. Autonomous design decision protocol
 
@@ -33,33 +33,33 @@ Then write a full visual and interaction contract for this artifact. The result 
 
 ## 1. Design thesis
 
-AI Story Maker should feel like a focused creative studio where the writer is in command of a living manuscript system. The impression is warm editorial precision: calmer than a game UI, richer than a document editor, and more craft-focused than a SaaS dashboard. The interface should make story structure visible without turning creativity into spreadsheet work. The writer should always know where the premise, cast, outline, scene board, continuity warnings, and export status live.
+AI Story Maker should feel like a focused story-making product where the writer is in command of a living manuscript system. The impression is warm editorial precision: calmer than a game UI, richer than a plain document form, and more craft-focused than a generic SaaS shell. The interface should make story structure visible without turning creativity into spreadsheet work. The writer should always know where the premise, cast, outline, scene board, continuity warnings, and export status live.
 
 The product must not feel like a chat box with cards stapled around it. Generation is part of the workflow, but the story package is the product. Every screen should reinforce authorship: editable beats, visible revision handles, explanations for blocked provider states, and clear next actions for improving the story. The style should support long sessions, dense story material, and careful reading without becoming beige, whimsical, or default-admin.
 
 ## 2. Chosen style direction
 
-Use **editorial story-room workbench** style direction: a dark ink workspace with paper-like panels, quiet brass accents, structured board lanes, and manuscript-grade typography. It should feel like a professional writers' room table where index cards, continuity notes, and draft excerpts are arranged with intent. This is specific to the artifact because the user is not monitoring generic metrics; they are shaping a story system that needs relationships, rhythm, and revision affordances.
+Use **warm editorial story-making** style direction: a dark ink surface with paper-like regions, quiet brass accents, structured story lanes, and manuscript-grade typography. It should feel like story material, continuity notes, and draft excerpts are arranged with intent. This is specific to the artifact because the user is not monitoring generic metrics; they are shaping a story system that needs relationships, rhythm, and revision affordances.
 
-Reject a generic white SaaS dashboard because it makes scenes and character arcs feel like database rows. Reject fantasy parchment because it becomes decorative and harms readability. Reject neon cyberpunk because it fights long-form editing and emotional nuance. Reject chat-first AI assistant UI because it hides the storyboard and turns every operation into a prompt. The artifact should keep the story board and editor dominant, with AI actions presented as craft tools rather than spectacle.
+Reject a generic white SaaS shell because it makes scenes and character arcs feel like database rows. Reject fantasy parchment because it becomes decorative and harms readability. Reject neon cyberpunk because it fights long-form editing and emotional nuance. Reject chat-first AI assistant UI because it hides the storyboard and turns every operation into a prompt. The artifact should keep the story board and drafting surface dominant, with AI actions presented as craft tools rather than spectacle.
 
 ## 3. Color system
 
-Use concrete tokens and preserve their semantic roles. Background `#101214` is the app shell. Surface `#181A1E` is the main panel color. Elevated surface `#22252A` is for active cards, drawers, and selected scene inspectors. Paper surface `#F4EBDD` is allowed only inside manuscript preview/export panes, never for the whole app. Border `#343842` separates panels without heavy outlines. Primary `#D7A84F` is the main generate/save/export action. Accent `#7DB7B2` marks relationships, graph links, and character focus. Secondary accent `#B987D6` marks revision suggestions and alternate beats. Success `#61B37B`, warning `#D99A3D`, danger `#D85C5C`, blocked `#8A6D3B`, text-main `#F2EFE8`, text-muted `#A7A39A`, text-soft `#C9C2B7`, and focus ring `#F0C66A` complete the system.
+Use concrete tokens and preserve their semantic roles. Background `#101214` is the app shell. Surface `#181A1E` is the main region color. Elevated surface `#22252A` is for active cards, drawers, and selected scene details. Paper surface `#F4EBDD` is allowed only inside manuscript preview/export regions, never for the whole app. Border `#343842` separates regions without heavy outlines. Primary `#D7A84F` is the main generate/save/export action. Accent `#7DB7B2` marks relationships, graph links, and character focus. Secondary accent `#B987D6` marks revision suggestions and alternate beats. Success `#61B37B`, warning `#D99A3D`, danger `#D85C5C`, blocked `#8A6D3B`, text-main `#F2EFE8`, text-muted `#A7A39A`, text-soft `#C9C2B7`, and focus ring `#F0C66A` complete the system.
 
 Never rely on color alone: blocked provider states need icon/text labels, errors need recovery copy, and selected cards need both border and background change. Do not use broad purple-blue gradients, beige full-page themes, or random glow orbs. Brass primary should be used sparingly for committed actions; draft/regenerate actions can use outline or accent treatment so the user can distinguish irreversible export/save from exploratory generation.
 
 ## 4. Typography system
 
-Use a manuscript-friendly serif for story content and a quiet sans for controls. If exact fonts are unavailable, use Georgia or Charter-like serif for draft excerpts and Inter or system sans for UI. The workspace-title/heading token is 30px, line-height 1.15, weight 700, used only for the current story package title or major route title. Section-title is 20px, line-height 1.25, weight 650, used for Outline, Cast, Storyboard, Continuity, and Export sections. Panel-title is 15px, line-height 1.3, weight 650, used inside cards and inspectors.
+Use a manuscript-friendly serif for story content and a quiet sans for controls. If exact fonts are unavailable, use Georgia or Charter-like serif for draft excerpts and Inter or system sans for UI. The title/heading token is 30px, line-height 1.15, weight 700, used only for the current story package title or major route title. Section-title is 20px, line-height 1.25, weight 650, used for Outline, Cast, Storyboard, Continuity, and Export sections. Panel-title is 15px, line-height 1.3, weight 650, used inside cards and detail regions.
 
 Body text is 15px, line-height 1.55, weight 400 for readable scene summaries and instructions. Manuscript-body is 17px, line-height 1.65, weight 400 for generated prose previews. Metadata/code is 12px, line-height 1.35, weight 500, used for provider status, timestamps, ids, and export details. Button-label is 13px, line-height 1.1, weight 700, with normal letter spacing. Do not scale font size with viewport width; adjust layout and wrapping instead.
 
 ## 5. Layout and spatial rhythm
 
-The dominant first screen is a usable story studio, not a landing page. Desktop layout uses a three-zone workbench: left rail for story package navigation and status, center board/editor for outline and storyboard, right inspector for selected character, scene, continuity, or provider state. Use 8px as the base spacing unit, 12/16px for compact control gaps, 24px for section separation, and 32px only around route-level transitions. Cards should use 6px or 8px radius, never oversized pill shapes.
+The dominant first screen is a usable story-making surface, not a landing page. Desktop layout uses three role-based regions: story package navigation and status, outline/storyboard plus drafting, and selected character, scene, continuity, or provider detail. Use 8px as the base spacing unit, 12/16px for compact control gaps, 24px for section separation, and 32px only around route-level transitions. Cards should use 6px or 8px radius, never oversized pill shapes.
 
-Mobile layout becomes a single-column responsive studio with a compact top mode switcher: Intake, Cast, Board, Scene, Review, Export. The center editor owns scroll. Inspectors become drawers, and board lanes stack vertically with stable card dimensions so long scene titles do not resize surrounding controls. Desktop and mobile must avoid page-level horizontal overflow. The story board, not a hero headline, must be visually dominant on the first screen after setup.
+Mobile layout becomes a single-column responsive story flow with a compact top mode switcher: Intake, Cast, Board, Scene, Review, Export. The drafting area owns scroll. Detail regions become drawers, and board lanes stack vertically with stable card dimensions so long scene titles do not resize surrounding controls. Desktop and mobile must avoid page-level horizontal overflow. The story board, not a hero headline, must be visually dominant on the first screen after setup.
 
 ## 6. Component language
 
@@ -81,7 +81,7 @@ Never replace a blocked live provider with canned story text and call it success
 
 ## 9. Anti-generic rules
 
-Forbidden for this artifact: generic white SaaS dashboard, default Tailwind starter look, unstyled browser controls, random gradients, decorative charts, fake activity feeds, placeholder icons, raw JSON dumps as main UI, dead tabs, functionless buttons, optimistic success with no runtime proof, static outline cards that cannot be edited, chat-only story generation, repeated generic scene copy, hidden provider failures, inconsistent radii, low contrast, clipped long titles, unreadable mobile text, and any style that contradicts the editorial story-room thesis.
+Forbidden for this artifact: generic white SaaS shell, default Tailwind starter look, unstyled browser controls, random gradients, decorative charts, fake activity feeds, placeholder icons, raw JSON dumps as main UI, dead tabs, functionless buttons, optimistic success with no runtime proof, static outline cards that cannot be edited, chat-only story generation, repeated generic scene copy, hidden provider failures, inconsistent radii, low contrast, clipped long titles, unreadable mobile text, and any style that contradicts the warm editorial story-making thesis.
 
 ## 10. Phase obligation
 

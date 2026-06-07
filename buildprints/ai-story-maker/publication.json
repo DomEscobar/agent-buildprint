@@ -10,7 +10,7 @@
   "status": "proof-required",
   "runtime": [
     "Executable Buildprint packet",
-    "Browser story studio",
+    "Browser story-making product",
     "Provider adapter seam",
     "Local persistence",
     "Export/readback proof"
@@ -29,9 +29,9 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "A Mapper OS v3 executable packet for building an AI story-making studio with premise intake, story world graph, cast and relationship model, outline board, scene storyboard, editable generation loop, continuity review, provider boundaries, persistence, and export proof.",
+  "summary": "A Mapper OS v3 executable packet for building an AI story-making product with premise intake, story world graph, cast and relationship model, outline board, scene storyboard, editable generation loop, continuity review, provider boundaries, persistence, and export proof.",
   "plainDescription": "AI Story Maker turns seed ideas or notes into a structured, editable story package: premise, world rules, cast, relationships, outline, storyboard cards, draft scenes, continuity notes, and exportable artifacts. The packet requires honest provider blocked states, durable state, semantic output review, viewport/editor stress proof, and final critical review before any completion claim.",
-  "promise": "A source-independent, proof-gated implementation packet for a serious creative-writing workbench. It does not claim live AI, deployment, story quality, export quality, or production readiness until matching evidence exists.",
+  "promise": "A source-independent, proof-gated implementation packet for a serious creative-writing product. It does not claim live AI, deployment, story quality, export quality, or production readiness until matching evidence exists.",
   "whatYouGet": [
     "Generic AI-builder briefing in BUILDPRINT.md",
     "Hard-stop and assumable defaults in 00-questions.md",
@@ -45,7 +45,7 @@
     "A target implementation repo or empty app directory",
     "A production-capable browser app stack",
     "Provider credentials only when upgrading beyond deterministic fixture proof",
-    "Browser/screenshot proof for the story studio",
+    "Browser/screenshot proof for the story-making surface",
     "Persistence and export readback proof before durable/export claims",
     "Security and privacy review before public deployment"
   ],
@@ -77,7 +77,7 @@
     "HANDOVER.md"
   ],
   "risks": [
-    "Building a generic writing prompt form instead of a story studio",
+    "Building a generic writing prompt form instead of a story-making product",
     "Shipping static outline cards that cannot be edited or regenerated",
     "Counting deterministic fixture text as live provider or story-quality proof",
     "Hiding missing provider, persistence, export, or deployment blockers behind optimistic success UI",

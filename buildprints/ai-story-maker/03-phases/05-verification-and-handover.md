@@ -15,7 +15,7 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, inspectors, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
 Verify AI Story Maker from a fresh-start mindset and write the final handover. Run the real commands a next agent or human would use. Exercise the golden path: create a story package, build or fixture-label the story world, edit outline/storyboard cards, draft or block a scene generation honestly, save and reload state, run continuity or critique if implemented, export the package, and ask a character or story coach if provider/runtime support exists. Negative paths matter: empty input, blocked provider, failed export, lost storage, long content, and narrow viewport should all be inspected or recorded as blockers.
 

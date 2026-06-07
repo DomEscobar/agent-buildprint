@@ -15,7 +15,7 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, inspectors, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
 Build the first complete creative loop: premise and seed notes become a story world, cast, relationships, chapter outline, and scene storyboard that a writer can inspect and revise. This phase should preserve the useful source-distilled pattern of structured memory and graph-backed progression, but express it as story craft: characters have goals and relationship edges, world rules constrain later scenes, outline beats escalate causally, and storyboard cards expose purpose, conflict, turn, consequence, emotional temperature, and revision handles.
 
