@@ -77,7 +77,7 @@ central_output_contract:
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
   ui_decision_precision:
-    applies_when: artifact has human-facing UI, reports, dashboards, editors, visual workflows, or operator surfaces
+    applies_when: artifact has human-facing UI, reports, generated outputs, visual workflows, forms, or operator surfaces
     requires:
       - explicit style direction and rejected adjacent styles
       - exact color tokens and status semantics
@@ -91,7 +91,7 @@ typed_quality_gates:
       - mobile or narrow-viewport proof when users may operate there
       - screenshot inspection for overlap, clipping, unreadable text, unreachable actions, and page-level horizontal overflow
   editor_stress_acceptance:
-    applies_when: artifact renders editable, generated, document-like, canvas, timeline, deck, notes, or report content
+    applies_when: artifact renders editable, generated, document-like, fixed-format, long-form, visual, note, or report content
     requires:
       - long-title and long-body fixtures
       - fixed-surface framing or scroll ownership proof

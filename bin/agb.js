@@ -116,7 +116,7 @@ function hasPreciseStyleDirection(text) {
   return styleSection.trim().length >= 350 &&
     /Use[\s\S]{0,80}\*\*|Use\s+[A-Za-z][\w\s-]+style direction/i.test(styleSection) &&
     /not|Avoid|No /i.test(styleSection) &&
-    /specific|artifact|product|user|workflow|canvas|workbench|studio|surface/i.test(styleSection)
+    /specific|artifact|product|user|workflow|surface|operator|developer|audience|task/i.test(styleSection)
 }
 
 function hasPreciseTypographySystem(text) {
@@ -124,7 +124,7 @@ function hasPreciseTypographySystem(text) {
   return countMatches(typeSection, /\b\d{2}(?:-\d{2})?px\b/gi) >= 5 &&
     /line-height|\/\s*1\./i.test(typeSection) &&
     /weight|\/\s*\d{3}/i.test(typeSection) &&
-    /workspace-title|hero-title|heading/i.test(typeSection) &&
+    /title|heading/i.test(typeSection) &&
     /section-title/i.test(typeSection) &&
     /panel-title/i.test(typeSection) &&
     /body/i.test(typeSection) &&
@@ -133,7 +133,7 @@ function hasPreciseTypographySystem(text) {
 
 function hasPreciseLayoutSystem(text) {
   const layoutSection = (text.match(/#{2,3}\s*\d+\.\s*Layout and spatial rhythm\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
-  return /layout|view|shell|canvas|workbench|split|panel/i.test(layoutSection) &&
+  return /layout|view|shell|surface|region|flow|grid|panel|navigation|output/i.test(layoutSection) &&
     /desktop/i.test(layoutSection) &&
     /mobile/i.test(layoutSection) &&
     /responsive/i.test(layoutSection) &&
@@ -611,7 +611,7 @@ function packetCheckResults(dir) {
   ok('ui/ux decision has precise typography scale', isMapperTemplatePacket ? /Define heading, body, metadata\/code, and label treatment/i.test(uiux) && /scale, weight, line-height/i.test(uiux) : hasPreciseTypographySystem(uiux))
   ok('ui/ux decision has precise layout and responsive rules', isMapperTemplatePacket ? /Define the main layout model/i.test(uiux) && /spacing rhythm, density, grid behavior, hierarchy, and responsive behavior/i.test(uiux) : hasPreciseLayoutSystem(uiux))
   ok('ui/ux decision defines components, motion, and states', /Component language/i.test(uiux) && /Motion and interaction feel/i.test(uiux) && /Empty, loading, error, and blocked states/i.test(uiux))
-  ok('ui/ux decision forbids generic short-phrase design', /Do not write only short phrases|short phrases/i.test(uiux) || /generic white SaaS dashboard/i.test(uiux))
+  ok('ui/ux decision forbids generic short-phrase design', /Do not write only short phrases|short phrases/i.test(uiux) || /generic product shell/i.test(uiux))
   ok('ui/ux decision rejects generic dead UI', /functionless buttons|inert tabs|decorative charts|sample data|optimistic success|dead tabs/i.test(uiux))
 
   ok('phase flow defines active phase loop', /active phase only/i.test(phaseFlow) && /Do not read every phase upfront/i.test(phaseFlow) && /Restate the smallest real vertical path/i.test(phaseFlow))

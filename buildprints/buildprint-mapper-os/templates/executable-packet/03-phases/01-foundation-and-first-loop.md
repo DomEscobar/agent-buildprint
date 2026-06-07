@@ -15,7 +15,7 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, inspectors, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
 Create the implementation foundation and first visible/runnable loop for the mapped artifact. The builder should leave this phase with a real project skeleton, local commands, architecture docs, env contract, proof strategy, and a first product path that demonstrates the artifact direction.
 

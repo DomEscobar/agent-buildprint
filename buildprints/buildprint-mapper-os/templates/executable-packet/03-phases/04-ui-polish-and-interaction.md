@@ -15,11 +15,11 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, inspectors, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
-Repair the human-facing experience until it feels like the product described in `02-uiux-decision.md`. This is not a cosmetic pass. It is the phase that catches generic dashboards, dead controls, unclear empty states, invisible errors, weak motion, confusing hierarchy, and interactions that do not teach the user what is happening.
+Repair the human-facing experience until it feels like the product described in `02-uiux-decision.md`. This is not a cosmetic pass. It is the phase that catches generic product shells, dead controls, unclear empty states, invisible errors, weak motion, confusing hierarchy, and interactions that do not teach the user what is happening.
 
-For UI products, inspect the app like a hostile product reviewer. Click every visible control in the golden path. Try empty input, blocked provider/runtime, success, error, reload, and mobile/narrow layout where relevant. Make the primary surface feel intentional. Motion, spacing, copy, panels, and state transitions should help comprehension rather than decorate placeholders.
+For UI products, inspect the app like a hostile product reviewer. Click every visible control in the golden path. Try empty input, blocked provider/runtime, success, error, reload, and mobile/narrow layout where relevant. Make the primary surface feel intentional. Motion, spacing, copy, layout regions, and state transitions should help comprehension rather than decorate placeholders.
 
 Use the selected gates in `docs/proof-matrix.md` or equivalent to decide what to inspect. If viewport proof applies, inspect real desktop and mobile/narrow screenshots for overlap, clipping, unreadable text, unreachable actions, and page-level horizontal overflow. If editor stress applies, test long labels/content/notes or artifact-specific stress data. If semantic output proof applies, review whether the output is specific and useful rather than repeated generic copy. If the artifact is non-UI, inspect the operator/developer surface with the same severity: help text, logs, errors, retries, idempotency, and recovery.
 

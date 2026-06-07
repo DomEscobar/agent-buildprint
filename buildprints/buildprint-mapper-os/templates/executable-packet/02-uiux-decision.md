@@ -5,13 +5,13 @@ UX is a must. It matters as much as the implementation because the user only exp
 Small checklist before writing the style constitution:
 
 - Can a first-time user understand what this artifact is, what to do first, and what state it is in?
-- Does the visual direction feel intentionally designed for this artifact rather than copied from a generic dashboard?
+- Does the visual direction feel intentionally designed for this artifact rather than copied from a generic product shell?
 - Are colors, typography, spacing, components, and motion defined concretely enough for another agent to implement consistently?
 - Are empty, loading, error, and blocked states understandable without reading logs or source code?
 - Are all visible controls expected to work, validate, navigate, or explain a blocker?
 - Would a demanding human call this product surface polished, or just “technically present”?
 
-This file is the style constitution for every human-facing surface. It must force a clear visual world before implementation starts. Do not write short phrases like “clean UI” or “modern dashboard.” Write a detailed design schema that later phases can obey without guessing.
+This file is the style constitution for every human-facing surface. It must force a clear visual world before implementation starts. Do not write short phrases like “clean UI” or “modern app.” Write a detailed design schema that later phases can obey without guessing.
 
 For non-UI libraries/services, write `not-ui-bearing` and describe the developer/operator experience with the same level of specificity: command shape, output formatting, error tone, docs style, and interaction rhythm.
 
@@ -25,13 +25,13 @@ Before building UI, the generated packet must force the implementing agent to re
 - chosen style direction, including what adjacent styles are rejected and why;
 - color tokens with exact values for background, surfaces, borders, main text, secondary text, primary action, secondary accent, success, warning, danger, blocked, and focus;
 - typography tokens with exact sizes, line heights, weights, and where each token is used;
-- layout model for desktop and mobile, including navigation, primary work surface, secondary panels, scroll ownership, fixed-format regions, and overflow behavior;
-- component language for controls, cards, tables/lists, graphs/charts, inspector panels, modals/drawers, empty states, loading states, blocked states, and errors;
+- layout model for desktop and mobile, including navigation, primary task surface, supporting regions, scroll ownership, fixed-format regions, and overflow behavior;
+- component language for controls, repeated items, structured data views, detail regions, overlays, empty states, loading states, blocked states, and errors;
 - proof obligations: screenshots, viewport assertions, no-overlap checks, long-text fixtures, and content-specificity checks.
 
 These decisions must be written before implementation because the first UI pass should already be aiming at a coherent product, not discovering the design accidentally through patches.
 
-Use the proof obligations selectively. A CLI may need operator output, error, and recovery style instead of screenshots. A single-viewport kiosk may need fixed-size framing instead of mobile proof. A generative editor may need long-content and content-specificity stress. The rule is precise fit: choose the proof that would reveal the artifact's most likely quality failure, and record why omitted UI proofs are not applicable.
+Use the proof obligations selectively. A CLI may need operator output, error, and recovery style instead of screenshots. A single-viewport artifact may need fixed-size framing instead of mobile proof. A generative artifact may need long-content and content-specificity stress. The rule is precise fit: choose the proof that would reveal the artifact's most likely quality failure, and record why omitted UI proofs are not applicable.
 
 ## How to implement this decision
 
@@ -49,11 +49,11 @@ Write the following sections in complete, specific paragraphs. Do not leave plac
 
 ### 1. Design thesis
 
-Describe what the artifact should feel like and what it must not feel like. Name the emotional and professional impression: calm intelligence, cinematic command center, editorial precision, playful creative canvas, industrial reliability, luxury operating system, soft human workspace, etc. Explain why this style fits the product and user.
+Describe what the artifact should feel like and what it must not feel like. Name the emotional and professional impression in source-specific terms: calm or intense, sparse or dense, playful or restrained, editorial or operational, expressive or utilitarian. Explain why this style fits the product and user.
 
 ### 2. Chosen style direction
 
-Pick one strong direction and commit to it. Examples: glassmorphism intelligence lab, Swiss precision dashboard, dark cinematic control room, soft clay workspace, brutalist developer console, warm editorial notebook, playful creative studio, luxury AI operating system. The chosen direction must be specific to the artifact, not a default preference.
+Pick one strong direction and commit to it. Describe the direction through concrete choices: density, contrast, geometry, texture, typography, interaction pace, and what adjacent styles are rejected. The chosen direction must be specific to the artifact, not a default preference or a named UI genre copied from the mapper.
 
 ### 3. Color system
 
@@ -65,15 +65,15 @@ Define heading, body, metadata/code, and label treatment. Describe font personal
 
 ### 5. Layout and spatial rhythm
 
-Define the main layout model: split pane, canvas workbench, command palette, document flow, cards, sidebar, timeline, inspector, etc. Specify spacing rhythm, density, grid behavior, hierarchy, and responsive behavior. Say what should be visually dominant on the first screen.
+Define the main layout model through roles rather than borrowed product names: primary task region, supporting context, navigation, controls, output/result area, review/detail area, and feedback/status area. Specify spacing rhythm, density, grid behavior, hierarchy, and responsive behavior. Say what should be visually dominant on the first screen.
 
 ### 6. Component language
 
-Describe how buttons, inputs, panels, cards, navigation, tables/lists, charts/graphs, inspectors, modals, toasts, and status chips look and behave. Include border radius, shadows, blur, outlines, hover/active/disabled states, and how selected/blocked/error states appear.
+Describe how buttons, inputs, layout regions, repeated items, data views, navigation, overlays, notifications, and status indicators look and behave. Include border radius, shadows, blur, outlines, hover/active/disabled states, and how selected/blocked/error states appear.
 
 ### 7. Motion and interaction feel
 
-Define motion principles: calm fade, elastic spring, cinematic slide, instant utilitarian response, hover lift, graph pulse, timeline progress, loading shimmer, etc. Motion must clarify state and control, not decorate randomly. Include reduced-motion expectations.
+Define motion principles by purpose: confirming action, revealing hierarchy, showing progress, preserving orientation, or reducing perceived wait. Motion must clarify state and control, not decorate randomly. Include reduced-motion expectations.
 
 ### 8. Empty, loading, error, and blocked states
 
@@ -81,7 +81,7 @@ Define exact state language and visual treatment. Empty states should teach the 
 
 ### 9. Anti-generic rules
 
-List what is forbidden for this artifact: generic white SaaS dashboard, default Tailwind starter look, unstyled browser controls, random gradients, inconsistent radii, low contrast, decorative charts, fake activity feeds, placeholder icons, raw JSON dumps as main UI, dead tabs, functionless buttons, optimistic success with no runtime proof, and any style that contradicts the design thesis.
+List what is forbidden for this artifact: generic product shells, default starter looks, unstyled browser controls, random gradients, inconsistent radii, low contrast, decorative data views, fake activity feeds, placeholder icons, raw JSON dumps as main UI, dead tabs, functionless buttons, optimistic success with no runtime proof, and any style that contradicts the design thesis.
 
 ### 10. Phase obligation
 
@@ -100,7 +100,7 @@ State that every later phase touching UI must preserve this style schema. If a p
 
 - Do not write only short phrases, moodboard words, or generic labels.
 - Do not say “modern, clean, intuitive” without concrete visual rules.
-- Do not use placeholder cards, lorem ipsum, fake activity feeds, inert tabs, decorative charts, or static graph bubbles.
+- Do not use placeholder repeated items, lorem ipsum, fake activity feeds, inert tabs, decorative data views, or static graph bubbles.
 - Do not treat raw JSON as the main experience unless the artifact is explicitly a developer JSON tool.
 - Do not hide provider/runtime/deployment blockers behind optimistic success UI.
 - Do not claim polished from colors alone; interaction, hierarchy, motion, copy, and state behavior matter.

@@ -15,13 +15,13 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 ## Building objective
 
-Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, inspectors, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-uiux-decision.md` open as the design/style constitution. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the style schema unless the artifact is explicitly marked `not-ui-bearing`.
 
 Build the first complete golden-path loop mirrored in `blueprint.yaml` and elaborated by the phase objectives. This is the main product path: the user/operator/developer should move from initial input/configuration to a useful result and visible/readable state.
 
 The loop must include real validation, meaningful state transition, and output that depends on the input. It must also reach the central output quality bar defined in `blueprint.yaml` and `docs/output-quality.md` or equivalent. If live dependencies are unavailable, build the adapter seam and blocked state, but do not substitute canned success. The path should be small enough to finish, but complete enough that a skeptical reviewer can see the product starting to work.
 
-Do not confuse "input-derived" with "good." The central output should include the mapped artifact's source-derived primitives and quality signals. A generic result with the user's words copied into it is not enough. If the product produces analysis, generated code, diagrams, documents, simulations, plans, reports, or dashboards, the output must satisfy the mapped artifact's domain-specific standard for usefulness, correctness, credibility, publishability, or actionability.
+Do not confuse "input-derived" with "good." The central output should include the mapped artifact's source-derived primitives and quality signals. A generic result with the user's words copied into it is not enough. If the product produces analysis, generated code, diagrams, documents, simulations, plans, reports, or structured views, the output must satisfy the mapped artifact's domain-specific standard for usefulness, correctness, credibility, publishability, or actionability.
 
 For UI-bearing products, every visible control in this path must work or block honestly. For API/CLI/service products, every documented command/endpoint in this path must return meaningful success/error output and avoid hidden side effects.
 

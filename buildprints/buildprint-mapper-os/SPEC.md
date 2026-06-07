@@ -47,7 +47,7 @@ The selected `BUILDPRINT.md` must be generic and transferable. It should say “
 
 The mapper should not solve vague UI direction by adding endless style prose. It should route uncertainty into explicit decisions before implementation. If the source has no brand, palette, typography, or layout system, the selected packet must require the builder to reason from artifact type, audience, density, workflow, risk, and review proof, then write a concrete local UI identity before UI code.
 
-For visual/editor/workbench artifacts, the selected packet must also declare viewport and stress proof obligations. A screenshot path is weaker than screenshot inspection: the packet should say what must be inspected, such as primary surface framing, no overlap, no clipped controls, no page-level horizontal overflow, readable text, and reachable actions on desktop and mobile when responsive use is in scope.
+For visual, editable, or fixed-format artifacts, the selected packet must also declare viewport and stress proof obligations. A screenshot path is weaker than screenshot inspection: the packet should say what must be inspected, such as primary surface framing, no overlap, no clipped controls, no page-level horizontal overflow, readable text, and reachable actions on desktop and mobile when responsive use is in scope.
 
 ## Central output anti-regression rule
 
@@ -67,7 +67,7 @@ If a selected packet can produce a polished shell whose main output could fit an
 Mapper OS should choose proof obligations by artifact type instead of hammering every packet with the same text.
 
 - UI-bearing apps need design-decision precision, desktop/mobile visual inspection when responsive use is expected, interaction-state proof, and accessibility/overflow checks.
-- Editor/workbench/canvas tools need fixed-format surface proof, long-content stress fixtures, selection/edit/readback proof, and no-overlap inspection.
+- Editable or fixed-format tools need fixed-surface proof, long-content stress fixtures, selection/edit/readback proof, and no-overlap inspection.
 - AI/generative products need semantic output-specificity proof, repeated-output rejection, provider/blocker honesty, and reviewer acceptance questions.
 - Integrations/plugins/CLIs/services may be `not-ui-bearing`, but they still need operator/developer experience decisions: command shape, logs, errors, idempotency, retries, audit trail, and recovery proof.
 

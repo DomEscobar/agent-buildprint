@@ -72,7 +72,7 @@ The mapper must select proof obligations that fit the artifact instead of forcin
 
 - UI-bearing artifacts: screenshot/browser inspection of the real path, interaction-state proof, no-overlap/no-clipping/no-horizontal-overflow checks when practical, and accessibility/focus sanity.
 - Responsive artifacts: desktop and mobile proof, or an explicit reason the artifact is single-viewport.
-- Editor/workbench/canvas artifacts: fixed-surface framing, long-content stress fixtures, edit/readback proof, and inspector/control reachability.
+- Editable or fixed-format artifacts: fixed-surface framing, long-content stress fixtures, edit/readback proof, and detail/control reachability.
 - AI/generative artifacts: central output specificity proof, repeated-generic-output rejection, provider/blocker honesty, and sample output review against the output contract.
 - Integration/plugin/service/CLI artifacts: install/configure/first-action proof, idempotency/retry/failure proof, operator logs/errors, and audit/recovery proof.
 

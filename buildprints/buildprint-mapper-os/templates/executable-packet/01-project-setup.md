@@ -41,7 +41,7 @@ Create these in the implementation project unless the project already has equiva
 - Do not put real secrets in `.env.example`, docs, tests, logs, screenshots, or handover.
 - Do not choose a stack only because it is familiar if it cannot prove the golden path.
 - Do not hide hard-stop questions as assumptions.
-- Do not make a landing page when the product needs a workbench, API, CLI, worker, or runtime first.
+- Do not make a landing page when the product needs an operational product surface, API, CLI, worker, or runtime first.
 
 ## Minimum proof before moving on
 

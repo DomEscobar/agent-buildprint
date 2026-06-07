@@ -7,7 +7,7 @@
 The `ai-presentation-generation` packet was patched through several proof loops after generated Presenton-style builds exposed repeatable quality gaps:
 
 - vague UI direction allowed generic visual output;
-- desktop screenshots could pass while the workbench composition was still too narrow or visually compressed;
+- desktop screenshots could pass while the primary composition was still too narrow or visually compressed;
 - mobile screenshots could exist while important controls were clipped;
 - generated slide content could be structurally correct but semantically repetitive;
 - long text was not stressful enough to expose editor layout failures;
@@ -43,7 +43,7 @@ Patch `buildprints/buildprint-mapper-os` so every generated executable packet ca
    - Deterministic fallback content is acceptable only if clearly labeled and still shaped by input controls.
 
 4. **Stress fixtures as first-class proof**
-   - Editor/workbench products must include long-title, long-body, long-provenance, long-notes, and narrow-viewport stress cases where relevant.
+   - Editor-like or fixed-format products must include long-title, long-body, long-provenance, long-notes, and narrow-viewport stress cases where relevant.
    - The packet should require proof that stress content does not break layout, controls, or export/readback surfaces.
 
 5. **Repeatable generated-app proof commands**
