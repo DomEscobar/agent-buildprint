@@ -2,15 +2,171 @@ schema_version: mapper-os/executable-blueprint/v3
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
-qualification_label: local_build_requires_review
+qualification_label: PROOF_REQUIRED
 
 product:
-  slug: ai-story-maker
-  name: AI Story Maker
-  artifact_type: responsive generative story-making product
-  primary_user: writers, game masters, educators, and creative teams shaping long-form stories from seed ideas
-  central_interface: browser story-making surface with intake, world graph, outline board, scene storyboard, review/export, and character conversation capabilities arranged through progressive disclosure rather than simultaneous permanent regions
-  golden_path: A user enters a premise or uploads seed notes, receives a structured story world graph, develops a chapter/scene outline, generates a storyboard with beats and character arcs, edits and regenerates specific scenes, exports a coherent story package, and can ask characters or the story coach targeted follow-up questions.
+  name: AI Short-Drama Production Canvas
+  artifact_type: authenticated_browser_or_desktop_webapp
+  selected_scope: production_canvas_webapp
+  product_summary: A canvas-first short-drama production tool where creators select a project and episode, inspect and edit a connected pipeline of script, director plan, assets, storyboard table, storyboard frames, and video workbench, then use a realtime production assistant and provider-backed media generation to advance toward a finished short-drama episode.
+  source_independence_rule: This packet preserves observed product behavior and quality obligations. A downstream builder must not need to open the original source repository.
+
+purpose: Build an authenticated canvas-first AI short-drama production webapp that preserves the connected episode production board, realtime assistant, durable flow-data readback, provider/media seams, and Canva-like editing UX.
+
+runtime:
+  artifact: authenticated webapp with optional desktop/local packaging
+  frontend: browser SPA with graph/canvas editor, compact rail navigation, right assistant panel, media previews, and responsive/narrow fallback
+  backend: authenticated API plus realtime channel for assistant/tool actions
+  persistence: durable relational database plus local or object media storage
+  providers: configurable text, image, and video model adapters with test and blocked states
+
+state:
+  durable_entities:
+    - users and sessions
+    - projects
+    - episodes/scripts
+    - flow_data
+    - assets and derived_assets
+    - storyboard_frames
+    - video_workbench_items
+    - provider_settings
+    - assistant_messages_and_memory
+  readback_rule: Any edited or assistant-mutated canvas artifact must survive reload/refetch before it can be trusted.
+
+nodes:
+  auth:
+    label: Authenticated local entry
+    input:
+      reads: user credentials and session token
+    output:
+      writes: authenticated session and deployment credential blocker state
+    side_effects: rejects unauthenticated access and blocks public claims while default credentials remain
+  project_episode_context:
+    label: Project and episode context
+    input:
+      reads: authenticated user, projects, and episodes
+    output:
+      writes: active project and active episode context
+    side_effects: drives which production board and assistant context load
+  production_canvas:
+    label: Infinite production canvas
+    input:
+      reads: active project, active episode, flow data, node positions, and UI identity
+    output:
+      writes: canvas viewport state, node positions, and user-visible artifact edits
+    side_effects: renders pan, zoom, fit, refresh, auto-layout, and connected artifact nodes
+  script:
+    label: Script node
+    input:
+      reads: episode script content
+    output:
+      writes: edited script content through save/readback
+    side_effects: opens markdown preview and editor dialog
+  script_plan:
+    label: Director plan node
+    input:
+      reads: script and planning content
+    output:
+      writes: edited director plan through save/readback
+    side_effects: presents the plan as the bridge between script and storyboard table
+  assets:
+    label: Assets node
+    input:
+      reads: asset and derived asset records, prompts, media URLs, and generation states
+    output:
+      writes: asset edits, derived asset mutations, and image state updates
+    side_effects: previews media, triggers guarded delete/generation/edit actions, and displays failed reasons
+  storyboard_table:
+    label: Storyboard table node
+    input:
+      reads: director plan and storyboard table content
+    output:
+      writes: edited storyboard table through save/readback
+    side_effects: keeps structured scene/track planning visible before frame generation
+  storyboard:
+    label: Storyboard frame node
+    input:
+      reads: storyboard frame records, associated assets, image URLs, and generation states
+    output:
+      writes: selected frame state, frame edits, generated image states, and frame order
+    side_effects: supports preview, batch select, insert-between, delete, edit, scale, and failed-state recovery
+  workbench:
+    label: Video workbench node
+    input:
+      reads: storyboard frames, references, video prompts, model settings, and generation history
+    output:
+      writes: video workbench items, prompt edits, job states, output URLs, and downloads
+    side_effects: opens production video controls and history without replacing the canvas
+  production_assistant:
+    label: Realtime production assistant
+    input:
+      reads: active project, active episode, assistant memory, provider state, and sanitized flow data
+    output:
+      writes: assistant messages, memory/history, and tool-mediated canvas mutations
+    side_effects: connects, stops, reconnects, clears memory with confirmation, and blocks honestly when providers fail
+  providers_media:
+    label: Provider and media runtime
+    input:
+      reads: provider settings, prompts, references, media files, and job ids
+    output:
+      writes: generated image/video states, media paths, error reasons, and provider test results
+    side_effects: calls live providers only when credentials exist and otherwise exposes blocked states
+
+edges:
+  - from: auth
+    to: project_episode_context
+    meaning: authenticated users select a project and episode before production work
+  - from: project_episode_context
+    to: production_canvas
+    meaning: active context drives the canvas data
+  - from: production_canvas
+    to: script
+    meaning: the canvas renders and edits the episode script
+  - from: script
+    to: script_plan
+    meaning: script content informs director planning
+  - from: script
+    to: assets
+    meaning: script content derives role, scene, tool, and clip assets
+  - from: script_plan
+    to: storyboard_table
+    meaning: director plan structures storyboard table creation
+  - from: storyboard_table
+    to: storyboard
+    meaning: storyboard rows become selectable visual frames
+  - from: storyboard
+    to: workbench
+    meaning: frames and references drive video generation
+  - from: production_assistant
+    to: production_canvas
+    meaning: assistant actions must mutate visible canvas artifacts
+  - from: providers_media
+    to: assets
+    meaning: image providers create and update asset media states
+  - from: providers_media
+    to: storyboard
+    meaning: image providers create and update storyboard frame states
+  - from: providers_media
+    to: workbench
+    meaning: video providers create and update workbench media states
+
+acceptance_criteria:
+  - user can authenticate, select project and episode, and reach the production canvas
+  - canvas renders script, director plan, assets, storyboard table, storyboard frames, and workbench nodes as a connected editable board
+  - pan, zoom, fit, refresh, auto-layout, assistant open/collapse, and episode switch are usable
+  - at least one edited artifact is saved and read back after reload/refetch
+  - assistant action either mutates canvas state or shows an honest blocker
+  - missing provider credentials show blocked state and never fake generated output
+  - media states are visible for not generated, generating, completed, and failed
+  - desktop and narrow screenshots are inspected for overlap, clipping, overflow, readability, and reachable actions
+  - central output is specific to selected project and episode, not generic generated prose
+
+forbidden_dependencies:
+  - source repository access during downstream implementation
+  - real secrets in docs, env examples, logs, screenshots, or handoff
+  - in-memory-only persistence for claimed durable behavior
+  - placeholder provider success
+  - generic dashboard shell as the main product surface
 
 deployment_posture:
   current: trusted_local
@@ -18,12 +174,101 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
+  public_webapp_blockers:
+    - default local admin credentials must be removed or forced through password rotation
+    - provider secrets and generated media storage must be hardened
+    - auth/session secret, upload limits, and destructive actions need production review
+
+golden_path:
+  - start the authenticated app
+  - log in with seeded local credentials or a configured account
+  - choose or create a project
+  - choose an episode/script
+  - open the production canvas route
+  - see the connected node chain for script, director plan, assets, storyboard table, storyboard frames, and video workbench
+  - refresh and auto-layout the canvas
+  - open the assistant panel and send a production instruction
+  - edit or generate one artifact through a node or assistant action
+  - save and reload to prove durable readback
+
+central_interface:
+  dominant_surface: infinite_white_episode_canvas
+  primary_gesture: spatial_editing_and_agent_guided_production
+  supporting_surfaces:
+    - left icon navigation rail
+    - floating episode selector
+    - refresh and auto-layout controls
+    - zoom, fit, and pan controls
+    - right realtime assistant drawer
+    - full-width editing dialogs
+    - provider and media settings
+  forbidden_main_surfaces:
+    - generic dashboard
+    - static flow diagram
+    - chat-only app
+    - raw JSON editor
+    - feature-card grid
+
+source_observed_runtime_contract:
+  frontend_contract:
+    - Vue-style single-page app with hash routes is acceptable but not mandatory
+    - production route must be reachable after auth and project context
+    - graph/canvas library must support real pan, zoom, fit, draggable nodes, handles, controls, and layout
+    - UI must preserve compact white-canvas, black-control, icon-rail, right-assistant editing feel
+  backend_contract:
+    - authenticated API
+    - durable relational persistence for projects, episodes, flow data, assets, storyboard, media, settings, and agent memory/history
+    - realtime channel for production assistant chat, stop, reconnect, context update, and graph mutation callbacks
+    - file/object storage for uploaded and generated images/videos
+  provider_contract:
+    - text model seam for assistant decisions and subagents
+    - image model seam for assets/storyboard/edit-image generation
+    - video model seam for workbench generation
+    - model/provider test actions and blocked states
+    - no fake provider success without real credentials and runtime proof
+
+central_output_contract:
+  central_output: A persisted episode production board whose visible artifacts can guide real short-drama production from script to director plan, assets, storyboard frames, and video generation.
+  output_primitives:
+    - episode script content
+    - director or shooting plan
+    - asset list with role, tool, scene, clip types, prompts, images, generated states, and derived variants
+    - storyboard table with scene/track structure
+    - storyboard frames with prompt, duration, associated asset ids, generated image, state, and failure reason
+    - video workbench items with prompt, references, track, duration, generation state, history, and downloadable media
+    - assistant messages with visible reasoning/actions and persisted context
+  quality_signals:
+    - canvas state matches selected project and episode
+    - node chain makes the production progression obvious without docs
+    - generated or edited artifacts are saved and read back after reload
+    - storyboard and video outputs are specific to the selected script and assets
+    - media generation failures show reasons and recovery actions
+    - assistant tool actions mutate the same canvas data the user sees
+    - dense storyboard/media content remains inspectable without visual collapse
+  unacceptable_generic_substitutes:
+    - sample boards not tied to a real project/episode
+    - AI text pasted into chat without updating canvas artifacts
+    - placeholder thumbnails counted as generated media
+    - disconnected node cards with no persistence
+    - generic episode summaries that do not produce usable storyboard/media prompts
+    - a polished UI that cannot prove save/readback or provider blocker honesty
+  reviewer_acceptance_questions:
+    - Can a creator tell which episode is active and what production stage each node represents?
+    - After one assistant instruction, did a visible canvas artifact change and persist?
+    - Are storyboard/image/video outputs specific enough that a human could continue production from them?
+    - If providers are unavailable, does the UI show an honest blocked state instead of fake success?
+    - Does the canvas still work when the assistant panel is open and when content is dense?
+  claim_gates:
+    - Do not claim production-ready until auth, credentials, storage, upload limits, and destructive actions are hardened.
+    - Do not claim live generation until real text/image/video providers are configured and used.
+    - Do not claim UI complete until desktop and narrow viewport screenshots are inspected.
+    - Do not claim durable state until save/reload/readback is proven for flow data and at least one media or storyboard mutation.
 
 read_order:
   - BUILDPRINT.md
   - 00-questions.md
-  - 01-ui-identity.md
-  - 02-project-setup.md
+  - 01-project-setup.md
+  - 02-ui-identity.md
   - blueprint.yaml
   - 03-phases/phase-index.yaml
   - 03-phases/phase-flow.md
@@ -35,12 +280,11 @@ packet_shape:
   required_files:
     - BUILDPRINT.md
     - 00-questions.md
-    - 01-ui-identity.md
-    - 02-project-setup.md
+    - 01-project-setup.md
+    - 02-ui-identity.md
     - blueprint.yaml
     - 03-phases/phase-index.yaml
     - 03-phases/phase-flow.md
-    - 03-phases/critical-review-pushback.md
     - HANDOVER.md
 
 phase_contract:
@@ -50,7 +294,7 @@ phase_contract:
     - DO NOT
     - Minimum proof before moving on
     - Handoff note
-  rule: Each phase must contain one comprehensive, product-specific building objective. Do not decompose phase guidance into tiny schema sections or slice YAML.
+  rule: Each phase must read 02-ui-identity.md and contain one comprehensive product-specific building objective.
   forbidden_shapes:
     - slices/
     - gates/
@@ -62,89 +306,42 @@ phase_contract:
     - generated/agent-prompt.md
     - generated/codex-handoff.md
 
-agent_contract:
-  role: Senior Product Engineer
-  rule: Build the story-making product honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; provider, export, and deployment claims require matching proof.
-
-source_distillation:
-  origin_context_only: >
-    The prior packet described a graph-backed simulation and report product.
-    AI Story Maker preserves the useful behavior pattern as a
-    creative-writing product: intake creates structured memory, graph
-    relationships shape a scenario, runtime transforms drive story beats,
-    reports become editable story packages, and post-output interaction
-    becomes character/story-coach conversation.
-  stale_branding_policy: Do not surface old product names, old slugs, or unrelated repository labels in builder-facing instructions except as explicit origin context in metadata or migration notes.
-
-central_output_contract:
-  central_output: a coherent, editable story package containing premise, world rules, cast, relationship graph, chapter outline, scene storyboard, character arcs, tension map, continuity notes, and exportable draft material
-  output_primitives:
-    - premise and genre promise
-    - world rules and constraints
-    - character cards with goals, wounds, voice, relationship edges, and arc state
-    - chapter and scene beats with purpose, conflict, turn, and consequence
-    - storyboard cards with visual/action notes, dialogue seeds, emotional temperature, and continuity references
-    - critique notes, unresolved threads, and regeneration targets
-  quality_signals:
-    - story beats escalate causally instead of forming a disconnected list
-    - character decisions reflect goals, relationships, and prior scene state
-    - generated scenes have distinct voice, stakes, conflict, and revision handles
-    - continuity notes catch contradictions in names, locations, timeline, and motivations
-    - export output is useful to a writer as a next drafting step, not merely a summary
-  unacceptable_generic_substitutes:
-    - a generic outline that repeats the user's premise without causal progression
-    - canned chapter cards with interchangeable conflict labels
-    - static character profiles that never influence generated scenes
-    - raw JSON dumps or provider transcripts as the main story experience
-    - fake success when provider credentials, persistence, or export runtime did not run
-  reviewer_acceptance_questions:
-    - What story decision can the writer make next from the generated package?
-    - Which beat, character relationship, or continuity note proves the output is specific to this premise?
-    - What changed when a scene or character was regenerated?
-    - Which output claim remains unproven because provider, persistence, export, or browser proof did not run?
-  claim_gates:
-    - do not claim story quality until at least one generated package is reviewed against the central output contract
-    - do not claim character interaction quality until conversation responses cite story state and change the user's next action
-    - do not claim export quality until exported files are opened or parsed back successfully
-  minimum_standard: The product path must produce a story package a writer can revise from, not just text that depends on a prompt.
-
 typed_quality_gates:
-  rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
   ui_decision_precision:
-    applies_when: browser story-making surface, drafting surface, outline board, or export review surface exists
+    applies: true
     requires:
-      - explicit style direction and rejected adjacent styles
+      - explicit canvas editor style direction and rejected adjacent styles
       - exact color tokens and status semantics
       - typography scale and usage
-      - desktop and mobile layout model
-      - screen-state inventory with visible-now, hidden/reachable, detail/modal/step/route placement, and visible-together exclusions
+      - desktop and narrow viewport layout model
       - component and state language before UI implementation
   visual_viewport_acceptance:
-    applies_when: responsive browser story-making surface is implemented
+    applies: true
     requires:
-      - desktop proof for intake, story board, editor, and export review
-      - narrow viewport proof for the primary story path
+      - desktop proof for login to project to production canvas
+      - narrow viewport proof with assistant collapsed or drawer mode
       - screenshot inspection for overlap, clipping, unreadable text, unreachable actions, and page-level horizontal overflow
   editor_stress_acceptance:
-    applies_when: story cards, generated scenes, notes, outlines, or editable draft text render
+    applies: true
     requires:
-      - long-title, long-scene, long-character-name, and dense-outline fixtures
-      - scroll ownership proof for board/editor panels
-      - edit, regenerate, save, reload, and readback proof
+      - long script and long storyboard table fixtures
+      - 50+ storyboard frames fixture
+      - edit/readback proof for text and media-bearing nodes
+      - scroll ownership proof inside canvas and node contents
   semantic_output_acceptance:
-    applies_when: story package, scene, outline, critique, or character response is generated
+    applies: true
     requires:
-      - output-specificity check against central_output_contract
-      - repeated-generic-output rejection
-      - sample output review stating what the writer can do next
+      - output-specificity check against selected script/assets
+      - rejection of generic storyboard/media prompts
+      - sample output review that states what the creator can do next
   integration_operator_acceptance:
-    applies_when: provider, file import/export, background generation, or automation runs
+    applies: true
     requires:
-      - install, configure, and first-generation proof
-      - provider blocked-state proof when credentials are missing
-      - error, retry, idempotency, logging, audit, and recovery expectations where relevant
+      - provider configure/test proof or explicit blocked state
+      - realtime assistant connect/disconnect/stop/reconnect proof
+      - persistence, logs/errors, retry/recovery expectations
   critical_review_pushback:
-    applies_when: serious executable packet or user-facing artifact
+    applies: true
     phase_id: 99-critical-review-pushback
     phase: 03-phases/critical-review-pushback.md
     pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"

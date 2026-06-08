@@ -1,44 +1,42 @@
-# Handover
-
-Use this template when stopping or finishing. Keep it concise, concrete, and evidence-based.
+# HANDOVER
 
 ## Built
 
-- <what was actually built>
+- Selected packet for an AI short-drama production canvas webapp.
+- Generic AI-builder briefing in `BUILDPRINT.md`.
+- Product contract and route mirror in `blueprint.yaml`.
+- Setup, UI identity, phase route, comprehensive phase objectives, and critical review phase.
 
 ## Verified
 
-- Command/API/browser/runtime proof:
-  - `<command>` - <result>
-- Screenshot/browser/API/readback evidence:
-  - <what was inspected>
-- Typed quality gates:
-  - UI decision precision - <applicable/not applicable> - <proof or reason>
-  - Visual viewport acceptance - <applicable/not applicable> - <desktop/mobile/overflow proof or reason>
-  - Editor/content stress acceptance - <applicable/not applicable> - <fixture/proof or reason>
-  - Semantic output acceptance - <applicable/not applicable> - <output-specificity proof or reason>
-  - Integration/operator acceptance - <applicable/not applicable> - <install/configure/first-action/retry/audit proof or reason>
-  - Critical review pushback - <score/result or blocker>
-- Central output quality evidence:
-  - <what the story package makes clear>
-  - <what still feels generic or weak>
-  - <what a writer can do next from the output>
+- Mapper OS bootstrap used exact snapshot download with `agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json .`.
+- Source evidence was gathered from read-only checkouts under `evidence/Toonflow-app` and `evidence/Toonflow-web`.
+- The selected scope preserves the production canvas, not the entire suite.
 
 ## Blocked
 
-- <blocker> - <exact missing input/dependency/credential/command/decision>
+- No downstream implementation has been built from this packet yet.
+- Live provider generation was not run during mapping.
+- Production deployment, security hardening, and media storage durability remain implementation-phase proof items.
 
-## Not proven
+## Not Proven
 
-- <claim that should not be made yet>
-- <central output quality claim that should not be made yet>
-- <selected typed quality gate that did not run or did not pass>
+- Browser proof of a rebuilt artifact.
+- Live text/image/video provider success.
+- Production-ready auth, upload limits, storage, and public deployment.
+- Screenshot proof for a downstream implementation.
+
+## Typed quality gates
+
+- UI decision precision: selected and routed through `02-ui-identity.md`; downstream implementation must generate local `docs/ui-identity.md` or `UI-IDENTITY.md` before UI phases.
+- Visual viewport acceptance: selected; desktop and narrow screenshot inspection remain unproven until implementation.
+- Editor/content stress acceptance: selected; long script, dense storyboard table, and 50+ storyboard frame fixtures remain implementation proof.
+- Semantic output acceptance: selected; generated episode artifacts must be script/project-specific, not generic prose.
+- Integration/operator acceptance: selected; provider, realtime assistant, persistence, retry, error, and blocked-state proof remain required.
+- Critical review pushback: selected as final mandatory phase `03-phases/critical-review-pushback.md`.
 
 ## Next
 
-1. <next useful action>
-2. <alternate action if blocked>
+Start with `BUILDPRINT.md`, then follow the read order. The active phase is `03-phases/01-foundation-and-first-loop.md`. Keep the UI identity binding active through every phase and do not claim completion until `03-phases/critical-review-pushback.md` passes or records an external blocker.
 
-## Handoff warning
-
-Do not claim completion beyond the evidence above. Visible controls must work or block honestly; provider, persistence, export, deployment, security, and story-quality claims require matching proof. Deterministic fixture text can prove UI flow only when labeled as fixture mode; it cannot prove live AI or creative quality.
+Do not claim completion beyond the evidence.

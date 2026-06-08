@@ -22,8 +22,8 @@ Be precise. Be skeptical of your own claims. Prefer direct verification over con
 
 1. `BUILDPRINT.md`
 2. `00-questions.md`
-3. `01-ui-identity.md` when the artifact has UI or human-facing interaction
-4. `02-project-setup.md`
+3. `01-project-setup.md`
+4. `02-ui-identity.md`
 5. `blueprint.yaml`
 6. `03-phases/phase-index.yaml`
 7. `03-phases/phase-flow.md`

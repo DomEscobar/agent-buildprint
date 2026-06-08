@@ -1,46 +1,38 @@
-# Phase 01 - Foundation And First Loop
+# 01 Foundation And First Loop
 
 ## How to implement this phase
 
-Before writing code, read:
-
-- `03-phases/phase-flow.md`
-- `.buildprint/next-agent.md` if it exists
-- current project `AGENTS.md` if it exists
-- `BUILDPRINT.md`
-- `02-project-setup.md`
-- `01-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
-
-Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
+Read `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, `02-ui-identity.md`, `blueprint.yaml`, `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, and current project `AGENTS.md` if they exist. Then create the implementation foundation and the smallest honest vertical path: authenticated entry, project/episode context, production canvas route, seeded flow data, and durable readback. Load the local frontend skill before UI decisions. If setup has not created the local skill harness, stop and complete setup first.
 
 ## Building objective
 
-Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
+Build the first real product loop for an AI short-drama production canvas. The user should be able to start the app, authenticate, reach a project list, select or create a project, select or seed an episode, open the production canvas, and see a connected pipeline of episode artifacts. This first loop may use deterministic seeded data, but it must be real application data saved in the selected persistence layer, not a hard-coded UI-only fixture.
 
-Create the implementation foundation and the first visible story-making loop for AI Story Maker. The first loop should let a writer start a story package from a premise and optional seed notes, validate the input, create durable local package state, and see an initial story-making surface with story package status, cast/world placeholders that are honestly empty or sample- or demo-labeled, and a clear next action to build the outline. This is not a marketing page or a chat demo. The first screen after setup should already feel like the generated story-making identity created from `01-ui-identity.md`.
+The visible surface must already follow `02-ui-identity.md`: narrow icon rail, clean white workspace, black primary actions, compact controls, no landing page, no dashboard-first detour, no raw JSON. The canvas can start simple, but it must establish the product silhouette and route ownership so later phases extend a real editor instead of replacing a generic shell.
 
-The implementation foundation must include architecture docs, local commands, env contract, UI identity, and setup receipt from `02-project-setup.md`. The domain model should start with story file, premise, seed note, character placeholder, relationship, outline beat, scene card, generation run, provider status, export artifact, and log event, even if some fields are not fully used yet. The path should prove that the product can create and reload a project shell without pretending that live AI generation has happened.
+Create or complete the local setup artifacts required by `01-project-setup.md`, including `AGENTS.md`, local skill harness files, `.env.example`, `docs/architecture.md`, and `.buildprint/setup-receipt.md`. Define database/storage schema names for projects, episodes, flow data, assets, storyboard frames, media outputs, provider settings, and agent history even if not all tables are fully used yet.
 
-The phase should leave the next phase with a stable place to add story-world graph and outline generation. A skeptical reviewer should be able to run the app or API, submit a premise, see validation errors for empty input, see provider status as configured or blocked, reload the created package, and inspect that no visible controls promise generation/export/chat unless they work or explain the blocker.
+The first proof should cover auth to canvas to readback: create a project and episode, persist starter `flowData`, reload or refetch it, and render the same selected project/episode on the canvas route. Browser proof is preferred; if browser proof is blocked, record the exact blocker and provide API/command proof without claiming UI completion.
 
 ## DO NOT
 
-- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
-- Do not create functionless buttons, inert navigation, swallowed errors, or fake progress.
-- Do not count mocked/sample data as proof for real input, live provider, persistence, or operator paths.
-- Do not hide missing provider/runtime/deployment blockers behind optimistic success UI.
-- Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
-- Do not mark this phase complete from code edits or prose alone.
-- Do not build a generic landing page when the mapped product is a working story-making surface.
+- Do not build a marketing page or static demo board.
+- Do not ship placeholders, functionless buttons, or mocked/sample data counted as proof.
+- Do not skip the local skill harness.
+- Do not claim durable state from in-memory objects.
+- Do not use default admin credentials as acceptable for private or public deployment.
+- Do not hide missing provider credentials by showing successful generation.
+- Do not allow the initial route to be a generic dashboard that must later be replaced.
 
 ## Minimum proof before moving on
 
-- Run the relevant build/test/typecheck/runtime command or record why it cannot run.
-- Inspect the product path through UI/API/CLI/runtime, not only source files.
-- Prove persistence/readback for the created story package.
-- Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
-- Record any blocker with exact missing dependency, command, credential, or decision.
+- `AGENTS.md`, local skill harness files, `.env.example`, `docs/architecture.md`, and `.buildprint/setup-receipt.md` exist.
+- App can start with named command, or the blocker is recorded with exact failure.
+- Authenticated user can reach a project/episode context.
+- A production canvas route exists and renders a real selected project/episode.
+- Starter flow data is persisted and read back after reload/refetch.
+- Screenshot or browser inspection confirms the first surface follows the canvas-editor silhouette and has no page-level horizontal overflow.
 
 ## Handoff note
 
-Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
+Record the selected stack, commands, persistence location, seeded account policy, seeded project/episode ids, proof run, UI proof status, and unresolved provider/storage/deployment blockers.
