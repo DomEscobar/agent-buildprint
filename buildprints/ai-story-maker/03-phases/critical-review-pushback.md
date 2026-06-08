@@ -12,18 +12,19 @@ The phase passes only when the artifact earns a credible pass score and no high-
 
 1. Start a review note at `.buildprint/critical-review-pushback.md`.
 2. List the surfaces or commands reviewed, including intake, story world, cast/relationship view, outline/storyboard, scene editor, provider status, continuity review, export, character/story-coach interaction, persistence/readback, screenshots, API/CLI checks, and handoff files.
-3. Score the artifact on the rubric below from 0 to 5 per category, with one evidence sentence per score.
-4. Compute the total score out of 50.
-5. Pass threshold: at least 42/50 overall, no category below 4, and no unresolved high-severity finding.
-6. If the score fails, run a repair loop:
+3. Run screenshot delta review when this is a rerun or redesign: compare old and new screenshots and state whether the dominant surface, interaction model, creative object, user flow, and information hierarchy changed. Palette, copy, labels, spacing, iconography, and section-title changes alone fail this review.
+4. Score the artifact on the rubric below from 0 to 5 per category, with one evidence sentence per score.
+5. Compute the total score out of 50.
+6. Pass threshold: at least 42/50 overall, no category below 4, no unresolved high-severity finding, and no failed product-experience originality or screenshot delta review.
+7. If the score fails, run a repair loop:
    - name the flaw and severity;
    - identify the responsible file, phase, surface, command, or blocker;
    - patch the smallest real fix;
    - rerun the relevant proof or inspect the product again;
    - rescore the affected categories;
    - repeat until pass or until a real external blocker is recorded.
-7. Cap self-contained repair loops at five iterations unless the user explicitly asks for more.
-8. Update `.buildprint/progress.md`, `.buildprint/blockers.md`, and handoff notes with the final score, repaired flaws, proof commands, and remaining risks.
+8. Cap self-contained repair loops at five iterations unless the user explicitly asks for more.
+9. Update `.buildprint/progress.md`, `.buildprint/blockers.md`, and handoff notes with the final score, repaired flaws, proof commands, and remaining risks.
 
 ## Rubric
 
@@ -32,6 +33,7 @@ Score each category 0 to 5.
 - Product intent fit: the artifact clearly helps a writer make and revise a story package, not just generate text in a generic form.
 - UX clarity: a first-time user can understand what to do first, where story state lives, and what is blocked.
 - Visual/design execution: style direction, color, typography, layout, spacing, and component language match `01-ui-identity.md`.
+- Product experience originality: the product has a distinct creative object, primary manipulation gesture, and layout silhouette. Score below 4 if the app silhouette matches a prior/default build, the UI is mostly cards/panels/status, sample data is the main thing being inspected, creative action is weaker than proof/status/export action, or the screenshot could be mistaken for an evaluator dashboard.
 - Interaction completeness: visible controls work, validate, navigate, regenerate, export, ask, save, reload, or explain blockers.
 - State honesty: empty, loading, error, blocked, success, provider, export, persistence, and privacy states are honest and actionable.
 - Core output quality: the story package is specific, causally structured, inspectable, editable, and not canned text, repeated copy, static cards, or raw JSON.
@@ -56,12 +58,14 @@ Scoring anchors:
 - Do not treat a high total score as pass if one essential category is below 4.
 - Do not hide serious flaws in "future work" when they belong to the current promise.
 - Do not claim story quality if the output does not use premise, cast, relationships, continuity, and revision handles in a specific way.
+- Do not pass a redesign whose screenshot differs mostly by palette, copy, labels, spacing, iconography, or section titles.
 
 ## Minimum proof before moving on
 
 - `.buildprint/critical-review-pushback.md` exists and includes reviewed surfaces, rubric scores, total score, pass/fail status, findings, repairs, and final residual risks.
+- If this was a rerun/redesign, screenshot delta review records old vs new dominant surface, interaction model, creative object, user flow, and information hierarchy.
 - If the first score failed, at least one repair loop entry records flaw -> fix -> proof -> rescore, or a genuine blocker explains why repair cannot continue.
-- The final score is at least 42/50, every category is 4 or 5, and no high-severity finding remains unresolved unless it is recorded as a real blocker.
+- The final score is at least 42/50, every category is 4 or 5, product-experience originality is not below 4, screenshot delta review is not failed, and no high-severity finding remains unresolved unless it is recorded as a real blocker.
 - Handoff notes include the final score and do not claim completion beyond the evidence.
 
 ## Handoff note

@@ -29,6 +29,7 @@ Create these in the implementation project unless the project already has equiva
 - `AGENTS.md` — local implementation constitution, mandatory read order, ownership map, no-fake rules, and verification expectations.
 - `docs/architecture.md` — selected stack, runtime topology, adapters, persistence, deployment posture, and state ownership.
 - `docs/product-loop.md` — golden path and primary user/operator journey.
+- `docs/product-experience.md` — required for UI-bearing artifacts; primary screen sketch in prose, dominant object, primary gesture, top three interactions, forbidden default silhouette, and what the UI must make impossible to confuse.
 - `docs/output-quality.md` — central output, output primitives, quality signals, unacceptable generic substitutes, reviewer acceptance questions, and claim gates.
 - `docs/proof-strategy.md` — commands/tests/browser/API proof, screenshot criteria, provider blocker semantics, and what cannot upgrade claims.
 - `docs/proof-matrix.md` — selected typed quality gates from `blueprint.yaml`, each marked applicable/not applicable, with command or inspection path and current blocker.
@@ -44,6 +45,7 @@ Create these in the implementation project unless the project already has equiva
 - Do not choose a stack only because it is familiar if it cannot prove the golden path.
 - Do not hide hard-stop questions as assumptions.
 - Do not overwrite the generated UI identity with generic setup defaults.
+- Do not name routes, components, fixtures, or screenshots around dashboard/workbench/panel/inspector concepts unless `docs/product-experience.md` proves those names are subordinate to a stronger product metaphor and primary gesture.
 - Do not make a landing page when the product needs an operational product surface, API, CLI, worker, or runtime first.
 
 ## Minimum proof before moving on
@@ -52,6 +54,7 @@ Create these in the implementation project unless the project already has equiva
 - package/build/test commands are named, even if some are currently blocked;
 - `.env.example` has blank secrets only;
 - `docs/output-quality.md` or an equivalent artifact-specific output contract exists;
+- UI-bearing artifacts have `docs/product-experience.md` or equivalent with dominant object, primary gesture, forbidden default silhouette, and first-screen sketch;
 - `docs/proof-matrix.md` or equivalent names selected typed quality gates, proof commands/inspection paths, and non-applicable gates;
 - UI-bearing artifacts have `UI-IDENTITY.md` or equivalent generated from `01-ui-identity.md`, including first-run comprehension and user-language map;
 - `.buildprint/setup-receipt.md` records assumptions and blockers;

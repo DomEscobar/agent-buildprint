@@ -592,6 +592,13 @@ function packetCheckResults(dir) {
     /command\/proof path/i.test(setup) &&
     /not applicable/i.test(setup)
   )
+  ok('project setup requires product experience artifact for UI',
+    /docs\/product-experience\.md/i.test(setup) &&
+    /dominant (creative )?object/i.test(setup) &&
+    /primary gesture/i.test(setup) &&
+    /forbidden default silhouette|old\/default layout patterns/i.test(setup) &&
+    /first[- ]screen sketch|primary screen sketch/i.test(setup)
+  )
   ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
 
   const uiux = safeReadText(path.join(dir, '01-ui-identity.md'))
@@ -601,11 +608,26 @@ function packetCheckResults(dir) {
   ok('ui identity requires first-run comprehension and user-language control', /First-run comprehension contract/i.test(uiux) && /User-language map/i.test(uiux) && /internal.*terms|proof terms|evaluator language/i.test(uiux))
   ok('ui identity is substantial enough to guide generation', uiux.trim().length >= (isMapperTemplatePacket ? 3500 : 4500))
   ok('ui identity defines generated identity sections', /Product identity thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Layout model/i.test(uiux) && /Interaction model/i.test(uiux) && /Component language/i.test(uiux) && /Color and typography tokens/i.test(uiux))
+  ok('ui identity requires product metaphor and manipulation model',
+    /Creative product concept/i.test(uiux) &&
+    /product metaphor|emotional\/product metaphor|emotional\/operator affordance/i.test(uiux) &&
+    /dominant object|central creative object/i.test(uiux) &&
+    /primary (creative )?gesture|primary gesture\/manipulation/i.test(uiux) &&
+    /moment-to-moment manipulation/i.test(uiux)
+  )
+  ok('ui identity rejects default product silhouette',
+    /Silhouette rejection/i.test(uiux) &&
+    /forbidden default silhouette|forbidden silhouette/i.test(uiux) &&
+    /generic dashboard/i.test(uiux) &&
+    /renamed workbench|old workbench|proof workbench/i.test(uiux) &&
+    /card grid|central card grid/i.test(uiux) &&
+    /proof console/i.test(uiux)
+  )
   ok('ui identity requires autonomous product reasoning before setup', /reason from the artifact|Think through the product|think deeply/i.test(uiux) && /golden path/i.test(uiux) && /central output/i.test(uiux) && /before setup/i.test(uiux))
   ok('ui identity selects typed proof obligations without gate spam',
     !requiresTypedQualityRouting ||
     /Proof obligations/i.test(uiux) &&
-    /most likely UI failure|most likely quality failure/i.test(uiux)
+    /most likely UI failure|most likely quality failure|screenshot delta review/i.test(uiux)
   )
   ok('ui identity requires exact generated visual tokens', /exact semantic color/i.test(uiux) && /typography/i.test(uiux) && /state colors|focus/i.test(uiux))
   ok('ui identity defines components, motion/states, stress fixtures, and proof', /Component language/i.test(uiux) && /empty\/loading\/error\/blocked|Empty, loading, error, and blocked/i.test(uiux) && /Content stress fixtures/i.test(uiux) && /Proof obligations/i.test(uiux))
@@ -651,6 +673,15 @@ function packetCheckResults(dir) {
       /at least 42\/50/i.test(criticalReviewText) &&
       /no category below 4/i.test(criticalReviewText) &&
       /no unresolved high-severity finding/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback requires product experience originality and screenshot delta',
+      /Product experience originality/i.test(criticalReviewText) &&
+      /screenshot delta review/i.test(criticalReviewText) &&
+      /dominant surface/i.test(criticalReviewText) &&
+      /interaction model/i.test(criticalReviewText) &&
+      /creative\/operator object|creative object/i.test(criticalReviewText) &&
+      /information hierarchy/i.test(criticalReviewText) &&
+      /palette, copy, labels, spacing, iconography/i.test(criticalReviewText)
     )
     ok('critical-review-pushback defines repair loop for failed score',
       /repair loop/i.test(criticalReviewText) &&

@@ -74,6 +74,10 @@ for (const required of [
   /BUILDPRINT\.md`? is (the )?(execution start and )?AI-builder briefing only/i,
   /UX is a must/i,
   /UI identity/i,
+  /product metaphor/i,
+  /dominant object/i,
+  /primary gesture/i,
+  /forbidden default silhouette/i,
   /Every phase (file )?must read `?01-ui-identity\.md`?/i,
   /blueprint\.yaml`? (is|mirrors|routes).*product[- ]contract/i,
   /Typed proof/i,
@@ -129,6 +133,29 @@ const missingProofMatrix = copyTemplate('missing-proof-matrix')
 edit(missingProofMatrix, '02-project-setup.md', (s) => s.replace(/- `docs\/proof-matrix\.md`[\s\S]*?\n/, ''))
 expectFailure('mapper eval requires typed proof matrix setup', ['packet', 'check', missingProofMatrix], ['✗ project setup requires typed proof matrix'])
 
+const missingProductExperience = copyTemplate('missing-product-experience')
+edit(missingProductExperience, '02-project-setup.md', (s) => s
+  .replace(/- `docs\/product-experience\.md`[^\n]*\n/g, '')
+  .replace(/UI-bearing artifacts have `docs\/product-experience\.md`[^\n]*\n/g, '')
+  .replace(/docs\/product-experience\.md/g, 'docs/experience-removed.md')
+  .replace(/dominant object/g, 'main thing')
+  .replace(/primary gesture/g, 'main action')
+  .replace(/forbidden default silhouette/g, 'blocked layout')
+  .replace(/first-screen sketch/g, 'initial sketch'))
+expectFailure('mapper eval requires product experience setup artifact', ['packet', 'check', missingProductExperience], ['✗ project setup requires product experience artifact for UI'])
+
+const weakUiIdentityConcept = copyTemplate('weak-ui-identity-concept')
+edit(weakUiIdentityConcept, '01-ui-identity.md', (s) => s
+  .replace(/## Required sections in the generated UI identity[\s\S]*?## Minimum proof before moving to setup/, '## Required sections in the generated UI identity\n\nWrite style and layout rules.\n\n## Minimum proof before moving to setup')
+  .replace(/The generated identity also fails[\s\S]*?screenshot-level acceptance criteria\.\n/, ''))
+expectFailure('mapper eval rejects UI identity without product concept', ['packet', 'check', weakUiIdentityConcept], ['✗ ui identity requires product metaphor and manipulation model'])
+
+const weakUiIdentitySilhouette = copyTemplate('weak-ui-identity-silhouette')
+edit(weakUiIdentitySilhouette, '01-ui-identity.md', (s) => s
+  .replace(/3\. Silhouette rejection:[\s\S]*?\n4\. First-run comprehension contract:/, '3. Layout preference: use a clear responsive layout.\n4. First-run comprehension contract:')
+  .replace(/The generated identity also fails[\s\S]*?screenshot-level acceptance criteria\./, 'The generated identity must be clear and product-specific.'))
+expectFailure('mapper eval rejects UI identity without silhouette rejection', ['packet', 'check', weakUiIdentitySilhouette], ['✗ ui identity rejects default product silhouette'])
+
 const weakHandoverTypedGates = copyTemplate('weak-handover-typed-gates')
 edit(weakHandoverTypedGates, 'HANDOVER.md', (s) => s.replace(/- Typed quality gates:[\s\S]*?(?=- Central output quality evidence:)/, ''))
 expectFailure('mapper eval requires typed gate handover', ['packet', 'check', weakHandoverTypedGates], ['✗ handover captures typed quality gate results'])
@@ -144,6 +171,14 @@ expectFailure('mapper eval rejects missing comprehensive phase heading', ['packe
 const weakFlow = copyTemplate('weak-flow')
 edit(weakFlow, '03-phases/phase-flow.md', () => '# Phase Flow\n\nJust code all phases.\n')
 expectFailure('mapper eval rejects weak phase flow', ['packet', 'check', weakFlow], ['✗ phase flow defines active phase loop', '✗ phase flow rejects proof theater', '✗ phase flow defines repair routing'])
+
+const weakCriticalReviewExperience = copyTemplate('weak-critical-review-experience')
+edit(weakCriticalReviewExperience, '03-phases/critical-review-pushback.md', (s) => s
+  .replace(/3\. Run screenshot delta review[\s\S]*?\n4\. Score the artifact/, '3. Look at screenshots.\n4. Score the artifact')
+  .replace(/- Product experience originality:[^\n]*\n/, '')
+  .replace(/product-experience originality[^.\n]*\./gi, '')
+  .replace(/screenshot delta review[^.\n]*\./gi, ''))
+expectFailure('mapper eval rejects weak critical review experience gate', ['packet', 'check', weakCriticalReviewExperience], ['✗ critical-review-pushback requires product experience originality and screenshot delta'])
 
 const cliHelp = runAgb(['--help']).output
 for (const stale of ['persona --slice', 'state derive', 'slice status']) {
@@ -200,8 +235,8 @@ const redactionFiles = {
   }, null, 2),
   '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-ui-identity.md, 02-project-setup.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions.\n',
-  '/02-project-setup.md': '# 02 Project Setup\n\nThis project setup file is long enough for snapshot checks.\n',
-  '/01-ui-identity.md': '# 01 UI Identity\n\nUX is a must. The experience must be understandable. Small checklist before applying this UI identity: first-time user, what to do first, all visible controls.\n',
+  '/02-project-setup.md': '# 02 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires docs/product-experience.md, docs/proof-matrix.md, command/proof path, applicable/not applicable setup, dominant object, primary gesture, forbidden default silhouette, and first-screen sketch.\n',
+  '/01-ui-identity.md': '# 01 UI Identity\n\nUX is a must. The experience must be understandable and a confusing interface is not a finished product. Generate a local docs/ui-identity.md or UI-IDENTITY.md before setup. Required sections include First-run comprehension contract, User-language map, Creative product concept, product metaphor, dominant object, primary gesture, moment-to-moment manipulation, Silhouette rejection, forbidden default silhouette, generic dashboard, renamed workbench, card grid, proof console, Product identity thesis, Chosen style direction, Layout model, Interaction model, Component language, Color and typography tokens, Content stress fixtures, Proof obligations, screenshot delta review, exact semantic color, typography, state colors, focus, empty/loading/error/blocked, functionless buttons, dead controls, raw JSON, and evaluator language. Think deeply about the golden path and central output before setup.\n',
   '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
   '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',

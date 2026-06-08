@@ -22,26 +22,31 @@ Then think deeply about the product, user, artifact type, golden path, central o
 
 The generated identity must be specific enough that a later agent can build the same product surface without guessing. If it could apply unchanged to ten unrelated products, it fails.
 
+The generated identity also fails if it can be satisfied by a generic dashboard, renamed workbench, card grid, admin shell, or proof console with better labels. First-run comprehension is necessary but not sufficient. The identity must name an artifact-specific product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, and screenshot-level acceptance criteria.
+
 ## Required sections in the generated UI identity
 
 Write the following sections in complete, product-specific language:
 
 1. Product identity thesis: what this product is in plain language, who it serves, what job the first screen must make obvious, and what it must not feel like.
-2. First-run comprehension contract: the exact first screen mental model, first action, visible state, and next action a non-technical user should understand within 10 seconds.
-3. User-language map: translate internal/build/proof terms into user-facing terms, and list forbidden main-UI words. Internal terms may live only in docs, logs, dev panels, or clearly labeled diagnostics.
-4. Chosen style direction: one concrete direction and the adjacent styles rejected, with reasoning tied to the artifact rather than generic taste.
-5. Layout model before stack: desktop and mobile region roles, primary task surface, supporting context, navigation, scroll ownership, fixed-format regions, and what must be visually dominant.
-6. Interaction model: how users create, inspect, edit, recover, confirm, navigate, and understand blocked actions.
-7. Component language: controls, repeated items, detail regions, overlays, empty/loading/error/blocked states, selected states, density, radii, icon use, and feedback.
-8. Color and typography tokens: exact semantic color roles, readable typography scale, state colors, focus treatment, and forbidden palette pitfalls.
-9. Content stress fixtures: long names, long titles, dense data, empty data, failed provider/runtime, failed persistence/export, and mobile/narrow cases the UI must survive.
-10. Proof obligations: screenshots, viewport checks, no-overlap/no-clipping, keyboard/focus checks where relevant, content-specificity checks, edit/readback proof, and blocked-state proof.
-11. Anti-generic rules: what must not appear in the main product surface, including generic shells, raw JSON dumps, proof-theater labels, dead controls, fake success, decorative-only views, unclear empty states, and internal status jargon.
+2. Creative product concept: the artifact-specific metaphor, dominant object, primary gesture, moment-to-moment manipulation, and what emotional/operator affordance should make the surface feel like this product rather than a generic shell.
+3. Silhouette rejection: the expected desktop/mobile layout silhouette and the forbidden default silhouette. Explicitly reject generic dashboard, renamed workbench, card grid, admin shell, proof console, and any old layout shape that could pass with labels/colors changed.
+4. First-run comprehension contract: the exact first screen mental model, first action, visible state, and next action a non-technical user should understand within 10 seconds.
+5. User-language map: translate internal/build/proof terms into user-facing terms, and list forbidden main-UI words. Internal terms may live only in docs, logs, dev panels, or clearly labeled diagnostics.
+6. Chosen style direction: one concrete direction and the adjacent styles rejected, with reasoning tied to the artifact rather than generic taste.
+7. Layout model before stack: desktop and mobile region roles, primary task surface, supporting context, navigation, scroll ownership, fixed-format regions, and what must be visually dominant.
+8. Interaction model: how users create, inspect, edit, recover, confirm, navigate, and understand blocked actions. Identify the primary gesture before secondary status/export actions.
+9. Component language: controls, repeated items, detail regions, overlays, empty/loading/error/blocked states, selected states, density, radii, icon use, and feedback. Components support the product concept; they are not the concept.
+10. Color and typography tokens: exact semantic color roles, readable typography scale, state colors, focus treatment, and forbidden palette pitfalls.
+11. Content stress fixtures: long names, long titles, dense data, empty data, failed provider/runtime, failed persistence/export, and mobile/narrow cases the UI must survive.
+12. Proof obligations: screenshots, screenshot delta review against prior/default builds when available, viewport checks, no-overlap/no-clipping, keyboard/focus checks where relevant, content-specificity checks, edit/readback proof, and blocked-state proof.
+13. Anti-generic rules: what must not appear in the main product surface, including generic shells, raw JSON dumps, proof-theater labels, dead controls, fake success, decorative-only views, unclear empty states, and internal status jargon.
 
 ## Minimum proof before moving to setup
 
 - A local `docs/ui-identity.md` or `UI-IDENTITY.md` exists for UI-bearing artifacts.
 - The identity includes a first-run comprehension contract.
+- The identity names a creative product concept, product metaphor, dominant object, primary gesture, forbidden default silhouette, and screenshot-level acceptance criteria.
 - Internal/proof terms are translated or banned from the main UI.
 - Layout and interaction are defined before stack scaffolding.
 - Color, typography, component, and state rules are concrete enough to implement.
@@ -52,5 +57,6 @@ Write the following sections in complete, product-specific language:
 - Do not treat this file as a fixed moodboard.
 - Do not copy a style from another packet without reasoning from this product.
 - Do not write only "modern, clean, intuitive", "dashboard", "studio", "workbench", or other borrowed UI labels.
+- Do not accept an identity that can be implemented as a dashboard/workbench/card grid with palette, spacing, copy, icon, or label changes.
 - Do not expose proof/evaluator/build terms in the main product UI unless the product is explicitly a developer tool.
 - Do not let setup start until the identity plan exists or the artifact is explicitly `not-ui-bearing`.

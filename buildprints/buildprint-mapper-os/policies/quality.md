@@ -14,6 +14,7 @@ Mapper OS quality is judged by whether a downstream AI builder can build the map
 - Setup and UI/operator decisions happen before phase implementation.
 - `01-ui-identity.md` is a mandatory UI identity for UI-bearing artifacts, not a cosmetic note.
 - Every phase reads `01-ui-identity.md` as standing comprehension, user-language, and visual identity responsibility.
+- UI identity must define a product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, and screenshot-level acceptance criteria. A UI identity that can be satisfied by a generic dashboard, renamed workbench, card grid, or proof console is invalid.
 - Claims stay conservative until the built product path is verified.
 
 ## Anti-slop requirements
@@ -30,11 +31,12 @@ Selected packets must explicitly reject:
 - polished shells whose central artifact could fit unrelated inputs with superficial text swaps;
 - confusing/generic/ugly UI treated as finished product;
 - weak UI moodboards with only phrases like “clean, modern, intuitive”;
+- UI identities that only improve labels, palette, spacing, icons, or status copy around the same generic layout silhouette;
 - completion from prose, screenshots alone, or unchecked happy paths.
 
 ## UI/style quality bar
 
-For UI-bearing artifacts, `01-ui-identity.md` must open with UX importance and understandability, include a small checklist, and then define a strong style schema: design thesis, style direction, color tokens, typography, layout/spatial rhythm, component language, motion, empty/loading/error/blocked states, anti-generic rules, and phase obligation. If the UI identity could fit ten unrelated products unchanged, it is too generic.
+For UI-bearing artifacts, `01-ui-identity.md` must open with UX importance and understandability, include a small checklist, and then define a strong identity schema: product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, design thesis, style direction, color tokens, typography, layout/spatial rhythm, component language, motion, empty/loading/error/blocked states, anti-generic rules, and phase obligation. If the UI identity could fit ten unrelated products unchanged, it is too generic. First-run comprehension is necessary but not sufficient; for creative, generative, editor, or operator tools, the emotional/operational affordance and primary manipulation are required quality gates.
 
 If the source lacks style direction, the mapper should force a decision protocol, not a longer moodboard. The builder must infer a precise design system from product purpose, audience, workflow density, risk, and artifact type, then record the chosen and rejected directions before building UI.
 
@@ -57,6 +59,8 @@ Quality gates should be selected, not sprayed everywhere.
 - Mark irrelevant proof paths as not applicable instead of bloating the packet.
 
 The handover should still name what proof was selected, what ran, what failed, and what remains unproven.
+
+When a generated artifact is a redesign or rerun, critical review should include screenshot delta review. It should fail if old and new screenshots differ mostly by palette, copy, labels, spacing, iconography, or section titles while preserving the same dominant surface, interaction model, central object, flow, and information hierarchy.
 
 ## Review stance
 
