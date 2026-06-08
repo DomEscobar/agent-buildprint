@@ -4,7 +4,7 @@ Use this loop for the active phase only. Do not read every phase upfront. Do not
 
 ## How to run a phase
 
-1. Read `BUILDPRINT.md`, `00-questions.md`, `01-ui-identity.md`, and `02-project-setup.md` before every active phase. For UI-bearing artifacts, `01-ui-identity.md` and the generated local UI identity are the standing comprehension, user-language, and visual identity contract, not optional polish files.
+1. Read `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, and `02-ui-identity.md` before every active phase. For UI-bearing artifacts, `02-ui-identity.md` and the generated local UI identity are the standing comprehension, user-language, and visual identity contract, not optional polish files.
 2. Read `.buildprint/next-agent.md` and current project `AGENTS.md` if they exist.
 3. Read the active phase file named in `03-phases/phase-index.yaml`.
 4. Before editing code, state a short thinking checkpoint in the working response or task plan: active phase, smallest real vertical user/operator path, 3-7 likely failure modes, proof plan, and claim ceiling. This is not a deliverable file. Do not create phase-run paperwork by default.
@@ -27,9 +27,9 @@ Final completion is impossible until phase `99-critical-review-pushback` has run
 ## Repair routing
 
 - If the phase objective is wrong or too thin, repair the phase file before coding more.
-- If setup is missing architecture, local skill harness, commands, env, proof surfaces, or UI identity, return to `02-project-setup.md`.
+- If setup is missing architecture, local skill harness, commands, env, proof surfaces, or setup receipt, return to `01-project-setup.md`.
 - If a product-defining/security/destructive/secret decision is missing, return to `00-questions.md` and stop.
-- If UI quality is generic, interactionless, visually incoherent, stuffing multiple capabilities into one permanent view, or drifting away from the generated identity contract, return to `01-ui-identity.md` or `docs/ui-identity.md` before advancing.
+- If UI quality is generic, interactionless, visually incoherent, stuffing multiple capabilities into one permanent view, or drifting away from the generated identity contract, return to `02-ui-identity.md` or `docs/ui-identity.md` before advancing.
 - If runtime/provider/deployment is unavailable, build the seam and record a blocker; do not fake live success.
 
 ## Handoff discipline

@@ -17,7 +17,7 @@
     "Artifact-mode classification",
     "v3 phase-driven packet extraction",
     "Comprehensive product phase objectives",
-    "Project setup, UI/operator identity, and skill harness",
+    "Project setup, skill harness, and UI/operator identity",
     "Concise handover"
   ],
   "iconKeys": [
@@ -28,14 +28,14 @@
   "difficulty": "Advanced",
   "featured": true,
   "summary": "Agent-session workflow for mapping an existing repo into a source-independent v3 Buildprint packet with a generic AI-builder briefing, product-contract mirror, mandatory UI identity, local skill harness, and comprehensive phase objectives.",
-  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable Buildprint: map the source, classify the artifact, choose scope, then emit a v3 phase-driven execution packet with generic BUILDPRINT.md, 00-questions.md, 02-project-setup.md, detailed 01-ui-identity.md and project-local skill harness, blueprint.yaml, 03-phases, and HANDOVER.md.",
+  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable Buildprint: map the source, classify the artifact, choose scope, then emit a v3 phase-driven execution packet with generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases, and HANDOVER.md.",
   "promise": "A repo-to-Buildprint workflow that preserves scope fidelity and emits a readable packet that makes agents build real product loops with design responsibility instead of generic slop.",
   "whatYouGet": [
-    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 02-project-setup.md, detailed 01-ui-identity.md and project-local skill harness, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, HANDOVER.md",
     "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
     "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
-    "A mandatory UI identity plus project-local skill harness with frontend design and subagent implementation skills",
-    "Comprehensive phase files that read 01-ui-identity.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
+    "A project-local skill harness followed by mandatory UI identity with frontend design skill loading",
+    "Comprehensive phase files that read 02-ui-identity.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
     "Hard-stop/assumable/deferrable question model",
     "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
   ],
@@ -57,11 +57,11 @@
     "Handover"
   ],
   "includes": [
-    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 02-project-setup.md, detailed 01-ui-identity.md and project-local skill harness, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, HANDOVER.md",
     "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
     "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
-    "A mandatory UI identity plus project-local skill harness with frontend design and subagent implementation skills",
-    "Comprehensive phase files that read 01-ui-identity.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
+    "A project-local skill harness followed by mandatory UI identity with frontend design skill loading",
+    "Comprehensive phase files that read 02-ui-identity.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
     "Hard-stop/assumable/deferrable question model",
     "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
   ],
@@ -69,7 +69,7 @@
     "Selected scope silently shrinks",
     "Packet overfits source internals instead of observable behavior",
     "Product-specific source baggage leaks into selected BUILDPRINT.md",
-    "01-ui-identity.md becomes a weak moodboard instead of a UI identity contract",
+    "02-ui-identity.md becomes a weak moodboard instead of a UI identity contract",
     "Project-local skill harness is missing or not recorded in AGENTS.md",
     "Generated phases become generic dashboard work or skip design responsibility",
     "Agent writes proof-looking prose instead of building a usable loop",
@@ -79,10 +79,10 @@
   "checks": [
     "Selected output uses v3 phase-driven packet files",
     "BUILDPRINT.md is a generic AI-builder briefing with no mapped-source product specifics",
-    "01-ui-identity.md starts with UX importance/understandability and includes a small checklist",
-    "01-ui-identity.md contains a detailed UI identity contract, not short phrases",
+    "02-ui-identity.md starts with UX importance/understandability and includes a small checklist",
+    "02-ui-identity.md contains a detailed UI identity contract, not short phrases",
     "Project-local skill harness initializes AGENTS.md and local frontend/subagent skills",
-    "Every phase references 01-ui-identity.md as standing design/style responsibility",
+    "Every phase references 02-ui-identity.md as standing design/style responsibility",
     "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v3",
     "Obsolete v2 packet folders/files are absent from the selected packet",
     "Every phase has required comprehensive headings and a substantial Building objective",
@@ -97,12 +97,12 @@
     },
     {
       "label": "Local skill harness",
-      "detail": "Project setup initializes AGENTS.md plus Buildprint-native frontend and subagent implementation skills before phase work.",
+      "detail": "Project setup initializes AGENTS.md plus Buildprint-native frontend and subagent implementation skills before UI identity or phase work.",
       "tone": "success"
     },
     {
       "label": "Mandatory UX constitution",
-      "detail": "01-ui-identity.md makes UX understandable, detailed, UI-specific, and binding on every UI-bearing phase.",
+      "detail": "02-ui-identity.md makes UX understandable, detailed, UI-specific, and binding on every UI-bearing phase.",
       "tone": "success"
     },
     {
@@ -136,24 +136,24 @@
     },
     {
       "title": "4. Emit the v3 packet",
-      "detail": "The selected packet contains generic BUILDPRINT.md, 00-questions.md, 02-project-setup.md, detailed 01-ui-identity.md and project-local skill harness, blueprint.yaml, 03-phases/, and HANDOVER.md."
+      "detail": "The selected packet contains generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, and HANDOVER.md."
     },
     {
       "title": "5. Build phase by phase",
-      "detail": "A downstream builder reads the active phase only, keeps 01-ui-identity.md open as design responsibility, builds the smallest real product path, verifies it, repairs fake-success shortcuts, and records handoff facts."
+      "detail": "A downstream builder reads the active phase only, keeps 02-ui-identity.md open as design responsibility, builds the smallest real product path, verifies it, repairs fake-success shortcuts, and records handoff facts."
     }
   ],
   "resultChecklist": [
     "Selected output uses v3 phase-driven packet files",
     "BUILDPRINT.md is a generic AI-builder briefing with no mapped-source product specifics",
-    "01-ui-identity.md starts with UX importance/understandability and includes a small checklist",
-    "01-ui-identity.md contains a detailed UI identity contract, not short phrases",
-    "Every phase references 01-ui-identity.md as standing design/style responsibility",
+    "02-ui-identity.md starts with UX importance/understandability and includes a small checklist",
+    "02-ui-identity.md contains a detailed UI identity contract, not short phrases",
+    "Every phase references 02-ui-identity.md as standing design/style responsibility",
     "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v3",
     "Obsolete v2 packet folders/files are absent from the selected packet",
     "Every phase has required comprehensive headings and a substantial Building objective",
     "Phase flow rejects placeholders, functionless buttons, mocks-as-proof, and fake success",
     "HANDOVER.md names built, verified, blocked, not proven, and next actions"
   ],
-  "copyPrompt": "Use the Buildprint Mapper OS Buildprint to map a target repo in the current agent session. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md. Emit a v3 phase-driven packet with generic BUILDPRINT.md, detailed 01-ui-identity.md and project-local skill harness, blueprint.yaml product contract, and comprehensive phases."
+  "copyPrompt": "Use the Buildprint Mapper OS Buildprint to map a target repo in the current agent session. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md. Emit a v3 phase-driven packet with generic BUILDPRINT.md, 01-project-setup.md for architecture and local skill harness, 02-ui-identity.md with frontend skill loading, blueprint.yaml product contract, and comprehensive phases."
 }

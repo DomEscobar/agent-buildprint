@@ -137,8 +137,8 @@ Current Mapper OS output is a v3 phase-driven executable packet:
 ```text
 BUILDPRINT.md
 00-questions.md
-01-ui-identity.md
-02-project-setup.md
+01-project-setup.md
+02-ui-identity.md
 blueprint.yaml
 03-phases/
   phase-index.yaml
@@ -151,8 +151,8 @@ Core responsibilities:
 
 - `BUILDPRINT.md` is the generic AI-builder briefing and read order. It must not become the product spec.
 - `00-questions.md` asks only implementation-changing hard stops, assumable defaults, and deferrable decisions.
-- `01-ui-identity.md` defines product identity, design thesis, screen-state expectations, style direction, tokens, typography, layout, components, motion, state behavior, anti-generic rules, and proof obligations.
-- `02-project-setup.md` creates the implementation foundation: local skill harness, `AGENTS.md`, `docs/ui-identity.md`, `docs/architecture.md`, env contract, setup receipt, and stack/runtime decisions.
+- `01-project-setup.md` creates the implementation foundation: local skill harness, `AGENTS.md`, `docs/architecture.md`, env contract, setup receipt, and stack/runtime decisions.
+- `02-ui-identity.md` loads the frontend UI skill and defines product identity, design thesis, screen-state expectations, style direction, tokens, typography, layout, components, motion, state behavior, anti-generic rules, and proof obligations.
 - `blueprint.yaml` is the machine route and product-contract mirror. YAML routes; Markdown teaches and builds.
 - `03-phases/phase-index.yaml` names the active phase and phase files.
 - `03-phases/phase-flow.md` defines the active-phase loop and repair routing.

@@ -11,8 +11,8 @@ A selected packet must contain:
 ```text
 BUILDPRINT.md
 00-questions.md
-02-project-setup.md
-01-ui-identity.md
+01-project-setup.md
+02-ui-identity.md
 blueprint.yaml
 03-phases/
   phase-index.yaml
@@ -34,7 +34,7 @@ If product identity appears in `BUILDPRINT.md`, the packet has mixed responsibil
 
 ## Product contract location
 
-Product identity, artifact shape, central interface, golden path, runtime posture, provider/runtime constraints, state/readback expectations, and source-distilled product specifics belong in `blueprint.yaml`, `02-project-setup.md`, `01-ui-identity.md`, and the phase objectives — not in `BUILDPRINT.md`.
+Product identity, artifact shape, central interface, golden path, runtime posture, provider/runtime constraints, state/readback expectations, and source-distilled product specifics belong in `blueprint.yaml`, `01-project-setup.md`, `02-ui-identity.md`, and the phase objectives — not in `BUILDPRINT.md`.
 
 `blueprint.yaml` is the machine-readable mirror. It routes and declares concise product contract facts. It must not become a full implementation manual.
 
@@ -59,11 +59,11 @@ Output existence is not enough. Input-derived output is not enough. A selected p
 
 ## UI identity contract
 
-`01-ui-identity.md` is mandatory for every UI-bearing artifact and must be detailed enough to guide later implementation without guessing. It must:
+`02-ui-identity.md` is mandatory for every UI-bearing artifact and must be detailed enough to guide later implementation without guessing. It must:
 
 - open by saying UX is a must and that confusing/generic/ugly UI is not finished product;
-- include a small understandability checklist;
-- define design thesis, style direction, color system, typography, layout rhythm, component language, motion, states, anti-generic rules, and phase obligation;
+- load the local `frontend-ui-product-design` skill and relevant references created by setup;
+- define design thesis, style direction, color system, typography, layout rhythm, screen-state contract, component language, motion, states, anti-generic rules, and phase obligation;
 - tell every later phase to preserve the style schema.
 
 For non-UI artifacts, it must explicitly say `not-ui-bearing` and define the developer/operator experience with equivalent specificity.
@@ -80,7 +80,7 @@ The mapper must select proof obligations that fit the artifact instead of forcin
 - AI/generative artifacts: central output specificity proof, repeated-generic-output rejection, provider/blocker honesty, and sample output review against the output contract.
 - Integration/plugin/service/CLI artifacts: install/configure/first-action proof, idempotency/retry/failure proof, operator logs/errors, and audit/recovery proof.
 
-Selected packets should put concise routing facts in `blueprint.yaml`, buildable proof setup in `02-project-setup.md`, phase-specific inspection in phase objectives, and final evidence fields in `HANDOVER.md`.
+Selected packets should put concise routing facts in `blueprint.yaml`, buildable proof setup in `01-project-setup.md`, UI/UX identity and screen-state decisions in `02-ui-identity.md`, phase-specific inspection in phase objectives, and final evidence fields in `HANDOVER.md`.
 
 ## Phase contract
 
@@ -92,7 +92,7 @@ Each phase file must include:
 - `Minimum proof before moving on`
 - `Handoff note`
 
-The `Building objective` must be comprehensive and product-specific. It should read like a senior product-engineering assignment, not a decomposed schema or checklist fragment. Every phase must read `01-ui-identity.md` as standing comprehension, user-language, and visual identity responsibility for UI-bearing artifacts, even when the phase is runtime, data, report, verification, or backend work.
+The `Building objective` must be comprehensive and product-specific. It should read like a senior product-engineering assignment, not a decomposed schema or checklist fragment. Every phase must read `02-ui-identity.md` as standing comprehension, user-language, and visual identity responsibility for UI-bearing artifacts, even when the phase is runtime, data, report, verification, or backend work.
 
 ## Machine contract
 
@@ -106,9 +106,9 @@ The `Building objective` must be comprehensive and product-specific. It should r
 - obsolete selected packet filenames;
 - generated prompt/handoff files as packet authority;
 - product-specific or mapped-source leakage in `BUILDPRINT.md`;
-- missing UX-must-matter preface/checklist in `01-ui-identity.md`;
+- missing UX-must-matter preface/checklist in `02-ui-identity.md`;
 - weak/generic UI UI identitys;
-- phase files that do not read `01-ui-identity.md`;
+- phase files that do not read `02-ui-identity.md`;
 - tiny or missing phase objectives;
 - missing required phase headings;
 - phase index references to missing files;

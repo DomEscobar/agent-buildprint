@@ -8,16 +8,16 @@ Before writing code, read:
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
-- `02-project-setup.md`
-- `01-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Repair the human-facing experience until it feels like the product described in `01-ui-identity.md`. This is not a cosmetic pass. It is the phase that catches generic product shells, dead controls, unclear empty states, invisible errors, weak motion, confusing hierarchy, and interactions that do not teach the user what is happening.
+Repair the human-facing experience until it feels like the product described in `02-ui-identity.md`. This is not a cosmetic pass. It is the phase that catches generic product shells, dead controls, unclear empty states, invisible errors, weak motion, confusing hierarchy, and interactions that do not teach the user what is happening.
 
 For UI products, inspect the app like a hostile product reviewer. Click every visible control in the golden path. Try empty input, blocked provider/runtime, success, error, reload, and mobile/narrow layout where relevant. Make the primary surface feel intentional. Motion, spacing, copy, layout regions, and state transitions should help comprehension rather than decorate placeholders.
 

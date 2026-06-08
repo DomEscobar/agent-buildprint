@@ -8,20 +8,20 @@ Before writing code, read:
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
-- `02-project-setup.md`
-- `01-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
 Create the implementation foundation and first visible/runnable loop for the mapped artifact. The builder should leave this phase with a real project skeleton, project-local skill harness, local commands, architecture docs, env contract, proof surfaces, and a first product path that demonstrates the artifact direction.
 
 This phase should not chase feature breadth. It should make the product shape undeniable: a user/operator/developer can start the app/service/tool, see or call the central surface, trigger one meaningful action, and receive either a real result or an honest blocked state. The result must be specific to the mapped product, not a generic starter app.
 
-If the artifact is UI-bearing, the first surface should already reflect the visual/interaction direction from `01-ui-identity.md`. If the artifact is API/CLI/worker-first, the first command or endpoint should prove the central interface and error/blocker semantics.
+If the artifact is UI-bearing, the first surface should already reflect the visual/interaction direction from `02-ui-identity.md`. If the artifact is API/CLI/worker-first, the first command or endpoint should prove the central interface and error/blocker semantics.
 
 ## DO NOT
 

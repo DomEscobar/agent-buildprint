@@ -25,7 +25,7 @@ The obsolete v2 abstraction is gone. It was too compressed and runner-shaped. Ma
 4. Scope selection — stop for a human choice when multiple products/scopes are plausible.
 5. Source distillation — define artifact identity, golden path, central artifact/interface/boundary, central output quality contract, runtime posture, state/readback, provider/security/destructive boundaries, and UI/operator experience obligations.
 6. Responsibility placement — put the generic AI-builder briefing in selected `BUILDPRINT.md`; put product contract facts in `blueprint.yaml`, setup, UI/style decision, and phase objectives.
-7. Packet emission — write the v3 phase-driven packet: `BUILDPRINT.md`, `00-questions.md`, `02-project-setup.md`, `01-ui-identity.md`, `blueprint.yaml`, `03-phases/`, and `HANDOVER.md`.
+7. Packet emission — write the v3 phase-driven packet: `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, `02-ui-identity.md`, `blueprint.yaml`, `03-phases/`, and `HANDOVER.md`.
 8. Qualification — keep claims conservative until a downstream implementation is built and checked.
 
 ## Selected package shape
@@ -33,8 +33,8 @@ The obsolete v2 abstraction is gone. It was too compressed and runner-shaped. Ma
 ```text
 BUILDPRINT.md
 00-questions.md
-02-project-setup.md
-01-ui-identity.md
+01-project-setup.md
+02-ui-identity.md
 blueprint.yaml
 03-phases/
   phase-index.yaml
@@ -48,8 +48,8 @@ HANDOVER.md
 
 - Selected `BUILDPRINT.md` is the AI-builder briefing only: role, responsibility, perfection alignment, fake-success intolerance, and read order. It must not name the mapped source product or carry the product spec.
 - `blueprint.yaml` mirrors the product contract and routes the packet.
-- `01-ui-identity.md` is the mandatory UI identity for UI-bearing artifacts and must begin with UX importance/understandability plus a checklist.
-- Every phase file must read `01-ui-identity.md` as the standing comprehension, user-language, and visual identity responsibility when UI exists.
+- `02-ui-identity.md` is the mandatory UI identity for UI-bearing artifacts and must begin with UX importance/understandability plus a checklist.
+- Every phase file must read `02-ui-identity.md` as the standing comprehension, user-language, and visual identity responsibility when UI exists.
 
 Each phase file must be comprehensive and readable, not a decomposed schema. Required headings: `How to implement this phase`, `Building objective`, `DO NOT`, `Minimum proof before moving on`, and `Handoff note`.
 
@@ -57,7 +57,7 @@ Each phase file must be comprehensive and readable, not a decomposed schema. Req
 
 - Do not emit slices, gates, team capsules, runner specs, generated prompt handoffs, or tiny YAML implementation guidance.
 - Do not put product-specific mapped-source details into selected `BUILDPRINT.md`.
-- Do not write a weak `01-ui-identity.md`; UX is mandatory, understandable, detailed, and phase-binding.
+- Do not write a weak `02-ui-identity.md`; UX is mandatory, understandable, detailed, and phase-binding.
 - Do not let phases skip the UI/UI identity.
 - Do not copy secrets or mutate source while mapping.
 - Do not silently shrink requested scope.
