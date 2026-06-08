@@ -22,8 +22,9 @@ jobs:
           SOURCE_SHA: ${{ github.sha }}
         run: |
           if [ -z "$GH_TOKEN" ]; then
-            echo "No source-side WEBSITE_REPO_TOKEN configured; website self-sync schedule will pick this up automatically."
-            exit 0
+            echo "WEBSITE_REPO_TOKEN is not configured, so this push cannot trigger the website sync."
+            echo "Failing loudly instead of leaving agent-buildprint.com stale behind a green workflow."
+            exit 1
           fi
           gh api repos/DomEscobar/agent-buildprint-website/dispatches \
             --method POST \
