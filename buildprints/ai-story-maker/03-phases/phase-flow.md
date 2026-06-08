@@ -29,7 +29,7 @@ Final completion is impossible until phase `99-critical-review-pushback` has run
 - If the phase objective is wrong or too thin, repair the phase file before coding more.
 - If setup is missing architecture, commands, env, proof strategy, or UI identity, return to `02-project-setup.md`.
 - If a product-defining/security/destructive/secret decision is missing, return to `00-questions.md` and stop.
-- If UI quality is generic, interactionless, visually incoherent, drifting away from the generated identity contract, mostly label/palette changes around a dashboard/workbench silhouette, or stuffing multiple product capabilities into one permanent view instead of using progressive disclosure, return to `01-ui-identity.md` or `docs/product-experience.md` before advancing.
+- If UI quality is generic, interactionless, visually incoherent, drifting away from the generated identity contract, mostly label/palette changes around a dashboard/workbench silhouette, or stuffing multiple product capabilities into one permanent view instead of using progressive disclosure, return to `01-ui-identity.md` or `docs/ui-identity.md` before advancing.
 - If runtime/provider/deployment is unavailable, build the seam and record a blocker; do not fake live success.
 
 ## Handoff discipline

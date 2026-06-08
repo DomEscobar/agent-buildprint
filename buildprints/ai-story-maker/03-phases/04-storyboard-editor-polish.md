@@ -41,7 +41,7 @@ This phase should also improve interaction details that make the story output us
 - Inspect the product path through UI/API/CLI/runtime, not only source files.
 - Prove persistence/readback when this phase creates durable state.
 - Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
-- Run or record selected typed proof paths from `docs/proof-matrix.md`, especially viewport, stress, semantic-output, and provider/operator proof.
+- Run or record the relevant proof paths named in `docs/architecture.md`, especially viewport, stress, semantic-output, and provider/operator proof.
 - Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note

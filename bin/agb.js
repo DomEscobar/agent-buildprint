@@ -583,21 +583,22 @@ function packetCheckResults(dir) {
 
   const setup = safeReadText(path.join(dir, '02-project-setup.md'))
   ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && /Do not start `?03-phases\/\*`?/i.test(setup))
-  ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /docs\/product-loop\.md/i.test(setup) && /docs\/proof-strategy\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
-  ok('project setup requires typed proof matrix',
+  ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /docs\/ui-identity\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
+  ok('project setup routes typed quality through architecture or proof matrix',
     !requiresTypedQualityRouting ||
     /typed_quality_gates/i.test(setup) &&
-    /docs\/proof-matrix\.md/i.test(setup) &&
+    (/docs\/proof-matrix\.md/i.test(setup) || /docs\/architecture\.md/i.test(setup)) &&
     /applicable\/not applicable/i.test(setup) &&
     /command\/proof path/i.test(setup) &&
     /not applicable/i.test(setup)
   )
-  ok('project setup requires product experience artifact for UI',
-    /docs\/product-experience\.md/i.test(setup) &&
+  ok('project setup requires UI identity screen-state contract',
+    /docs\/ui-identity\.md/i.test(setup) &&
     /dominant (creative )?object/i.test(setup) &&
-    /primary gesture/i.test(setup) &&
+    /primary (creative )?gesture/i.test(setup) &&
+    /screen states|screen-state|visible-together|hidden\/reachable/i.test(setup) &&
     /forbidden default silhouette|old\/default layout patterns/i.test(setup) &&
-    /first[- ]screen sketch|primary screen sketch/i.test(setup)
+    /first[- ]run comprehension|first[- ]screen sketch|primary screen sketch/i.test(setup)
   )
   ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
 
