@@ -17,7 +17,7 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Create the implementation foundation and first visible/runnable loop for the mapped artifact. The builder should leave this phase with a real project skeleton, local commands, architecture docs, env contract, proof strategy, and a first product path that demonstrates the artifact direction.
+Create the implementation foundation and first visible/runnable loop for the mapped artifact. The builder should leave this phase with a real project skeleton, project-local skill harness, local commands, architecture docs, env contract, proof surfaces, and a first product path that demonstrates the artifact direction.
 
 This phase should not chase feature breadth. It should make the product shape undeniable: a user/operator/developer can start the app/service/tool, see or call the central surface, trigger one meaningful action, and receive either a real result or an honest blocked state. The result must be specific to the mapped product, not a generic starter app.
 

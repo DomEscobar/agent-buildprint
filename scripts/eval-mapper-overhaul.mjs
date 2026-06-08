@@ -82,6 +82,9 @@ for (const required of [
   /blueprint\.yaml`? (is|mirrors|routes).*product[- ]contract/i,
   /Typed proof/i,
   /proof obligations by artifact type/i,
+  /project-local skill harness/i,
+  /frontend UI product design|frontend-ui-product-design/i,
+  /subagent-driven implementation|subagent-driven-implementation/i,
 ]) {
   if (!required.test(docCorpus)) {
     console.error(docCorpus)
@@ -122,27 +125,40 @@ fs.rmSync(path.join(missingQuestions, '00-questions.md'))
 expectFailure('mapper eval requires 00-questions', ['packet', 'check', missingQuestions], ['✗ packet file exists: 00-questions.md'])
 
 const missingCentralOutput = copyTemplate('missing-central-output-contract')
-edit(missingCentralOutput, 'blueprint.yaml', (s) => s.replace(/\ncentral_output_contract:\n[\s\S]*?\nstate_and_handoff:/, '\nstate_and_handoff:'))
+edit(missingCentralOutput, 'blueprint.yaml', (s) => s.replace(/central_output_contract:/g, 'central_output_contract_removed:'))
 expectFailure('mapper eval requires central output quality contract', ['packet', 'check', missingCentralOutput], ['✗ blueprint declares central output quality contract'])
 
 const missingTypedGates = copyTemplate('missing-typed-quality-gates')
-edit(missingTypedGates, 'blueprint.yaml', (s) => s.replace(/\ntyped_quality_gates:\n[\s\S]*?\nstate_and_handoff:/, '\nstate_and_handoff:'))
+edit(missingTypedGates, 'blueprint.yaml', (s) => s.replace(/typed_quality_gates:/g, 'typed_quality_gates_removed:'))
 expectFailure('mapper eval requires typed quality gate routing', ['packet', 'check', missingTypedGates], ['✗ blueprint declares typed quality gate routing'])
 
-const missingProofMatrix = copyTemplate('missing-proof-matrix')
-edit(missingProofMatrix, '02-project-setup.md', (s) => s.replace(/- `docs\/proof-matrix\.md`[\s\S]*?\n/, ''))
-expectFailure('mapper eval requires typed proof matrix setup', ['packet', 'check', missingProofMatrix], ['✗ project setup requires typed proof matrix'])
+const missingArchitectureProof = copyTemplate('missing-architecture-proof')
+edit(missingArchitectureProof, '02-project-setup.md', (s) => s
+  .replace(/docs\/architecture\.md/g, 'docs/architecture-removed.md')
+  .replace(/applicable\/not applicable/g, 'selected or skipped')
+  .replace(/command\/proof path/g, 'proof target'))
+expectFailure('mapper eval requires architecture-routed typed proof setup', ['packet', 'check', missingArchitectureProof], ['✗ project setup routes typed quality through architecture'])
 
-const missingProductExperience = copyTemplate('missing-product-experience')
-edit(missingProductExperience, '02-project-setup.md', (s) => s
-  .replace(/- `docs\/product-experience\.md`[^\n]*\n/g, '')
-  .replace(/UI-bearing artifacts have `docs\/product-experience\.md`[^\n]*\n/g, '')
-  .replace(/docs\/product-experience\.md/g, 'docs/experience-removed.md')
+const missingSkillHarness = copyTemplate('missing-skill-harness')
+edit(missingSkillHarness, '02-project-setup.md', (s) => s
+  .replace(/agb harness init/g, 'manual setup')
+  .replace(/Buildprint skill harness/gi, 'project notes')
+  .replace(/frontend-ui-product-design/g, 'frontend')
+  .replace(/subagent-driven-implementation/g, 'subagents')
+  .replace(/\.agents\/skills/g, '.agents/files'))
+expectFailure('mapper eval requires local skill harness setup', ['packet', 'check', missingSkillHarness], ['✗ project setup requires local skill harness'])
+
+const missingScreenStateContract = copyTemplate('missing-screen-state-contract')
+edit(missingScreenStateContract, '02-project-setup.md', (s) => s
+  .replace(/docs\/ui-identity\.md/g, 'docs/identity-removed.md')
   .replace(/dominant object/g, 'main thing')
   .replace(/primary gesture/g, 'main action')
+  .replace(/screen states/g, 'screens')
+  .replace(/visible-together/g, 'shown')
+  .replace(/hidden\/reachable/g, 'later')
   .replace(/forbidden default silhouette/g, 'blocked layout')
-  .replace(/first-screen sketch/g, 'initial sketch'))
-expectFailure('mapper eval requires product experience setup artifact', ['packet', 'check', missingProductExperience], ['✗ project setup requires product experience artifact for UI'])
+  .replace(/first-run comprehension/g, 'first impression'))
+expectFailure('mapper eval requires UI identity screen-state contract', ['packet', 'check', missingScreenStateContract], ['✗ project setup requires UI identity screen-state contract'])
 
 const weakUiIdentityConcept = copyTemplate('weak-ui-identity-concept')
 edit(weakUiIdentityConcept, '01-ui-identity.md', (s) => s
@@ -174,11 +190,13 @@ expectFailure('mapper eval rejects weak phase flow', ['packet', 'check', weakFlo
 
 const weakCriticalReviewExperience = copyTemplate('weak-critical-review-experience')
 edit(weakCriticalReviewExperience, '03-phases/critical-review-pushback.md', (s) => s
-  .replace(/3\. Run screenshot delta review[\s\S]*?\n4\. Score the artifact/, '3. Look at screenshots.\n4. Score the artifact')
-  .replace(/- Product experience originality:[^\n]*\n/, '')
-  .replace(/product-experience originality[^.\n]*\./gi, '')
+  .replace(/3\. Run screenshot delta review[\s\S]*?\n5\. Score the artifact/, '3. Look at screenshots.\n5. Score the artifact')
+  .replace(/- Experience originality:[^\n]*\n/, '')
+  .replace(/- Progressive disclosure and screen-state hierarchy:[^\n]*\n/, '')
+  .replace(/experience originality[^.\n]*\./gi, '')
+  .replace(/progressive-disclosure review[^.\n]*\./gi, '')
   .replace(/screenshot delta review[^.\n]*\./gi, ''))
-expectFailure('mapper eval rejects weak critical review experience gate', ['packet', 'check', weakCriticalReviewExperience], ['✗ critical-review-pushback requires product experience originality and screenshot delta'])
+expectFailure('mapper eval rejects weak critical review experience gate', ['packet', 'check', weakCriticalReviewExperience], ['✗ critical-review-pushback requires experience originality, disclosure, and screenshot delta'])
 
 const cliHelp = runAgb(['--help']).output
 for (const stale of ['persona --slice', 'state derive', 'slice status']) {
@@ -190,6 +208,31 @@ for (const stale of ['persona --slice', 'state derive', 'slice status']) {
 }
 console.log('✓ cli help no longer exposes obsolete runner commands')
 expectFailure('cli eval rejects removed persona command', ['persona', '--slice', 'slices/x/slice.yaml', '--role', 'build'], ['Usage:'])
+
+const harnessFixture = path.join(tmp, 'harness-fixture')
+fs.mkdirSync(harnessFixture, { recursive: true })
+expectFailure('cli eval detects missing project harness', ['harness', 'check', harnessFixture, '--agent', 'codex'], ['Harness check: MISSING'])
+expectPass('cli eval initializes project harness', ['harness', 'init', harnessFixture, '--agent', 'codex'], ['Harness check: PASS'])
+expectPass('cli eval verifies initialized project harness', ['harness', 'check', harnessFixture, '--agent', 'codex'], ['Harness check: PASS'])
+for (const required of [
+  'AGENTS.md',
+  '.agents/skills/frontend-ui-product-design/SKILL.md',
+  '.agents/skills/subagent-driven-implementation/SKILL.md',
+  '.codex/skills/frontend-ui-product-design/SKILL.md',
+  '.codex/skills/subagent-driven-implementation/SKILL.md'
+]) {
+  if (!fs.existsSync(path.join(harnessFixture, required))) {
+    console.error(`cli eval failed; harness init missing ${required}`)
+    process.exit(1)
+  }
+}
+const harnessAgentsMd = fs.readFileSync(path.join(harnessFixture, 'AGENTS.md'), 'utf8')
+if (!/Buildprint Skill Harness/.test(harnessAgentsMd) || !/frontend-ui-product-design/.test(harnessAgentsMd) || !/subagent-driven-implementation/.test(harnessAgentsMd)) {
+  console.error(harnessAgentsMd)
+  console.error('cli eval failed; AGENTS.md harness section is incomplete')
+  process.exit(1)
+}
+console.log('✓ cli eval writes project-local skill harness')
 
 const traversalPackage = path.join(tmp, 'traversal-package')
 fs.mkdirSync(traversalPackage, { recursive: true })
@@ -235,7 +278,7 @@ const redactionFiles = {
   }, null, 2),
   '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-ui-identity.md, 02-project-setup.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions.\n',
-  '/02-project-setup.md': '# 02 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires docs/product-experience.md, docs/proof-matrix.md, command/proof path, applicable/not applicable setup, dominant object, primary gesture, forbidden default silhouette, and first-screen sketch.\n',
+  '/02-project-setup.md': '# 02 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires agb harness init, Buildprint skill harness, frontend-ui-product-design, subagent-driven-implementation, .agents/skills, docs/architecture.md, docs/ui-identity.md, command/proof path, applicable/not applicable setup, dominant object, primary gesture, screen states, hidden/reachable, visible-together, forbidden default silhouette, and first-run comprehension.\n',
   '/01-ui-identity.md': '# 01 UI Identity\n\nUX is a must. The experience must be understandable and a confusing interface is not a finished product. Generate a local docs/ui-identity.md or UI-IDENTITY.md before setup. Required sections include First-run comprehension contract, User-language map, Creative product concept, product metaphor, dominant object, primary gesture, moment-to-moment manipulation, Silhouette rejection, forbidden default silhouette, generic dashboard, renamed workbench, card grid, proof console, Product identity thesis, Chosen style direction, Layout model, Interaction model, Component language, Color and typography tokens, Content stress fixtures, Proof obligations, screenshot delta review, exact semantic color, typography, state colors, focus, empty/loading/error/blocked, functionless buttons, dead controls, raw JSON, and evaluator language. Think deeply about the golden path and central output before setup.\n',
   '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
@@ -265,7 +308,7 @@ try {
   const redactionTarget = path.join(tmp, 'redaction-target')
   const redactionManifestUrl = `http://127.0.0.1:${port}/package.json?manifestToken=leaksecret`
   const { failed, output } = await runAgbAsync(['start', redactionManifestUrl, redactionTarget])
-  if (failed) {
+  if (failed && !fs.existsSync(path.join(redactionTarget, '.buildprint/source.json'))) {
     console.error(output)
     console.error('cli eval failed to start redaction fixture')
     process.exit(1)
@@ -285,6 +328,11 @@ try {
       console.error(`cli eval failed; next-agent missing v3 read order item: ${expected}`)
       process.exit(1)
     }
+  }
+  if (!nextAgent.includes('agb harness init .')) {
+    console.error(nextAgent)
+    console.error('cli eval failed; next-agent missing local harness initialization step')
+    process.exit(1)
   }
   if (/01-project-setup\.md|02-uiux-decision\.md|04-review\.md|05-handover\.md|smallest real usable slice/.test(nextAgent)) {
     console.error(nextAgent)

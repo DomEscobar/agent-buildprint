@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 import fs from 'node:fs'
-import path from 'node:path'
 import os from 'node:os'
+import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { checkBlueprint, printBlueprintResults } from '../src/blueprint/blueprint-check.js'
+import { evidenceCheck } from '../src/evidence/evidence-ledger.js'
+import { harnessCheckResult, harnessInit, printHarnessResult } from '../src/harness/local-harness.js'
 
 const cwd = process.cwd()
 const cliDir = path.dirname(fileURLToPath(import.meta.url))
@@ -21,6 +24,19 @@ function optionValue(flag) {
   return value
 }
 
+function positionalArgs(startIndex = 0) {
+  const positional = []
+  for (let i = startIndex; i < args.length; i++) {
+    const value = args[i]
+    if (value.startsWith('--')) {
+      if (value === '--agent' && args[i + 1] && !args[i + 1].startsWith('--')) i++
+      continue
+    }
+    positional.push(value)
+  }
+  return positional
+}
+
 function usage(exitCode = 0) {
   console.log(`Agent Buildprint
 
@@ -29,6 +45,8 @@ Usage:
   agb start <buildprint-package-json-url-or-file> [target-folder]
   agb packet check <packet-folder-or-package-json-url>
   agb packet next <packet-folder-or-build-state-folder>
+  agb harness init [project-folder] [--agent auto|all|codex|claude|agents] [--json]
+  agb harness check [project-folder] [--agent auto|all|codex|claude|agents] [--json]
   agb evidence check <evidence-ledger-jsonl>
 
 Examples:
@@ -37,6 +55,8 @@ Examples:
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json ./my-build
   agb packet check ./buildprints/ai-swarm-simulator
   agb packet next ./buildprints/ai-swarm-simulator
+  agb harness init .
+  agb harness check .
   agb evidence check .buildprint/evidence/evidence-ledger.jsonl
 
 Mapper note:
@@ -63,211 +83,6 @@ function walk(dir) {
   })
 }
 
-
-function parseYamlLite(text) {
-  // Purposefully tiny parser for blueprint validation; supports the conventions used by this MVP.
-  // It is not a general YAML parser. The blueprint stays human-readable; checks use targeted extraction.
-  return text
-}
-
-function extractRelativeRefs(text) {
-  const refs = new Set()
-  const patterns = [
-    /(?:\.\/?[\w.-]+(?:\/[\w.\-#]+)+)/g,
-    /(?:\.\/[\w.\-]+\.[\w]+)/g
-  ]
-  for (const pattern of patterns) {
-    for (const m of text.matchAll(pattern)) {
-      const clean = m[0].split('#')[0]
-      if (clean.startsWith('./')) refs.add(clean)
-    }
-  }
-  return [...refs]
-}
-
-function countMatches(text, pattern) {
-  return [...text.matchAll(pattern)].length
-}
-
-function hasDetailedDesignDecisionProtocol(text) {
-  return /Autonomous design decision protocol/i.test(text) &&
-    /If no upstream visual direction exists/i.test(text) &&
-    /reason from product purpose/i.test(text) &&
-    /write the resulting decisions/i.test(text) &&
-    /before implementation/i.test(text)
-}
-
-function hasPreciseColorSystem(text) {
-  const colorSection = (text.match(/#{2,3}\s*\d+\.\s*Color system\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
-  return countMatches(colorSection, /#[0-9a-f]{6}\b|rgba?\(/gi) >= 10 &&
-    /background/i.test(colorSection) &&
-    /surface/i.test(colorSection) &&
-    /border/i.test(colorSection) &&
-    /text/i.test(colorSection) &&
-    /primary/i.test(colorSection) &&
-    /success/i.test(colorSection) &&
-    /warning/i.test(colorSection) &&
-    /danger|blocked/i.test(colorSection) &&
-    /never rely on color alone/i.test(colorSection)
-}
-
-function hasPreciseStyleDirection(text) {
-  const styleSection = (text.match(/#{2,3}\s*\d+\.\s*Chosen style direction\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
-  return styleSection.trim().length >= 350 &&
-    /Use[\s\S]{0,80}\*\*|Use\s+[A-Za-z][\w\s-]+style direction/i.test(styleSection) &&
-    /not|Avoid|No /i.test(styleSection) &&
-    /specific|artifact|product|user|workflow|surface|operator|developer|audience|task/i.test(styleSection)
-}
-
-function hasPreciseTypographySystem(text) {
-  const typeSection = (text.match(/#{2,3}\s*\d+\.\s*Typography system\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
-  return countMatches(typeSection, /\b\d{2}(?:-\d{2})?px\b/gi) >= 5 &&
-    /line-height|\/\s*1\./i.test(typeSection) &&
-    /weight|\/\s*\d{3}/i.test(typeSection) &&
-    /title|heading/i.test(typeSection) &&
-    /section-title/i.test(typeSection) &&
-    /panel-title/i.test(typeSection) &&
-    /body/i.test(typeSection) &&
-    /button-label/i.test(typeSection)
-}
-
-function hasPreciseLayoutSystem(text) {
-  const layoutSection = (text.match(/#{2,3}\s*\d+\.\s*Layout and spatial rhythm\s*\n([\s\S]*?)(?=\n#{2,3}\s*\d+\.|\n$)/i) || [])[1] || ''
-  return /layout|view|shell|surface|region|flow|grid|panel|navigation|output/i.test(layoutSection) &&
-    /desktop/i.test(layoutSection) &&
-    /mobile/i.test(layoutSection) &&
-    /responsive/i.test(layoutSection) &&
-    /dominant|primary|first screen/i.test(layoutSection) &&
-    /8px/i.test(layoutSection) &&
-    /12\/16px/i.test(layoutSection) &&
-    /24/i.test(layoutSection)
-}
-
-function extractForbiddenDeps(text) {
-  const lines = text.split(/\r?\n/)
-  const start = lines.findIndex((line) => /^\s{2}forbidden_dependencies:\s*$/.test(line) || /^forbidden_dependencies:\s*$/.test(line))
-  if (start < 0) return []
-  const deps = []
-  const baseIndent = lines[start].match(/^\s*/)[0].length
-  for (let i = start + 1; i < lines.length; i++) {
-    const line = lines[i]
-    if (!line.trim()) continue
-    const indent = line.match(/^\s*/)[0].length
-    if (indent <= baseIndent && !/^\s*-/.test(line)) break
-    const m = line.match(/^\s*-\s*['"]?([^'"\n]+?)['"]?\s*$/)
-    if (m) deps.push(m[1].trim())
-    else if (!/^\s*-/.test(line) && indent <= baseIndent + 2) break
-  }
-  return deps
-}
-
-function extractNodes(text) {
-  const nodesBlock = text.match(/\nnodes:\n([\s\S]*?)(?:\nedges:|\ncheckpointing:|\nhuman_interrupts:|\ngeneration_tasks:|$)/)
-  if (!nodesBlock) return []
-  return [...nodesBlock[1].matchAll(/^\s{2}([A-Za-z_][\w-]*):\s*$/gm)].map((m) => m[1])
-}
-
-function extractEdges(text) {
-  const edgesBlock = text.match(/\nedges:\n([\s\S]*?)(?:\ncheckpointing:|\nhuman_interrupts:|\ngeneration_tasks:|$)/)
-  if (!edgesBlock) return []
-  const froms = [...edgesBlock[1].matchAll(/^\s*-\s*from:\s*([\w-]+)/gm)].map((m) => m[1])
-  const tos = [...edgesBlock[1].matchAll(/^\s*to:\s*([\w-]+)/gm)].map((m) => m[1])
-  return { froms, tos }
-}
-
-function scanImports(codeDir) {
-  const imports = []
-  for (const file of walk(codeDir).filter((f) => /\.[cm]?[tj]sx?$/.test(f))) {
-    const rel = path.relative(codeDir, file)
-    const text = readText(file)
-    for (const m of text.matchAll(/(?:import\s+(?:[^'";]+\s+from\s+)?|import\s*\(|require\()\s*['"]([^'"]+)['"]/g)) {
-      imports.push({ file: rel, specifier: m[1] })
-    }
-  }
-  return imports
-}
-
-function pass(msg) { return { ok: true, msg } }
-function fail(msg) { return { ok: false, msg } }
-function warn(msg) { return { ok: null, msg } }
-
-function checkBlueprint(folder, options = {}) {
-  const root = path.resolve(cwd, folder)
-  const bp = path.join(root, 'blueprint.yaml')
-  const results = []
-
-  results.push(exists(root) ? pass(`folder exists: ${root}`) : fail(`folder missing: ${root}`))
-  if (!exists(root)) return results
-
-  results.push(exists(bp) ? pass('blueprint.yaml exists') : fail('blueprint.yaml missing'))
-  if (!exists(bp)) return results
-
-  const text = readText(bp)
-  parseYamlLite(text)
-
-  for (const required of ['purpose:', 'runtime:', 'state:', 'nodes:', 'edges:', 'acceptance_criteria:']) {
-    results.push(text.includes(required) ? pass(`required section present: ${required}`) : fail(`required section missing: ${required}`))
-  }
-
-  const refs = extractRelativeRefs(text)
-  for (const ref of refs) {
-    const absolute = path.resolve(root, ref)
-    results.push(exists(absolute) ? pass(`referenced file exists: ${ref}`) : fail(`referenced file missing: ${ref}`))
-  }
-
-  const nodes = extractNodes(text)
-  results.push(nodes.length > 0 ? pass(`nodes declared: ${nodes.join(', ')}`) : fail('no nodes declared'))
-
-  for (const node of nodes) {
-    const nodeBlock = text.match(new RegExp(`\\n  ${node}:\\n([\\s\\S]*?)(?:\\n  [A-Za-z_][\\w-]*:\\n|\\nedges:|$)`))?.[1] ?? ''
-    results.push(/input:\n[\s\S]*?reads:/.test(nodeBlock) ? pass(`node ${node} declares input reads`) : fail(`node ${node} missing input reads`))
-    results.push(/output:\n[\s\S]*?writes:/.test(nodeBlock) ? pass(`node ${node} declares output writes`) : fail(`node ${node} missing output writes`))
-    results.push(/side_effects:/.test(nodeBlock) ? pass(`node ${node} declares side effects`) : fail(`node ${node} missing side_effects`))
-  }
-
-  const edges = extractEdges(text)
-  if (Array.isArray(edges)) {
-    results.push(fail('edges block could not be parsed'))
-  } else {
-    const allowed = new Set(['start', 'end', ...nodes])
-    for (const from of edges.froms) results.push(allowed.has(from) ? pass(`edge from known node: ${from}`) : fail(`edge from unknown node: ${from}`))
-    for (const to of edges.tos) results.push(allowed.has(to) ? pass(`edge to known node: ${to}`) : fail(`edge to unknown node: ${to}`))
-  }
-
-  const forbidden = extractForbiddenDeps(text)
-  results.push(forbidden.length ? pass(`forbidden dependencies declared: ${forbidden.join(', ')}`) : warn('no forbidden dependencies declared'))
-
-  const codeDir = options.code ? path.resolve(cwd, options.code) : null
-  if (codeDir) {
-    if (!exists(codeDir)) {
-      results.push(fail(`code folder missing: ${codeDir}`))
-    } else {
-      const imports = scanImports(codeDir)
-      for (const dep of forbidden) {
-        const offenders = imports.filter((i) => i.specifier === dep || i.specifier.startsWith(dep + '/'))
-        results.push(offenders.length === 0
-          ? pass(`no forbidden import: ${dep}`)
-          : fail(`forbidden import ${dep}: ${offenders.map((o) => o.file).join(', ')}`))
-      }
-    }
-  } else {
-    results.push(warn('no --code folder provided; skipped generated-code import checks'))
-  }
-
-  return results
-}
-
-function printResults(results) {
-  let failed = 0
-  let warned = 0
-  for (const r of results) {
-    if (r.ok === true) console.log(`✓ ${r.msg}`)
-    else if (r.ok === false) { console.log(`✗ ${r.msg}`); failed++ }
-    else { console.log(`! ${r.msg}`); warned++ }
-  }
-  console.log(`\nResult: ${failed ? 'FAIL' : 'PASS'} (${failed} failed, ${warned} warnings)`)
-  return failed === 0
-}
 
 function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true })
@@ -477,13 +292,6 @@ function packetHasObsoleteRouter(file) {
     file.includes('/proof-contract.yaml')
 }
 
-function evidenceRowsFromText(text) {
-  return text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((line, index) => {
-    try { return { index, row: JSON.parse(line), error: null } }
-    catch (error) { return { index, row: null, error } }
-  })
-}
-
 function packetCheckResults(dir) {
   dir = packetCheckRoot(dir)
   const checks = []
@@ -584,10 +392,18 @@ function packetCheckResults(dir) {
   const setup = safeReadText(path.join(dir, '02-project-setup.md'))
   ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && /Do not start `?03-phases\/\*`?/i.test(setup))
   ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /docs\/ui-identity\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
-  ok('project setup routes typed quality through architecture or proof matrix',
+  ok('project setup requires local skill harness',
+    /agb harness init/i.test(setup) &&
+    /Buildprint skill harness|local skill harness/i.test(setup) &&
+    /frontend-ui-product-design/i.test(setup) &&
+    /subagent-driven-implementation/i.test(setup) &&
+    /\.agents\/skills/i.test(setup) &&
+    /AGENTS\.md/i.test(setup)
+  )
+  ok('project setup routes typed quality through architecture',
     !requiresTypedQualityRouting ||
     /typed_quality_gates/i.test(setup) &&
-    (/docs\/proof-matrix\.md/i.test(setup) || /docs\/architecture\.md/i.test(setup)) &&
+    /docs\/architecture\.md/i.test(setup) &&
     /applicable\/not applicable/i.test(setup) &&
     /command\/proof path/i.test(setup) &&
     /not applicable/i.test(setup)
@@ -670,14 +486,15 @@ function packetCheckResults(dir) {
     ok('phase flow requires 99-critical-review-pushback before final completion', /99-critical-review-pushback/i.test(phaseFlow) && /critical-review-pushback\.md/i.test(phaseFlow) && /Final mandatory phase/i.test(phaseFlow) && /rubric does not pass/i.test(phaseFlow) && /fix .*ad hoc flaws/i.test(phaseFlow))
     ok('critical-review-pushback defines scored rubric and pass threshold',
       /Score each category 0 to 5/i.test(criticalReviewText) &&
-      /total score out of 50/i.test(criticalReviewText) &&
-      /at least 42\/50/i.test(criticalReviewText) &&
+      /total score out of 60/i.test(criticalReviewText) &&
+      /at least 50\/60/i.test(criticalReviewText) &&
       /no category below 4/i.test(criticalReviewText) &&
       /no unresolved high-severity finding/i.test(criticalReviewText)
     )
-    ok('critical-review-pushback requires product experience originality and screenshot delta',
-      /Product experience originality/i.test(criticalReviewText) &&
+    ok('critical-review-pushback requires experience originality, disclosure, and screenshot delta',
+      /Experience originality/i.test(criticalReviewText) &&
       /screenshot delta review/i.test(criticalReviewText) &&
+      /progressive-disclosure screenshot review/i.test(criticalReviewText) &&
       /dominant surface/i.test(criticalReviewText) &&
       /interaction model/i.test(criticalReviewText) &&
       /creative\/operator object|creative object/i.test(criticalReviewText) &&
@@ -845,109 +662,6 @@ async function packetNext(ref) {
 }
 
 
-function evidenceCheck(file) {
-  const text = readText(path.resolve(cwd, file))
-  let failed = 0
-  let count = 0
-  for (const [index, raw] of text.split(/\r?\n/).entries()) {
-    const line = raw.trim()
-    if (!line) continue
-    count++
-    try {
-      const row = JSON.parse(line)
-      for (const field of ['artifact_id', 'type', 'phase_id', 'status', 'source', 'proves', 'proof_type', 'provider_mode', 'upgrades_claim', 'claim_type']) {
-        if (!(field in row)) {
-          failed++
-          console.error(`✗ line ${index + 1}: missing ${field}`)
-        }
-      }
-      if (!['missing', 'passed', 'proven', 'blocked', 'failed', 'skipped'].includes(String(row.status))) {
-        failed++; console.error(`✗ line ${index + 1}: invalid status ${row.status}`)
-      }
-      if (!['static', 'unit_contract', 'integration', 'runtime_api', 'browser_e2e', 'screenshot_review', 'persistence_restart', 'provider_fake', 'provider_live', 'security_review', 'no_fake_scan', 'clean_room_reversal', 'deployment_ops', 'blocker'].includes(String(row.proof_type))) {
-        failed++; console.error(`✗ line ${index + 1}: invalid proof_type ${row.proof_type}`)
-      }
-      if (!['none', 'fake', 'deterministic', 'sandbox', 'live', 'blocked', 'missing_live_credentials', 'not_applicable'].includes(String(row.provider_mode))) {
-        failed++; console.error(`✗ line ${index + 1}: invalid provider_mode ${row.provider_mode}`)
-      }
-      if (!['target', 'core_pass', 'claim_upgrade', 'blocker'].includes(String(row.claim_type))) {
-        failed++; console.error(`✗ line ${index + 1}: invalid claim_type ${row.claim_type}`)
-      }
-      if (row.upgrades_claim === true && row.provider_mode === 'deterministic' && Array.isArray(row.proves) && row.proves.includes('provider_live')) {
-        failed++; console.error(`✗ line ${index + 1}: deterministic provider cannot prove provider_live`)
-      }
-      if (row.upgrades_claim === true && row.proof_type === 'blocker') {
-        failed++; console.error(`✗ line ${index + 1}: blocker proof cannot upgrade a claim`)
-      }
-    } catch (error) {
-      failed++
-      console.error(`✗ line ${index + 1}: invalid JSON (${error.message})`)
-    }
-  }
-  if (!failed) console.log(`✓ evidence ledger valid (${count} row${count === 1 ? '' : 's'})`)
-  return failed === 0
-}
-
-
-function readJsonFile(file) {
-  return JSON.parse(readText(file))
-}
-
-function copyDirectorySafe(from, to) {
-  if (!exists(from)) throw new Error(`input folder does not exist: ${from}`)
-  if (exists(to)) throw new Error(`output folder already exists: ${to}`)
-  fs.mkdirSync(path.dirname(to), { recursive: true })
-  fs.cpSync(from, to, { recursive: true, errorOnExist: true })
-}
-
-function featureQualificationRecords(facts) {
-  return featureInventory(facts).map((feature) => {
-    const evidence = feature.evidence.filter(Boolean)
-    const readableEvidence = evidence.filter((relative) => {
-      const file = path.join(facts.root || '', relative)
-      return exists(file)
-    })
-    const hasSource = readableEvidence.length > 0
-    const missing = []
-    if (!hasSource) missing.push('source evidence file')
-    if (!feature.requiredBehavior?.length) missing.push('required behavior')
-    if (!feature.acceptance?.length) missing.push('acceptance proof')
-    const needsRuntimeProof = /external|provider|stripe|billing|payment|email|notification|AI|Agent|tool|webhook|auth|permission/i.test(feature.title + ' ' + feature.requiredBehavior.join(' '))
-    if (needsRuntimeProof) missing.push('runtime proof for side effects, auth, privacy, or external behavior')
-    return {
-      title: feature.title,
-      kind: feature.kind,
-      status: missing.length ? 'blocked_unknown' : 'validated_feature',
-      previousStatus: 'unqualified_hypothesis',
-      evidence,
-      readableEvidence,
-      confirmed: {
-        trigger: hasSource ? 'source evidence exists; human/agent must confirm exact runtime trigger' : 'unknown',
-        behavior: feature.requiredBehavior,
-        stateChanges: hasSource ? 'requires source review; not inferred as qualified from filenames' : 'unknown',
-        permissions: needsRuntimeProof ? 'requires explicit auth/privacy review' : 'not detected by static mapper',
-        externalSideEffects: needsRuntimeProof ? 'requires runtime evidence before promotion' : 'not detected by static mapper',
-        errorEmptyStates: 'requires source/test review before promotion',
-        acceptanceProof: feature.acceptance
-      },
-      blockers: missing
-    }
-  })
-}
-
-function qualificationSummary(records) {
-  const counts = records.reduce((acc, r) => ({ ...acc, [r.status]: (acc[r.status] || 0) + 1 }), {})
-  return { total: records.length, ...counts }
-}
-
-function sourceValidationMd(records) {
-  return ['# SOURCE_VALIDATION', '', 'Qualification reads map evidence and refuses to promote unresolved hypotheses. Static evidence can validate file existence and source-review targets, but runtime behavior still needs proof.', '', ...records.map((r) => [`## ${r.title}`, '', `- Status: ${r.status}`, `- Previous status: ${r.previousStatus}`, '- Evidence:', ...(r.evidence.length ? r.evidence.map((x) => `  - ${x}${r.readableEvidence.includes(x) ? ' (readable)' : ' (missing)'}`) : ['  - none']), '- Confirmed / required:', `  - Trigger: ${r.confirmed.trigger}`, `  - State changes: ${r.confirmed.stateChanges}`, `  - Permissions: ${r.confirmed.permissions}`, `  - External side effects: ${r.confirmed.externalSideEffects}`, `  - Error/empty states: ${r.confirmed.errorEmptyStates}`, '- Blockers:', ...(r.blockers.length ? r.blockers.map((x) => `  - ${x}`) : ['  - none']), ''].join('\n')).join('\n')].join('\n')
-}
-
-function qualifiedProductScopeMd(records) {
-  return ['# PRODUCT_SCOPE', '', 'This product scope is derived from qualification records. Preserve validated behavior; do not claim parity for blocked unknowns.', '', '## Must preserve', '', ...(records.filter((r) => r.status === 'validated_feature').map((r) => `- ${r.title}`) || []), '', '## Unknown / blocked', '', ...(records.filter((r) => r.status !== 'validated_feature').map((r) => `- ${r.title}: ${r.blockers.join('; ')}`) || ['- none']), '', '## Can replace', '', '- Internal framework/library choices unless product behavior, data semantics, privacy, or integration contracts depend on them.', '- File/folder layout unless it is part of a public package/API contract.', '', '## Explicitly excluded', '', '- Features without source evidence.', '- Full production parity for blocked unknowns.', '- Runtime/security/privacy guarantees without tests or source proof.', ''].join('\n')
-}
-
 function uniqueStrings(values) {
   return [...new Set(values.filter(Boolean))]
 }
@@ -1106,14 +820,14 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     blocked: false,
     lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
     nextAction: isExecutablePacket
-      ? 'read .buildprint/next-agent.md, generate UI identity, complete project setup, then follow the active phase loop'
+      ? 'read .buildprint/next-agent.md, initialize local skill harness, generate UI identity, complete project setup, then follow the active phase loop'
       : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
     runtimeEvidenceLedger: hasLegacyRuntimeEvidence ? '.buildprint/evidence/evidence-ledger.jsonl' : null,
     updatedAt: now,
   })
 
   fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
-    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared product-led phase-flow state.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, generate UI identity, complete product setup, then execute the active phase loop.\n`
+    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared product-led phase-flow state.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, initialize the local skill harness, generate UI identity, complete product setup, then execute the active phase loop.\n`
     : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
@@ -1126,13 +840,14 @@ This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stal
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read \`.buildprint/snapshots/00-questions.md\`; stop only for true hard-stop decisions.
-4. Read \`.buildprint/snapshots/01-ui-identity.md\`; for UI-bearing artifacts, generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before setup.
-5. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work, preserving the generated UI identity.
-6. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
-7. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
-8. Execute the phase-flow loop: restate the smallest real vertical product path, build it, verify it, repair visible slop/fake-success shortcuts, and record useful handover facts.
-9. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
-10. Before completion or stopping, write the handover described in \`.buildprint/snapshots/HANDOVER.md\`.
+4. Initialize the project-local skill harness: run \`agb harness init .\` if \`agb\` is available, otherwise create the \`AGENTS.md\` harness section and local skills described by \`.buildprint/snapshots/02-project-setup.md\`.
+5. Read \`.buildprint/snapshots/01-ui-identity.md\`; for UI-bearing artifacts, generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before setup.
+6. Read and complete \`.buildprint/snapshots/02-project-setup.md\` before phase work, preserving the generated UI identity and local skill harness.
+7. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
+8. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
+9. Execute the phase-flow loop: restate the smallest real vertical product path, build it, verify it, repair visible slop/fake-success shortcuts, and record useful handover facts.
+10. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
+11. Before completion or stopping, write the handover described in \`.buildprint/snapshots/HANDOVER.md\`.
 
 Whenever you stop, end your handover with this menu so the developer has a concrete choice (fill in real phase ids from \`03-phases/phase-index.yaml\`):
 
@@ -1145,7 +860,7 @@ Rules:
 
 - Do not read every phase upfront.
 - Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
-- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created from \`02-project-setup.md\`, not shipped in the packet.
+- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created or patched by \`agb harness init .\` from \`02-project-setup.md\`, not shipped in the packet.
 - Keep claims scoped until the built product has been checked directly.
 - Do not create proof theater; local checks and product review are useful only insofar as they catch real defects.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
@@ -1198,6 +913,26 @@ if (args[0] === 'start') {
   }
 }
 
+if (args[0] === 'harness') {
+  const sub = args[1]
+  if (!sub || isHelp(sub)) usage(0)
+  const project = positionalArgs(2)[0] || cwd
+  const agent = optionValue('--agent') || 'auto'
+  const json = args.includes('--json')
+  try {
+    if (sub === 'init') process.exit(harnessInit(project, agent, json) ? 0 : 1)
+    if (sub === 'check') {
+      const result = harnessCheckResult(project, agent)
+      printHarnessResult(result, json)
+      process.exit(result.status === 'pass' ? 0 : 1)
+    }
+    throw new Error(`unknown harness subcommand: ${sub}`)
+  } catch (error) {
+    console.error(`Harness ${sub} failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
 
 if (args[0] === 'packet') {
   const sub = args[1]
@@ -1241,7 +976,7 @@ if (args[0] === 'check') {
   if (!folder) usage(1)
   try {
     const code = optionValue('--code')
-    const ok = printResults(checkBlueprint(folder, { code }))
+    const ok = printBlueprintResults(checkBlueprint(folder, { code, cwd }))
     process.exit(ok ? 0 : 1)
   } catch (error) {
     console.error(`Check failed: ${error.message}`)

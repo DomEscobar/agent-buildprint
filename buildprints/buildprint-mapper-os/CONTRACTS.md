@@ -38,6 +38,10 @@ Product identity, artifact shape, central interface, golden path, runtime postur
 
 `blueprint.yaml` is the machine-readable mirror. It routes and declares concise product contract facts. It must not become a full implementation manual.
 
+## Local skill harness contract
+
+Project setup must initialize a project-local Buildprint skill harness before phase work. The harness patches or creates root `AGENTS.md`, writes Buildprint-native local skills for frontend UI product design and subagent-driven implementation, and places them in `.agents/skills/` plus detected agent-specific folders such as `.codex/skills/` or `.claude/skills/`. It must not silently install global skills or copy third-party skill packs.
+
 ## Central output contract
 
 Every selected packet must identify the artifact's central output and the minimum quality bar for that output. This belongs in `blueprint.yaml` as concise machine-readable routing and in Markdown as buildable guidance.
@@ -53,7 +57,7 @@ The mapper must extract, from source evidence and product behavior:
 
 Output existence is not enough. Input-derived output is not enough. A selected packet must reject technically generated but domain-generic results.
 
-## UX/style contract
+## UI identity contract
 
 `01-ui-identity.md` is mandatory for every UI-bearing artifact and must be detailed enough to guide later implementation without guessing. It must:
 

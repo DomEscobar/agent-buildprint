@@ -14,7 +14,8 @@
     "generic AI-builder BUILDPRINT briefing without mapped-source product specifics",
     "blueprint.yaml product-contract mirror and route file",
     "central output quality contract extracted from source behavior",
-    "mandatory detailed 02-uiux-decision style constitution for UI-bearing artifacts",
+    "mandatory detailed 01-ui-identity contract for UI-bearing artifacts",
+    "project-local Buildprint skill harness with frontend and subagent implementation skills",
     "every phase reads UI/style responsibilities before building",
     "comprehensive phase objectives instead of obsolete v2 packet fragments",
     "forbidden fake-success paths and concise handover"
@@ -73,11 +74,11 @@
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/01-project-setup.md",
+      "path": "templates/executable-packet/01-ui-identity.md",
       "role": "source"
     },
     {
-      "path": "templates/executable-packet/02-uiux-decision.md",
+      "path": "templates/executable-packet/02-project-setup.md",
       "role": "source"
     },
     {
@@ -125,10 +126,11 @@
     "scanner-authored product facts",
     "selected extraction without scope decision",
     "product-specific selected BUILDPRINT.md briefing",
-    "weak or phrase-only 02-uiux-decision.md",
+    "weak or phrase-only 01-ui-identity.md",
+    "missing project-local Buildprint skill harness",
     "missing central output quality contract",
     "technically input-derived but domain-generic selected outputs",
-    "phases that skip 02-uiux-decision.md design responsibility",
+    "phases that skip 01-ui-identity.md design responsibility",
     "obsolete v2 selected-output packet shape",
     "tiny YAML implementation guidance",
     "agent-written proof theater",
@@ -144,7 +146,8 @@
     "policies/safety.md",
     "policies/quality.md",
     "policies/questions.md",
-    "templates/executable-packet/02-uiux-decision.md",
+    "templates/executable-packet/01-ui-identity.md",
+    "templates/executable-packet/02-project-setup.md",
     "templates/executable-packet/03-phases/phase-flow.md"
   ],
   "schemaVersion": "mapper-os/executable-blueprint/v3",

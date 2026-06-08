@@ -23,7 +23,7 @@ Patch `buildprints/buildprint-mapper-os` so every generated executable packet ca
 ### Required mapper changes
 
 1. **UI decision precision**
-   - `02-uiux-decision.md` templates must not allow empty or vague design direction.
+   - `01-ui-identity.md` templates must not allow empty or vague design direction.
    - The mapper must force concrete decisions for color, style, typography, layout, density, interaction states, responsive behavior, and accessibility.
    - If source material lacks those decisions, the packet must instruct the builder to reason from product purpose, audience, workflow, and domain, then write explicit choices.
    - Missing UI direction should be a packet-quality failure, not an invitation to use generic defaults.
@@ -75,7 +75,7 @@ Patch `buildprints/buildprint-mapper-os` so every generated executable packet ca
 
 These files in `ai-presentation-generation` contain the concrete downstream version of the lesson:
 
-- `02-uiux-decision.md`
+- `01-ui-identity.md`
 - `blueprint.yaml`
 - `03-phases/phase-flow.md`
 - `03-phases/phase-index.yaml`
@@ -87,7 +87,7 @@ These files in `ai-presentation-generation` contain the concrete downstream vers
 
 The mapper template already has partial versions in:
 
-- `templates/executable-packet/02-uiux-decision.md`
+- `templates/executable-packet/01-ui-identity.md`
 - `templates/executable-packet/03-phases/phase-flow.md`
 - `templates/executable-packet/03-phases/phase-index.yaml`
 - `templates/executable-packet/03-phases/critical-review-pushback.md`
