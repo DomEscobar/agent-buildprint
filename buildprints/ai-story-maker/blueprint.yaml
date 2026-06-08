@@ -9,7 +9,7 @@ product:
   name: AI Story Maker
   artifact_type: responsive generative story-making product
   primary_user: writers, game masters, educators, and creative teams shaping long-form stories from seed ideas
-  central_interface: browser story-making surface with intake, world graph, outline board, scene storyboard, review/export, and character conversation regions
+  central_interface: browser story-making surface with intake, world graph, outline board, scene storyboard, review/export, and character conversation capabilities arranged through progressive disclosure rather than simultaneous permanent regions
   golden_path: A user enters a premise or uploads seed notes, receives a structured story world graph, develops a chapter/scene outline, generates a storyboard with beats and character arcs, edits and regenerates specific scenes, exports a coherent story package, and can ask characters or the story coach targeted follow-up questions.
 
 deployment_posture:
@@ -117,6 +117,7 @@ typed_quality_gates:
       - exact color tokens and status semantics
       - typography scale and usage
       - desktop and mobile layout model
+      - screen-state inventory with visible-now, hidden/reachable, detail/modal/step/route placement, and visible-together exclusions
       - component and state language before UI implementation
   visual_viewport_acceptance:
     applies_when: responsive browser story-making surface is implemented

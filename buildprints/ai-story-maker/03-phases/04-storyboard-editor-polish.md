@@ -17,7 +17,7 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 Every phase must keep `01-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, provider, export, or verification work changes what the writer sees through states, copy, blockers, detail views, draft previews, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Repair the human-facing story-making product until it feels like the warm editorial experience described in the generated identity contract. This is not cosmetic cleanup. It is where generic product shells, dead controls, unclear empty states, weak motion, clipped scene cards, unreadable long generated text, hidden provider failures, and confusing hierarchy get found and fixed. The primary writer workflow should remain visible: story package status, cast/world structure, outline/storyboard, selected scene drafting, continuity review, and export or provider state.
+Repair the human-facing story-making product until it feels like the experience chosen in the generated identity contract. This is not cosmetic cleanup. It is where generic product shells, dead controls, unclear empty states, weak motion, clipped scene cards, unreadable long generated text, hidden provider failures, and confusing hierarchy get found and fixed. The primary writer workflow must remain reachable, but only the current task may dominate the screen. Story package status, cast/world structure, outline/storyboard, selected scene drafting, continuity review, and export or provider state should appear through progressive disclosure, task steps, tabs, routes, drawers, detail views, or scoped modals rather than as permanent competing regions.
 
 Inspect the app like a skeptical product reviewer. Try empty premise, long premise, long chapter title, many characters, dense outline, blocked provider, failed generation, successful save, reload, export, and mobile/narrow layout. Board cards must keep stable dimensions. Drawers and detail regions must own their scroll. Long generated scenes must remain readable without pushing controls off screen. Every visible CTA must work, validate, navigate, regenerate, export, or explain a blocker.
 
@@ -33,6 +33,7 @@ This phase should also improve interaction details that make the story output us
 - Do not mark this phase complete from code edits or prose alone.
 - Do not treat gradients, rounded cards, or icons as proof of product quality.
 - Do not leave any visible CTA without working or blocked behavior.
+- Do not pass an all-in-one page where intake, world, cast, outline, storyboard, scene editor, continuity, provider status, export, and coach surfaces compete for attention at the same time.
 
 ## Minimum proof before moving on
 
