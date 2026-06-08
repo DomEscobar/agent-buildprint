@@ -29,8 +29,8 @@
   ],
   "difficulty": "Advanced",
   "featured": true,
-  "summary": "A Mapper OS v3 executable packet for building an AI story-making product with premise intake, story world graph, cast and relationship model, outline board, scene storyboard, editable generation loop, continuity review, provider boundaries, persistence, and export proof.",
-  "plainDescription": "AI Story Maker turns seed ideas or notes into a structured, editable story package: premise, world rules, cast, relationships, outline, storyboard cards, draft scenes, continuity notes, and exportable artifacts. The packet requires honest provider blocked states, durable state, semantic output review, viewport/editor stress proof, and final critical review before any completion claim.",
+  "summary": "A Mapper OS v3 executable packet for building an AI story-making product with premise intake, story world graph, cast and relationship model, outline board, scene storyboard, editable generation loop, continuity review, provider boundaries, persistence, export proof, and progressive-disclosure UI requirements.",
+  "plainDescription": "AI Story Maker turns seed ideas or notes into a structured, editable story package: premise, world rules, cast, relationships, outline, storyboard cards, draft scenes, continuity notes, and exportable artifacts. The packet requires honest provider blocked states, durable state, semantic output review, viewport/editor stress proof, progressive-disclosure information architecture, screen-state budgeting, and final critical review before any completion claim.",
   "promise": "A source-independent, proof-gated implementation packet for a serious creative-writing product. It does not claim live AI, deployment, story quality, export quality, or production readiness until matching evidence exists.",
   "whatYouGet": [
     "Generic AI-builder briefing in BUILDPRINT.md",
@@ -78,6 +78,8 @@
   ],
   "risks": [
     "Building a generic writing prompt form instead of a story-making product",
+    "Stuffing intake, story world, cast, outline, storyboard, drafting, review, export, status, and help into one permanent page instead of using progressive disclosure",
+    "Applying a metaphor skin to a flat dashboard or card pile instead of defining a task flow, navigation model, and disclosure hierarchy",
     "Shipping static outline cards that cannot be edited or regenerated",
     "Counting deterministic fixture text as live provider or story-quality proof",
     "Hiding missing provider, persistence, export, or deployment blockers behind optimistic success UI",
@@ -114,5 +116,5 @@
   ],
   "originGithubUrl": "https://github.com/HBAI-Ltd/Toonflow-app",
   "originLabel": "HBAI-Ltd/Toonflow-app",
-  "copyPrompt": "Use the AI Story Maker Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-story-maker/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-story-maker/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Follow the packet read order, typed quality gates, central output contract, and critical-review-pushback phase before claiming completion."
+  "copyPrompt": "Use the AI Story Maker Buildprint. First bootstrap exact snapshots: agb start https://agent-buildprint.com/buildprints/ai-story-maker/package.json . If agb is not installed, clone https://github.com/DomEscobar/agent-buildprint and run node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/ai-story-maker/package.json . Then read .buildprint/next-agent.md and continue. Do not write Buildprint snapshots manually. Follow the packet read order, especially 01-ui-identity.md, 02-project-setup.md, blueprint.yaml typed_quality_gates, 03-phases/phase-flow.md, and critical-review-pushback before claiming completion. Before UI code, define docs/product-experience.md with the task-flow navigation model, disclosure hierarchy, screen-state budget, visible-now vs hidden/reachable surfaces, modal/drawer/step/route placement, and visible-together exclusions. Do not build a one-big-view dashboard or card pile that exposes intake, world, cast, outline, storyboard, drafting, review, export, status, and help all at once unless the product is explicitly a monitoring dashboard, which AI Story Maker is not. Compose the product temporally through focused steps or views, not spatially by stuffing every capability into the first viewport. Reject metaphor-skin compliance: a loom/canvas/board label does not pass unless the interaction model, mobile flow, and primary creative act are actually better."
 }
