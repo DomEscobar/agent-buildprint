@@ -84,7 +84,11 @@ Use user-facing product language:
 
 - "Project", "Episode", "Script", "Director plan", "Assets", "Storyboard table", "Storyboard frames", "Video workbench", "Generate image", "Generate video", "Refresh canvas", "Auto layout", "Assistant", "Provider settings".
 
-Allowed Chinese-first state terms when the implementation supports Chinese UI:
+Default English state terms:
+
+- `Not generated`, `Generating`, `Complete`, `Failed`.
+
+Optional localized state terms are allowed only when a language selector or translation layer is implemented:
 
 - `未生成`, `生成中`, `已完成`, `生成失败`.
 
@@ -203,7 +207,7 @@ Use exact semantic color tokens with typography, state colors, and focus treatme
 
 Typography:
 
-- use a system sans stack with Chinese glyph support;
+- use a system sans stack with broad multilingual glyph support;
 - 12px for dense tags/meta;
 - 14px for body and controls;
 - 16px for node titles;
@@ -216,7 +220,7 @@ Typography:
 The UI must survive:
 
 - long project names and long episode titles;
-- long Chinese script paragraphs;
+- long English script paragraphs and optional translated script content;
 - long director plan and storyboard tables;
 - 50+ storyboard frames;
 - assets with no source image, failed image, generated image, and many derived variants;

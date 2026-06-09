@@ -1,30 +1,53 @@
-# 00 Questions
+# 00-questions
 
-Use this file to separate true blockers from reasonable defaults. Stop before `01-project-setup.md` only when an answer changes safety, data exposure, cost, product identity, or public release posture.
+Ask only questions that change implementation behavior. If no answer is available, continue with the safest high-quality default and record the unresolved decision in `HANDOVER.md`.
+
+If a hard-stop question is unanswered, stop before `01-project-setup.md`.
 
 ## Hard-stop questions
 
-1. **Deployment posture** — Is this still a trusted-local/self-hosted presentation product, or must it be private authenticated or public webapp? Public deployment requires auth, tenancy, upload hardening, rate limits, abuse controls, observability, and backup before claiming readiness.
-2. **Secrets and provider policy** — Which text and image providers may be used? API keys, OAuth tokens, local model endpoints, ChatGPT session state, and provider secrets must never enter commits, snapshots, logs, generated decks, or handover.
-3. **Privacy/compliance exposure** — Will users upload private, client, regulated, or third-party documents? If yes, define retention, deletion, redaction, OCR/parser limits, and local-only guarantees before building upload/import behavior.
-4. **Export runtime** — Must PPTX/PDF export be real in the first implementation, or can it be a precise blocked state? Real export requires a working bundled export runtime, converter binary, app-data path, and download boundary.
-5. **Product/artifact identity** — Is the central artifact an editable deck workbench, API service, desktop app, template studio, or public web product? The default is trusted-local editable deck workbench; changing that changes architecture and proof.
-6. **Template fidelity** — Should the product support custom HTML/Tailwind template creation and PPTX-derived template import in the first release? If yes, the builder must budget for schema extraction, font handling, layout preview, and template persistence.
-7. **Automation surface** — Are async API, webhooks, MCP, and desktop packaging required user-facing features or future seams? Treat them as blocked seams unless implemented and proven with real requests/events.
-8. **Destructive/data-loss behavior** — May decks, uploaded documents, generated images, templates, fonts, export files, and chat histories be deleted? If destructive behavior is allowed, require confirmation, clear ownership, and recoverable state where possible.
+These require explicit human confirmation before setup, UI identity, or implementation:
 
-## Assumable defaults
+1. **Deployment posture** — trusted local, private authenticated, or public web? This changes auth, secrets, abuse controls, persistence, and deployment gates.
+2. **Secrets and provider policy** — Which paid/live providers may be used, and where may credentials live? Never guess secret handling.
+3. **Destructive/data-loss behavior** — Can the product delete, overwrite, migrate, publish, send, charge, or mutate external systems?
+4. **Privacy/compliance exposure** — Does the product handle private data, regulated data, minors, financial/medical/legal claims, or public posting?
+5. **Product/artifact identity** — If the central artifact or primary user is ambiguous, ask before building the wrong thing.
 
-- Deployment posture is `trusted_local`.
-- The product is a Presenton-inspired, self-hosted deck workbench, not a clone of Presenton branding or source.
-- The first artifact is an editable deck model generated from prompt, uploaded documents, or imported template.
-- Provider setup uses bring-your-own-key or local model configuration with visible readiness checks.
-- Uploaded documents can use local fixtures for smoke tests, but sample-only proof must be labeled honestly.
-- Export may start as a precise blocked state if the bundled runtime/converter is unavailable.
-- API, webhook, MCP, and desktop claims require proof; otherwise they remain visible seams with blockers.
+6. Should the implementation include live external provider calls during verification, or run deterministic local/provider-stub mode until credentials are supplied?
+   - AI-best-judgment default: implement provider seams and validation, prove deterministic local behavior, and mark live provider calls blocked until sandbox credentials are provided.
 
-## Deferrable questions
+7. What deployment posture should be assumed: `trusted_local`, `private_authenticated`, or `public_webapp`?
+   - AI-best-judgment default: `private_authenticated` for web deployment and `trusted_local` for desktop/local packaging. Do not expose generated files or provider keys publicly.
 
-- Exact hosted-cloud pricing, billing, and organization/team model.
-- Full public auth/tenancy model beyond trusted-local or private authenticated use.
-- Long-term template marketplace, collaborative editing, version history, and multi-user review workflows.
+8. Should OAuth-style ChatGPT sign-in be included in the selected implementation, or blocked behind a provider seam?
+   - AI-best-judgment default: include the UI/provider seam and session model, but block live OAuth proof unless callback credentials and test accounts are supplied.
+
+## Assumable Defaults
+
+1. Persistence should be durable and readback-proven.
+   - Default: SQL-backed presentation/slide/template/chat/task state plus file/object storage for uploads, assets, exports, and local user config.
+
+2. Export should target editable PPTX and PDF.
+   - Default: implement both, but qualify PDF/PPTX only after the export worker/browser runtime produces downloadable artifacts from the editor state.
+
+3. The first implementation path should be prompt or document to outline to editable deck to export.
+   - Default: include prompt-only and uploaded-document input in the first loop; defer exotic provider combinations until provider settings are in place.
+
+## Deferrable Questions
+
+1. Which optional model providers must be live-proven first?
+   - Default: one text provider, one image provider, and one local/offline provider seam are enough for early proof; all others remain configured but not live-proven.
+
+2. Which custom template formats must be accepted first?
+   - Default: support built-in templates first, then custom template import/editing, then template generation from existing presentations.
+
+## Decision ledger template
+
+```md
+| Question | Answer / assumption | Reversible? | Architectural impact | Blocks setup? |
+|---|---|---:|---|---:|
+| Deployment posture | private_authenticated assumed for server, trusted_local assumed for desktop/local | yes | auth, secrets, storage, provider proof, and deployment gates | no |
+```
+
+If a hard-stop is blank, write the blocker and ask. Do not continue because defaults are probably fine.

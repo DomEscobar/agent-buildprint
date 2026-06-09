@@ -32,7 +32,7 @@ Stop before `01-project-setup.md` if any hard-stop answer would change product i
 
 2. Stack: choose a modern browser app with a real canvas/graph library, authenticated API, Socket.IO or equivalent realtime channel, durable relational persistence, and media storage. The exact stack is flexible if it can prove the product contract.
 
-3. Language: support Chinese-first labels and multilingual-ready structure. If full translation files are not implemented in the first slice, keep user-facing copy centralized and do not hard-code internal English proof terms into the UI.
+3. Language: default to English-first product labels and copy, with a multilingual-ready structure. If full translation files are not implemented in the first slice, keep user-facing copy centralized and do not hard-code internal proof terms into the UI.
 
 4. Default account: local development may seed `admin` / `admin123`, but setup must force password change or clearly block public/private deployment until credentials are rotated.
 

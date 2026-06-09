@@ -10,11 +10,7 @@ Act like a senior product engineer who owns the outcome end to end. Understand t
 
 Build the real thing the packet asks for. Preserve the required behavior, interaction quality, state, runtime boundaries, and verification discipline described in the later files. If something cannot be built or proven, say so plainly and route the blocker instead of masking it.
 
-Functionless buttons, dead controls, placeholder screens, decorative-only UI, mocked/sample data counted as real proof, fake provider success, raw JSON in place of a product surface, swallowed errors, unchecked happy-path claims, and fake export/API success are failures. Do not ship them. Do not call them done.
-
-Confusing novice UX is also a product failure. If a first-time user cannot tell how to configure a provider, add prompt/documents, review the outline, edit the deck, understand export readiness, and see which automation seams are real or blocked, the phase is not complete even if the code works.
-
-The product-specific identity and runtime contract live in `blueprint.yaml`, `02-uiux-decision.md`, and the phase files. Keep this start file as the builder briefing, then follow the required read order for the artifact details.
+Functionless buttons, dead controls, placeholder screens, decorative-only UI, mocked/sample data counted as real proof, fake provider success, raw JSON in place of a product surface, swallowed errors, and unchecked happy-path claims are failures. Do not ship them. Do not call them done.
 
 ## Perfection alignment
 
@@ -24,14 +20,17 @@ Be precise. Be skeptical of your own claims. Prefer direct verification over con
 
 ## Required read order
 
-1. `BUILDPRINT.md`
-2. `00-questions.md`
-3. `01-project-setup.md`
-4. `02-uiux-decision.md`
-5. `blueprint.yaml`
-6. `03-phases/phase-index.yaml`
-7. `03-phases/phase-flow.md`
-8. The active phase file named by `03-phases/phase-index.yaml`
-9. `HANDOVER.md` before stopping or claiming completion
+1. `00-questions.md`
+2. `01-project-setup.md`
+3. `02-ui-identity.md`
+4. `blueprint.yaml`
+5. `03-phases/phase-index.yaml`
+6. `03-phases/phase-flow.md`
+7. The active phase named by `phase-index.yaml`
+8. `HANDOVER.md`
 
 Read sequentially. Do not inventory every phase before the active phase is known.
+
+## Claim Discipline
+
+Packet structure alone does not prove the product. A phase is only complete when the real user path for that phase has been exercised with local proof, and live-provider/export/deployment claims remain blocked until the relevant runtime is configured and checked.

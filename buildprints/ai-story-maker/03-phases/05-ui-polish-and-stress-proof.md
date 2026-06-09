@@ -6,7 +6,7 @@ Read `02-ui-identity.md`, generated `docs/ui-identity.md`, `blueprint.yaml`, `03
 
 ## Building objective
 
-Stress and polish the full production canvas experience. Build or load fixtures with long project names, long episode titles, long Chinese script content, long director plans, long storyboard tables, 50+ storyboard frames, assets with original and derived variants, failed media items, missing provider credentials, disconnected assistant state, and a narrow viewport. Inspect and repair the UI until the canvas remains understandable and operational.
+Stress and polish the full production canvas experience. Build or load fixtures with long project names, long episode titles, long English script content, optional translated script content, long director plans, long storyboard tables, 50+ storyboard frames, assets with original and derived variants, failed media items, missing provider credentials, disconnected assistant state, and a narrow viewport. Inspect and repair the UI until the canvas remains understandable and operational.
 
 Polish should protect product comprehension. The route should make active project/episode, canvas controls, assistant status, node states, selected media, blocked actions, and next creative steps obvious. Controls should use icon buttons with tooltips where appropriate. Buttons must fit their labels. Text should wrap or scroll in the right region. The assistant drawer should resize/collapse cleanly. Node cards should keep stable dimensions or scroll ownership so content changes do not destroy layout.
 

@@ -1,201 +1,275 @@
 schema_version: mapper-os/executable-blueprint/v3
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
-schema_role: "YAML routes; markdown teaches and builds"
-
-product:
-  name: AI Presentation Generation Workbench
-  inspiration: Presenton self-hosted AI presentation generator and API
-  central_artifact: editable, export-ready presentation deck generated from prompt, documents, templates, provider configuration, and deck iteration state
-  golden_path: configure provider/runtime -> add prompt or documents -> generate/edit outline -> select template/layout/theme -> build editable deck -> iterate with chat -> export PPTX/PDF or use API/webhook/MCP/desktop seams
-  source_fidelity_note: Presenton current main at 9acd4a6f22e7b621aacdad69bc93b3e548e0b651 exposes a Next.js workbench plus FastAPI backend with prompt/document ingestion, structured outline generation, layout selection, slide content generation, editable slide canvas, custom templates, provider and image configuration, chat iteration, PPTX/PDF export runtime, async API, webhooks, MCP server, and Electron desktop packaging. Future implementations may simplify stack, but must not reduce the artifact to a static markdown-to-slides demo.
-  primary_audience_default: non-technical first-time user who wants a self-hosted deck generator with local/provider control
-  novice_workflow: configure -> create -> outline -> deck -> templates -> exports
-  required_views:
-    - Configure
-    - Create
-    - Outline
-    - Deck
-    - Templates
-    - Exports
-  required_example_scenarios:
-    - Build a startup launch pitch deck from a short prompt
-    - Turn an uploaded report excerpt into an executive briefing deck
-    - Import or choose a template and regenerate a product update deck
-  required_presentation_surfaces:
-    - provider and image readiness panel
-    - prompt and document upload surface
-    - editable outline stream
-    - slide thumbnail rail
-    - main slide canvas with editable content/assets
-    - speaker notes and layout/theme controls
-    - chat iteration panel tied to deck/slide context
-    - PPTX/PDF export center with task state
-    - API/webhook/MCP/desktop seam status
-  central_output_contract:
-    central_output: editable presentation deck with source-grounded outline, layout/template assignment, slide content, assets, speaker notes, deck state, export readiness, and iteration provenance
-    output_primitives:
-      - runtime readiness across text provider, image provider, parser, storage, export runtime, API, webhook, MCP, and desktop seams
-      - prompt and uploaded document/file references with extraction/decomposition status
-      - generation request fields for slide count, language, tone, verbosity, web search, title slide, table of contents, template, instructions, export format, and webhook trigger
-      - streamed or loaded outline with per-slide markdown content and editable structure
-      - layout/template model with available layouts, custom template metadata, fonts, theme, and per-slide layout indexes
-      - persisted deck with id, title, slides, layouts, theme, speaker notes, assets, and autosave/readback status
-      - chat messages and tool/trace context scoped to active deck or selected slide
-      - export task state with PPTX/PDF format, runtime dependency status, output path/download, and failure detail
-      - API async task, webhook event, MCP server, and desktop export states when implemented or precisely blocked
-    quality_signals:
-      - generated outline follows source prompt/documents and user controls instead of generic presentation filler
-      - outline and slide content are specific to each slide title, source input, requested tone, and instructions; repeated generic body text across multiple slides is a failed content proof
-      - slide layouts are selected because they fit slide content, tables, charts, images, or table-of-contents needs
-      - slide content matches each layout's expected data shape and remains editable after generation
-      - generated code includes executable proof scripts for deck behavior, desktop/mobile screenshots, content specificity, and long-text stress rather than relying on manual visual claims alone
-      - desktop Deck view uses a wide editor composition with thumbnail rail, 16:9 canvas, inspector, and chat/export context visible without collapsing into a stacked mobile layout at desktop widths
-      - slide canvas renders every generated title, subtitle, body, chart/table label, asset caption, and provenance chip without overlap, clipping, or unreadable compression
-      - mobile Deck view preserves readable navigation, slide thumbnail selection, canvas preview, and inspector fields without horizontally clipped tabs, rails, or controls
-      - long-text stress proof demonstrates that titles, bullets, notes, and source/provenance labels wrap, clamp intentionally, or move to the inspector instead of breaking layout
-      - deck canvas, thumbnails, theme, notes, assets, and chat all point at the same persisted deck id
-      - export status reflects real runtime readiness rather than a fake download button
-      - provider/image/parser errors are visible as precise blockers with next action
-      - reviewer can identify the input source, generated outline, layout decisions, editable slide state, asset provenance, export state, and unproven claims
-    unacceptable_generic_substitutes:
-      - prompt-to-static-slide-card demo with no editable deck model
-      - markdown summary shown as a deck without layout/template assignment
-      - fake PPTX/PDF download or export success without runtime proof
-      - hard-coded thumbnails or example decks counted as generation
-      - repeated slide plan/body copy that only proves data flow and does not distinguish executive summary, risks, operating signals, root causes, or requested sections
-      - generated app with no automated screenshot/geometry/content-specificity/long-text proof path
-      - narrow stacked layout presented as desktop workbench proof
-      - slide canvas text, chips, dividers, icons, or bars overlapping inside the main deck preview
-      - mobile screenshots with horizontally clipped view tabs, thumbnail rails, inspector controls, or deck toolbar actions
-      - provider/API/webhook/MCP/desktop labels with no working seam or blocker
-      - raw JSON dumped into the UI instead of outline, deck, and export surfaces
-      - template gallery that does not affect generated layouts or slide schemas
-    reviewer_acceptance_questions:
-      - What input source and instructions shaped this deck?
-      - Which outline slides were generated, edited, or accepted?
-      - Which layout/template was selected for each slide, and why does it fit?
-      - Which slide fields, assets, theme, and notes are editable after generation?
-      - Does the desktop Deck view look like a real editor at 1440px width, with stable regions rather than a stretched mobile stack?
-      - Does the primary slide canvas render without text overlap, clipped labels, or unreadable compressed content?
-      - Does mobile Deck proof keep tabs, thumbnails, canvas, toolbar, inspector, and action buttons readable and reachable without accidental horizontal clipping?
-      - Are slide plans and body fields meaningfully different per slide, or is the app repeating one generic paragraph under different titles?
-      - Has at least one long-title/long-bullet stress deck been inspected so the proof is not limited to short happy-path copy?
-      - What is the deck id/readback state, and can the user resume or save it?
-      - Is PPTX/PDF export real, blocked, or failed with a precise runtime reason?
-      - Which API, webhook, MCP, or desktop claims are proven versus only exposed as seams?
-    claim_gates:
-      - deck_output_quality required before claiming useful presentation generation
-      - outline_quality required before claiming content-grounded deck planning
-      - layout_template_quality required before claiming Presenton-style template/layout fidelity
-      - editable_workbench_quality required before claiming a deck editor
-      - desktop_visual_acceptance required before claiming desktop workbench quality
-      - mobile_visual_acceptance required before claiming responsive deck quality
-      - content_specificity_acceptance required before claiming useful presentation generation
-      - long_text_stress_acceptance required before claiming robust editor layout
-      - export_runtime_probe required before claiming PPTX/PDF export
-      - provider_probe required before live AI generation claims
-      - document_parser_probe required before uploaded document extraction claims
-      - api_webhook_mcp_probe required before automation claims
-      - desktop_runtime_probe required before desktop packaging claims
-      - auth_privacy_observability_deployment required before private/public deployment claims
-  source_fidelity_contract:
-    source_steps_to_preserve:
-      - configure BYOK or local model provider and image provider with visible readiness
-      - accept prompt plus optional uploaded documents or slides markdown
-      - decompose uploaded files before using them as generation context
-      - generate structured outline using slide count, language, tone, verbosity, title-slide, table-of-contents, web-search, and instructions
-      - select layouts from available/custom templates based on slide content and layout rules
-      - generate structured slide content according to the chosen layout data shape, including speaker notes when supported
-      - persist presentations, slides, themes, generated/uploaded images, templates, fonts, chat history, and export state
-      - support editing slide content/assets/layouts and chat iteration against active deck/slide context
-      - export through a real presentation-export runtime/converter or show an exact runtime blocker
-      - expose async API, webhook delivery, MCP server, and Electron desktop boundaries only when implemented or honestly blocked
-    not_optional:
-      - do not reduce Presenton to a single prompt box and static deck preview
-      - do not claim editable PPTX/PDF export without a working export runtime or precise blocked state
-      - do not erase provider/image/parser/template/API/webhook/MCP/desktop seams
-      - do not treat screenshots of example decks as proof of generated, persisted, editable decks
-
-required_files:
-  - BUILDPRINT.md
-  - 00-questions.md
-  - 01-project-setup.md
-  - 02-uiux-decision.md
-  - blueprint.yaml
-  - 03-phases/phase-index.yaml
-  - 03-phases/phase-flow.md
-  - HANDOVER.md
-
-forbidden_shapes:
-  - slices/
-  - gates/
-  - generated/agent-prompt.md
-  - generated/codex-handoff.md
-  - templates/runner/
-  - templates/teams/
-  - 02-architecture.md
-  - 03-ux-contract.md
-  - 04-handover.md
-  - 04-review.md
-  - 05-handover.md
-
+claim_status: product_build_required
+qualification_label: local_build_requires_review
+packet_name: private_ai_presentation_workbench
+artifact_type: ui_bearing_full_stack_webapp
 deployment_posture:
   current: trusted_local
   allowed_values:
     - trusted_local
     - private_authenticated
     - public_webapp
+read_order:
+  - BUILDPRINT.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-ui-identity.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - HANDOVER.md
+packet_shape:
+  style: phase_driven_comprehensive
+  principle: YAML routes; markdown teaches and builds.
+  required_files:
+    - BUILDPRINT.md
+    - 00-questions.md
+    - 01-project-setup.md
+    - 02-ui-identity.md
+    - blueprint.yaml
+    - 03-phases/phase-index.yaml
+    - 03-phases/phase-flow.md
+    - HANDOVER.md
+phase_contract:
+  required_headings:
+    - How to implement this phase
+    - Building objective
+    - DO NOT
+    - Minimum proof before moving on
+    - Handoff note
+  rule: Each phase must contain one comprehensive, product-specific building objective. Do not decompose phase guidance into tiny schema sections or slice YAML.
+  forbidden_shapes:
+    - slices/
+    - gates/
+    - 02-architecture.md
+    - 03-ux-contract.md
+    - 04-handover.md
+    - 04-review.md
+    - 05-handover.md
+    - generated/agent-prompt.md
+    - generated/codex-handoff.md
+agent_contract:
+  role: Senior Product Engineer
+  rule: Build the product loop honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; live/provider/deployment claims require matching proof.
+source_evidence:
+  repository: https://github.com/presenton/presenton
+  commit: 99a23afd496dbb9654572fd2aa439aa852c05f33
+  mapped_at: "2026-06-09"
+  evidence_files:
+    - README.md
+    - VISION.md
+    - docker-compose.yml
+    - servers/fastapi/api/v1/ppt/router.py
+    - servers/fastapi/api/v1/ppt/endpoints/presentation.py
+    - servers/fastapi/api/v1/ppt/endpoints/outlines.py
+    - servers/fastapi/models/generate_presentation_request.py
+    - servers/fastapi/models/sql/presentation.py
+    - servers/fastapi/models/sql/slide.py
+    - servers/fastapi/services/database.py
+    - servers/nextjs/app/(presentation-generator)/upload/components/UploadPage.tsx
+    - servers/nextjs/app/(presentation-generator)/outline/components/OutlinePage.tsx
+    - servers/nextjs/app/(presentation-generator)/presentation/components/PresentationPage.tsx
+    - servers/nextjs/app/(presentation-generator)/presentation/components/SidePanel.tsx
+    - servers/nextjs/app/api/export-presentation/route.ts
+    - servers/nextjs/lib/run-bundled-presentation-export.ts
+    - servers/nextjs/utils/storeHelpers.ts
+    - servers/nextjs/utils/providerConstants.ts
 
-runtime_contract:
-  frontend: workbench UI with configure/create/outline/deck/templates/exports views, slide thumbnails, canvas, chat, and export center
-  backend: local API/service with provider config, document ingestion, outline generation, layout selection, slide content generation, persistence, chat, export tasks, and automation seams
-  providers: bring-your-own text and image providers including OpenAI-compatible, OpenAI, Gemini/Google, Vertex, Azure, Bedrock, Fireworks, Together, Anthropic, LM Studio, Ollama, custom endpoints, and optional ChatGPT/Codex account flows when proven
-  storage: local persisted deck state, uploaded files, themes, templates, fonts, image assets, chat history, export outputs, and task state
-  export: PPTX/PDF only after runtime/converter proof; otherwise precise blocked state
-  automation: async API, webhooks, MCP, and desktop bridges must be working or visibly blocked
-  ui: focused presentation workbench with stable slide dimensions, editable deck surfaces, provider/export blockers, and no dead controls
+required_files:
+  - BUILDPRINT.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-ui-identity.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - HANDOVER.md
 
-verification_artifacts:
-  required_generated_app_scripts:
-    - install
-    - build_or_typecheck
-    - lint_or_static_check
-    - unit_or_smoke_tests
-    - screenshot_capture
-  required_screenshot_proofs:
-    - configure_view
-    - create_view
-    - outline_view
-    - deck_desktop_1440_or_wider
-    - deck_mobile_phone_width
-    - templates_view
-    - exports_view
-    - long_text_desktop
-    - long_text_mobile
-  required_semantic_proofs:
-    - content specificity across at least four non-title slides
-    - same deck id across canvas thumbnails inspector notes export and chat context
-    - blocked states for unproven provider parser export API webhook MCP desktop auth privacy and deployment claims
+product:
+  name: Presenton-style private AI presentation workbench
+  summary: Build a self-hostable presentation generator where users configure their own model providers, create decks from prompts or uploaded documents, review outlines, choose templates, edit slides, refine with chat, and export editable PPTX/PDF artifacts.
+  central_artifact: Editable presentation deck with persisted slides, theme/template structure, generated assets, chat-edit history, and downloadable PPTX/PDF exports.
+  primary_users:
+    - private individuals generating local decks
+    - teams self-hosting AI presentation workflows
+    - developers/operators exposing generation through API or desktop packaging
+  golden_path:
+    - configure or validate text and image provider settings
+    - create a presentation from prompt and/or uploaded document
+    - stream and review outline
+    - select built-in or custom template
+    - generate editable slides
+    - inspect, reorder, add, and inline-edit slides
+    - refine slide content through chat
+    - export PPTX and PDF
+    - reopen the persisted deck and downloaded artifacts
+  secondary_paths:
+    - dashboard list/delete/reopen presentations
+    - custom template creation/import/editing
+    - theme generation and selection
+    - local provider/Ollama model handling
+    - webhook/API generation and export
+    - desktop packaging seam
 
-production_quality_gates:
-  provider_probe: required before live generation claims
-  document_parser_probe: required before uploaded document extraction claims
-  outline_quality: required before claiming source-grounded planning
-  layout_template_quality: required before claiming template/layout fidelity
-  editable_workbench_quality: required before claiming a deck editor
-  desktop_visual_acceptance: required before claiming desktop workbench quality; needs a 1440px-or-wider Deck proof with thumbnail rail, canvas, inspector, stable 16:9 canvas, and no visible overlap/clipping in slide text or controls
-  mobile_visual_acceptance: required before claiming responsive deck quality; needs a mobile Deck proof where view tabs, thumbnail rail, toolbar actions, slide canvas, inspector fields, and chat/export controls are readable, reachable, and not horizontally clipped
-  content_specificity_acceptance: required before claiming useful presentation generation; generated outline plans, slide body fields, notes, and layout reasons must be differentiated by slide purpose and source input rather than repeated generic filler
-  long_text_stress_acceptance: required before claiming robust editor layout; include at least one generated or seeded deck with long title, long bullets, long provenance/source label, and long speaker notes, then inspect desktop and mobile screenshots for wrapping, intentional clamping, and no accidental overlap/clipping
-  deck_output_quality: required before claiming useful presentation generation
-  export_runtime_probe: required before claiming PPTX/PDF export
-  api_webhook_mcp_probe: required before automation claims
-  desktop_runtime_probe: required before desktop claims
-  durable_persistence: required before resume/history claims
-  accessibility_responsive_editor: required before production UX claims
-  auth_privacy_observability_deployment: required before private or public deployment claims
+central_output_contract:
+  rule: Preserve the source-derived central output contract before implementation begins.
+  central_output: Editable presentation deck with persisted slides, theme/template structure, generated assets, chat-edit history, and downloadable PPTX/PDF exports.
+  output_primitives:
+    - presentation record
+    - ordered slide records
+    - outline and title
+    - selected template/layout group
+    - slide content JSON and rendered slide surface
+    - theme and font data
+    - generated/reused image assets
+    - chat edit trace
+    - PPTX/PDF export file
+  quality_signals:
+    - deck content reflects prompt, uploaded documents, instructions, language, tone, verbosity, and slide count
+    - outline has a coherent narrative sequence and can be edited before generation
+    - selected template changes slide structure, not just colors
+    - generated slides are visually inspectable and editable, with no clipped or overlapping core content in proof fixtures
+    - exports reopen as real files and preserve the user-visible deck enough to be useful
+    - provider failures identify missing key/model/endpoint instead of failing generically
+    - persisted readback restores the same deck order, content, theme, and assets
+  unacceptable_generic_substitutes:
+    - prompt produces interchangeable business slides unrelated to source input
+    - uploaded document text is ignored
+    - outline exists only as raw JSON or cannot be edited
+    - export button downloads a placeholder or static sample
+    - template choice does not affect layout/theme
+    - chat says it edited a slide but the slide does not change
+    - provider calls are mocked while UI labels imply live model output
+  reviewer_acceptance_questions:
+    - Can a skeptical user trace how their input shaped the outline and final slides?
+    - Can the user edit and reorder the generated deck before export?
+    - Does exported PPTX/PDF match the visible deck enough for real handoff?
+    - Does the app fail closed when model/image/export credentials or runtimes are missing?
+    - Does a reload preserve the presentation state and assets?
 
-phase_flow: 03-phases/phase-flow.md
-phase_index: 03-phases/phase-index.yaml
-handover: HANDOVER.md
+runtime:
+  posture_defaults:
+    local: trusted_local
+    server: private_authenticated
+  persistence:
+    sql_required: true
+    file_storage_required: true
+    config_file_required: true
+    in_memory_only_allowed: false
+  providers:
+    text_provider_seam_required: true
+    image_provider_seam_required: true
+    deterministic_mode_allowed_for_proof: true
+    live_provider_claim_requires_credentials: true
+  export_runtime:
+    pptx_required: true
+    pdf_required: true
+    browser_or_converter_required: true
+    placeholder_export_forbidden: true
+  auth:
+    setup_login_logout_required: true
+    disable_auth_allowed_only_for_trusted_local: true
+  uploads:
+    supported_categories:
+      - prompt
+      - pdf
+      - text
+      - word_processing
+      - presentation
+      - spreadsheet
+      - image
+
+forbidden_shapes:
+  - single prompt box with fake deck output
+  - raw JSON as primary user-facing deck or outline
+  - no-op provider settings
+  - no-op export controls
+  - mocked live-provider success
+  - in-memory persistence when durability is claimed
+  - template selection that does not change slide layout
+  - chat response without persisted slide mutation
+  - production-ready claim without live runtime proof
+
+harness:
+  provider: agents
+  profiles:
+    - webapp
+  required_skills:
+    - setup-runbook
+    - frontend-ui-product-design
+    - subagent-driven-implementation
+    - verify-and-review
+    - webapp
+
+typed_quality_gates:
+  rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
+  ui_decision_precision:
+    applies_when: artifact has human-facing UI, reports, generated outputs, visual workflows, forms, or operator surfaces
+    requires:
+      - explicit style direction and rejected adjacent styles
+      - exact color tokens and status semantics
+      - typography scale and usage
+      - desktop/mobile layout model when responsive use is in scope
+      - component and state language before UI implementation
+  visual_viewport_acceptance:
+    applies_when: artifact has responsive or browser/app UI
+    requires:
+      - desktop proof for the primary workflow
+      - mobile or narrow-viewport proof when users may operate there
+      - screenshot inspection for overlap, clipping, unreadable text, unreachable actions, and page-level horizontal overflow
+  editor_stress_acceptance:
+    applies_when: artifact renders editable, generated, document-like, fixed-format, long-form, visual, note, or report content
+    requires:
+      - long-title and long-body fixtures
+      - fixed-surface framing or scroll ownership proof
+      - edit/readback or state persistence proof when editing exists
+  semantic_output_acceptance:
+    applies_when: artifact generates, transforms, recommends, summarizes, analyzes, or composes output
+    requires:
+      - output-specificity check against central_output_contract
+      - repeated-generic-output rejection
+      - sample output review that states what the user/operator can do next
+  integration_operator_acceptance:
+    applies_when: artifact is a plugin, integration, CLI, service, worker, automation, API, or background job
+    requires:
+      - install/configure/first-action proof
+      - error, retry, idempotency, logging, audit, and recovery expectations where relevant
+      - explicit live-provider or external-side-effect blockers
+  critical_review_pushback:
+    applies_when: serious executable packet or user-facing artifact
+    phase_id: 99-critical-review-pushback
+    phase: 03-phases/critical-review-pushback.md
+    pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"
+    repair_loop: "up to five flaw -> fix -> proof -> rescore iterations unless externally blocked"
+
+proof_obligations:
+  ui:
+    desktop_browser_required: true
+    mobile_upload_dashboard_required: true
+    editor_mobile_scope: bounded_or_blocked
+    no_overlap_no_clipping_required: true
+    focus_and_keyboard_sanity_required: true
+  generative:
+    provider_mode_must_be_labeled: true
+    repeated_generic_output_rejected: true
+    sample_output_review_required: true
+  editable_fixed_format:
+    fixed_slide_surface_required: true
+    long_content_stress_required: true
+    edit_readback_required: true
+    export_reopen_or_artifact_inspection_required: true
+  service:
+    api_contract_smoke_required: true
+    webhook_or_task_status_blocker_if_unproven: true
+
+routes:
+  phase_index: 03-phases/phase-index.yaml
+  phase_flow: 03-phases/phase-flow.md
+  handover: HANDOVER.md
+  claim_gates:
+    - do not claim live provider quality until real credentials and sample outputs are reviewed
+    - do not claim export fidelity until generated PPTX/PDF artifacts are inspected
+    - do not claim persistence until deck, slides, assets, theme, and chat changes survive reload
+  minimum_standard: The product path must produce an editable, inspectable, exportable deck that reaches the mapped artifact's quality bar, not merely output that depends on input.

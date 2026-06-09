@@ -4,27 +4,30 @@ phases:
   - phase_id: 01-foundation-and-first-loop
     file: 03-phases/01-foundation-and-first-loop.md
     status: included
-  - phase_id: 02-provider-and-upload-readiness
-    file: 03-phases/02-provider-and-upload-readiness.md
+    depends_on: []
+    checkpoint: first real local deck loop
+  - phase_id: 02-provider-upload-outline-loop
+    file: 03-phases/02-provider-upload-outline-loop.md
     status: included
-  - phase_id: 03-outline-and-layout-generation
-    file: 03-phases/03-outline-and-layout-generation.md
+    depends_on: [01-foundation-and-first-loop]
+    checkpoint: provider-aware input and outline review
+  - phase_id: 03-editor-template-chat-loop
+    file: 03-phases/03-editor-template-chat-loop.md
     status: included
-  - phase_id: 04-editable-deck-workbench
-    file: 03-phases/04-editable-deck-workbench.md
+    depends_on: [02-provider-upload-outline-loop]
+    checkpoint: editable deck workbench
+  - phase_id: 04-export-api-runtime-loop
+    file: 03-phases/04-export-api-runtime-loop.md
     status: included
-  - phase_id: 05-templates-assets-and-theme
-    file: 03-phases/05-templates-assets-and-theme.md
+    depends_on: [03-editor-template-chat-loop]
+    checkpoint: export, API, runtime hardening
+  - phase_id: 05-critical-review-and-handover
+    file: 03-phases/05-critical-review-and-handover.md
     status: included
-  - phase_id: 06-chat-iteration-and-memory
-    file: 03-phases/06-chat-iteration-and-memory.md
-    status: included
-  - phase_id: 07-export-api-webhook-mcp-desktop
-    file: 03-phases/07-export-api-webhook-mcp-desktop.md
-    status: included
-  - phase_id: 08-verification-and-handover
-    file: 03-phases/08-verification-and-handover.md
-    status: included
+    depends_on: [04-export-api-runtime-loop]
+    checkpoint: proof review and final handover
   - phase_id: 99-critical-review-pushback
     file: 03-phases/critical-review-pushback.md
     status: included
+    depends_on: [05-critical-review-and-handover]
+    checkpoint: mandatory final critical review
