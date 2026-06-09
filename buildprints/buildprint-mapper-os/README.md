@@ -37,7 +37,7 @@ HANDOVER.md
 
 - `BUILDPRINT.md` is the generic AI-builder briefing: role, responsibility, perfection alignment, fake-success intolerance, and read order. It must not carry product specifics or names from the mapped source.
 - `00-questions.md` asks only implementation-changing hard stops, assumptions, and deferrable decisions.
-- `01-project-setup.md` creates the project foundation and local skill harness before identity or phase work: stack, local `AGENTS.md`, local frontend/subagent skills, `docs/architecture.md`, env contract, and setup receipt.
+- `01-project-setup.md` creates the project foundation and local skill harness before identity or phase work: stack, local `AGENTS.md`, core skills (`setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, `verify-and-review`), optional profiles, `docs/architecture.md`, env contract, and setup receipt.
 - `02-ui-identity.md` is the UI identity step. It loads the local `frontend-ui-product-design` skill, opens with "UX is a must," explains understandability, then writes a detailed design schema: thesis, style direction, color tokens, typography, layout, screen states, components, motion, state behavior, anti-generic rules, and phase obligation.
 - `blueprint.yaml` is the machine route and product-contract mirror: product name, central artifact, golden path, central output contract, runtime/posture constraints, required files, forbidden shapes, phase index, and phase flow.
 - `03-phases/phase-index.yaml` routes only.
@@ -47,7 +47,7 @@ HANDOVER.md
 
 ## Why this split matters
 
-The downstream coding agent needs a simple start file and a strong packet. If `BUILDPRINT.md` contains product-specific source baggage, the first thing the builder reads becomes noisy and stale. If setup mixes in identity work, it turns design into paperwork before the frontend skill is loaded. If `02-ui-identity.md` is weak, later phases build generic slop even when the backend works. If the local skill harness is missing, agents skip the frontend and subagent workflow discipline at the moment they need it most. If the central output contract is missing, the app can technically process input while producing bland or interchangeable results. If phases do not reload the UI identity, design responsibility disappears during “backend” work and resurfaces too late.
+The downstream coding agent needs a simple start file and a strong packet. If `BUILDPRINT.md` contains product-specific source baggage, the first thing the builder reads becomes noisy and stale. If setup mixes in identity work, it turns design into paperwork before the frontend skill is loaded. If `02-ui-identity.md` is weak, later phases build generic slop even when the backend works. If the local skill harness is missing, agents skip setup-runbook, frontend, subagent, and verify-and-review discipline at the moment they need it most. If the central output contract is missing, the app can technically process input while producing bland or interchangeable results. If phases do not reload the UI identity, design responsibility disappears during “backend” work and resurfaces too late.
 
 ## Forbidden selected-output shapes
 

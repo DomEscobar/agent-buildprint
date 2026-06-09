@@ -20,14 +20,14 @@ The setup output should make the identity step and first implementation phase ob
 
 Use `typed_quality_gates` in `blueprint.yaml` as a selector, not as decoration. During setup, record applicable/not applicable gates, command/proof path, and blocker if missing inside `docs/architecture.md`. Do not add irrelevant gates just to look thorough. Matching gates need a real proof path or an honest blocker.
 
-Initialize the local Buildprint skill harness before identity or phase work. If `agb` is available, run `agb harness init .`; otherwise create the same project-local harness manually. The harness must patch or create `AGENTS.md`, add local skill files for `frontend-ui-product-design` and `subagent-driven-implementation`, and place them in the portable `.agents/skills/` folder plus detected agent-specific folders such as `.codex/skills/` or `.claude/skills/`. Do not install global skills, clone third-party skill packs, or copy upstream skill files without an explicit user request.
+Initialize the local Buildprint skill harness before identity or phase work. `blueprint.yaml` declares `harness.profiles`; use those profiles as the source of truth. If `agb` is available, run `agb harness init .` with the declared `--profile` flags from `blueprint.yaml` or `.buildprint/next-agent.md`. Otherwise create the same project-local harness manually. The default harness must patch or create `AGENTS.md`, add local core skill files for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`, and place them in the portable `.agents/skills/` folder plus detected agent-specific folders such as `.codex/skills/` or `.claude/skills/`. Selected profiles add focused skills only when declared: `webapp`, `backend`, `agentic`, or `full`. Every skill must declare `triggers`, `skips`, and `completion_signal`; phase handoffs must include the relevant completion signal. Do not install global skills, clone third-party skill packs, or copy upstream skill files without an explicit user request.
 
 ## Required setup artifacts
 
 Create these in the implementation project unless the project already has equivalent stronger files:
 
 - `AGENTS.md` - local implementation constitution, mandatory read order, ownership map, no-fake rules, verification expectations, and Buildprint Skill Harness section.
-- `.agents/skills/frontend-ui-product-design/SKILL.md` and `.agents/skills/subagent-driven-implementation/SKILL.md`, plus detected agent-specific copies such as `.codex/skills/**/SKILL.md` or `.claude/skills/**/SKILL.md`.
+- `.agents/skills/setup-runbook/SKILL.md`, `.agents/skills/frontend-ui-product-design/SKILL.md`, `.agents/skills/subagent-driven-implementation/SKILL.md`, and `.agents/skills/verify-and-review/SKILL.md`, plus selected profile skills and detected agent-specific copies such as `.codex/skills/**/SKILL.md` or `.claude/skills/**/SKILL.md`.
 - `docs/architecture.md` - selected stack, runtime topology, adapters, persistence, deployment posture, state ownership, golden path, central output contract, proof strategy, selected typed quality gates, command/proof paths, blockers, and claim ceilings.
 - `.env.example` - exact env names with blank secrets and no mock/test mode enabled by default.
 - `.buildprint/setup-receipt.md` - decisions made, assumptions, blockers, commands discovered, and identity-step readiness.
@@ -40,6 +40,7 @@ Create these in the implementation project unless the project already has equiva
 - Do not choose a stack only because it is familiar if it cannot prove the golden path.
 - Do not hide hard-stop questions as assumptions.
 - Do not skip `agb harness init .` or the equivalent manual local harness creation before identity or phase work.
+- Do not skip `agb harness check .` after harness initialization or `agb harness checkup .` before phase implementation; record checkup warnings as setup blockers or accepted claim ceilings.
 - Do not install global skills, clone third-party skill packs, symlink outside the project, or copy upstream skill text unless the user explicitly requests it.
 - Do not create `docs/product-experience.md`, `docs/product-loop.md`, `docs/proof-matrix.md`, `docs/proof-strategy.md`, or `docs/output-quality.md`; keep setup decisions inside `docs/architecture.md`, `blueprint.yaml`, and handoff notes.
 - Do not make a landing page when the product needs an operational product surface, API, CLI, worker, or runtime first.
@@ -48,7 +49,9 @@ Create these in the implementation project unless the project already has equiva
 
 - setup artifacts exist and are specific to this product;
 - `AGENTS.md` has a Buildprint Skill Harness section;
-- local skill files exist for `frontend-ui-product-design` and `subagent-driven-implementation`;
+- local core skill files exist for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`;
+- local skill frontmatter includes `triggers`, `skips`, and `completion_signal`;
+- `agb harness check .` passes, and `agb harness checkup .` has no unresolved fail result before phase work;
 - package/build/test commands are named, even if some are currently blocked;
 - `.env.example` has blank secrets only;
 - `docs/architecture.md` exists and names stack, runtime topology, persistence, providers, commands, central output contract, selected typed quality gates, proof surfaces, blockers, and claim ceilings;

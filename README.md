@@ -32,6 +32,7 @@ Install the local agent skill harness:
 ```bash
 agb harness init .
 agb harness check .
+agb harness checkup .
 ```
 
 Then give the workspace to your coding agent and tell it to read:
@@ -46,8 +47,9 @@ Then give the workspace to your coding agent and tell it to read:
 agb start <buildprint-package-json-url-or-file> [target-folder]
 agb packet check <packet-folder-or-package-json-url>
 agb packet next <packet-folder-or-build-state-folder>
-agb harness init [project-folder]
-agb harness check [project-folder]
+agb harness init [project-folder] [--profile webapp] [--profile backend]
+agb harness check [project-folder] [--profiles webapp,backend]
+agb harness checkup [project-folder] [--profiles webapp,backend]
 agb --help
 ```
 

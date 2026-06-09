@@ -8,8 +8,8 @@ Use this loop for the active phase only. Do not read every phase upfront. Do not
 2. Read `.buildprint/next-agent.md` and current project `AGENTS.md` if they exist.
 3. Read the active phase file named in `03-phases/phase-index.yaml`.
 4. Before editing code, state a short thinking checkpoint in the working response or task plan: active phase, smallest real vertical user/operator path, 3-7 likely failure modes, proof plan, and claim ceiling. This is not a deliverable file. Do not create phase-run paperwork by default.
-5. Build the path only after that checkpoint is clear.
-6. Verify with the most meaningful available command, API/runtime check, browser/screenshot inspection, or persistence/readback proof.
+5. Build the path only after that checkpoint is clear. Use `subagent-driven-implementation` only when the phase splits into cleanly owned workstreams; otherwise keep implementation local.
+6. Verify with the most meaningful available command, API/runtime check, browser/screenshot inspection, or persistence/readback proof. Load `verify-and-review` before claiming phase completion.
 7. Compare the result against the predicted failure modes. Mark each avoided, found and fixed, still blocked, or not applicable.
 8. Repair visible slop and fake-success shortcuts before continuing. Do one concrete weakness repair unless none is found.
 9. Record what works, what is blocked, what was verified, what the proof does not prove, and what the next phase may trust.
@@ -23,6 +23,8 @@ A phase passes only when the building objective is satisfied by a real product p
 Do not create phase-run markdown, evidence ledgers, or planning artifacts by default. The thinking checkpoint is behavioral: it should shape the work, not become paperwork. Persist only concise progress, blockers, and handoff facts needed for continuation.
 
 Final completion is impossible until phase `99-critical-review-pushback` has run and either passed or recorded an external blocker. Treat it as the last phase in the phase graph, not as optional review prose.
+
+Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`, `UI_IDENTITY_DONE`, `SUBAGENT_PHASE_DONE` when subagents governed the work, and `VERIFY_REVIEW_DONE` before phase completion.
 
 ## Repair routing
 

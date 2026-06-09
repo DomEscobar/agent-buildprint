@@ -24,12 +24,25 @@ function optionValue(flag) {
   return value
 }
 
+function optionValues(...flags) {
+  const values = []
+  for (let i = 0; i < args.length; i++) {
+    const value = args[i]
+    if (!flags.includes(value)) continue
+    const next = args[i + 1]
+    if (!next || next.startsWith('--')) throw new Error(`missing value for ${value}`)
+    values.push(...next.split(',').map((item) => item.trim()).filter(Boolean))
+    i++
+  }
+  return values
+}
+
 function positionalArgs(startIndex = 0) {
   const positional = []
   for (let i = startIndex; i < args.length; i++) {
     const value = args[i]
     if (value.startsWith('--')) {
-      if (value === '--agent' && args[i + 1] && !args[i + 1].startsWith('--')) i++
+      if ((value === '--agent' || value === '--profile' || value === '--profiles') && args[i + 1] && !args[i + 1].startsWith('--')) i++
       continue
     }
     positional.push(value)
@@ -45,8 +58,9 @@ Usage:
   agb start <buildprint-package-json-url-or-file> [target-folder]
   agb packet check <packet-folder-or-package-json-url>
   agb packet next <packet-folder-or-build-state-folder>
-  agb harness init [project-folder] [--agent auto|all|codex|claude|agents] [--json]
-  agb harness check [project-folder] [--agent auto|all|codex|claude|agents] [--json]
+  agb harness init [project-folder] [--agent auto|all|codex|claude|agents] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
+  agb harness check [project-folder] [--agent auto|all|codex|claude|agents] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
+  agb harness checkup [project-folder] [--agent auto|all|codex|claude|agents] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
   agb evidence check <evidence-ledger-jsonl>
 
 Examples:
@@ -57,6 +71,7 @@ Examples:
   agb packet next ./buildprints/ai-swarm-simulator
   agb harness init .
   agb harness check .
+  agb harness checkup .
   agb evidence check .buildprint/evidence/evidence-ledger.jsonl
 
 Mapper note:
@@ -370,6 +385,10 @@ function packetCheckResults(dir) {
     /reviewer_acceptance_questions:/i.test(blueprint) &&
     /claim_gates:/i.test(blueprint)
   )
+  ok('blueprint declares harness profile selection',
+    /harness:\s*\n[\s\S]*profiles:/i.test(blueprint) &&
+    /webapp|backend|agentic|full|default/i.test(blueprint)
+  )
   ok('blueprint declares typed quality gate routing',
     !requiresTypedQualityRouting ||
     /typed_quality_gates:/i.test(blueprint) &&
@@ -401,9 +420,15 @@ function packetCheckResults(dir) {
   ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
   ok('project setup requires local skill harness',
     /agb harness init/i.test(setup) &&
+    /agb harness checkup/i.test(setup) &&
     /Buildprint skill harness|local skill harness/i.test(setup) &&
+    /setup-runbook/i.test(setup) &&
     /frontend-ui-product-design/i.test(setup) &&
     /subagent-driven-implementation/i.test(setup) &&
+    /verify-and-review/i.test(setup) &&
+    /triggers/i.test(setup) &&
+    /skips/i.test(setup) &&
+    /completion_signal/i.test(setup) &&
     /\.agents\/skills/i.test(setup) &&
     /AGENTS\.md/i.test(setup)
   )
@@ -733,6 +758,45 @@ function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
   return uniqueStrings([...canonical, ...extras])
 }
 
+function cleanHarnessProfileValue(value) {
+  return String(value || '')
+    .replace(/[[\]'"]/g, '')
+    .split(/[,\s]+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
+function harnessProfilesFromBlueprint(blueprintText) {
+  const lines = blueprintText.split(/\r?\n/)
+  const profiles = []
+  for (let i = 0; i < lines.length; i++) {
+    if (!/^harness:\s*(?:#.*)?$/.test(lines[i])) continue
+    for (let j = i + 1; j < lines.length; j++) {
+      const line = lines[j]
+      if (/^\S/.test(line) && !/^#/.test(line)) break
+      const profile = line.match(/^\s*profile:\s*(.+?)\s*(?:#.*)?$/)
+      if (profile) profiles.push(...cleanHarnessProfileValue(profile[1]))
+      const inlineProfiles = line.match(/^\s*profiles:\s*(.+?)\s*(?:#.*)?$/)
+      if (inlineProfiles && inlineProfiles[1].trim()) profiles.push(...cleanHarnessProfileValue(inlineProfiles[1]))
+      if (/^\s*profiles:\s*(?:#.*)?$/.test(line)) {
+        for (let k = j + 1; k < lines.length; k++) {
+          const item = lines[k]
+          if (/^\s{2,}\w[\w-]*:/.test(item) || /^\S/.test(item)) break
+          const bullet = item.match(/^\s*-\s*(.+?)\s*(?:#.*)?$/)
+          if (bullet) profiles.push(...cleanHarnessProfileValue(bullet[1]))
+        }
+      }
+    }
+  }
+  return uniqueStrings(profiles.length ? profiles : ['default'])
+}
+
+function harnessInitCommandForProfiles(profiles) {
+  const normalized = uniqueStrings((profiles || ['default']).filter(Boolean))
+  if (!normalized.length || (normalized.length === 1 && normalized[0] === 'default')) return 'agb harness init .'
+  return `agb harness init .${normalized.map((profile) => ` --profile ${profile}`).join('')}`
+}
+
 async function startBuildprint(manifestRef, targetFolder = cwd) {
   const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
@@ -811,6 +875,10 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   const now = new Date().toISOString()
   const phaseIndexPath = path.join(snapshotDir, '03-phases', 'phase-index.yaml')
   const phaseIndexText = fs.existsSync(phaseIndexPath) ? fs.readFileSync(phaseIndexPath, 'utf8') : ''
+  const blueprintPath = path.join(snapshotDir, 'blueprint.yaml')
+  const blueprintText = fs.existsSync(blueprintPath) ? fs.readFileSync(blueprintPath, 'utf8') : ''
+  const harnessProfiles = harnessProfilesFromBlueprint(blueprintText)
+  const harnessInitCommand = harnessInitCommandForProfiles(harnessProfiles)
   const { activePhase, activePhaseId } = phaseIndexActiveInfo(phaseIndexText)
   const manifestReadOrder = isExecutablePacket
     ? executableReadOrder(baseReadOrder, hasManifestFile, activePhase)
@@ -840,6 +908,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     downloaded,
     readOrder: manifestReadOrder,
     executablePacket: isExecutablePacket,
+    harnessProfiles,
   })
 
   writeJson(path.join(stateDir, 'state.json'), {
@@ -857,6 +926,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
         : 'read .buildprint/next-agent.md, initialize local skill harness, generate UI identity, complete project setup, then follow the active phase loop'
       : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
     runtimeEvidenceLedger: hasLegacyRuntimeEvidence ? '.buildprint/evidence/evidence-ledger.jsonl' : null,
+    harnessProfiles,
     updatedAt: now,
   })
 
@@ -874,7 +944,7 @@ This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stal
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
 3. Read \`.buildprint/snapshots/00-questions.md\`; stop only for true hard-stop decisions.
-4. Read and complete \`.buildprint/snapshots/${setupFile}\`; initialize the project-local skill harness by running \`agb harness init .\` if \`agb\` is available, otherwise create the \`AGENTS.md\` harness section and local skills described by the setup file.
+4. Read and complete \`.buildprint/snapshots/${setupFile}\`; initialize the project-local skill harness from the profiles declared in \`.buildprint/snapshots/blueprint.yaml\` by running \`${harnessInitCommand}\` if \`agb\` is available. Then run \`agb harness check .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\` and \`agb harness checkup .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\`. If \`agb\` is unavailable, create the \`AGENTS.md\` harness section and local skills described by the setup file.
 5. Read \`.buildprint/snapshots/${uiIdentityFile}\`; for UI-bearing artifacts, load the local \`frontend-ui-product-design\` skill and generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before phase work.
 6. Confirm setup and identity proof are complete before phase work.
 7. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
@@ -894,7 +964,7 @@ Rules:
 
 - Do not read every phase upfront.
 - Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
-- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created or patched by \`agb harness init .\` from \`${setupFile}\`, not shipped in the packet.
+- Project root/local \`AGENTS.md\` files belong in the implementation project and should be created or patched by \`${harnessInitCommand}\` from \`${setupFile}\`, not shipped in the packet. Use the profiles declared in \`blueprint.yaml\`; do not default to \`full\`.
 - Keep claims scoped until the built product has been checked directly.
 - Do not create proof theater; local checks and product review are useful only insofar as they catch real defects.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
@@ -952,13 +1022,20 @@ if (args[0] === 'harness') {
   if (!sub || isHelp(sub)) usage(0)
   const project = positionalArgs(2)[0] || cwd
   const agent = optionValue('--agent') || 'auto'
+  const profiles = optionValues('--profile', '--profiles')
+  const selectedProfiles = profiles.length ? profiles : ['default']
   const json = args.includes('--json')
   try {
-    if (sub === 'init') process.exit(harnessInit(project, agent, json) ? 0 : 1)
+    if (sub === 'init') process.exit(harnessInit(project, agent, json, selectedProfiles) ? 0 : 1)
     if (sub === 'check') {
-      const result = harnessCheckResult(project, agent)
+      const result = harnessCheckResult(project, agent, selectedProfiles)
       printHarnessResult(result, json)
       process.exit(result.status === 'pass' ? 0 : 1)
+    }
+    if (sub === 'checkup') {
+      const result = harnessCheckResult(project, agent, selectedProfiles, 'checkup')
+      printHarnessResult(result, json)
+      process.exit(result.status === 'missing' ? 1 : 0)
     }
     throw new Error(`unknown harness subcommand: ${sub}`)
   } catch (error) {

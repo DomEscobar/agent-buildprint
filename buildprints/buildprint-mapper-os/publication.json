@@ -34,7 +34,7 @@
     "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, HANDOVER.md",
     "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
     "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
-    "A project-local skill harness followed by mandatory UI identity with frontend design skill loading",
+    "A project-local skill harness with blueprint-declared profiles, four core skills, and mandatory UI identity",
     "Comprehensive phase files that read 02-ui-identity.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
     "Hard-stop/assumable/deferrable question model",
     "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
@@ -60,7 +60,7 @@
     "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, HANDOVER.md",
     "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
     "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
-    "A project-local skill harness followed by mandatory UI identity with frontend design skill loading",
+    "A project-local skill harness with blueprint-declared profiles, four core skills, and mandatory UI identity",
     "Comprehensive phase files that read 02-ui-identity.md and include How to implement this phase, Building objective, DO NOT, Minimum proof before moving on, and Handoff note",
     "Hard-stop/assumable/deferrable question model",
     "Anti-placeholder, anti-functionless-button, anti-mock-as-proof constraints"
@@ -81,7 +81,7 @@
     "BUILDPRINT.md is a generic AI-builder briefing with no mapped-source product specifics",
     "02-ui-identity.md starts with UX importance/understandability and includes a small checklist",
     "02-ui-identity.md contains a detailed UI identity contract, not short phrases",
-    "Project-local skill harness initializes AGENTS.md and local frontend/subagent skills",
+    "Project-local skill harness initializes AGENTS.md, four core skills, precise profiles, and trigger/skip/completion contracts",
     "Every phase references 02-ui-identity.md as standing design/style responsibility",
     "blueprint.yaml declares schema_version mapper-os/executable-blueprint/v3",
     "Obsolete v2 packet folders/files are absent from the selected packet",

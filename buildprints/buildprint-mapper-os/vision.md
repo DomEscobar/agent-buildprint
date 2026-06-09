@@ -16,7 +16,7 @@ A downstream builder needs the first file to orient their behavior: you are resp
 
 ## Why 02-ui-identity.md is mandatory
 
-UX is not polish after the real work. The user experiences the artifact through surfaces, states, copy, controls, motion, and feedback. A confusing or generic interface is an implementation failure. Mapper OS therefore initializes the local skill harness in setup, then forces a detailed UI identity with the frontend skill loaded before phases begin. Every phase reads it so design responsibility survives backend/runtime/report/verification work.
+UX is not polish after the real work. The user experiences the artifact through surfaces, states, copy, controls, motion, and feedback. A confusing or generic interface is an implementation failure. Mapper OS therefore initializes the local skill harness in setup: `setup-runbook` captures architecture and proof paths, `frontend-ui-product-design` forces a detailed UI identity before phases begin, `subagent-driven-implementation` is used only for cleanly separable phase work, and `verify-and-review` blocks fake completion. Every phase reads the UI identity so design responsibility survives backend/runtime/report/verification work.
 
 ## Desired downstream behavior
 

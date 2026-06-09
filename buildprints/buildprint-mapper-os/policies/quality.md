@@ -11,7 +11,7 @@ Mapper OS quality is judged by whether a downstream AI builder can build the map
 - Put product contract facts in `blueprint.yaml`, `01-project-setup.md`, `02-ui-identity.md`, and phase objectives.
 - YAML routes; Markdown teaches/builds.
 - Phase files are comprehensive product objectives, not mini schemas.
-- Setup creates the architecture and local skill harness before UI/operator identity; UI/operator decisions happen in `02-ui-identity.md` before phase implementation.
+- Setup creates the architecture and local skill harness before UI/operator identity; the default harness contains `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`, with optional profiles selected only when the artifact type needs them. UI/operator decisions happen in `02-ui-identity.md` before phase implementation.
 - `02-ui-identity.md` is a mandatory UI identity for UI-bearing artifacts, not a cosmetic note.
 - Every phase reads `02-ui-identity.md` as standing comprehension, user-language, and visual identity responsibility.
 - UI identity must define a product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, and screenshot-level acceptance criteria. A UI identity that can be satisfied by a generic dashboard, renamed workbench, card grid, or proof console is invalid.

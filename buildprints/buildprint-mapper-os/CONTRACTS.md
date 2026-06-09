@@ -40,7 +40,7 @@ Product identity, artifact shape, central interface, golden path, runtime postur
 
 ## Local skill harness contract
 
-Project setup must initialize a project-local Buildprint skill harness before phase work. The harness patches or creates root `AGENTS.md`, writes Buildprint-native local skills for frontend UI product design and subagent-driven implementation, and places them in `.agents/skills/` plus detected agent-specific folders such as `.codex/skills/` or `.claude/skills/`. It must not silently install global skills or copy third-party skill packs.
+Project setup must initialize a project-local Buildprint skill harness before phase work. `blueprint.yaml` declares the selected `harness.profiles`, and `.buildprint/next-agent.md` carries those profiles into `agb harness init`. The default harness patches or creates root `AGENTS.md`, writes Buildprint-native local core skills for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`, and places them in `.agents/skills/` plus detected agent-specific folders such as `.codex/skills/` or `.claude/skills/`. Optional profiles add focused skills only when the artifact needs them: `webapp`, `backend`, `agentic`, or `full`. Every skill must declare trigger/skip boundaries and a completion signal. The harness must not silently install global skills or copy third-party skill packs.
 
 ## Central output contract
 

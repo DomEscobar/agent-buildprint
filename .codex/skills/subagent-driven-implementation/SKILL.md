@@ -1,6 +1,17 @@
 ---
 name: subagent-driven-implementation
 description: Use when executing a Buildprint phase or implementation plan with multiple tasks, review checkpoints, or separable workstreams.
+phase: 03-phases
+triggers:
+  - multi-task phase
+  - separable workstreams
+  - parallel implementation
+  - subagent
+skips:
+  - one small edit
+  - same-file changes
+  - unclear ownership boundaries
+completion_signal: SUBAGENT_PHASE_DONE
 ---
 
 # Subagent-Driven Implementation
@@ -32,3 +43,5 @@ Use when a Buildprint phase or plan has independent implementation tasks. Keep t
 - Accepting close-enough behavior when the phase objective is explicit.
 - Letting implementation agents broaden scope, rewrite unrelated files, or invent architecture not present in the plan.
 - Treating tests as enough when browser/runtime/product proof is required.
+
+End the controller summary with `SUBAGENT_PHASE_DONE` only after integration and controller review are complete.

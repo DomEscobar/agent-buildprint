@@ -83,8 +83,11 @@ for (const required of [
   /Typed proof/i,
   /proof obligations by artifact type/i,
   /project-local skill harness/i,
+  /harness\.profiles/i,
+  /setup-runbook/i,
   /frontend UI product design|frontend-ui-product-design/i,
   /subagent-driven implementation|subagent-driven-implementation/i,
+  /verify-and-review/i,
 ]) {
   if (!required.test(docCorpus)) {
     console.error(docCorpus)
@@ -142,9 +145,13 @@ expectFailure('mapper eval requires architecture-routed typed proof setup', ['pa
 const missingSkillHarness = copyTemplate('missing-skill-harness')
 edit(missingSkillHarness, '01-project-setup.md', (s) => s
   .replace(/agb harness init/g, 'manual setup')
+  .replace(/agb harness checkup/g, 'manual check')
+  .replace(/setup-runbook/g, 'setup')
   .replace(/Buildprint skill harness/gi, 'project notes')
   .replace(/frontend-ui-product-design/g, 'frontend')
   .replace(/subagent-driven-implementation/g, 'subagents')
+  .replace(/verify-and-review/g, 'review')
+  .replace(/completion_signal/g, 'done marker')
   .replace(/\.agents\/skills/g, '.agents/files'))
 expectFailure('mapper eval requires local skill harness setup', ['packet', 'check', missingSkillHarness], ['✗ project setup requires local skill harness'])
 
@@ -216,18 +223,25 @@ expectPass('cli eval initializes project harness', ['harness', 'init', harnessFi
 expectPass('cli eval verifies initialized project harness', ['harness', 'check', harnessFixture, '--agent', 'codex'], ['Harness check: PASS'])
 for (const required of [
   'AGENTS.md',
+  '.agents/skills/setup-runbook/SKILL.md',
   '.agents/skills/frontend-ui-product-design/SKILL.md',
   '.agents/skills/subagent-driven-implementation/SKILL.md',
+  '.agents/skills/verify-and-review/SKILL.md',
+  '.codex/skills/setup-runbook/SKILL.md',
   '.codex/skills/frontend-ui-product-design/SKILL.md',
-  '.codex/skills/subagent-driven-implementation/SKILL.md'
+  '.codex/skills/subagent-driven-implementation/SKILL.md',
+  '.codex/skills/verify-and-review/SKILL.md'
 ]) {
   if (!fs.existsSync(path.join(harnessFixture, required))) {
     console.error(`cli eval failed; harness init missing ${required}`)
     process.exit(1)
   }
 }
+expectPass('cli eval checkup warns until setup artifacts exist', ['harness', 'checkup', harnessFixture, '--agent', 'codex'], ['Harness checkup: WARN', '.buildprint/setup-receipt.md exists'])
+expectPass('cli eval initializes webapp profile skills', ['harness', 'init', harnessFixture, '--agent', 'codex', '--profile', 'webapp'], ['Profiles: webapp', 'frontend-visual-qa', 'asset-pipeline'])
+expectPass('cli eval initializes multiple profile skills', ['harness', 'init', harnessFixture, '--agent', 'codex', '--profile', 'webapp', '--profile', 'backend'], ['Profiles: webapp, backend', 'api-contract-checks', 'frontend-visual-qa'])
 const harnessAgentsMd = fs.readFileSync(path.join(harnessFixture, 'AGENTS.md'), 'utf8')
-if (!/Buildprint Skill Harness/.test(harnessAgentsMd) || !/frontend-ui-product-design/.test(harnessAgentsMd) || !/subagent-driven-implementation/.test(harnessAgentsMd)) {
+if (!/Buildprint Skill Harness/.test(harnessAgentsMd) || !/setup-runbook/.test(harnessAgentsMd) || !/frontend-ui-product-design/.test(harnessAgentsMd) || !/subagent-driven-implementation/.test(harnessAgentsMd) || !/verify-and-review/.test(harnessAgentsMd) || !/completion_signal/.test(harnessAgentsMd)) {
   console.error(harnessAgentsMd)
   console.error('cli eval failed; AGENTS.md harness section is incomplete')
   process.exit(1)
@@ -278,9 +292,9 @@ const redactionFiles = {
   }, null, 2),
   '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-project-setup.md, 02-ui-identity.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions. If blocked, stop before 01-project-setup.md.\n',
-  '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires agb harness init, Buildprint skill harness, frontend-ui-product-design, subagent-driven-implementation, .agents/skills, docs/architecture.md, command/proof path, applicable/not applicable setup, AGENTS.md, .env.example, setup-receipt.md, placeholder commands, real secrets, and hide hard-stop.\n',
+  '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires agb harness init, agb harness checkup, Buildprint skill harness, setup-runbook, frontend-ui-product-design, subagent-driven-implementation, verify-and-review, triggers, skips, completion_signal, .agents/skills, docs/architecture.md, command/proof path, applicable/not applicable setup, AGENTS.md, .env.example, setup-receipt.md, placeholder commands, real secrets, and hide hard-stop.\n',
   '/02-ui-identity.md': '# 02 UI Identity\n\nUX is a must. The experience must be understandable and a confusing interface is not a finished product. This runs after 01-project-setup.md and before 03-phases/*. Generate a local docs/ui-identity.md or UI-IDENTITY.md after setup and before phase work. Load frontend-ui-product-design from .agents/skills/frontend-ui-product-design/SKILL.md and references/screen-states.md, returning to 01-project-setup.md if missing. Required sections include First-run comprehension contract, User-language map, Creative product concept, product metaphor, dominant object, primary gesture, moment-to-moment manipulation, Silhouette rejection, forbidden default silhouette, generic dashboard, renamed workbench, card grid, proof console, Product identity thesis, Chosen style direction, Layout model, Interaction model, Component language, Color and typography tokens, Content stress fixtures, Proof obligations, screenshot delta review, exact semantic color, typography, state colors, focus, empty/loading/error/blocked, functionless buttons, dead controls, raw JSON, and evaluator language. Think deeply about the golden path and central output before phase implementation.\n',
-  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\n',
+  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\nharness:\n  profiles:\n    - webapp\n    - backend\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
   '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',
   '/03-phases/01-start.md': '# Phase 01\n\n## How to implement this phase\n\nRead phase-flow.\n\n## Building objective\n\nBuild a real path.\n\n## DO NOT\n\nNo placeholders.\n\n## Minimum proof before moving on\n\nRun checks.\n\n## Handoff note\n\nRecord proof.\n',
@@ -332,6 +346,16 @@ try {
   if (!nextAgent.includes('agb harness init .')) {
     console.error(nextAgent)
     console.error('cli eval failed; next-agent missing local harness initialization step')
+    process.exit(1)
+  }
+  if (!nextAgent.includes('agb harness checkup .')) {
+    console.error(nextAgent)
+    console.error('cli eval failed; next-agent missing local harness checkup step')
+    process.exit(1)
+  }
+  if (!nextAgent.includes('agb harness init . --profile webapp --profile backend')) {
+    console.error(nextAgent)
+    console.error('cli eval failed; next-agent missing blueprint-declared harness profiles')
     process.exit(1)
   }
   if (/01-ui-identity\.md|02-project-setup\.md|02-uiux-decision\.md|04-review\.md|05-handover\.md|smallest real usable slice/.test(nextAgent)) {

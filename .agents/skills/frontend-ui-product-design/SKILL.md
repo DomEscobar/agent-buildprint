@@ -1,6 +1,18 @@
 ---
 name: frontend-ui-product-design
 description: Use when building or changing any human-facing UI, frontend, dashboard, app, page, component, or visual workflow from a Buildprint.
+phase: 02-ui-identity
+triggers:
+  - UI identity
+  - frontend
+  - page
+  - component
+  - visual workflow
+skips:
+  - backend-only change
+  - CLI-only change
+  - docs-only edit
+completion_signal: UI_IDENTITY_DONE
 ---
 
 # Frontend UI Product Design
@@ -32,3 +44,5 @@ Use before UI code. The goal is not decoration; the goal is a product surface th
 - Template rhythm reused without product reason.
 - Untokenized colors/fonts, invented proof copy, fake chrome, and display-heading italics.
 - UI copy that exposes evaluator/build/proof terms unless the artifact is explicitly a developer tool.
+
+End the identity or UI-design handoff with `UI_IDENTITY_DONE` only after the generated local identity artifact or UI implementation proof exists.
