@@ -1,6 +1,6 @@
-# Portable Personal Agent Chat OS
+# Agentic Chat
 
-A portable self-hosted personal agent chat workbench with streaming chat, provider routing, tools, skills, MCP seams, memory, subagents, telemetry, and local safety boundaries.
+Agentic Chat is a portable self-hosted agent chat workbench with streaming chat, provider routing, tools, skills, MCP seams, memory, subagents, telemetry, and local safety boundaries.
 
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
 ![Build](https://img.shields.io/badge/build-local%20checks%20required-yellow)
