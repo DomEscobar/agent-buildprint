@@ -1,6 +1,6 @@
-# Automated AI Blog OS
+# Portable Personal Agent Chat OS
 
-An approval-gated blog production workspace for source discovery, idea scoring, grounded drafting, SEO and claim checks, visuals, and publishing handoff.
+A portable self-hosted personal agent chat workbench with streaming chat, provider routing, tools, skills, MCP seams, memory, subagents, telemetry, and local safety boundaries.
 
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
 ![Build](https://img.shields.io/badge/build-local%20checks%20required-yellow)
@@ -10,7 +10,7 @@ An approval-gated blog production workspace for source discovery, idea scoring, 
 
 ## Features
 
-- Produce and inspect the central artifact: Approved blog post package with source references, outline, draft, SEO metadata, claim validation, visual assets, and publishing handoff notes.
+- Produce and inspect the central artifact: Durable personal agent session with streamed messages, selected provider, tool policy decisions, memory/checkpoint readback, subagent trace, and telemetry summary.
 - Configure provider/API access without hiding missing-key blockers.
 - Persist product state when durability is claimed.
 - Keep external publishing, deployment, and side effects approval-gated.

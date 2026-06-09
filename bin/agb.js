@@ -67,8 +67,8 @@ Examples:
   agb check ./my-buildprint
   agb check ./my-buildprint --code ./my-agent
   agb start https://agent-buildprint.com/buildprints/ai-influencer-os/package.json ./my-build
-  agb packet check ./buildprints/ai-swarm-simulator
-  agb packet next ./buildprints/ai-swarm-simulator
+  agb packet check ./buildprints/buildprint-mapper-os
+  agb packet next ./buildprints/buildprint-mapper-os
   agb harness init .
   agb harness check .
   agb harness checkup .
@@ -323,11 +323,9 @@ function packetCheckResults(dir) {
     normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet') ||
     /Replace this template-level rule with the selected artifact's source-derived central output contract/i.test(blueprint)
   const requiresTypedQualityRouting = isMapperTemplatePacket
-  const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint) ||
-    normalizedPacketDir.endsWith('buildprints/ai-presentation-generation')
+  const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint)
   const requiresCriticalReviewPushback = isMapperTemplatePacket ||
-    isPresentationPacket ||
-    normalizedPacketDir.endsWith('buildprints/ai-swarm-simulator')
+    isPresentationPacket
 
   const obsoleteFiles = allFiles.filter((file) =>
     file === '02-architecture.md' ||

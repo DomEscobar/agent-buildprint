@@ -4,7 +4,7 @@
 
 ### Context
 
-The `ai-presentation-generation` packet was patched through several proof loops after generated Presenton-style builds exposed repeatable quality gaps:
+An archived downstream presentation-generation packet was patched through several proof loops after generated deck-builder builds exposed repeatable quality gaps:
 
 - vague UI direction allowed generic visual output;
 - desktop screenshots could pass while the primary composition was still too narrow or visually compressed;
@@ -71,21 +71,9 @@ Patch `buildprints/buildprint-mapper-os` so every generated executable packet ca
    - Mutation tests should delete individual gates and confirm the packet check rejects the degraded packet.
    - This prevents future edits from preserving section names while removing the actual acceptance bar.
 
-### Files already patched downstream
+### Mapper template anchors
 
-These files in `ai-presentation-generation` contain the concrete downstream version of the lesson:
-
-- `02-ui-identity.md`
-- `blueprint.yaml`
-- `03-phases/phase-flow.md`
-- `03-phases/phase-index.yaml`
-- `03-phases/critical-review-pushback.md`
-- `03-phases/04-editable-deck-workbench.md`
-- `03-phases/08-verification-and-handover.md`
-- `HANDOVER.md`
-- `patchnote.md`
-
-The mapper template already has partial versions in:
+The mapper template carries these lessons in:
 
 - `templates/executable-packet/02-ui-identity.md`
 - `templates/executable-packet/03-phases/phase-flow.md`

@@ -1,181 +1,34 @@
----
-title: Automated AI Blog OS
-slug: automated-ai-blog-os
-category: Product OS
-stack: [Astro/MDX, Markdown, Research workflow, SEO checks, Approval queue, Scheduled publishing]
-difficulty: Advanced
-status: publishable-draft
-agentFile: true
----
+# BUILDPRINT: AI Builder Briefing
 
-# Automated AI Blog OS Buildprint
+You are the responsible builder. Your job is not to satisfy a checklist or produce a plausible-looking shell. Your job is to build the assigned artifact with uncompromising product judgment, clean execution, and honest proof.
 
-## Agent Operating Contract
+## Your role
 
-Build an Automated AI Blog OS: a Markdown/MDX-first content pipeline that scans sources, scores ideas, reads content memory, drafts useful posts, validates claims and SEO/build outputs, queues approval, publishes or schedules only through configured gates, and audits stale or unsafe work.
+Act like a senior product engineer who owns the outcome end to end. Understand the intent, make sharp implementation decisions, protect the user experience, and refuse shallow completion. You are expected to notice missing assumptions, repair weak abstractions, and turn vague direction into a working artifact without silently shrinking scope.
 
-Preserve this target shape:
+## Your responsibility
 
-```txt
-research scanner + idea scorer + content memory + draft generator + visual post templates + SEO validator + approval queue + publisher/scheduler + manager audit
-```
+Build the real thing the packet asks for. Preserve the required behavior, interaction quality, state, runtime boundaries, and verification discipline described in the later files. If something cannot be built or proven, say so plainly and route the blocker instead of masking it.
 
-Default publishing is draft/manual approval. Direct publishing is never enabled by default.
+Functionless buttons, dead controls, placeholder screens, decorative-only UI, mocked/sample data counted as real proof, fake provider success, raw JSON in place of a product surface, swallowed errors, and unchecked happy-path claims are failures. Do not ship them. Do not call them done.
 
-## Binding Implementation Slice
+## Perfection alignment
 
-The minimum included behavior is the content-operations pipeline, not a generic CMS or theme:
+Aim for a result that a demanding human would recognize as intentionally built: coherent structure, tight feedback loops, visible state, graceful empty/error/blocked paths, consistent copy, and no hidden fake-success shortcuts. Every phase should leave the artifact more real, more usable, and easier for the next agent to continue.
 
-- configured sources are captured with URL, title, excerpt, observed signal, timestamp, quality, and retrieval status;
-- ideas are scored with explicit rubric fields;
-- previous posts, used angles, banned topics, and internal links are read before drafting;
-- drafts include frontmatter, source map, claim map, reusable prompt/workflow value, visual plan, internal links, CTA or next step, and publish checklist state;
-- factual claims are linked to source IDs or blocked;
-- SEO validation checks metadata, canonical, robots, OG/Twitter, dates, tags, language, JSON-LD, schema where applicable, sitemap, RSS/feed, llms output, and build status;
-- publishing refuses unapproved drafts and requires passing claim, SEO, feed, and build gates;
-- manager audit reports stale drafts, weak sources, repeated angles, SEO drift, broken feeds, and blocked publish attempts;
-- tests pass without network or real publishing credentials.
+Be precise. Be skeptical of your own claims. Prefer direct verification over confidence. Completion means the artifact survives real use, not that the files changed.
 
-## Non-Goals / Unsafe Claims
-
-- Do not replace the system with a plain blog template, CMS admin, or keyword list.
-- Do not publish without approval by default.
-- Do not invent sources.
-- Do not include unsourced factual claims.
-- Do not launder sources by attaching source IDs to unsupported claims.
-- Do not present fake expertise, fake case studies, or generic SEO filler as product output.
-- Do not hide broken sitemap, RSS/feed, llms, metadata, or build outputs.
-- Do not call external source, LLM, deployment, or publishing services in tests.
-- Do not count route-shaped, command-shaped, or service-shaped placeholders as implemented behavior.
-
-## Required Read Order
+## Required read order
 
 1. `BUILDPRINT.md`
-2. `SPEC.md`
-3. `CONTRACTS.md`
-4. `DEFAULT_PRESET.md`
-5. `questions.md`
-6. `PLAN.md`
-7. `plans/*.md` in listed phase order
-11. `policies/publishing.md`
+2. `00-questions.md`
+3. `01-project-setup.md`
+4. `02-ui-identity.md` when the artifact has UI or human-facing interaction
+5. `blueprint.yaml`
+6. `03-phases/phase-index.yaml`
+7. `03-phases/phase-flow.md`
+8. The active phase file named by `03-phases/phase-index.yaml`
+9. `README.md` as the product/operator-facing overview before final handoff
+10. `HANDOVER.md` before stopping or claiming completion
 
-## Phase Gates
-
-1. Configuration: if the user says `Use default blog preset`, apply `DEFAULT_PRESET.md`; otherwise ask exactly `questions.md`, summarize answers with its template, and wait for confirmation.
-2. Alignment: record content lane, audience, source types, publisher mode, approval policy, excluded capabilities, fixture policy, and blockers in `VALIDATION.md`.
-3. Content structure: create the required config, source, memory, post, visual/component, storage, script, test, and fixture surfaces with implemented behavior or explicit blocked status.
-4. Source scanner: capture `SourceRecord` files and mark inaccessible sources as `failed` or `skipped` without inventing content.
-5. Idea scoring: generate `IdeaRecord` candidates from captured source IDs and explicit rubric fields.
-6. Drafting and visuals: write `DraftRecord` and Markdown/MDX output with source maps, claim maps, original angle, visual plan, internal links, and checklist state.
-7. Claim and SEO validation: block ungrounded factual claims and invalid metadata, schema, feeds, llms output, or build status.
-8. Approval and publishing: require approval plus passing claim, SEO, feed, and build gates before manual preparation, scheduling, or publishing.
-9. Manager audit: report stale, weak, repeated, broken, blocked, and contradictory records with evidence and recommended action.
-10. Proof and validation: run the target test/build commands and map every phase risk to evidence or an explicit blocker.
-
-## Acceptance Gates
-
-- Source scanner produces valid `SourceRecord` fixtures.
-- Idea scorer produces rubric-based `IdeaRecord` files.
-- Draft generator writes frontmatter, source map, claim map, visual plan, internal links, CTA or next step, and checklist state.
-- Content memory is read before drafting and repeated angles are avoided or flagged.
-- Claim validator blocks ungrounded factual claims.
-- SEO validator checks metadata, structured data, sitemap/RSS/feed, llms output, and build command.
-- Publisher refuses unapproved drafts by default.
-- Schedule or auto mode requires explicit configuration and the same gates.
-- Manager audit reports stale drafts, repeated angles, weak sources, SEO/feed failures, failed builds, and blocked publish attempts.
-- Tests pass without network or publishing credentials.
-- `VALIDATION.md` records implementation evidence and blockers.
-
-## Purpose
-
-Use this Buildprint to create an editorial automation system for practical, source-grounded blog publishing. The output should be useful workflow-first posts with visible evidence and human-controlled publishing gates.
-
-## Architecture
-
-```txt
-Sources
-  -> Scanner
-  -> SourceRecords
-  -> Idea Scorer
-  -> IdeaRecords
-  -> Content Memory
-  -> Draft Generator
-  -> DraftRecord + Markdown/MDX
-  -> Claim Validator
-  -> SEO Validator
-  -> Approval Queue
-  -> Publisher/Scheduler
-
-All storage
-  -> Manager Audit
-  -> Audit Report
-```
-
-Required project surface:
-
-```txt
-Automated AI Blog OS
-  |-- config
-  |   |-- content-os.config.json
-  |   `-- sources.json
-  |-- content-research
-  |   |-- README.md
-  |   |-- YYYY-MM-DD.md
-  |   `-- ideas/*.json
-  |-- content-memory
-  |   |-- posts-index.json
-  |   |-- used-angles.json
-  |   |-- internal-links.json
-  |   `-- banned-claims.json
-  |-- src/content/blog or content/blog
-  |   `-- draft/published Markdown/MDX posts
-  |-- src/content/visuals or components
-  |   |-- FlowGraphic
-  |   |-- CompareGrid
-  |   |-- DoDont
-  |   |-- MetricStrip
-  |   `-- Checklist
-  |-- scripts
-  |   |-- scan-sources
-  |   |-- score-ideas
-  |   |-- draft-post
-  |   |-- validate-claims
-  |   |-- validate-seo
-  |   |-- approve-draft
-  |   |-- publish-or-schedule
-  |   `-- manager-audit
-  |-- storage
-  |   |-- sources/*.json
-  |   |-- drafts/*.json
-  |   |-- approvals/*.json
-  |   |-- seo-reports/*.json
-  |   `-- publish-reports/*.json
-  `-- tests
-      |-- fixtures
-      |-- content-pipeline.test.*
-      |-- seo-validation.test.*
-      `-- approval-publishing.test.*
-```
-
-## Evidence Boundary
-
-Fixture and local tests are evidence for pipeline behavior, source grounding, validation gates, and fail-closed publishing. They are not evidence of live source access, live LLM generation, deployed publishing, analytics, or external scheduler behavior.
-
-Any unavailable source access, LLM/provider integration, deployment access, or publishing integration must be recorded in `VALIDATION.md` as blocked or excluded, not represented as working.
-
-## Required Validation
-
-Default command gate:
-
-```bash
-target verification command
-npm run build
-```
-
-If the target project does not use npm, run equivalent test/build commands and record the substitution in `VALIDATION.md`.
-
-`VALIDATION.md` must include configuration, generated modules/files, exact commands and results, risk coverage mapped to per-phase proof gates, deviations, blockers, and the publish safety statement.
-
-## Copyable Agent Prompt
-
-Build the Automated AI Blog OS from `BUILDPRINT.md`. Treat `BUILDPRINT.md` as the canonical authority before every other file. If I say `Use default blog preset`, use `DEFAULT_PRESET.md`; otherwise ask exactly `questions.md`, summarize the answers using its template, and wait for confirmation. Then implement a Markdown/MDX-first pipeline with source scanning, idea scoring, content memory, draft generation, visual post templates, claim validation, SEO/build/feed validation, approval queue, publisher/scheduler, manager audit, tests, and `VALIDATION.md`. Default publishing must be draft/manual approval. Tests must use fixtures and must not call real source, LLM, deployment, or publishing services. Every represented command, route, service, or capability must work end to end or be recorded as blocked/excluded.
+Read sequentially. Do not inventory every phase before the active phase is known.
