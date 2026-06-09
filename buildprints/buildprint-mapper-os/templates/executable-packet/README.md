@@ -17,11 +17,11 @@ One clear sentence explaining what this product does for its user or operator.
 
 ## Requirements
 
-- Runtime: replace with the required runtime and version.
-- Package manager or CLI: replace with the commands used by this project.
-- Storage/database: replace with required local or managed storage.
-- Browser/desktop/mobile: replace with supported surfaces when relevant.
-- External services: replace with required or optional services.
+- Runtime version only if the user/operator must install it manually.
+- Package manager or CLI only if it is needed to run the product.
+- Provider/API keys only for enabled live providers.
+- Database, storage, export, webhook, OAuth, or deployment credentials only for enabled features.
+- External service accounts only when the product actually calls that service.
 
 ## Environment And Provider Keys
 

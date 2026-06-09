@@ -10,9 +10,13 @@ Users must be able to export the persisted deck to PPTX and PDF through a real r
 
 Runtime setup must support local Docker/self-hosted deployment with app data volume, database URL, provider env, auth env, and export browser/converter settings. Desktop packaging can remain a seam unless it is actually built and launched.
 
+Export, API tasking, and runtime work must follow `blueprint.yaml` `proven_implementation_requirements`: use a real PPTX/PDF export library, browser/converter runtime, or dedicated export service; use a durable task/status model for export and generation; and use a database/migration layer rather than ad hoc files for persistent product state. A from-scratch exporter is acceptable only if it proves editable PPTX structure, PDF visual fidelity, path safety, and artifact readback against representative decks.
+
 ## DO NOT
 
 - Do not create placeholder `.pptx` or `.pdf` files.
+- Do not hand-roll PPTX/PDF export when a proven library/runtime is available unless equivalent export fidelity proof is added.
+- Do not implement long-running export/generation as invisible fire-and-forget work.
 - Do not return download URLs outside the configured export directory.
 - Do not expose arbitrary files through export download routes.
 - Do not mark export proven if the converter/browser runtime is missing.

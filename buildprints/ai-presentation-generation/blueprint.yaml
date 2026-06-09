@@ -181,6 +181,77 @@ runtime:
       - spreadsheet
       - image
 
+proven_implementation_requirements:
+  rule: Hard product domains must use proven libraries, SDKs, runtimes, or platform services unless a from-scratch alternative is explicitly justified and proven against the same acceptance criteria. Keep the packet stack-neutral, but do not let builders casually hand-roll fixed-format export, rich editing, document parsing, drag interactions, chart rendering, provider clients, task orchestration, or migrations.
+  editable_slide_rendering:
+    requirement: Use a structured rendering/editing approach that preserves slide layout, editable content fields, theme/font separation, aspect-ratio framing, and persisted readback.
+    acceptable_patterns:
+      - React/Vue/Svelte component template system with structured slide JSON
+      - rich text editor framework for inline text where rich editing is claimed
+      - schema-validated template/layout compiler
+    casual_hand_roll_forbidden: true
+  rich_text_and_inline_editing:
+    requirement: Use a proven editor framework or a narrowly scoped structured input model; plain textareas are acceptable only for simple fields and must not be claimed as rich slide editing.
+    examples:
+      - TipTap/ProseMirror
+      - Lexical
+      - Slate
+      - structured custom controls for bounded title/body/image/icon fields
+  fixed_format_export:
+    requirement: Use a real PPTX/PDF export library or browser/converter runtime; exported files must be generated from persisted deck state and inspected before fidelity claims.
+    examples:
+      - pptxgenjs
+      - python-pptx
+      - Playwright/Puppeteer browser-to-PDF
+      - LibreOffice/UNO or a dedicated conversion service
+      - dedicated presentation-export runtime
+    forbidden:
+      - placeholder files
+      - screenshot-only PPTX when editable PPTX is claimed
+      - download routes that bypass export-directory constraints
+  document_extraction:
+    requirement: Use established parsers/extractors for PDF, Office, spreadsheet, text, and image/OCR inputs as applicable; uploaded document content must affect the generated outline/deck.
+    examples:
+      - pdfplumber or equivalent PDF parser
+      - python-pptx or equivalent presentation parser
+      - xlsx/csv parser
+      - OCR library/service only when image text extraction is claimed
+  drag_reorder_and_canvas_interaction:
+    requirement: Use a proven drag/drop or interaction library for slide reorder and complex pointer behavior unless the custom implementation proves keyboard, pointer, focus, and persistence behavior.
+    examples:
+      - dnd-kit
+      - React DnD
+      - SortableJS
+  charts_diagrams_and_visual_primitives:
+    requirement: Use chart/diagram/rendering libraries for structured charts, diagrams, code blocks, and visual primitives where generated slides claim those capabilities.
+    examples:
+      - Chart.js
+      - Recharts
+      - Mermaid
+      - SVG/canvas helpers with structured data contracts
+  provider_abstraction:
+    requirement: Define a local provider interface and use official SDKs or well-supported HTTP clients for live providers; provider-specific auth/model/error handling must not be scattered through UI code.
+    live_claim_requires:
+      - configured credentials or local provider runtime
+      - model validation or explicit model selection
+      - user-facing missing-key/model/endpoint errors
+      - sample-output proof
+  background_jobs_and_export_tasks:
+    requirement: Use a real task/status model for generation, document extraction, local model pulls, webhooks, and export; heavier deployments may use a queue, but local proof still needs durable task state or honest blockers.
+    acceptable_patterns:
+      - SQL-backed task status
+      - Redis/RQ/Celery
+      - BullMQ
+      - platform queue/service
+      - explicit single-process local task model with persisted status
+  persistence_and_migrations:
+    requirement: Use a database layer with migrations or an explicit schema evolution path; browser-only or memory-only state is forbidden when durability is claimed.
+    acceptable_patterns:
+      - SQL ORM/query layer plus migrations
+      - SQLite for trusted local proof
+      - Postgres/MySQL for server deployment
+      - file/object storage for uploads/assets/exports with database metadata
+
 forbidden_shapes:
   - single prompt box with fake deck output
   - raw JSON as primary user-facing deck or outline
@@ -191,6 +262,9 @@ forbidden_shapes:
   - template selection that does not change slide layout
   - chat response without persisted slide mutation
   - production-ready claim without live runtime proof
+  - hand-rolled PPTX/PDF export without proof equal to a proven export runtime
+  - hand-rolled document parsing without parser-level extraction proof
+  - hand-rolled rich editor or drag/reorder interaction without accessibility and readback proof
 
 harness:
   provider: agents

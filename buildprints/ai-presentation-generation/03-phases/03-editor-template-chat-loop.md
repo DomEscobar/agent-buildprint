@@ -10,9 +10,12 @@ Users must be able to generate slides from the reviewed outline and selected tem
 
 Presentation mode must show the deck without editor chrome, support next/previous navigation and exit, and preserve theme/template rendering. Error boundaries must show useful messages when a slide layout fails rather than crashing the whole workbench.
 
+Editor, template, chart, and drag/reorder work must follow `blueprint.yaml` `proven_implementation_requirements`: use a structured slide template/rendering system, a proven rich text editor or bounded structured inputs, proven drag/drop interaction library for reorder, and chart/diagram libraries for generated visual primitives. If custom implementations are used, they must prove keyboard, pointer, focus, long-content, visual framing, and persistence behavior.
+
 ## DO NOT
 
 - Do not render slides as static images if editing is claimed.
+- Do not hand-roll rich editing, drag/reorder, or chart rendering without accessibility, stress, and readback proof.
 - Do not implement chat as text-only advice with no slide mutation.
 - Do not let reorder modify only Redux/client state without persistence.
 - Do not allow a broken slide layout to blank the whole editor.

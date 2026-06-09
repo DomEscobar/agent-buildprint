@@ -16,6 +16,8 @@ Create the real base project structure for the artifact described by `blueprint.
 
 Use `typed_quality_gates` in `blueprint.yaml` as a selector, not as decoration. During setup, record applicable/not applicable gates, command/proof path, and blockers inside `docs/architecture.md`.
 
+Use `proven_implementation_requirements` in `blueprint.yaml` to choose libraries and runtimes for hard domains. The packet is stack-neutral, but the implementation is not allowed to casually hand-roll PPTX/PDF export, document extraction, rich editing, drag/reorder interactions, charts/diagrams, provider SDK clients, task orchestration, or migrations. If a from-scratch alternative is chosen, `docs/architecture.md` must justify it and name the proof that will show it satisfies the same product bar.
+
 ## Architecture Foundation
 
 Use a full-stack architecture with these responsibilities:
@@ -25,6 +27,7 @@ Use a full-stack architecture with these responsibilities:
 - Worker/runtime layer: PPTX/PDF export, document extraction, optional local model startup/pull jobs, and long-running generation/export task tracking.
 - Storage: SQL for presentations, slides, templates, chat history, task status, image asset metadata, and webhooks; file/object storage for uploads, generated assets, exported files, and local config.
 - Provider layer: text model providers, image providers, local OpenAI-compatible providers, and disabled-image fallback must be explicit configuration states, not hidden mocks.
+- Library/runtime choices: choose proven packages or platform services for fixed-format export, rich editing, document parsing, drag/drop, charts/diagrams, provider SDKs, queue/task state, and migrations; record exact package/service choices and why they satisfy `proven_implementation_requirements`.
 
 Source evidence: the mapped source aggregates presentation routes for files, fonts, outlines, presentations, slides, chat, images, Ollama, providers, themes, templates, and PDF/PPTX support in `servers/fastapi/api/v1/ppt/router.py`. It stores presentation and slide records in SQL models with JSON structure/layout/content fields. It exposes provider configuration through frontend validation and Docker/env variables.
 
@@ -79,6 +82,7 @@ Secrets must never be committed, shown in logs, or exposed to the frontend unles
 Before moving to phase work, produce a setup receipt in `HANDOVER.md` or the phase handoff with:
 
 - Stack selected and why it satisfies the contract.
+- Proven library/runtime choices for export, document extraction, editing, drag/reorder, charts/diagrams, providers, task state, and persistence/migrations.
 - Local harness status.
 - Database/storage location and migration/init command.
 - Provider mode: deterministic, configured live, or blocked.

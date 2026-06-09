@@ -4,6 +4,7 @@
 
 - Source-independent selected Buildprint packet for a private AI presentation workbench.
 - Packet shape: generic `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, `02-ui-identity.md`, `blueprint.yaml`, phase index/flow, five comprehensive phase files, and this handover template.
+- `blueprint.yaml` includes `proven_implementation_requirements` for hard domains: editable slide rendering, rich text/inline editing, fixed-format export, document extraction, drag/reorder, charts/diagrams, provider abstraction, background jobs/export tasks, and persistence/migrations.
 
 ## Verified
 
@@ -11,6 +12,7 @@
 - `.buildprint/next-agent.md` was read before mapping.
 - Target source was cloned from `https://github.com/presenton/presenton` at commit `99a23afd496dbb9654572fd2aa439aa852c05f33`.
 - Source discovery covered README/VISION, FastAPI route aggregation, presentation/outline endpoints, SQL models, provider config, upload/outline/editor UI, export runtime, Docker/env, and subagent scans.
+- The framework/library hard-technique adjustment was validated with `agb packet check buildprint-submission`: `PASS (0 failed)`.
 
 ## Blocked
 

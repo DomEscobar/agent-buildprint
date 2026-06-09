@@ -1,27 +1,71 @@
-# MiroFish Social Simulation Studio
+# ai-swarm-simulator
 
-A Mapper OS v3 phase-driven executable packet for building a MiroFish-inspired social simulation studio. The artifact starts trusted-local, then hardens toward real provider, runtime, persistence, publishing/export, and production boundaries.
+![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![Build](https://img.shields.io/badge/build-local%20checks%20required-yellow)
+![Runtime](https://img.shields.io/badge/runtime-browser%20webapp-lightgrey)
+![Status](https://img.shields.io/badge/status-trusted--local%20first-yellow)
 
-The product thesis is not a generic AI operations dashboard. It is a simulation/content engine: seed material goes in, a source-grounded ontology/graph is created, graph entities become configured agents, agents act inside Twitter/Reddit-style environments, and the user gets a readable feed, grounded story/report, and postable simulation artifact.
+`ai-swarm-simulator` is a social simulation studio for turning seed material into a graph-backed world, running agent activity across simulated social platforms, and producing a readable feed, report, and exportable story artifact.
 
-The output quality bar is now explicit: the generated map, feed, report, and story must be scenario-specific enough to teach the user something. A future implementation should show source-derived ontology, graph facts, entity-to-agent mapping, actor motives, risks, influence paths, differentiated social posts, Reddit-style disagreement, action logs, timeline shifts, run insights, report provenance, and a concrete publishing brief. A polished shell with repetitive template posts is not enough.
+## Features
 
-Mapper OS remap comparison note: the current novice-first Start/Map/Run/Feed/Story/Projects wrapper is useful as a regression oracle, but the original Microfish source carries a stricter pipeline: upload and prediction requirement -> ontology generation -> Zep-style GraphRAG -> OASIS-compatible profile/config generation -> dual-platform action logs -> ReportAgent-style grounded prediction report -> deep interaction. Implementations should preserve that source-fidelity contract while keeping the friendlier product wrapper.
+- Build a scenario map from source material, entities, relationships, motives, risks, and influence paths.
+- Convert graph entities into simulation agents with roles, stances, activity levels, influence weights, and platform behavior.
+- Run a local or provider-backed swarm simulation with posts, replies, comments, reactions, reposts, searches, follows, and timeline events.
+- Inspect the simulated feed, action logs, agent decisions, graph facts, report provenance, and scenario changes.
+- Generate a grounded story, report, or postable thread from the simulation output without pretending it was posted to a real social network.
+- Keep blocked states honest when provider keys, graph memory, persistence, export, or deployment requirements are missing.
 
-Start with `BUILDPRINT.md`, answer only the true hard stops in `00-questions.md`, complete `01-project-setup.md`, make the UI/UX decisions in `02-uiux-decision.md`, then follow the active phase loop in `03-phases/phase-flow.md`.
+## Requirements
 
-The packet intentionally does not ship `slices/`, `gates/`, `generated/`, team capsules, or runner files. The work is organized as comprehensive product phases.
+- Text/model provider key when live provider-backed simulation is enabled.
+- Graph memory API URL/key when external graph memory is enabled.
+- Database URL and session secret when saved projects/runs are enabled.
+- Export storage credentials only when exported reports/stories are written to external storage.
+- Deployment credentials only when moving beyond trusted-local use.
 
-The first five phases build and verify the trusted-local product loop. Later phases are mandatory if the artifact is expected to be production quality:
+## Environment And Provider Keys
 
-- plain-language novice UX and actionable blocked states
-- social simulation feed with agent posts, reactions, reposts, comments, and timeline events
-- postable story/thread export built from the simulation, clearly separated from real X/Twitter posting
-- source-fidelity checks for upload/ontology/graph/entity-agent/action-log/report provenance
-- backend provider probe and server-side secret boundary
-- durable project persistence
-- real deterministic simulation runtime
-- provider-backed runtime and report generation
-- external graph memory adapter
-- UX stress, accessibility, and large graph handling
-- deployment, auth, privacy, observability, and operations
+Use `.env.example` as the source of truth for exact variable names in an implementation. Keep real secrets out of README files, tests, logs, screenshots, and handover notes.
+
+```bash
+TEXT_PROVIDER_API_KEY=
+GRAPH_MEMORY_URL=
+GRAPH_MEMORY_API_KEY=
+DATABASE_URL=
+SESSION_SECRET=
+EXPORT_STORAGE_URL=
+```
+
+- Required only when the matching feature is enabled; deterministic local simulation should not need live provider keys.
+- Optional provider keys unlock live generation, external graph memory, export storage, or deployment.
+- Blocked unless configured: live provider-backed simulation, external graph memory, production deployment, real publishing, and durable export storage.
+
+## Quick Start
+
+```bash
+install-command
+configure-env-command
+run-dev-command
+test-or-check-command
+```
+
+Open the product, create or load a scenario, inspect the map, run a deterministic local simulation, review the feed, and generate the report/story output.
+
+## Verification
+
+Before claiming the product is complete, verify:
+
+- setup, build, lint/typecheck, and test commands exit successfully or record exact blockers;
+- the main product path works through the UI, API, or CLI surface;
+- simulation output is scenario-specific rather than repetitive template text;
+- state survives reload/refetch when persistence is claimed;
+- missing providers produce clear blocked states rather than fake success;
+- desktop and narrow layouts avoid overlap, clipped controls, unreadable text, and unreachable actions.
+
+## Limitations
+
+- Trusted-local operation is the default until auth, privacy, deployment, and observability are proven.
+- Live provider-backed simulation requires configured credentials and safe provider boundaries.
+- Real publishing to external social platforms is not implied by simulated feed or export features.
+- Production readiness requires separate proof for persistence, provider secrets, deployment, privacy, and recovery paths.

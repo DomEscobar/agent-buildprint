@@ -10,9 +10,13 @@ Build the provider-aware generation intake. Users must be able to configure or r
 
 For deterministic proof, implement a structured local generator that uses prompt and extracted document text to produce topic-specific outlines. It must reject generic repeated output by comparing generated outline terms against the input. If real providers are configured, prove one text provider path and one image-provider readiness path; otherwise mark them blocked.
 
+Document ingestion and provider calls must follow `blueprint.yaml` `proven_implementation_requirements`: use established parsers/extractors for uploaded files and official SDKs or well-supported HTTP clients behind a local provider interface. Do not hand-roll PDF/Office/spreadsheet parsing or scatter provider-specific request logic through UI components.
+
 ## DO NOT
 
 - Do not accept uploaded files and then ignore their content.
+- Do not hand-roll document parsers when mature parsers exist unless parser-level extraction proof is added.
+- Do not scatter provider-specific SDK/auth/error logic through the frontend.
 - Do not allow `Auto` language with documents if the implementation cannot reliably infer it.
 - Do not stream random text that later fails JSON/schema parsing.
 - Do not show stock/image provider success without checking the selected provider.

@@ -100,7 +100,7 @@ The README must include:
 - the product name and one concise product promise;
 - version/status badges, including at minimum product version, build/check status, license, runtime, and qualification/status;
 - a feature section explaining what the artifact does for its user or operator;
-- a requirements section naming runtime prerequisites, supported package manager or CLI commands, storage/database needs, browser/desktop requirements when relevant, and external services;
+- a requirements section naming only real user/operator prerequisites: required runtimes/CLIs, provider/API keys, database/storage/export services, OAuth/webhook/deployment credentials, and external service accounts needed by enabled features;
 - an environment/provider keys section with exact variable names from `.env.example`, blank secret examples only, and honest notes for optional, required, blocked, or live-proof-only providers;
 - a quick start section with install, configure, run, test/check, and first-use commands;
 - a verification or proof section listing the commands and manual surface checks that were actually run;
