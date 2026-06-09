@@ -1,39 +1,98 @@
 # Phase Flow
 
-Use this loop for the active phase only. Do not read every phase upfront. Do not turn phase execution into paperwork.
+You are the orchestrator for this phase only. Keep the active context small: route work through the active phase, the required role contracts in `06-contracts/`, and runtime phase-run artifacts.
 
-## How to run a phase
+## Phase-Entry Protocol
 
-1. Read `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, and `02-ui-identity.md` before every active phase. For UI-bearing artifacts, `02-ui-identity.md` and the generated local UI identity are the standing comprehension, user-language, and visual identity contract, not optional polish files.
-2. Read `.buildprint/next-agent.md` and current project `AGENTS.md` if they exist.
-3. Read the active phase file named in `03-phases/phase-index.yaml`.
-4. Before editing code, state a short thinking checkpoint in the working response or task plan: active phase, smallest real vertical user/operator path, 3-7 likely failure modes, proof plan, and claim ceiling. This is not a deliverable file. Do not create phase-run paperwork by default.
-5. Build the path only after that checkpoint is clear. Use `subagent-driven-implementation` only when the phase splits into cleanly owned workstreams; otherwise keep implementation local.
-6. Verify with the most meaningful available command, API/runtime check, browser/screenshot inspection, or persistence/readback proof. Load `verify-and-review` before claiming phase completion.
-7. Compare the result against the predicted failure modes. Mark each avoided, found and fixed, still blocked, or not applicable.
-8. Repair visible slop and fake-success shortcuts before continuing. Do one concrete weakness repair unless none is found.
-9. Record what works, what is blocked, what was verified, what the proof does not prove, and what the next phase may trust.
-10. Continue through the dependency-ready implementation phases in `03-phases/phase-index.yaml`.
-99. Final mandatory phase: run `03-phases/critical-review-pushback.md` as `99-critical-review-pushback`; if the rubric does not pass, fix the named ad hoc flaws and rerun the relevant proof before claiming done.
+Before writing code for any phase:
 
-## Completion rule
+0. Confirm the `Foundation scaffold gate` in `02-project-setup.md` has produced a real base project structure, mandatory root `AGENTS.md`, `architecture.md`, `engineering-standards.md`, `test-strategy.md`, and `ui-identity.md` when UI-bearing. If the scaffold is missing, stop before phase code, create it, and ensure any blocked setup or e2e/runtime proof is exiting deterministically instead of hanging.
+1. Read the active phase file named by `03-phases/phase-index.yaml`.
+2. Resolve every `requires_roles` entry to `06-contracts/<role>.md`.
+3. Read only the role contracts required by the active phase.
+4. Declare the phase objective in `.buildprint/phase-runs/<phase-id>/plan.md`.
+5. Write `.buildprint/phase-runs/<phase-id>/team-gates.md` with active roles, contract files, blocking gates, and proof expectations.
+6. Write bounded `.buildprint/phase-runs/<phase-id>/handoffs/<role>.md` for every required role.
+7. Use subagents, delegated workers, or parallel specialist sessions when the environment supports them.
+8. If subagents are unavailable, self-simulate each required role and write `.buildprint/phase-runs/<phase-id>/returns/<role>.md`.
+9. Integrate role returns, implement the first real vertical path, verify, review, write proof, then record evidence.
 
-A phase passes only when the building objective is satisfied by a real product path or a blocker is honestly recorded. Edits alone, placeholder screens, mocked data, functionless buttons, sample-only proof, unchecked screenshots, or a skipped thinking checkpoint do not complete a phase.
+Subagents are optional tooling. Role-gated delegation artifacts are mandatory. Do not mark `phase_core_passed` until every required role has a handoff and a return file, or an explicit blocker routed through the evidence ledger.
 
-Do not create phase-run markdown, evidence ledgers, or planning artifacts by default. The thinking checkpoint is behavioral: it should shape the work, not become paperwork. Persist only concise progress, blockers, and handoff facts needed for continuation.
+## Required Phase Artifacts
 
-Final completion is impossible until phase `99-critical-review-pushback` has run and either passed or recorded an external blocker. Treat it as the last phase in the phase graph, not as optional review prose.
+Before implementation:
 
-Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`, `UI_IDENTITY_DONE`, `SUBAGENT_PHASE_DONE` when subagents governed the work, and `VERIFY_REVIEW_DONE` before phase completion.
+- `.buildprint/phase-runs/<phase-id>/plan.md`
+- `.buildprint/phase-runs/<phase-id>/team-gates.md`
+- `.buildprint/phase-runs/<phase-id>/handoffs/<role>.md` for every role in `requires_roles`
 
-## Repair routing
+Before evidence:
 
-- If the phase objective is wrong or too thin, repair the phase file before coding more.
-- If setup is missing architecture, local skill harness, commands, env, proof surfaces, or setup receipt, return to `01-project-setup.md`.
-- If a product-defining/security/destructive/secret decision is missing, return to `00-questions.md` and stop.
-- If UI quality is generic, interactionless, visually incoherent, stuffing multiple capabilities into one permanent view, or drifting away from the generated identity contract, return to `02-ui-identity.md` or `docs/ui-identity.md` before advancing.
-- If runtime/provider/deployment is unavailable, build the seam and record a blocker; do not fake live success.
+- `.buildprint/phase-runs/<phase-id>/returns/<role>.md` for every role in `requires_roles`, unless that role has an explicit blocker
+- `.buildprint/phase-runs/<phase-id>/reviews/architecture.md`
+- `.buildprint/phase-runs/<phase-id>/reviews/ux.md`
+- `.buildprint/phase-runs/<phase-id>/reviews/qa.md`
+- `.buildprint/phase-runs/<phase-id>/proof.md`
 
-## Handoff discipline
+Only then:
 
-Before stopping, update `.buildprint/progress.md`, `.buildprint/blockers.md`, and handoff notes. If those files do not exist yet, create them. Keep the handoff concise and evidence-based.
+- append `.buildprint/evidence/evidence-ledger.jsonl`
+- update `.buildprint/progress.md`, `.buildprint/state.json`, and `.buildprint/next-agent.md`
+
+## Phase State Model
+
+Every phase must distinguish three states:
+
+- `checkpoint_recorded`: the runtime evidence ledger has at least one valid proof or blocker row for this phase.
+- `phase_core_passed`: the phase's first real local vertical path is implemented, verified, reviewed, and recorded without core blockers.
+- `claim_qualified`: live-provider, browser/e2e, screenshot, deployment, security, worker, or data-lifecycle proof has enough matching evidence to upgrade the corresponding claim.
+
+An early checkpoint is not phase completion. A phase may continue after `checkpoint_recorded`, but it is not `phase_core_passed` until the owned implementation path works end to end.
+
+For UI-bearing phases, `phase_core_passed` requires at least one user action path through a UI/controller boundary into runtime behavior and back into visible state or readback. Static state cards, dead buttons, generic dashboards, stacked forms, raw text-list substitutes, default browser controls, and screenshots that read as local MVPs do not satisfy the UI path.
+
+## Delegation Protocol
+
+Each handoff must include:
+
+- phase id and active phase file
+- role contract path under `06-contracts/`
+- files to read
+- allowed edit scope
+- non-goals
+- success criteria
+- verification command or proof artifact expected
+- evidence row expectations
+- risks/blockers to report
+
+Each return file must use the headings required by its role contract. The main agent remains responsible for integration, final verification, claim limits, and evidence rows even when subagents produce the role returns.
+
+## Review and Integration
+
+The orchestrator cannot silently discard dissent. If a role return reports a blocker or quality gap, either fix it, route it to setup/questions/prior phase/external blocker, or record why it is out of scope.
+
+Required runtime artifact reviews:
+
+- `.buildprint/phase-runs/<phase-id>/reviews/architecture.md`: use the `product-architect` return to verify topology, dependency direction, state/runtime ownership, product obligation preservation, ADR-lite tradeoffs, and next-phase boundary.
+- `.buildprint/phase-runs/<phase-id>/reviews/ux.md`: use the `ux-ui-craft` return for UI-bearing phases; for non-UI phases, write `## Verdict: not-ui-bearing`, `## Reason`, and `## Downstream UI obligations`.
+- `.buildprint/phase-runs/<phase-id>/reviews/qa.md`: use the `test-and-verification` return to verify commands, negative cases, evidence row scope, and claim limits.
+
+## Evidence Gate
+
+Runtime proof/blocker rows go only to `.buildprint/evidence/evidence-ledger.jsonl`. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence and remains immutable after bootstrap.
+
+Before writing runtime evidence, read `05-evidence/evidence-ledger.schema.json` and conform to it. Every runtime row must include `artifact_id`, `type`, `phase_id`, valid `status`, `source`, array `proves`, `proof_type`, `provider_mode`, and `upgrades_claim`.
+
+Use the evidence ceiling rule from `06-contracts/test-and-verification.md`: Do not copy every required proof label into every evidence row; HTTP/API runtime traces prove API/runtime behavior, not browser behavior; Provider adapter/config tests can prove adapter seams but not live provider behavior; Review prose cannot upgrade implementation proof by itself; QA review must explicitly audit every `upgrades_claim: true` row; `visual_quality_gate` requires screenshot/browser critique, not default-control shells or raw text-list substitutes; use `blocks_continuation: false` only when a blocker limits qualification but not downstream implementation.
+
+## Continuation gate
+
+Continue to the next dependency-ready phase only when this phase has:
+
+- core implementation/API/domain/persistence tests passing for the first real vertical path
+- required handoffs, returns, reviews, proof, and evidence rows written
+- for UI-bearing phases, a local user action path and product-grade screenshot/browser review, or a non-upgrading blocker that does not block core continuation
+- non-upgrading blocker rows for live-provider, deployment, or external-service proof that could not run in the current environment
+
+Do not continue when the blocker means the current phase did not implement its core product path, did not persist state it owns, failed required tests, has unresolved destructive/security ambiguity, or cannot provide honest local runtime/API proof.
