@@ -1,30 +1,45 @@
-# Phase 05 - Persistence, Gallery, And Publishing
+# Phase 05 - Persistence Gallery And Publishing
 
 ## How to implement this phase
 
-Turn generated outputs into durable, auditable artifacts and safe publishing actions.
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md` if it exists
+- current project `AGENTS.md` if it exists
+- `BUILDPRINT.md`
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
+
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Implement and prove local output persistence, gallery records, S3/public gallery behavior where configured, social account lookup, publishing/scheduling confirmations, and side-effect audit trails. The operator must know whether a short is local-only, gallery-published, scheduled, posted, failed, or blocked.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Production durability is not satisfied by in-memory maps. If the implementation remains local/file-based, record the restart and retention ceiling clearly.
+Implement durable local gallery records, optional object-store seam, export/download status, social publishing confirmation, Upload-Post-style provider boundary, audit records, and retry/error paths. Publishing must require explicit confirmation and provider response proof; local gallery proof must show readback after restart or record a production durability blocker.
+
+This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
 
-- Do not publish or schedule without explicit confirmation.
-- Do not mark public gallery or social publishing complete from request submission alone.
-- Do not store real provider secrets in logs, docs, examples, or screenshots.
-- Do not claim backup/durability without readback and restart proof.
+- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
+- Do not create functionless buttons, inert navigation, swallowed errors, or fake progress.
+- Do not count mocked/sample data as proof for real input, live provider, persistence, or operator paths.
+- Do not hide missing provider/runtime/deployment blockers behind optimistic success UI.
+- Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
+- Do not mark this phase complete from code edits or prose alone.
+- Do not build a generic landing page unless the mapped product is actually a landing-page product.
 
 ## Minimum proof before moving on
 
-- Output artifact readback from local storage.
-- Gallery record creation/readback or S3/object-store blocker.
-- Upload-Post profile lookup or exact key/account blocker.
-- Publish/schedule dry-run or live response proof with audit record.
-- Restart-safe job/gallery state proof or durability blocker.
+- Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Inspect the product path through UI/API/CLI/runtime, not only source files.
+- Prove persistence/readback when this phase creates durable state.
+- Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note
 
-Record storage paths, gallery ids, provider responses, side effects performed, redacted audit evidence, and durability limits.
+Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
+

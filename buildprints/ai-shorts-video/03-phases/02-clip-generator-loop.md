@@ -2,29 +2,44 @@
 
 ## How to implement this phase
 
-Build the long-form-video-to-shorts loop around real media processing and honest provider seams.
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md` if it exists
+- current project `AGENTS.md` if it exists
+- `BUILDPRINT.md`
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
+
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Implement and prove the Clip Generator path: upload or ingest owned source video, transcribe it, detect candidate moments, generate 3-15 short candidates, cut vertical MP4s, add hook/caption metadata, and show them in the review surface. Gemini may choose moments only when a real key is configured; otherwise the phase must preserve a deterministic/local blocker path without pretending to know viral quality.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-The operator should be able to play each generated short, see source-derived title/hook/caption/platform metadata, inspect processing logs, and retry or move to editing/publishing.
+Implement the long-form video to vertical shorts path: input validation, transcript or caption extraction, scene/segment selection, 9:16 crop/reframe strategy, preview metadata, render task, and export record. The operator should see source, selected segment, caption timing, render status, and retry/blocker actions instead of a generic upload-complete card.
+
+This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
 
-- Do not output generic clips unrelated to the source.
-- Do not claim AI viral detection without Gemini response proof.
-- Do not silently skip transcription, scene detection, crop/reframe, or caption timing.
-- Do not let oversized files or disabled YouTube ingest fail unclearly.
+- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
+- Do not create functionless buttons, inert navigation, swallowed errors, or fake progress.
+- Do not count mocked/sample data as proof for real input, live provider, persistence, or operator paths.
+- Do not hide missing provider/runtime/deployment blockers behind optimistic success UI.
+- Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
+- Do not mark this phase complete from code edits or prose alone.
+- Do not build a generic landing page unless the mapped product is actually a landing-page product.
 
 ## Minimum proof before moving on
 
-- API/UI proof for upload or URL submission with rights attestation.
-- Job status transitions through queued/processing/completed or failed with specific error.
-- At least one generated MP4 exists, plays, and is linked to source metadata, or an exact provider/runtime blocker is recorded.
-- Caption/hook metadata is source-derived, not filler.
-- Browser proof of result review state and blocked/error state.
+- Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Inspect the product path through UI/API/CLI/runtime, not only source files.
+- Prove persistence/readback when this phase creates durable state.
+- Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note
 
-Record source fixture, output path, job id, generated clip count, provider/runtime blockers, and unproven quality claims.
+Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
+

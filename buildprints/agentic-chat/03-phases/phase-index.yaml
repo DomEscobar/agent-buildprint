@@ -1,44 +1,28 @@
-schema_version: mapper-os/phase-index
+schema_version: mapper-os/phase-index/v3
 active_phase: 03-phases/01-contracts-storage.md
 phases:
   - phase_id: 01-contracts-storage
     file: 03-phases/01-contracts-storage.md
-    status: pending
+    status: included
     depends_on: []
-    proof_gate: proof-01-contracts-storage
   - phase_id: 02-provider-streaming-runtime
     file: 03-phases/02-provider-streaming-runtime.md
-    status: pending
-    depends_on:
-      - 01-contracts-storage
-    proof_gate: proof-02-provider-streaming-runtime
+    status: included
+    depends_on: [01-contracts-storage]
   - phase_id: 03-tools-skills-mcp-policy
     file: 03-phases/03-tools-skills-mcp-policy.md
-    status: pending
-    depends_on:
-      - 01-contracts-storage
-      - 02-provider-streaming-runtime
-    proof_gate: proof-03-tools-skills-mcp-policy
+    status: included
+    depends_on: [02-provider-streaming-runtime]
   - phase_id: 04-memory-subagents-telemetry
     file: 03-phases/04-memory-subagents-telemetry.md
-    status: pending
-    depends_on:
-      - 01-contracts-storage
-      - 02-provider-streaming-runtime
-    proof_gate: proof-04-memory-subagents-telemetry
-  - phase_id: 05-safety-claim-boundaries
-    file: 03-phases/05-safety-claim-boundaries.md
-    status: pending
-    depends_on:
-      - 03-tools-skills-mcp-policy
-      - 04-memory-subagents-telemetry
-    proof_gate: proof-05-safety-claim-boundaries
-  - phase_id: 06-webui-api-workbench
-    file: 03-phases/06-webui-api-workbench.md
-    status: pending
-    depends_on:
-      - 02-provider-streaming-runtime
-      - 03-tools-skills-mcp-policy
-      - 04-memory-subagents-telemetry
-      - 05-safety-claim-boundaries
-    proof_gate: proof-06-webui-api-workbench
+    status: included
+    depends_on: [03-tools-skills-mcp-policy]
+  - phase_id: 05-safety-webui-verification
+    file: 03-phases/05-safety-webui-verification.md
+    status: included
+    depends_on: [04-memory-subagents-telemetry]
+  - phase_id: 99-critical-review-pushback
+    file: 03-phases/critical-review-pushback.md
+    status: included
+    depends_on: [05-safety-webui-verification]
+

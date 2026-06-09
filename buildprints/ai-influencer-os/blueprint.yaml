@@ -10,7 +10,7 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
-  claim_ceiling: live AI providers, S3/object storage, social publishing, and public SaaS deployment require configured credentials plus runtime proof.
+  claim_ceiling: live social posting, public deployment, real image generation, and browser publishing require explicit credentials plus runtime proof.
 
 read_order:
   - BUILDPRINT.md
@@ -68,7 +68,7 @@ phase_contract:
 
 agent_contract:
   role: Senior Product Engineer
-  rule: Build real OpenShorts-style product paths. Visible controls must work or block honestly; provider, deployment, publishing, and durability claims require direct proof.
+  rule: Build the OpenClaw persona, memory, image, social, and publishing handoff paths honestly. Provider, browser, and publishing claims require direct proof or explicit blockers.
 
 harness:
   provider: agents
@@ -79,38 +79,36 @@ harness:
   selection_rule: Use only profiles that match this artifact. Do not expand to full unless broad coverage is explicitly worth the extra context.
 
 central_output_contract:
-  rule: The central output must be specific to AI Shorts Video, not a generic shell with renamed labels.
-  central_output: Publish-ready vertical short-video package.
+  rule: The central output must be specific to AI Influencer OS, not a generic shell with renamed labels.
+  central_output: Grounded AI influencer draft package with persona context, media job, policy status, and manual publishing handoff.
   output_primitives:
-    - 9:16 MP4 clip or generated UGC video
-    - source-derived hook and caption/subtitle track
-    - title, description, hashtags, and platform metadata
-    - render/edit state and preview
-    - optional gallery record and social publishing status
+    - persona memory/state update
+    - grounded social draft with source references
+    - Wavespeed media job or blocked provider state
+    - publisher handoff record and manager audit finding
   quality_signals:
-    - derived from the uploaded video, URL, or product description rather than generic filler
-    - valid video file exists and plays
-    - captions/hooks align with source language and timing
-    - metadata makes the next publish/review action clear
-    - provider failures name the failed service and recoverable next action
-    - side effects are confirmed and auditable
+    - persona voice follows SOUL/USER/canon without leaking private state
+    - user memory and persona self-state remain separate
+    - public/private media gates produce structured block reasons
+    - drafts include groundedIn references and QA notes
+    - publishing is manual/mock by default and audited
   unacceptable_generic_substitutes:
-    - sample MP4s unrelated to input
-    - generated text without renderable video
-    - raw provider JSON as the user-facing result
-    - fake completed publishing state
-    - in-memory-only job state claimed as durable production history
+    - generic chatbot replies
+    - ungrounded social claims
+    - image placeholders counted as Wavespeed proof
+    - auto-publish success without confirmation
+    - merged private memory and persona self-state
   reviewer_acceptance_questions:
-    - Can the operator see what source produced this short?
-    - Can the operator play the output and inspect hook/caption/platform metadata?
-    - Can the operator retry, edit, export, or publish from the result?
-    - Which provider, storage, and side-effect claims are still blocked?
+    - Can the operator see why the persona drafted this post?
+    - Can unsafe or ungrounded media be blocked with a reason?
+    - Can the draft become a media job and publishing handoff without auto-publishing?
+    - Which provider/browser claims remain blocked?
   claim_gates:
-    - live AI provider success requires configured key and provider response proof
-    - social publishing requires explicit confirmation and Upload-Post response proof
-    - gallery/SEO pages require S3/object-store or local equivalent readback
-    - production durability requires restart-safe job state or recorded blocker
-  minimum_standard: The product path must create or process real media into a reviewable vertical short package.
+    - Wavespeed proof requires configured key and response artifact
+    - browser/noVNC proof requires local-only auth and runtime evidence
+    - social publishing requires manual approval and provider response
+    - OpenClaw runtime availability must be proven or recorded as blocked
+  minimum_standard: A local OpenClaw-shaped persona runtime produces inspectable grounded drafts and media/publishing handoff records with honest blockers.
 
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
@@ -177,18 +175,12 @@ proven_implementation_requirements:
     - allow from-scratch alternatives only with explicit justification and proof equal to the proven tool path
     - record selected package/runtime choices in docs/architecture.md during setup
   product_domains:
-    fixed_format_video_rendering:
-      requirement: Use FFmpeg and/or Remotion for real 9:16 video output; sample files and screenshot-only output are forbidden.
-    speech_transcription:
-      requirement: Use faster-whisper or equivalent transcription with word-level timing for caption claims.
-    computer_vision_reframing:
-      requirement: Use MediaPipe, YOLO/OpenCV, or equivalent proven CV tooling for face/person tracking claims.
-    provider_abstraction:
-      requirement: Isolate Gemini, fal.ai, ElevenLabs, Upload-Post, and S3 clients behind provider interfaces with typed errors, retries, and blocker states.
-    background_jobs_and_export_tasks:
-      requirement: Use a real task/status model; production claims require restart-safe persistence or an explicit blocker.
-    persistence_and_migrations:
-      requirement: File output is acceptable for local media proof; production durability needs database/object-store schema and migration path.
-    social_side_effects:
-      requirement: Publishing/scheduling requires confirmation, audit, provider response, and safe failure handling.
+    agent_runtime:
+      requirement: Use OpenClaw-compatible extension/config/skill structure or record runtime_missing as a blocker; do not replace with an unrelated chatbot runtime.
+    image_provider:
+      requirement: Use a provider adapter for Wavespeed in live mode and deterministic mocks only in tests.
+    browser_publishing_handoff:
+      requirement: Use local-only authenticated browser/noVNC or an explicit blocked handoff; do not expose passwordless public browser control.
+    persistence_and_memory:
+      requirement: Persist relationship memory, persona self-state, drafts, media jobs, and posted history separately with readback proof.
 

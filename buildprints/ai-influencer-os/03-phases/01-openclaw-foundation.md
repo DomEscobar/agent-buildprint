@@ -1,4 +1,4 @@
-# Phase 04 - YouTube Studio And Editing
+# Phase 01 - OpenClaw Foundation
 
 ## How to implement this phase
 
@@ -17,7 +17,7 @@ Then implement this phase as one coherent product path. Do not split the work in
 
 Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Build review and editing tools for title, thumbnail, description, hashtags, captions, timing, platform metadata, and YouTube-style readiness. Edits must persist and read back. Long titles, long captions, failed render, failed provider, and mobile/narrow layouts must remain usable without clipping or hidden actions.
+Create the package foundation for `openclaw-ai-influencer-os`: OpenClaw config, extension registration, skill folders, Docker entrypoint, env contract, storage directories, local commands, and a first runtime path that either starts the OpenClaw-shaped persona extension or records `openclaw_runtime_missing` as a validation blocker. The first loop should accept a deterministic local event, load SOUL/USER/canon context, return a persona-shaped response, and write an inspectable runtime trace without contacting live providers.
 
 This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 

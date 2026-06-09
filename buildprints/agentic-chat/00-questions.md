@@ -1,6 +1,6 @@
 # 00 Questions
 
-These questions are scoped to AI Shorts Video.
+These questions are scoped to Agentic Chat.
 
 Ask only questions that change implementation. Do not turn mapping into a long interview. If a hard-stop question is unanswered, stop before `01-project-setup.md`.
 

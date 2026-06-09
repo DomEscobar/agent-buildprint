@@ -1,119 +1,45 @@
-# Phase 03 — Tools Skills MCP Policy
+# Phase 03 - Tools Skills MCP Policy
 
 ## How to implement this phase
 
 Before writing code, read:
 
 - `03-phases/phase-flow.md`
-- `.buildprint/next-agent.md`
-- current project `AGENTS.md`
+- `.buildprint/next-agent.md` if it exists
+- current project `AGENTS.md` if it exists
+- `BUILDPRINT.md`
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 
-Then execute this phase through `03-phases/phase-flow.md`: resolve every role in `requires_roles` to `06-contracts/<role>.md`,
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
-1. declare phase objective
-2. write compact runtime artifact `.buildprint/phase-runs/<phase-id>/team-gates.md` with required roles
-3. create handoff/return files only for real delegation
-4. collect reviews
-5. integrate
-6. verify
-7. record evidence
+## Building objective
 
-Every role in `requires_roles` must produce a handoff and return artifact before `phase_core_passed`.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-You may not append evidence or mark this phase passed until the phase-flow required artifacts exist.
+Implement the policy boundary and runtime records for tools, skills, MCP adapters, and browser or file actions. The user path should show what is allowed, blocked, delegated, retried, or failed; tool output must be typed and auditable. Dangerous actions must require explicit configuration and never execute from implicit model text.
 
-requires_roles:
-  - product-architect
-  - integration-runtime
-  - security-boundary
-  - test-and-verification
+This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
-## Product outcome
+## DO NOT
 
-Wire policy-gated tools, selective skills, and MCP-style external tool adapters into the agent loop without allowing raw model text to execute. Deterministic fixtures prove allowed and denied paths.
+- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
+- Do not create functionless buttons, inert navigation, swallowed errors, or fake progress.
+- Do not count mocked/sample data as proof for real input, live provider, persistence, or operator paths.
+- Do not hide missing provider/runtime/deployment blockers behind optimistic success UI.
+- Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
+- Do not mark this phase complete from code edits or prose alone.
+- Do not build a generic landing page unless the mapped product is actually a landing-page product.
 
-## Phase mode contract
+## Minimum proof before moving on
 
-blueprint_mode: product
-phase_style: outcome_flow
-- Mode lens: this phase proves the user/operator outcome of enabling structured agent capabilities while keeping risky actions blocked and auditable.
-- Shared proof spine: preconditions are streaming runtime and storage; entrypoint is structured tool-call handling and skill/MCP registry bootstrap; execution behavior validates schemas, applies policy, dispatches allowed safe tools, denies risky classes, and records audit events; state/artifact effects include selected skill state, MCP mapping records, and tool traces; observable proof is allow/deny runtime trace plus skill and MCP fixture tests; failure/recovery covers invalid schema, denied risks, timeout, retry/error mapping, and disabled MCP; non-goals are arbitrary raw-text execution and live external MCP writes.
+- Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Inspect the product path through UI/API/CLI/runtime, not only source files.
+- Prove persistence/readback when this phase creates durable state.
+- Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Record any blocker with exact missing dependency, command, credential, or decision.
 
-## Mapped product obligations
+## Handoff note
 
-- Source paths agent/tools/schema.py, registry.py, dispatch.py, filesystem, shell, web/search, task-list, and skills tools show schema-driven tool dispatch and risk surfaces.
-- Source paths agent/skills.py and source path skills/*/SKILL.md show discoverable skills with instructions, triggers, scripts, and resources.
-- Source paths agent/mcp/client.py, config.py, connection.py, and adapter.py show MCP server config and tool mapping.
+Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
 
-## Behavior compatibility contract
-
-- Tool registry and dispatcher: preserve through `ToolSpec`, schema validation, risk labels, audit events, and dispatcher.
-- Dangerous filesystem/shell/network/browser tools: preserve as policy boundaries; default disposition is deny unless explicitly enabled. Compatibility impact: denied-by-default behavior intentionally differs from any permissive source setup.
-- Skill discovery and injection: preserve equivalent target behavior; source skill content is not copied.
-- MCP adapter: preserve by mapping enabled MCP tools into namespaced `ToolSpec` records. Compatibility impact: real MCP server interoperability is deferred; deterministic local MCP fixture proves mapping.
-
-## Implementation scope
-
-Add tool request parsing only for structured provider output, not arbitrary text. Validate input schema, evaluate risk policy, emit `tool.requested`, `tool.allowed` or `tool.denied`, and `tool.result` where applicable. Add skill registry selection and MCP adapter mapping through the same dispatcher.
-
-## Interfaces touched
-
-- API/routes/adapters/frontend-backend contracts: tool/skill/MCP bootstrap state and trace events.
-- Provider/tool contracts: structured tool-call request contract, `ToolSpec`, `SkillSpec`, `McpServerSpec`, policy evaluator, deterministic tool fixtures.
-
-## State/runtime touched
-
-- Database/persistence: tool audit events, selected skill events, MCP mapping events, optional enabled/disabled config state.
-- Env/config: allowed tool risk policy, bounded roots/timeouts, MCP server IDs, secret handles only.
-- Jobs/workers/runtime: tool dispatcher, skill loader, MCP adapter boundary.
-- Runtime artifacts/generated outputs: runtime artifact tool trace and deterministic MCP fixture transcript.
-
-## UX/UI requirements
-
-For UI-bearing work, apply the product-grade visual contract from `02-project-setup.md`: visual hierarchy, state coverage, responsive behavior, accessibility, and Screenshot critique are required before UX proof can upgrade. If not user-facing, write `None - reason:` and name downstream UI obligations.
-
-
-Runtime state must support UI rows for registered tools with risk labels, selected skills with enabled/disabled state, MCP servers/tools with health/timeout/blocked state, and clear denial reasons. Full workbench rendering is later.
-
-## Safety/security constraints
-
-No tool may execute from raw model text. Default policy allows only `safe` and bounded `read`. `write`, `network`, `shell`, browser, external MCP writes, publishing, billing, media upload, and retrieval providers require explicit config, bounded scope, and separate proof. Every denial must be auditable and should let the turn continue safely where possible.
-
-## Quality gates
-
-- Static/typecheck gate.
-- Unit tests for schema validation and risk policy allow/deny.
-- Runtime test where deterministic provider requests an allowed safe tool and receives a result.
-- Runtime test where shell/write/network/browser-class action is denied and does not execute.
-- Skill injection test proving selected skill only enters context.
-- MCP fixture test proving namespaced mapped tool uses the same policy path.
-
-## Proof gate
-
-Additional production proof tracks:
-- visual_quality_gate
-
-
-Proof id: proof-03-tools-skills-mcp-policy
-Required proof types:
-- unit_or_integration_test
-- runtime_or_browser_trace_or_blocker
-- persistence_roundtrip_or_blocker
-- security_boundary_review_or_blocker
-- no_fake_scan_pass
-- evidence_ledger_entry
-
-
-Production-grade proof split:
-- provider_adapter_config_test_required
-- live_provider_proof_blocker_only
-- worker_retry_cancel_recovery
-- repeatable_browser_e2e
-
-Missing live credentials block live proof only after adapter/config/test/runtime wiring exists for provider, streaming, tools, MCP, memory, team, telemetry, security, and WebUI/API paths.
-
-Required runtime evidence row must use `phase_id: 03-tools-skills-mcp-policy` and write to `.buildprint/evidence/evidence-ledger.jsonl` after phase-flow artifacts exist. The packaged `05-evidence/evidence-ledger.jsonl` is seed evidence only.
-
-## Repair routing
-
-If the current phase fails verification, return here before editing again. Route architecture contradictions to `02-project-setup.md`, product-defining human ambiguity to `01-questions.md`, packet seed-only blockers to `05-evidence/evidence-ledger.jsonl`, and runtime proof/blocker rows to `.buildprint/evidence/evidence-ledger.jsonl`.

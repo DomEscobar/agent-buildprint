@@ -21,7 +21,7 @@ Before identity generation, load the local frontend skill created by setup:
 
 ## Product identity seed
 
-- Product: AI Shorts Video.
+- Product: Agentic Chat.
 - Product-specific identity must reject generic dashboards, admin shells, proof consoles, renamed workbenches, and card grids.
 
 ## Identity generation protocol

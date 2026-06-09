@@ -1,28 +1,45 @@
-# Phase 06 - Verification, Hardening, And Handover
+# Phase 06 - Verification Hardening And Handover
 
 ## How to implement this phase
 
-Run the product as an operator would, then harden the gaps that block credible handover.
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md` if it exists
+- current project `AGENTS.md` if it exists
+- `BUILDPRINT.md`
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
+
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Verify the full OpenShorts path across setup, dashboard, backend, render worker, media outputs, provider blockers/live paths, error handling, and documentation. Repair visible slop, generic output, unsafe publishing flows, secret leakage, oversized/mobile UI failures, and unclear recovery states.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
+
+Run end-to-end verification across clip generation, AI shorts orchestration, editing/readback, render/export, gallery, provider blockers, and publishing side-effect guards. Inspect the UI at desktop and mobile widths, prove video files exist and play when claimed, record commands and blockers, and prepare handoff without claiming live providers or SaaS operation beyond evidence.
+
+This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
 
-- Do not treat Docker build success as product proof.
-- Do not skip browser review for UI paths.
-- Do not claim complete provider integration when only local seams were tested.
-- Do not leave handover with ambiguous next steps.
+- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
+- Do not create functionless buttons, inert navigation, swallowed errors, or fake progress.
+- Do not count mocked/sample data as proof for real input, live provider, persistence, or operator paths.
+- Do not hide missing provider/runtime/deployment blockers behind optimistic success UI.
+- Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
+- Do not mark this phase complete from code edits or prose alone.
+- Do not build a generic landing page unless the mapped product is actually a landing-page product.
 
 ## Minimum proof before moving on
 
-- Build/lint/type/test commands for backend, dashboard, render service, or recorded blockers.
-- Browser screenshots for settings, processing, completed output, blocked provider, and publish confirmation.
-- API/runtime proof for health, job status, render status, and artifact readback.
-- Secret scan of docs/examples/logs for accidental real keys.
-- Updated README/HANDOVER with exact claim ceilings.
+- Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Inspect the product path through UI/API/CLI/runtime, not only source files.
+- Prove persistence/readback when this phase creates durable state.
+- Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note
 
-Record final verified commands, screenshots/artifacts, unresolved blockers, not-proven claims, and safe next implementation route.
+Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
+

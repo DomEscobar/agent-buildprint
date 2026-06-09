@@ -1,0 +1,28 @@
+schema_version: mapper-os/phase-index/v3
+active_phase: 03-phases/01-openclaw-foundation.md
+phases:
+  - phase_id: 01-openclaw-foundation
+    file: 03-phases/01-openclaw-foundation.md
+    status: included
+    depends_on: []
+  - phase_id: 02-persona-memory-runtime
+    file: 03-phases/02-persona-memory-runtime.md
+    status: included
+    depends_on: [01-openclaw-foundation]
+  - phase_id: 03-media-policy-and-wavespeed
+    file: 03-phases/03-media-policy-and-wavespeed.md
+    status: included
+    depends_on: [02-persona-memory-runtime]
+  - phase_id: 04-social-planner-and-publisher
+    file: 03-phases/04-social-planner-and-publisher.md
+    status: included
+    depends_on: [03-media-policy-and-wavespeed]
+  - phase_id: 05-manager-audit-and-handover
+    file: 03-phases/05-manager-audit-and-handover.md
+    status: included
+    depends_on: [04-social-planner-and-publisher]
+  - phase_id: 99-critical-review-pushback
+    file: 03-phases/critical-review-pushback.md
+    status: included
+    depends_on: [05-manager-audit-and-handover]
+

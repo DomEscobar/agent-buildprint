@@ -10,7 +10,7 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
-  claim_ceiling: live AI providers, S3/object storage, social publishing, and public SaaS deployment require configured credentials plus runtime proof.
+  claim_ceiling: live source crawling, live LLM drafting, deployment, analytics, and scheduled publishing require configured providers plus side-effect proof.
 
 read_order:
   - BUILDPRINT.md
@@ -68,49 +68,49 @@ phase_contract:
 
 agent_contract:
   role: Senior Product Engineer
-  rule: Build real OpenShorts-style product paths. Visible controls must work or block honestly; provider, deployment, publishing, and durability claims require direct proof.
+  rule: Build the editorial pipeline honestly. Source, claim, SEO, feed, build, approval, and publishing claims require direct proof or explicit blockers.
 
 harness:
   provider: agents
   profiles:
     - webapp
     - backend
-    - agentic
   selection_rule: Use only profiles that match this artifact. Do not expand to full unless broad coverage is explicitly worth the extra context.
 
 central_output_contract:
-  rule: The central output must be specific to AI Shorts Video, not a generic shell with renamed labels.
-  central_output: Publish-ready vertical short-video package.
+  rule: The central output must be specific to Automated AI Blog OS, not a generic shell with renamed labels.
+  central_output: Source-grounded blog draft with claim map, SEO checklist, approval state, and publish/schedule report.
   output_primitives:
-    - 9:16 MP4 clip or generated UGC video
-    - source-derived hook and caption/subtitle track
-    - title, description, hashtags, and platform metadata
-    - render/edit state and preview
-    - optional gallery record and social publishing status
+    - SourceRecord captures
+    - rubric-scored IdeaRecord candidates
+    - DraftRecord plus Markdown or MDX post
+    - claim and SEO validation report
+    - approval and publish/schedule status
+    - manager audit report
   quality_signals:
-    - derived from the uploaded video, URL, or product description rather than generic filler
-    - valid video file exists and plays
-    - captions/hooks align with source language and timing
-    - metadata makes the next publish/review action clear
-    - provider failures name the failed service and recoverable next action
-    - side effects are confirmed and auditable
+    - factual claims map to captured source IDs
+    - content memory prevents repeated angles or flags them
+    - metadata, schema, sitemap, feed, llms output, and build status are checked
+    - publisher refuses unapproved or invalid drafts
+    - manager audit identifies stale, weak, repeated, broken, and blocked work
   unacceptable_generic_substitutes:
-    - sample MP4s unrelated to input
-    - generated text without renderable video
-    - raw provider JSON as the user-facing result
-    - fake completed publishing state
-    - in-memory-only job state claimed as durable production history
+    - plain blog template
+    - invented sources
+    - generic SEO filler
+    - unsourced factual claims
+    - publishing success without approval and provider proof
+    - network calls in fixture tests
   reviewer_acceptance_questions:
-    - Can the operator see what source produced this short?
-    - Can the operator play the output and inspect hook/caption/platform metadata?
-    - Can the operator retry, edit, export, or publish from the result?
-    - Which provider, storage, and side-effect claims are still blocked?
+    - Can the editor trace every factual claim to a source record?
+    - Can invalid SEO/feed/build state block publishing?
+    - Can a reviewer approve, reject, or schedule with audit evidence?
+    - Which live provider or deployment claims remain blocked?
   claim_gates:
-    - live AI provider success requires configured key and provider response proof
-    - social publishing requires explicit confirmation and Upload-Post response proof
-    - gallery/SEO pages require S3/object-store or local equivalent readback
-    - production durability requires restart-safe job state or recorded blocker
-  minimum_standard: The product path must create or process real media into a reviewable vertical short package.
+    - live source access requires captured response proof
+    - LLM drafting requires provider key and prompt/output trace
+    - publishing or scheduling requires explicit approval and provider response
+    - SEO/build/feed claims require command output artifacts
+  minimum_standard: The local pipeline must produce a useful source-grounded draft and fail closed before publishing when validation is missing or failed.
 
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
@@ -177,18 +177,12 @@ proven_implementation_requirements:
     - allow from-scratch alternatives only with explicit justification and proof equal to the proven tool path
     - record selected package/runtime choices in docs/architecture.md during setup
   product_domains:
-    fixed_format_video_rendering:
-      requirement: Use FFmpeg and/or Remotion for real 9:16 video output; sample files and screenshot-only output are forbidden.
-    speech_transcription:
-      requirement: Use faster-whisper or equivalent transcription with word-level timing for caption claims.
-    computer_vision_reframing:
-      requirement: Use MediaPipe, YOLO/OpenCV, or equivalent proven CV tooling for face/person tracking claims.
-    provider_abstraction:
-      requirement: Isolate Gemini, fal.ai, ElevenLabs, Upload-Post, and S3 clients behind provider interfaces with typed errors, retries, and blocker states.
-    background_jobs_and_export_tasks:
-      requirement: Use a real task/status model; production claims require restart-safe persistence or an explicit blocker.
-    persistence_and_migrations:
-      requirement: File output is acceptable for local media proof; production durability needs database/object-store schema and migration path.
-    social_side_effects:
-      requirement: Publishing/scheduling requires confirmation, audit, provider response, and safe failure handling.
+    content_pipeline:
+      requirement: Use structured records for sources, ideas, drafts, claims, approvals, SEO reports, and publish reports; raw text blobs are not enough.
+    markdown_mdx_rendering:
+      requirement: Use a real Markdown/MDX content path and build command when claiming generated posts render.
+    claim_and_seo_validation:
+      requirement: Implement validators that block ungrounded factual claims and invalid metadata/schema/feed/build output.
+    publishing_side_effects:
+      requirement: Use approval gates and provider adapters for scheduling/publishing; direct publishing is never enabled by default.
 

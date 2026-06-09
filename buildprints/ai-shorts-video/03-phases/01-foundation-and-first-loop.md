@@ -2,29 +2,44 @@
 
 ## How to implement this phase
 
-Read the setup, UI identity, blueprint, and phase flow. Build the foundation before feature breadth.
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md` if it exists
+- current project `AGENTS.md` if it exists
+- `BUILDPRINT.md`
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
+
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Create the local OpenShorts implementation foundation and first visible operator loop. The app must start as a multi-service product or a deliberately narrowed local slice, show provider readiness, accept one real source input path, create a job with honest state, and return either a real reviewable output or a precise blocked state.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-The loop should prove the product shape: an operator can open the dashboard, see which keys/services are missing, submit a rights-attested video upload or safe fixture, observe queued/processing/error state, and inspect logs/status without raw JSON being the main product surface. If live Gemini/FFmpeg/transcription cannot run, the UI/API must name that blocker and preserve the source/job record for retry.
+Create the implementation foundation for `ai-shorts-video`: local app/API structure, render worker boundary, media storage layout, env contract, upload or source input path, job status model, local commands, and first visible loop. The first loop should accept a fixture video or product description, create a job, show progress or blocked state, and produce an inspectable local artifact path without claiming live provider success.
+
+This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
 
-- Do not create a landing page as the primary surface.
-- Do not ship inert settings, fake progress, or sample clips as generated results.
-- Do not hide missing provider keys behind success UI.
-- Do not claim durable job history if state is only in memory.
+- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
+- Do not create functionless buttons, inert navigation, swallowed errors, or fake progress.
+- Do not count mocked/sample data as proof for real input, live provider, persistence, or operator paths.
+- Do not hide missing provider/runtime/deployment blockers behind optimistic success UI.
+- Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
+- Do not mark this phase complete from code edits or prose alone.
+- Do not build a generic landing page unless the mapped product is actually a landing-page product.
 
 ## Minimum proof before moving on
 
-- `docker compose config` or equivalent service config check.
-- Backend health/API startup proof or exact dependency blocker.
-- Dashboard browser proof for settings-ready or settings-blocked state.
-- One job creation/status path through API or UI.
-- File output/readback proof if media is produced.
+- Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Inspect the product path through UI/API/CLI/runtime, not only source files.
+- Prove persistence/readback when this phase creates durable state.
+- Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note
 
-Record commands run, services started, ports, first loop status, blockers, screenshots/API checks, and what phase 02 or 03 may trust.
+Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
+

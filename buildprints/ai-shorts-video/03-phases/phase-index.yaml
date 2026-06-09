@@ -12,20 +12,21 @@ phases:
   - phase_id: 03-ai-shorts-loop
     file: 03-phases/03-ai-shorts-loop.md
     status: included
-    depends_on: [01-foundation-and-first-loop]
+    depends_on: [02-clip-generator-loop]
   - phase_id: 04-youtube-studio-and-editing
     file: 03-phases/04-youtube-studio-and-editing.md
     status: included
-    depends_on: [02-clip-generator-loop]
+    depends_on: [03-ai-shorts-loop]
   - phase_id: 05-persistence-gallery-and-publishing
     file: 03-phases/05-persistence-gallery-and-publishing.md
     status: included
-    depends_on: [02-clip-generator-loop, 03-ai-shorts-loop]
+    depends_on: [04-youtube-studio-and-editing]
   - phase_id: 06-verification-hardening-and-handover
     file: 03-phases/06-verification-hardening-and-handover.md
     status: included
-    depends_on: [04-youtube-studio-and-editing, 05-persistence-gallery-and-publishing]
+    depends_on: [05-persistence-gallery-and-publishing]
   - phase_id: 99-critical-review-pushback
     file: 03-phases/critical-review-pushback.md
     status: included
     depends_on: [06-verification-hardening-and-handover]
+

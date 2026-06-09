@@ -1,0 +1,28 @@
+schema_version: mapper-os/phase-index/v3
+active_phase: 03-phases/01-editorial-foundation.md
+phases:
+  - phase_id: 01-editorial-foundation
+    file: 03-phases/01-editorial-foundation.md
+    status: included
+    depends_on: []
+  - phase_id: 02-source-memory-and-ideas
+    file: 03-phases/02-source-memory-and-ideas.md
+    status: included
+    depends_on: [01-editorial-foundation]
+  - phase_id: 03-drafting-visuals-and-claims
+    file: 03-phases/03-drafting-visuals-and-claims.md
+    status: included
+    depends_on: [02-source-memory-and-ideas]
+  - phase_id: 04-seo-approval-and-publishing
+    file: 03-phases/04-seo-approval-and-publishing.md
+    status: included
+    depends_on: [03-drafting-visuals-and-claims]
+  - phase_id: 05-manager-audit-and-handover
+    file: 03-phases/05-manager-audit-and-handover.md
+    status: included
+    depends_on: [04-seo-approval-and-publishing]
+  - phase_id: 99-critical-review-pushback
+    file: 03-phases/critical-review-pushback.md
+    status: included
+    depends_on: [05-manager-audit-and-handover]
+

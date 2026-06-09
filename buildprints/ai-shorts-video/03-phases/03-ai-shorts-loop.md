@@ -2,29 +2,44 @@
 
 ## How to implement this phase
 
-Build the product-description-or-URL-to-UGC-video loop with provider boundaries first.
+Before writing code, read:
+
+- `03-phases/phase-flow.md`
+- `.buildprint/next-agent.md` if it exists
+- current project `AGENTS.md` if it exists
+- `BUILDPRINT.md`
+- `01-project-setup.md`
+- `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
+
+Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
 ## Building objective
 
-Implement and prove the AI Shorts path: analyze a website URL or manual product description, generate a structured UGC script, select/upload/generate an actor, choose voice/video mode, create voice/video/b-roll assets through configured providers, composite a vertical UGC video, and return reviewable output with cost estimate and retry state.
+Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-If Gemini, fal.ai, or ElevenLabs keys are missing, the UI must block at the correct stage with clear recovery. A manual script fixture may be used to test downstream local composition only if labeled as fixture proof, not live AI proof.
+Implement the product-description to UGC-style short path with provider abstraction for script, actor/video, voice, b-roll, captions, compositing, and render. Live AI providers must be blocked without keys; deterministic fixtures must prove orchestration, status, and output shape. The output must be a reviewable short package, not only generated copy.
+
+This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
 
-- Do not count a script-only response as completed UGC video.
-- Do not claim actor, voice, lipsync, b-roll, or premium mode without provider proof.
-- Do not auto-upload public gallery records without explicit operator confirmation.
-- Do not bury provider errors in logs only.
+- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
+- Do not create functionless buttons, inert navigation, swallowed errors, or fake progress.
+- Do not count mocked/sample data as proof for real input, live provider, persistence, or operator paths.
+- Do not hide missing provider/runtime/deployment blockers behind optimistic success UI.
+- Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
+- Do not mark this phase complete from code edits or prose alone.
+- Do not build a generic landing page unless the mapped product is actually a landing-page product.
 
 ## Minimum proof before moving on
 
-- Analyze endpoint/UI path returns product-specific script or a provider blocker.
-- Actor/voice/video mode controls have working or blocked behavior.
-- Generated video path exists and plays, or provider blocker identifies missing service/key/stage.
-- Cost estimate and retry behavior are visible.
-- Browser proof for success or blocked provider stage.
+- Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Inspect the product path through UI/API/CLI/runtime, not only source files.
+- Prove persistence/readback when this phase creates durable state.
+- Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
+- Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note
 
-Record provider keys used or blocked, script source, job id, generated assets, gallery upload status, and cost/quality caveats.
+Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
+

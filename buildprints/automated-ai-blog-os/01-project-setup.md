@@ -14,7 +14,7 @@ Then create or update the implementation project foundation. Do not start `02-ui
 
 ## Setup objective
 
-Create the real base project structure for AI Shorts Video, centered on a reviewable 9:16 short-video package with source, render, captions, metadata, provider status, and publish/export actions. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the module boundaries, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
+Create the real base project structure for Automated AI Blog OS, centered on a source-grounded editorial pipeline that turns captured sources into useful draft posts and blocks publishing until claims, SEO, feeds, build, and approval gates pass. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the module boundaries, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
 
 The setup output should make the identity step and first implementation phase obvious: where code goes, what commands run, how state persists, what is mocked in tests, what is blocked in live mode, and what good enough to continue means.
 

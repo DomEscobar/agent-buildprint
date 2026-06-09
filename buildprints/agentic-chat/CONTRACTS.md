@@ -1,6 +1,6 @@
 # CONTRACTS
 
-This compatibility file summarizes the packet contracts. `BUILDPRINT.md`, `02-project-setup.md`, and the active files under `03-phases/` are authoritative.
+This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01-project-setup.md`, `blueprint.yaml`, `03-phases/phase-index.yaml`, and the active files under `03-phases/` are authoritative.
 
 ## Core contracts
 
