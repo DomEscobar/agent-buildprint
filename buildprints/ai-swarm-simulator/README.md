@@ -1,11 +1,11 @@
 # ai-swarm-simulator
 
+`ai-swarm-simulator` is a social simulation studio for turning seed material into a graph-backed world, running agent activity across simulated social platforms, and producing a readable feed, report, and exportable story artifact.
+
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
 ![Build](https://img.shields.io/badge/build-local%20checks%20required-yellow)
 ![Runtime](https://img.shields.io/badge/runtime-browser%20webapp-lightgrey)
 ![Status](https://img.shields.io/badge/status-trusted--local%20first-yellow)
-
-`ai-swarm-simulator` is a social simulation studio for turning seed material into a graph-backed world, running agent activity across simulated social platforms, and producing a readable feed, report, and exportable story artifact.
 
 ## Features
 

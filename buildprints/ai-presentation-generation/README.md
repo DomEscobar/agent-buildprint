@@ -1,11 +1,11 @@
 # AI Presentation Generation
 
+AI Presentation Generation is a private deck-building workbench for turning prompts or uploaded documents into editable presentations, then refining slides and exporting real PPTX/PDF artifacts.
+
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
 ![Build](https://img.shields.io/badge/build-local%20checks%20required-yellow)
 ![Runtime](https://img.shields.io/badge/runtime-private%20webapp-lightgrey)
 ![Status](https://img.shields.io/badge/status-local%20build%20requires%20review-yellow)
-
-AI Presentation Generation is a private deck-building workbench for turning prompts or uploaded documents into editable presentations, then refining slides and exporting real PPTX/PDF artifacts.
 
 ## Features
 

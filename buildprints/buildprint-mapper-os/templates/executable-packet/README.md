@@ -1,12 +1,12 @@
 # Product Name
 
+One clear sentence explaining what this product does for its user or operator.
+
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
 ![Build](https://img.shields.io/badge/build-local%20checks%20required-yellow)
 ![License](https://img.shields.io/badge/license-TBD-lightgrey)
 ![Runtime](https://img.shields.io/badge/runtime-TBD-lightgrey)
 ![Status](https://img.shields.io/badge/status-local%20build%20requires%20review-yellow)
-
-One clear sentence explaining what this product does for its user or operator.
 
 ## Features
 
