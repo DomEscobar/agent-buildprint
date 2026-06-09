@@ -18,7 +18,7 @@
     "v3 phase-driven packet extraction",
     "Comprehensive product phase objectives",
     "Project setup, skill harness, and UI/operator identity",
-    "Concise handover"
+    "Product README with version/status badges, requirements, provider-key notes, verification, and concise handover"
   ],
   "iconKeys": [
     "md",
@@ -28,10 +28,10 @@
   "difficulty": "Advanced",
   "featured": true,
   "summary": "Agent-session workflow for mapping an existing repo into a source-independent v3 Buildprint packet with a generic AI-builder briefing, product-contract mirror, mandatory UI identity, local skill harness, and comprehensive phase objectives.",
-  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable Buildprint: map the source, classify the artifact, choose scope, then emit a v3 phase-driven execution packet with generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases, and HANDOVER.md.",
+  "plainDescription": "Use Mapper OS when you have a working repo and want an agent to turn it into a reusable Buildprint: map the source, classify the artifact, choose scope, then emit a v3 phase-driven execution packet with generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases, product-facing README.md, and HANDOVER.md.",
   "promise": "A repo-to-Buildprint workflow that preserves scope fidelity and emits a readable packet that makes agents build real product loops with design responsibility instead of generic slop.",
   "whatYouGet": [
-    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, product-facing README.md, HANDOVER.md",
     "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
     "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
     "A project-local skill harness with blueprint-declared profiles, four core skills, and mandatory UI identity",
@@ -57,7 +57,7 @@
     "Handover"
   ],
   "includes": [
-    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, HANDOVER.md",
+    "A selected-buildprint/ v3 executable packet: generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, product-facing README.md, HANDOVER.md",
     "A BUILDPRINT.md that orients the AI builder with role, responsibility, perfection alignment, fake-success intolerance, and read order only",
     "A blueprint.yaml product-contract mirror for artifact identity, central interface, golden path, runtime/posture constraints, and routing",
     "A project-local skill harness with blueprint-declared profiles, four core skills, and mandatory UI identity",
@@ -87,6 +87,7 @@
     "Obsolete v2 packet folders/files are absent from the selected packet",
     "Every phase has required comprehensive headings and a substantial Building objective",
     "Phase flow rejects placeholders, functionless buttons, mocks-as-proof, and fake success",
+    "README.md names features, version/status badges, requirements, provider-key/environment needs, verification, and limitations",
     "HANDOVER.md names built, verified, blocked, not proven, and next actions"
   ],
   "trustBadges": [
@@ -136,7 +137,7 @@
     },
     {
       "title": "4. Emit the v3 packet",
-      "detail": "The selected packet contains generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, and HANDOVER.md."
+      "detail": "The selected packet contains generic BUILDPRINT.md, 00-questions.md, 01-project-setup.md for architecture and harness, detailed 02-ui-identity.md, blueprint.yaml, 03-phases/, product-facing README.md, and HANDOVER.md."
     },
     {
       "title": "5. Build phase by phase",
@@ -153,6 +154,7 @@
     "Obsolete v2 packet folders/files are absent from the selected packet",
     "Every phase has required comprehensive headings and a substantial Building objective",
     "Phase flow rejects placeholders, functionless buttons, mocks-as-proof, and fake success",
+    "README.md names features, version/status badges, requirements, provider-key/environment needs, verification, and limitations",
     "HANDOVER.md names built, verified, blocked, not proven, and next actions"
   ],
   "copyPrompt": "Use the Buildprint Mapper OS Buildprint to map a target repo in the current agent session. Bootstrap exact snapshots with agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json . Then read .buildprint/next-agent.md. Emit a v3 phase-driven packet with generic BUILDPRINT.md, 01-project-setup.md for architecture and local skill harness, 02-ui-identity.md with frontend skill loading, blueprint.yaml product contract, and comprehensive phases."

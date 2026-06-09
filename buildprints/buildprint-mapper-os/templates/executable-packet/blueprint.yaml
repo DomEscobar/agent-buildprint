@@ -19,6 +19,7 @@ read_order:
   - blueprint.yaml
   - 03-phases/phase-index.yaml
   - 03-phases/phase-flow.md
+  - README.md
   - HANDOVER.md
 
 packet_shape:
@@ -32,6 +33,7 @@ packet_shape:
     - blueprint.yaml
     - 03-phases/phase-index.yaml
     - 03-phases/phase-flow.md
+    - README.md
     - HANDOVER.md
 
 phase_contract:
@@ -124,4 +126,42 @@ typed_quality_gates:
 state_and_handoff:
   local_state_dir: .buildprint/
   setup_receipt: .buildprint/setup-receipt.md
+  readme_template: README.md
   handover_template: HANDOVER.md
+
+proven_implementation_requirements:
+  rule: Replace or specialize this template-level rule during selected extraction. Hard product domains must use proven libraries, SDKs, runtimes, or platform services unless a from-scratch alternative is explicitly justified and proven against the same acceptance criteria. Keep selected packets stack-neutral, but do not let builders casually hand-roll fixed-format export, rich editing, document parsing, drag interactions, chart rendering, provider clients, task orchestration, or migrations.
+  detect_from_source:
+    - fixed-format export or rendering
+    - rich text or inline editing
+    - document parsing or ingestion
+    - drag/reorder/canvas interaction
+    - charts, diagrams, maps, timelines, code rendering, or visual primitives
+    - live provider SDKs, OAuth, webhooks, external APIs, or local model runtimes
+    - background jobs, export tasks, queues, retries, or long-running work
+    - durable persistence, migrations, file/object storage, or sync
+  selected_packet_must:
+    - name hard domains that are source-derived product requirements
+    - require a proven package/runtime/service category for each hard domain
+    - keep implementation choices stack-neutral unless the source makes a specific stack part of the product contract
+    - allow from-scratch alternatives only with explicit justification and proof equal to the proven tool path
+    - record selected package/runtime choices in docs/architecture.md during setup
+  common_domains:
+    editable_slide_rendering:
+      requirement: Use a structured rendering/editing approach that preserves layout, editable content fields, theme/font separation, fixed-surface framing, and persisted readback.
+    rich_text_and_inline_editing:
+      requirement: Use a proven editor framework or narrowly scoped structured controls; plain textareas are acceptable only for simple fields and must not be claimed as rich editing.
+    fixed_format_export:
+      requirement: Use a real export library, browser/converter runtime, or dedicated export service; placeholder artifacts and screenshot-only exports are forbidden when editable/fidelity claims are made.
+    document_extraction:
+      requirement: Use established parsers/extractors for PDF, Office, spreadsheet, text, image/OCR, or source-specific formats as applicable; ingested content must affect the central output.
+    drag_reorder_and_canvas_interaction:
+      requirement: Use a proven interaction library for complex pointer/drag behavior unless custom code proves keyboard, pointer, focus, persistence, and edge cases.
+    charts_diagrams_and_visual_primitives:
+      requirement: Use chart/diagram/rendering libraries or structured visual primitives where generated outputs claim those capabilities.
+    provider_abstraction:
+      requirement: Define a local provider interface and use official SDKs or well-supported clients for live providers; provider-specific auth/model/error handling must not be scattered through UI code.
+    background_jobs_and_export_tasks:
+      requirement: Use a real task/status model for long-running work; heavier deployments may use queues, but local proof still needs durable task state or honest blockers.
+    persistence_and_migrations:
+      requirement: Use a database layer with migrations or an explicit schema evolution path; browser-only or memory-only state is forbidden when durability is claimed.

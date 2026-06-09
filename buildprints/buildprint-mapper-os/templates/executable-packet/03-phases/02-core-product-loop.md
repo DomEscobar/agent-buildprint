@@ -21,6 +21,8 @@ Build the first complete golden-path loop mirrored in `blueprint.yaml` and elabo
 
 The loop must include real validation, meaningful state transition, and output that depends on the input. It must also reach the central output quality bar defined in `blueprint.yaml` and the proof/claim ceilings in `docs/architecture.md`. If live dependencies are unavailable, build the adapter seam and blocked state, but do not substitute canned success. The path should be small enough to finish, but complete enough that a skeptical reviewer can see the product starting to work.
 
+Use `proven_implementation_requirements` in `blueprint.yaml` while building the golden path. If the path depends on hard domains such as rich editing, document extraction, fixed-format rendering/export, drag interactions, charts/diagrams, provider SDKs, task state, or migrations, use proven packages/runtimes/services or prove the custom implementation against the same acceptance bar. Do not replace a source-derived hard technique with a toy version because it is easier to code.
+
 Do not confuse "input-derived" with "good." The central output should include the mapped artifact's source-derived primitives and quality signals. A generic result with the user's words copied into it is not enough. If the product produces analysis, generated code, diagrams, documents, simulations, plans, reports, or structured views, the output must satisfy the mapped artifact's domain-specific standard for usefulness, correctness, credibility, publishability, or actionability.
 
 For UI-bearing products, every visible control in this path must work or block honestly. For API/CLI/service products, every documented command/endpoint in this path must return meaningful success/error output and avoid hidden side effects.
@@ -34,6 +36,7 @@ For UI-bearing products, every visible control in this path must work or block h
 - Do not dump raw JSON as the main product experience unless the artifact is explicitly a JSON developer tool.
 - Do not mark this phase complete from code edits or prose alone.
 - Do not create broad shallow feature panels that name capabilities but implement none of them.
+- Do not hand-roll hard product techniques when proven libraries/runtimes exist unless equivalent proof is added.
 
 ## Minimum proof before moving on
 
@@ -42,6 +45,7 @@ For UI-bearing products, every visible control in this path must work or block h
 - Prove persistence/readback when this phase creates durable state.
 - Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
 - Record reviewer-style output proof: what the output makes clear, what still feels generic, what a user/operator can do next, and which quality claim remains unproven.
+- Record any proven library/runtime choice or from-scratch hard-domain justification used by the central path.
 - Record any blocker with exact missing dependency, command, credential, or decision.
 
 ## Handoff note

@@ -30,6 +30,7 @@ blueprint.yaml
   phase-flow.md
   01-<phase>.md
   02-<phase>.md
+README.md
 HANDOVER.md
 ```
 
@@ -40,9 +41,11 @@ HANDOVER.md
 - `01-project-setup.md` creates the project foundation and local skill harness before identity or phase work: stack, local `AGENTS.md`, core skills (`setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, `verify-and-review`), optional profiles, `docs/architecture.md`, env contract, and setup receipt.
 - `02-ui-identity.md` is the UI identity step. It loads the local `frontend-ui-product-design` skill, opens with "UX is a must," explains understandability, then writes a detailed design schema: thesis, style direction, color tokens, typography, layout, screen states, components, motion, state behavior, anti-generic rules, and phase obligation.
 - `blueprint.yaml` is the machine route and product-contract mirror: product name, central artifact, golden path, central output contract, runtime/posture constraints, required files, forbidden shapes, phase index, and phase flow.
+- `blueprint.yaml` also carries `proven_implementation_requirements` for source-derived hard domains such as fixed-format export, rich editing, document extraction, drag/reorder interaction, charts/diagrams, provider clients, task orchestration, migrations, and durable storage. These stay stack-neutral but require proven libraries/runtimes/services or equivalent proof.
 - `03-phases/phase-index.yaml` routes only.
 - `03-phases/phase-flow.md` defines the active-phase loop and requires `02-ui-identity.md` before every phase for UI-bearing artifacts.
 - Every phase file is a comprehensive product-engineering assignment with a detailed `Building objective`, required context, proof, handoff, and standing comprehension, user-language, and visual identity responsibility.
+- `README.md` is the product-facing README for the selected artifact. It must explain features, version/status badges, requirements, env/provider keys from `.env.example`, quick start, verification, and limitations without making the Buildprint packet the subject.
 - `HANDOVER.md` captures built, verified, blocked, not-proven, and next actions.
 
 ## Why this split matters

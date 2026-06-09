@@ -19,6 +19,8 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - Semantic output acceptance — <applicable/not applicable> — <output-specificity proof or reason>
   - Integration/operator acceptance — <applicable/not applicable> — <install/configure/first-action/retry/audit proof or reason>
   - Critical review pushback — <score/result or blocker>
+- Proven implementation requirements:
+  - <hard domain> — <library/runtime/service used, custom proof, not applicable reason, or blocker>
 - Central output quality evidence:
   - <what the output makes clear>
   - <what still feels generic or weak>

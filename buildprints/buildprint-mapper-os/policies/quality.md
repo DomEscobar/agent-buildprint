@@ -48,6 +48,12 @@ Every phase must name a concrete building objective, the context to read, `02-ui
 
 Every selected packet must define the central output contract for the mapped artifact. That contract should name the central output, its primitives, quality signals, unacceptable generic substitutes, reviewer acceptance questions, and claim gates. If these are missing, downstream agents can build something structurally correct but semantically weak.
 
+## Proven implementation requirements
+
+Selected packets must identify source-derived hard technical domains that are unrealistic or fragile to hand-roll casually. Examples: fixed-format export, rich text or inline editing, document extraction, drag/reorder/canvas interaction, charts/diagrams/visual primitives, provider SDKs or OAuth/webhooks/external APIs, background jobs/export tasks/queues, persistence migrations, and file/object storage.
+
+Mapper OS should keep the packet stack-neutral while still requiring proven libraries, SDKs, runtimes, platform services, or explicit equivalent proof. Missing package/runtime proof becomes a blocker or claim ceiling. It is not permission to replace the product with a shallow implementation.
+
 ## Typed proof bar
 
 Quality gates should be selected, not sprayed everywhere.

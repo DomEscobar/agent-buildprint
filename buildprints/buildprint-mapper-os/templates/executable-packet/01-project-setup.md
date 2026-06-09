@@ -20,6 +20,8 @@ The setup output should make the identity step and first implementation phase ob
 
 Use `typed_quality_gates` in `blueprint.yaml` as a selector, not as decoration. During setup, record applicable/not applicable gates, command/proof path, and blocker if missing inside `docs/architecture.md`. Do not add irrelevant gates just to look thorough. Matching gates need a real proof path or an honest blocker.
 
+Use `proven_implementation_requirements` in `blueprint.yaml` to choose libraries, SDKs, runtimes, and platform services for hard domains. The selected packet should stay stack-neutral, but setup is not allowed to casually hand-roll fixed-format export, rich editing, document extraction, drag/reorder interactions, charts/diagrams, provider clients, task orchestration, or migrations. If a from-scratch alternative is chosen, `docs/architecture.md` must justify it and name the proof that will show it satisfies the same product bar as a proven tool path.
+
 Initialize the local Buildprint skill harness before identity or phase work. `blueprint.yaml` declares `harness.provider` and `harness.profiles`; use those values as the source of truth. If `agb` is available, run `agb harness init . --provider agents` with the declared `--profile` flags from `blueprint.yaml` or `.buildprint/next-agent.md`. Otherwise create the same project-local harness manually. The default provider is `agents`, which must patch or create `AGENTS.md`, add local core skill files for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`, and place them only in the portable `.agents/skills/` folder. Provider-specific folders such as `.claude/skills/`, `.cline/skills/`, or `.cursor/rules/` require an explicit, evidence-backed provider selection; never create multiple provider folders by detection alone. Selected profiles add focused skills only when declared: `webapp`, `backend`, `agentic`, or `full`. Every skill must declare `triggers`, `skips`, and `completion_signal`; phase handoffs must include the relevant completion signal. Do not install global skills, clone third-party skill packs, or copy upstream skill files without an explicit user request.
 
 ## Required setup artifacts
@@ -29,6 +31,7 @@ Create these in the implementation project unless the project already has equiva
 - `AGENTS.md` - local implementation constitution, mandatory read order, ownership map, no-fake rules, verification expectations, and Buildprint Skill Harness section.
 - `.agents/skills/setup-runbook/SKILL.md`, `.agents/skills/frontend-ui-product-design/SKILL.md`, `.agents/skills/subagent-driven-implementation/SKILL.md`, and `.agents/skills/verify-and-review/SKILL.md`, plus selected profile skills under `.agents/skills/` only for the default provider.
 - `docs/architecture.md` - selected stack, runtime topology, adapters, persistence, deployment posture, state ownership, golden path, central output contract, proof strategy, selected typed quality gates, command/proof paths, blockers, and claim ceilings.
+- `docs/architecture.md` must also name selected package/runtime/service choices for every applicable `proven_implementation_requirements` domain, or record why no hard-domain library requirement applies.
 - `.env.example` - exact env names with blank secrets and no mock/test mode enabled by default.
 - `.buildprint/setup-receipt.md` - decisions made, assumptions, blockers, commands discovered, and identity-step readiness.
 
@@ -38,6 +41,7 @@ Create these in the implementation project unless the project already has equiva
 - Do not create placeholder commands that silently pass.
 - Do not put real secrets in `.env.example`, docs, tests, logs, screenshots, or handover.
 - Do not choose a stack only because it is familiar if it cannot prove the golden path.
+- Do not hand-roll hard domains when proven libraries/runtimes exist unless the alternative is justified and proof-bound.
 - Do not hide hard-stop questions as assumptions.
 - Do not skip `agb harness init . --provider agents` or the equivalent manual local harness creation before identity or phase work.
 - Do not skip `agb harness check . --provider agents` after harness initialization or `agb harness checkup . --provider agents` before phase implementation; record checkup warnings as setup blockers or accepted claim ceilings.
@@ -55,5 +59,6 @@ Create these in the implementation project unless the project already has equiva
 - package/build/test commands are named, even if some are currently blocked;
 - `.env.example` has blank secrets only;
 - `docs/architecture.md` exists and names stack, runtime topology, persistence, providers, commands, central output contract, selected typed quality gates, proof surfaces, blockers, and claim ceilings;
+- `docs/architecture.md` records proven library/runtime decisions for applicable hard domains or honest blockers;
 - `.buildprint/setup-receipt.md` records assumptions and blockers;
 - `02-ui-identity.md` can start without guessing the architecture or whether the local skill harness exists.

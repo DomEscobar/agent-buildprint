@@ -18,6 +18,7 @@ blueprint.yaml
   phase-index.yaml
   phase-flow.md
   <phase>.md
+README.md
 HANDOVER.md
 ```
 
@@ -57,6 +58,14 @@ The mapper must extract, from source evidence and product behavior:
 
 Output existence is not enough. Input-derived output is not enough. A selected packet must reject technically generated but domain-generic results.
 
+## Proven implementation requirements contract
+
+Some mapped products depend on hard technical domains that should not be casually hand-rolled. Mapper OS must preserve those as product requirements without making the selected packet stack-fixed.
+
+When source evidence shows fixed-format export, rich editing, document extraction, drag/reorder/canvas interactions, charts/diagrams/visual primitives, provider SDKs/OAuth/webhooks/external APIs, long-running jobs, queues, migrations, durable storage, or similar specialized domains, the selected `blueprint.yaml` must include `proven_implementation_requirements`.
+
+That section must name source-derived hard domains, require a proven library/SDK/runtime/platform service or equivalent tool category for each applicable domain, keep implementation choices stack-neutral unless source evidence makes a specific stack part of product behavior, allow from-scratch alternatives only with explicit justification and proof equal to the proven-tool path, and route selected package/runtime decisions into `01-project-setup.md` and `docs/architecture.md`.
+
 ## UI identity contract
 
 `02-ui-identity.md` is mandatory for every UI-bearing artifact and must be detailed enough to guide later implementation without guessing. It must:
@@ -80,7 +89,24 @@ The mapper must select proof obligations that fit the artifact instead of forcin
 - AI/generative artifacts: central output specificity proof, repeated-generic-output rejection, provider/blocker honesty, and sample output review against the output contract.
 - Integration/plugin/service/CLI artifacts: install/configure/first-action proof, idempotency/retry/failure proof, operator logs/errors, and audit/recovery proof.
 
-Selected packets should put concise routing facts in `blueprint.yaml`, buildable proof setup in `01-project-setup.md`, UI/UX identity and screen-state decisions in `02-ui-identity.md`, phase-specific inspection in phase objectives, and final evidence fields in `HANDOVER.md`.
+Selected packets should put concise routing facts in `blueprint.yaml`, buildable proof setup in `01-project-setup.md`, UI/UX identity and screen-state decisions in `02-ui-identity.md`, phase-specific inspection in phase objectives, the product/operator-facing overview in `README.md`, and final evidence fields in `HANDOVER.md`.
+
+## Product README contract
+
+Every selected packet must include a root `README.md` that reads like the finished product's public/operator-facing README, not a Buildprint explanation. The final implementation phase must update it after verification so it reflects the artifact that actually exists.
+
+The README must include:
+
+- the product name and one concise product promise;
+- version/status badges, including at minimum product version, build/check status, license, runtime, and qualification/status;
+- a feature section explaining what the artifact does for its user or operator;
+- a requirements section naming runtime prerequisites, supported package manager or CLI commands, storage/database needs, browser/desktop requirements when relevant, and external services;
+- an environment/provider keys section with exact variable names from `.env.example`, blank secret examples only, and honest notes for optional, required, blocked, or live-proof-only providers;
+- a quick start section with install, configure, run, test/check, and first-use commands;
+- a verification or proof section listing the commands and manual surface checks that were actually run;
+- a limitations/blockers section that matches `HANDOVER.md` and does not claim live provider, deployment, security, or production readiness without proof.
+
+Do not describe Mapper OS, the source repository, or the Buildprint packet as the main subject of the selected product README.
 
 ## Phase contract
 
@@ -104,6 +130,7 @@ The `Building objective` must be comprehensive and product-specific. It should r
 
 - obsolete v2 structures;
 - obsolete selected packet filenames;
+- missing selected product README.md;
 - generated prompt/handoff files as packet authority;
 - product-specific or mapped-source leakage in `BUILDPRINT.md`;
 - missing UX-must-matter preface/checklist in `02-ui-identity.md`;
@@ -116,6 +143,7 @@ The `Building objective` must be comprehensive and product-specific. It should r
 - missing central output quality contracts in selected packets.
 - missing selected proof obligations for obvious visual, responsive, editor, generative, or integration artifact types.
 - missing critical-review-pushback phase in serious executable packets.
+- missing proven implementation requirements for hard technical domains, or setup guidance that fails to route selected library/runtime decisions into architecture.
 
 ## Completion contract
 

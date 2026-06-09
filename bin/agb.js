@@ -364,6 +364,7 @@ function packetCheckResults(dir) {
     'blueprint.yaml',
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
+    'README.md',
     'HANDOVER.md'
   ]
   for (const file of need) ok(`packet file exists: ${file}`, files.has(file))
@@ -400,6 +401,18 @@ function packetCheckResults(dir) {
     /integration_operator_acceptance:/i.test(blueprint) &&
     /critical_review_pushback:/i.test(blueprint) &&
     /Select only the gates that match the artifact type/i.test(blueprint)
+  )
+  ok('blueprint declares proven implementation requirements',
+    /proven_implementation_requirements:/i.test(blueprint) &&
+    /proven libraries|proven packages|proven tool/i.test(blueprint) &&
+    /fixed-format export|fixed format export/i.test(blueprint) &&
+    /rich editing|rich text/i.test(blueprint) &&
+    /document parsing|document extraction/i.test(blueprint) &&
+    /drag|reorder/i.test(blueprint) &&
+    /provider/i.test(blueprint) &&
+    /task/i.test(blueprint) &&
+    /migration/i.test(blueprint) &&
+    /from-scratch|custom implementation/i.test(blueprint)
   )
 
   const readOrderPattern = usesSetupFirstIdentitySecond
@@ -440,6 +453,12 @@ function packetCheckResults(dir) {
     /applicable\/not applicable/i.test(setup) &&
     /command\/proof path/i.test(setup) &&
     /not applicable/i.test(setup)
+  )
+  ok('project setup routes proven implementation requirements',
+    /proven_implementation_requirements/i.test(setup) &&
+    /docs\/architecture\.md/i.test(setup) &&
+    /libraries|runtimes|SDKs|platform services/i.test(setup) &&
+    /hand-roll|from-scratch/i.test(setup)
   )
   if (!usesSetupFirstIdentitySecond) {
     ok('project setup requires UI identity screen-state contract',
@@ -723,7 +742,7 @@ function readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile) {
   const setupFile = hasManifestFile('01-project-setup.md') ? '01-project-setup.md' : '02-project-setup.md'
   const uiIdentityFile = hasManifestFile('02-ui-identity.md') ? '02-ui-identity.md' : '01-ui-identity.md'
   return isExecutablePacket
-    ? ['BUILDPRINT.md', '00-questions.md', setupFile, uiIdentityFile, 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', 'HANDOVER.md'].filter(hasManifestFile)
+    ? ['BUILDPRINT.md', '00-questions.md', setupFile, uiIdentityFile, 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', 'README.md', 'HANDOVER.md'].filter(hasManifestFile)
     : ['BUILDPRINT.md'].filter(hasManifestFile)
 }
 
@@ -753,6 +772,7 @@ function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
     '03-phases/phase-index.yaml',
     '03-phases/phase-flow.md',
     activePhase,
+    'README.md',
     'HANDOVER.md'
   ].filter((file, index, arr) => file && hasManifestFile(file) && arr.indexOf(file) === index)
   const extras = baseReadOrder.filter((file) => hasManifestFile(file) && !canonical.includes(file))

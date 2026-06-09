@@ -135,6 +135,10 @@ const missingTypedGates = copyTemplate('missing-typed-quality-gates')
 edit(missingTypedGates, 'blueprint.yaml', (s) => s.replace(/typed_quality_gates:/g, 'typed_quality_gates_removed:'))
 expectFailure('mapper eval requires typed quality gate routing', ['packet', 'check', missingTypedGates], ['✗ blueprint declares typed quality gate routing'])
 
+const missingProvenRequirements = copyTemplate('missing-proven-implementation-requirements')
+edit(missingProvenRequirements, 'blueprint.yaml', (s) => s.replace(/proven_implementation_requirements:/g, 'proven_implementation_requirements_removed:'))
+expectFailure('mapper eval requires proven implementation requirements', ['packet', 'check', missingProvenRequirements], ['✗ blueprint declares proven implementation requirements'])
+
 const missingArchitectureProof = copyTemplate('missing-architecture-proof')
 edit(missingArchitectureProof, '01-project-setup.md', (s) => s
   .replace(/docs\/architecture\.md/g, 'docs/architecture-removed.md')
@@ -305,6 +309,7 @@ const redactionFiles = {
       { path: '03-phases/phase-index.yaml', rawUrl: '03-phases/phase-index.yaml?fileToken=leaksecret' },
       { path: '03-phases/phase-flow.md', rawUrl: '03-phases/phase-flow.md?fileToken=leaksecret' },
       { path: '03-phases/01-start.md', rawUrl: '03-phases/01-start.md?fileToken=leaksecret' },
+      { path: 'README.md', rawUrl: 'README.md?fileToken=leaksecret' },
       { path: 'HANDOVER.md', rawUrl: 'HANDOVER.md?fileToken=leaksecret' }
     ],
     entrypoints: {
@@ -314,14 +319,15 @@ const redactionFiles = {
       rawBase: 'https://example.invalid/raw?rawToken=leaksecret'
     }
   }, null, 2),
-  '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-project-setup.md, 02-ui-identity.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, HANDOVER.md.\n',
+  '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-project-setup.md, 02-ui-identity.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, README.md, HANDOVER.md.\n',
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions. If blocked, stop before 01-project-setup.md.\n',
-  '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires agb harness init, agb harness checkup, Buildprint skill harness, setup-runbook, frontend-ui-product-design, subagent-driven-implementation, verify-and-review, triggers, skips, completion_signal, .agents/skills, docs/architecture.md, command/proof path, applicable/not applicable setup, AGENTS.md, .env.example, setup-receipt.md, placeholder commands, real secrets, and hide hard-stop.\n',
+  '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires agb harness init, agb harness checkup, Buildprint skill harness, setup-runbook, frontend-ui-product-design, subagent-driven-implementation, verify-and-review, triggers, skips, completion_signal, .agents/skills, docs/architecture.md, command/proof path, applicable/not applicable setup, AGENTS.md, .env.example, setup-receipt.md, placeholder commands, real secrets, hide hard-stop, proven_implementation_requirements, libraries, runtimes, SDKs, platform services, hand-roll, and from-scratch.\n',
   '/02-ui-identity.md': '# 02 UI Identity\n\nUX is a must. The experience must be understandable and a confusing interface is not a finished product. This runs after 01-project-setup.md and before 03-phases/*. Generate a local docs/ui-identity.md or UI-IDENTITY.md after setup and before phase work. Load frontend-ui-product-design from .agents/skills/frontend-ui-product-design/SKILL.md and references/screen-states.md, returning to 01-project-setup.md if missing. Required sections include First-run comprehension contract, User-language map, Creative product concept, product metaphor, dominant object, primary gesture, moment-to-moment manipulation, Silhouette rejection, forbidden default silhouette, generic dashboard, renamed workbench, card grid, proof console, Product identity thesis, Chosen style direction, Layout model, Interaction model, Component language, Color and typography tokens, Content stress fixtures, Proof obligations, screenshot delta review, exact semantic color, typography, state colors, focus, empty/loading/error/blocked, functionless buttons, dead controls, raw JSON, and evaluator language. Think deeply about the golden path and central output before phase implementation.\n',
-  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\nharness:\n  provider: agents\n  profiles:\n    - webapp\n    - backend\n',
+  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\nharness:\n  provider: agents\n  profiles:\n    - webapp\n    - backend\nproven_implementation_requirements:\n  rule: use proven libraries, proven packages, or a proven tool path for fixed-format export, rich text editing, document parsing, drag reorder behavior, provider clients, task status, migrations, and any from-scratch custom implementation.\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
   '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',
   '/03-phases/01-start.md': '# Phase 01\n\n## How to implement this phase\n\nRead phase-flow.\n\n## Building objective\n\nBuild a real path.\n\n## DO NOT\n\nNo placeholders.\n\n## Minimum proof before moving on\n\nRun checks.\n\n## Handoff note\n\nRecord proof.\n',
+  '/README.md': '# Product Name\n\n![Version](https://img.shields.io/badge/version-0.1.0-blue)\n\nFeatures, requirements, provider keys, quick start, verification, and limitations.\n',
   '/HANDOVER.md': '# Handover\n\nBuilt, verified, blocked, not proven, next.\n'
 }
 const redactionServer = http.createServer((req, res) => {
@@ -406,6 +412,7 @@ const nestedFiles = [
   '03-phases/phase-index.yaml',
   '03-phases/phase-flow.md',
   '03-phases/01-start.md',
+  'README.md',
   'HANDOVER.md'
 ]
 fs.writeFileSync(path.join(nestedStartPackage, 'package.json'), JSON.stringify({
@@ -419,7 +426,7 @@ for (const file of nestedFiles) {
   fs.mkdirSync(path.dirname(target), { recursive: true })
   fs.writeFileSync(target, body)
 }
-expectPass('cli eval starts nested executable packet template', ['start', path.join(nestedStartPackage, 'package.json'), nestedTarget], ['Downloaded 9 snapshot files'])
+expectPass('cli eval starts nested executable packet template', ['start', path.join(nestedStartPackage, 'package.json'), nestedTarget], ['Downloaded 10 snapshot files'])
 const nestedNextAgent = fs.readFileSync(path.join(nestedTarget, '.buildprint/next-agent.md'), 'utf8')
 if (!nestedNextAgent.includes('.buildprint/snapshots/templates/executable-packet/01-project-setup.md') || !nestedNextAgent.includes('agb harness init . --provider agents --profile webapp --profile backend')) {
   console.error(nestedNextAgent)

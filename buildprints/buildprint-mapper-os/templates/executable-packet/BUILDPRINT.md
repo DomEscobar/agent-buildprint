@@ -28,6 +28,7 @@ Be precise. Be skeptical of your own claims. Prefer direct verification over con
 6. `03-phases/phase-index.yaml`
 7. `03-phases/phase-flow.md`
 8. The active phase file named by `03-phases/phase-index.yaml`
-9. `HANDOVER.md` before stopping or claiming completion
+9. `README.md` as the product/operator-facing overview before final handoff
+10. `HANDOVER.md` before stopping or claiming completion
 
 Read sequentially. Do not inventory every phase before the active phase is known.

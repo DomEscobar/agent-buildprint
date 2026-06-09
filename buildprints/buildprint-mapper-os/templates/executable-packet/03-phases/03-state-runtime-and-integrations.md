@@ -21,6 +21,8 @@ Make the product loop durable and honest across runtime boundaries. Implement th
 
 A user/operator should be able to reload, re-run, or inspect the relevant state without discovering that the product was only in-memory or hardcoded. Provider and integration seams should have deterministic test paths and explicit live blockers. If external systems are involved, calls must be bounded, safe, logged enough for operator understanding, and never pretend to run when credentials/runtime are missing.
 
+Use `proven_implementation_requirements` in `blueprint.yaml` for runtime-heavy domains. Provider clients should sit behind local interfaces and use official SDKs or well-supported clients. Long-running work should have a real task/status model. Persistence should use a database layer with migrations or explicit schema evolution. File/object storage should own uploads, generated assets, and exports with path safety. Custom implementations are acceptable only when the hard-domain proof is named and run.
+
 This phase should turn the core loop from a local demo into a trustworthy local product path.
 
 ## DO NOT
@@ -33,12 +35,14 @@ This phase should turn the core loop from a local demo into a trustworthy local 
 - Do not mark this phase complete from code edits or prose alone.
 - Do not leave state in memory if the product claims persistence or reload/readback.
 - Do not hard-code a single provider when the Buildprint requires dynamic provider configuration.
+- Do not replace queues, task status, provider SDKs, migrations, or file/object safety with ad hoc code unless the alternative is explicitly proof-bound.
 
 ## Minimum proof before moving on
 
 - Run the relevant build/test/typecheck/runtime command or record why it cannot run.
 - Inspect the product path through UI/API/CLI/runtime, not only source files.
 - Prove persistence/readback when this phase creates durable state.
+- Prove selected libraries/runtimes or record exact blockers for hard domains named in `proven_implementation_requirements`.
 - Capture screenshot/browser/API/runtime evidence when this phase changes a user/operator surface.
 - Record any blocker with exact missing dependency, command, credential, or decision.
 
