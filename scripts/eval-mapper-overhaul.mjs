@@ -368,3 +368,38 @@ try {
   for (const socket of redactionSockets) socket.destroy()
   await new Promise((resolve) => redactionServer.close(resolve))
 }
+
+const nestedStartPackage = path.join(tmp, 'nested-start-package')
+const nestedTarget = path.join(tmp, 'nested-start-target')
+const nestedPrefix = 'templates/executable-packet'
+fs.mkdirSync(path.join(nestedStartPackage, nestedPrefix, '03-phases'), { recursive: true })
+const nestedFiles = [
+  'BUILDPRINT.md',
+  '00-questions.md',
+  '01-project-setup.md',
+  '02-ui-identity.md',
+  'blueprint.yaml',
+  '03-phases/phase-index.yaml',
+  '03-phases/phase-flow.md',
+  '03-phases/01-start.md',
+  'HANDOVER.md'
+]
+fs.writeFileSync(path.join(nestedStartPackage, 'package.json'), JSON.stringify({
+  slug: 'nested-start-package',
+  title: 'Nested Start Package',
+  files: nestedFiles.map((file) => ({ path: `${nestedPrefix}/${file}` }))
+}, null, 2))
+for (const file of nestedFiles) {
+  const body = redactionFiles[`/${file}`]
+  const target = path.join(nestedStartPackage, nestedPrefix, file)
+  fs.mkdirSync(path.dirname(target), { recursive: true })
+  fs.writeFileSync(target, body)
+}
+expectPass('cli eval starts nested executable packet template', ['start', path.join(nestedStartPackage, 'package.json'), nestedTarget], ['Downloaded 9 snapshot files'])
+const nestedNextAgent = fs.readFileSync(path.join(nestedTarget, '.buildprint/next-agent.md'), 'utf8')
+if (!nestedNextAgent.includes('.buildprint/snapshots/templates/executable-packet/01-project-setup.md') || !nestedNextAgent.includes('agb harness init . --profile webapp --profile backend')) {
+  console.error(nestedNextAgent)
+  console.error('cli eval failed; nested executable packet start did not preserve template paths and harness profiles')
+  process.exit(1)
+}
+console.log('✓ cli eval starts nested executable packet template with profile handoff')

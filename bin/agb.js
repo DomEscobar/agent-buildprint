@@ -805,7 +805,18 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     .filter(Boolean)
     .map((filePath) => safeManifestPath(filePath))
     .filter((filePath) => !filePath.includes('*'))
-  const hasManifestFile = (filePath) => manifestFilePaths.includes(filePath)
+  const executablePacketPrefix = (() => {
+    const rootHasExecutablePacket = ['00-questions.md', 'blueprint.yaml', '03-phases/phase-index.yaml']
+      .every((file) => manifestFilePaths.includes(file))
+    if (rootHasExecutablePacket) return ''
+    const templatePrefix = 'templates/executable-packet/'
+    const templateHasExecutablePacket = ['00-questions.md', 'blueprint.yaml', '03-phases/phase-index.yaml']
+      .every((file) => manifestFilePaths.includes(`${templatePrefix}${file}`))
+    return templateHasExecutablePacket ? templatePrefix : ''
+  })()
+  const manifestPathFor = (filePath) => `${executablePacketPrefix}${filePath}`
+  const hasManifestFile = (filePath) => manifestFilePaths.includes(manifestPathFor(filePath))
+  const snapshotPathFor = (filePath) => `.buildprint/snapshots/${manifestPathFor(filePath)}`
   const setupFile = hasManifestFile('01-project-setup.md') ? '01-project-setup.md' : '02-project-setup.md'
   const uiIdentityFile = hasManifestFile('02-ui-identity.md') ? '02-ui-identity.md' : '01-ui-identity.md'
   const usesSetupFirstIdentitySecond = setupFile === '01-project-setup.md' && uiIdentityFile === '02-ui-identity.md'
@@ -873,9 +884,10 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     }
   }
   const now = new Date().toISOString()
-  const phaseIndexPath = path.join(snapshotDir, '03-phases', 'phase-index.yaml')
+  const executableSnapshotDir = path.join(snapshotDir, ...executablePacketPrefix.split('/').filter(Boolean))
+  const phaseIndexPath = path.join(executableSnapshotDir, '03-phases', 'phase-index.yaml')
   const phaseIndexText = fs.existsSync(phaseIndexPath) ? fs.readFileSync(phaseIndexPath, 'utf8') : ''
-  const blueprintPath = path.join(snapshotDir, 'blueprint.yaml')
+  const blueprintPath = path.join(executableSnapshotDir, 'blueprint.yaml')
   const blueprintText = fs.existsSync(blueprintPath) ? fs.readFileSync(blueprintPath, 'utf8') : ''
   const harnessProfiles = harnessProfilesFromBlueprint(blueprintText)
   const harnessInitCommand = harnessInitCommandForProfiles(harnessProfiles)
@@ -942,16 +954,16 @@ Start here.
 This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stale assumptions, but package snapshots remain read-only.
 
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
-2. Read order: ${manifestReadOrder.map((file) => `\`.buildprint/snapshots/${file}\``).join(' -> ')}.
-3. Read \`.buildprint/snapshots/00-questions.md\`; stop only for true hard-stop decisions.
-4. Read and complete \`.buildprint/snapshots/${setupFile}\`; initialize the project-local skill harness from the profiles declared in \`.buildprint/snapshots/blueprint.yaml\` by running \`${harnessInitCommand}\` if \`agb\` is available. Then run \`agb harness check .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\` and \`agb harness checkup .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\`. If \`agb\` is unavailable, create the \`AGENTS.md\` harness section and local skills described by the setup file.
-5. Read \`.buildprint/snapshots/${uiIdentityFile}\`; for UI-bearing artifacts, load the local \`frontend-ui-product-design\` skill and generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before phase work.
+2. Read order: ${manifestReadOrder.map((file) => `\`${snapshotPathFor(file)}\``).join(' -> ')}.
+3. Read \`${snapshotPathFor('00-questions.md')}\`; stop only for true hard-stop decisions.
+4. Read and complete \`${snapshotPathFor(setupFile)}\`; initialize the project-local skill harness from the profiles declared in \`${snapshotPathFor('blueprint.yaml')}\` by running \`${harnessInitCommand}\` if \`agb\` is available. Then run \`agb harness check .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\` and \`agb harness checkup .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\`. If \`agb\` is unavailable, create the \`AGENTS.md\` harness section and local skills described by the setup file.
+5. Read \`${snapshotPathFor(uiIdentityFile)}\`; for UI-bearing artifacts, load the local \`frontend-ui-product-design\` skill and generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before phase work.
 6. Confirm setup and identity proof are complete before phase work.
-7. Read \`.buildprint/snapshots/03-phases/phase-flow.md\`.
-8. Load only the active phase named in \`.buildprint/snapshots/03-phases/phase-index.yaml\`: \`${activePhase || 'unknown'}\`.
+7. Read \`${snapshotPathFor('03-phases/phase-flow.md')}\`.
+8. Load only the active phase named in \`${snapshotPathFor('03-phases/phase-index.yaml')}\`: \`${activePhase || 'unknown'}\`.
 9. Execute the phase-flow loop: restate the smallest real vertical product path, build it, verify it, repair visible slop/fake-success shortcuts, and record useful handover facts.
 10. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
-11. Before completion or stopping, write the handover described in \`.buildprint/snapshots/HANDOVER.md\`.
+11. Before completion or stopping, write the handover described in \`${snapshotPathFor('HANDOVER.md')}\`.
 
 Whenever you stop, end your handover with this menu so the developer has a concrete choice (fill in real phase ids from \`03-phases/phase-index.yaml\`):
 
