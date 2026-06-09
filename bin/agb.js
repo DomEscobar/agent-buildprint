@@ -42,7 +42,7 @@ function positionalArgs(startIndex = 0) {
   for (let i = startIndex; i < args.length; i++) {
     const value = args[i]
     if (value.startsWith('--')) {
-      if ((value === '--agent' || value === '--profile' || value === '--profiles') && args[i + 1] && !args[i + 1].startsWith('--')) i++
+      if ((value === '--agent' || value === '--provider' || value === '--profile' || value === '--profiles') && args[i + 1] && !args[i + 1].startsWith('--')) i++
       continue
     }
     positional.push(value)
@@ -58,9 +58,9 @@ Usage:
   agb start <buildprint-package-json-url-or-file> [target-folder]
   agb packet check <packet-folder-or-package-json-url>
   agb packet next <packet-folder-or-build-state-folder>
-  agb harness init [project-folder] [--agent auto|all|codex|claude|agents] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
-  agb harness check [project-folder] [--agent auto|all|codex|claude|agents] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
-  agb harness checkup [project-folder] [--agent auto|all|codex|claude|agents] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
+  agb harness init [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
+  agb harness check [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
+  agb harness checkup [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
   agb evidence check <evidence-ledger-jsonl>
 
 Examples:
@@ -385,8 +385,9 @@ function packetCheckResults(dir) {
     /reviewer_acceptance_questions:/i.test(blueprint) &&
     /claim_gates:/i.test(blueprint)
   )
-  ok('blueprint declares harness profile selection',
+  ok('blueprint declares harness provider and profile selection',
     /harness:\s*\n[\s\S]*profiles:/i.test(blueprint) &&
+    /provider:\s*agents/i.test(blueprint) &&
     /webapp|backend|agentic|full|default/i.test(blueprint)
   )
   ok('blueprint declares typed quality gate routing',
@@ -793,8 +794,10 @@ function harnessProfilesFromBlueprint(blueprintText) {
 
 function harnessInitCommandForProfiles(profiles) {
   const normalized = uniqueStrings((profiles || ['default']).filter(Boolean))
-  if (!normalized.length || (normalized.length === 1 && normalized[0] === 'default')) return 'agb harness init .'
-  return `agb harness init .${normalized.map((profile) => ` --profile ${profile}`).join('')}`
+  const profileArgs = normalized.length && !(normalized.length === 1 && normalized[0] === 'default')
+    ? normalized.map((profile) => ` --profile ${profile}`).join('')
+    : ''
+  return `agb harness init . --provider agents${profileArgs}`
 }
 
 async function startBuildprint(manifestRef, targetFolder = cwd) {
@@ -956,7 +959,7 @@ This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stal
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`${snapshotPathFor(file)}\``).join(' -> ')}.
 3. Read \`${snapshotPathFor('00-questions.md')}\`; stop only for true hard-stop decisions.
-4. Read and complete \`${snapshotPathFor(setupFile)}\`; initialize the project-local skill harness from the profiles declared in \`${snapshotPathFor('blueprint.yaml')}\` by running \`${harnessInitCommand}\` if \`agb\` is available. Then run \`agb harness check .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\` and \`agb harness checkup .${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\`. If \`agb\` is unavailable, create the \`AGENTS.md\` harness section and local skills described by the setup file.
+4. Read and complete \`${snapshotPathFor(setupFile)}\`; initialize the project-local skill harness from the profiles declared in \`${snapshotPathFor('blueprint.yaml')}\` by running \`${harnessInitCommand}\` if \`agb\` is available. Then run \`agb harness check . --provider agents${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\` and \`agb harness checkup . --provider agents${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\`. If \`agb\` is unavailable, create the \`AGENTS.md\` harness section and local skills described by the setup file.
 5. Read \`${snapshotPathFor(uiIdentityFile)}\`; for UI-bearing artifacts, load the local \`frontend-ui-product-design\` skill and generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before phase work.
 6. Confirm setup and identity proof are complete before phase work.
 7. Read \`${snapshotPathFor('03-phases/phase-flow.md')}\`.
@@ -1033,19 +1036,19 @@ if (args[0] === 'harness') {
   const sub = args[1]
   if (!sub || isHelp(sub)) usage(0)
   const project = positionalArgs(2)[0] || cwd
-  const agent = optionValue('--agent') || 'auto'
+  const provider = optionValue('--provider') || optionValue('--agent') || 'agents'
   const profiles = optionValues('--profile', '--profiles')
   const selectedProfiles = profiles.length ? profiles : ['default']
   const json = args.includes('--json')
   try {
-    if (sub === 'init') process.exit(harnessInit(project, agent, json, selectedProfiles) ? 0 : 1)
+    if (sub === 'init') process.exit(harnessInit(project, provider, json, selectedProfiles) ? 0 : 1)
     if (sub === 'check') {
-      const result = harnessCheckResult(project, agent, selectedProfiles)
+      const result = harnessCheckResult(project, provider, selectedProfiles)
       printHarnessResult(result, json)
       process.exit(result.status === 'pass' ? 0 : 1)
     }
     if (sub === 'checkup') {
-      const result = harnessCheckResult(project, agent, selectedProfiles, 'checkup')
+      const result = harnessCheckResult(project, provider, selectedProfiles, 'checkup')
       printHarnessResult(result, json)
       process.exit(result.status === 'missing' ? 1 : 0)
     }

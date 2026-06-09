@@ -7,6 +7,43 @@ import { HARNESS_CORE_SKILL_NAMES, HARNESS_PROFILES, harnessSkillsForProfiles, n
 
 const HARNESS_SECTION_START = '<!-- AGB_HARNESS_START -->'
 const HARNESS_SECTION_END = '<!-- AGB_HARNESS_END -->'
+const HARNESS_PROVIDERS = {
+  agents: {
+    status: 'portable-default',
+    evidenceUrl: 'https://agents.md/',
+    kind: 'skills',
+    skillRoot: ['.agents', 'skills'],
+    description: 'Portable Buildprint skill store'
+  },
+  codex: {
+    status: 'verified-agents-md-only',
+    evidenceUrl: 'https://github.com/openai/codex/blob/main/docs/agents_md.md',
+    kind: 'agents-bridge',
+    skillRoot: ['.agents', 'skills'],
+    description: 'Codex reads AGENTS.md; Buildprint skills stay in the portable .agents store'
+  },
+  claude: {
+    status: 'verified-native-skills',
+    evidenceUrl: 'https://code.claude.com/docs/en/skills',
+    kind: 'skills',
+    skillRoot: ['.claude', 'skills'],
+    description: 'Claude Code project skills'
+  },
+  cline: {
+    status: 'verified-native-skills',
+    evidenceUrl: 'https://docs.cline.bot/customization/skills',
+    kind: 'skills',
+    skillRoot: ['.cline', 'skills'],
+    description: 'Cline project skills'
+  },
+  cursor: {
+    status: 'verified-rules-only',
+    evidenceUrl: 'https://docs.cursor.com/context/rules',
+    kind: 'cursor-rules',
+    ruleRoot: ['.cursor', 'rules'],
+    description: 'Cursor project rules carrying Buildprint skill guidance'
+  }
+}
 
 function uniqueStrings(values) {
   return [...new Set(values.filter(Boolean))]
@@ -16,11 +53,16 @@ function projectRelative(projectRoot, file) {
   return toPosixPath(path.relative(projectRoot, file))
 }
 
-function harnessSkillDirForAgent(projectRoot, agent) {
-  if (agent === 'codex') return path.join(projectRoot, '.codex', 'skills')
-  if (agent === 'claude') return path.join(projectRoot, '.claude', 'skills')
-  if (agent === 'agents') return path.join(projectRoot, '.agents', 'skills')
-  throw new Error(`unknown harness agent target: ${agent}`)
+function harnessProviderConfig(provider) {
+  const config = HARNESS_PROVIDERS[provider]
+  if (!config) throw new Error(`unknown --provider value: ${provider}`)
+  return config
+}
+
+function harnessSkillDirForProvider(projectRoot, provider) {
+  const config = harnessProviderConfig(provider)
+  if (!config.skillRoot) throw new Error(`${provider} does not support native SKILL.md output`)
+  return path.join(projectRoot, ...config.skillRoot)
 }
 
 function harnessSkillFiles(skill) {
@@ -30,22 +72,23 @@ function harnessSkillFiles(skill) {
   ]
 }
 
-function detectedHarnessAgents(projectRoot) {
+function detectedHarnessProviders(projectRoot) {
   const detected = []
   const home = os.homedir()
-  if (process.env.CODEX_HOME || exists(path.join(projectRoot, '.codex')) || exists(path.join(home, '.codex'))) detected.push('codex')
+  if (process.env.CODEX_HOME || exists(path.join(home, '.codex'))) detected.push('codex')
   if (process.env.CLAUDECODE || process.env.CLAUDE_CODE || exists(path.join(projectRoot, '.claude')) || exists(path.join(projectRoot, 'CLAUDE.md')) || exists(path.join(home, '.claude'))) detected.push('claude')
+  if (exists(path.join(projectRoot, '.cline')) || exists(path.join(projectRoot, '.clinerules'))) detected.push('cline')
+  if (exists(path.join(projectRoot, '.cursor'))) detected.push('cursor')
   if (exists(path.join(projectRoot, '.agents'))) detected.push('agents')
   return uniqueStrings(detected)
 }
 
-function harnessTargetAgents(projectRoot, requested = 'auto') {
-  const value = requested || 'auto'
-  if (value === 'all') return ['agents', 'codex', 'claude']
-  if (['agents', 'codex', 'claude'].includes(value)) return uniqueStrings(['agents', value])
-  if (value !== 'auto') throw new Error(`unknown --agent value: ${value}`)
-  const detected = detectedHarnessAgents(projectRoot)
-  return uniqueStrings(['agents', ...detected])
+function harnessTargetProviders(projectRoot, requested = 'agents') {
+  const value = requested || 'agents'
+  if (value === 'all') return Object.keys(HARNESS_PROVIDERS)
+  if (value === 'auto') return ['agents']
+  harnessProviderConfig(value)
+  return [value]
 }
 
 function profileCliArgs(profiles) {
@@ -55,6 +98,10 @@ function profileCliArgs(profiles) {
 function buildHarnessAgentsSection(targets, profiles = ['default']) {
   const normalizedProfiles = normalizeHarnessProfiles(profiles)
   const selectedSkillNames = harnessSkillsForProfiles(normalizedProfiles).map((skill) => skill.name)
+  const providerLines = targets.map((provider) => {
+    const config = harnessProviderConfig(provider)
+    return `- \`${provider}\`: ${config.description}; status \`${config.status}\`; evidence: ${config.evidenceUrl}`
+  })
   const profileLine = normalizedProfiles.length === 1 && normalizedProfiles[0] === 'default'
     ? '- Active profile: `default`.'
     : `- Active profiles: ${normalizedProfiles.map((profile) => `\`${profile}\``).join(', ')} (selected skills: ${selectedSkillNames.map((name) => `\`${name}\``).join(', ')}).`
@@ -64,11 +111,15 @@ function buildHarnessAgentsSection(targets, profiles = ['default']) {
     '',
     'This project uses a local Buildprint skill harness. Keep it project-local unless the user explicitly asks for global agent configuration changes.',
     '',
-    '- Initialize or repair with `agb harness init .`.',
+    '- Initialize or repair with `agb harness init .` for the portable default, or `agb harness init . --provider <provider>` for one explicit provider.',
     '- Verify with `agb harness check .` before phase implementation; use `agb harness checkup .` for the stricter setup doctor.',
-    `- Active skill targets: ${targets.join(', ')}.`,
+    `- Active provider targets: ${targets.join(', ')}.`,
     profileLine,
-    '- Portable skills live in `.agents/skills/`; agent-specific copies may live in `.codex/skills/` or `.claude/skills/` when those agents are detected or requested.',
+    '- Default output is only `.agents/skills/` plus this AGENTS.md section. Provider folders are explicit and evidence-backed; do not create `.codex`, `.claude`, `.cline`, or `.cursor` folders unless requested by provider.',
+    '',
+    'Provider evidence:',
+    '',
+    ...providerLines,
     `- Required core skills: ${HARNESS_CORE_SKILL_NAMES.map((name) => `\`${name}\``).join(', ')}.`,
     '- Optional profiles: `webapp`, `backend`, `agentic`, `full`. Do not use `full` unless broad coverage is worth the extra context.',
     '- Do not copy third-party skill packs blindly. Use the Buildprint-native local skills unless the user explicitly installs an upstream skill/plugin.',
@@ -100,8 +151,19 @@ function patchAgentsMd(projectRoot, targets, profiles = ['default']) {
 function writeHarnessSkillCopies(projectRoot, targets, profiles = ['default']) {
   const written = []
   const skills = harnessSkillsForProfiles(profiles)
-  for (const agent of targets) {
-    const root = harnessSkillDirForAgent(projectRoot, agent)
+  for (const provider of targets) {
+    const config = harnessProviderConfig(provider)
+    if (config.kind === 'cursor-rules') {
+      const root = path.join(projectRoot, ...config.ruleRoot)
+      for (const skill of skills) {
+        const file = path.join(root, `buildprint-${skill.name}.mdc`)
+        fs.mkdirSync(path.dirname(file), { recursive: true })
+        fs.writeFileSync(file, cursorRuleForSkill(skill, profiles))
+        written.push(projectRelative(projectRoot, file))
+      }
+      continue
+    }
+    const root = harnessSkillDirForProvider(projectRoot, provider)
     for (const skill of skills) {
       const dir = path.join(root, skill.name)
       for (const artifact of harnessSkillFiles(skill)) {
@@ -113,6 +175,24 @@ function writeHarnessSkillCopies(projectRoot, targets, profiles = ['default']) {
     }
   }
   return written
+}
+
+function cursorRuleForSkill(skill, profiles = ['default']) {
+  return [
+    '---',
+    `description: Buildprint skill ${skill.name}`,
+    'alwaysApply: false',
+    '---',
+    '',
+    `# Buildprint skill: ${skill.name}`,
+    '',
+    `Selected profiles: ${normalizeHarnessProfiles(profiles).join(', ')}`,
+    '',
+    'This Cursor project rule is generated from the Buildprint harness because Cursor documents project rules, not native SKILL.md skills.',
+    'Source evidence: https://docs.cursor.com/context/rules',
+    '',
+    skill.body
+  ].join('\n')
 }
 
 function textHasSkillContract(text) {
@@ -155,20 +235,38 @@ function checkupArtifacts(projectRoot, agentsText) {
   return checks
 }
 
-export function harnessCheckResult(projectFolder = process.cwd(), requestedAgent = 'auto', profiles = ['default'], mode = 'check') {
+export function harnessCheckResult(projectFolder = process.cwd(), requestedProvider = 'agents', profiles = ['default'], mode = 'check') {
   const projectRoot = path.resolve(projectFolder)
-  const targets = harnessTargetAgents(projectRoot, requestedAgent)
+  const targets = harnessTargetProviders(projectRoot, requestedProvider)
   const normalizedProfiles = normalizeHarnessProfiles(profiles)
   const skills = harnessSkillsForProfiles(normalizedProfiles)
   const agentsPath = path.join(projectRoot, 'AGENTS.md')
   const agentsText = exists(agentsPath) ? readText(agentsPath) : ''
-  const skillResults = targets.flatMap((agent) => {
-    const root = harnessSkillDirForAgent(projectRoot, agent)
+  const skillResults = targets.flatMap((provider) => {
+    const config = harnessProviderConfig(provider)
+    if (config.kind === 'cursor-rules') {
+      const root = path.join(projectRoot, ...config.ruleRoot)
+      return skills.map((skill) => {
+        const file = path.join(root, `buildprint-${skill.name}.mdc`)
+        const artifactText = exists(file) ? readText(file) : ''
+        return {
+          provider,
+          agent: provider,
+          skill: skill.name,
+          artifact: 'Cursor rule',
+          path: projectRelative(projectRoot, file),
+          exists: exists(file),
+          hasContract: exists(file) ? textHasSkillContract(artifactText) : null
+        }
+      })
+    }
+    const root = harnessSkillDirForProvider(projectRoot, provider)
     return skills.flatMap((skill) => harnessSkillFiles(skill).map((artifact) => {
       const file = path.join(root, skill.name, artifact.path)
       const artifactText = exists(file) ? readText(file) : ''
       return {
-        agent,
+        provider,
+        agent: provider,
         skill: skill.name,
         artifact: artifact.path,
         path: projectRelative(projectRoot, file),
@@ -189,26 +287,31 @@ export function harnessCheckResult(projectFolder = process.cwd(), requestedAgent
     : (!hasSection || missingSkills.length || badContracts.length || warnedCheckups.length ? 'warn' : 'pass')
   const nextSteps = []
   const profileArg = profileCliArgs(normalizedProfiles)
-  if (!hasAgents) nextSteps.push(`Run \`agb harness init .${profileArg}\` to create AGENTS.md and local skills.`)
-  else if (!hasSection) nextSteps.push(`Run \`agb harness init .${profileArg}\` to patch AGENTS.md with the Buildprint Skill Harness section.`)
-  if (missingSkills.length) nextSteps.push(`Run \`agb harness init .${profileArg}\` to write missing local skill files.`)
+  const providerArg = requestedProvider && requestedProvider !== 'agents' ? ` --provider ${requestedProvider}` : ''
+  if (!hasAgents) nextSteps.push(`Run \`agb harness init .${providerArg}${profileArg}\` to create AGENTS.md and local skills.`)
+  else if (!hasSection) nextSteps.push(`Run \`agb harness init .${providerArg}${profileArg}\` to patch AGENTS.md with the Buildprint Skill Harness section.`)
+  if (missingSkills.length) nextSteps.push(`Run \`agb harness init .${providerArg}${profileArg}\` to write missing local skill files.`)
   if (badContracts.length) nextSteps.push('Repair skill frontmatter so every SKILL.md has triggers, skips, and completion_signal.')
   if (warnedCheckups.length) nextSteps.push('Complete setup artifacts or record honest blockers before phase work.')
   if (!nextSteps.length) nextSteps.push('Harness is initialized. Run phase setup and keep AGENTS.md in the mandatory read order.')
   return {
     status,
     projectRoot,
-    requestedAgent,
+    requestedProvider,
+    requestedAgent: requestedProvider,
     profile: normalizedProfiles.join(','),
     profiles: normalizedProfiles,
     mode,
     targets,
+    providers: targets,
     selectedSkills: skills.map((skill) => skill.name),
     availableProfiles: Object.keys(HARNESS_PROFILES),
+    availableProviders: HARNESS_PROVIDERS,
     agentsMd: { path: 'AGENTS.md', exists: hasAgents, hasHarnessSection: hasSection },
     skills: skillResults,
     checkup,
-    detectedAgents: detectedHarnessAgents(projectRoot),
+    detectedProviders: detectedHarnessProviders(projectRoot),
+    detectedAgents: detectedHarnessProviders(projectRoot),
     nextSteps
   }
 }
@@ -220,12 +323,12 @@ export function printHarnessResult(result, json = false) {
   }
   console.log(`Harness ${result.mode === 'checkup' ? 'checkup' : 'check'}: ${result.status.toUpperCase()}`)
   console.log(`Project: ${result.projectRoot}`)
-  console.log(`Targets: ${result.targets.join(', ')}`)
+  console.log(`Providers: ${result.targets.join(', ')}`)
   console.log(`Profiles: ${(result.profiles || [result.profile]).join(', ')}`)
   console.log(`AGENTS.md: ${result.agentsMd.exists ? (result.agentsMd.hasHarnessSection ? 'present with harness section' : 'present, harness section missing') : 'missing'}`)
   for (const skill of result.skills) {
     const contract = skill.hasContract === false ? ' contract-missing' : ''
-    console.log(`${skill.exists ? '[ok]' : '[missing]'} ${skill.agent}: ${skill.path}${contract}`)
+    console.log(`${skill.exists ? '[ok]' : '[missing]'} ${skill.provider || skill.agent}: ${skill.path}${contract}`)
   }
   if (result.checkup.length) {
     console.log('\nCheckup:')
@@ -235,14 +338,14 @@ export function printHarnessResult(result, json = false) {
   for (const step of result.nextSteps) console.log(`- ${step}`)
 }
 
-export function harnessInit(projectFolder = process.cwd(), requestedAgent = 'auto', json = false, profiles = ['default']) {
+export function harnessInit(projectFolder = process.cwd(), requestedProvider = 'agents', json = false, profiles = ['default']) {
   const projectRoot = path.resolve(projectFolder)
   fs.mkdirSync(projectRoot, { recursive: true })
-  const targets = harnessTargetAgents(projectRoot, requestedAgent)
+  const targets = harnessTargetProviders(projectRoot, requestedProvider)
   const normalizedProfiles = normalizeHarnessProfiles(profiles)
   const written = writeHarnessSkillCopies(projectRoot, targets, normalizedProfiles)
   patchAgentsMd(projectRoot, targets, normalizedProfiles)
-  const result = harnessCheckResult(projectRoot, requestedAgent, normalizedProfiles)
+  const result = harnessCheckResult(projectRoot, requestedProvider, normalizedProfiles)
   result.written = written
   printHarnessResult(result, json)
   return result.status === 'pass'

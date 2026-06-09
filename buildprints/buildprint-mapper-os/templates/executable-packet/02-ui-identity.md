@@ -14,7 +14,7 @@ For UI-bearing artifacts, the builder must generate a local `docs/ui-identity.md
 
 Before identity generation, load the local frontend skill created by setup:
 
-- Prefer the active agent-specific copy, such as `.codex/skills/frontend-ui-product-design/SKILL.md` or `.claude/skills/frontend-ui-product-design/SKILL.md`, when it exists.
+- Prefer the active provider-specific copy only when an explicit provider created one. For the default provider, load `.agents/skills/frontend-ui-product-design/SKILL.md`.
 - Also accept the portable `.agents/skills/frontend-ui-product-design/SKILL.md`.
 - Read the skill's `SKILL.md`, then load only the references needed for this artifact. At minimum for UI-bearing artifacts, use `references/preflight.md`, `references/screen-states.md`, `references/structural-variety.md`, `references/design-tokens.md`, `references/component-states.md`, `references/mobile-hard-floor.md`, and `references/slop-review.md` when present.
 - If the local frontend skill is missing, return to `01-project-setup.md` and initialize the project-local harness. Do not continue by improvising from memory.

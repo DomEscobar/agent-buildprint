@@ -179,6 +179,14 @@ deployment_posture:
     - provider secrets and generated media storage must be hardened
     - auth/session secret, upload limits, and destructive actions need production review
 
+harness:
+  provider: agents
+  profiles:
+    - webapp
+    - backend
+    - agentic
+  selection_rule: Use the portable `.agents/skills` provider by default. Provider-specific folders require an explicit evidence-backed provider selection.
+
 golden_path:
   - start the authenticated app
   - log in with seeded local credentials or a configured account

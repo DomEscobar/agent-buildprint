@@ -9,7 +9,7 @@ This project uses a local Buildprint skill harness. Keep it project-local unless
 - Verify with `agb harness check .` before phase implementation; use `agb harness checkup .` for the stricter setup doctor.
 - Active skill targets: agents, codex.
 - Active profile: `default`.
-- Portable skills live in `.agents/skills/`; agent-specific copies may live in `.codex/skills/` or `.claude/skills/` when those agents are detected or requested.
+- Default output is only `.agents/skills/` plus this AGENTS.md section. Provider folders are explicit and evidence-backed; do not create `.codex`, `.claude`, `.cline`, or `.cursor` folders unless requested by provider.
 - Required core skills: `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, `verify-and-review`.
 - Optional profiles: `webapp`, `backend`, `agentic`, `full`. Do not use `full` unless broad coverage is worth the extra context.
 - Do not copy third-party skill packs blindly. Use the Buildprint-native local skills unless the user explicitly installs an upstream skill/plugin.

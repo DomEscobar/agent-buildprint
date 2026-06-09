@@ -218,28 +218,30 @@ expectFailure('cli eval rejects removed persona command', ['persona', '--slice',
 
 const harnessFixture = path.join(tmp, 'harness-fixture')
 fs.mkdirSync(harnessFixture, { recursive: true })
-expectFailure('cli eval detects missing project harness', ['harness', 'check', harnessFixture, '--agent', 'codex'], ['Harness check: MISSING'])
-expectPass('cli eval initializes project harness', ['harness', 'init', harnessFixture, '--agent', 'codex'], ['Harness check: PASS'])
-expectPass('cli eval verifies initialized project harness', ['harness', 'check', harnessFixture, '--agent', 'codex'], ['Harness check: PASS'])
+expectFailure('cli eval detects missing project harness', ['harness', 'check', harnessFixture], ['Harness check: MISSING'])
+expectPass('cli eval initializes project harness', ['harness', 'init', harnessFixture], ['Harness check: PASS', 'Providers: agents'])
+expectPass('cli eval verifies initialized project harness', ['harness', 'check', harnessFixture], ['Harness check: PASS', 'Providers: agents'])
 for (const required of [
   'AGENTS.md',
   '.agents/skills/setup-runbook/SKILL.md',
   '.agents/skills/frontend-ui-product-design/SKILL.md',
   '.agents/skills/subagent-driven-implementation/SKILL.md',
-  '.agents/skills/verify-and-review/SKILL.md',
-  '.codex/skills/setup-runbook/SKILL.md',
-  '.codex/skills/frontend-ui-product-design/SKILL.md',
-  '.codex/skills/subagent-driven-implementation/SKILL.md',
-  '.codex/skills/verify-and-review/SKILL.md'
+  '.agents/skills/verify-and-review/SKILL.md'
 ]) {
   if (!fs.existsSync(path.join(harnessFixture, required))) {
     console.error(`cli eval failed; harness init missing ${required}`)
     process.exit(1)
   }
 }
-expectPass('cli eval checkup warns until setup artifacts exist', ['harness', 'checkup', harnessFixture, '--agent', 'codex'], ['Harness checkup: WARN', '.buildprint/setup-receipt.md exists'])
-expectPass('cli eval initializes webapp profile skills', ['harness', 'init', harnessFixture, '--agent', 'codex', '--profile', 'webapp'], ['Profiles: webapp', 'frontend-visual-qa', 'asset-pipeline'])
-expectPass('cli eval initializes multiple profile skills', ['harness', 'init', harnessFixture, '--agent', 'codex', '--profile', 'webapp', '--profile', 'backend'], ['Profiles: webapp, backend', 'api-contract-checks', 'frontend-visual-qa'])
+for (const forbidden of ['.codex/skills', '.claude/skills', '.cline/skills', '.cursor/rules']) {
+  if (fs.existsSync(path.join(harnessFixture, forbidden))) {
+    console.error(`cli eval failed; default harness should not create ${forbidden}`)
+    process.exit(1)
+  }
+}
+expectPass('cli eval checkup warns until setup artifacts exist', ['harness', 'checkup', harnessFixture], ['Harness checkup: WARN', '.buildprint/setup-receipt.md exists'])
+expectPass('cli eval initializes webapp profile skills', ['harness', 'init', harnessFixture, '--profile', 'webapp'], ['Profiles: webapp', 'frontend-visual-qa', 'asset-pipeline'])
+expectPass('cli eval initializes multiple profile skills', ['harness', 'init', harnessFixture, '--profile', 'webapp', '--profile', 'backend'], ['Profiles: webapp, backend', 'api-contract-checks', 'frontend-visual-qa'])
 const harnessAgentsMd = fs.readFileSync(path.join(harnessFixture, 'AGENTS.md'), 'utf8')
 if (!/Buildprint Skill Harness/.test(harnessAgentsMd) || !/setup-runbook/.test(harnessAgentsMd) || !/frontend-ui-product-design/.test(harnessAgentsMd) || !/subagent-driven-implementation/.test(harnessAgentsMd) || !/verify-and-review/.test(harnessAgentsMd) || !/completion_signal/.test(harnessAgentsMd)) {
   console.error(harnessAgentsMd)
@@ -247,6 +249,28 @@ if (!/Buildprint Skill Harness/.test(harnessAgentsMd) || !/setup-runbook/.test(h
   process.exit(1)
 }
 console.log('✓ cli eval writes project-local skill harness')
+
+const claudeFixture = path.join(tmp, 'claude-fixture')
+expectPass('cli eval initializes claude provider only', ['harness', 'init', claudeFixture, '--provider', 'claude', '--profile', 'webapp'], ['Providers: claude', '.claude/skills/frontend-ui-product-design/SKILL.md'])
+if (fs.existsSync(path.join(claudeFixture, '.agents/skills')) || !fs.existsSync(path.join(claudeFixture, '.claude/skills/frontend-ui-product-design/SKILL.md'))) {
+  console.error('cli eval failed; claude provider should write only .claude/skills plus AGENTS.md')
+  process.exit(1)
+}
+
+const clineFixture = path.join(tmp, 'cline-fixture')
+expectPass('cli eval initializes cline provider only', ['harness', 'init', clineFixture, '--provider', 'cline', '--profile', 'webapp'], ['Providers: cline', '.cline/skills/frontend-ui-product-design/SKILL.md'])
+if (fs.existsSync(path.join(clineFixture, '.agents/skills')) || !fs.existsSync(path.join(clineFixture, '.cline/skills/frontend-ui-product-design/SKILL.md'))) {
+  console.error('cli eval failed; cline provider should write only .cline/skills plus AGENTS.md')
+  process.exit(1)
+}
+
+const cursorFixture = path.join(tmp, 'cursor-fixture')
+expectPass('cli eval initializes cursor rules provider only', ['harness', 'init', cursorFixture, '--provider', 'cursor', '--profile', 'webapp'], ['Providers: cursor', '.cursor/rules/buildprint-frontend-ui-product-design.mdc'])
+if (fs.existsSync(path.join(cursorFixture, '.agents/skills')) || !fs.existsSync(path.join(cursorFixture, '.cursor/rules/buildprint-frontend-ui-product-design.mdc'))) {
+  console.error('cli eval failed; cursor provider should write only .cursor/rules plus AGENTS.md')
+  process.exit(1)
+}
+console.log('✓ cli eval writes only the requested evidence-backed provider folder')
 
 const traversalPackage = path.join(tmp, 'traversal-package')
 fs.mkdirSync(traversalPackage, { recursive: true })
@@ -294,7 +318,7 @@ const redactionFiles = {
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions. If blocked, stop before 01-project-setup.md.\n',
   '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires agb harness init, agb harness checkup, Buildprint skill harness, setup-runbook, frontend-ui-product-design, subagent-driven-implementation, verify-and-review, triggers, skips, completion_signal, .agents/skills, docs/architecture.md, command/proof path, applicable/not applicable setup, AGENTS.md, .env.example, setup-receipt.md, placeholder commands, real secrets, and hide hard-stop.\n',
   '/02-ui-identity.md': '# 02 UI Identity\n\nUX is a must. The experience must be understandable and a confusing interface is not a finished product. This runs after 01-project-setup.md and before 03-phases/*. Generate a local docs/ui-identity.md or UI-IDENTITY.md after setup and before phase work. Load frontend-ui-product-design from .agents/skills/frontend-ui-product-design/SKILL.md and references/screen-states.md, returning to 01-project-setup.md if missing. Required sections include First-run comprehension contract, User-language map, Creative product concept, product metaphor, dominant object, primary gesture, moment-to-moment manipulation, Silhouette rejection, forbidden default silhouette, generic dashboard, renamed workbench, card grid, proof console, Product identity thesis, Chosen style direction, Layout model, Interaction model, Component language, Color and typography tokens, Content stress fixtures, Proof obligations, screenshot delta review, exact semantic color, typography, state colors, focus, empty/loading/error/blocked, functionless buttons, dead controls, raw JSON, and evaluator language. Think deeply about the golden path and central output before phase implementation.\n',
-  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\nharness:\n  profiles:\n    - webapp\n    - backend\n',
+  '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\nharness:\n  provider: agents\n  profiles:\n    - webapp\n    - backend\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
   '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',
   '/03-phases/01-start.md': '# Phase 01\n\n## How to implement this phase\n\nRead phase-flow.\n\n## Building objective\n\nBuild a real path.\n\n## DO NOT\n\nNo placeholders.\n\n## Minimum proof before moving on\n\nRun checks.\n\n## Handoff note\n\nRecord proof.\n',
@@ -353,7 +377,7 @@ try {
     console.error('cli eval failed; next-agent missing local harness checkup step')
     process.exit(1)
   }
-  if (!nextAgent.includes('agb harness init . --profile webapp --profile backend')) {
+  if (!nextAgent.includes('agb harness init . --provider agents --profile webapp --profile backend')) {
     console.error(nextAgent)
     console.error('cli eval failed; next-agent missing blueprint-declared harness profiles')
     process.exit(1)
@@ -397,7 +421,7 @@ for (const file of nestedFiles) {
 }
 expectPass('cli eval starts nested executable packet template', ['start', path.join(nestedStartPackage, 'package.json'), nestedTarget], ['Downloaded 9 snapshot files'])
 const nestedNextAgent = fs.readFileSync(path.join(nestedTarget, '.buildprint/next-agent.md'), 'utf8')
-if (!nestedNextAgent.includes('.buildprint/snapshots/templates/executable-packet/01-project-setup.md') || !nestedNextAgent.includes('agb harness init . --profile webapp --profile backend')) {
+if (!nestedNextAgent.includes('.buildprint/snapshots/templates/executable-packet/01-project-setup.md') || !nestedNextAgent.includes('agb harness init . --provider agents --profile webapp --profile backend')) {
   console.error(nestedNextAgent)
   console.error('cli eval failed; nested executable packet start did not preserve template paths and harness profiles')
   process.exit(1)

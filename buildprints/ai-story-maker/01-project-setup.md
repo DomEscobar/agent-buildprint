@@ -13,7 +13,7 @@ Before writing product code, read:
 
 Create the implementation project foundation first. Do not start `02-ui-identity.md` or `03-phases/*` until the project has a real runtime shape, local skills, persistence choices, provider seams, and command/proof paths.
 
-If `agb` is available, run `agb harness init .`. If not, create the equivalent project-local harness manually. The harness must be local to the implementation project: root `AGENTS.md`, `.agents/skills/frontend-ui-product-design/SKILL.md`, `.agents/skills/subagent-driven-implementation/SKILL.md`, and agent-specific copies such as `.codex/skills/**/SKILL.md` or `.claude/skills/**/SKILL.md` when those folders are in use. Do not install global skills or copy third-party skill packs.
+If `agb` is available, run `agb harness init . --provider agents --profile webapp --profile backend --profile agentic`, then run `agb harness checkup . --provider agents --profile webapp --profile backend --profile agentic`. If not, create the equivalent project-local Buildprint skill harness manually. The default harness must be local to the implementation project: root `AGENTS.md` and portable `.agents/skills/**/SKILL.md` files only, including `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`. Every local `SKILL.md` must include explicit `triggers`, `skips`, and `completion_signal` fields so later phase handoffs can prove which skill governed the work. Provider-specific folders such as `.claude/skills/`, `.cline/skills/`, or `.cursor/rules/` require an explicit, evidence-backed `--provider` selection. Do not install global skills or copy third-party skill packs.
 
 ## Building objective
 
@@ -26,7 +26,7 @@ Create these setup artifacts in the implementation project:
 - `AGENTS.md`: local constitution, required read order, UI priority, source-independent product scope, no-fake-success rules, provider and media safety, verification expectations, and Buildprint Skill Harness section.
 - `.agents/skills/frontend-ui-product-design/SKILL.md`: local skill that forces canvas-product UI preflight, screen-state design, stress fixtures, visual QA, and anti-generic review.
 - `.agents/skills/subagent-driven-implementation/SKILL.md`: local skill that tells workers they are not alone in the codebase, defines ownership before edits, and requires proof before phase handoff.
-- agent-specific copies of the two skills where the active agent system expects them.
+- no provider-specific folders unless the user explicitly selected that provider.
 - `docs/architecture.md`: stack, runtime topology, routes/events, persistence schema, media storage, auth/session model, provider seams, generated-output contract, command/proof paths, applicable typed gates, blockers, and claim ceilings.
 - `.env.example`: blank env names only. Include auth/session secret, database URL/path, media storage root or object storage endpoint, text/image/video provider keys, provider base URLs, public asset URL, and port. No real secrets.
 - `.buildprint/setup-receipt.md`: decisions made, defaults used, blockers, commands discovered, seeded data, and readiness for UI identity.

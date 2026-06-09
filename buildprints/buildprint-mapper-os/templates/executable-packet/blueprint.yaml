@@ -58,6 +58,7 @@ agent_contract:
   rule: Build the product loop honestly from comprehensive phase objectives. A phase is not complete from edits, prose, placeholders, mocks, or screenshots alone. Visible controls must work or block honestly; live/provider/deployment claims require matching proof.
 
 harness:
+  provider: agents
   profiles:
     - webapp
   selection_rule: Replace these template profiles with the selected artifact's needs. Use webapp for responsive UI/product surfaces, backend for APIs/data/migrations/security-heavy services, agentic for agent runtimes/tools/memory/subagent systems, and full only when broad coverage is explicitly worth the extra context.

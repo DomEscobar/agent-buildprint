@@ -17,7 +17,7 @@ This file runs after `01-project-setup.md` and before `03-phases/*`. Generate a 
 
 Before identity generation, load the local frontend skill:
 
-- Prefer `.codex/skills/frontend-ui-product-design/SKILL.md` or `.claude/skills/frontend-ui-product-design/SKILL.md` when present.
+- Prefer `.agents/skills/frontend-ui-product-design/SKILL.md` for the default provider, or the explicit provider-specific copy only when the harness was initialized with that provider.
 - Also accept `.agents/skills/frontend-ui-product-design/SKILL.md`.
 - Read only references relevant to canvas editors, including `references/screen-states.md`, design tokens, component states, mobile floor, and slop review.
 - If the skill is missing, return to `01-project-setup.md`; do not improvise UI from memory.
