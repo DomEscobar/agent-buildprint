@@ -1,0 +1,144 @@
+schema_version: mapper-os/executable-blueprint/v3
+execution_start: BUILDPRINT.md
+machine_contract: blueprint.yaml
+claim_status: product_build_required
+qualification_label: source_mapped_local_build_requires_review
+
+source:
+  repo: https://github.com/mutonby/openshorts
+  mapped_commit: fe87af6dd599b854e6eab2de0ca247ebafe13885
+  evidence_root: source/openshorts
+  source_files:
+    - README.md
+    - app.py
+    - main.py
+    - saasshorts.py
+    - dashboard/src/App.jsx
+    - render-service/src/server.ts
+    - remotion/src/Root.tsx
+    - docker-compose.yml
+    - requirements.txt
+    - dashboard/package.json
+    - render-service/package.json
+
+deployment_posture:
+  current: trusted_local
+  allowed_values:
+    - trusted_local
+    - private_authenticated
+    - public_webapp
+  claim_ceiling: public SaaS, multi-tenant auth, strong secret management, live provider success, and social posting require additional proof.
+
+read_order:
+  - BUILDPRINT.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-ui-identity.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - README.md
+  - HANDOVER.md
+
+packet_shape:
+  style: phase_driven_comprehensive
+  principle: YAML routes; markdown teaches and builds.
+  required_files:
+    - BUILDPRINT.md
+    - 00-questions.md
+    - 01-project-setup.md
+    - 02-ui-identity.md
+    - blueprint.yaml
+    - 03-phases/phase-index.yaml
+    - 03-phases/phase-flow.md
+    - README.md
+    - HANDOVER.md
+
+agent_contract:
+  role: Senior Product Engineer
+  rule: Build real OpenShorts product paths. Visible controls must work or block honestly; provider, deployment, publishing, and durability claims require direct proof.
+
+harness:
+  provider: agents
+  profiles:
+    - webapp
+    - backend
+    - agentic
+
+central_output_contract:
+  central_output: Publish-ready vertical short-video package.
+  output_primitives:
+    - 9:16 MP4 clip or generated UGC video
+    - source-derived hook and caption/subtitle track
+    - title, description, hashtags, and platform metadata
+    - render/edit state and preview
+    - optional gallery record and social publishing status
+  quality_signals:
+    - derived from the uploaded video, URL, or product description rather than generic filler
+    - valid video file exists and plays
+    - captions/hooks align with the source language and timing
+    - metadata makes the next publish/review action clear
+    - provider failures name the failed service and recoverable next action
+    - side effects are confirmed and auditable
+  unacceptable_generic_substitutes:
+    - sample MP4s unrelated to input
+    - generated text without renderable video
+    - raw provider JSON as the user-facing result
+    - fake completed publishing state
+    - in-memory-only job state claimed as durable production history
+  reviewer_acceptance_questions:
+    - Can the operator see what source produced this short?
+    - Can the operator play the output and inspect hook/caption/platform metadata?
+    - Can the operator retry, edit, export, or publish from the result?
+    - Which provider, storage, and side-effect claims are still blocked?
+  claim_gates:
+    - live AI provider success requires configured key and provider response proof
+    - social publishing requires explicit confirmation and Upload-Post response proof
+    - gallery/SEO pages require S3/object-store or local equivalent readback
+    - production durability requires restart-safe job state or recorded blocker
+  minimum_standard: The product path must create or process real media into a reviewable vertical short package.
+
+typed_quality_gates:
+  ui_decision_precision:
+    applies: true
+    proof: docs/ui-identity.md plus screenshots of key states
+  visual_viewport_acceptance:
+    applies: true
+    proof: desktop and mobile browser checks for settings, processing, result review, and blocked publish states
+  editor_stress_acceptance:
+    applies: true
+    proof: long filenames, long titles, long captions, edit/readback, and stable 9:16 preview framing
+  semantic_output_acceptance:
+    applies: true
+    proof: source-derived short package review against central output contract
+  integration_operator_acceptance:
+    applies: true
+    proof: Docker/local startup, provider key validation, job status, retry/error, S3/social blockers or live proof
+  critical_review_pushback:
+    applies: true
+    phase_id: 99-critical-review-pushback
+    phase: 03-phases/critical-review-pushback.md
+    pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"
+    repair_loop: "up to five flaw -> fix -> proof -> rescore iterations unless externally blocked"
+
+proven_implementation_requirements:
+  fixed_format_video_rendering:
+    requirement: Use FFmpeg and/or Remotion for real 9:16 video output; sample files and screenshot-only output are forbidden.
+  speech_transcription:
+    requirement: Use faster-whisper or equivalent transcription with word-level timing for caption claims.
+  computer_vision_reframing:
+    requirement: Use MediaPipe, YOLO/OpenCV, or equivalent proven CV tooling for face/person tracking claims.
+  provider_abstraction:
+    requirement: Isolate Gemini, fal.ai, ElevenLabs, Upload-Post, and S3 clients behind provider interfaces with typed errors, retries, and blocker states.
+  background_jobs_and_export_tasks:
+    requirement: Use a real task/status model; production claims require restart-safe persistence or an explicit blocker.
+  persistence_and_migrations:
+    requirement: File output is acceptable for local media proof; production durability needs database/object-store schema and migration path.
+  social_side_effects:
+    requirement: Publishing/scheduling requires confirmation, audit, provider response, and safe failure handling.
+
+state_and_handoff:
+  local_state_dir: .buildprint/
+  setup_receipt: .buildprint/setup-receipt.md
+  readme_template: README.md
+  handover_template: HANDOVER.md
