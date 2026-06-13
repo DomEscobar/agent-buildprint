@@ -1,0 +1,110 @@
+schema: agent-buildprint/capability.v0
+name: stripe-subscriptions
+type: capability
+capability: billing.subscriptions
+description: Adds Stripe Checkout subscriptions, signed webhook handling, and persisted entitlement checks to compatible web apps.
+execution_profile: guarded
+host_frameworks:
+  - nextjs
+  - express
+host_detection:
+  package_files:
+    - package.json
+  route_signals:
+    - app/api
+    - pages/api
+    - server/routes
+    - src/routes
+  auth_signals:
+    - session lookup
+    - user id in request context
+    - middleware-authenticated route
+  database_signals:
+    - prisma
+    - drizzle
+    - supabase
+    - migrations
+    - sql schema
+requires:
+  env:
+    - STRIPE_SECRET_KEY
+    - STRIPE_WEBHOOK_SECRET
+    - STRIPE_PRICE_ID
+  existing_capabilities:
+    - auth.user_identity
+  human_decisions:
+    - subscription product and price
+    - entitlement model
+    - trial behavior if any
+    - billing portal requirement
+touches:
+  - dependencies
+  - env.example
+  - config loader
+  - billing service
+  - checkout route
+  - webhook route
+  - entitlement persistence
+  - protected route or helper
+  - account or billing UI
+apply:
+  inspect:
+    - package manager and framework router
+    - current auth/session helper
+    - database migration path
+    - env/config pattern
+    - existing billing or entitlement code
+  steps:
+    - add official Stripe SDK or host-approved equivalent
+    - add typed billing configuration with missing-env blocked state
+    - add customer/subscription persistence fields or tables
+    - add checkout session creation endpoint
+    - add webhook endpoint with raw body and signature verification
+    - add idempotent subscription state update handling
+    - add entitlement helper used by at least one protected surface
+    - add user/operator setup, success, blocked, and canceled states
+  forbidden:
+    - hard-code secret keys
+    - trust unsigned webhook payloads
+    - mark users paid from checkout redirect alone
+    - claim subscription success without persisted entitlement readback
+    - overwrite existing billing provider without migration approval
+verify:
+  proof_level: sandbox
+  commands:
+    - package test command if present
+    - package lint/typecheck command if present
+  runtime_checks:
+    - checkout endpoint creates a Stripe Checkout session for an authenticated user
+    - signed webhook updates subscription state
+    - duplicate webhook events are idempotent or harmless
+    - protected entitlement check reads persisted state
+    - missing STRIPE_SECRET_KEY produces actionable setup error
+  blocked_checks:
+    - live checkout requires Stripe sandbox key
+    - webhook delivery requires Stripe CLI, tunnel, or fixture event
+risk:
+  level: high
+  reason: Touches billing, external provider callbacks, user entitlement state, persistence, and secrets.
+failure_modes:
+  - webhook secret mismatch
+  - raw body parsing breaks signature verification
+  - duplicate webhook events create conflicting state
+  - auth user missing during checkout
+  - subscription canceled but entitlement remains active
+  - local dev cannot receive provider webhooks without tunnel or fixture
+  - existing billing provider conflicts with new Stripe state
+composition:
+  expects:
+    - auth.user_identity
+  provides:
+    - billing.subscription_state
+    - billing.entitlement_check
+  composes_with:
+    - rbac-permissions
+    - admin-dashboard
+    - email-notifications
+  conflicts_with:
+    - existing billing provider without migration decision
+    - entitlement state owned by another package without adapter
+

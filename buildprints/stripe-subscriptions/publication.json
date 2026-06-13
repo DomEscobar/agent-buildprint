@@ -1,0 +1,96 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "slug": "stripe-subscriptions",
+  "title": "Stripe Subscriptions",
+  "creator": "Agent Buildprint",
+  "category": "Feature / Extension",
+  "tier": "agent-grade",
+  "status": "publishable-draft",
+  "runtime": ["Capability Buildprint packet"],
+  "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md"],
+  "iconKeys": ["plugin", "code", "sparkles"],
+  "difficulty": "Hard",
+  "featured": true,
+  "summary": "A guarded Capability Buildprint for adding Stripe Checkout subscriptions, signed webhook handling, and persisted entitlement checks to compatible apps.",
+  "promise": "Gives coding agents a phased implementation contract for grafting subscription billing into an existing app without guessing around auth, database, routes, or verification.",
+  "includes": [
+    "Stripe subscription capability contract",
+    "host assessment checkpoint",
+    "integration planning checkpoint",
+    "config and persistence phase",
+    "core billing integration phase",
+    "checkout and webhook wiring phase",
+    "user/operator surface phase",
+    "verification and receipt phase"
+  ],
+  "risks": [
+    "Requires host app user identity and persistence",
+    "Sandbox proof requires Stripe test keys and webhook delivery",
+    "Existing billing providers require an explicit migration decision",
+    "Provider API details must be checked against current Stripe docs during implementation"
+  ],
+  "checks": [
+    "Read BUILDPRINT.md first",
+    "Write host assessment before edits",
+    "Write capability plan before implementation",
+    "Verify webhook signatures before trusting events",
+    "Persist entitlement state before claiming paid access",
+    "Write capability receipt with proof level and blockers"
+  ],
+  "trustBadges": [
+    {
+      "label": "Guarded capability",
+      "detail": "Uses phased host assessment, planning, implementation, verification, and receipt.",
+      "tone": "info"
+    },
+    {
+      "label": "Billing risk declared",
+      "detail": "Explicitly treats Stripe subscriptions as high-risk billing and entitlement work.",
+      "tone": "warning"
+    }
+  ],
+  "publicStatus": {
+    "label": "Dogfood draft",
+    "explanation": "Ready for agent dogfooding against a small compatible host app. Not yet runtime-verified against a real Stripe sandbox host."
+  },
+  "whatYouGet": [
+    "A bounded subscription billing implementation contract",
+    "Host compatibility rules",
+    "Phased implementation files",
+    "Verification proof levels",
+    "Receipt requirements for applying agents"
+  ],
+  "whatYouNeed": [
+    "A compatible app with user identity",
+    "A persistence layer or approved persistence choice",
+    "Stripe sandbox keys for runtime proof",
+    "A subscription price/product decision"
+  ],
+  "howToUse": [
+    {
+      "title": "Load the packet",
+      "detail": "Use the package manifest and read BUILDPRINT.md first."
+    },
+    {
+      "title": "Assess the host",
+      "detail": "Write .buildprint/host-assessment.md before edits."
+    },
+    {
+      "title": "Plan and graft",
+      "detail": "Write .buildprint/capability-plan.md, then implement each phase in order."
+    },
+    {
+      "title": "Verify honestly",
+      "detail": "Run available checks and record the actual proof level in .buildprint/capability-receipt.md."
+    }
+  ],
+  "resultChecklist": [
+    "Host user identity is mapped",
+    "Persistence path is mapped",
+    "Stripe env contract is documented",
+    "Checkout route is authenticated",
+    "Webhook route verifies signatures",
+    "Entitlement helper reads persisted state",
+    "Receipt records proof level and blockers"
+  ]
+}
