@@ -1,0 +1,111 @@
+schema: agent-buildprint/capability.v0
+name: rbac-permissions
+type: capability
+capability: auth.rbac
+description: Adds role-based access control with explicit roles, centralized permission checks, protected routes or actions, and verifiable allow/deny behavior.
+execution_profile: guarded
+host_frameworks:
+  - nextjs
+  - express
+  - hono
+host_detection:
+  package_files:
+    - package.json
+  auth_signals:
+    - current user/session helper
+    - protected route or middleware
+    - user id in request context
+  database_signals:
+    - prisma
+    - drizzle
+    - supabase
+    - migrations
+    - sql schema
+  route_signals:
+    - app
+    - pages
+    - app/api
+    - pages/api
+    - server/routes
+    - src/routes
+requires:
+  env: []
+  existing_capabilities:
+    - auth.user_identity
+  human_decisions:
+    - initial roles
+    - default role for new users
+    - admin bootstrap path
+    - first protected route or action
+touches:
+  - data model
+  - migrations or role source
+  - auth/session helper
+  - permission policy
+  - authorization helper
+  - protected routes or actions
+  - denied and misconfigured states
+  - admin/operator surface when present
+apply:
+  inspect:
+    - current user identity source
+    - existing route protection pattern
+    - database schema and migration tooling
+    - existing role/permission/admin code
+    - current test/lint/typecheck commands
+  steps:
+    - define explicit role and permission names
+    - define deny-by-default permission matrix
+    - add role persistence or approved role derivation
+    - add central authorization helper
+    - protect selected routes/actions through the helper
+    - add secure admin bootstrap or assignment path
+    - expose denied and missing-role states clearly
+    - add tests or fixtures proving allow and deny paths
+  forbidden:
+    - scatter permission literals across unrelated files
+    - silently make every user admin
+    - allow unknown roles by default
+    - hide denied states behind generic 500 errors
+    - bypass the central permission helper in protected code
+verify:
+  proof_level: fixture
+  commands:
+    - package test command if present
+    - package lint/typecheck command if present
+    - package build command if relevant
+  runtime_checks:
+    - privileged user can access protected action
+    - non-privileged user is denied
+    - unknown or missing role is denied or blocked clearly
+    - protected surface calls central permission helper
+    - role policy is covered by fixture or unit tests
+  blocked_checks:
+    - no auth/session model blocks with a clear prerequisite
+    - existing permission system blocks without migration decision
+risk:
+  level: high
+  reason: Touches authorization boundaries and can expose protected data or block legitimate users if implemented incorrectly.
+failure_modes:
+  - default role grants too much access
+  - route bypasses central permission helper
+  - admin bootstrap path is insecure
+  - permission literals drift across files
+  - UI hides denied state instead of explaining it
+  - existing custom permission system is partially overwritten
+composition:
+  expects:
+    - auth.user_identity
+  provides:
+    - auth.role_state
+    - auth.permission_check
+    - auth.protected_surface
+  composes_with:
+    - stripe-subscriptions
+    - admin-dashboard
+    - audit-log
+    - team-workspace-model
+  conflicts_with:
+    - existing custom permission system without migration decision
+    - auth provider that cannot expose stable user identity
+

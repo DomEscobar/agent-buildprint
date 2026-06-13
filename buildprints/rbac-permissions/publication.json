@@ -1,0 +1,99 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "slug": "rbac-permissions",
+  "title": "RBAC Permissions",
+  "creator": "Agent Buildprint",
+  "category": "Feature / Extension",
+  "tier": "agent-grade",
+  "status": "publishable-draft",
+  "runtime": ["Capability Buildprint packet"],
+  "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md"],
+  "iconKeys": ["plugin", "code", "sparkles"],
+  "difficulty": "Hard",
+  "featured": true,
+  "summary": "A guarded Capability Buildprint for adding role-based access control with explicit roles, central permission checks, protected surfaces, and allow/deny proof.",
+  "promise": "Gives coding agents a phased implementation contract for grafting RBAC into an existing app without scattering permission logic or faking authorization proof.",
+  "includes": [
+    "RBAC capability contract",
+    "host assessment checkpoint",
+    "integration planning checkpoint",
+    "role and permission policy phase",
+    "central authorization helper phase",
+    "protected route/action wiring phase",
+    "denied/setup state phase",
+    "verification and receipt phase"
+  ],
+  "risks": [
+    "Requires stable host user identity",
+    "Existing permission systems require an explicit migration decision",
+    "Bad defaults can expose protected actions",
+    "Client-only protection is not sufficient"
+  ],
+  "checks": [
+    "Read BUILDPRINT.md first",
+    "Write host assessment before edits",
+    "Write capability plan before implementation",
+    "Use deny-by-default policy",
+    "Protect server-side route or action",
+    "Verify privileged allow and non-privileged deny paths",
+    "Write capability receipt with proof level and blockers"
+  ],
+  "trustBadges": [
+    {
+      "label": "Guarded capability",
+      "detail": "Uses phased host assessment, planning, implementation, verification, and receipt.",
+      "tone": "info"
+    },
+    {
+      "label": "Locally verifiable",
+      "detail": "Can prove allow and deny paths without external provider keys.",
+      "tone": "success"
+    }
+  ],
+  "publicStatus": {
+    "label": "Dogfood draft",
+    "explanation": "Ready for agent dogfooding against a compatible host app. Intended to reach fixture or runtime proof without external keys."
+  },
+  "whatYouGet": [
+    "A bounded RBAC implementation contract",
+    "Host compatibility rules",
+    "Phased implementation files",
+    "Deny-by-default security posture",
+    "Verification proof levels",
+    "Receipt requirements for applying agents"
+  ],
+  "whatYouNeed": [
+    "A compatible app with user identity",
+    "A protected route/action to guard",
+    "A role storage or derivation decision",
+    "Fixture users or test doubles for allow/deny proof"
+  ],
+  "howToUse": [
+    {
+      "title": "Load the packet",
+      "detail": "Use the package manifest and read BUILDPRINT.md first."
+    },
+    {
+      "title": "Assess the host",
+      "detail": "Write .buildprint/host-assessment.md before edits."
+    },
+    {
+      "title": "Plan and graft",
+      "detail": "Write .buildprint/capability-plan.md, then implement each phase in order."
+    },
+    {
+      "title": "Verify honestly",
+      "detail": "Prove both allow and deny paths, then record the actual proof level in .buildprint/capability-receipt.md."
+    }
+  ],
+  "resultChecklist": [
+    "Host user identity is mapped",
+    "Role model is explicit",
+    "Permission matrix is centralized",
+    "Default role is least privilege",
+    "Protected surface uses central helper",
+    "Privileged allow path is proven",
+    "Non-privileged deny path is proven",
+    "Receipt records proof level and blockers"
+  ]
+}
