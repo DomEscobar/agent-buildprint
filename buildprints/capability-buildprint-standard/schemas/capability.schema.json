@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-buildprint.com/schemas/capability-buildprint.v0.json",
+  "title": "Capability Buildprint v0",
+  "type": "object",
+  "required": [
+    "schema",
+    "name",
+    "type",
+    "capability",
+    "description",
+    "execution_profile",
+    "host_frameworks",
+    "host_detection",
+    "requires",
+    "touches",
+    "apply",
+    "verify",
+    "risk",
+    "failure_modes",
+    "composition"
+  ],
+  "properties": {
+    "schema": {
+      "const": "agent-buildprint/capability.v0"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,80}$"
+    },
+    "type": {
+      "enum": ["capability", "capability-standard"]
+    },
+    "capability": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20
+    },
+    "execution_profile": {
+      "enum": ["light", "guarded", "strict"]
+    },
+    "host_frameworks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "host_detection": {
+      "type": "object"
+    },
+    "requires": {
+      "type": "object"
+    },
+    "touches": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "apply": {
+      "type": "object"
+    },
+    "verify": {
+      "type": "object"
+    },
+    "risk": {
+      "type": "object",
+      "required": ["level", "reason"],
+      "properties": {
+        "level": { "enum": ["low", "medium", "high", "critical"] },
+        "reason": { "type": "string" }
+      }
+    },
+    "failure_modes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "composition": {
+      "type": "object"
+    }
+  }
+}

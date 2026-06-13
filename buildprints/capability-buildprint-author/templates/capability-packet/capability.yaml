@@ -1,0 +1,35 @@
+schema: agent-buildprint/capability.v0
+name: <capability-slug>
+type: capability
+capability: <domain.capability>
+description: <specific capability promise>
+execution_profile: guarded
+host_frameworks:
+  - <framework>
+host_detection:
+  package_files:
+    - package.json
+requires:
+  env: []
+  existing_capabilities: []
+  human_decisions: []
+touches: []
+apply:
+  inspect: []
+  steps: []
+  forbidden: []
+verify:
+  proof_level: fixture
+  commands: []
+  runtime_checks: []
+  blocked_checks: []
+risk:
+  level: medium
+  reason: <why this risk level fits>
+failure_modes: []
+composition:
+  expects: []
+  provides: []
+  composes_with: []
+  conflicts_with: []
+

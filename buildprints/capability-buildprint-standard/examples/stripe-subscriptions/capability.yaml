@@ -1,0 +1,89 @@
+schema: agent-buildprint/capability.v0
+name: stripe-subscriptions
+type: capability
+capability: billing.subscriptions
+description: Adds Stripe Checkout subscriptions, webhook handling, and entitlement state to a compatible web app.
+execution_profile: guarded
+host_frameworks:
+  - nextjs
+  - express
+host_detection:
+  package_files:
+    - package.json
+  route_signals:
+    - app/api
+    - pages/api
+    - server/routes
+  auth_signals:
+    - session lookup
+    - user id in request context
+  database_signals:
+    - prisma
+    - drizzle
+    - supabase
+requires:
+  env:
+    - STRIPE_SECRET_KEY
+    - STRIPE_WEBHOOK_SECRET
+    - STRIPE_PRICE_ID
+  existing_capabilities:
+    - auth.user_identity
+  human_decisions:
+    - subscription product and price
+    - entitlement model
+touches:
+  - dependencies
+  - env.example
+  - billing service
+  - checkout route
+  - webhook route
+  - entitlement persistence
+  - account or billing UI
+apply:
+  inspect:
+    - package manager and framework router
+    - current auth/session helper
+    - database migration path
+    - env/config pattern
+  steps:
+    - install official Stripe SDK or host-approved equivalent
+    - add billing provider wrapper
+    - add checkout session creation endpoint
+    - add webhook endpoint with signature verification
+    - persist customer, subscription, status, and entitlement fields
+    - add blocked setup state when env vars are missing
+  forbidden:
+    - hard-code secret keys
+    - trust unsigned webhook payloads
+    - claim subscription success without persisted entitlement readback
+verify:
+  proof_level: sandbox
+  commands:
+    - package test command if present
+    - package lint/typecheck command if present
+  runtime_checks:
+    - checkout endpoint creates a Stripe Checkout session
+    - signed webhook updates subscription state
+    - protected entitlement check reads persisted state
+  blocked_checks:
+    - missing STRIPE_SECRET_KEY produces actionable setup error
+risk:
+  level: high
+  reason: Touches billing, external provider callbacks, user entitlement state, and secrets.
+failure_modes:
+  - webhook secret mismatch
+  - duplicate webhook events
+  - auth user missing during checkout
+  - subscription canceled but entitlement remains active
+  - local dev cannot receive provider webhooks without tunnel or fixture
+composition:
+  expects:
+    - auth.user_identity
+  provides:
+    - billing.subscription_state
+    - billing.entitlement_check
+  composes_with:
+    - rbac-permissions
+    - admin-dashboard
+  conflicts_with:
+    - existing billing provider without migration decision

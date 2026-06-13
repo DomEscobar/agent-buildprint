@@ -1,0 +1,82 @@
+schema: agent-buildprint/capability.v0
+name: rbac-permissions
+type: capability
+capability: auth.rbac
+description: Adds role-based access control with explicit roles, permission checks, protected routes, and admin/operator review paths.
+execution_profile: guarded
+host_frameworks:
+  - nextjs
+  - express
+  - hono
+host_detection:
+  package_files:
+    - package.json
+  auth_signals:
+    - current user/session helper
+    - protected route or middleware
+  database_signals:
+    - prisma
+    - drizzle
+    - supabase
+    - sql migrations
+requires:
+  existing_capabilities:
+    - auth.user_identity
+  human_decisions:
+    - initial roles
+    - default role for new users
+    - admin bootstrap path
+touches:
+  - data model
+  - migrations
+  - auth middleware
+  - permission helper
+  - protected routes
+  - admin or operator UI when present
+apply:
+  inspect:
+    - current user identity source
+    - route protection pattern
+    - database schema/migration tooling
+    - existing admin/operator surfaces
+  steps:
+    - define role and permission model
+    - add persistence for user roles or memberships
+    - add central authorization helper
+    - protect selected routes/actions through the helper
+    - add bootstrap/admin assignment path
+    - surface denied and misconfigured states clearly
+  forbidden:
+    - scatter permission literals across unrelated files
+    - silently make every user admin
+    - hide denied states behind generic 500 errors
+verify:
+  proof_level: fixture
+  commands:
+    - package test command if present
+    - package lint/typecheck command if present
+  runtime_checks:
+    - admin user can access protected action
+    - non-admin user is denied
+    - missing role produces actionable blocked state
+  blocked_checks:
+    - no auth/session model blocks with a clear prerequisite
+risk:
+  level: high
+  reason: Touches authorization boundaries and can expose or block protected actions.
+failure_modes:
+  - default role grants too much access
+  - route bypasses central permission helper
+  - admin bootstrap path is insecure
+  - UI hides denied state instead of explaining it
+composition:
+  expects:
+    - auth.user_identity
+  provides:
+    - auth.role_state
+    - auth.permission_check
+  composes_with:
+    - stripe-subscriptions
+    - admin-dashboard
+  conflicts_with:
+    - existing custom permission system without migration decision

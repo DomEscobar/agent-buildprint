@@ -1,0 +1,91 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "slug": "capability-buildprint-standard",
+  "title": "Capability Buildprint Standard",
+  "creator": "Agent Buildprint",
+  "category": "Feature / Extension",
+  "tier": "agent-grade",
+  "status": "publishable-draft",
+  "runtime": ["Capability Buildprint standard"],
+  "stack": ["BUILDPRINT.md", "capability.yaml", "apply.md", "verify.md", "compatibility.md"],
+  "iconKeys": ["plugin", "sparkles", "code"],
+  "difficulty": "Medium",
+  "featured": true,
+  "summary": "A draft v0 standard for packaging reusable agent-installable capabilities such as Stripe, RBAC, auth, analytics, admin UI, and deployment.",
+  "promise": "Defines the first compact Capability Buildprint format so agents can add bounded powers to existing software without rediscovering implementation contracts from scratch.",
+  "includes": [
+    "Capability Buildprint v0 contract",
+    "phased grafting protocol for existing host repos",
+    "machine-readable capability.yaml standard",
+    "host assessment and integration plan checkpoints",
+    "apply and verify authoring rules",
+    "host compatibility and composition model",
+    "Stripe subscription example manifest",
+    "RBAC permissions example manifest",
+    "starter JSON schema for scanner/tool validation"
+  ],
+  "risks": [
+    "Draft standard needs real capability packets to harden edge cases",
+    "Scanner and registry UI do not yet deeply validate capability.yaml",
+    "Examples are contract examples, not full provider implementations"
+  ],
+  "checks": [
+    "Read BUILDPRINT.md first",
+    "Write host assessment before edits",
+    "Write integration plan before implementation",
+    "Validate required files are present",
+    "Use examples to author one bounded capability packet",
+    "Do not claim runtime install success without verify.md proof"
+  ],
+  "trustBadges": [
+    {
+      "label": "Draft standard",
+      "detail": "First published shape for Capability Buildprints.",
+      "tone": "info"
+    },
+    {
+      "label": "Composable",
+      "detail": "Designed for bounded capabilities that can be applied to host projects.",
+      "tone": "success"
+    }
+  ],
+  "publicStatus": {
+    "label": "Draft v0",
+    "explanation": "Ready for dogfooding with real Stripe, RBAC, and auth capability packets."
+  },
+  "whatYouGet": [
+    "A compact file shape for reusable capability packets",
+    "A phased workflow for safely grafting capabilities into host repos",
+    "A manifest contract scanners and agents can parse",
+    "Apply, verify, compatibility, and composition rules",
+    "Concrete example manifests for billing and permissions"
+  ],
+  "whatYouNeed": [
+    "One bounded capability to package",
+    "A target host family such as Next.js, Express, Supabase, or another framework",
+    "Concrete verification proof before claiming the capability works"
+  ],
+  "howToUse": [
+    {
+      "title": "Author a capability",
+      "detail": "Copy the packet shape, fill capability.yaml, then write apply.md and verify.md for one bounded integration."
+    },
+    {
+      "title": "Check compatibility",
+      "detail": "Use compatibility.md to declare host signals, expected existing capabilities, and composition rules."
+    },
+    {
+      "title": "Dogfood it",
+      "detail": "Apply the packet to a real host repo and record proof level, blockers, and missing scanner rules."
+    }
+  ],
+  "resultChecklist": [
+    "Capability identity is specific",
+    "Execution profile is declared",
+    "Host signals are explicit",
+    "Secrets and side effects are declared",
+    "Apply instructions adapt to host architecture",
+    "Verification checks prove the capability, not just file creation",
+    "Composition expectations are declared"
+  ]
+}

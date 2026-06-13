@@ -1,0 +1,48 @@
+schema: agent-buildprint/author.v0
+name: capability-buildprint-author
+type: buildprint-author
+title: Capability Buildprint Author
+description: Authoring workflow for creating valid Capability Buildprints from a capability idea, existing integration, vendor docs, or source repo.
+creates:
+  schema: agent-buildprint/capability.v0
+  packet_type: capability-buildprint
+canonical_start: BUILDPRINT.md
+read_order:
+  - BUILDPRINT.md
+  - author.yaml
+  - 00-intake.md
+  - 01-capability-boundary.md
+  - 02-contract-authoring.md
+  - 03-phase-authoring.md
+  - 04-validation-and-publication.md
+  - templates/capability-packet/
+inputs:
+  accepted:
+    - capability idea
+    - existing integration code
+    - vendor documentation
+    - source repository or folder
+    - desired host framework family
+outputs:
+  required:
+    - BUILDPRINT.md
+    - capability.yaml
+    - compatibility.md
+    - 00-host-assessment.md
+    - 01-integration-plan.md
+    - apply.md
+    - 02-implementation-phases/01-contract-and-config.md
+    - 02-implementation-phases/02-core-integration.md
+    - 02-implementation-phases/03-host-wiring.md
+    - 02-implementation-phases/04-user-operator-surface.md
+    - 02-implementation-phases/05-verification-and-receipt.md
+    - verify.md
+    - README.md
+quality_bar:
+  - capability is bounded and reusable
+  - host detection is explicit
+  - execution profile matches risk
+  - apply phases are concrete enough to prevent freestyle implementation
+  - verification proves the capability instead of file creation
+  - receipt requirements are present
+

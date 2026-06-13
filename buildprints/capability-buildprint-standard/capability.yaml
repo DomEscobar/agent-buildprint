@@ -1,0 +1,118 @@
+schema: agent-buildprint/capability.v0
+name: capability-buildprint-standard
+type: capability-standard
+title: Capability Buildprint Standard
+description: Defines the v0 Capability Buildprint format for packaging reusable agent-installable software capabilities.
+capability: standards.capability-buildprints
+status: draft-standard
+canonical_start: BUILDPRINT.md
+read_order:
+  - BUILDPRINT.md
+  - capability.yaml
+  - compatibility.md
+  - 00-host-assessment.md
+  - 01-integration-plan.md
+  - apply.md
+  - 02-implementation-phases/01-contract-and-config.md
+  - 02-implementation-phases/02-core-integration.md
+  - 02-implementation-phases/03-host-wiring.md
+  - 02-implementation-phases/04-user-operator-surface.md
+  - 02-implementation-phases/05-verification-and-receipt.md
+  - verify.md
+  - schemas/capability.schema.json
+  - examples/stripe-subscriptions/capability.yaml
+  - examples/rbac-permissions/capability.yaml
+packet_shape:
+  required_files:
+    - BUILDPRINT.md
+    - capability.yaml
+    - 00-host-assessment.md
+    - 01-integration-plan.md
+    - apply.md
+    - verify.md
+    - compatibility.md
+    - 02-implementation-phases/01-contract-and-config.md
+    - 02-implementation-phases/02-core-integration.md
+    - 02-implementation-phases/03-host-wiring.md
+    - 02-implementation-phases/04-user-operator-surface.md
+    - 02-implementation-phases/05-verification-and-receipt.md
+  optional_directories:
+    - examples/
+    - scripts/
+    - references/
+authoring_contract:
+  primary_unit: one bounded reusable capability
+  not_for:
+    - whole product rebuilds
+    - broad architecture plans
+    - vague prompt collections
+    - vendor docs copied without host adaptation rules
+  must_define:
+    - capability identity
+    - execution profile
+    - supported host signals
+    - required inputs and secrets
+    - integration surfaces
+    - apply sequence
+    - verification proof
+    - failure modes
+    - composition rules
+minimum_capability_fields:
+  - schema
+  - name
+  - type
+  - capability
+  - description
+  - execution_profile
+  - host_frameworks
+  - host_detection
+  - requires
+  - touches
+  - apply
+  - verify
+  - risk
+  - failure_modes
+  - composition
+verification_rule: A capability is not installed until its declared verification checks pass or blockers are reported explicitly.
+execution_profiles:
+  light:
+    use_for:
+      - additive helpers
+      - local UI helpers
+      - non-sensitive configuration
+    requires:
+      - host-assessment
+      - integration-plan
+      - verification-receipt
+  guarded:
+    use_for:
+      - auth
+      - billing
+      - RBAC
+      - database changes
+      - webhooks
+      - provider integrations
+    requires:
+      - host-assessment
+      - integration-plan
+      - phased-implementation
+      - blocked-state-proof
+      - verification-receipt
+  strict:
+    use_for:
+      - destructive operations
+      - production data migration
+      - security boundary changes
+      - public deployment
+    requires:
+      - host-assessment
+      - integration-plan
+      - rollback-plan
+      - security-boundary-check
+      - critical-review
+      - verification-receipt
+risk_levels:
+  - low
+  - medium
+  - high
+  - critical

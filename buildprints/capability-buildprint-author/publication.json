@@ -1,0 +1,40 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "slug": "capability-buildprint-author",
+  "title": "Capability Buildprint Author",
+  "creator": "Agent Buildprint",
+  "category": "Framework / Architecture",
+  "tier": "agent-grade",
+  "status": "publishable-draft",
+  "runtime": ["Buildprint authoring workflow"],
+  "stack": ["BUILDPRINT.md", "author.yaml", "templates/capability-packet"],
+  "difficulty": "Medium",
+  "featured": true,
+  "summary": "An authoring Buildprint that turns a capability idea, existing integration, vendor docs, or source repo into a valid phased Capability Buildprint packet.",
+  "promise": "Guides agents through intake, capability boundary, contract authoring, phased workflow authoring, and publication checks for reusable Capability Buildprints.",
+  "includes": [
+    "Capability intake workflow",
+    "boundary definition rules",
+    "capability.yaml authoring contract",
+    "phase authoring rules",
+    "publication validation checklist",
+    "starter capability packet template"
+  ],
+  "risks": [
+    "Authored packets still need dogfooding against real host repos",
+    "Vendor-specific implementation quality depends on source evidence and docs",
+    "Proof claims must remain conservative until a capability is applied"
+  ],
+  "checks": [
+    "Capability is bounded to one reusable promise",
+    "Execution profile matches risk",
+    "Required files are authored",
+    "Verification and receipt rules are concrete",
+    "Publication metadata is honest"
+  ],
+  "publicStatus": {
+    "label": "Draft authoring workflow",
+    "explanation": "Ready to create the first real capability packet, likely Stripe subscriptions or RBAC."
+  }
+}
+
