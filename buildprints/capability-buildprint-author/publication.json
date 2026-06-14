@@ -10,9 +10,11 @@
   "stack": ["BUILDPRINT.md", "author.yaml", "templates/capability-packet"],
   "difficulty": "Medium",
   "featured": true,
-  "summary": "An internet-deepsearch authoring Buildprint that turns a capability idea, existing integration, vendor docs, or source repo into a valid phased Capability Buildprint packet.",
-  "promise": "When context is thin, forces agents to search current internet/docs/source evidence, compare candidate techniques, and choose the best current approach before authoring or asking broad questions.",
+  "summary": "A classifier-backed Buildprint creator that routes greenfield products to product Buildprints and turns bounded capabilities into valid phased Capability Buildprint packets.",
+  "promise": "Classifies product vs capability first. For capability work, forces agents to search current internet/docs/source evidence, compare candidate techniques, and choose the best current approach before authoring or asking broad questions.",
   "includes": [
+    "Product vs capability classifier",
+    "Greenfield product handoff route",
     "Internet deepsearch to choose technique",
     "Candidate technique comparison",
     "Capability intake workflow",
@@ -28,6 +30,7 @@
     "Proof claims must remain conservative until a capability is applied"
   ],
   "checks": [
+    "Greenfield product requests route away from capability authoring",
     "Internet deepsearch selects or downgrades the technique before authoring",
     "Capability is bounded to one reusable promise",
     "Best-practice/current/proven claims are cited or downgraded",

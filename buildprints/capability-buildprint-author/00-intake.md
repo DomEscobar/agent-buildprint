@@ -2,7 +2,7 @@
 
 ## Objective
 
-Gather enough input to decide whether the requested output should be a Capability Buildprint, Product Buildprint, or something else.
+Gather enough input to author the selected route after `00-request-classifier.md` has decided this is Capability Buildprint work.
 
 ## Acceptable inputs
 
@@ -21,7 +21,7 @@ Determine:
 - whether vendor/provider docs are needed
 - what current official docs, source examples, competing techniques, or benchmark evidence have already been inspected
 - whether secrets, billing, auth, database, migrations, or destructive side effects are involved
-- whether the output is one capability or a whole product
+- the classifier result and why this is one reusable capability rather than a greenfield product
 
 ## Before asking
 
@@ -39,6 +39,6 @@ Do not ask broad "what should this include?" or "which approach should I use?" q
 
 ## Hard stop
 
-If the request requires building a whole app, route to Product Buildprint / Mapper OS instead.
+If intake reveals that the classifier was wrong and the request requires building a whole app, stop and route to Product Buildprint / Buildprint Mapper OS instead.
 
 If the capability cannot be bounded to one central promise, ask for scope before authoring files.

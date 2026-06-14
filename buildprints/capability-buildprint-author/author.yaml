@@ -2,7 +2,7 @@ schema: agent-buildprint/author.v0
 name: capability-buildprint-author
 type: buildprint-author
 title: Buildprint Creator
-description: Authoring workflow for creating valid Capability Buildprints from a capability idea, existing integration, vendor docs, or source repo.
+description: Classifier and authoring workflow for routing greenfield products or creating valid Capability Buildprints from a capability idea, existing integration, vendor docs, or source repo.
 creates:
   schema: agent-buildprint/capability.v0
   packet_type: capability-buildprint
@@ -10,6 +10,7 @@ canonical_start: BUILDPRINT.md
 read_order:
   - BUILDPRINT.md
   - author.yaml
+  - 00-request-classifier.md
   - 00-internet-deepsearch.md
   - 00-intake.md
   - 01-capability-boundary.md
@@ -19,11 +20,22 @@ read_order:
   - templates/capability-packet/
 inputs:
   accepted:
+    - greenfield product idea
     - capability idea
     - existing integration code
     - vendor documentation
     - source repository or folder
     - desired host framework family
+routes:
+  greenfield_product:
+    when: request is a whole new product, app, SaaS, site, dashboard, internal tool, game, or agent system
+    action: route to Product Buildprint / Buildprint Mapper OS with a short handoff
+    do_not_create_capability_packet: true
+  capability_buildprint:
+    when: request is one reusable graft into an existing host project
+    action: continue through internet deepsearch, intake, boundary, contract, phases, validation, and publication
+  ambiguous:
+    action: ask one classifier question before deepsearch or authoring
 outputs:
   required:
     - BUILDPRINT.md
@@ -69,6 +81,8 @@ internet_deepsearch_policy:
     - target host when not inferable
   benchmark_rule: cite benchmark evidence or write "No benchmark evidence found"; never invent numbers
 quality_bar:
+  - request classifier runs before deepsearch, intake, or authoring
+  - greenfield products route to Product Buildprint / Buildprint Mapper OS instead of capability files
   - capability is bounded and reusable
   - internet deepsearch selects or downgrades the technique before broad questions or authoring
   - host detection is explicit
