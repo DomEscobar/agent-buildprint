@@ -1,5 +1,6 @@
 {
   "schema": "agent-buildprint/publication.v1",
+  "publish": false,
   "slug": "capability-buildprint-standard",
   "title": "Capability Buildprint Standard",
   "creator": "Agent Buildprint",
