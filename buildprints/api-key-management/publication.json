@@ -1,0 +1,106 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "slug": "api-key-management",
+  "title": "API Key Management",
+  "creator": "Agent Buildprint",
+  "category": "Feature / Extension",
+  "tier": "agent-grade",
+  "status": "publishable-draft",
+  "runtime": ["Capability Buildprint packet"],
+  "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md"],
+  "iconKeys": ["key", "lock", "code"],
+  "difficulty": "Hard",
+  "featured": true,
+  "summary": "A guarded Capability Buildprint for adding secure API key generation, hash-only storage, scopes, revocation, rotation, API authentication, and audit proof to compatible SaaS apps.",
+  "promise": "Gives coding agents a phased implementation contract for grafting API key management into an existing app without plaintext secrets, tenant bypasses, or fake verification.",
+  "includes": [
+    "API key capability contract",
+    "host assessment checkpoint",
+    "integration planning checkpoint",
+    "key contract and persistence phase",
+    "core generation and verification phase",
+    "API route/middleware wiring phase",
+    "user/operator key surface phase",
+    "verification and receipt phase"
+  ],
+  "risks": [
+    "Requires stable user or owner identity",
+    "Requires server-side persistence for hash-only key storage",
+    "Existing token systems require an explicit migration decision",
+    "Bad scope or tenant checks can expose protected APIs"
+  ],
+  "checks": [
+    "Read BUILDPRINT.md first",
+    "Write host assessment before edits",
+    "Write capability plan before implementation",
+    "Store only hashes and non-secret metadata",
+    "Show full key secret only once",
+    "Verify valid, revoked, missing, malformed, and wrong-scope keys",
+    "Write capability receipt with proof level and blockers"
+  ],
+  "trustBadges": [
+    {
+      "label": "Guarded capability",
+      "detail": "Uses phased host assessment, planning, implementation, verification, and receipt.",
+      "tone": "info"
+    },
+    {
+      "label": "Security risk declared",
+      "detail": "Treats API keys as high-risk credentials with hash-only storage and scope proof.",
+      "tone": "warning"
+    },
+    {
+      "label": "Locally verifiable",
+      "detail": "Can prove valid, revoked, malformed, and wrong-scope behavior with fixtures.",
+      "tone": "success"
+    }
+  ],
+  "publicStatus": {
+    "label": "Creator dogfood draft",
+    "explanation": "Created by dogfooding Buildprint Creator. Ready for review and fixture application against a compatible host app."
+  },
+  "whatYouGet": [
+    "A bounded API key implementation contract",
+    "Host compatibility rules",
+    "Phased implementation files",
+    "Hash-only secret storage rules",
+    "Scope and revocation proof requirements",
+    "Receipt requirements for applying agents"
+  ],
+  "whatYouNeed": [
+    "A compatible app with user identity",
+    "An owner/team/organization model",
+    "A persistence layer or approved persistence choice",
+    "At least one API route/action/controller to protect",
+    "Fixture keys or tests for lifecycle proof"
+  ],
+  "howToUse": [
+    {
+      "title": "Load the packet",
+      "detail": "Use the package manifest and read BUILDPRINT.md first."
+    },
+    {
+      "title": "Assess the host",
+      "detail": "Write .buildprint/host-assessment.md before edits."
+    },
+    {
+      "title": "Plan and graft",
+      "detail": "Write .buildprint/capability-plan.md, then implement each phase in order."
+    },
+    {
+      "title": "Verify honestly",
+      "detail": "Prove valid, revoked, missing, malformed, and wrong-scope behavior, then record the actual proof level."
+    }
+  ],
+  "resultChecklist": [
+    "Host owner model is mapped",
+    "API key schema stores hash only",
+    "Full secret is one-time visible",
+    "Scopes are explicit and deny-by-default",
+    "Selected API surface uses server-side key verification",
+    "Revoked key is denied",
+    "Wrong-scope key is denied",
+    "Audit or last-used evidence is recorded",
+    "Receipt records proof level and blockers"
+  ]
+}

@@ -1,0 +1,152 @@
+schema: agent-buildprint/capability.v0
+name: api-key-management
+type: capability
+capability: auth.api_key_management
+description: Adds secure API key generation, hash-only storage, scopes, revocation, rotation, request authentication, and audit evidence to compatible SaaS apps.
+execution_profile: guarded
+host_frameworks:
+  - nextjs
+  - express
+  - hono
+  - rails
+  - django
+host_detection:
+  package_files:
+    - package.json
+    - pyproject.toml
+    - Gemfile
+  auth_signals:
+    - current user/session helper
+    - organization or team membership helper
+    - protected dashboard route
+  database_signals:
+    - prisma
+    - drizzle
+    - supabase
+    - migrations
+    - sql schema
+    - django models
+    - rails migrations
+  route_signals:
+    - app/api
+    - pages/api
+    - server/routes
+    - src/routes
+    - api/controllers
+    - urls.py
+requires:
+  env: []
+  existing_capabilities:
+    - auth.user_identity
+  human_decisions:
+    - API surface to protect first
+    - key owner model: user, team, organization, or service account
+    - initial scopes or permissions
+    - key expiration policy if any
+    - whether usage audit is required for every request or only lifecycle events
+touches:
+  - data model
+  - migrations
+  - cryptographic hashing helper
+  - key generation service
+  - API authentication middleware
+  - protected API route or action
+  - key management UI or operator surface
+  - audit/event logging path
+apply:
+  inspect:
+    - current user and owner/tenant model
+    - existing RBAC or permission helpers
+    - API routes/actions that should accept API keys
+    - persistence and migration tooling
+    - existing token, session, or API key code
+    - audit/event logging conventions
+    - test/lint/typecheck commands
+  steps:
+    - define API key owner, prefix, hash, scope, status, and timestamp contract
+    - add secure random secret generation with one-time display
+    - persist only a derived hash plus non-secret metadata
+    - add key prefix lookup and constant-time hash comparison where the platform provides it
+    - add scopes or permissions and deny-by-default scope checks
+    - add revoke and rotate/replacement behavior
+    - add server-side API key authentication middleware or helper
+    - wire the helper into one selected API route/action
+    - emit audit events for key creation, use, revoke, and rotation where host patterns exist
+    - add tests or fixtures for valid, revoked, wrong-scope, missing, and malformed keys
+  forbidden:
+    - store plaintext API keys
+    - show full key secret after creation
+    - validate API keys in client code
+    - bypass existing tenant or RBAC boundaries
+    - grant broad admin scope by default
+    - silently replace an existing token system
+verify:
+  proof_level: fixture
+  commands:
+    - package test command if present
+    - package lint/typecheck command if present
+    - package build command if relevant
+  runtime_checks:
+    - generated key secret is visible only at creation
+    - database stores hash and prefix, not plaintext secret
+    - valid active key authenticates selected API route/action
+    - revoked key is denied
+    - missing or malformed key is denied
+    - wrong-scope key is denied
+    - key lifecycle or usage audit event is written or blocker is recorded
+  blocked_checks:
+    - no owner/user model blocks with a clear prerequisite
+    - no persistence layer blocks with a clear prerequisite
+    - existing token system blocks without migration decision
+evidence:
+  official_docs:
+    - title: Kinde API key rotation
+      url: https://kinde.com/docs/manage-your-apis/add-manage-api-keys/rotate-api-keys/
+      note: Documents rotation as required after exposure, on schedules, and when scopes change.
+    - title: ArcGIS API key rotation
+      url: https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/rotate-api-keys/online/
+      note: Treats rotation as a mitigation for vulnerability exposure.
+    - title: GitHub personal access token permissions
+      url: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+      note: Shows token expiration, scope/permission, and revocation patterns for developer credentials.
+    - title: OWASP Secrets Management Cheat Sheet
+      url: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+      note: General guidance for secret storage and rotation risk.
+  source_examples:
+    - title: LastSaaS feature list
+      url: https://github.com/jonradoff/lastsaas
+      note: Cross-checks API keys as a repeated SaaS capability need.
+  benchmarks: []
+  no_benchmark_evidence_found: true
+  stale_risk:
+    - Provider and framework docs can change; re-check official docs before claiming current best practice.
+    - Cryptographic primitives must come from the host runtime or maintained libraries, not handwritten algorithms.
+risk:
+  level: high
+  reason: API keys can grant programmatic access to sensitive data and actions. Plaintext storage, weak scopes, tenant bypass, or bad revocation can expose customer systems.
+failure_modes:
+  - plaintext or reversible key storage
+  - secret is logged or re-displayed
+  - prefix lookup authenticates without full hash verification
+  - key scope is not checked on protected actions
+  - revoked key still works through cache or stale middleware
+  - key bypasses user/team/tenant boundaries
+  - audit events omit owner, actor, target, or outcome
+composition:
+  expects:
+    - auth.user_identity
+  provides:
+    - auth.api_key_state
+    - auth.api_key_authentication
+    - auth.scoped_api_access
+    - audit.api_key_events
+  composes_with:
+    - rbac-permissions
+    - audit-log
+    - rate-limiting
+    - outgoing-webhooks
+    - team-workspace-model
+  conflicts_with:
+    - existing API key or token system without migration decision
+    - host with no stable owner or tenant model
+    - client-only applications with no server-side secret storage
