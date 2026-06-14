@@ -10,7 +10,7 @@ canonical_start: BUILDPRINT.md
 read_order:
   - BUILDPRINT.md
   - author.yaml
-  - 00-evidence-discovery.md
+  - 00-internet-deepsearch.md
   - 00-intake.md
   - 01-capability-boundary.md
   - 02-contract-authoring.md
@@ -39,8 +39,9 @@ outputs:
     - 02-implementation-phases/05-verification-and-receipt.md
     - verify.md
     - README.md
-evidence_policy:
-  run_before_questions_when_context_is_thin: true
+internet_deepsearch_policy:
+  required_when_user_context_is_thin: true
+  goal: determine_best_current_technique_before_questions_or_authoring
   prefer:
     - project-local skill or alignment workflow
     - deep research tool or skill
@@ -48,6 +49,18 @@ evidence_policy:
     - official provider/framework docs
     - inspected source repository or examples
     - benchmark/comparison evidence when claims require it
+  must_compare:
+    - official provider/framework recommended path
+    - maintained source examples or starter templates
+    - common alternative techniques
+    - benchmark/comparison evidence when available
+  must_record:
+    - selected technique and reason
+    - rejected techniques and reasons
+    - confidence level
+    - sources, versions, or dates
+    - "No benchmark evidence found when benchmark evidence is unavailable"
+    - "No confident best technique found when sources are weak or conflicting"
   ask_only_for:
     - business/product decisions
     - secrets/account/provider access
@@ -57,7 +70,7 @@ evidence_policy:
   benchmark_rule: cite benchmark evidence or write "No benchmark evidence found"; never invent numbers
 quality_bar:
   - capability is bounded and reusable
-  - evidence discovery is recorded before broad questions or authoring
+  - internet deepsearch selects or downgrades the technique before broad questions or authoring
   - host detection is explicit
   - execution profile matches risk
   - apply phases are concrete enough to prevent freestyle implementation

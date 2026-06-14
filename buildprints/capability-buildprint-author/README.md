@@ -4,7 +4,7 @@ This Buildprint helps an agent create new Capability Buildprints using the Capab
 
 Use it when you have a capability idea, existing integration, vendor docs, or source code and want a reusable agent-installable packet.
 
-It must not author from model memory alone. When context is incomplete, the authoring agent first runs evidence discovery against official docs, source examples, relevant skills/alignment workflows, and benchmark/comparison evidence when a claim depends on it. Only then should it ask narrow hard-stop questions.
+It must not author from model memory alone. When context is incomplete, the authoring agent first runs internet deepsearch to choose the best current technique: official docs, source examples, maintained templates, relevant skills/alignment workflows, and benchmark/comparison evidence when available. It records selected and rejected techniques, confidence, and source basis before asking narrow hard-stop questions.
 
 ## Output
 

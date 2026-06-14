@@ -19,15 +19,15 @@ Determine:
 - desired host frameworks
 - whether source code exists
 - whether vendor/provider docs are needed
-- what current official docs, source examples, or benchmark evidence have already been inspected
+- what current official docs, source examples, competing techniques, or benchmark evidence have already been inspected
 - whether secrets, billing, auth, database, migrations, or destructive side effects are involved
 - whether the output is one capability or a whole product
 
 ## Before asking
 
-If the user has not supplied enough context, first complete `00-evidence-discovery.md`.
+If the user has not supplied enough context, first complete `00-internet-deepsearch.md`.
 
-Then ask only narrow hard-stop questions that discovery cannot answer:
+Then ask only narrow hard-stop questions that internet deepsearch cannot answer:
 
 - target host framework or version if it cannot be inferred
 - provider/account choices
@@ -35,7 +35,7 @@ Then ask only narrow hard-stop questions that discovery cannot answer:
 - permission to inspect private repositories or systems
 - product decisions that official docs and source evidence cannot decide
 
-Do not ask broad "what should this include?" questions while official docs, source files, or known examples are still unchecked.
+Do not ask broad "what should this include?" or "which approach should I use?" questions while official docs, source files, known examples, and competing techniques are still unchecked.
 
 ## Hard stop
 

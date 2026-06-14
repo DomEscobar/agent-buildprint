@@ -8,7 +8,7 @@ This Buildprint creates Buildprints. It does not install the capability into the
 
 1. `BUILDPRINT.md`
 2. `author.yaml`
-3. `00-evidence-discovery.md`
+3. `00-internet-deepsearch.md`
 4. `00-intake.md`
 5. `01-capability-boundary.md`
 6. `02-contract-authoring.md`
@@ -53,14 +53,15 @@ publication.json
 
 The agent must make the capability specific before writing packet files. "Add payments" is too broad. "Add Stripe Checkout subscriptions with webhook-verified entitlement state to compatible Next.js apps" is specific enough.
 
-Before asking the user for missing context, the agent must first run evidence discovery. Use any available deep-research, source-driven-development, official-docs, or project-local alignment skill/tool to find current implementation guidance, host framework conventions, provider docs, proven examples, and benchmark/comparison evidence. Ask the user only for decisions that research cannot answer safely.
+When the user provides thin implementation context, the agent must first run `00-internet-deepsearch.md`. Search current internet sources, official docs, source examples, maintained templates, and benchmark/comparison evidence where available. Compare candidate techniques, select the best current technique for the target host and risk, or explicitly write `No confident best technique found`. Ask the user only for decisions research cannot answer safely.
 
 ## Non-negotiables
 
 - Do not author a vague integration guide.
 - Do not create a whole-product Buildprint when the requested output is one reusable capability.
 - Do not start from generic LLM memory when current docs, source, examples, or benchmark evidence can be inspected.
-- Do not ask broad questions before researching available context and writing down what is known, unknown, and blocked.
+- Do not ask broad questions before internet deepsearch compares current techniques and records what is known, unknown, and blocked.
+- Do not ask the user which approach to use before comparing current internet evidence yourself.
 - Do not skip execution profile, host detection, risk, failure modes, compatibility, phases, or verification.
 - Do not claim provider/runtime proof in the authored packet unless real proof exists.
 - Do not claim "best practice", "recommended", "benchmark-backed", "proven", or "current" unless the packet names the source or states that no benchmark/source was found.

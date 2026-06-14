@@ -10,10 +10,11 @@
   "stack": ["BUILDPRINT.md", "author.yaml", "templates/capability-packet"],
   "difficulty": "Medium",
   "featured": true,
-  "summary": "An evidence-led authoring Buildprint that turns a capability idea, existing integration, vendor docs, or source repo into a valid phased Capability Buildprint packet.",
-  "promise": "Forces agents to inspect current docs, source examples, skills/alignment workflows, and benchmark evidence before authoring reusable Capability Buildprints or asking broad questions.",
+  "summary": "An internet-deepsearch authoring Buildprint that turns a capability idea, existing integration, vendor docs, or source repo into a valid phased Capability Buildprint packet.",
+  "promise": "When context is thin, forces agents to search current internet/docs/source evidence, compare candidate techniques, and choose the best current approach before authoring or asking broad questions.",
   "includes": [
-    "Evidence discovery before broad questions",
+    "Internet deepsearch to choose technique",
+    "Candidate technique comparison",
     "Capability intake workflow",
     "boundary definition rules",
     "capability.yaml authoring contract",
@@ -27,7 +28,7 @@
     "Proof claims must remain conservative until a capability is applied"
   ],
   "checks": [
-    "Evidence discovery is recorded before authoring",
+    "Internet deepsearch selects or downgrades the technique before authoring",
     "Capability is bounded to one reusable promise",
     "Best-practice/current/proven claims are cited or downgraded",
     "Execution profile matches risk",

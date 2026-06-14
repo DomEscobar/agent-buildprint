@@ -1,12 +1,12 @@
-# 00 Evidence Discovery
+# 00 Internet Deepsearch
 
 ## Objective
 
-Replace generic LLM recall with current, inspectable evidence before the author asks broad questions or writes packet files.
+When the user has not provided enough implementation context, search the internet and current primary sources to determine the best current technique before asking broad questions or writing packet files.
 
 ## When to run
 
-Run this before intake questions whenever the user has not provided enough concrete context to author safely.
+Run this before intake questions whenever the user has not provided enough concrete context to choose a technique safely.
 
 Examples:
 
@@ -16,18 +16,29 @@ Examples:
 - source repository, docs URL, package name, benchmark name, or competing implementation mentioned by the user
 - unclear host framework, runtime, provider API version, pricing/billing behavior, security boundary, or destructive side effect
 
-## Required evidence pass
+## Required internet deepsearch
 
-Before asking the user, gather what can be discovered without them:
+Before asking the user, discover the likely best technique yourself:
 
 - official provider or framework docs for the relevant API/version
 - changelog or migration notes when the provider/framework is moving quickly
 - source code or package examples when a repo/path is provided
 - known reference implementations or starter templates from the provider/framework
 - security, auth, billing, data, webhook, or migration constraints
-- benchmark, comparison, or evaluation evidence if the capability claims "best", "fastest", "most reliable", "recommended", or "proven"
+- benchmark, comparison, or evaluation evidence for competing techniques when available
+- current community or maintainer guidance only as secondary evidence after primary sources
 
-Prefer a project-local skill/alignment workflow when available. If the environment has a deep research, source-driven-development, official-docs, or repo-orientation skill/tool, use it and record its output. If no such tool exists, use the best available primary-source search and code inspection.
+Prefer an internet-capable deep research/search skill or tool when available. Pair it with project-local alignment/source inspection when a host repo or source package is provided. If no deepsearch tool exists, use the best available web search, official docs, and code inspection.
+
+## Technique decision
+
+The note must identify:
+
+- candidate techniques or patterns considered
+- selected technique and why it fits the target host/risk
+- rejected techniques and why they are weaker, stale, too risky, or out of scope
+- confidence level: high, medium, or low
+- benchmark/proof basis, or `No benchmark evidence found`
 
 ## Evidence notes
 
@@ -39,12 +50,13 @@ The note must include:
 - implementation constraints discovered
 - host assumptions the evidence supports
 - benchmark/comparison claims found, or `No benchmark evidence found`
+- selected best-current technique or explicit `No confident best technique found`
 - unresolved questions that still require the user
 - stale-risk areas that future agents must re-check
 
 ## Asking rule
 
-Ask the user only after this evidence pass, and ask only for:
+Ask the user only after this internet deepsearch, and ask only for:
 
 - product/business decisions the sources cannot decide
 - secrets/account/provider access
@@ -55,7 +67,9 @@ Ask the user only after this evidence pass, and ask only for:
 ## DO NOT
 
 - Do not ask "what docs should I use?" before trying to find official docs yourself.
+- Do not ask "which approach should I use?" before comparing current techniques yourself.
 - Do not claim a provider pattern is current without checking docs or source.
 - Do not convert a blog post, stale README, or model memory into a packet authority without marking it lower confidence.
 - Do not invent benchmark numbers. Cite them or state that the packet is not benchmark-backed.
+- Do not pretend there is a best technique when sources are weak; write `No confident best technique found`.
 - Do not hide missing evidence inside assumptions.
