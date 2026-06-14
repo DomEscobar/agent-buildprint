@@ -13,13 +13,13 @@ https://agent-buildprint.com/
 
 ## Shortcuts
 
-Install the CLI:
+AGB is the optional CLI helper for loading exact Buildprint snapshots into a workspace. You can install it globally for convenience:
 
 ```bash
 npm install -g agent-buildprint
 ```
 
-Start from a published Buildprint:
+Then start from a published Buildprint:
 
 ```bash
 mkdir my-build
@@ -27,7 +27,15 @@ cd my-build
 agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json .
 ```
 
-Install the local agent skill harness:
+No global install required:
+
+```bash
+git clone https://github.com/DomEscobar/agent-buildprint
+node agent-buildprint/bin/agb.js start \
+  https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json .
+```
+
+Optionally install the local agent skill harness:
 
 ```bash
 agb harness init .
