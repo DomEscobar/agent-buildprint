@@ -1,91 +1,74 @@
-<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Buildprint logo</title>
+  <desc id="desc">A blueprint sheet folded into an agent routing mark.</desc>
   <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0066ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+    <linearGradient id="sheet" x1="48" y1="32" x2="208" y2="224" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10233f"/>
+      <stop offset="1" stop-color="#050914"/>
     </linearGradient>
-    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    <linearGradient id="route" x1="76" y1="76" x2="184" y2="184" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#38bdf8"/>
     </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+    <linearGradient id="fold" x1="168" y1="34" x2="210" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d7f8ff"/>
+    </linearGradient>
   </defs>
-  
-  <!-- Background circle -->
-  <circle cx="128" cy="128" r="124" fill="#f8f9ff" stroke="#e0e7ff" stroke-width="2"/>
-  
-  <!-- Blueprint grid pattern -->
-  <g opacity="0.1" stroke="#0066ff" stroke-width="1">
-    <line x1="64" y1="40" x2="64" y2="216" />
-    <line x1="128" y1="40" x2="128" y2="216" />
-    <line x1="192" y1="40" x2="192" y2="216" />
-    <line x1="40" y1="80" x2="216" y2="80" />
-    <line x1="40" y1="128" x2="216" y2="128" />
-    <line x1="40" y1="176" x2="216" y2="176" />
+
+  <path
+    fill="url(#sheet)"
+    stroke="#ffffff"
+    stroke-linejoin="round"
+    stroke-width="12"
+    d="M54 28h113l35 35v165H54z"
+  />
+  <path fill="url(#fold)" d="M167 28v39h35z"/>
+  <path fill="#050914" opacity=".18" d="M167 67h35l-35 22z"/>
+
+  <g stroke="#ffffff" stroke-linecap="round" stroke-width="4" opacity=".18">
+    <path d="M76 78h58"/>
+    <path d="M76 102h104"/>
+    <path d="M76 126h38"/>
+    <path d="M142 126h38"/>
+    <path d="M76 150h104"/>
+    <path d="M76 174h58"/>
   </g>
-  
-  <!-- Central agent node (larger) -->
-  <circle cx="128" cy="128" r="16" fill="url(#grad1)" filter="url(#glow)"/>
-  <circle cx="128" cy="128" r="16" fill="none" stroke="#0066ff" stroke-width="2" opacity="0.3">
-    <animate attributeName="r" from="16" to="24" dur="2s" repeatCount="indefinite" />
-    <animate attributeName="stroke-width" from="2" to="0" dur="2s" repeatCount="indefinite" />
-    <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite" />
-  </circle>
-  
-  <!-- Surrounding agent nodes (network of 6) -->
-  <g id="agents">
-    <!-- Node 1 (top) -->
-    <line x1="128" y1="144" x2="128" y2="184" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
-    <circle cx="128" cy="200" r="8" fill="url(#grad2)"/>
-    
-    <!-- Node 2 (top-right) -->
-    <line x1="139" y1="139" x2="169" y2="169" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
-    <circle cx="184" cy="184" r="8" fill="url(#grad2)"/>
-    
-    <!-- Node 3 (bottom-right) -->
-    <line x1="139" y1="117" x2="169" y2="87" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
-    <circle cx="184" cy="72" r="8" fill="url(#grad2)"/>
-    
-    <!-- Node 4 (top-left) -->
-    <line x1="117" y1="139" x2="87" y2="169" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
-    <circle cx="72" cy="184" r="8" fill="url(#grad2)"/>
-    
-    <!-- Node 5 (bottom-left) -->
-    <line x1="117" y1="117" x2="87" y2="87" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
-    <circle cx="72" cy="72" r="8" fill="url(#grad2)"/>
-    
-    <!-- Node 6 (right) -->
-    <line x1="144" y1="128" x2="184" y2="128" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
-    <circle cx="200" cy="128" r="8" fill="url(#grad2)"/>
+
+  <path
+    fill="none"
+    stroke="#ffffff"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="18"
+    d="M89 164h30c14 0 25-11 25-25v-22c0-14 11-25 25-25h8"
+  />
+  <path
+    fill="none"
+    stroke="url(#route)"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="10"
+    d="M89 164h30c14 0 25-11 25-25v-22c0-14 11-25 25-25h8"
+  />
+
+  <g stroke="#050914" stroke-width="5">
+    <circle cx="83" cy="164" r="16" fill="#ffffff"/>
+    <circle cx="144" cy="128" r="18" fill="#ffffff"/>
+    <circle cx="181" cy="92" r="16" fill="#ffffff"/>
   </g>
-  
-  <!-- Blueprint corner marks (architectural detail) -->
-  <g stroke="#0066ff" stroke-width="1.5" fill="none" opacity="0.4">
-    <!-- Top-left corner -->
-    <line x1="52" y1="52" x2="68" y2="52" />
-    <line x1="52" y1="52" x2="52" y2="68" />
-    
-    <!-- Top-right corner -->
-    <line x1="204" y1="52" x2="188" y2="52" />
-    <line x1="204" y1="52" x2="204" y2="68" />
-    
-    <!-- Bottom-left corner -->
-    <line x1="52" y1="204" x2="68" y2="204" />
-    <line x1="52" y1="204" x2="52" y2="188" />
-    
-    <!-- Bottom-right corner -->
-    <line x1="204" y1="204" x2="188" y2="204" />
-    <line x1="204" y1="204" x2="204" y2="188" />
+  <g fill="#0f172a">
+    <circle cx="83" cy="164" r="7"/>
+    <circle cx="144" cy="128" r="8"/>
+    <circle cx="181" cy="92" r="7"/>
   </g>
-  
-  <!-- Center text/symbol (optional) -->
-  <text x="128" y="244" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle" fill="#0066ff" opacity="0.7">
-    agent-buildprint
-  </text>
+
+  <path
+    fill="#f59e0b"
+    stroke="#ffffff"
+    stroke-linejoin="round"
+    stroke-width="6"
+    d="M184 164l-17 46 30-12 30 12-17-46z"
+  />
+  <path fill="#7c2d12" opacity=".2" d="M197 198l30 12-17-46h-13z"/>
 </svg>
