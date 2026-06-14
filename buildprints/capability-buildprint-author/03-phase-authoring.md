@@ -20,6 +20,7 @@ Author the phased grafting workflow so the applying agent cannot jump from docs 
 
 - objective
 - required inputs
+- evidence or docs the applying agent must re-check before edits
 - implementation or assessment instructions
 - proof before moving on
 - DO NOT rules
@@ -30,9 +31,13 @@ Author the phased grafting workflow so the applying agent cannot jump from docs 
 - `.buildprint/capability-plan.md`
 - `.buildprint/capability-receipt.md`
 
+## Phase evidence rules
+
+For volatile providers, frameworks, billing, auth, security, data migration, webhook, or benchmark-sensitive work, phases must force the applying agent to verify current docs/source before implementation. The phase should say what to inspect, which version-sensitive assumptions matter, and when to block instead of guessing.
+
 ## DO NOT
 
 - Do not leave `apply.md` as a vague "implement this" note.
 - Do not let the agent skip host assessment.
 - Do not let the agent claim installed without receipt and verification.
-
+- Do not let phases silently rely on stale provider behavior or uncited model memory.

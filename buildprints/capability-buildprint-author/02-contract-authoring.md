@@ -21,6 +21,7 @@ Write `capability.yaml` and `compatibility.md` as the contract the applying agen
 - `risk`
 - `failure_modes`
 - `composition`
+- `evidence`
 
 ## compatibility.md must define
 
@@ -29,11 +30,23 @@ Write `capability.yaml` and `compatibility.md` as the contract the applying agen
 - composition rules
 - conflicts
 - version/framework support
+- docs/source versions or stale-risk notes
 - when to block instead of adapt
+
+## evidence must define
+
+Record the basis for the packet:
+
+- official docs inspected
+- source repositories, examples, or templates inspected
+- benchmark/comparison evidence inspected, or `No benchmark evidence found`
+- date or version for volatile providers/frameworks
+- claims that must be re-checked by future agents
 
 ## DO NOT
 
 - Do not make YAML a decorative summary. It is the machine contract.
 - Do not omit risk, failure modes, or compatibility because the provider docs seem obvious.
+- Do not derive machine contracts from memory when docs/source evidence is available.
+- Do not use benchmark language without a cited benchmark or explicit no-benchmark-found note.
 - Do not put secret values into the packet.
-

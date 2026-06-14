@@ -9,6 +9,7 @@ Make the capability precise enough that another agent can apply it without guess
 - capability slug
 - one-sentence promise
 - host project assumptions
+- evidence basis: official docs, source examples, repo inspection, benchmark/comparison evidence, or explicit no-benchmark-found note
 - execution profile: `light`, `guarded`, or `strict`
 - required existing capabilities
 - provided capabilities
@@ -41,4 +42,4 @@ Add Stripe Checkout subscriptions, signed webhook handling, and persisted entitl
 - Do not include multiple unrelated capabilities.
 - Do not bury prerequisites in prose.
 - Do not claim "works with any stack" unless the packet defines adaptation rules and proof expectations.
-
+- Do not say "best practice", "recommended", "modern", or "proven" without naming the evidence or explicitly marking the claim as unproven.

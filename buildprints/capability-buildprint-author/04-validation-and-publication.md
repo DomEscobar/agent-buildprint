@@ -28,6 +28,7 @@ README.md
 
 The packet must make these claims checkable:
 
+- evidence basis and source freshness
 - host compatibility
 - required env/secrets/services
 - integration surfaces
@@ -35,6 +36,7 @@ The packet must make these claims checkable:
 - failure modes
 - verification proof level
 - receipt output
+- benchmark/proven/recommended claims, or explicit `No benchmark evidence found`
 
 ## Publication metadata
 
@@ -49,9 +51,17 @@ If publishing to Agent Buildprint, add `publication.json` with:
 - checks
 - public status
 
+## Evidence gate
+
+Do not publish until one of these is true:
+
+- the authored packet includes current official docs/source/benchmark references for its key claims
+- the packet explicitly says which evidence was unavailable and downgrades claims accordingly
+- the packet is marked draft/internal and `publish: false`
+
 ## DO NOT
 
 - Do not publish a packet that only passes file-count checks.
 - Do not call examples "verified" unless they were applied to a host repo.
 - Do not hide unknown proof as future work.
-
+- Do not publish "best practice" or "recommended" claims that are only based on LLM knowledge.

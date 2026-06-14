@@ -21,3 +21,4 @@ You are applying one Capability Buildprint to an existing host project. Follow t
 
 No source edits before `.buildprint/host-assessment.md` and `.buildprint/capability-plan.md` exist.
 
+Before planning or editing, inspect the packet's `evidence` section in `capability.yaml`. Re-check current official docs/source for volatile providers, frameworks, auth, billing, data migration, webhooks, security, and benchmark-sensitive claims. If evidence is missing or stale, block or downgrade the claim instead of guessing from memory.

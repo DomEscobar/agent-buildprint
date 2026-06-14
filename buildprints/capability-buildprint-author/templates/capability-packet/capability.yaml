@@ -23,6 +23,12 @@ verify:
   commands: []
   runtime_checks: []
   blocked_checks: []
+evidence:
+  official_docs: []
+  source_examples: []
+  benchmarks: []
+  no_benchmark_evidence_found: true
+  stale_risk: []
 risk:
   level: medium
   reason: <why this risk level fits>
@@ -32,4 +38,3 @@ composition:
   provides: []
   composes_with: []
   conflicts_with: []
-

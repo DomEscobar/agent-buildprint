@@ -10,9 +10,10 @@
   "stack": ["BUILDPRINT.md", "author.yaml", "templates/capability-packet"],
   "difficulty": "Medium",
   "featured": true,
-  "summary": "An authoring Buildprint that turns a capability idea, existing integration, vendor docs, or source repo into a valid phased Capability Buildprint packet.",
-  "promise": "Guides agents through intake, capability boundary, contract authoring, phased workflow authoring, and publication checks for reusable Capability Buildprints.",
+  "summary": "An evidence-led authoring Buildprint that turns a capability idea, existing integration, vendor docs, or source repo into a valid phased Capability Buildprint packet.",
+  "promise": "Forces agents to inspect current docs, source examples, skills/alignment workflows, and benchmark evidence before authoring reusable Capability Buildprints or asking broad questions.",
   "includes": [
+    "Evidence discovery before broad questions",
     "Capability intake workflow",
     "boundary definition rules",
     "capability.yaml authoring contract",
@@ -22,11 +23,13 @@
   ],
   "risks": [
     "Authored packets still need dogfooding against real host repos",
-    "Vendor-specific implementation quality depends on source evidence and docs",
+    "Vendor-specific implementation quality depends on current source evidence, docs, and benchmark availability",
     "Proof claims must remain conservative until a capability is applied"
   ],
   "checks": [
+    "Evidence discovery is recorded before authoring",
     "Capability is bounded to one reusable promise",
+    "Best-practice/current/proven claims are cited or downgraded",
     "Execution profile matches risk",
     "Required files are authored",
     "Verification and receipt rules are concrete",
@@ -37,4 +40,3 @@
     "explanation": "Ready to create the first real capability packet, likely Stripe subscriptions or RBAC."
   }
 }
-
