@@ -1,7 +1,7 @@
 schema: agent-buildprint/author.v0
 name: capability-buildprint-author
 type: buildprint-author
-title: Capability Buildprint Author
+title: Buildprint Creator
 description: Authoring workflow for creating valid Capability Buildprints from a capability idea, existing integration, vendor docs, or source repo.
 creates:
   schema: agent-buildprint/capability.v0

@@ -1,4 +1,4 @@
-# Capability Buildprint Author
+# Buildprint Creator
 
 This Buildprint helps an agent create new Capability Buildprints using the Capability Buildprint Standard.
 
