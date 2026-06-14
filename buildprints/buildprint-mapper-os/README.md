@@ -1,8 +1,8 @@
-# Buildprint Mapper OS
+# Buildprint Mapper
 
-Mapper OS is an agent-session workflow for mapping an existing source repo into a source-independent executable Buildprint.
+Buildprint Mapper is an agent-session workflow for mapping an existing source repo into a source-independent executable Buildprint.
 
-The selected packet is **v3 phase-driven**. Obsolete runner-shaped abstractions are gone. Mapper OS now emits readable implementation manuals: YAML routes; Markdown teaches and builds.
+The selected packet is **v3 phase-driven**. Obsolete runner-shaped abstractions are gone. Buildprint Mapper now emits readable implementation manuals: YAML routes; Markdown teaches and builds.
 
 ## Use it
 
@@ -13,7 +13,7 @@ The selected packet is **v3 phase-driven**. Obsolete runner-shaped abstractions 
 agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json ./mapper-os
 ```
 
-3. Follow `.buildprint/next-agent.md` and the Mapper OS docs.
+3. Follow `.buildprint/next-agent.md` and the Buildprint Mapper docs.
 4. Discover behavior before selecting scope.
 5. Emit a v3 selected packet.
 

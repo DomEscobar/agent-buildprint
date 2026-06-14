@@ -1,6 +1,6 @@
-# Patchnote - Mapper OS Promotion Notes
+# Patchnote - Buildprint Mapper Promotion Notes
 
-## 2026-06-07 - Promote downstream packet lessons into Mapper OS
+## 2026-06-07 - Promote downstream packet lessons into Buildprint Mapper
 
 ### Context
 
@@ -14,9 +14,9 @@ An archived downstream presentation-generation packet was patched through severa
 - agents could satisfy broad prose while quietly dropping hard proof obligations;
 - a generated app could self-report a pass without a structured critical-review repair loop.
 
-Those fixes should not stay as one-off Presenton packet patches. Mapper OS should learn them and emit stronger executable packets by default.
+Those fixes should not stay as one-off Presenton packet patches. Buildprint Mapper should learn them and emit stronger executable packets by default.
 
-### Mapper OS patch target
+### Buildprint Mapper patch target
 
 Patch `buildprints/buildprint-mapper-os` so every generated executable packet can inherit stronger product-quality gates when the artifact type implies a visual app, editor, generator, workflow tool, or user-facing surface.
 
@@ -38,7 +38,7 @@ Patch `buildprints/buildprint-mapper-os` so every generated executable packet ca
      - page-level horizontal overflow.
 
 3. **Semantic output quality for generative products**
-   - For AI/generative/editor products, Mapper OS must require useful, differentiated sample output.
+   - For AI/generative/editor products, Buildprint Mapper must require useful, differentiated sample output.
    - Repeated generic body copy across generated items should fail content-specificity acceptance.
    - Deterministic fallback content is acceptable only if clearly labeled and still shaped by input controls.
 
@@ -51,7 +51,7 @@ Patch `buildprints/buildprint-mapper-os` so every generated executable packet ca
    - Missing repeatable proof commands should be recorded as blockers.
 
 6. **Critical-review-pushback phase**
-   - Mapper OS should emit a `critical-review-pushback` phase for serious executable packets.
+   - Buildprint Mapper should emit a `critical-review-pushback` phase for serious executable packets.
    - The phase must include:
      - a scored rubric;
      - pass threshold;
@@ -67,7 +67,7 @@ Patch `buildprints/buildprint-mapper-os` so every generated executable packet ca
      - up to 5 repair loops unless explicitly told to continue.
 
 7. **Packet regression checks**
-   - Mapper OS should include or generate packet checks that fail when required quality gates are removed.
+   - Buildprint Mapper should include or generate packet checks that fail when required quality gates are removed.
    - Mutation tests should delete individual gates and confirm the packet check rejects the degraded packet.
    - This prevents future edits from preserving section names while removing the actual acceptance bar.
 
@@ -95,4 +95,4 @@ The mapper OS patch is not complete until:
 
 ### Why this matters
 
-Mapper OS should convert observed build failures into durable packet-generation rules. Otherwise every Buildprint can be fixed locally while the mapper keeps producing packets that allow the same vague UI, shallow proof, and self-reported quality gaps.
+Buildprint Mapper should convert observed build failures into durable packet-generation rules. Otherwise every Buildprint can be fixed locally while the mapper keeps producing packets that allow the same vague UI, shallow proof, and self-reported quality gaps.

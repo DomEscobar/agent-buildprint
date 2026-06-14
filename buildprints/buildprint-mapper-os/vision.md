@@ -1,6 +1,6 @@
-# Vision: Buildprint Mapper OS
+# Vision: Buildprint Mapper
 
-Mapper OS should make AI builders better at reconstruction, not better at filling schemas.
+Buildprint Mapper should make AI builders better at reconstruction, not better at filling schemas.
 
 The target output is a readable execution manual for a product-minded coding agent. It should teach the artifact identity, golden path, setup posture, UI/operator experience, phase flow, fake-success boundaries, and handover expectations without polluting the selected start file with product-specific source baggage.
 
@@ -16,7 +16,7 @@ A downstream builder needs the first file to orient their behavior: you are resp
 
 ## Why 02-ui-identity.md is mandatory
 
-UX is not polish after the real work. The user experiences the artifact through surfaces, states, copy, controls, motion, and feedback. A confusing or generic interface is an implementation failure. Mapper OS therefore initializes the local skill harness in setup: `setup-runbook` captures architecture and proof paths, `frontend-ui-product-design` forces a detailed UI identity before phases begin, `subagent-driven-implementation` is used only for cleanly separable phase work, and `verify-and-review` blocks fake completion. Every phase reads the UI identity so design responsibility survives backend/runtime/report/verification work.
+UX is not polish after the real work. The user experiences the artifact through surfaces, states, copy, controls, motion, and feedback. A confusing or generic interface is an implementation failure. Buildprint Mapper therefore initializes the local skill harness in setup: `setup-runbook` captures architecture and proof paths, `frontend-ui-product-design` forces a detailed UI identity before phases begin, `subagent-driven-implementation` is used only for cleanly separable phase work, and `verify-and-review` blocks fake completion. Every phase reads the UI identity so design responsibility survives backend/runtime/report/verification work.
 
 ## Desired downstream behavior
 

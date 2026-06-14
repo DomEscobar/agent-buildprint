@@ -33,7 +33,7 @@ Signals:
 - does not assume an existing host app
 - success means a runnable product, not a reusable capability packet
 
-Do not author a Capability Buildprint. Route to Product Buildprint / Buildprint Mapper OS and write a short handoff:
+Do not author a Capability Buildprint. Route to Product Buildprint / Buildprint Mapper and write a short handoff:
 
 - product idea
 - target users

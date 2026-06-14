@@ -1,7 +1,7 @@
 {
   "schema": "agent-buildprint/v2",
   "slug": "buildprint-mapper-os",
-  "title": "Buildprint Mapper OS",
+  "title": "Buildprint Mapper",
   "canonicalStart": "BUILDPRINT.md",
   "tier": "agent-grade",
   "mode": "agent-run-mapper-workflow",

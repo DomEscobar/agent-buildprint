@@ -39,6 +39,6 @@ Do not ask broad "what should this include?" or "which approach should I use?" q
 
 ## Hard stop
 
-If intake reveals that the classifier was wrong and the request requires building a whole app, stop and route to Product Buildprint / Buildprint Mapper OS instead.
+If intake reveals that the classifier was wrong and the request requires building a whole app, stop and route to Product Buildprint / Buildprint Mapper instead.
 
 If the capability cannot be bounded to one central promise, ask for scope before authoring files.

@@ -6,7 +6,7 @@ Use it when you have a product idea, capability idea, existing integration, vend
 
 It classifies first:
 
-- greenfield product/app/SaaS/site/dashboard/internal tool -> Product Buildprint / Buildprint Mapper OS handoff
+- greenfield product/app/SaaS/site/dashboard/internal tool -> Product Buildprint / Buildprint Mapper handoff
 - one reusable graft into existing apps -> Capability Buildprint authoring
 - ambiguous -> one narrow classifier question before deepsearch
 

@@ -1,6 +1,6 @@
 # Quality Policy
 
-Mapper OS quality is judged by whether a downstream AI builder can build the mapped artifact without guessing, silently shrinking scope, losing design responsibility, or shipping fake success.
+Buildprint Mapper quality is judged by whether a downstream AI builder can build the mapped artifact without guessing, silently shrinking scope, losing design responsibility, or shipping fake success.
 
 ## Invariants
 
@@ -52,7 +52,7 @@ Every selected packet must define the central output contract for the mapped art
 
 Selected packets must identify source-derived hard technical domains that are unrealistic or fragile to hand-roll casually. Examples: fixed-format export, rich text or inline editing, document extraction, drag/reorder/canvas interaction, charts/diagrams/visual primitives, provider SDKs or OAuth/webhooks/external APIs, background jobs/export tasks/queues, persistence migrations, and file/object storage.
 
-Mapper OS should keep the packet stack-neutral while still requiring proven libraries, SDKs, runtimes, platform services, or explicit equivalent proof. Missing package/runtime proof becomes a blocker or claim ceiling. It is not permission to replace the product with a shallow implementation.
+Buildprint Mapper should keep the packet stack-neutral while still requiring proven libraries, SDKs, runtimes, platform services, or explicit equivalent proof. Missing package/runtime proof becomes a blocker or claim ceiling. It is not permission to replace the product with a shallow implementation.
 
 ## Typed proof bar
 

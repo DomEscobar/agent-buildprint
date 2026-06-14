@@ -1,4 +1,4 @@
-# Mapper OS Questions
+# Buildprint Mapper Questions
 
 Ask after discovery, not before, unless source access or safety boundaries are unclear.
 
@@ -30,7 +30,7 @@ Every selected Buildprint must carry a pre-implementation gate covering only unr
 4. Runtime/provider verification: are sandbox credentials, provider test access, or runtime/browser environments available?
 5. Persistence/infra default: source-observed stack, existing stack, SQLite, Postgres, durable queue/object store, local files only when justified, or other?
 
-Quality is not a question: Mapper OS always targets max-quality for the requested scope. Missing verification becomes a blocker/readiness state, not a lower quality tier.
+Quality is not a question: Buildprint Mapper always targets max-quality for the requested scope. Missing verification becomes a blocker/readiness state, not a lower quality tier.
 
 ## Confirmation Summary
 

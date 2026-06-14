@@ -1,4 +1,4 @@
-# Mapper OS Question Policy
+# Buildprint Mapper Question Policy
 
 The mapper asks minimal, high-impact questions only.
 

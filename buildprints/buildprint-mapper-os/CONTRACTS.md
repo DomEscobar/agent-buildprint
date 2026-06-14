@@ -1,8 +1,8 @@
-# CONTRACTS: Buildprint Mapper OS
+# CONTRACTS: Buildprint Mapper
 
 ## Root contract
 
-Mapper OS maps source projects into source-independent Buildprints. It must preserve product scope, observable behavior, artifact type, runtime boundaries, state/readback expectations, provider constraints, design responsibilities, and proof obligations without requiring the downstream builder to open the original source.
+Buildprint Mapper maps source projects into source-independent Buildprints. It must preserve product scope, observable behavior, artifact type, runtime boundaries, state/readback expectations, provider constraints, design responsibilities, and proof obligations without requiring the downstream builder to open the original source.
 
 ## Selected packet contract
 
@@ -60,7 +60,7 @@ Output existence is not enough. Input-derived output is not enough. A selected p
 
 ## Proven implementation requirements contract
 
-Some mapped products depend on hard technical domains that should not be casually hand-rolled. Mapper OS must preserve those as product requirements without making the selected packet stack-fixed.
+Some mapped products depend on hard technical domains that should not be casually hand-rolled. Buildprint Mapper must preserve those as product requirements without making the selected packet stack-fixed.
 
 When source evidence shows fixed-format export, rich editing, document extraction, drag/reorder/canvas interactions, charts/diagrams/visual primitives, provider SDKs/OAuth/webhooks/external APIs, long-running jobs, queues, migrations, durable storage, or similar specialized domains, the selected `blueprint.yaml` must include `proven_implementation_requirements`.
 
@@ -106,7 +106,7 @@ The README must include:
 - a verification or proof section listing the commands and manual surface checks that were actually run;
 - a limitations/blockers section that matches `HANDOVER.md` and does not claim live provider, deployment, security, or production readiness without proof.
 
-Do not describe Mapper OS, the source repository, or the Buildprint packet as the main subject of the selected product README.
+Do not describe Buildprint Mapper, the source repository, or the Buildprint packet as the main subject of the selected product README.
 
 ## Phase contract
 

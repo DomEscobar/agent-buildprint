@@ -1,12 +1,12 @@
-# BUILDPRINT: Buildprint Mapper OS
+# BUILDPRINT: Buildprint Mapper
 
-Mapper OS is an agent-run workflow for turning an existing source project into a source-independent executable Buildprint packet. It is not a scanner command, source-code clone plan, obsolete schema revival, or evidence-writing machine.
+Buildprint Mapper is an agent-run workflow for turning an existing source project into a source-independent executable Buildprint packet. It is not a scanner command, source-code clone plan, obsolete schema revival, or evidence-writing machine.
 
 ## Core invariant
 
 A Buildprint is an execution manual for an AI builder. It must preserve source behavior, artifact type, scope, product judgment, boundaries, design responsibilities, and proof expectations in a form another coding agent can build from without opening the source repo.
 
-The obsolete v2 abstraction is gone. It was too compressed and runner-shaped. Mapper OS now emits phase-driven comprehensive packets: YAML routes, markdown teaches/builds.
+The obsolete v2 abstraction is gone. It was too compressed and runner-shaped. Buildprint Mapper now emits phase-driven comprehensive packets: YAML routes, markdown teaches/builds.
 
 ## Read order
 

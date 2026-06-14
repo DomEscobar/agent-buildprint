@@ -1,4 +1,4 @@
-# Mapper OS Safety Policy
+# Buildprint Mapper Safety Policy
 
 ## Source Boundary
 

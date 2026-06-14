@@ -29,7 +29,7 @@ inputs:
 routes:
   greenfield_product:
     when: request is a whole new product, app, SaaS, site, dashboard, internal tool, game, or agent system
-    action: route to Product Buildprint / Buildprint Mapper OS with a short handoff
+    action: route to Product Buildprint / Buildprint Mapper with a short handoff
     do_not_create_capability_packet: true
   capability_buildprint:
     when: request is one reusable graft into an existing host project
@@ -82,7 +82,7 @@ internet_deepsearch_policy:
   benchmark_rule: cite benchmark evidence or write "No benchmark evidence found"; never invent numbers
 quality_bar:
   - request classifier runs before deepsearch, intake, or authoring
-  - greenfield products route to Product Buildprint / Buildprint Mapper OS instead of capability files
+  - greenfield products route to Product Buildprint / Buildprint Mapper instead of capability files
   - capability is bounded and reusable
   - internet deepsearch selects or downgrades the technique before broad questions or authoring
   - host detection is explicit
