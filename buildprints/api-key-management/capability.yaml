@@ -8,8 +8,6 @@ host_frameworks:
   - nextjs
   - express
   - hono
-  - rails
-  - django
 host_detection:
   package_files:
     - package.json

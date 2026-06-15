@@ -6,14 +6,14 @@ Decide whether the host app can safely receive the API Key Management capability
 
 ## Supported host families
 
-This packet targets server-rendered or API-capable apps with authenticated owners or an explicitly approved service-account owner model and persistence, including:
+This packet targets server-rendered or API-capable JavaScript/TypeScript apps with authenticated owners or an explicitly approved service-account owner model and persistence, including:
 
 - Next.js app router or pages router apps with API routes/server actions
 - Express or Hono-style Node APIs
-- Rails apps with controllers and migrations
-- Django apps with views, middleware, and models
 
 Other hosts are allowed only if the applying agent can map every required surface to equivalent host primitives and records the adaptation in `.buildprint/capability-plan.md`.
+
+Rails and Django are plausible future adaptation targets, but they are not currently proven by this packet's dogfood receipts.
 
 ## Required host features
 
@@ -84,7 +84,6 @@ Block instead of adapting silently when:
 Prefer the host app's existing crypto/runtime facilities:
 
 - Node: use maintained runtime crypto APIs or approved framework helpers.
-- Rails: use framework primitives and migrations.
-- Django: use framework primitives and migrations.
+- Rails or Django: block or mark unproven until an adapter proof exists.
 
 Do not hand-roll cryptographic algorithms. Do not pin a library unless the host repository or current official docs justify it during implementation.

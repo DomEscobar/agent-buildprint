@@ -24,7 +24,8 @@
     "verification and receipt phase",
     "real host runtime receipt against a copied Bun API server",
     "real host runtime receipt against a public Hono/Drizzle API starter",
-    "real host runtime receipt against a public NextAuth/Prisma app with build blocker recorded"
+    "real host runtime receipt against a public NextAuth/Prisma app with build blocker recorded",
+    "evidence matrix with explicit not-proven claims and score"
   ],
   "risks": [
     "Requires stable user, owner, or approved service-account identity",
@@ -60,7 +61,7 @@
   ],
   "publicStatus": {
     "label": "Runtime dogfooded",
-    "explanation": "Created by dogfooding Buildprint Creator, then applied to copied real Bun, Hono/Drizzle, and NextAuth/Prisma hosts with runtime or route-unit tests for valid, revoked, missing, malformed, valid-prefix/wrong-secret, wrong-scope, owner-scoped revoke, and hash-only storage behavior. The Next/Prisma production build blocker is recorded instead of overclaimed."
+    "explanation": "Created by dogfooding Buildprint Creator, then applied to copied real Bun, Hono/Drizzle, and NextAuth/Prisma hosts with runtime or route-unit tests for valid, revoked, missing, malformed, valid-prefix/wrong-secret, wrong-scope, owner-scoped revoke, and hash-only storage behavior. The Next/Prisma production build blocker and unproven Rails/Django adapters are recorded instead of overclaimed."
   },
   "whatYouGet": [
     "A bounded API key implementation contract",

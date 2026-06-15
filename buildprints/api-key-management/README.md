@@ -61,6 +61,7 @@ This packet has been applied to copied real host apps:
 - `examples/agb-website-server-runtime-receipt.md`
 - `examples/hono-open-api-starter-runtime-receipt.md`
 - `examples/nextjs-prisma-boilerplate-runtime-receipt.md`
+- `examples/evidence-matrix.md`
 
 The Bun proof added user-owned API keys, hash-only SQLite storage, signed-in key management routes, a Bearer-key protected export route, and runtime tests for valid, missing, malformed, wrong-scope, and revoked keys.
 
