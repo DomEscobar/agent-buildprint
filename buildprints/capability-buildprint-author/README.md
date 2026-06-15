@@ -24,6 +24,7 @@ A completed Capability Buildprint folder with:
 - integration plan protocol
 - phased implementation workflow
 - verification and receipt rules
+- brutal 10/10 quality gate with downgrade rules
 - README and publication metadata
 
 ## Best first targets

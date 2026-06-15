@@ -15,8 +15,9 @@ This Buildprint creates Buildprints. It does not install the capability into the
 7. `02-contract-authoring.md`
 8. `03-phase-authoring.md`
 9. `04-validation-and-publication.md`
-10. `templates/capability-packet/`
-11. `README.md`
+10. `05-brutal-quality-gate.md`
+11. `templates/capability-packet/`
+12. `README.md`
 
 ## Output
 
@@ -69,5 +70,6 @@ When the user provides thin implementation context, the agent must first run `00
 - Do not skip execution profile, host detection, risk, failure modes, compatibility, phases, or verification.
 - Do not claim provider/runtime proof in the authored packet unless real proof exists.
 - Do not claim "best practice", "recommended", "benchmark-backed", "proven", or "current" unless the packet names the source or states that no benchmark/source was found.
+- Do not claim 10/10 or perfect quality unless `05-brutal-quality-gate.md` passes with real-host proof and adversarial review evidence.
 - Do not copy secrets or vendor docs wholesale.
 - Do not hide uncertainty. Put unknowns into hard-stop questions or explicit assumptions.

@@ -15,14 +15,27 @@ requires:
   human_decisions: []
 touches: []
 apply:
-  inspect: []
-  steps: []
-  forbidden: []
+  inspect:
+    - current host implementation and overlapping systems
+    - current official docs/source for volatile or high-risk assumptions
+  steps:
+    - map the generic capability contract to concrete host files before edits
+    - implement the smallest real host surface that proves the capability
+    - add negative tests for relevant denial, failure, and abuse paths
+  forbidden:
+    - claim installed without command/runtime evidence
+    - hide blockers or not-proven production gaps
 verify:
   proof_level: fixture
-  commands: []
-  runtime_checks: []
-  blocked_checks: []
+  commands:
+    - package test command if present
+    - package lint/typecheck/build commands if present
+  runtime_checks:
+    - selected real host surface proves the capability works
+    - relevant denial and failure paths are tested
+  blocked_checks:
+    - missing host prerequisite blocks with a concrete receipt
+    - missing proof path downgrades the claim instead of passing
 evidence:
   official_docs: []
   source_examples: []
@@ -32,7 +45,10 @@ evidence:
 risk:
   level: medium
   reason: <why this risk level fits>
-failure_modes: []
+failure_modes:
+  - happy-path-only proof hides broken denial or recovery behavior
+  - machine contract contradicts markdown instructions
+  - publication copy claims more than receipts prove
 composition:
   expects: []
   provides: []

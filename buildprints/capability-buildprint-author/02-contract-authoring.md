@@ -43,6 +43,25 @@ Record the basis for the packet:
 - date or version for volatile providers/frameworks
 - claims that must be re-checked by future agents
 
+## contract consistency must define
+
+Before moving on, compare:
+
+- `requires.existing_capabilities` against `composition.expects`
+- `apply.steps` against `verify.runtime_checks`
+- `failure_modes` against required negative tests
+- `publication.json` claims against actual examples, receipts, and proof level
+
+Any adaptation such as user-owned to service-account-owned behavior must be reflected in every relevant contract section, or recorded as blocked/not-proven.
+
+For credential, token, secret, or API-key packets, the contract must include:
+
+- plaintext/recoverable storage prohibition
+- one-time secret disclosure
+- keyed or host-approved versioned hash material
+- high-entropy lookup prefixes and collision handling when prefixes exist
+- full-secret verification after prefix lookup, proven by a valid-prefix/wrong-secret negative test
+
 ## DO NOT
 
 - Do not make YAML a decorative summary. It is the machine contract.
@@ -50,3 +69,4 @@ Record the basis for the packet:
 - Do not derive machine contracts from memory when docs/source evidence is available.
 - Do not use benchmark language without a cited benchmark or explicit no-benchmark-found note.
 - Do not put secret values into the packet.
+- Do not leave security-sensitive negative tests implicit.

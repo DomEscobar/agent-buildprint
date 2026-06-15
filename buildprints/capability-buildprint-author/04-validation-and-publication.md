@@ -37,6 +37,9 @@ The packet must make these claims checkable:
 - verification proof level
 - receipt output
 - benchmark/proven/recommended claims, or explicit `No benchmark evidence found`
+- contradiction checks between machine contract sections, especially `requires`, `composition`, `apply`, and `verify`
+- high-risk negative proof for deny/failure paths, not only happy-path success
+- credential/token/secret/API-key proof for storage posture, one-time disclosure, keyed or host-approved versioned hash material, prefix collision handling, and valid-prefix/wrong-secret denial when applicable
 
 ## Publication metadata
 
@@ -65,3 +68,4 @@ Do not publish until one of these is true:
 - Do not call examples "verified" unless they were applied to a host repo.
 - Do not hide unknown proof as future work.
 - Do not publish "best practice" or "recommended" claims that are only based on LLM knowledge.
+- Do not publish a 10/10 or perfect-quality claim without the brutal quality gate, real-host proof, and adversarial review notes.

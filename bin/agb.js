@@ -286,6 +286,51 @@ function yamlListItems(text, key) {
   return items
 }
 
+function yamlSection(text, key) {
+  const lines = text.split(/\r?\n/)
+  const index = lines.findIndex((line) => new RegExp(`^\\s*${escapeRegExp(key)}:\\s*$`, 'i').test(line))
+  if (index < 0) return ''
+  const keyIndent = (lines[index].match(/^\s*/) || [''])[0].length
+  const collected = []
+  for (let i = index + 1; i < lines.length; i++) {
+    const line = lines[i]
+    const indent = (line.match(/^\s*/) || [''])[0].length
+    if (line.trim() && indent <= keyIndent && /^\s*[\w.-]+:/.test(line)) break
+    collected.push(line)
+  }
+  return collected.join('\n')
+}
+
+function yamlListItemsInSection(text, sectionKey, listKey) {
+  return yamlListItems(yamlSection(text, sectionKey), listKey)
+}
+
+function normalizedCapabilityItem(value) {
+  return String(value || '').toLowerCase().replace(/[`'"]/g, '').replace(/\s+/g, ' ').trim()
+}
+
+function listItemsOverlap(left, right) {
+  const normalizedLeft = left.map(normalizedCapabilityItem).filter(Boolean)
+  const normalizedRight = right.map(normalizedCapabilityItem).filter(Boolean)
+  return normalizedLeft.some((a) => normalizedRight.some((b) => a === b || a.includes(b) || b.includes(a)))
+}
+
+function capabilityRequirementsAlign(requiredItems, expectedItems) {
+  const normalizedRequired = requiredItems.map(normalizedCapabilityItem).filter(Boolean)
+  const normalizedExpected = expectedItems.map(normalizedCapabilityItem).filter(Boolean)
+  if (!normalizedRequired.length || !normalizedExpected.length) return true
+  for (const required of normalizedRequired) {
+    if (/\s+or\s+/.test(required) && !normalizedExpected.includes(required)) return false
+  }
+  return listItemsOverlap(normalizedRequired, normalizedExpected)
+}
+
+function isCredentialCapability(capability, buildprint, publication) {
+  const name = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')}`
+  if (/(api[-_\s]?key|token|secret|credential)/i.test(name)) return true
+  return /api[-_\s]?key management|token management|secret management|credential management/i.test(`${buildprint}\n${publication}`)
+}
+
 function phaseFilesFromIndex(text) {
   return [...text.matchAll(/^\s*file:\s*(03-phases\/[^\s#]+\.md)\s*$/gmi)].map((m) => m[1].trim())
 }
@@ -362,6 +407,11 @@ function capabilityPacketCheckResults(dir) {
     '01-integration-plan.md',
     ...phaseFiles,
   ]
+  const phaseTexts = phaseFiles.map((file) => safeReadText(path.join(dir, file)))
+  const combinedCapabilityText = [capability, buildprint, apply, verify, compatibility, publication, ...phaseTexts].join('\n')
+  const requiredCapabilityItems = yamlListItemsInSection(capability, 'requires', 'existing_capabilities')
+  const expectedCapabilityItems = yamlListItemsInSection(capability, 'composition', 'expects')
+  const credentialCapability = isCredentialCapability(capability, buildprint, publication)
 
   for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
   ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
@@ -383,6 +433,9 @@ function capabilityPacketCheckResults(dir) {
   ok('capability.yaml declares risk level and reason', /risk:\s*\n[\s\S]*level:\s*(low|medium|high|critical)/i.test(capability) && /reason:/i.test(capability))
   ok('capability.yaml declares failure modes', yamlListItems(capability, 'failure_modes').length >= 3)
   ok('capability.yaml declares composition expectations/provides/conflicts', /composition:\s*\n[\s\S]*(expects|provides):/i.test(capability) && /conflicts_with:/i.test(capability))
+  if (requiredCapabilityItems.length && expectedCapabilityItems.length) {
+    ok('capability.yaml keeps requires.existing_capabilities aligned with composition.expects', capabilityRequirementsAlign(requiredCapabilityItems, expectedCapabilityItems))
+  }
 
   ok('BUILDPRINT identifies bounded capability, not whole product', /bounded capability|not a whole-product/i.test(buildprint) && !/Product Buildprint builds a whole/i.test(buildprint))
   ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
@@ -390,9 +443,23 @@ function capabilityPacketCheckResults(dir) {
 
   ok('compatibility names host signals and block conditions', /host app|host project/i.test(compatibility) && /block|blocked|must not proceed/i.test(compatibility))
   ok('apply requires assessment, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))
-  ok('apply forbids plaintext secrets and over-broad rewrites', /Do not store plaintext|plaintext API keys/i.test(apply) && /bounded|Do not redesign|Do not.*whole/i.test(apply))
+  ok('apply forbids over-broad rewrites', /bounded|Do not redesign|Do not.*whole/i.test(apply))
   ok('verify defines structural/runtime/blocker checks', /Required structural checks/i.test(verify) && /Runtime checks/i.test(verify) && /Blocked checks/i.test(verify))
   ok('verify requires receipt before success claim', /capability-receipt\.md/i.test(verify) && /Pass condition/i.test(verify))
+  ok('verify blocks overclaiming by requiring not-proven or blocked evidence', /not[- ]proven|blocked checks|blockers/i.test(verify) && /proof level/i.test(verify))
+
+  if (credentialCapability) {
+    ok('credential apply forbids plaintext secrets', /Do not store plaintext|plaintext API keys|plaintext|plain text/i.test(apply))
+    ok('credential capability forbids plaintext/recoverable secret storage', /plaintext|plain text/i.test(combinedCapabilityText) && /(not plaintext|no plaintext|forbid|forbidden|do not store plaintext|not reversible|non-reversible)/i.test(combinedCapabilityText))
+    ok('credential capability requires one-time secret disclosure', /one[- ]time|only once|shown once|visible only at creation/i.test(combinedCapabilityText))
+    ok('credential capability requires keyed or host-approved versioned hash material', /(keyed|hmac|pepper|host-approved)[\s\S]{0,80}(hash|digest)|hash[\s\S]{0,80}(version|versioned)/i.test(combinedCapabilityText))
+    ok('credential capability.yaml requires keyed/versioned or host-approved hash material', /(keyed|hmac|pepper|host-approved)[\s\S]{0,80}(hash|digest)|hash[\s\S]{0,80}(version|versioned)/i.test(capability))
+    ok('credential capability requires high-entropy prefix and collision handling when prefixes are used', /prefix/i.test(combinedCapabilityText) && /high[- ]entropy|enough entropy|collision retry|unique-constraint retry|collision handling/i.test(combinedCapabilityText))
+    ok('credential capability.yaml requires high-entropy prefix and collision handling when prefixes are used', /prefix/i.test(capability) && /high[- ]entropy|enough entropy|collision retry|unique-constraint retry|collision handling/i.test(capability))
+    ok('credential capability proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(combinedCapabilityText))
+    ok('credential capability.yaml proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(capability))
+    ok('credential verify.md proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(verify))
+  }
 
   for (const file of phaseFiles) {
     const text = safeReadText(path.join(dir, file))

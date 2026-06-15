@@ -7,7 +7,7 @@
   "tier": "agent-grade",
   "status": "publishable-draft",
   "runtime": ["Buildprint authoring workflow"],
-  "stack": ["BUILDPRINT.md", "author.yaml", "templates/capability-packet"],
+  "stack": ["BUILDPRINT.md", "author.yaml", "05-brutal-quality-gate.md", "templates/capability-packet"],
   "difficulty": "Medium",
   "featured": true,
   "summary": "A classifier-backed Buildprint creator that routes greenfield products to product Buildprints and turns bounded capabilities into valid phased Capability Buildprint packets.",
@@ -22,6 +22,7 @@
     "capability.yaml authoring contract",
     "phase authoring rules",
     "publication validation checklist",
+    "brutal 10/10 quality gate",
     "starter capability packet template"
   ],
   "risks": [
@@ -37,6 +38,8 @@
     "Execution profile matches risk",
     "Required files are authored",
     "Verification and receipt rules are concrete",
+    "High-risk packets include contradiction checks and negative proof",
+    "10/10 claims require real-host proof and adversarial review",
     "Publication metadata is honest"
   ],
   "publicStatus": {

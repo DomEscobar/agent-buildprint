@@ -17,6 +17,7 @@ read_order:
   - 02-contract-authoring.md
   - 03-phase-authoring.md
   - 04-validation-and-publication.md
+  - 05-brutal-quality-gate.md
   - templates/capability-packet/
 inputs:
   accepted:
@@ -91,3 +92,5 @@ quality_bar:
   - verification proves the capability instead of file creation
   - receipt requirements are present
   - best-practice/current/proven claims are cited or downgraded
+  - credential/security-sensitive packets include negative tests for full-secret verification, storage posture, and overclaim prevention
+  - 10/10 claims require real-host proof plus adversarial review with fixed or explicitly downgraded findings

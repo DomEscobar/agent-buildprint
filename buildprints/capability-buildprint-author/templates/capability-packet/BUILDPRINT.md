@@ -22,3 +22,7 @@ You are applying one Capability Buildprint to an existing host project. Follow t
 No source edits before `.buildprint/host-assessment.md` and `.buildprint/capability-plan.md` exist.
 
 Before planning or editing, inspect the packet's `evidence` section in `capability.yaml`. Re-check current official docs/source for volatile providers, frameworks, auth, billing, data migration, webhooks, security, and benchmark-sensitive claims. If evidence is missing or stale, block or downgrade the claim instead of guessing from memory.
+
+## Brutal quality rule
+
+Do not call this capability complete, proven, perfect, or 10/10 unless verification includes real command/runtime evidence, blocked/not-proven claims, and an adversarial self-review. For credential, token, secret, or API-key capabilities, require negative tests for storage posture and full-secret verification, not only successful authentication.
