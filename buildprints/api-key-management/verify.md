@@ -43,6 +43,8 @@ At `fixture` proof or higher:
 - stored state contains no plaintext secret
 - full secret cannot be fetched after creation
 - key use writes last-used state or audit event
+- rate limiting is integrated for API-key authenticated surfaces or a blocker is recorded
+- migration and rollback artifacts exist for persistent schema changes or a blocker is recorded
 
 At `runtime` proof:
 
@@ -59,6 +61,7 @@ Record blockers for:
 - missing test runner
 - existing token system requiring migration decision
 - ambiguous scope or tenant model
+- unavailable production-like database for live migration/rollback execution
 
 ## Pass condition
 
