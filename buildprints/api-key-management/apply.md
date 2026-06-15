@@ -29,7 +29,7 @@ Keep the capability bounded. Do not redesign auth, rebuild account settings, rep
 
 ## Secret-handling rule
 
-The full API key secret may be shown only once at creation time. Store only a derived hash plus non-secret metadata such as prefix, owner, scopes, status, timestamps, and display name.
+The full API key secret may be shown only once at creation time. Store only a keyed/versioned derived hash plus non-secret metadata such as prefix, owner, scopes, status, timestamps, and display name.
 
 ## DO NOT
 
@@ -37,4 +37,4 @@ The full API key secret may be shown only once at creation time. Store only a de
 - Do not store plaintext API keys.
 - Do not expose key verification to client bundles.
 - Do not grant broad scopes by default.
-- Do not claim install success without valid, revoked, and wrong-scope proof.
+- Do not claim install success without valid, revoked, wrong-scope, and valid-prefix/wrong-secret proof.

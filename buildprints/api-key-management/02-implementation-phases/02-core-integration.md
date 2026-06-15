@@ -17,10 +17,12 @@ Implement the reusable API key core that routes, middleware, and UI can call.
 Implement or adapt:
 
 - secure random key generation
-- stable key format with non-secret prefix
+- stable key format with high-entropy non-secret prefix
 - one-time secret return path
-- hash derivation and verification helper
+- keyed or host-approved hash derivation and verification helper
+- hash version marker for future rotation/migration
 - prefix lookup plus full hash comparison
+- collision retry or unique-constraint retry for generated prefixes
 - scope check helper
 - revoke helper
 - rotate or replacement helper
@@ -32,7 +34,8 @@ The core must keep key generation, verification, persistence, and route handling
 
 - generated key returns full secret only from creation helper
 - stored state contains hash and prefix, not the full secret
-- verify helper denies missing, malformed, revoked, expired, and wrong-scope keys
+- stored state includes hash version or an explicit host-approved reason for omitting it
+- verify helper denies missing, malformed, valid-prefix/wrong-secret, revoked, expired, and wrong-scope keys
 - scope helper defaults to deny when scope is unknown
 
 ## DO NOT

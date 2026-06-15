@@ -21,7 +21,7 @@ This is not a whole-product Buildprint. It is a bounded capability packet for ad
 
 ## Capability promise
 
-Add secure API key management to a host app that already has user identity and persistence. The installed capability must generate one-time-visible secrets, store only hashes, support key prefixes and scopes, authenticate API requests, handle revocation and rotation, and emit audit evidence.
+Add secure API key management to a host app that already has user identity or an explicitly approved service-account owner model plus persistence. The installed capability must generate one-time-visible secrets, store only keyed/versioned hashes, support high-entropy key prefixes and scopes, authenticate API requests, handle revocation and rotation, and emit audit evidence.
 
 ## Local checkpoints
 
@@ -39,7 +39,7 @@ No source edits before host assessment and capability plan exist.
 
 Stop and ask instead of guessing when:
 
-- the host has no identifiable user/session model for key owners
+- the host has no identifiable user/session model or approved service-account model for key owners
 - the host has no persistence layer and the user has not approved one
 - the API surface to protect is unclear
 - the account/team ownership model is ambiguous
@@ -52,7 +52,8 @@ Stop and ask instead of guessing when:
 Do not claim API key management is installed unless verification proves:
 
 - new key secret is shown once and cannot be recovered later
-- stored key material is hashed, not plaintext
+- stored key material is keyed/versioned hash material, not plaintext
+- valid prefix with wrong secret body fails
 - valid active key authenticates the selected API surface
 - revoked key fails
 - rotated/replaced key behavior is explicit

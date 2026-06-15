@@ -11,7 +11,7 @@
   "iconKeys": ["key", "lock", "code"],
   "difficulty": "Hard",
   "featured": true,
-  "summary": "A guarded Capability Buildprint for adding secure API key generation, hash-only storage, scopes, revocation, rotation, API authentication, and audit proof to compatible SaaS apps.",
+    "summary": "A guarded Capability Buildprint for adding secure API key generation, keyed hash-only storage, scopes, revocation, rotation, API authentication, and audit proof to compatible SaaS apps.",
   "promise": "Gives coding agents a phased implementation contract for grafting API key management into an existing app without plaintext secrets, tenant bypasses, or fake verification.",
   "includes": [
     "API key capability contract",
@@ -35,9 +35,9 @@
     "Read BUILDPRINT.md first",
     "Write host assessment before edits",
     "Write capability plan before implementation",
-    "Store only hashes and non-secret metadata",
+    "Store only keyed/versioned hashes and non-secret metadata",
     "Show full key secret only once",
-    "Verify valid, revoked, missing, malformed, and wrong-scope keys",
+    "Verify valid, revoked, missing, malformed, valid-prefix/wrong-secret, and wrong-scope keys",
     "Write capability receipt with proof level and blockers"
   ],
   "trustBadges": [
@@ -53,19 +53,19 @@
     },
     {
       "label": "Locally verifiable",
-      "detail": "Can prove valid, revoked, malformed, and wrong-scope behavior with fixtures.",
+      "detail": "Can prove valid, revoked, malformed, valid-prefix/wrong-secret, and wrong-scope behavior with fixtures.",
       "tone": "success"
     }
   ],
   "publicStatus": {
     "label": "Runtime dogfooded",
-    "explanation": "Created by dogfooding Buildprint Creator, then applied to copied real Bun and Hono/Drizzle API hosts with runtime tests for valid, revoked, missing, malformed, wrong-scope, and hash-only storage behavior."
+    "explanation": "Created by dogfooding Buildprint Creator, then applied to copied real Bun and Hono/Drizzle API hosts with runtime tests for valid, revoked, missing, malformed, valid-prefix/wrong-secret, wrong-scope, and hash-only storage behavior."
   },
   "whatYouGet": [
     "A bounded API key implementation contract",
     "Host compatibility rules",
     "Phased implementation files",
-    "Hash-only secret storage rules",
+    "Keyed/versioned hash-only secret storage rules",
     "Scope and revocation proof requirements",
     "Receipt requirements for applying agents"
   ],
@@ -91,17 +91,18 @@
     },
     {
       "title": "Verify honestly",
-      "detail": "Prove valid, revoked, missing, malformed, and wrong-scope behavior, then record the actual proof level."
+      "detail": "Prove valid, revoked, missing, malformed, valid-prefix/wrong-secret, and wrong-scope behavior, then record the actual proof level."
     }
   ],
   "resultChecklist": [
     "Host owner model is mapped",
-    "API key schema stores hash only",
+    "API key schema stores keyed/versioned hash only",
     "Full secret is one-time visible",
     "Scopes are explicit and deny-by-default",
     "Selected API surface uses server-side key verification",
     "Revoked key is denied",
     "Wrong-scope key is denied",
+    "Valid prefix with wrong secret body is denied",
     "Audit or last-used evidence is recorded",
     "Receipt records proof level and blockers",
     "Real host dogfood receipts exist under examples/"

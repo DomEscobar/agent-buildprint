@@ -37,7 +37,7 @@ host_detection:
 requires:
   env: []
   existing_capabilities:
-    - auth.user_identity or approved service_account owner model
+    - auth.user_identity or explicitly approved service_account owner model
   human_decisions:
     - API surface to protect first
     - key owner model: user, team, organization, or service account
@@ -63,16 +63,17 @@ apply:
     - audit/event logging conventions
     - test/lint/typecheck commands
   steps:
-    - define API key owner, prefix, hash, scope, status, and timestamp contract
+    - define API key owner, high-entropy prefix, keyed hash/version, scope, status, and timestamp contract
     - add secure random secret generation with one-time display
-    - persist only a derived hash plus non-secret metadata
+    - persist only a keyed/versioned derived hash plus non-secret metadata
+    - generate a non-secret lookup prefix with enough entropy and collision retry or unique-constraint retry
     - add key prefix lookup and constant-time hash comparison where the platform provides it
     - add scopes or permissions and deny-by-default scope checks
     - add revoke and rotate/replacement behavior
     - add server-side API key authentication middleware or helper
     - wire the helper into one selected API route/action
     - emit audit events for key creation, use, revoke, and rotation where host patterns exist
-    - add tests or fixtures for valid, revoked, wrong-scope, missing, and malformed keys
+    - add tests or fixtures for valid, revoked, wrong-scope, missing, malformed, and valid-prefix/wrong-secret keys
   forbidden:
     - store plaintext API keys
     - show full key secret after creation
@@ -89,7 +90,9 @@ verify:
   runtime_checks:
     - generated key secret is visible only at creation
     - database stores hash and prefix, not plaintext secret
+    - stored hash is keyed or host-approved, versioned, and not reversible
     - valid active key authenticates selected API route/action
+    - valid prefix with wrong secret body is denied
     - revoked key is denied
     - missing or malformed key is denied
     - wrong-scope key is denied
@@ -128,13 +131,15 @@ failure_modes:
   - plaintext or reversible key storage
   - secret is logged or re-displayed
   - prefix lookup authenticates without full hash verification
+  - lookup prefix has too little entropy or no collision handling
+  - unversioned or unkeyed hash weakens breach recovery
   - key scope is not checked on protected actions
   - revoked key still works through cache or stale middleware
   - key bypasses user/team/tenant boundaries
   - audit events omit owner, actor, target, or outcome
 composition:
   expects:
-    - auth.user_identity
+    - auth.user_identity or explicitly approved service_account owner model
   provides:
     - auth.api_key_state
     - auth.api_key_authentication

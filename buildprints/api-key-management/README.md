@@ -7,7 +7,7 @@ It is designed for coding agents. It is not a copy-paste auth tutorial.
 ## What it adds
 
 - API key generation with one-time secret display
-- hash-only key storage with searchable key prefixes
+- keyed/versioned hash-only key storage with searchable high-entropy key prefixes
 - key scopes or permissions
 - revocation and rotation/replacement flow
 - request authentication middleware or helper
@@ -16,7 +16,7 @@ It is designed for coding agents. It is not a copy-paste auth tutorial.
 
 ## What the host app must already have
 
-- authenticated user identity
+- authenticated user identity or explicitly approved service-account owner model
 - persistence layer or approved persistence decision
 - server-side API route/action capability
 - account, team, organization, or owner model for keys
@@ -63,7 +63,7 @@ This packet has been applied to copied real host apps:
 
 The Bun proof added user-owned API keys, hash-only SQLite storage, signed-in key management routes, a Bearer-key protected export route, and runtime tests for valid, missing, malformed, wrong-scope, and revoked keys.
 
-The Hono proof adapted to a service-account owner model because the host has no user/session auth. It added Drizzle-backed API keys, admin-token operator routes, a protected `GET /tasks/export` route, and caught real implementation bugs in key format parsing, route param schema, and typed OpenAPI responses.
+The Hono proof adapted to a service-account owner model because the host has no user/session auth. It added Drizzle-backed API keys, admin-token operator routes, HMAC-SHA256 hash material with versioning, high-entropy prefix generation with collision retry, a protected `GET /tasks/export` route, and caught real implementation bugs in key format parsing, prefix strength, full-secret verification, route param schema, and typed OpenAPI responses.
 
 Verification result:
 
@@ -88,4 +88,4 @@ all passed
 - No recoverable secret after initial creation.
 - No client-side-only API key validation.
 - No access without owner/tenant boundary checks.
-- No install success claim without valid, revoked, and wrong-scope proof.
+- No install success claim without valid, revoked, wrong-scope, and valid-prefix/wrong-secret proof.

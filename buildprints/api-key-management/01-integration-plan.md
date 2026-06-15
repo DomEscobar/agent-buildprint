@@ -14,7 +14,7 @@ The plan must include:
 - dependency changes, if any
 - env/config changes, if any
 - persistence changes and migration strategy
-- API key schema: prefix, hash, scopes, status, timestamps, last used, owner
+- API key schema: high-entropy prefix, keyed hash, hash version, scopes, status, timestamps, last used, owner
 - secret generation and one-time display behavior
 - scope/permission model and deny-by-default behavior
 - revocation and rotation/replacement behavior

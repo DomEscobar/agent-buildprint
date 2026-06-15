@@ -53,4 +53,4 @@ Use this shape:
 
 - Do not mark `fixture` or `runtime` proof without real checks.
 - Do not omit blocked checks.
-- Do not claim API key management is complete when revoked or wrong-scope behavior is untested.
+- Do not claim API key management is complete when revoked, wrong-scope, or valid-prefix/wrong-secret behavior is untested.

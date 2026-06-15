@@ -20,6 +20,8 @@ If a command does not exist, record that in `.buildprint/capability-receipt.md`.
 Confirm:
 
 - data model stores key hash and prefix, not plaintext key secret
+- stored hash is keyed or host-approved, versioned, and non-reversible
+- prefix generation uses enough entropy for the host scale and handles unique collisions
 - create-key path returns full secret only once
 - list/detail paths show only prefix and metadata
 - revoke path exists
@@ -36,6 +38,7 @@ At `fixture` proof or higher:
 - revoked key is denied
 - missing key is denied
 - malformed key is denied
+- valid prefix with wrong secret body is denied
 - wrong-scope key is denied
 - stored state contains no plaintext secret
 - full secret cannot be fetched after creation
