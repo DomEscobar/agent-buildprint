@@ -256,10 +256,34 @@ function packetCheckRoot(dir) {
   return dir
 }
 
+function isCapabilityPacket(dir) {
+  const capabilityFile = path.join(dir, 'capability.yaml')
+  if (!exists(capabilityFile)) return false
+  const capability = safeReadText(capabilityFile)
+  return /schema:\s*agent-buildprint\/capability\.v0/i.test(capability) ||
+    /type:\s*capability/i.test(capability)
+}
 
 function yamlScalar(text, key) {
   const match = text.match(new RegExp(`^\\s*${key}:\\s*([^\\n#]+)`, 'mi'))
   return match ? match[1].trim().replace(/^['"]|['"]$/g, '') : ''
+}
+
+function yamlListItems(text, key) {
+  const lines = text.split(/\r?\n/)
+  const index = lines.findIndex((line) => new RegExp(`^\\s*${escapeRegExp(key)}:\\s*$`, 'i').test(line))
+  if (index < 0) return []
+  const keyIndent = (lines[index].match(/^\s*/) || [''])[0].length
+  const items = []
+  for (let i = index + 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line.trim() || /^\s*#/.test(line)) continue
+    const indent = (line.match(/^\s*/) || [''])[0].length
+    if (indent <= keyIndent && /^\s*[\w.-]+:/.test(line)) break
+    const item = line.match(/^\s*-\s*(.+?)\s*(?:#.*)?$/)
+    if (item) items.push(item[1].trim().replace(/^['"]|['"]$/g, ''))
+  }
+  return items
 }
 
 function phaseFilesFromIndex(text) {
@@ -307,8 +331,84 @@ function packetHasObsoleteRouter(file) {
     file.includes('/proof-contract.yaml')
 }
 
+function capabilityPacketCheckResults(dir) {
+  const checks = []
+  const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
+  const files = new Set(packetFiles(dir))
+  const allFiles = Array.from(files)
+
+  const capability = safeReadText(path.join(dir, 'capability.yaml'))
+  const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
+  const apply = safeReadText(path.join(dir, 'apply.md'))
+  const verify = safeReadText(path.join(dir, 'verify.md'))
+  const compatibility = safeReadText(path.join(dir, 'compatibility.md'))
+  const publication = safeReadText(path.join(dir, 'publication.json'))
+  const phasesDir = '02-implementation-phases'
+  const phaseFiles = [
+    `${phasesDir}/01-contract-and-config.md`,
+    `${phasesDir}/02-core-integration.md`,
+    `${phasesDir}/03-host-wiring.md`,
+    `${phasesDir}/04-user-operator-surface.md`,
+    `${phasesDir}/05-verification-and-receipt.md`,
+  ]
+  const requiredFiles = [
+    'BUILDPRINT.md',
+    'README.md',
+    'capability.yaml',
+    'compatibility.md',
+    'apply.md',
+    'verify.md',
+    '00-host-assessment.md',
+    '01-integration-plan.md',
+    ...phaseFiles,
+  ]
+
+  for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
+  ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
+  ok('capability packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
+
+  ok('capability.yaml declares v0 schema', /schema:\s*agent-buildprint\/capability\.v0/i.test(capability))
+  ok('capability.yaml declares type capability', /type:\s*capability/i.test(capability))
+  ok('capability.yaml has stable kebab-case name', /^[a-z0-9][a-z0-9-]{1,80}$/.test(yamlScalar(capability, 'name')))
+  ok('capability.yaml declares dotted capability id', /^[a-z][a-z0-9_.-]*\.[a-z0-9_.-]+$/i.test(yamlScalar(capability, 'capability')))
+  ok('capability.yaml declares execution profile', /execution_profile:\s*(light|guarded|strict)/i.test(capability))
+  ok('capability.yaml declares host frameworks', yamlListItems(capability, 'host_frameworks').length > 0)
+  ok('capability.yaml declares host detection signals', /host_detection:\s*\n[\s\S]*(package_files|route_signals|auth_signals|database_signals):/i.test(capability))
+  ok('capability.yaml declares existing capabilities or human decisions', /requires:\s*\n[\s\S]*(existing_capabilities|human_decisions|env):/i.test(capability))
+  ok('capability.yaml declares touched surfaces', yamlListItems(capability, 'touches').length >= 3)
+  ok('capability.yaml declares apply inspect and steps', /apply:\s*\n[\s\S]*inspect:\s*\n[\s\S]*steps:/i.test(capability))
+  ok('capability.yaml declares forbidden apply actions', /apply:\s*\n[\s\S]*forbidden:/i.test(capability))
+  ok('capability.yaml declares verify commands and runtime checks', /verify:\s*\n[\s\S]*commands:\s*\n[\s\S]*runtime_checks:/i.test(capability))
+  ok('capability.yaml declares blocked checks', /blocked_checks:/i.test(capability))
+  ok('capability.yaml declares risk level and reason', /risk:\s*\n[\s\S]*level:\s*(low|medium|high|critical)/i.test(capability) && /reason:/i.test(capability))
+  ok('capability.yaml declares failure modes', yamlListItems(capability, 'failure_modes').length >= 3)
+  ok('capability.yaml declares composition expectations/provides/conflicts', /composition:\s*\n[\s\S]*(expects|provides):/i.test(capability) && /conflicts_with:/i.test(capability))
+
+  ok('BUILDPRINT identifies bounded capability, not whole product', /bounded capability|not a whole-product/i.test(buildprint) && !/Product Buildprint builds a whole/i.test(buildprint))
+  ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
+  ok('BUILDPRINT forbids implementation before assessment and plan', /No source edits before host assessment and capability plan/i.test(buildprint) || /must not make source edits before.*host assessment.*capability plan/i.test(buildprint))
+
+  ok('compatibility names host signals and block conditions', /host app|host project/i.test(compatibility) && /block|blocked|must not proceed/i.test(compatibility))
+  ok('apply requires assessment, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))
+  ok('apply forbids plaintext secrets and over-broad rewrites', /Do not store plaintext|plaintext API keys/i.test(apply) && /bounded|Do not redesign|Do not.*whole/i.test(apply))
+  ok('verify defines structural/runtime/blocker checks', /Required structural checks/i.test(verify) && /Runtime checks/i.test(verify) && /Blocked checks/i.test(verify))
+  ok('verify requires receipt before success claim', /capability-receipt\.md/i.test(verify) && /Pass condition/i.test(verify))
+
+  for (const file of phaseFiles) {
+    const text = safeReadText(path.join(dir, file))
+    ok(`${file} has objective and proof gate`, /##\s*Objective/i.test(text) && /Proof before moving on|Required output|DO NOT/i.test(text))
+  }
+
+  if (publication) {
+    ok('publication metadata marks capability stack', /"stack"\s*:\s*\[[\s\S]*capability\.yaml[\s\S]*apply\.md[\s\S]*verify\.md/i.test(publication))
+  }
+
+  return checks
+}
+
 function packetCheckResults(dir) {
   dir = packetCheckRoot(dir)
+  if (isCapabilityPacket(dir)) return capabilityPacketCheckResults(dir)
   const checks = []
   const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
   const files = new Set(packetFiles(dir))

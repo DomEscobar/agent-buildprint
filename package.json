@@ -8,6 +8,7 @@
   "dependencies": {},
   "scripts": {
     "check:syntax": "node --check bin/agb.js",
+    "check:capability": "node bin/agb.js packet check buildprints/api-key-management",
     "check:packet:mapper": "node bin/agb.js packet check buildprints/buildprint-mapper-os",
     "check:packets": "node bin/agb.js packet check buildprints/agentic-chat && node bin/agb.js packet check buildprints/ai-influencer-os && node bin/agb.js packet check buildprints/ai-shorts-video && node bin/agb.js packet check buildprints/automated-ai-blog-os && node bin/agb.js packet check buildprints/buildprint-mapper-os",
     "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs",

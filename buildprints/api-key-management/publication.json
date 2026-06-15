@@ -21,7 +21,8 @@
     "core generation and verification phase",
     "API route/middleware wiring phase",
     "user/operator key surface phase",
-    "verification and receipt phase"
+    "verification and receipt phase",
+    "real host runtime receipt against a copied Bun API server"
   ],
   "risks": [
     "Requires stable user or owner identity",
@@ -56,8 +57,8 @@
     }
   ],
   "publicStatus": {
-    "label": "Creator dogfood draft",
-    "explanation": "Created by dogfooding Buildprint Creator. Ready for review and fixture application against a compatible host app."
+    "label": "Runtime dogfooded",
+    "explanation": "Created by dogfooding Buildprint Creator, then applied to a copied real Bun API host with runtime tests for valid, revoked, missing, malformed, wrong-scope, and hash-only storage behavior."
   },
   "whatYouGet": [
     "A bounded API key implementation contract",
@@ -101,6 +102,7 @@
     "Revoked key is denied",
     "Wrong-scope key is denied",
     "Audit or last-used evidence is recorded",
-    "Receipt records proof level and blockers"
+    "Receipt records proof level and blockers",
+    "Real host dogfood receipt exists under examples/"
   ]
 }

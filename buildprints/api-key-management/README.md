@@ -54,6 +54,23 @@ flowchart LR
 
 Use the highest honest level. Do not claim runtime proof without testing the host API surface.
 
+## Dogfood proof
+
+This packet has been applied to a copied real Bun API host from `/root/AGB-website/server`.
+
+Receipt: `examples/agb-website-server-runtime-receipt.md`
+
+The proof added user-owned API keys, hash-only SQLite storage, signed-in key management routes, a Bearer-key protected export route, and runtime tests for valid, missing, malformed, wrong-scope, and revoked keys.
+
+Verification result:
+
+```text
+bun test
+12 pass
+0 fail
+59 expect() calls
+```
+
 ## Non-negotiables
 
 - No source edits before host assessment and capability plan.
