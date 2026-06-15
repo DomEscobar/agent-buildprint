@@ -22,10 +22,11 @@
     "API route/middleware wiring phase",
     "user/operator key surface phase",
     "verification and receipt phase",
-    "real host runtime receipt against a copied Bun API server"
+    "real host runtime receipt against a copied Bun API server",
+    "real host runtime receipt against a public Hono/Drizzle API starter"
   ],
   "risks": [
-    "Requires stable user or owner identity",
+    "Requires stable user, owner, or approved service-account identity",
     "Requires server-side persistence for hash-only key storage",
     "Existing token systems require an explicit migration decision",
     "Bad scope or tenant checks can expose protected APIs"
@@ -58,7 +59,7 @@
   ],
   "publicStatus": {
     "label": "Runtime dogfooded",
-    "explanation": "Created by dogfooding Buildprint Creator, then applied to a copied real Bun API host with runtime tests for valid, revoked, missing, malformed, wrong-scope, and hash-only storage behavior."
+    "explanation": "Created by dogfooding Buildprint Creator, then applied to copied real Bun and Hono/Drizzle API hosts with runtime tests for valid, revoked, missing, malformed, wrong-scope, and hash-only storage behavior."
   },
   "whatYouGet": [
     "A bounded API key implementation contract",
@@ -69,8 +70,8 @@
     "Receipt requirements for applying agents"
   ],
   "whatYouNeed": [
-    "A compatible app with user identity",
-    "An owner/team/organization model",
+    "A compatible app with user identity or an approved service-account owner model",
+    "An owner/team/organization/service-account model",
     "A persistence layer or approved persistence choice",
     "At least one API route/action/controller to protect",
     "Fixture keys or tests for lifecycle proof"
@@ -103,6 +104,6 @@
     "Wrong-scope key is denied",
     "Audit or last-used evidence is recorded",
     "Receipt records proof level and blockers",
-    "Real host dogfood receipt exists under examples/"
+    "Real host dogfood receipts exist under examples/"
   ]
 }

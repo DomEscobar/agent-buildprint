@@ -37,7 +37,7 @@ host_detection:
 requires:
   env: []
   existing_capabilities:
-    - auth.user_identity
+    - auth.user_identity or approved service_account owner model
   human_decisions:
     - API surface to protect first
     - key owner model: user, team, organization, or service account

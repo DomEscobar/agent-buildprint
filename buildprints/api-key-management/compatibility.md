@@ -6,7 +6,7 @@ Decide whether the host app can safely receive the API Key Management capability
 
 ## Supported host families
 
-This packet targets server-rendered or API-capable apps with authenticated owners and persistence, including:
+This packet targets server-rendered or API-capable apps with authenticated owners or an explicitly approved service-account owner model and persistence, including:
 
 - Next.js app router or pages router apps with API routes/server actions
 - Express or Hono-style Node APIs
@@ -19,7 +19,7 @@ Other hosts are allowed only if the applying agent can map every required surfac
 
 The host must have:
 
-- a way to identify the current authenticated user
+- a way to identify the current authenticated user, or an explicit service-account owner decision recorded in the capability plan
 - an owner model for keys: user, team, organization, or service account
 - a persistence layer for API key metadata and hashes
 - a server-side API route, action, controller, or middleware path to protect
@@ -51,7 +51,8 @@ Inspect:
 
 This capability expects:
 
-- `auth.user_identity`
+- `auth.user_identity` for user/team/organization-owned keys
+- an approved `service_account` owner model for server-to-server API hosts without user sessions
 
 It provides:
 
@@ -72,7 +73,7 @@ It composes well with:
 Block instead of adapting silently when:
 
 - another token or API key system already owns this surface
-- the host has no user or owner model
+- the host has no user/team/organization model and no approved service-account owner decision
 - the host has no persistence layer and the user has not approved one
 - the selected API surface has unclear tenant boundaries
 - requested scopes conflict with existing RBAC or permission policy

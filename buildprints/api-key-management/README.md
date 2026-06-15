@@ -56,11 +56,14 @@ Use the highest honest level. Do not claim runtime proof without testing the hos
 
 ## Dogfood proof
 
-This packet has been applied to a copied real Bun API host from `/root/AGB-website/server`.
+This packet has been applied to copied real host apps:
 
-Receipt: `examples/agb-website-server-runtime-receipt.md`
+- `examples/agb-website-server-runtime-receipt.md`
+- `examples/hono-open-api-starter-runtime-receipt.md`
 
-The proof added user-owned API keys, hash-only SQLite storage, signed-in key management routes, a Bearer-key protected export route, and runtime tests for valid, missing, malformed, wrong-scope, and revoked keys.
+The Bun proof added user-owned API keys, hash-only SQLite storage, signed-in key management routes, a Bearer-key protected export route, and runtime tests for valid, missing, malformed, wrong-scope, and revoked keys.
+
+The Hono proof adapted to a service-account owner model because the host has no user/session auth. It added Drizzle-backed API keys, admin-token operator routes, a protected `GET /tasks/export` route, and caught real implementation bugs in key format parsing, route param schema, and typed OpenAPI responses.
 
 Verification result:
 
@@ -69,6 +72,13 @@ bun test
 12 pass
 0 fail
 59 expect() calls
+
+pnpm test -- --run
+13 pass
+pnpm typecheck
+pnpm lint
+pnpm build
+all passed
 ```
 
 ## Non-negotiables
