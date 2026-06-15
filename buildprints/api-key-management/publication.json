@@ -23,7 +23,8 @@
     "user/operator key surface phase",
     "verification and receipt phase",
     "real host runtime receipt against a copied Bun API server",
-    "real host runtime receipt against a public Hono/Drizzle API starter"
+    "real host runtime receipt against a public Hono/Drizzle API starter",
+    "real host runtime receipt against a public NextAuth/Prisma app with build blocker recorded"
   ],
   "risks": [
     "Requires stable user, owner, or approved service-account identity",
@@ -59,7 +60,7 @@
   ],
   "publicStatus": {
     "label": "Runtime dogfooded",
-    "explanation": "Created by dogfooding Buildprint Creator, then applied to copied real Bun and Hono/Drizzle API hosts with runtime tests for valid, revoked, missing, malformed, valid-prefix/wrong-secret, wrong-scope, and hash-only storage behavior."
+    "explanation": "Created by dogfooding Buildprint Creator, then applied to copied real Bun, Hono/Drizzle, and NextAuth/Prisma hosts with runtime or route-unit tests for valid, revoked, missing, malformed, valid-prefix/wrong-secret, wrong-scope, owner-scoped revoke, and hash-only storage behavior. The Next/Prisma production build blocker is recorded instead of overclaimed."
   },
   "whatYouGet": [
     "A bounded API key implementation contract",
@@ -105,6 +106,7 @@
     "Valid prefix with wrong secret body is denied",
     "Audit or last-used evidence is recorded",
     "Receipt records proof level and blockers",
-    "Real host dogfood receipts exist under examples/"
+    "Real host dogfood receipts exist under examples/",
+    "Production build blockers are recorded instead of hidden"
   ]
 }
