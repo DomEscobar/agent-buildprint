@@ -44,6 +44,8 @@ Capability Buildprints enter an existing world: assess the host, map the capabil
 
 Agent Skills teach reusable procedure. Capability Buildprints package reusable implementation contracts.
 
+Skills improve the worker. Buildprints package the work. A skill changes the agent's method; a Buildprint changes the target app or product through an explicit, proof-bound packet.
+
 ```mermaid
 flowchart TD
   P[Prompt] --> C[Repo context]
@@ -54,7 +56,7 @@ flowchart TD
   E --> R[Receipt and proof]
 ```
 
-An agent can use both. The skill gives general discipline. The Capability Buildprint gives the specific contract for Stripe subscriptions, RBAC, Supabase auth, or another bounded capability.
+An agent can use both. The skill gives general discipline. The Capability Buildprint gives the specific contract for Stripe subscriptions, RBAC, API key management, Supabase auth, or another bounded integration. A Stripe skill may teach Stripe concepts; a Stripe Subscriptions Buildprint tells the agent how to inspect the host, map users to customers, add checkout/webhook/entitlement paths, verify behavior, and write a receipt.
 
 ## Core Packet Shape
 

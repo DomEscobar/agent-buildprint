@@ -5,7 +5,9 @@
 [![license MIT](https://img.shields.io/npm/l/agent-buildprint)](https://www.npmjs.com/package/agent-buildprint)
 [![Website](https://img.shields.io/badge/buildprints-agent--buildprint.com-111827)](https://agent-buildprint.com/)
 
-Buildprints are executable product blueprints for coding agents.
+Buildprints are executable implementation packets for coding agents.
+
+Skills improve the worker. Buildprints package the work. A skill teaches an agent how to debug, design, review, search, or use a tool well. A Buildprint tells an agent what to install, change, or build in a target codebase and how to prove it worked.
 
 Browse published Buildprints and copy the shortest start command here:
 
@@ -66,6 +68,8 @@ agb --help
 A Buildprint snapshot gives the agent ordered files for setup, UI identity, implementation phases, proof obligations, blockers, and handover.
 
 The point is not to guess from a repo blindly. The point is to give the agent a precise build path it can follow, while still allowing explicit wishes such as a different door, a bigger garden, or another extension.
+
+Product Buildprints package whole systems. Capability Buildprints package bounded integrations such as Stripe subscriptions, RBAC permissions, API key management, webhooks, auth, analytics, or deployment.
 
 ## Local Development
 
