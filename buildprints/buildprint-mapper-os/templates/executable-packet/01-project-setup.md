@@ -41,6 +41,7 @@ Create these in the implementation project unless the project already has equiva
 ## DO NOT
 
 - Do not start identity or feature phase code before foundation exists.
+- Do not start phase work while `.buildprint/decisions.md` still contains the empty stub; all five hard-stop questions from `00-questions.md` must be resolved first.
 - Do not create placeholder commands that silently pass.
 - Do not put real secrets in `.env.example`, docs, tests, logs, screenshots, or handover.
 - Do not choose a stack only because it is familiar if it cannot prove the golden path.
@@ -55,6 +56,7 @@ Create these in the implementation project unless the project already has equiva
 
 ## Minimum proof before moving on
 
+- `.buildprint/decisions.md` records confirmed answers (or honest blockers) for all five hard-stop questions from `00-questions.md`; the file must not contain the empty "No implementation decisions recorded yet" stub;
 - setup artifacts exist and are specific to this product;
 - `AGENTS.md` has a Buildprint Skill Harness section;
 - local core skill files exist for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`;

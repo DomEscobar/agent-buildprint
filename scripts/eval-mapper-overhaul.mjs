@@ -471,3 +471,117 @@ if (!nestedNextAgent.includes('.buildprint/snapshots/templates/executable-packet
   process.exit(1)
 }
 console.log('✓ cli eval starts nested executable packet template with profile handoff')
+
+// ---------------------------------------------------------------------------
+// Packet-check: decisions hard-stop requirement in setup (negative test)
+// ---------------------------------------------------------------------------
+const weakDecisionsSetup = copyTemplate('weak-decisions-setup')
+edit(weakDecisionsSetup, '01-project-setup.md', (text) =>
+  text.replace(/- Do not start phase work while.*\r?\n/, '')
+    .replace(/- `\.buildprint\/decisions\.md` records confirmed answers.*\r?\n/, '')
+)
+expectFailure(
+  'mapper eval rejects setup without decisions hard-stop requirement',
+  ['packet', 'check', weakDecisionsSetup],
+  ['✗ project setup requires decisions hard-stop before phase work']
+)
+
+// ---------------------------------------------------------------------------
+// Packet-check: critical-review artifact verification reference (negative test)
+// ---------------------------------------------------------------------------
+const weakCrNoArtifactRef = copyTemplate('weak-cr-no-artifact-ref')
+edit(weakCrNoArtifactRef, '03-phases/critical-review-pushback.md', (text) =>
+  text.replace(/agb verify ui \./gi, 'run verification').replace(/artifact-check\.md/gi, 'verification-check.md')
+)
+expectFailure(
+  'mapper eval rejects critical-review without artifact-check reference',
+  ['packet', 'check', weakCrNoArtifactRef],
+  ['✗ critical-review-pushback references artifact verification']
+)
+
+// ---------------------------------------------------------------------------
+// Packet-check: critical-review three-track pass requirement (negative test)
+// ---------------------------------------------------------------------------
+const weakCrNoThreeTracks = copyTemplate('weak-cr-no-three-tracks')
+edit(weakCrNoThreeTracks, '03-phases/critical-review-pushback.md', (text) =>
+  text.replace(/Track B \(product\/UI\) and Track C[\s\S]*?open\.\*\*/m, '')
+    .replace(/\*\*Track B.*Track C.*must both be fully clear[^*]*\*\*/g, '')
+)
+expectFailure(
+  'mapper eval rejects critical-review without three-track pass requirement',
+  ['packet', 'check', weakCrNoThreeTracks],
+  ['✗ critical-review-pushback defines three-track pass requirement']
+)
+
+// ---------------------------------------------------------------------------
+// Packet-check: critical-review blocks pass on UI/decisions track (negative test)
+// ---------------------------------------------------------------------------
+const weakCrNoTrackBlock = copyTemplate('weak-cr-no-track-block')
+edit(weakCrNoTrackBlock, '03-phases/critical-review-pushback.md', (text) =>
+  text.replace(/may not reach PASS or PENDING_RECHECK.*Track B[^\n]*/g, '')
+    .replace(/PASS or PENDING_RECHECK.*resolving only Track A[^\n]*/g, '')
+)
+expectFailure(
+  'mapper eval rejects critical-review that does not block pass on UI/decisions track',
+  ['packet', 'check', weakCrNoTrackBlock],
+  ['✗ critical-review-pushback blocks pass on UI/decisions track failure']
+)
+
+// ---------------------------------------------------------------------------
+// agb verify ui: slop project fixture (expect fail on 3 checks)
+// ---------------------------------------------------------------------------
+const slopProject = path.join(tmp, 'slop-project')
+fs.mkdirSync(path.join(slopProject, '.buildprint'), { recursive: true })
+fs.mkdirSync(path.join(slopProject, 'public'), { recursive: true })
+fs.writeFileSync(path.join(slopProject, '.buildprint', 'decisions.md'), '# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n')
+fs.writeFileSync(path.join(slopProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup', '02-ui'] }))
+fs.writeFileSync(path.join(slopProject, 'public', 'index.html'), `<!doctype html>
+<html><head><title>Slop Workbench</title></head>
+<body>
+<script>
+function renderEvents(events) {
+  document.getElementById('events').textContent = JSON.stringify(events, null, 2);
+}
+</script>
+<div id="events"></div>
+</body></html>
+`)
+{
+  const { failed, output } = runAgb(['verify', 'ui', slopProject])
+  const missing = ['decisions-stub', 'raw-json-in-dom'].filter((id) => !output.includes(id))
+  if (!failed || missing.length) {
+    console.error(output)
+    console.error(`agb verify ui slop fixture test failed; missing expected checks: ${missing.join(', ') || '(none)'}`)
+    process.exit(1)
+  }
+  console.log('✓ agb verify ui correctly fails slop project (decisions-stub + raw-json-in-dom)')
+  console.log(['  - decisions-stub', '  - raw-json-in-dom'].join('\n'))
+}
+
+// ---------------------------------------------------------------------------
+// agb verify ui: clean project fixture (expect pass)
+// ---------------------------------------------------------------------------
+const cleanProject = path.join(tmp, 'clean-project')
+fs.mkdirSync(path.join(cleanProject, '.buildprint'), { recursive: true })
+fs.mkdirSync(path.join(cleanProject, 'public'), { recursive: true })
+fs.mkdirSync(path.join(cleanProject, 'docs'), { recursive: true })
+fs.writeFileSync(path.join(cleanProject, '.buildprint', 'decisions.md'), '# Decisions\n\n| Question | Answer |\n|---|---|\n| Deployment posture | trusted_local |\n')
+fs.writeFileSync(path.join(cleanProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
+fs.writeFileSync(path.join(cleanProject, 'docs', 'ui-identity.md'), '# UI Identity\n\n## 5) User-language map\n\n- Forbidden main surface words:\n  - "proof"\n')
+fs.writeFileSync(path.join(cleanProject, 'public', 'index.html'), `<!doctype html>
+<html><head><title>Clean App</title></head>
+<body>
+<script>
+function renderMessages(messages) {
+  const container = document.getElementById('feed');
+  messages.forEach((m) => {
+    const el = document.createElement('div');
+    el.textContent = m.content;
+    container.appendChild(el);
+  });
+}
+</script>
+<div id="feed"></div>
+</body></html>
+`)
+expectPass('agb verify ui passes clean project', ['verify', 'ui', cleanProject])

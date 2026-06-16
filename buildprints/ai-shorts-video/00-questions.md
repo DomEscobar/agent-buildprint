@@ -24,6 +24,8 @@ If not answered, the agent may choose a reversible default and record it in setu
 - conservative UI scope that proves the first useful loop before breadth;
 - sample data only as novice/demo path, never as operator/live proof.
 
+**Scope-presentation mismatch is a hard-stop, not a default.** If the build will expose a broad product surface (full-featured UI, multi-panel workbench, multi-domain admin) while the runtime posture is a local proof or mock-only, that mismatch must be confirmed explicitly. Record the intended scope ("local proof of the core loop only" vs. "full product") before building. Defaulting to a local proof stack while presenting as a full product is not a valid assumable default.
+
 ## Deferrable questions
 
 Record these, but do not block setup:
@@ -33,7 +35,9 @@ Record these, but do not block setup:
 - advanced analytics, billing, or admin polish not required by the golden path;
 - secondary integrations not needed for the first real loop.
 
-## Decision ledger template
+## Decision ledger
+
+Record confirmed hard-stop answers in `.buildprint/decisions.md` before starting `01-project-setup.md`. The file must not still contain the empty placeholder stub when phase work begins. Use the table template below. Every hard-stop question (1–5) must appear with either a confirmed answer or a recorded blocker.
 
 ```md
 | Question | Answer / assumption | Reversible? | Architectural impact | Blocks setup? |

@@ -16,11 +16,11 @@ const HARNESS_PROVIDERS = {
     description: 'Portable Buildprint skill store'
   },
   codex: {
-    status: 'verified-agents-md-only',
+    status: 'verified-native-skills',
     evidenceUrl: 'https://github.com/openai/codex/blob/main/docs/agents_md.md',
-    kind: 'agents-bridge',
-    skillRoot: ['.agents', 'skills'],
-    description: 'Codex reads AGENTS.md; Buildprint skills stay in the portable .agents store'
+    kind: 'skills',
+    skillRoot: ['.codex', 'skills'],
+    description: 'Codex project skills in the native .codex/skills store'
   },
   claude: {
     status: 'verified-native-skills',
@@ -115,7 +115,7 @@ function buildHarnessAgentsSection(targets, profiles = ['default']) {
     '- Verify with `agb harness check .` before phase implementation; use `agb harness checkup .` for the stricter setup doctor.',
     `- Active provider targets: ${targets.join(', ')}.`,
     profileLine,
-    '- Default output is only `.agents/skills/` plus this AGENTS.md section. Provider folders are explicit and evidence-backed; do not create `.codex`, `.claude`, `.cline`, or `.cursor` folders unless requested by provider.',
+    '- Default output is only `.agents/skills/` plus this AGENTS.md section. Provider folders are explicit and evidence-backed; do not create `.claude`, `.cline`, or `.cursor` folders unless requested by provider. The `.codex/skills/` folder is created when `codex` is an explicit provider target.',
     '',
     'Provider evidence:',
     '',

@@ -62,6 +62,7 @@ Usage:
   agb harness check [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
   agb harness checkup [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
   agb evidence check <evidence-ledger-jsonl>
+  agb verify ui [project-folder]
 
 Examples:
   agb check ./my-buildprint
@@ -73,6 +74,8 @@ Examples:
   agb harness check .
   agb harness checkup .
   agb evidence check .buildprint/evidence/evidence-ledger.jsonl
+  agb verify ui .
+  agb verify ui /path/to/my-build
 
 Mapper note:
   The old agb map CLI has been removed. To map a source project, run an agent
@@ -813,7 +816,27 @@ function packetCheckResults(dir) {
       /\b1280\b/.test(criticalReviewText) &&
       /Playwright|tool chain|browser screenshot/i.test(criticalReviewText)
     )
+    ok('critical-review-pushback references artifact verification',
+      /agb verify ui/i.test(criticalReviewText) &&
+      /artifact-check\.md/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback defines three-track pass requirement',
+      /Track A/i.test(criticalReviewText) &&
+      /Track B/i.test(criticalReviewText) &&
+      /Track C/i.test(criticalReviewText) &&
+      /Track B.*Track C.*must both be fully clear|Track B \(product\/UI\) and Track C/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback blocks pass on UI\/decisions track failure',
+      /may not reach PASS or PENDING_RECHECK.*Track B|PASS or PENDING_RECHECK.*resolving only Track A/i.test(criticalReviewText)
+    )
   }
+
+  const setupForDecisions = safeReadText(path.join(dir, setupFile))
+  ok('project setup requires decisions hard-stop before phase work',
+    /decisions\.md/i.test(setupForDecisions) &&
+    /hard-stop/i.test(setupForDecisions) &&
+    /No implementation decisions recorded yet/i.test(setupForDecisions)
+  )
 
   const collectPhaseMd = (root) => exists(root)
     ? fs.readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
@@ -1349,6 +1372,163 @@ if (args[0] === 'map') {
 }
 
 // Obsolete runner commands were removed with the Mapper OS v3 phase-driven packet.
+
+// ---------------------------------------------------------------------------
+// agb verify ui <project>
+// Deterministic artifact checker. Reads the BUILT project and reports
+// literal/identity-derived violations that a builder cannot self-pass.
+// Each check is a pure function returning { id, pass, evidence }.
+// ---------------------------------------------------------------------------
+
+function verifyUiChecks(projectRoot) {
+  const buildprintDir = path.join(projectRoot, '.buildprint')
+  const decisionsFile = path.join(buildprintDir, 'decisions.md')
+  const stateFile = path.join(buildprintDir, 'state.json')
+  const uiIdentityFile = path.join(projectRoot, 'docs', 'ui-identity.md')
+  const results = []
+
+  // Check 1: decisions-stub
+  // Fails when decisions.md still contains the empty stub while state records completed phases.
+  const decisionsStubText = 'No implementation decisions recorded yet.'
+  const decisionsContent = safeReadText(decisionsFile)
+  const stateContent = safeReadText(stateFile)
+  let stateCompletedPhases = []
+  try { stateCompletedPhases = JSON.parse(stateContent).completedPhases || [] } catch { /* ignore */ }
+  const decisionsIsStub = decisionsContent.includes(decisionsStubText)
+  const hasPhasesCompleted = stateCompletedPhases.length > 0
+  results.push({
+    id: 'decisions-stub',
+    pass: !(decisionsIsStub && hasPhasesCompleted),
+    evidence: decisionsIsStub && hasPhasesCompleted
+      ? `${path.relative(projectRoot, decisionsFile)} still contains the empty stub while ${stateCompletedPhases.length} phase(s) are marked complete in state.json`
+      : '',
+  })
+
+  // Check 2: raw-json-in-dom
+  // Fails when HTML/JS renders payloads via JSON.stringify(..., null, 2) bound to .textContent / innerHTML.
+  // Scoped to event, telemetry, message, memory, and trace surfaces to avoid false positives on JSON viewers.
+  const RAW_JSON_PATTERN = /JSON\.stringify\s*\([^)]*,\s*null\s*,\s*2\s*\)/g
+  const CONTEXT_ASSIGN_PATTERN = /\.(textContent|innerHTML)\s*=\s*JSON\.stringify|JSON\.stringify[^;]*\.textContent|JSON\.stringify[^;]*\.innerHTML/
+  const htmlFiles = walk(path.join(projectRoot, 'public')).filter((f) => f.endsWith('.html') || f.endsWith('.js'))
+  const srcFiles = walk(path.join(projectRoot, 'src')).filter((f) => f.endsWith('.ts') || f.endsWith('.js'))
+  const candidateFiles = [...htmlFiles, ...srcFiles]
+  const rawJsonEvidence = []
+  for (const file of candidateFiles) {
+    const content = safeReadText(file)
+    const lines = content.split(/\r?\n/)
+    lines.forEach((line, idx) => {
+      if (RAW_JSON_PATTERN.test(line) && CONTEXT_ASSIGN_PATTERN.test(line)) {
+        rawJsonEvidence.push(`${path.relative(projectRoot, file)}:${idx + 1}`)
+      }
+      RAW_JSON_PATTERN.lastIndex = 0
+    })
+  }
+  results.push({
+    id: 'raw-json-in-dom',
+    pass: rawJsonEvidence.length === 0,
+    evidence: rawJsonEvidence.length > 0 ? `raw JSON rendered to DOM at: ${rawJsonEvidence.join(', ')}` : '',
+  })
+
+  // Check 3: context-leakage
+  // Fails when rendered message/assistant output or response payloads contain internal runtime field tokens.
+  // These are tokens that the mock provider echoes back from context; they are never valid product output.
+  const LEAKAGE_TOKENS = ['--TURN', 'context_source', 'recent_messages', 'session_checkpoint']
+  const leakageFiles = [...htmlFiles, ...srcFiles, ...walk(path.join(projectRoot, 'evidence')).filter((f) => f.endsWith('.txt') || f.endsWith('.json'))]
+  const leakageEvidence = []
+  for (const file of leakageFiles) {
+    const content = safeReadText(file)
+    for (const token of LEAKAGE_TOKENS) {
+      if (content.includes(token)) {
+        leakageEvidence.push(`"${token}" in ${path.relative(projectRoot, file)}`)
+        break
+      }
+    }
+  }
+  results.push({
+    id: 'context-leakage',
+    pass: leakageEvidence.length === 0,
+    evidence: leakageEvidence.length > 0 ? `internal runtime tokens found in output surfaces: ${leakageEvidence.join('; ')}` : '',
+  })
+
+  // Check 4: forbidden-words
+  // Reads docs/ui-identity.md to derive the project's own forbidden-word list and "not a X" claims,
+  // then checks whether the shipped UI markup uses those words.
+  // Identity-derived: if the project has no ui-identity.md, this check is skipped.
+  const uiIdentity = safeReadText(uiIdentityFile)
+  if (!uiIdentity) {
+    results.push({ id: 'forbidden-words', pass: true, evidence: 'no docs/ui-identity.md — check skipped' })
+  } else {
+    // Extract "Forbidden main surface words" list from the identity doc (section 5)
+    const forbiddenSection = uiIdentity.match(/##\s*\d*[^#\n]*[Ff]orbidden[^#\n]*main[^#\n]*surface[^#\n]*([\s\S]*?)(?=\n##|\n#[^#]|$)/i)?.[1] || ''
+    const forbiddenWords = [...forbiddenSection.matchAll(/["`'*]([^`'"*\n]+)["`'*]/g)].map((m) => m[1].trim()).filter((w) => w.length > 2)
+    // Extract "not a X" phrases from section 1/product thesis — capture the first word only, skip very short tokens
+    const notAMatches = [...uiIdentity.matchAll(/not\s+an?\s+([A-Za-z][A-Za-z-]+)/gi)].map((m) => m[1].trim()).filter((w) => w.length >= 5)
+    const allForbidden = [...new Set([...forbiddenWords, ...notAMatches])]
+
+    const uiMarkupFiles = htmlFiles
+    const forbiddenViolations = []
+    for (const file of uiMarkupFiles) {
+      const content = safeReadText(file)
+      for (const word of allForbidden) {
+        const re = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+        const lineIdx = content.split(/\r?\n/).findIndex((l) => re.test(l))
+        if (lineIdx >= 0) {
+          forbiddenViolations.push(`"${word}" found in ${path.relative(projectRoot, file)}:${lineIdx + 1}`)
+        }
+      }
+    }
+    results.push({
+      id: 'forbidden-words',
+      pass: forbiddenViolations.length === 0,
+      evidence: forbiddenViolations.length > 0 ? `identity-doc forbidden words found in markup: ${forbiddenViolations.join('; ')}` : '',
+    })
+  }
+
+  return results
+}
+
+function printVerifyUiResults(checks, projectRoot) {
+  const reportLines = ['# Artifact Check\n']
+  let failed = 0
+  for (const check of checks) {
+    if (check.pass) {
+      console.log(`✓ ${check.id}${check.evidence ? ` (${check.evidence})` : ''}`)
+      reportLines.push(`- [PASS] ${check.id}${check.evidence ? `: ${check.evidence}` : ''}`)
+    } else {
+      failed++
+      console.log(`✗ ${check.id}: ${check.evidence}`)
+      reportLines.push(`- [FAIL] ${check.id}: ${check.evidence}`)
+    }
+  }
+  const summary = failed === 0 ? 'PASS' : `FAIL (${failed} check${failed > 1 ? 's' : ''} failed)`
+  console.log(`\nArtifact check: ${summary}`)
+  reportLines.push(`\n## Result\n\n${summary}`)
+  const buildprintDir = path.join(projectRoot, '.buildprint')
+  if (exists(buildprintDir)) {
+    fs.writeFileSync(path.join(buildprintDir, 'artifact-check.md'), reportLines.join('\n') + '\n')
+  }
+  return failed === 0
+}
+
+function verifyUi(projectRoot) {
+  const resolved = path.resolve(projectRoot || '.')
+  if (!exists(resolved)) throw new Error(`project folder not found: ${resolved}`)
+  const checks = verifyUiChecks(resolved)
+  return printVerifyUiResults(checks, resolved)
+}
+
+if (args[0] === 'verify') {
+  const sub = args[1]
+  const project = args[2] || '.'
+  if (!sub || isHelp(sub)) usage(0)
+  try {
+    if (sub === 'ui') process.exit(verifyUi(project) ? 0 : 1)
+    throw new Error(`unknown verify subcommand: ${sub}`)
+  } catch (error) {
+    console.error(`Verify ${sub} failed: ${error.message}`)
+    process.exit(1)
+  }
+}
 
 if (args[0] === 'check') {
   if (isHelp(args[1])) usage(0)

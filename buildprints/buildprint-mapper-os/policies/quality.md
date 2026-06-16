@@ -79,3 +79,28 @@ When a generated artifact is a redesign or rerun, critical review should include
 ## Review stance
 
 The checker is a smoke alarm for structure and stale artifacts. Product quality is enforced by hostile critical review with an independent fresh-context reviewer, evidence-bound rubric scores, objective auto-fail triggers, phase objectives, direct runtime/browser/API checks, design review against the UI identity, and honest handoff. The builder must not score its own work; self-graded reviews are invalid regardless of numeric score.
+
+## Artifact verification gate
+
+Before the critical review can pass, `agb verify ui .` must be run and `.buildprint/artifact-check.md` must report PASS. The gate has two tiers:
+
+**Tier 1 — Deterministic CLI checks** (`agb verify ui`): unambiguous literal violations that the agent cannot self-pass:
+- `decisions-stub`: `.buildprint/decisions.md` still contains the empty stub while phases are complete.
+- `raw-json-in-dom`: built UI renders payloads via `JSON.stringify(..., null, 2)` bound to `.textContent`/`innerHTML`.
+- `context-leakage`: rendered output contains internal runtime tokens (`--TURN`, `context_source`, `recent_messages`, `session_checkpoint`).
+- `forbidden-words`: built UI markup uses exact words or phrases that the project's own `docs/ui-identity.md` declares forbidden.
+
+**Tier 2 — AI classifier judgment** (critical-review Track B): "does the silhouette look like a generic dashboard or proof console?" stays an AI reviewer judgment call; it is never replaced by regex pattern matching. The independent reviewer receives only screenshots + `docs/ui-identity.md` and returns a structured verdict.
+
+## Decisions hard-stop
+
+Before any phase work begins, `.buildprint/decisions.md` must be filled with confirmed answers (or explicit blockers) for all five hard-stop questions from `00-questions.md`. A build that runs phases with the empty stub is a setup failure. Scope-presentation mismatch (building a broad UI while posture is a local proof or mock-only) is a hard-stop, not an assumable default.
+
+## Three-track pass requirement
+
+Critical review PASS requires all three tracks to be clear:
+- **Track A** (runtime/proof): echo/canned output absent; independent reviewer.
+- **Track B** (product/UI): artifact-check PASS; no forbidden silhouette; no raw JSON in DOM; no context leakage; no dead controls.
+- **Track C** (decisions/honesty): `decisions.md` filled; no scope-presentation mismatch.
+
+A review may not reach PASS or PENDING_RECHECK by resolving only Track A while Track B or Track C failures remain open.
