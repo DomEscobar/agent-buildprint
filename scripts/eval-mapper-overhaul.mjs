@@ -159,6 +159,16 @@ edit(missingSkillHarness, '01-project-setup.md', (s) => s
   .replace(/\.agents\/skills/g, '.agents/files'))
 expectFailure('mapper eval requires local skill harness setup', ['packet', 'check', missingSkillHarness], ['✗ project setup requires local skill harness'])
 
+const weakArchitectureQuality = copyTemplate('weak-architecture-quality')
+edit(weakArchitectureQuality, '01-project-setup.md', (s) => s
+  .replace(/Architecture is a best-effort engineering decision[\s\S]*?minimal-scope win\./, '')
+  .replace(/- `docs\/architecture\.md` must include an engineering quality bar:[\s\S]*?enforce them\./, '')
+  .replace(/- Do not ship a thin or default architecture[\s\S]*?keep scope minimal\./, '')
+  .replace(/- `docs\/architecture\.md` names scalability seams[\s\S]*?type-check gates;/, ''))
+expectFailure('mapper eval requires engineering quality bar in setup',
+  ['packet', 'check', weakArchitectureQuality],
+  ['✗ project setup requires engineering quality bar'])
+
 const missingScreenStateContract = copyTemplate('missing-screen-state-contract')
 edit(missingScreenStateContract, '02-ui-identity.md', (s) => s
   .replace(/docs\/ui-identity\.md/g, 'docs/identity-removed.md')
@@ -183,6 +193,15 @@ edit(weakUiIdentitySilhouette, '02-ui-identity.md', (s) => s
   .replace(/The generated identity also fails[\s\S]*?screenshot-level acceptance criteria\./, 'The generated identity must be clear and product-specific.'))
 expectFailure('mapper eval rejects UI identity without silhouette rejection', ['packet', 'check', weakUiIdentitySilhouette], ['✗ ui identity rejects default product silhouette'])
 
+const weakUiIdentityDistinctiveness = copyTemplate('weak-ui-identity-distinctiveness')
+edit(weakUiIdentityDistinctiveness, '02-ui-identity.md', (s) => s
+  .replace(/Name the adjacent at-risk silhouette[\s\S]*?distinguishing treatment\./, '')
+  .replace(/Include an anti-silhouette distinctiveness screenshot check:[\s\S]*?do not satisfy this obligation\./, ''))
+expectFailure('mapper eval rejects UI identity without distinctiveness proof',
+  ['packet', 'check', weakUiIdentityDistinctiveness],
+  ['✗ ui identity requires nearest-silhouette distinguishing treatment',
+    '✗ ui identity requires anti-silhouette distinctiveness proof'])
+
 const weakHandoverTypedGates = copyTemplate('weak-handover-typed-gates')
 edit(weakHandoverTypedGates, 'HANDOVER.md', (s) => s.replace(/- Typed quality gates:[\s\S]*?(?=- Central output quality evidence:)/, ''))
 expectFailure('mapper eval requires typed gate handover', ['packet', 'check', weakHandoverTypedGates], ['✗ handover captures typed quality gate results'])
@@ -201,13 +220,26 @@ expectFailure('mapper eval rejects weak phase flow', ['packet', 'check', weakFlo
 
 const weakCriticalReviewExperience = copyTemplate('weak-critical-review-experience')
 edit(weakCriticalReviewExperience, '03-phases/critical-review-pushback.md', (s) => s
-  .replace(/3\. Run screenshot delta review[\s\S]*?\n5\. Score the artifact/, '3. Look at screenshots.\n5. Score the artifact')
+  .replace(/5\. Run screenshot delta review[\s\S]*?\n8\. Score the artifact/, '5. Look at screenshots.\n8. Score the artifact')
   .replace(/- Experience originality:[^\n]*\n/, '')
   .replace(/- Progressive disclosure and screen-state hierarchy:[^\n]*\n/, '')
   .replace(/experience originality[^.\n]*\./gi, '')
   .replace(/progressive-disclosure review[^.\n]*\./gi, '')
   .replace(/screenshot delta review[^.\n]*\./gi, ''))
 expectFailure('mapper eval rejects weak critical review experience gate', ['packet', 'check', weakCriticalReviewExperience], ['✗ critical-review-pushback requires experience originality, disclosure, and screenshot delta'])
+
+const weakCriticalReviewIndependence = copyTemplate('weak-critical-review-independence')
+edit(weakCriticalReviewIndependence, '03-phases/critical-review-pushback.md', (s) => s
+  .replace(/## External reviewer independence protocol[\s\S]*?## How to implement this phase/, '## How to implement this phase')
+  .replace(/Objective auto-fail triggers[\s\S]*?## Rubric/, '## Rubric')
+  .replace(/five worst flaws[^.\n]*\./gi, '')
+  .replace(/prose-only justification[^.\n]*\./gi, ''))
+expectFailure('mapper eval rejects weak critical review independence gate', ['packet', 'check', weakCriticalReviewIndependence], ['✗ critical-review-pushback requires external reviewer independence', '✗ critical-review-pushback defines objective auto-fail triggers'])
+
+const weakCriticalReviewArchitecture = copyTemplate('weak-critical-review-architecture')
+edit(weakCriticalReviewArchitecture, '03-phases/critical-review-pushback.md', (s) => s
+  .replace(/- \*\*Thin or default architecture\*\*:[\s\S]*?Runtime\/proof integrity\*\* at 2\.\r?\n/, ''))
+expectFailure('mapper eval rejects critical review without architecture auto-fail', ['packet', 'check', weakCriticalReviewArchitecture], ['✗ critical-review-pushback defines objective auto-fail triggers'])
 
 const cliHelp = runAgb(['--help']).output
 for (const stale of ['persona --slice', 'state derive', 'slice status']) {

@@ -22,6 +22,8 @@ Use `typed_quality_gates` in `blueprint.yaml` as a selector, not as decoration. 
 
 Use `proven_implementation_requirements` in `blueprint.yaml` to choose libraries, SDKs, runtimes, and platform services for hard domains. The selected packet should stay stack-neutral, but setup is not allowed to casually hand-roll fixed-format export, rich editing, document extraction, drag/reorder interactions, charts/diagrams, provider clients, task orchestration, or migrations. If a from-scratch alternative is chosen, `docs/architecture.md` must justify it and name the proof that will show it satisfies the same product bar as a proven tool path.
 
+Architecture is a best-effort engineering decision, not a thin stack list. `docs/architecture.md` must reason about scalability, maintainability, and the coding standards the build will enforce. Name the scalability seams - data growth, concurrency, load, and feature growth - and where the design absorbs that growth without a rewrite. Name the module boundaries, separation of concerns, and testability that keep the code maintainable as phases stack on it. Name the enforced coding standards and best practices the build must follow - SOLID, KISS, DRY, typed boundaries, and explicit error handling - and the lint, format, and type-check gates that enforce them. A thin or default architecture that ignores scalability, maintainability, or coding standards is a setup failure, not a minimal-scope win.
+
 Initialize the local Buildprint skill harness before identity or phase work. `blueprint.yaml` declares `harness.provider` and `harness.profiles`; use those values as the source of truth. If `agb` is available, run `agb harness init . --provider agents` with the declared `--profile` flags from `blueprint.yaml` or `.buildprint/next-agent.md`. Otherwise create the same project-local harness manually. The default provider is `agents`, which must patch or create `AGENTS.md`, add local core skill files for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`, and place them only in the portable `.agents/skills/` folder. Provider-specific folders such as `.claude/skills/`, `.cline/skills/`, or `.cursor/rules/` require an explicit, evidence-backed provider selection; never create multiple provider folders by detection alone. Selected profiles add focused skills only when declared: `webapp`, `backend`, `agentic`, or `full`. Every skill must declare `triggers`, `skips`, and `completion_signal`; phase handoffs must include the relevant completion signal. Do not install global skills, clone third-party skill packs, or copy upstream skill files without an explicit user request.
 
 ## Required setup artifacts
@@ -32,6 +34,7 @@ Create these in the implementation project unless the project already has equiva
 - `.agents/skills/setup-runbook/SKILL.md`, `.agents/skills/frontend-ui-product-design/SKILL.md`, `.agents/skills/subagent-driven-implementation/SKILL.md`, and `.agents/skills/verify-and-review/SKILL.md`, plus selected profile skills under `.agents/skills/` only for the default provider.
 - `docs/architecture.md` - selected stack, runtime topology, adapters, persistence, deployment posture, state ownership, golden path, central output contract, proof strategy, selected typed quality gates, command/proof paths, blockers, and claim ceilings.
 - `docs/architecture.md` must also name selected package/runtime/service choices for every applicable `proven_implementation_requirements` domain, or record why no hard-domain library requirement applies.
+- `docs/architecture.md` must include an engineering quality bar: named scalability seams, maintainability boundaries with separation of concerns and testability, and enforced coding standards (SOLID, KISS, DRY, typed boundaries, explicit error handling) with the lint, format, and type-check gates that enforce them.
 - `.env.example` - exact env names with blank secrets and no mock/test mode enabled by default.
 - `.buildprint/setup-receipt.md` - decisions made, assumptions, blockers, commands discovered, and identity-step readiness.
 
@@ -42,6 +45,7 @@ Create these in the implementation project unless the project already has equiva
 - Do not put real secrets in `.env.example`, docs, tests, logs, screenshots, or handover.
 - Do not choose a stack only because it is familiar if it cannot prove the golden path.
 - Do not hand-roll hard domains when proven libraries/runtimes exist unless the alternative is justified and proof-bound.
+- Do not ship a thin or default architecture that omits scalability seams, maintainability boundaries, or enforced coding standards just to keep scope minimal.
 - Do not hide hard-stop questions as assumptions.
 - Do not skip `agb harness init . --provider agents` or the equivalent manual local harness creation before identity or phase work.
 - Do not skip `agb harness check . --provider agents` after harness initialization or `agb harness checkup . --provider agents` before phase implementation; record checkup warnings as setup blockers or accepted claim ceilings.
@@ -60,6 +64,7 @@ Create these in the implementation project unless the project already has equiva
 - `.env.example` has blank secrets only;
 - `docs/architecture.md` exists and names stack, runtime topology, persistence, providers, commands, central output contract, selected typed quality gates, proof surfaces, blockers, and claim ceilings;
 - `docs/architecture.md` records proven library/runtime decisions for applicable hard domains or honest blockers;
+- `docs/architecture.md` names scalability seams, maintainability boundaries, and enforced coding standards (SOLID, KISS, DRY, typed boundaries, error handling) with lint/format/type-check gates;
 - `.buildprint/setup-receipt.md` records assumptions and blockers;
 - `02-ui-identity.md` can start without guessing the architecture or whether the local skill harness exists.
 

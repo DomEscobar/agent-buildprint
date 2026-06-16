@@ -48,7 +48,7 @@ Write the following sections in complete, product-specific language:
 
 1. Product identity thesis: what this product is in plain language, who it serves, what job the first screen must make obvious, and what it must not feel like.
 2. Creative product concept: the artifact-specific metaphor, dominant object, primary gesture, moment-to-moment manipulation, and what emotional/operator affordance should make the surface feel like this product rather than a generic shell.
-3. Silhouette rejection: the expected desktop/mobile layout silhouette and the forbidden default silhouette. Explicitly reject generic dashboard, renamed workbench, card grid, admin shell, proof console, and any old layout shape that could pass with labels/colors changed.
+3. Silhouette rejection: the expected desktop/mobile layout silhouette and the forbidden default silhouette. Explicitly reject generic dashboard, renamed workbench, card grid, admin shell, proof console, and any old layout shape that could pass with labels/colors changed. Name the adjacent at-risk silhouette your own chosen layout is structurally closest to, and state the concrete structural and visual treatment that distinguishes your layout from it. Token, palette, copy, spacing, label, or icon changes do not count as a distinguishing treatment.
 4. First-run comprehension contract: the exact first screen mental model, first action, visible state, and next action a non-technical user should understand within 10 seconds.
 5. User-language map: translate internal/build/proof terms into user-facing terms, and list forbidden main-UI words. Internal terms may live only in docs, logs, dev panels, or clearly labeled diagnostics.
 6. Chosen style direction: one concrete direction and the adjacent styles rejected, with reasoning tied to the artifact rather than generic taste.
@@ -58,7 +58,7 @@ Write the following sections in complete, product-specific language:
 10. Component language: controls, repeated items, detail regions, overlays, empty/loading/error/blocked states, selected states, density, radii, icon use, and feedback. Components support the product concept; they are not the concept.
 11. Color and typography tokens: exact semantic color roles, readable typography scale, state colors, focus treatment, and forbidden palette pitfalls.
 12. Content stress fixtures: long names, long titles, dense data, empty data, failed provider/runtime, failed persistence/export, and mobile/narrow cases the UI must survive.
-13. Proof obligations: screenshots, screenshot delta review against prior/default builds when available, viewport checks, no-overlap/no-clipping, keyboard/focus checks where relevant, content-specificity checks, edit/readback proof, and blocked-state proof.
+13. Proof obligations: screenshots, screenshot delta review against prior/default builds when available, viewport checks, no-overlap/no-clipping, keyboard/focus checks where relevant, content-specificity checks, edit/readback proof, and blocked-state proof. Include an anti-silhouette distinctiveness screenshot check: compare the shipped first-screen screenshot against the forbidden silhouette and the named adjacent silhouette, and fail if the screenshot is indistinguishable from them once the copy is ignored. Mechanical checks alone (overlap, clipping, viewport, focus) do not satisfy this obligation.
 14. Anti-generic rules: what must not appear in the main product surface, including generic shells, raw JSON dumps, proof-theater labels, dead controls, fake success, decorative-only views, unclear empty states, and internal status jargon.
 
 ## Minimum proof before moving to phases
@@ -71,7 +71,7 @@ Write the following sections in complete, product-specific language:
 - Internal/proof terms are translated or banned from the main UI.
 - Layout and interaction are defined before phase scaffolding.
 - Color, typography, component, and state rules are concrete enough to implement.
-- Proof obligations name the checks that would catch the artifact's most likely UI failure.
+- Proof obligations name the checks that would catch the artifact's most likely UI failure, and include an anti-silhouette distinctiveness screenshot check that fails a build matching the forbidden or adjacent silhouette.
 
 ## DO NOT
 
@@ -79,6 +79,7 @@ Write the following sections in complete, product-specific language:
 - Do not copy a style from another packet without reasoning from this product.
 - Do not write only "modern, clean, intuitive", "dashboard", "studio", "workbench", or other borrowed UI labels.
 - Do not accept an identity that can be implemented as a dashboard/workbench/card grid with palette, spacing, copy, icon, or label changes.
+- Do not accept a chosen layout that is the forbidden or adjacent silhouette with only token, palette, copy, spacing, label, or icon changes; the distinguishing structural treatment must be named.
 - Do not expose proof/evaluator/build terms in the main product UI unless the product is explicitly a developer tool.
 - Do not let phases start until the identity plan exists, the artifact is explicitly `not-ui-bearing`, or a blocker is recorded.
 

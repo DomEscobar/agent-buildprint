@@ -315,7 +315,7 @@ Use during Buildprint project setup. The goal is to stop blind discovery and lea
 1. Read the Buildprint setup file, \`00-questions.md\`, \`blueprint.yaml\`, and existing project instructions.
 2. Inspect the repo shape, package manager, framework, runtime, ports, env files, data stores, generated folders, and existing tests.
 3. Create or update \`AGENTS.md\` with mandatory reads, ownership boundaries, verification expectations, and the Buildprint Skill Harness section.
-4. Create or update \`docs/architecture.md\` with stack, topology, persistence, provider seams, deployment posture, central output contract, typed quality gates, proof commands, blockers, and claim ceilings.
+4. Create or update \`docs/architecture.md\` with stack, topology, persistence, provider seams, deployment posture, central output contract, typed quality gates, proof commands, blockers, and claim ceilings, plus an engineering quality bar: scalability seams (data growth, concurrency, load, feature growth), maintainability boundaries with separation of concerns and testability, and enforced coding standards (SOLID, KISS, DRY, typed boundaries, explicit error handling) with the lint, format, and type-check gates that enforce them.
 5. Create or update \`.env.example\` with blank secrets only.
 6. Create or update \`.buildprint/setup-receipt.md\` with decisions, assumptions, blockers, commands discovered, and readiness for UI identity or phase work.
 7. End the setup note with \`SETUP_RUNBOOK_DONE\` only after the artifacts exist or blockers are recorded.
@@ -323,6 +323,7 @@ Use during Buildprint project setup. The goal is to stop blind discovery and lea
 ## Hard Rules
 
 - Do not start identity or phase work before setup facts exist.
+- Do not record a thin or default architecture; name the scalability seams, maintainability boundaries, and enforced coding standards (SOLID, KISS, DRY) with lint/format/type-check gates, or record an honest blocker.
 - Do not invent commands; mark unknown commands as blockers.
 - Do not hide hard-stop questions as assumptions.
 - Do not put real secrets into docs, examples, tests, logs, screenshots, or handover.
@@ -477,13 +478,15 @@ Use before claiming a phase, checkpoint, or Buildprint is complete.
     name: 'frontend-visual-qa',
     body: `---
 name: frontend-visual-qa
-description: Use in the webapp profile after UI implementation to inspect screenshots, responsive layout, state rendering, and visual regressions.
+description: Use in the webapp profile after UI implementation to inspect screenshots, responsive layout, state rendering, and visual regressions against the local UI identity.
 profile: webapp
 triggers:
   - screenshot
   - responsive
   - visual QA
   - browser polish
+  - viewport check
+  - UI regression
 skips:
   - no human-facing UI
   - backend-only change
@@ -492,7 +495,34 @@ completion_signal: FRONTEND_VISUAL_QA_DONE
 
 # Frontend Visual QA
 
-Verify at meaningful desktop and mobile widths. Check no overlap, no clipped text, no horizontal page scroll, visible focus states, empty/loading/error/blocked states, and that the central product surface matches \`docs/ui-identity.md\`.
+Use after UI implementation to verify the shipped surface matches \`docs/ui-identity.md\` and survives real viewports and states. The goal is to catch layout failures, silhouette violations, and missing states before handoff, not after.
+
+## Workflow
+
+1. Load \`docs/ui-identity.md\` (or the local equivalent) and extract the forbidden silhouette, dominant surface, screen-state contract, and proof obligations defined there.
+2. Capture desktop and mobile screenshots at 320, 375, 414, and 768 px. If a prior screenshot exists, run a delta review: fail if the dominant surface, interaction model, or central object is unchanged while palette, copy, or spacing differs only cosmetically.
+3. For each viewport, verify: no horizontal page scroll, no clipped controls or text, no overlapping elements, no two-line clickable labels, and the dominant surface is visually dominant.
+4. Check all required screen states are reachable and render without layout collapse: empty, loading, streaming, blocked, error, success, and selected.
+5. Read \`references/mobile-hard-floor.md\` and confirm every failure criterion listed there is absent.
+6. Read \`references/slop-review.md\` and score the shipped UI. Any category below 3 requires one concrete repair before DONE.
+7. Verify keyboard focus: Tab reaches the primary input and action controls, and focus-visible styling is visible without relying solely on color.
+8. Record the viewport tested, states verified, any delta-review finding, and any score that triggered repair.
+
+## Hard Rules
+
+- Do not pass a UI whose silhouette matches the forbidden silhouette named in \`docs/ui-identity.md\`.
+- Do not pass if any required screen state is missing or collapses the layout.
+- Do not accept a screenshot as proof without stating which viewport it represents.
+- Slop-review scores below 3 require repair, not a note saying "future work."
+
+## Red Flags
+
+- Screenshots taken only at desktop width while the product is responsive.
+- Empty, error, and blocked states that were never triggered during QA — only the happy path was verified.
+- A delta review that passes because "colors changed and it looks better" without verifying the dominant surface changed.
+- Focus verification skipped because "it looked fine visually."
+
+End the review with \`FRONTEND_VISUAL_QA_DONE\` only after screenshots are captured at all required viewports, all required states are verified, and no slop-review category is below 3.
 `,
     references: []
   },
@@ -506,7 +536,9 @@ triggers:
   - generated image
   - media asset
   - public asset
-  - file upload/download
+  - file upload
+  - file download
+  - font asset
 skips:
   - code-only change
   - remote placeholder asset with no local ownership
@@ -515,7 +547,33 @@ completion_signal: ASSET_PIPELINE_DONE
 
 # Asset Pipeline
 
-Move generated or external media into project-owned asset paths, use stable names, update references, verify build output can load them, and record source/usage notes when licensing or provenance matters. Do not leave required assets in temp folders, chat downloads, or untracked local paths.
+Use when generated or external media must become durable project assets. The goal is to ensure every required asset is at a stable, project-owned path the build can load — not a temp folder, chat download, or untracked local path.
+
+## Workflow
+
+1. List every asset the current change requires: images, videos, fonts, icons, downloads, and generated media files.
+2. For each asset, confirm it lives in a project-owned directory (e.g. \`public/\`, \`assets/\`, \`static/\`) with a stable, descriptive name — not a UUID, timestamp, or temp filename.
+3. Update all references to the asset (HTML, CSS, component imports, config) to point to the stable path.
+4. Verify the build output can load each asset: run the dev or build command and confirm no 404s, missing-module errors, or broken \`src\` paths for required assets.
+5. When an asset has licensing or provenance requirements (stock photo, third-party font, generated AI media), record the source, license, and any attribution obligation in a comment or \`docs/assets.md\` note.
+6. Confirm generated or downloaded assets are committed to the repo or to a documented external store — not silently absent for other developers.
+7. Run a final load check: open the relevant page or route and confirm every asset renders without console errors.
+
+## Hard Rules
+
+- Do not leave required assets in temp folders, chat-session downloads, or \`/tmp\` paths after the phase is done.
+- Do not use timestamps or UUIDs as asset filenames when a stable descriptive name is possible.
+- Do not commit assets with known incompatible licenses without recording a blocker and notifying the operator.
+- A missing asset that causes a runtime 404 is a blocking failure, not a "future cleanup" item.
+
+## Red Flags
+
+- Assets referenced in code but not committed or uploaded to the documented external store.
+- Font or icon assets loaded from an external CDN without a local fallback or explicit decision to accept the CDN dependency.
+- Generated images left in the chat download folder because "they looked fine when I tested."
+- Licensing metadata absent for stock photos or third-party media that clearly require attribution.
+
+End the review with \`ASSET_PIPELINE_DONE\` only after every required asset is at a stable project-owned path, all references are updated, and a build load check confirms no 404s or missing assets.
 `,
     references: []
   },
@@ -531,14 +589,44 @@ triggers:
   - schema
   - webhook
   - contract
+  - SDK boundary
+  - service contract
 skips:
   - static UI-only change
+  - no network or inter-service boundary changed
 completion_signal: API_CONTRACT_CHECKS_DONE
 ---
 
 # API Contract Checks
 
-Verify request and response shapes, validation errors, auth/tenant boundaries, retries/timeouts, and documented examples. Tests should cover success, malformed input, unauthorized/forbidden, missing dependency, and provider failure where relevant.
+Use when routes, payloads, schemas, webhooks, or service contracts change. The goal is to confirm every boundary is explicit, validated, and proven against the full request/response matrix before claiming the API surface is stable.
+
+## Workflow
+
+1. List every route, webhook, and SDK boundary the change touches; include request shape, response shape, auth requirements, and error codes.
+2. For each endpoint, verify request validation rejects malformed or missing fields with the correct error code and message — not a 500 or a silent pass.
+3. Check auth and tenant boundaries: unauthenticated callers receive 401, insufficient-permission callers receive 403, and cross-tenant access is impossible by construction or tested explicitly.
+4. Verify retry and timeout behavior: long-running operations have a stated timeout; clients receive actionable error responses, not hung connections.
+5. Confirm at least one documented example exists for each endpoint (curl, test case, or README snippet) that a new developer can run against the running service.
+6. Run the test matrix for each changed route: success, malformed input, unauthorized, forbidden, missing dependency, and provider/network failure. Missing cases must be recorded as blockers or explicit gaps.
+7. Check for breaking changes against callers: if an existing consumer depends on this contract, confirm the change is backwards-compatible or a migration path is documented.
+8. Read back: start the service, hit each changed route with the documented examples, and confirm responses match the stated contract.
+
+## Hard Rules
+
+- No route accepts requests without explicit input validation; silent coercion of bad input is a failure.
+- Auth and tenant checks must be server-enforced, not trust-the-caller.
+- Do not claim a contract is stable before the full test matrix (including error cases) runs.
+- Breaking changes to existing public contracts require an explicit migration plan or a versioned route.
+
+## Red Flags
+
+- Tests that cover only the happy path and skip malformed input, missing auth, and provider failure.
+- Error responses that expose internal stack traces, raw SQL errors, or model internals.
+- Endpoints that return 200 with an error body instead of the correct HTTP status code.
+- Auth checks described as "handled by middleware" without a test that verifies the middleware actually fires for this route.
+
+End the review with \`API_CONTRACT_CHECKS_DONE\` only after the full test matrix runs, a service readback confirms live responses match the stated contract, and any breaking-change migration path is documented.
 `,
     references: []
   },
@@ -552,17 +640,46 @@ triggers:
   - migration
   - database
   - persistence
-  - destructive
+  - destructive change
   - import
   - export
+  - seed data
+  - schema change
 skips:
   - stateless code change
+  - in-memory only change with no durable state
 completion_signal: MIGRATION_DATA_SAFETY_DONE
 ---
 
 # Migration Data Safety
 
-Require reversible or backed-up paths where practical, idempotent migrations, readback proof, destructive-action guards, and clear rollback/blocker notes. Never run destructive production data changes without explicit user approval.
+Use when persistence, migrations, seeds, deletes, imports, exports, or irreversible data changes are involved. The goal is to ensure every durable change is reversible or backed up where practical, idempotent on re-run, and proven before production data is touched.
+
+## Workflow
+
+1. Classify each migration step as reversible (down migration or restore path exists) or irreversible (column drop, data delete, type cast with data loss). Record irreversible steps explicitly before proceeding.
+2. Verify every migration is idempotent: re-running it against an already-migrated schema must produce no error and no duplicate data.
+3. For destructive operations (drops, deletes, truncates, type casts with lossy conversion), confirm an explicit backup or snapshot exists, or record a blocker stating that no backup path is available.
+4. Never run a destructive production data change without explicit operator approval — record the approval requirement in \`.buildprint/blockers.md\` if approval has not been given.
+5. Run a readback after migration: query the affected tables or stores to confirm the expected rows, columns, and constraints are present and no data was silently lost.
+6. Verify rollback: execute the down migration (or restore from snapshot) and confirm the schema and data return to the pre-migration state.
+7. Document the migration in \`docs/architecture.md\` or a migration log: what changed, why, the irreversible steps, and the rollback procedure.
+
+## Hard Rules
+
+- Irreversible production data changes require explicit operator approval; do not proceed on assumed consent.
+- Migrations must be idempotent; a re-run must not create duplicate data or raise an error.
+- Do not claim migration is done before a readback confirms the expected schema and data exist.
+- Rollback must be tested, not just described.
+
+## Red Flags
+
+- A migration that cannot be reversed and has no backup or explicit "irreversible, accepted by operator" record.
+- Readback skipped because "the migration ran without errors."
+- Seeds that insert duplicate data when run more than once.
+- A destructive column drop written into a migration while a "consider a backup first" note is deferred to "before going to prod."
+
+End the review with \`MIGRATION_DATA_SAFETY_DONE\` only after irreversible steps are documented and approved or blocked, readback confirms the expected state, and rollback has been tested or a tested rollback procedure is on record.
 `,
     references: []
   },
@@ -579,14 +696,46 @@ triggers:
   - permission
   - deployment
   - external service
+  - environment variable
+  - SSRF
+  - path traversal
 skips:
   - copy-only UI polish
+  - no auth, secrets, dependency, or network surface changed
 completion_signal: SECURITY_DEPENDENCY_REVIEW_DONE
 ---
 
 # Security Dependency Review
 
-Check secret handling, authz/authn, least privilege, SSRF/path traversal risks, exposed ports, dependency footprint, logging, and failure modes. Record residual risk and proof commands.
+Use when auth, secrets, permissions, dependencies, external calls, or deployment exposure change. The goal is to confirm no secret leaks, no privilege escalation, no unbounded external access, and no unintended attack surface before the change ships.
+
+## Workflow
+
+1. Audit secret handling: confirm every credential, token, and API key is read from environment variables or a secrets manager — never hard-coded, committed, logged, or included in error responses.
+2. Review authz and authn for the changed surface: every protected action checks both authentication (who are you) and authorization (are you allowed); trust-the-caller patterns are not accepted.
+3. Check least privilege: the running process, service account, or IAM role has only the permissions required for the task; excess permissions are recorded as a blocker.
+4. Inspect SSRF and path traversal vectors: any user-controlled input used in a file path, URL fetch, or DNS resolution must be validated and bounded to a known-safe allowlist or prefix.
+5. Review exposed ports and endpoints: confirm only the intended ports are open and that debug, admin, or metrics endpoints are not publicly reachable unless explicitly intended and hardened.
+6. Audit dependency footprint for the change: new packages should have a stated reason, be pinned to a version, and have no known critical CVEs (run \`npm audit\`, \`pip audit\`, or equivalent).
+7. Check logging and failure modes: errors must not surface stack traces, SQL queries, or internal config to the caller; failed auth must not reveal whether the user exists.
+8. Record residual risk: list any open permission, unvalidated input, or external dependency that cannot be fully closed now, and record it as a blocker in \`.buildprint/blockers.md\`.
+
+## Hard Rules
+
+- Hard-coded secrets are a blocking failure; no exceptions.
+- Auth checks must be server-enforced on every protected route; middleware-only protection without a per-route test is not sufficient proof.
+- User-controlled input used in file paths, URLs, or system calls must be validated and bounded before use.
+- New dependencies must be pinned and audited; "latest" or an unpinned range is not acceptable for production dependencies.
+
+## Red Flags
+
+- Environment variables logged at startup in plaintext.
+- A \`.env\` or secrets file committed to the repo, even in a test branch.
+- Authorization check described in prose but absent from the test suite.
+- A fetch or file read that constructs its target directly from user input without validation.
+- Admin or debug endpoints accessible without credentials because "they're only for internal use."
+
+End the review with \`SECURITY_DEPENDENCY_REVIEW_DONE\` only after secret handling, authz/authn, least privilege, and input validation are confirmed, dependency audit passes, and any residual risk is recorded as an explicit blocker.
 `,
     references: []
   },
@@ -599,16 +748,44 @@ profile: agentic
 triggers:
   - memory
   - handoff
-  - context
-  - continuation
+  - context assembly
+  - continuation file
+  - agent state
 skips:
-  - no agent/runtime state
+  - no agent or runtime state involved
+  - pure code-only change with no handoff artifacts
 completion_signal: MEMORY_HANDOFF_DISCIPLINE_DONE
 ---
 
 # Memory Handoff Discipline
 
-Verify durable state is explicit, private context is not leaked, continuation files are current, and future agents can distinguish trusted artifacts from stale notes or snapshots.
+Use when agent memory, handoff, or continuation files change. The goal is to ensure durable state is explicit, private context never leaks, and future agents can distinguish trusted artifacts from stale snapshots or notes.
+
+## Workflow
+
+1. Identify every file or store that carries agent state: memory items, session records, checkpoints, handover notes, continuation files, and compaction outputs.
+2. Verify each item is written to a stable, named path a future agent can locate and trust — not a temp file, inline comment, or ad hoc scratchpad.
+3. Check that private context (user input, credentials, internal reasoning) is not written to shared logs, exported artifacts, screenshots, or handover docs.
+4. Confirm continuation files are current: they must reflect the state after the most recent completed phase, not an earlier draft.
+5. For each artifact a future agent will read, confirm it signals whether it is a trusted fact or a provisional note (e.g. "built and verified" vs "assumed" vs "blocked").
+6. Trigger a readback: simulate the next-agent perspective by reading the handover, state, and continuation files cold and checking whether they are self-contained.
+7. Record any stale, ambiguous, or leaking artifact as a blocker before signaling done.
+
+## Hard Rules
+
+- Do not leave memory or handoff state in temp folders, inline assistant comments, or chat history.
+- Do not write user input, credentials, or private session context to exported artifacts or shared handover docs.
+- Continuation files must reflect what was actually built and verified, not what was planned.
+- A future agent reading only the handover must be able to distinguish what is proven, what is blocked, and what is unproven.
+
+## Red Flags
+
+- A handover that lists "done" items without referencing the proof command or artifact that confirmed them.
+- Memory items that copy raw user messages verbatim into shared state.
+- Continuation files that were written at the start of a phase and never updated after implementation.
+- Compaction summaries that omit blocked states or residual risks.
+
+End the review with \`MEMORY_HANDOFF_DISCIPLINE_DONE\` only after a cold readback of handover and state files confirms no leakage, no stale facts, and no ambiguous trust signals.
 `,
     references: []
   },
@@ -622,17 +799,45 @@ triggers:
   - tool
   - MCP
   - permission
+  - policy
   - side effect
-  - shell
-  - browser
+  - shell action
+  - browser action
 skips:
-  - no tool or permission surface
+  - no tool or permission surface touched
 completion_signal: TOOL_PERMISSION_REVIEW_DONE
 ---
 
 # Tool Permission Review
 
-Check risk labels, allow/deny policy, approval boundaries, timeouts, audit events, bounded filesystem roots, external side effects, and blocked-state UX.
+Use when tools, MCP connectors, shell/browser actions, or side-effect policies change. The goal is to prove every side effect is explicitly gated, audited, bounded, and recoverable before claiming the surface is safe.
+
+## Workflow
+
+1. Inventory every action surface the change touches: tools, MCP connectors, shell commands, browser automation, file operations, and external network calls.
+2. For each action, confirm an explicit risk label and an allow/deny policy decision; nothing executes by default-allow.
+3. Verify approval boundaries for dangerous or irreversible actions and confirm the unapproved path stays blocked rather than silently permitted.
+4. Check bounded execution: timeouts, filesystem roots, network scope, and resource limits are enforced at the policy layer, not assumed from caller behavior.
+5. Confirm every allow/deny/block decision emits an audit or trace event a later agent or operator can read back.
+6. Inspect the blocked-state UX: the user or operator is told what was blocked, why, and the exact config change needed to unblock.
+7. Prove it: trigger one explicitly allowed action and one explicitly blocked action, then read back the audit record for both.
+
+## Hard Rules
+
+- No action executes without an explicit policy decision; default-allow is a failure.
+- Dangerous or irreversible actions stay blocked until explicit operator approval, not just caller intent.
+- Never expose secrets, tokens, or raw internal policy detail in user-facing blocked-state copy.
+- A blocked state must name the missing allowlist entry, credential, or approval — generic errors fail this review.
+
+## Red Flags
+
+- Audit events that record successful actions but not denials or blocks.
+- Filesystem or network scope described as "trusted" rather than bounded to a named root or allowlist.
+- Blocked states that render generic "permission denied" errors instead of setup instructions.
+- Tests that cover only the allowed path and skip block/deny behavior.
+- Policy gates that are bypassed when a caller passes a flag or environment variable.
+
+End the review with \`TOOL_PERMISSION_REVIEW_DONE\` only after one allowed and one blocked action are proven and read back from the audit record.
 `,
     references: []
   },
@@ -647,14 +852,42 @@ triggers:
   - multi-agent
   - parallel changes
   - integration review
+  - controller integration
 skips:
   - single-agent single-file change
+  - sequential single-owner edits
 completion_signal: SUBAGENT_MERGE_SAFETY_DONE
 ---
 
 # Subagent Merge Safety
 
-Verify file ownership, dependency ordering, conflicting edits, unreviewed generated code, missing tests, and final controller integration before claiming multi-agent work is done.
+Use when multiple agents or subagents produce changes that must be integrated. The goal is to detect ownership conflicts, missing tests, and unreviewed generated code before the controller claims the phase is done.
+
+## Workflow
+
+1. List every file changed by each subagent and check for ownership overlap — two agents editing the same file or boundary is an immediate conflict requiring resolution before merge.
+2. Verify dependency ordering: changes that one subagent depends on from another must have landed and been verified before the dependent work is merged.
+3. Read each subagent's implementation changes as if you did not write them; check for scope creep, invented architecture, or rewritten files outside the assigned task boundary.
+4. Confirm each subagent's changes have at minimum a passing unit/type/lint result; accept no "tests will follow" deferrals at merge time.
+5. Run the full integration proof command across all merged changes, not just per-subagent commands.
+6. Reconcile handoff notes: each subagent must have produced a status (DONE/DONE_WITH_CONCERNS/BLOCKED/NEEDS_CONTEXT) and the controller must have acknowledged any open concern before signing off.
+7. Record what was merged, what conflicts were resolved, and what outstanding concerns remain as blockers.
+
+## Hard Rules
+
+- Do not merge changes with unresolved file ownership conflicts.
+- Do not accept a subagent's "close enough" scope change; route it back or record it as a blocker.
+- Do not mark integration done before the combined proof command passes, not just the per-subagent one.
+- Do not hide subagent DONE_WITH_CONCERNS findings in the handover; surface them explicitly.
+
+## Red Flags
+
+- Subagents that edited files outside their stated ownership boundary without controller approval.
+- Integration that was never run as a combined step — only individual subagent tests passed.
+- Handover that promotes one subagent's DONE status to overall DONE without acknowledging the others.
+- Generated code from a subagent that was never read by the controller.
+
+End the review with \`SUBAGENT_MERGE_SAFETY_DONE\` only after all ownership conflicts are resolved, combined proof passes, and all DONE_WITH_CONCERNS findings are either fixed or recorded as explicit residual blockers.
 `,
     references: []
   },
@@ -669,14 +902,42 @@ triggers:
   - Playwright
   - browser workflow
   - functional QA
+  - end-to-end test
 skips:
   - no browser UI
+  - CLI-only or API-only artifact
 completion_signal: FRONTEND_FUNCTIONAL_QA_DONE
 ---
 
 # Frontend Functional QA
 
-Exercise the golden path and key blocked/error states through the browser. Prefer real user actions over DOM-only assertions. Report what workflow was proven and what still needs manual or live-provider qualification.
+Use for Playwright or browser-level functional checks of critical UI workflows. The goal is to prove the golden path and key blocked/error states through real browser interactions — not DOM-only assertions — before claiming the UI is functionally complete.
+
+## Workflow
+
+1. Identify the golden path: the single most important end-to-end flow a user completes in the product (e.g. submit → receive response → inspect result). This is the first thing to exercise.
+2. Write or run a Playwright test that follows the golden path with real user actions: click, type, submit, navigate — not direct DOM manipulation or mocked fetch responses.
+3. Exercise at least one blocked or error state through the browser: trigger a missing-credential block, a failed provider, an invalid input, or a policy denial, and confirm the UI renders an actionable message rather than a crash or blank screen.
+4. Exercise at least one empty state: load the product with no prior data and confirm the empty state renders correctly and does not crash.
+5. Confirm navigation and routing are functional: all visible navigation controls reach their target without 404s or blank routes.
+6. Capture a screenshot or page snapshot after the golden path completes and confirm the central product output is visible, not replaced by a loader, blank area, or error message.
+7. Record what workflow was proven, what states were exercised, what viewport was used, and what still requires manual or live-provider qualification.
+
+## Hard Rules
+
+- Prefer real user interactions (click, type, submit) over direct DOM manipulation or programmatic state injection.
+- Do not count a Playwright test that bypasses the UI (direct fetch/API call) as browser functional QA.
+- Do not skip blocked and error states — these are where the product is most likely to silently fail.
+- A passing test that was never actually run is not proof.
+
+## Red Flags
+
+- Tests that mock all API responses and never hit a real server or deterministic runtime.
+- A golden path test that ends before the central output is confirmed visible.
+- Tests that only assert element existence, not that the content is meaningful and not an error.
+- Functional QA skipped for "frontend-only" changes that still depend on API calls or runtime state.
+
+End the review with \`FRONTEND_FUNCTIONAL_QA_DONE\` only after the golden path, at least one blocked/error state, and at least one empty state are exercised through real browser interactions, and the results record what remains unproven.
 `,
     references: []
   }

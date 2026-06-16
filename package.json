@@ -1,6 +1,6 @@
 {
   "name": "agent-buildprint",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "type": "module",
   "bin": {
     "agb": "./bin/agb.js"

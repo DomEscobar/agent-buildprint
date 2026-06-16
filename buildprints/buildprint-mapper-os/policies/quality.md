@@ -38,6 +38,10 @@ Selected packets must explicitly reject:
 
 For UI-bearing artifacts, `02-ui-identity.md` must open with UX importance and understandability, include a small checklist, and then define a strong identity schema: product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, design thesis, style direction, color tokens, typography, layout/spatial rhythm, component language, motion, empty/loading/error/blocked states, anti-generic rules, and phase obligation. If the UI identity could fit ten unrelated products unchanged, it is too generic. First-run comprehension is necessary but not sufficient; for creative, generative, editor, or operator tools, the emotional/operational affordance and primary manipulation are required quality gates.
 
+The silhouette rejection section must name the adjacent at-risk silhouette the chosen layout is structurally closest to, and state the concrete structural and visual treatment that distinguishes it. Token, palette, copy, spacing, label, or icon changes alone do not count as a distinguishing treatment.
+
+The proof obligations section must include an anti-silhouette distinctiveness screenshot check that compares the shipped first-screen screenshot against both the forbidden silhouette and the named adjacent silhouette and fails if they are indistinguishable once copy is ignored. Mechanical checks (overlap, clipping, viewport, focus) do not satisfy this obligation on their own.
+
 If the source lacks style direction, the mapper should force a decision protocol, not a longer moodboard. The builder must infer a precise design system from product purpose, audience, workflow density, risk, and artifact type, then record the chosen and rejected directions before building UI.
 
 ## Phase quality bar
@@ -53,6 +57,10 @@ Every selected packet must define the central output contract for the mapped art
 Selected packets must identify source-derived hard technical domains that are unrealistic or fragile to hand-roll casually. Examples: fixed-format export, rich text or inline editing, document extraction, drag/reorder/canvas interaction, charts/diagrams/visual primitives, provider SDKs or OAuth/webhooks/external APIs, background jobs/export tasks/queues, persistence migrations, and file/object storage.
 
 Buildprint Mapper should keep the packet stack-neutral while still requiring proven libraries, SDKs, runtimes, platform services, or explicit equivalent proof. Missing package/runtime proof becomes a blocker or claim ceiling. It is not permission to replace the product with a shallow implementation.
+
+## Architecture quality bar
+
+Setup must produce a best-effort architecture, not a thin stack list. `docs/architecture.md` must name the scalability seams (data growth, concurrency, load, feature growth) and where the design absorbs that growth without a rewrite; the maintainability boundaries (module ownership, separation of concerns, testability) that keep later phases from forcing a rewrite; and the enforced coding standards (SOLID, KISS, DRY, typed boundaries, explicit error handling) with the lint, format, and type-check gates that enforce them. A thin or default architecture that omits scalability, maintainability, or coding standards is a setup failure, not a minimal-scope win.
 
 ## Typed proof bar
 
@@ -70,4 +78,4 @@ When a generated artifact is a redesign or rerun, critical review should include
 
 ## Review stance
 
-The checker is a smoke alarm for structure and stale artifacts. Product quality is enforced by the Buildprint prose, phase objectives, direct runtime/browser/API checks, design review against the UI identity, and honest handoff.
+The checker is a smoke alarm for structure and stale artifacts. Product quality is enforced by hostile critical review with an independent fresh-context reviewer, evidence-bound rubric scores, objective auto-fail triggers, phase objectives, direct runtime/browser/API checks, design review against the UI identity, and honest handoff. The builder must not score its own work; self-graded reviews are invalid regardless of numeric score.

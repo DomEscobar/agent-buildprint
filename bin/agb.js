@@ -511,7 +511,9 @@ function packetCheckResults(dir) {
   const requiresTypedQualityRouting = isMapperTemplatePacket
   const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint)
   const requiresCriticalReviewPushback = isMapperTemplatePacket ||
-    isPresentationPacket
+    isPresentationPacket ||
+    /99-critical-review-pushback/i.test(phaseIndex) ||
+    /99-critical-review-pushback/i.test(blueprint)
 
   const obsoleteFiles = allFiles.filter((file) =>
     file === '02-architecture.md' ||
@@ -644,6 +646,15 @@ function packetCheckResults(dir) {
     /libraries|runtimes|SDKs|platform services/i.test(setup) &&
     /hand-roll|from-scratch/i.test(setup)
   )
+  ok('project setup requires engineering quality bar',
+    /scalab/i.test(setup) &&
+    /maintainab/i.test(setup) &&
+    /\bSOLID\b/i.test(setup) &&
+    /\bKISS\b/i.test(setup) &&
+    /coding standards|best practices/i.test(setup) &&
+    /module boundaries|separation of concerns/i.test(setup) &&
+    /lint|format|type-check/i.test(setup)
+  )
   if (!usesSetupFirstIdentitySecond) {
     ok('project setup requires UI identity screen-state contract',
       /docs\/ui-identity\.md/i.test(setup) &&
@@ -703,6 +714,18 @@ function packetCheckResults(dir) {
   ok('ui identity requires exact generated visual tokens', /exact semantic color/i.test(uiux) && /typography/i.test(uiux) && /state colors|focus/i.test(uiux))
   ok('ui identity defines components, motion/states, stress fixtures, and proof', /Component language/i.test(uiux) && /empty\/loading\/error\/blocked|Empty, loading, error, and blocked/i.test(uiux) && /Content stress fixtures/i.test(uiux) && /Proof obligations/i.test(uiux))
   ok('ui identity rejects generic dead UI and proof jargon', /functionless buttons|dead controls/i.test(uiux) && /raw JSON/i.test(uiux) && /proof.*labels|proof terms|evaluator language/i.test(uiux))
+  ok('ui identity requires nearest-silhouette distinguishing treatment',
+    !usesSetupFirstIdentitySecond ||
+    (/adjacent at-risk silhouette|adjacent silhouette/i.test(uiux) &&
+     /distinguish/i.test(uiux) &&
+     /do not count as a distinguishing treatment/i.test(uiux))
+  )
+  ok('ui identity requires anti-silhouette distinctiveness proof',
+    !usesSetupFirstIdentitySecond ||
+    (/anti-silhouette distinctiveness screenshot check/i.test(uiux) &&
+     /indistinguishable/i.test(uiux) &&
+     /Mechanical checks alone|mechanical checks/i.test(uiux))
+  )
 
   ok('phase flow defines active phase loop',
     /active phase only/i.test(phaseFlow) &&
@@ -762,6 +785,27 @@ function packetCheckResults(dir) {
       /rerun the relevant proof/i.test(criticalReviewText) &&
       /rescore/i.test(criticalReviewText) &&
       /five iterations/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback requires external reviewer independence',
+      /External reviewer independence protocol/i.test(criticalReviewText) &&
+      /fresh-context reviewer/i.test(criticalReviewText) &&
+      /## Reviewer independence/i.test(criticalReviewText) &&
+      /REVIEW_INVALID/i.test(criticalReviewText) &&
+      /must not score its own work/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback requires worst-flaws-first and evidence-bound scores',
+      /five worst flaws/i.test(criticalReviewText) &&
+      /Do not score until this section exists/i.test(criticalReviewText) &&
+      /prose-only justification/i.test(criticalReviewText) &&
+      /cite a concrete artifact/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback defines objective auto-fail triggers',
+      /Objective auto-fail triggers/i.test(criticalReviewText) &&
+      /Echo or canned core output/i.test(criticalReviewText) &&
+      /Forbidden silhouette match/i.test(criticalReviewText) &&
+      /Dead or decorative controls/i.test(criticalReviewText) &&
+      /Thin or default architecture/i.test(criticalReviewText) &&
+      /Self-review without independence/i.test(criticalReviewText)
     )
   }
 
