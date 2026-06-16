@@ -94,10 +94,10 @@ Optional directories exist only when they carry real value. Do not add decorativ
 : Explains host detection, framework support, required vs optional host features, composition, conflicts, and when to block.
 
 `00-host-assessment.md`
-: Forces no-edit inspection of the host repo. The applying agent writes `.buildprint/host-assessment.md`.
+: Forces no-edit inspection of the host repo. The applying agent writes `.buildprint/host-assessment.md`, classifies important findings, and stops on implementation-changing questions.
 
 `01-integration-plan.md`
-: Forces a host-specific plan before edits. The applying agent writes `.buildprint/capability-plan.md`.
+: Forces a host-specific plan before edits. The applying agent writes `.buildprint/capability-plan.md` and reconciles assessment blockers, assumptions, and baseline health.
 
 `apply.md`
 : Routes the phased workflow. It is not a vague "do this" file.
@@ -154,6 +154,17 @@ flowchart TD
 ```
 
 This flow exists to prevent false-positive plans. A nice plan is not enough. The agent must create durable checkpoints and then prove the capability.
+
+## Discovery Decision Gate
+
+Every Capability Buildprint must force host findings into one of four buckets:
+
+- `infer safely`
+- `patch locally`
+- `must ask user`
+- `out of scope`
+
+The applying agent must stop before source edits when a `must ask user` finding changes product behavior, auth or tenant boundaries, data ownership, security posture, migration strategy, provider side effects, external billing, or destructive operations. Verification must reconcile against the assessment and plan; broken baseline checks, failed schema validation, unresolved hard stops, or unplanned blockers downgrade the claim to partial or blocked.
 
 ## Local Checkpoints
 
@@ -402,4 +413,3 @@ flowchart LR
 ```
 
 Product Buildprints build systems. Capability Buildprints add powers to systems. Together they form an agent-readable software construction layer.
-

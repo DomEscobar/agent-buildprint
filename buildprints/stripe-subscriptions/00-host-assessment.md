@@ -18,6 +18,9 @@ Record:
 - test/lint/typecheck commands
 - existing billing, entitlement, or access-control code
 - surfaces likely to receive billing UI or blocked states
+- baseline health from available install/lint/test/typecheck/build/schema commands, or why they could not run
+- finding classifications: `infer safely`, `patch locally`, `must ask user`, or `out of scope`
+- unresolved implementation-changing questions
 - hard-stop blockers
 
 ## Required output
@@ -49,18 +52,26 @@ Use this shape:
 
 ## Commands Available
 
+## Baseline Health
+
+## Finding Classifications
+
 ## Blockers
 
 ## Assumptions
+
+## Decision
 ```
 
 ## Proof before moving on
 
-The assessment must identify a user identity path and a persistence path. If either is missing, block before planning.
+The assessment must identify a user identity path, a persistence path, and a trustworthy baseline proof path. If any are missing, block before planning.
+
+Use `block` when any unresolved finding would change user identity, entitlement model, billing provider migration, subscription state ownership, persistence/migration strategy, Stripe product/price mapping, webhook delivery, or access-control behavior.
 
 ## DO NOT
 
 - Do not edit source files in this phase.
 - Do not infer a database migration path without evidence.
 - Do not assume checkout redirect equals paid entitlement.
-
+- Do not convert hard-stop questions into assumptions.

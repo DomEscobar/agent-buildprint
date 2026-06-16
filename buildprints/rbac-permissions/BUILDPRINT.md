@@ -39,6 +39,17 @@ The applying agent must create these files in the host repo:
 
 No source edits before host assessment and capability plan exist.
 
+## Discovery decision gate
+
+Host assessment must classify important findings as:
+
+- `infer safely`
+- `patch locally`
+- `must ask user`
+- `out of scope`
+
+Stop before implementation when a `must ask user` finding changes user identity, role source, default role, admin bootstrap, tenant/team boundaries, protected surface selection, migration strategy, or existing authorization migration. Do not continue by turning those decisions into assumptions. Verification must reconcile against the assessment and plan; if a baseline command, schema validation, runtime route, or denied-path check fails, downgrade the claim instead of reporting installed success.
+
 ## Hard-stop conditions
 
 Stop and ask instead of guessing when:
@@ -48,6 +59,7 @@ Stop and ask instead of guessing when:
 - the default role for new users is unclear
 - the admin bootstrap path is unclear
 - persistence is required but the host has no approved persistence path
+- the baseline repo cannot validate/build/test in a way that makes RBAC proof trustworthy
 
 ## Success standard
 
@@ -58,4 +70,3 @@ Do not claim RBAC is installed unless verification proves:
 - unknown/missing role state is denied or blocked clearly
 - protected surfaces use the central permission helper
 - the role/permission policy is visible and maintainable
-

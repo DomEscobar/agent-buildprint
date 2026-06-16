@@ -57,6 +57,8 @@ The applying agent must write:
 
 The receipt is required even when the capability is blocked. A blocked receipt is better than false-positive success.
 
+The receipt must reconcile against `.buildprint/host-assessment.md` and `.buildprint/capability-plan.md`. Any broken baseline, failed validation, failed migration, unavailable command, unresolved hard-stop question, or unplanned blocker discovered during verification must downgrade the installed claim to blocked or partial.
+
 ## High-risk capability checks
 
 Billing, auth, RBAC, migrations, external APIs, background jobs, destructive operations, and public deployment need stronger proof:

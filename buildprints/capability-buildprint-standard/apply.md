@@ -44,6 +44,8 @@ Before applying a capability, inspect:
 - test runner and verification commands
 - deployment constraints when external services are involved
 
+The inspection must end in a decision contract. Classify important findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`. Stop before source edits when a `must ask user` finding changes product behavior, auth/tenant boundaries, data ownership, security posture, migrations, provider side effects, billing, or destructive operations.
+
 ## Apply sequence model
 
 Each Capability Buildprint should define:
@@ -76,6 +78,8 @@ After implementation:
 ```
 
 The agent must not make source edits before the host assessment and capability plan exist. The plan must map the generic capability to this host repo's framework, auth, data, env, route, UI/operator, and verification reality.
+
+If the host assessment says `block`, implementation must not start. If it says `proceed with assumptions`, the plan and receipt must carry those assumptions as claim ceilings until proof resolves them.
 
 ## Phase order
 

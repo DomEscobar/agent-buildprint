@@ -42,6 +42,12 @@ flowchart TD
   J --> K[Write .buildprint/capability-receipt.md]
 ```
 
+## Discovery decision gate
+
+Before edits, the applying agent must classify important host findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`. Questions that change user identity, entitlement model, billing provider migration, subscription state ownership, persistence/migration strategy, Stripe product/price mapping, webhook delivery, or access-control behavior are hard stops, not assumptions.
+
+The final receipt must reconcile every blocker, assumption, baseline failure, and hard-stop question with the claimed proof level.
+
 ## Proof levels
 
 ```mermaid
@@ -60,4 +66,4 @@ Use the highest honest level. Do not claim sandbox or live proof without real St
 - No unsigned webhook trust.
 - No paid entitlement from checkout redirect alone.
 - No install success claim without persisted entitlement readback or explicit blocker.
-
+- No sandbox/live proof claim when baseline schema/build/test validation remains broken without an explicit blocked or partial receipt.

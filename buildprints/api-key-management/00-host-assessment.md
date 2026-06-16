@@ -18,6 +18,9 @@ Record:
 - existing audit/event logging code
 - API route/action/controller to protect first
 - test/lint/typecheck/build commands
+- baseline health from available install/lint/test/typecheck/build/schema commands, or why they could not run
+- finding classifications: `infer safely`, `patch locally`, `must ask user`, or `out of scope`
+- unresolved implementation-changing questions
 - hard-stop blockers
 
 ## Required output
@@ -55,14 +58,22 @@ Use this shape:
 
 ## Commands Available
 
+## Baseline Health
+
+## Finding Classifications
+
 ## Blockers
 
 ## Assumptions
+
+## Decision
 ```
 
 ## Proof before moving on
 
-The assessment must identify a user/owner model, persistence path, and candidate server-side API surface. If any are missing, block before planning.
+The assessment must identify a user/owner model, persistence path, candidate server-side API surface, and trustworthy baseline proof path. If any are missing, block before planning.
+
+Use `block` when any unresolved finding would change owner identity, tenant/team boundaries, API surface selection, scope/RBAC behavior, existing token migration, persistence/migration strategy, hash/secret handling, audit behavior, or destructive operations.
 
 ## DO NOT
 
@@ -70,3 +81,4 @@ The assessment must identify a user/owner model, persistence path, and candidate
 - Do not invent an owner or tenant model.
 - Do not infer a database migration path without evidence.
 - Do not assume existing session tokens are safe API keys.
+- Do not convert hard-stop questions into assumptions.

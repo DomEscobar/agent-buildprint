@@ -17,6 +17,9 @@ Record:
 - current protected route/action pattern
 - candidate protected surface for proof
 - available test/lint/typecheck/build commands
+- baseline health from available install/lint/test/typecheck/build/schema commands, or why they could not run
+- finding classifications: `infer safely`, `patch locally`, `must ask user`, or `out of scope`
+- unresolved implementation-changing questions
 - hard-stop blockers
 
 ## Required output
@@ -48,18 +51,26 @@ Use this shape:
 
 ## Commands Available
 
+## Baseline Health
+
+## Finding Classifications
+
 ## Blockers
 
 ## Assumptions
+
+## Decision
 ```
 
 ## Proof before moving on
 
-The assessment must identify a stable user identity path and at least one protected surface for allow/deny proof.
+The assessment must identify a stable user identity path, at least one protected surface for allow/deny proof, and a trustworthy baseline proof path.
+
+Use `block` when any unresolved finding would change user identity, role source, default role, admin bootstrap, tenant/team boundaries, protected surface selection, migration strategy, or existing authorization migration.
 
 ## DO NOT
 
 - Do not edit source files in this phase.
 - Do not assume every app needs a database role table.
 - Do not treat UI hiding as authorization.
-
+- Do not convert hard-stop questions into assumptions.

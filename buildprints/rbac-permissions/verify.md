@@ -15,6 +15,8 @@ Run available host checks:
 
 If a command does not exist, record that in `.buildprint/capability-receipt.md`.
 
+If a baseline command or schema validation failed before implementation, the receipt must say whether the failure was fixed, unrelated but still a claim ceiling, or blocking. Do not treat later tests as proof if the selected auth/route/runtime layer remains invalid.
+
 ## Required structural checks
 
 Confirm:
@@ -59,5 +61,5 @@ The capability can be called installed only if:
 - structural checks pass
 - fixture/runtime checks pass at the claimed proof level
 - denied path is proven
+- `.buildprint/capability-receipt.md` reconciles every host-assessment blocker, assumption, baseline failure, and hard-stop question with the final proof level
 - `.buildprint/capability-receipt.md` exists
-

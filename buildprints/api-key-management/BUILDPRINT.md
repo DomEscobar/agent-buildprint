@@ -35,6 +35,17 @@ The applying agent must create these files in the host repo:
 
 No source edits before host assessment and capability plan exist.
 
+## Discovery decision gate
+
+Host assessment must classify important findings as:
+
+- `infer safely`
+- `patch locally`
+- `must ask user`
+- `out of scope`
+
+Stop before implementation when a `must ask user` finding changes owner identity, tenant/team boundaries, API surface selection, scope/RBAC behavior, existing token migration, persistence/migration strategy, hash/secret handling, audit behavior, or destructive operations. Do not continue by turning those decisions into assumptions. Verification must reconcile against the assessment and plan; if a baseline command, Prisma/schema validation, migration, runtime route, or negative security check fails, downgrade the claim instead of reporting installed success.
+
 ## Hard-stop conditions
 
 Stop and ask instead of guessing when:
@@ -46,6 +57,7 @@ Stop and ask instead of guessing when:
 - an existing API key or token system is present and no migration decision exists
 - the host cannot store secrets or hashes server-side
 - the requested scope model would silently bypass existing RBAC or tenant boundaries
+- the baseline repo cannot validate/build/test in a way that makes the capability proof trustworthy
 
 ## Success standard
 

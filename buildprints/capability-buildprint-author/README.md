@@ -24,8 +24,11 @@ A completed Capability Buildprint folder with:
 - integration plan protocol
 - phased implementation workflow
 - verification and receipt rules
+- discovery decision gate that classifies findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`
 - brutal 10/10 quality gate with downgrade rules
 - README and publication metadata
+
+Generated capability packets must stop before source edits when unresolved findings change product behavior, auth/tenant boundaries, data ownership, security posture, migration strategy, provider side effects, external billing, or destructive operations. The receipt must reconcile those findings with the final proof level instead of claiming success by momentum.
 
 ## Best first targets
 

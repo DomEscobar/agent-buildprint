@@ -78,12 +78,24 @@ The profile changes proof depth, not the core workflow. Even light capabilities 
 
 - Do not ship a capability packet without concrete apply and verify instructions.
 - Do not implement before host assessment and integration plan are written.
+- Do not continue past host assessment when the implementation path depends on an unresolved product, auth, data, security, migration, or provider decision.
 - Do not hide secrets, webhooks, migrations, auth, billing, provider, or destructive side effects behind vague prose.
 - Do not claim support for a framework unless the required host signals and file patterns are named.
 - Do not count mocks, screenshots, or sample data as live capability proof.
 - Do not make a capability depend on a whole-product rebuild unless that is the explicit contract.
 - Do not silently overwrite host architecture. The packet must tell the agent how to adapt to the host project.
 - Do not produce generic integration docs. A Capability Buildprint is an executable implementation contract.
+
+## Discovery decision gate
+
+Host assessment is a decision gate, not a checklist. The applying agent must classify each important finding as:
+
+- `infer safely`
+- `patch locally`
+- `must ask user`
+- `out of scope`
+
+If any `must ask user` item changes product behavior, auth/tenant boundaries, data ownership, billing/security posture, migration strategy, provider side effects, or destructive operations, the agent must stop before implementation. Later proof must reconcile against the assessment and plan. If proof exposes a broken baseline or unplanned blocker, the receipt must downgrade the claim instead of reporting success.
 
 ## Output standard
 

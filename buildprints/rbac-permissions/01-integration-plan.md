@@ -20,6 +20,7 @@ The plan must include:
 - verification commands and fixtures
 - rollback notes
 - hard-stop questions
+- reconciliation with `.buildprint/host-assessment.md`: every `must ask user`, blocker, baseline failure, and assumption is resolved, accepted as a claim ceiling, or left blocking
 
 ## Required output
 
@@ -54,6 +55,8 @@ Use this shape:
 
 ## Verification Plan
 
+## Assessment Reconciliation
+
 ## Rollback Notes
 
 ## Hard-Stop Questions
@@ -66,6 +69,6 @@ The plan must map every protected permission to a role decision and concrete hos
 ## DO NOT
 
 - Do not start implementation until the plan exists.
+- Do not start implementation if `.buildprint/host-assessment.md` decision is `block`.
 - Do not silently pick `admin` as a default role.
 - Do not protect only the UI while leaving server routes open.
-

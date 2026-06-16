@@ -23,6 +23,7 @@ The plan must include:
 - verification commands and runtime checks
 - blockers and hard-stop questions
 - rollback notes
+- reconciliation with `.buildprint/host-assessment.md`: every `must ask user`, blocker, baseline failure, and assumption is resolved, accepted as a claim ceiling, or left blocking
 
 ## Required output
 
@@ -57,6 +58,8 @@ Use this shape:
 
 ## Verification Plan
 
+## Assessment Reconciliation
+
 ## Rollback Notes
 
 ## Hard-Stop Questions
@@ -69,5 +72,6 @@ The plan must map every required capability surface to concrete host files or ex
 ## DO NOT
 
 - Do not start implementation until the plan exists.
+- Do not start implementation if `.buildprint/host-assessment.md` decision is `block`.
 - Do not choose owner, scope, or tenant behavior silently when multiple plausible models exist.
 - Do not add an API key table disconnected from a real auth/API surface.

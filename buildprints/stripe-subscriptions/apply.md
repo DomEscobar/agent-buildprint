@@ -27,6 +27,8 @@ The applying agent must create:
 
 Keep the capability bounded. Do not redesign auth, rebuild the dashboard, replace the database layer, or migrate an existing billing provider unless the user explicitly approved that extra scope.
 
+Host assessment is a hard gate. Classify important findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`. If any `must ask user` finding changes user identity, entitlement model, billing provider migration, subscription state ownership, persistence/migration strategy, Stripe product/price mapping, webhook delivery, or access-control behavior, stop and ask before source edits.
+
 ## Blocked-state rule
 
 If Stripe secrets, product IDs, webhook secrets, or sandbox access are unavailable, still implement safe configuration checks and record blocked runtime proof. Do not fake live billing verification.
@@ -34,7 +36,7 @@ If Stripe secrets, product IDs, webhook secrets, or sandbox access are unavailab
 ## DO NOT
 
 - Do not skip local assessment and plan files.
+- Do not implement when the host assessment decision is `block`.
 - Do not implement webhook handling without signature verification.
 - Do not persist paid access from checkout redirect alone.
 - Do not claim sandbox or live proof without running the relevant checks.
-

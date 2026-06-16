@@ -44,6 +44,12 @@ flowchart TD
   J --> K[Write .buildprint/capability-receipt.md]
 ```
 
+## Discovery decision gate
+
+Before edits, the applying agent must classify important host findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`. Questions that change owner identity, tenant boundaries, API surface selection, scope/RBAC behavior, existing token migration, persistence/migration strategy, hash/secret handling, or audit behavior are hard stops, not assumptions.
+
+The final receipt must reconcile every blocker, assumption, baseline failure, and hard-stop question with the claimed proof level.
+
 ## Proof levels
 
 ```mermaid
@@ -101,3 +107,4 @@ blocked by old Next 12 SWC/OpenSSL/ARM host mismatch
 - No client-side-only API key validation.
 - No access without owner/tenant boundary checks.
 - No install success claim without valid, revoked, wrong-scope, and valid-prefix/wrong-secret proof.
+- No proof claim when baseline schema/build/test validation remains broken without an explicit blocked or partial receipt.

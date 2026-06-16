@@ -31,6 +31,7 @@ It must include:
 - blocked claims and external requirements
 - rollback or recovery notes for guarded/strict profiles
 - hard-stop questions only when an implementation-changing decision cannot be inferred
+- reconciliation with `.buildprint/host-assessment.md`: every `must ask user`, blocker, baseline failure, and assumption is resolved, accepted as a claim ceiling, or left blocking
 
 ## Proceed rule
 
@@ -45,4 +46,4 @@ capability contract -> host architecture -> phase sequence -> verification route
 - Do not write a generic plan that could fit any repo.
 - Do not skip conflicts discovered in host assessment.
 - Do not proceed on secrets, billing, auth, migrations, or destructive side effects without explicit blocked states or safe sandbox assumptions.
-
+- Do not proceed when the assessment decision is `block`.

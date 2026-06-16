@@ -331,6 +331,23 @@ function isCredentialCapability(capability, buildprint, publication) {
   return /api[-_\s]?key management|token management|secret management|credential management/i.test(`${buildprint}\n${publication}`)
 }
 
+function hasDiscoveryDecisionGate(text) {
+  return /infer safely/i.test(text) &&
+    /patch locally/i.test(text) &&
+    /must ask user/i.test(text) &&
+    /out of scope/i.test(text) &&
+    /decision/i.test(text) &&
+    /block/i.test(text)
+}
+
+function hasAssessmentReconciliation(text) {
+  return /reconcile|reconciliation/i.test(text) &&
+    /host-assessment\.md/i.test(text) &&
+    /capability-plan\.md/i.test(text) &&
+    /baseline|assumption|hard-stop|blocker/i.test(text) &&
+    /downgrade|claim ceiling|partial|blocked/i.test(text)
+}
+
 function phaseFilesFromIndex(text) {
   return [...text.matchAll(/^\s*file:\s*(03-phases\/[^\s#]+\.md)\s*$/gmi)].map((m) => m[1].trim())
 }
@@ -440,6 +457,8 @@ function capabilityPacketCheckResults(dir) {
   ok('BUILDPRINT identifies bounded capability, not whole product', /bounded capability|not a whole-product/i.test(buildprint) && !/Product Buildprint builds a whole/i.test(buildprint))
   ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
   ok('BUILDPRINT forbids implementation before assessment and plan', /No source edits before host assessment and capability plan/i.test(buildprint) || /must not make source edits before.*host assessment.*capability plan/i.test(buildprint))
+  ok('capability packet requires discovery decision gate', hasDiscoveryDecisionGate(`${buildprint}\n${safeReadText(path.join(dir, '00-host-assessment.md'))}\n${apply}`))
+  ok('capability packet requires proof reconciliation and claim downgrade', hasAssessmentReconciliation(`${verify}\n${safeReadText(path.join(dir, '01-integration-plan.md'))}\n${buildprint}`))
 
   ok('compatibility names host signals and block conditions', /host app|host project/i.test(compatibility) && /block|blocked|must not proceed/i.test(compatibility))
   ok('apply requires assessment, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))

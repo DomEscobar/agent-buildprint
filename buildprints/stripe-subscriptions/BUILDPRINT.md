@@ -35,6 +35,17 @@ The applying agent must create these files in the host repo:
 
 No source edits before host assessment and capability plan exist.
 
+## Discovery decision gate
+
+Host assessment must classify important findings as:
+
+- `infer safely`
+- `patch locally`
+- `must ask user`
+- `out of scope`
+
+Stop before implementation when a `must ask user` finding changes user identity, entitlement model, billing provider migration, subscription state ownership, persistence/migration strategy, Stripe product/price mapping, webhook delivery, or access-control behavior. Do not continue by turning those decisions into assumptions. Verification must reconcile against the assessment and plan; if a baseline command, schema validation, migration, webhook proof, or entitlement readback fails, downgrade the claim instead of reporting installed success.
+
 ## Hard-stop conditions
 
 Stop and ask instead of guessing when:
@@ -44,6 +55,7 @@ Stop and ask instead of guessing when:
 - an existing billing provider is present and no migration decision exists
 - the entitlement model is ambiguous
 - production Stripe keys or webhook secrets are required but unavailable
+- the baseline repo cannot validate/build/test in a way that makes billing proof trustworthy
 
 ## Success standard
 
@@ -54,4 +66,3 @@ Do not claim subscription billing is installed unless verification proves:
 - subscription state is persisted
 - entitlement checks read persisted state
 - missing configuration produces an actionable blocked/setup state
-

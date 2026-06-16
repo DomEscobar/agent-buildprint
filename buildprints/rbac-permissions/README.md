@@ -43,6 +43,12 @@ flowchart TD
   J --> K[Write .buildprint/capability-receipt.md]
 ```
 
+## Discovery decision gate
+
+Before edits, the applying agent must classify important host findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`. Questions that change user identity, role source, default role, admin bootstrap, tenant/team boundaries, protected surface selection, migration strategy, or existing authorization migration are hard stops, not assumptions.
+
+The final receipt must reconcile every blocker, assumption, baseline failure, and hard-stop question with the claimed proof level.
+
 ## Proof levels
 
 ```mermaid
@@ -61,4 +67,4 @@ Unlike provider integrations, RBAC can usually reach `fixture` or `runtime` proo
 - No client-only protection.
 - No scattered permission literals.
 - No success claim without denied-path proof.
-
+- No proof claim when baseline build/test validation remains broken without an explicit blocked or partial receipt.
