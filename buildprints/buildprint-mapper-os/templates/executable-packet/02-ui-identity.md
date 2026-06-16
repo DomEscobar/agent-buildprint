@@ -16,7 +16,7 @@ Before identity generation, load the local frontend skill created by setup:
 
 - Prefer the active provider-specific copy only when an explicit provider created one. For the default provider, load `.agents/skills/frontend-ui-product-design/SKILL.md`.
 - Also accept the portable `.agents/skills/frontend-ui-product-design/SKILL.md`.
-- Read the skill's `SKILL.md`, then load only the references needed for this artifact. At minimum for UI-bearing artifacts, use `references/preflight.md`, `references/screen-states.md`, `references/structural-variety.md`, `references/design-tokens.md`, `references/component-states.md`, `references/mobile-hard-floor.md`, and `references/slop-review.md` when present.
+- Read the skill's `SKILL.md`, then load only the references needed for this artifact. At minimum for UI-bearing artifacts, use `references/preflight.md`, `references/screen-states.md`, `references/structural-variety.md`, `references/aesthetic-direction.md`, `references/design-tokens.md`, `references/component-states.md`, `references/mobile-hard-floor.md`, `references/screenshot-capture.md`, and `references/slop-review.md` when present.
 - If the local frontend skill is missing, return to `01-project-setup.md` and initialize the project-local harness. Do not continue by improvising from memory.
 
 ## Identity generation protocol
@@ -46,7 +46,7 @@ Write the following sections in complete, product-specific language:
 3. Silhouette rejection: the expected desktop/mobile layout silhouette and the forbidden default silhouette. Explicitly reject generic dashboard, renamed workbench, card grid, admin shell, proof console, and any old layout shape that could pass with labels/colors changed. Name the adjacent at-risk silhouette your own chosen layout is structurally closest to, and state the concrete structural and visual treatment that distinguishes your layout from it. Token, palette, copy, spacing, label, or icon changes do not count as a distinguishing treatment.
 4. First-run comprehension contract: the exact first screen mental model, first action, visible state, and next action a non-technical user should understand within 10 seconds.
 5. User-language map: translate internal/build/proof terms into user-facing terms, and list forbidden main-UI words. Internal terms may live only in docs, logs, dev panels, or clearly labeled diagnostics.
-6. Chosen style direction: one concrete direction and the adjacent styles rejected, with reasoning tied to the artifact rather than generic taste.
+6. Chosen style direction: one named aesthetic direction (functional-minimal, editorial, warm-approachable, technical/terminal, or expressive) committed to concrete type, color, shape, and motion choices, plus the adjacent style rejected with reasoning tied to the artifact. A direction that reduces to "modern, clean, minimal" with no committed choices fails.
 7. Layout model before stack: desktop and mobile region roles, primary task surface, supporting context, navigation, scroll ownership, fixed-format regions, and what must be visually dominant.
 8. Screen-state contract: current task, dominant surface, visible-now surfaces, reachable-but-hidden surfaces, route/tab/drawer/modal placement, and what must not be visible together.
 9. Interaction model: how users create, inspect, edit, recover, confirm, navigate, and understand blocked actions. Identify the primary gesture before secondary status/export actions.

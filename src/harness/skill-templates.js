@@ -244,6 +244,81 @@ Any score below 3 requires one concrete revision before handoff.
 
 State the screen-state model, the dominant surface, the hidden/reachable surfaces, and any score that needed revision.
 `
+  },
+  {
+    path: 'references/aesthetic-direction.md',
+    body: `# Aesthetic Direction
+
+Use this when choosing the visual style, after the structure is picked. Anti-slop rules tell you what to avoid; this tells you what to commit to. The output is a named direction with concrete type, color, shape, and motion choices, not "modern, clean, minimal".
+
+## Pick One Primary Direction From The Product Job
+
+Commit to one of these as the base, then adapt it to the product. Do not blend three.
+
+- Functional-minimal (Rams/Swiss lineage): operator tools, agent runtimes, review/decision tools, dense data. One tight neutral sans (for example Geist, Inter Tight, IBM Plex Sans) used strictly; mono for ids, code, timestamps, and data. Near-neutral base plus one functional accent where color means state, not decoration. Strict 4/8 spacing scale, generous gutters. Small consistent radii, hairline borders over shadows. Motion only on state change.
+- Editorial/document: reading, writing, long-form, publishing. Display serif for headings (for example Fraunces, Instrument Serif) with a clean body sans; strong column rhythm, generous margins, one editorial accent, drop caps or pull quotes where earned.
+- Warm-approachable (Scandinavian lineage): consumer onboarding, creator tools, friendly setup. Rounded humanist sans (for example Nunito, Cera, Plus Jakarta), warm neutrals (no pure black), soft large-blur shadows, 8-12px radii, gentle easing.
+- Technical/terminal: power-user CLIs, dev runtimes, log/inspection surfaces. Monospace-forward, high density, keyboard-first affordances, restrained accent, visible structure.
+- Expressive/brand-forward: marketing, landing, hero, launch pages only. Bold display type, color blocks, motion. Do not use this for an operational product surface.
+
+## Commit To Concrete Tokens
+
+After picking a direction, name the actual choices, not adjectives:
+
+- The exact display and body font families, and the mono family if data is shown.
+- The base background/surface neutrals and the single functional/brand accent.
+- The spacing scale base and the radius scale.
+- Borders-over-shadows or shadows-over-borders, stated once and kept.
+- The motion stance: which moments animate and which do not.
+
+## Rules
+
+- Name the adjacent direction you rejected and why it does not fit the product job.
+- Do not default a product that needs warmth or expression to functional-minimal, and do not default an operator tool to expressive.
+- A direction is invalid if it reduces to "modern/clean/minimal/intuitive" with no committed type, color, shape, or motion choices.
+- Never ship the unconsidered AI default: stock Inter plus a purple-to-blue gradient plus an even card grid is a slop signal, not a direction.
+`
+  },
+  {
+    path: 'references/screenshot-capture.md',
+    body: `# Screenshot Capture
+
+Use this whenever a UI-bearing surface needs visual proof: during UI build verification and during critical review. A screenshot obligation that does not say how, at what width, or where to save does not get executed.
+
+## Tool Chain (first available wins)
+
+1. Playwright MCP when available: precise viewport control, full-page capture, and explicit filenames.
+2. The IDE or Cursor browser screenshot tool when Playwright MCP is absent.
+3. A project end-to-end or screenshot script if one exists.
+4. Last resort: ask the user to provide screenshots at the named viewports and states. Do not skip the visual proof and do not claim it from code review alone.
+
+## Viewports
+
+Capture full-page at each width for every key surface:
+
+- Mobile 375
+- Tablet 768
+- Desktop 1280
+- Wide 1440
+
+## States
+
+Capture the default first screen plus the product's real states: empty, loading or streaming, error, blocked, success, a selected/active state, and one dense or long-content fixture.
+
+## Save Location And Naming
+
+Save to \`.buildprint/screenshots/\` with descriptive names that encode surface, state, and width, for example \`conversation-default-desktop-1280.png\` or \`conversation-error-mobile-375.png\`.
+
+## Analyze Each Capture
+
+Compare every screenshot against \`docs/ui-identity.md\`: the dominant surface is dominant, the forbidden and adjacent silhouettes are not matched, hierarchy reads, and there is no overflow, clipping, overlap, or unreadable text. Confirm keyboard focus is visible where relevant.
+
+## Rules
+
+- A screenshot is not proof unless its viewport and state are named.
+- Never claim responsive proof from desktop-only captures.
+- For a redesign or rerun, capture before and after for the delta review.
+`
   }
 ]
 
@@ -358,16 +433,18 @@ Use before UI code. The goal is not decoration; the goal is a product surface th
 1. Read \`references/preflight.md\` when the project already has files, design tokens, components, CSS, or a framework.
 2. Read \`references/screen-states.md\` before layout for any screen, app shell, or workflow.
 3. Read \`references/structural-variety.md\` before choosing the page or screen structure.
-4. Read \`references/design-tokens.md\` before writing colors, fonts, spacing, focus, or state styles.
-5. Read \`references/component-states.md\` for single components or interactive controls.
-6. Read \`references/mobile-hard-floor.md\` before responsive verification.
-7. Read \`references/slop-review.md\` before final handoff.
+4. Read \`references/aesthetic-direction.md\` before choosing the visual style; commit to one named direction with concrete type, color, shape, and motion choices.
+5. Read \`references/design-tokens.md\` before writing colors, fonts, spacing, focus, or state styles.
+6. Read \`references/component-states.md\` for single components or interactive controls.
+7. Read \`references/mobile-hard-floor.md\` before responsive verification.
+8. Read \`references/screenshot-capture.md\` before capturing UI proof.
+9. Read \`references/slop-review.md\` before final handoff.
 
 ## Required Decisions
 
 - Audience, current task, dominant object, primary gesture, first action.
 - Scope: component, screen state, multi-step flow, or full app shell.
-- Aesthetic direction and adjacent directions rejected.
+- Named aesthetic direction from \`references/aesthetic-direction.md\`, the concrete tokens it commits to, and the adjacent direction rejected.
 - Current screen state: visible now, reachable later, placement for details, and what must not be visible together.
 - One dominant surface, one supporting context surface, and one action/status surface per screen state.
 
@@ -460,11 +537,12 @@ Use before claiming a phase, checkpoint, or Buildprint is complete.
 
 1. Re-read the active acceptance criteria and setup receipt.
 2. Run the strongest available proof command, browser/API/runtime check, screenshot inspection, persistence readback, or manual check.
-3. Inspect the diff and list unrelated changes, dead controls, placeholder paths, mocked/sample-only proof, and claim gaps.
-4. Compare proof against the predicted failure modes from phase-flow.
-5. Patch one concrete weakness if found, then rerun the relevant proof.
-6. Record what was verified, what was not proven, and what future agents may trust.
-7. End with \`VERIFY_REVIEW_DONE\` only when the claim ceiling is honest.
+3. For UI-bearing work, capture screenshots per the frontend skill's \`references/screenshot-capture.md\`: named tool chain, every required viewport, saved to \`.buildprint/screenshots/\`, and analyzed against \`docs/ui-identity.md\`.
+4. Inspect the diff and list unrelated changes, dead controls, placeholder paths, mocked/sample-only proof, and claim gaps.
+5. Compare proof against the predicted failure modes from phase-flow.
+6. Patch one concrete weakness if found, then rerun the relevant proof.
+7. Record what was verified, what was not proven, and what future agents may trust.
+8. End with \`VERIFY_REVIEW_DONE\` only when the claim ceiling is honest.
 
 ## Hard Rules
 
@@ -500,7 +578,7 @@ Use after UI implementation to verify the shipped surface matches \`docs/ui-iden
 ## Workflow
 
 1. Load \`docs/ui-identity.md\` (or the local equivalent) and extract the forbidden silhouette, dominant surface, screen-state contract, and proof obligations defined there.
-2. Capture desktop and mobile screenshots at 320, 375, 414, and 768 px. If a prior screenshot exists, run a delta review: fail if the dominant surface, interaction model, or central object is unchanged while palette, copy, or spacing differs only cosmetically.
+2. Capture screenshots following \`references/screenshot-capture.md\`: use the named tool chain, capture every required viewport, save to \`.buildprint/screenshots/\` with viewport-and-state names. If a prior screenshot exists, run a delta review: fail if the dominant surface, interaction model, or central object is unchanged while palette, copy, or spacing differs only cosmetically.
 3. For each viewport, verify: no horizontal page scroll, no clipped controls or text, no overlapping elements, no two-line clickable labels, and the dominant surface is visually dominant.
 4. Check all required screen states are reachable and render without layout collapse: empty, loading, streaming, blocked, error, success, and selected.
 5. Read \`references/mobile-hard-floor.md\` and confirm every failure criterion listed there is absent.

@@ -21,11 +21,12 @@ Use before claiming a phase, checkpoint, or Buildprint is complete.
 
 1. Re-read the active acceptance criteria and setup receipt.
 2. Run the strongest available proof command, browser/API/runtime check, screenshot inspection, persistence readback, or manual check.
-3. Inspect the diff and list unrelated changes, dead controls, placeholder paths, mocked/sample-only proof, and claim gaps.
-4. Compare proof against the predicted failure modes from phase-flow.
-5. Patch one concrete weakness if found, then rerun the relevant proof.
-6. Record what was verified, what was not proven, and what future agents may trust.
-7. End with `VERIFY_REVIEW_DONE` only when the claim ceiling is honest.
+3. For UI-bearing work, capture screenshots per the frontend skill's `references/screenshot-capture.md`: named tool chain, every required viewport, saved to `.buildprint/screenshots/`, and analyzed against `docs/ui-identity.md`.
+4. Inspect the diff and list unrelated changes, dead controls, placeholder paths, mocked/sample-only proof, and claim gaps.
+5. Compare proof against the predicted failure modes from phase-flow.
+6. Patch one concrete weakness if found, then rerun the relevant proof.
+7. Record what was verified, what was not proven, and what future agents may trust.
+8. End with `VERIFY_REVIEW_DONE` only when the claim ceiling is honest.
 
 ## Hard Rules
 

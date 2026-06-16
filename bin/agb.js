@@ -807,6 +807,12 @@ function packetCheckResults(dir) {
       /Thin or default architecture/i.test(criticalReviewText) &&
       /Self-review without independence/i.test(criticalReviewText)
     )
+    ok('critical-review-pushback defines screenshot capture protocol',
+      /\.buildprint\/screenshots/i.test(criticalReviewText) &&
+      /\b375\b/.test(criticalReviewText) &&
+      /\b1280\b/.test(criticalReviewText) &&
+      /Playwright|tool chain|browser screenshot/i.test(criticalReviewText)
+    )
   }
 
   const collectPhaseMd = (root) => exists(root)

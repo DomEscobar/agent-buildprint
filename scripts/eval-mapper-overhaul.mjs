@@ -241,6 +241,11 @@ edit(weakCriticalReviewArchitecture, '03-phases/critical-review-pushback.md', (s
   .replace(/- \*\*Thin or default architecture\*\*:[\s\S]*?Runtime\/proof integrity\*\* at 2\.\r?\n/, ''))
 expectFailure('mapper eval rejects critical review without architecture auto-fail', ['packet', 'check', weakCriticalReviewArchitecture], ['✗ critical-review-pushback defines objective auto-fail triggers'])
 
+const weakCriticalReviewCapture = copyTemplate('weak-critical-review-capture')
+edit(weakCriticalReviewCapture, '03-phases/critical-review-pushback.md', (s) => s
+  .replace(/ Capture UI screenshots using the screenshot-capture protocol:[\s\S]*?desktop-only or single capture\./, ''))
+expectFailure('mapper eval rejects critical review without capture protocol', ['packet', 'check', weakCriticalReviewCapture], ['✗ critical-review-pushback defines screenshot capture protocol'])
+
 const cliHelp = runAgb(['--help']).output
 for (const stale of ['persona --slice', 'state derive', 'slice status']) {
   if (cliHelp.includes(stale)) {
