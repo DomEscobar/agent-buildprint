@@ -21,7 +21,7 @@ Use before claiming a phase, checkpoint, or Buildprint is complete.
 
 1. Re-read the active acceptance criteria and setup receipt.
 2. Run the strongest available proof command, browser/API/runtime check, screenshot inspection, persistence readback, or manual check.
-3. For UI-bearing work, capture screenshots per the frontend skill's `references/screenshot-capture.md`: named tool chain, every required viewport, saved to `.buildprint/screenshots/`, and analyzed against `docs/ui-identity.md`.
+3. For UI-bearing work, capture screenshots per the frontend skill's `references/screenshot-capture.md`: named tool chain, every required viewport, saved to `.buildprint/screenshots/`, and analyzed against `docs/ui-identity.md` and `docs/DESIGN.md`.
 4. Inspect the diff and list unrelated changes, dead controls, placeholder paths, mocked/sample-only proof, and claim gaps.
 5. Compare proof against the predicted failure modes from phase-flow.
 6. Patch one concrete weakness if found, then rerun the relevant proof.

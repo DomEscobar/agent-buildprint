@@ -28,7 +28,7 @@ Save to `.buildprint/screenshots/` with descriptive names that encode surface, s
 
 ## Analyze Each Capture
 
-Compare every screenshot against `docs/ui-identity.md`: the dominant surface is dominant, the forbidden and adjacent silhouettes are not matched, hierarchy reads, and there is no overflow, clipping, overlap, or unreadable text. Confirm keyboard focus is visible where relevant.
+Compare every screenshot against `docs/ui-identity.md` and `docs/DESIGN.md`: the dominant surface is dominant, the forbidden and adjacent silhouettes are not matched, the visual atmosphere/tokens/component styling match the design system, hierarchy reads, and there is no overflow, clipping, overlap, or unreadable text. Confirm keyboard focus is visible where relevant.
 
 ## Rules
 

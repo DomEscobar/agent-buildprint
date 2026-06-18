@@ -511,6 +511,9 @@ function packetCheckResults(dir) {
   const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') ||
     normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet') ||
     /Replace this template-level rule with the selected artifact's source-derived central output contract/i.test(blueprint)
+  const isAgenticChatPacket = normalizedPacketDir.endsWith('buildprints/agentic-chat') ||
+    /Product:\s*Agentic Chat/i.test(safeReadText(path.join(dir, '02-ui-identity.md'))) ||
+    /Agentic Chat/i.test(buildprint)
   const requiresTypedQualityRouting = isMapperTemplatePacket
   const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint)
   const requiresCriticalReviewPushback = isMapperTemplatePacket ||
@@ -689,7 +692,7 @@ function packetCheckResults(dir) {
       /return to `?01-project-setup\.md`?/i.test(uiux)
     )
   }
-  ok('ui identity requires generated local identity artifact', /docs\/ui-identity\.md/i.test(uiux) && /UI-IDENTITY\.md/i.test(uiux) && /generated UI identity|generate a local/i.test(uiux))
+  ok('ui identity requires generated local identity and design artifacts', /docs\/ui-identity\.md/i.test(uiux) && /UI-IDENTITY\.md/i.test(uiux) && /docs\/DESIGN\.md/i.test(uiux) && /generated UI identity|generate a local/i.test(uiux))
   ok('ui identity requires first-run comprehension and user-language control', /First-run comprehension contract/i.test(uiux) && /User-language map/i.test(uiux) && /internal.*terms|proof terms|evaluator language/i.test(uiux))
   ok('ui identity is substantial enough to guide generation', uiux.trim().length >= (isMapperTemplatePacket ? 3500 : 4500))
   ok('ui identity defines generated identity sections', /Product identity thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Layout model/i.test(uiux) && /Interaction model/i.test(uiux) && /Component language/i.test(uiux) && /Color and typography tokens/i.test(uiux))
@@ -729,6 +732,44 @@ function packetCheckResults(dir) {
      /indistinguishable/i.test(uiux) &&
      /Mechanical checks alone|mechanical checks/i.test(uiux))
   )
+  ok('ui identity requires evidence binder and action surface gate',
+    !usesSetupFirstIdentitySecond ||
+    (/Evidence binder requirements/i.test(uiux) &&
+     /\.buildprint\/ui-evidence\.md/i.test(uiux) &&
+     /Identity prose is not evidence/i.test(uiux) &&
+     /Action surface gate/i.test(uiux) &&
+     /stronger than "type and send"/i.test(uiux) &&
+     /next powerful user action/i.test(uiux) &&
+     /status panels are subordinate/i.test(uiux))
+  )
+  ok('ui identity requires separate DESIGN.md visual taste system',
+    !usesSetupFirstIdentitySecond ||
+    (/Required sections in generated DESIGN\.md/i.test(uiux) &&
+     /visual taste system/i.test(uiux) &&
+     /Design read/i.test(uiux) &&
+     /Taste dials/i.test(uiux) &&
+     /Visual atmosphere/i.test(uiux) &&
+     /Screenshot craft checks/i.test(uiux) &&
+     /Do not collapse `?docs\/ui-identity\.md`? and `?docs\/DESIGN\.md`?/i.test(uiux))
+  )
+  ok('agentic-chat requires chat-native action gate',
+    !isAgenticChatPacket ||
+    (/Product genre:\s*chat-native agent interface/i.test(uiux) &&
+     /conversation thread and composer\/input/i.test(uiux) &&
+     /Chat-native action gate/i.test(uiux) &&
+     /mission sheet.*guided-run.*task dashboard.*status lane.*workflow/i.test(uiux) &&
+     /action UI enhances chat; it does not displace chat/i.test(uiux))
+  )
+  ok('agentic-chat requires consumer chat craft gate',
+    !isAgenticChatPacket ||
+    (/references\/product-taste\.md/i.test(uiux) &&
+     /Design read and taste dials/i.test(uiux) &&
+     /Consumer chat craft gate/i.test(uiux) &&
+     /seeded feature-demo action cards/i.test(uiux) &&
+     /giant blank dead zone/i.test(uiux) &&
+     /system labels/i.test(uiux) &&
+     /cramped mobile composer\/chips/i.test(uiux))
+  )
 
   ok('phase flow defines active phase loop',
     /active phase only/i.test(phaseFlow) &&
@@ -747,6 +788,30 @@ function packetCheckResults(dir) {
     /what the proof does not prove/i.test(phaseFlow)
   )
   ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
+  ok('phase flow requires UI identity verification before completion',
+    /missing local UI identity/i.test(phaseFlow) &&
+    /missing local design system/i.test(phaseFlow) &&
+    /missing UI evidence binder/i.test(phaseFlow) &&
+    /\.buildprint\/ui-evidence\.md/i.test(phaseFlow) &&
+    /docs\/DESIGN\.md/i.test(phaseFlow) &&
+    /stronger than "type and send"/i.test(phaseFlow) &&
+    /agb verify ui \./i.test(phaseFlow) &&
+    /screenshot evidence/i.test(phaseFlow)
+  )
+  ok('agentic-chat phase flow blocks chat-native genre drift',
+    !isAgenticChatPacket ||
+    (/chat-native interface/i.test(phaseFlow) &&
+     /mission sheet.*guided-run.*task dashboard.*status lane.*form-first workflow/i.test(phaseFlow) &&
+     /conversation thread and composer\/input/i.test(phaseFlow))
+  )
+  ok('agentic-chat phase flow blocks consumer chat craft failure',
+    !isAgenticChatPacket ||
+    (/Consumer Chat Craft Gate/i.test(phaseFlow) &&
+     /seeded feature cards/i.test(phaseFlow) &&
+     /giant blank dead zone/i.test(phaseFlow) &&
+     /internal status labels/i.test(phaseFlow) &&
+     /cramped mobile composer\/chips/i.test(phaseFlow))
+  )
   ok('phase flow defines repair routing', new RegExp(`return to \`?${setupFile.replace('.', '\\.')}\`?`, 'i').test(phaseFlow) && /return to `?00-questions\.md`?/i.test(phaseFlow) && new RegExp(`return to \`?${uiIdentityFile.replace('.', '\\.')}\`?`, 'i').test(phaseFlow))
   ok('phase flow has no evidence-ledger bureaucracy', !/evidence-ledger\.jsonl|proof_contract|capability_id/i.test(phaseFlow))
 
@@ -814,7 +879,9 @@ function packetCheckResults(dir) {
       /\.buildprint\/screenshots/i.test(criticalReviewText) &&
       /\b375\b/.test(criticalReviewText) &&
       /\b1280\b/.test(criticalReviewText) &&
-      /Playwright|tool chain|browser screenshot/i.test(criticalReviewText)
+      /Playwright|tool chain|browser screenshot/i.test(criticalReviewText) &&
+      /forbidden silhouette/i.test(criticalReviewText) &&
+      /adjacent at-risk silhouette/i.test(criticalReviewText)
     )
     ok('critical-review-pushback references artifact verification',
       /agb verify ui/i.test(criticalReviewText) &&
@@ -828,6 +895,34 @@ function packetCheckResults(dir) {
     )
     ok('critical-review-pushback blocks pass on UI\/decisions track failure',
       /may not reach PASS or PENDING_RECHECK.*Track B|PASS or PENDING_RECHECK.*resolving only Track A/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback blocks missing identity and proof-console leakage',
+      /Missing local UI identity/i.test(criticalReviewText) &&
+      /ui-identity-present/i.test(criticalReviewText) &&
+      /Proof\/debug console leakage/i.test(criticalReviewText) &&
+      /proof-console-leakage/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback requires evidence binder and action surface gate',
+      /\.buildprint\/ui-evidence\.md/i.test(criticalReviewText) &&
+      /Missing UI evidence binder/i.test(criticalReviewText) &&
+      /Weak action surface/i.test(criticalReviewText) &&
+      /Prose-only identity compliance/i.test(criticalReviewText) &&
+      /next powerful user action/i.test(criticalReviewText) &&
+      /nearest bad silhouette/i.test(criticalReviewText)
+    )
+    ok('agentic-chat critical review blocks chat-native genre drift',
+      !isAgenticChatPacket ||
+      (/Chat-native genre drift/i.test(criticalReviewText) &&
+       /conversation thread plus composer\/input/i.test(criticalReviewText) &&
+       /mission sheet.*guided-run.*task dashboard.*status lane.*form-first workflow/i.test(criticalReviewText))
+    )
+    ok('agentic-chat critical review blocks consumer chat craft failure',
+      !isAgenticChatPacket ||
+      (/Consumer chat craft failure/i.test(criticalReviewText) &&
+       /seeded approval\/memory\/restore cards/i.test(criticalReviewText) &&
+       /giant blank dead zone/i.test(criticalReviewText) &&
+       /internal route\/provider\/memory labels/i.test(criticalReviewText) &&
+       /cramped mobile chips\/composer/i.test(criticalReviewText))
     )
   }
 
@@ -869,6 +964,33 @@ function packetCheckResults(dir) {
     /Semantic output acceptance/i.test(handover) &&
     /Integration\/operator acceptance/i.test(handover) &&
     /Critical review pushback/i.test(handover)
+  )
+  ok('handover captures UI identity and screenshot gate',
+    /UI identity and screenshot gate/i.test(handover) &&
+    /Local identity artifact/i.test(handover) &&
+    /agb verify ui \./i.test(handover) &&
+    /Screenshot set/i.test(handover)
+  )
+  ok('handover captures UI evidence and action gate',
+    /UI evidence binder/i.test(handover) &&
+    /Consumer\/action UI proven/i.test(handover) &&
+    /Nearest bad silhouette comparison/i.test(handover) &&
+    /\.buildprint\/ui-evidence\.md/i.test(handover) &&
+    /next powerful user action/i.test(handover)
+  )
+  ok('agentic-chat handover captures chat-native action gate',
+    !isAgenticChatPacket ||
+    (/Chat-native action gate/i.test(handover) &&
+     /conversation thread and composer\/input/i.test(handover) &&
+     /inline rather than replacing chat/i.test(handover))
+  )
+  ok('agentic-chat handover captures consumer chat craft gate',
+    !isAgenticChatPacket ||
+    (/Consumer chat craft gate/i.test(handover) &&
+     /Design Read/i.test(handover) &&
+     /Taste Dials/i.test(handover) &&
+     /composer quality/i.test(handover) &&
+     /system-label suppression/i.test(handover))
   )
   ok('handover warns against overclaiming', /Do not claim completion beyond the evidence/i.test(handover))
 
@@ -1384,7 +1506,13 @@ function verifyUiChecks(projectRoot) {
   const buildprintDir = path.join(projectRoot, '.buildprint')
   const decisionsFile = path.join(buildprintDir, 'decisions.md')
   const stateFile = path.join(buildprintDir, 'state.json')
-  const uiIdentityFile = path.join(projectRoot, 'docs', 'ui-identity.md')
+  const uiIdentityFiles = [
+    path.join(projectRoot, 'docs', 'ui-identity.md'),
+    path.join(projectRoot, 'UI-IDENTITY.md')
+  ]
+  const uiIdentityFile = uiIdentityFiles.find((file) => exists(file)) || uiIdentityFiles[0]
+  const designSystemFile = path.join(projectRoot, 'docs', 'DESIGN.md')
+  const uiEvidenceFile = path.join(buildprintDir, 'ui-evidence.md')
   const results = []
 
   // Check 1: decisions-stub
@@ -1412,6 +1540,12 @@ function verifyUiChecks(projectRoot) {
   const htmlFiles = walk(path.join(projectRoot, 'public')).filter((f) => f.endsWith('.html') || f.endsWith('.js'))
   const srcFiles = walk(path.join(projectRoot, 'src')).filter((f) => f.endsWith('.ts') || f.endsWith('.js'))
   const candidateFiles = [...htmlFiles, ...srcFiles]
+  const uiSurfaceFiles = candidateFiles.filter((file) =>
+    !/[\\/]node_modules[\\/]/.test(file) &&
+    !/[\\/](test|tests|__tests__|fixtures|evidence)[\\/]/i.test(file) &&
+    !/\.(test|spec)\.[cm]?[jt]sx?$/i.test(file) &&
+    !/\.d\.ts$/i.test(file)
+  )
   const rawJsonEvidence = []
   for (const file of candidateFiles) {
     const content = safeReadText(file)
@@ -1450,13 +1584,156 @@ function verifyUiChecks(projectRoot) {
     evidence: leakageEvidence.length > 0 ? `internal runtime tokens found in output surfaces: ${leakageEvidence.join('; ')}` : '',
   })
 
-  // Check 4: forbidden-words
+  // Check 4: ui-identity-present
+  // UI verification is a shipment gate. A UI-bearing artifact cannot pass if its
+  // product identity contract is absent, because derived checks have no source.
+  const uiIdentity = safeReadText(uiIdentityFile)
+  const isExplicitNonUi = /\bnot-ui-bearing\b/i.test(uiIdentity)
+  results.push({
+    id: 'ui-identity-present',
+    pass: !!uiIdentity || isExplicitNonUi,
+    evidence: uiIdentity
+      ? `${path.relative(projectRoot, uiIdentityFile)} present${isExplicitNonUi ? ' and marks artifact not-ui-bearing' : ''}`
+      : 'missing docs/ui-identity.md or UI-IDENTITY.md; UI-bearing artifacts must generate an identity before phase work and handoff',
+  })
+
+  // Check 4b: design-system-present
+  // UI verification also requires a separate visual taste system. Product/interaction
+  // identity and visual craft are distinct contracts; either can fail independently.
+  const designSystem = safeReadText(designSystemFile)
+  results.push({
+    id: 'design-system-present',
+    pass: isExplicitNonUi || !!designSystem,
+    evidence: designSystem
+      ? `${path.relative(projectRoot, designSystemFile)} present`
+      : (isExplicitNonUi
+          ? 'artifact is marked not-ui-bearing in the UI identity artifact'
+          : 'missing docs/DESIGN.md; UI-bearing artifacts must generate a visual taste system before phase work and handoff'),
+  })
+
+  const isAgenticChatArtifact = /Agentic Chat|chat-native agent interface/i.test(uiIdentity)
+  const uiEvidence = safeReadText(uiEvidenceFile)
+
+  // Check 4c: agentic-chat-consumer-craft-evidence
+  // Agentic Chat has an additional shipment gate: evidence must explicitly prove
+  // the default viewport is a polished consumer chat surface, not the old
+  // harness-demo state with seeded feature cards.
+  if (isAgenticChatArtifact && !isExplicitNonUi) {
+    const hasConsumerCraftEvidence =
+      /Consumer Chat Craft Gate/i.test(uiEvidence) &&
+      /Design Read/i.test(uiEvidence) &&
+      /Taste Dials/i.test(uiEvidence) &&
+      /no seeded|without seeded|seeded.*(absent|removed|not visible|not present)/i.test(uiEvidence) &&
+      /composer/i.test(uiEvidence) &&
+      /mobile/i.test(uiEvidence) &&
+      /system-label|internal status|route\/provider\/memory|provider.*label/i.test(uiEvidence)
+    results.push({
+      id: 'agentic-chat-consumer-craft-evidence',
+      pass: hasConsumerCraftEvidence,
+      evidence: hasConsumerCraftEvidence
+        ? `${path.relative(projectRoot, uiEvidenceFile)} records Consumer Chat Craft Gate, Design Read, taste dials, no seeded cards, composer/mobile, and system-label suppression evidence`
+        : 'Agentic Chat evidence must explicitly record Consumer Chat Craft Gate, Design Read, taste dials, no seeded feature cards in the default viewport, composer/mobile proof, and system-label suppression',
+    })
+  }
+
+  // Check 4d: agentic-chat-no-seeded-default-actions
+  // Fails stale or reused implementations that still show default approval,
+  // memory, restore, provider, or route cards before user intent.
+  if (isAgenticChatArtifact && !isExplicitNonUi) {
+    const staleSeededPatterns = [
+      /Read current folder/i,
+      /Save preference/i,
+      /Restore point ready/i,
+      /Inspect local files\?/i,
+      /Save this memory/i,
+      /Restore here/i,
+    ]
+    const seededEvidence = []
+    const seededSearchFiles = [
+      uiEvidenceFile,
+      ...walk(path.join(projectRoot, 'data')).filter((f) => /\.(json|jsonl|txt|md)$/i.test(f)),
+    ].filter(Boolean)
+    for (const file of seededSearchFiles) {
+      const content = safeReadText(file)
+      const lines = content.split(/\r?\n/)
+      lines.forEach((line, idx) => {
+        if (seededEvidence.length >= 20) return
+        const seededMatch = staleSeededPatterns.find((pattern) => pattern.test(line))
+        if (seededMatch) seededEvidence.push(`${path.relative(projectRoot, file)}:${idx + 1} contains stale seeded action text matching ${seededMatch}`)
+      })
+    }
+    results.push({
+      id: 'agentic-chat-no-seeded-default-actions',
+      pass: seededEvidence.length === 0,
+      evidence: seededEvidence.length > 0
+        ? seededEvidence.join('; ')
+        : '',
+    })
+
+    const staleStatusPatterns = [
+      /Local route ready/i,
+      /Live route needs key/i,
+      /\bsaved memories\b/i,
+    ]
+    const statusEvidence = []
+    const statusSearchFiles = [
+      uiEvidenceFile,
+      ...walk(path.join(projectRoot, 'data')).filter((f) => /\.(json|jsonl|txt|md)$/i.test(f)),
+    ].filter(Boolean)
+    for (const file of statusSearchFiles) {
+      const lines = safeReadText(file).split(/\r?\n/)
+      lines.forEach((line, idx) => {
+        if (statusEvidence.length >= 20) return
+        const match = staleStatusPatterns.find((pattern) => pattern.test(line))
+        if (match) statusEvidence.push(`${path.relative(projectRoot, file)}:${idx + 1} exposes default system status text matching ${match}`)
+      })
+    }
+    results.push({
+      id: 'agentic-chat-default-status-suppression',
+      pass: statusEvidence.length === 0,
+      evidence: statusEvidence.length > 0
+        ? statusEvidence.join('; ')
+        : '',
+    })
+  }
+
+  // Check 5: proof-console-leakage
+  // Fails when obvious build/evaluator/debug wording appears in app-facing UI.
+  // Diagnostics can still expose internals, but the product surface cannot be a
+  // proof console with nicer spacing.
+  const DEBUG_UI_PATTERNS = [
+    /\bproof\b/i,
+    /\bfixture\b/i,
+    /\bdeterministic\b/i,
+    /\bblocked provider\b/i,
+    /\brun ledger\b/i,
+    /\bsaved point\b/i,
+    /\bresponse engine setup\b/i,
+    /\bmock provider\b/i,
+    /\bevaluator\b/i,
+    /\bbuildprint\b/i,
+  ]
+  const debugUiEvidence = []
+  for (const file of uiSurfaceFiles) {
+    const lines = safeReadText(file).split(/\r?\n/)
+    lines.forEach((line, idx) => {
+      if (debugUiEvidence.length >= 20) return
+      const match = DEBUG_UI_PATTERNS.find((pattern) => pattern.test(line))
+      if (match) debugUiEvidence.push(`${path.relative(projectRoot, file)}:${idx + 1} matches ${match}`)
+    })
+  }
+  results.push({
+    id: 'proof-console-leakage',
+    pass: debugUiEvidence.length === 0,
+    evidence: debugUiEvidence.length > 0 ? `debug/build/proof terms found in app-facing UI: ${debugUiEvidence.join('; ')}` : '',
+  })
+
+  // Check 6: forbidden-words
   // Reads docs/ui-identity.md to derive the project's own forbidden-word list and "not a X" claims,
   // then checks whether the shipped UI markup uses those words.
-  // Identity-derived: if the project has no ui-identity.md, this check is skipped.
-  const uiIdentity = safeReadText(uiIdentityFile)
+  // Identity-derived: if the project has no ui-identity.md, this check fails instead of skipping.
   if (!uiIdentity) {
-    results.push({ id: 'forbidden-words', pass: true, evidence: 'no docs/ui-identity.md — check skipped' })
+    results.push({ id: 'forbidden-words', pass: false, evidence: 'cannot evaluate forbidden words because the UI identity artifact is missing' })
   } else {
     // Extract "Forbidden main surface words" list from the identity doc (section 5)
     const forbiddenSection = uiIdentity.match(/##\s*\d*[^#\n]*[Ff]orbidden[^#\n]*main[^#\n]*surface[^#\n]*([\s\S]*?)(?=\n##|\n#[^#]|$)/i)?.[1] || ''
@@ -1465,7 +1742,7 @@ function verifyUiChecks(projectRoot) {
     const notAMatches = [...uiIdentity.matchAll(/not\s+an?\s+([A-Za-z][A-Za-z-]+)/gi)].map((m) => m[1].trim()).filter((w) => w.length >= 5)
     const allForbidden = [...new Set([...forbiddenWords, ...notAMatches])]
 
-    const uiMarkupFiles = htmlFiles
+    const uiMarkupFiles = uiSurfaceFiles.filter((file) => /\.(html|jsx?|tsx?)$/i.test(file))
     const forbiddenViolations = []
     for (const file of uiMarkupFiles) {
       const content = safeReadText(file)

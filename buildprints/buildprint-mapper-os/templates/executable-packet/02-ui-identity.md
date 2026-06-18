@@ -8,7 +8,12 @@ This file runs after `01-project-setup.md` and before `03-phases/*`. Its job is 
 
 Project setup must create the architecture baseline and local skill harness without doing identity work. The identity step then uses that harness, the selected architecture, and the product contract to make UI/UX decisions deliberately instead of mixing design reasoning into setup paperwork.
 
-For UI-bearing artifacts, the builder must generate a local `docs/ui-identity.md` or `UI-IDENTITY.md` before starting any phase. For non-UI libraries/services, write `not-ui-bearing` and generate an equivalent developer/operator identity covering command shape, output formatting, error tone, docs style, and recovery flow.
+For UI-bearing artifacts, the builder must generate both local identity artifacts before starting any phase:
+
+- `docs/ui-identity.md` or `UI-IDENTITY.md` — the product and interaction contract: product genre, dominant user job, first action, user-language map, screen states, action model, forbidden silhouettes, and screenshot-level product-fit acceptance.
+- `docs/DESIGN.md` — the visual taste system: design read, atmosphere, palette, typography, spacing, radii, component styling, density, motion, responsive collapse, and exact visual bans.
+
+For non-UI libraries/services, write `not-ui-bearing` and generate an equivalent developer/operator identity covering command shape, output formatting, error tone, docs style, and recovery flow. Do not collapse `docs/ui-identity.md` and `docs/DESIGN.md` into one file for UI-bearing products: a surface can be visually tasteful while violating the product genre, so both contracts must exist and remain distinct.
 
 ## Skill loading protocol
 
@@ -16,7 +21,7 @@ Before identity generation, load the local frontend skill created by setup:
 
 - Prefer the active provider-specific copy only when an explicit provider created one. For the default provider, load `.agents/skills/frontend-ui-product-design/SKILL.md`.
 - Also accept the portable `.agents/skills/frontend-ui-product-design/SKILL.md`.
-- Read the skill's `SKILL.md`, then load only the references needed for this artifact. At minimum for UI-bearing artifacts, use `references/preflight.md`, `references/screen-states.md`, `references/structural-variety.md`, `references/aesthetic-direction.md`, `references/design-tokens.md`, `references/component-states.md`, `references/mobile-hard-floor.md`, `references/screenshot-capture.md`, and `references/slop-review.md` when present.
+- Read the skill's `SKILL.md`, then load only the references needed for this artifact. At minimum for UI-bearing artifacts, use `references/product-taste.md`, `references/preflight.md`, `references/screen-states.md`, `references/structural-variety.md`, `references/aesthetic-direction.md`, `references/design-tokens.md`, `references/component-states.md`, `references/mobile-hard-floor.md`, `references/screenshot-capture.md`, and `references/slop-review.md` when present.
 - If the local frontend skill is missing, return to `01-project-setup.md` and initialize the project-local harness. Do not continue by improvising from memory.
 
 ## Identity generation protocol
@@ -33,13 +38,13 @@ Before writing identity output, read:
 
 Then think deeply about the product, user, artifact type, golden path, central output, risk, density, review proof, and what a confused first-time user would misunderstand. Generate a full local UI identity plan in the implementation project. Do not ask for visual direction unless a hard-stop question in `00-questions.md` says the product identity itself is unknown.
 
-The generated identity must be specific enough that a later agent can build the same product surface without guessing. If it could apply unchanged to ten unrelated products, it fails.
+The generated identity and design system must be specific enough that a later agent can build the same product surface without guessing. If either file could apply unchanged to ten unrelated products, it fails.
 
 The generated identity also fails if it can be satisfied by a generic dashboard, renamed workbench, card grid, admin shell, or proof console with better labels. First-run comprehension is necessary but not sufficient. The identity must name an artifact-specific product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, and screenshot-level acceptance criteria.
 
 ## Required sections in the generated UI identity
 
-Write the following sections in complete, product-specific language:
+Write the following sections in `docs/ui-identity.md` or `UI-IDENTITY.md` in complete, product-specific language:
 
 1. Product identity thesis: what this product is in plain language, who it serves, what job the first screen must make obvious, and what it must not feel like.
 2. Creative product concept: the artifact-specific metaphor, dominant object, primary gesture, moment-to-moment manipulation, and what emotional/operator affordance should make the surface feel like this product rather than a generic shell.
@@ -55,10 +60,27 @@ Write the following sections in complete, product-specific language:
 12. Content stress fixtures: long names, long titles, dense data, empty data, failed provider/runtime, failed persistence/export, and mobile/narrow cases the UI must survive.
 13. Proof obligations: screenshots, screenshot delta review against prior/default builds when available, viewport checks, no-overlap/no-clipping, keyboard/focus checks where relevant, content-specificity checks, edit/readback proof, and blocked-state proof. Include an anti-silhouette distinctiveness screenshot check: compare the shipped first-screen screenshot against the forbidden silhouette and the named adjacent silhouette, and fail if the screenshot is indistinguishable from them once the copy is ignored. Mechanical checks alone (overlap, clipping, viewport, focus) do not satisfy this obligation.
 14. Anti-generic rules: what must not appear in the main product surface, including generic shells, raw JSON dumps, proof-theater labels, dead controls, fake success, decorative-only views, unclear empty states, and internal status jargon.
+15. Evidence binder requirements: every major UI identity claim must become a screenshot-checkable or source-checkable acceptance claim in `.buildprint/ui-evidence.md`. The binder must list claim, required evidence, screenshot path and region or source file/line, nearest bad silhouette, pass/fail judgment, and why the shipped UI is structurally different. Identity prose is not evidence.
+16. Action surface gate: the first viewport must prove a user action loop stronger than "type and send." The evidence binder must name the next powerful user action, what the agent will do next, what visible state/result changes, what recovery/approval/memory action appears at the moment of need, and why status panels are subordinate to user progress.
+
+## Required sections in generated DESIGN.md
+
+Write `docs/DESIGN.md` as a semantic visual system, not a moodboard and not a duplicate of `docs/ui-identity.md`. It must include:
+
+1. Design read: one sentence naming the product genre, audience, desired first-screen feeling, and nearest lazy visual default rejected.
+2. Taste dials: 4-7 product-specific dials with target values and screenshot-checkable implications.
+3. Visual atmosphere: the concrete emotional/operational feel, density, contrast, and hierarchy the first viewport must produce.
+4. Color system: exact semantic roles, state colors, focus treatment, contrast notes, and forbidden palette pitfalls.
+5. Typography system: font stack, scale, weights, line heights, label/copy treatment, and mobile adjustments.
+6. Layout rhythm: spacing, grid behavior, surface hierarchy, fixed-format dimensions, responsive collapse, and scroll ownership.
+7. Component styling: controls, inputs, cards/items, menus, tabs, chips, overlays, messages, empty/loading/error/blocked states, and selected/hover/focus states.
+8. Motion and feedback: transitions, loading behavior, reduced-motion stance, and interaction feedback timing.
+9. Visual anti-patterns: exact bans for this artifact, including any palette, typography, container, card, icon, decoration, or density choices that would make it generic.
+10. Screenshot craft checks: desktop/mobile regions that must be inspected and the visual craft failures that force repair.
 
 ## Minimum proof before moving to phases
 
-- A local `docs/ui-identity.md` or `UI-IDENTITY.md` exists for UI-bearing artifacts, or the artifact is explicitly marked `not-ui-bearing`.
+- A local `docs/ui-identity.md` or `UI-IDENTITY.md` and a local `docs/DESIGN.md` exist for UI-bearing artifacts, or the artifact is explicitly marked `not-ui-bearing`. Missing local identity or missing local design system is a hard failure for `agb verify ui .`, critical review, and final handoff; do not treat either as advisory setup polish.
 - The local frontend skill was loaded, or a missing-harness blocker routed back to `01-project-setup.md`.
 - The identity includes a first-run comprehension contract.
 - The identity names a creative product concept, product metaphor, dominant object, primary gesture, forbidden default silhouette, and screenshot-level acceptance criteria.
@@ -67,6 +89,8 @@ Write the following sections in complete, product-specific language:
 - Layout and interaction are defined before phase scaffolding.
 - Color, typography, component, and state rules are concrete enough to implement.
 - Proof obligations name the checks that would catch the artifact's most likely UI failure, and include an anti-silhouette distinctiveness screenshot check that fails a build matching the forbidden or adjacent silhouette.
+- `.buildprint/ui-evidence.md` exists and grounds identity, design, and action claims in screenshot paths, screenshot regions or source file/line references, nearest bad silhouette comparison, visual craft checks, and pass/fail judgments.
+- The first viewport proves an action surface stronger than "type and send"; if the next powerful user action cannot be identified from screenshot evidence, return to UI identity and implementation before moving on.
 
 ## DO NOT
 

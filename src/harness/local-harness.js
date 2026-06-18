@@ -200,6 +200,23 @@ function textHasSkillContract(text) {
 }
 
 function checkupArtifacts(projectRoot, agentsText) {
+  const statePath = path.join(projectRoot, '.buildprint', 'state.json')
+  let completedPhases = []
+  try {
+    completedPhases = JSON.parse(exists(statePath) ? readText(statePath) : '{}').completedPhases || []
+  } catch {
+    completedPhases = []
+  }
+  const hasCompletedPhaseWork = completedPhases.length > 0
+  const uiIdentityPaths = [
+    path.join(projectRoot, 'docs', 'ui-identity.md'),
+    path.join(projectRoot, 'UI-IDENTITY.md')
+  ]
+  const uiIdentityPath = uiIdentityPaths.find((file) => exists(file))
+  const uiIdentityText = uiIdentityPath ? readText(uiIdentityPath) : ''
+  const hasUiIdentity = !!uiIdentityText
+  const isExplicitNonUi = /\bnot-ui-bearing\b/i.test(uiIdentityText)
+  const hasDesignSystem = exists(path.join(projectRoot, 'docs', 'DESIGN.md'))
   const checks = [
     {
       id: 'agents-harness-section',
@@ -224,7 +241,12 @@ function checkupArtifacts(projectRoot, agentsText) {
     {
       id: 'ui-identity',
       label: 'UI identity artifact exists when the project is UI-bearing',
-      status: exists(path.join(projectRoot, 'docs', 'ui-identity.md')) || exists(path.join(projectRoot, 'UI-IDENTITY.md')) ? 'pass' : 'warn'
+      status: hasUiIdentity || isExplicitNonUi ? 'pass' : (hasCompletedPhaseWork ? 'fail' : 'warn')
+    },
+    {
+      id: 'design-system',
+      label: 'docs/DESIGN.md exists when the project is UI-bearing',
+      status: hasDesignSystem || isExplicitNonUi ? 'pass' : (hasCompletedPhaseWork ? 'fail' : 'warn')
     },
     {
       id: 'completion-signals',
@@ -292,6 +314,7 @@ export function harnessCheckResult(projectFolder = process.cwd(), requestedProvi
   else if (!hasSection) nextSteps.push(`Run \`agb harness init .${providerArg}${profileArg}\` to patch AGENTS.md with the Buildprint Skill Harness section.`)
   if (missingSkills.length) nextSteps.push(`Run \`agb harness init .${providerArg}${profileArg}\` to write missing local skill files.`)
   if (badContracts.length) nextSteps.push('Repair skill frontmatter so every SKILL.md has triggers, skips, and completion_signal.')
+  if (failedCheckups.length) nextSteps.push('Repair failed setup/readiness artifacts before marking phase work complete.')
   if (warnedCheckups.length) nextSteps.push('Complete setup artifacts or record honest blockers before phase work.')
   if (!nextSteps.length) nextSteps.push('Harness is initialized. Run phase setup and keep AGENTS.md in the mandatory read order.')
   return {

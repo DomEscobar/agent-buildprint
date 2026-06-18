@@ -4,7 +4,7 @@ Use this loop for the active phase only. Do not read every phase upfront. Do not
 
 ## How to run a phase
 
-1. Read `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, and `02-ui-identity.md` before every active phase. For UI-bearing artifacts, `02-ui-identity.md` and the generated local UI identity are the standing comprehension, user-language, and visual identity contract, not optional polish files.
+1. Read `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, and `02-ui-identity.md` before every active phase. For UI-bearing artifacts, `02-ui-identity.md`, the generated local UI identity, and `docs/DESIGN.md` are standing contracts, not optional polish files: `docs/ui-identity.md` governs product/interaction fit, and `docs/DESIGN.md` governs visual taste and craft.
 2. Read `.buildprint/next-agent.md` and current project `AGENTS.md` if they exist.
 3. Read the active phase file named in `03-phases/phase-index.yaml`.
 4. Before editing code, state a short thinking checkpoint in the working response or task plan: active phase, smallest real vertical user/operator path, 3-7 likely failure modes, proof plan, and claim ceiling. This is not a deliverable file. Do not create phase-run paperwork by default.
@@ -18,7 +18,7 @@ Use this loop for the active phase only. Do not read every phase upfront. Do not
 
 ## Completion rule
 
-A phase passes only when the building objective is satisfied by a real product path or a blocker is honestly recorded. Edits alone, placeholder screens, mocked data, functionless buttons, sample-only proof, unchecked screenshots, or a skipped thinking checkpoint do not complete a phase.
+A phase passes only when the building objective is satisfied by a real product path or a blocker is honestly recorded. For UI-bearing artifacts, phase completion also requires generated local `docs/ui-identity.md` or `UI-IDENTITY.md`, generated local `docs/DESIGN.md`, `.buildprint/ui-evidence.md` grounding identity/design/action claims in screenshot or source evidence, `agb verify ui .` without unresolved FAIL checks, and screenshot evidence for the relevant desktop/mobile states before final handoff. Edits alone, placeholder screens, mocked data, functionless buttons, sample-only proof, unchecked screenshots, missing local UI identity, missing local design system, missing UI evidence binder, or a skipped thinking checkpoint do not complete a phase.
 
 Do not create phase-run markdown, evidence ledgers, or planning artifacts by default. The thinking checkpoint is behavioral: it should shape the work, not become paperwork. Persist only concise progress, blockers, and handoff facts needed for continuation.
 
@@ -32,6 +32,8 @@ Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`,
 - If setup is missing architecture, local skill harness, commands, env, proof surfaces, or setup receipt, return to `01-project-setup.md`.
 - If a product-defining/security/destructive/secret decision is missing, return to `00-questions.md` and stop.
 - If UI quality is generic, interactionless, visually incoherent, stuffing multiple capabilities into one permanent view, or drifting away from the generated identity contract, return to `02-ui-identity.md` or `docs/ui-identity.md` before advancing.
+- If visual craft, palette, typography, density, motion, component styling, or responsive collapse drift away from the generated design system, return to `docs/DESIGN.md` and repair the UI before advancing.
+- If UI claims cannot be grounded in `.buildprint/ui-evidence.md`, or the first viewport cannot prove an action surface stronger than "type and send", return to `02-ui-identity.md`, `docs/ui-identity.md`, or `docs/DESIGN.md` according to the failed claim and repair the UI before advancing.
 - If runtime/provider/deployment is unavailable, build the seam and record a blocker; do not fake live success.
 
 ## Handoff discipline

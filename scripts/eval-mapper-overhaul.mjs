@@ -7,6 +7,7 @@ import { execFile, execFileSync } from 'node:child_process'
 
 const root = path.resolve(import.meta.dirname, '..')
 const template = path.join(root, 'buildprints/buildprint-mapper-os/templates/executable-packet')
+const agenticChatPacket = path.join(root, 'buildprints/agentic-chat')
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'mapper-overhaul-eval-'))
 
 function copyTemplate(name) {
@@ -60,6 +61,49 @@ function expectFailure(name, args, snippets) {
 }
 
 expectPass('mapper v3 template packet passes', ['packet', 'check', template], ['Packet check: PASS'])
+
+const weakAgenticChatNativeGate = path.join(tmp, 'weak-agentic-chat-native-gate')
+fs.cpSync(agenticChatPacket, weakAgenticChatNativeGate, { recursive: true })
+edit(weakAgenticChatNativeGate, '02-ui-identity.md', (s) => s
+  .replace(/- Product genre:[^\n]*\n/, '')
+  .replace(/17\. Chat-native action gate:[\s\S]*?\n\n## Minimum proof before moving to phases/, '17. Action UI: make the agent feel capable.\n\n## Minimum proof before moving to phases')
+  .replace(/- Do not replace the chat interface[^\n]*\n/, ''))
+edit(weakAgenticChatNativeGate, '03-phases/phase-flow.md', (s) => s
+  .replace(/- For Agentic Chat,[^\n]*\n/, ''))
+edit(weakAgenticChatNativeGate, '03-phases/critical-review-pushback.md', (s) => s
+  .replace(/- \*\*Chat-native genre drift\*\*:[^\n]*\n/, ''))
+edit(weakAgenticChatNativeGate, 'HANDOVER.md', (s) => s
+  .replace(/  - Chat-native action gate[^\n]*\n/, ''))
+expectFailure('agentic-chat eval rejects missing chat-native action gate',
+  ['packet', 'check', weakAgenticChatNativeGate],
+  ['✗ agentic-chat requires chat-native action gate',
+    '✗ agentic-chat phase flow blocks chat-native genre drift',
+    '✗ agentic-chat critical review blocks chat-native genre drift',
+    '✗ agentic-chat handover captures chat-native action gate'])
+
+const weakAgenticChatCraftGate = path.join(tmp, 'weak-agentic-chat-craft-gate')
+fs.cpSync(agenticChatPacket, weakAgenticChatCraftGate, { recursive: true })
+edit(weakAgenticChatCraftGate, '02-ui-identity.md', (s) => s
+  .replace(/references\/product-taste\.md, /, '')
+  .replace(/18\. Design read and taste dials:[\s\S]*?\n19\. Consumer chat craft gate:/, '18. Taste: make the chat feel good.\n19. Consumer chat craft gate:')
+  .replace(/19\. Consumer chat craft gate:[\s\S]*?\n\n## Minimum proof before moving to phases/, '19. Consumer chat craft gate: make the first screen polished.\n\n## Minimum proof before moving to phases')
+  .replace(/- The first viewport passes the Consumer Chat Craft Gate:[\s\S]*?\n/, '')
+  .replace(/- `\.buildprint\/ui-evidence\.md` records Design Read[\s\S]*?\n/, '')
+  .replace(/- Do not seed approval[\s\S]*?\n/, '')
+  .replace(/- Do not expose `local route`[\s\S]*?\n/, ''))
+edit(weakAgenticChatCraftGate, '03-phases/phase-flow.md', (s) => s
+  .replace(/- For Agentic Chat, if the default first viewport feels[\s\S]*?\n/, ''))
+edit(weakAgenticChatCraftGate, '03-phases/critical-review-pushback.md', (s) => s
+  .replace(/- \*\*Consumer chat craft failure\*\*:[^\n]*\n/, ''))
+edit(weakAgenticChatCraftGate, 'HANDOVER.md', (s) => s
+  .replace(/  - Consumer chat craft gate[^\n]*\n/, '')
+  .replace(/- <consumer chat craft claim[^\n]*\n/, ''))
+expectFailure('agentic-chat eval rejects missing consumer chat craft gate',
+  ['packet', 'check', weakAgenticChatCraftGate],
+  ['✗ agentic-chat requires consumer chat craft gate',
+    '✗ agentic-chat phase flow blocks consumer chat craft failure',
+    '✗ agentic-chat critical review blocks consumer chat craft failure',
+    '✗ agentic-chat handover captures consumer chat craft gate'])
 
 const mapperDocs = [
   'BUILDPRINT.md',
@@ -202,9 +246,28 @@ expectFailure('mapper eval rejects UI identity without distinctiveness proof',
   ['✗ ui identity requires nearest-silhouette distinguishing treatment',
     '✗ ui identity requires anti-silhouette distinctiveness proof'])
 
+const weakUiIdentityEvidenceBinder = copyTemplate('weak-ui-identity-evidence-binder')
+edit(weakUiIdentityEvidenceBinder, '02-ui-identity.md', (s) => s
+  .replace(/15\. Evidence binder requirements:[\s\S]*?\n16\. Action surface gate:/, '15. Visual review: inspect screenshots for quality.\n16. Action surface gate:')
+  .replace(/16\. Action surface gate:[\s\S]*?\n\n## Minimum proof before moving to phases/, '16. Action surface gate: make the UI action-oriented.\n\n## Minimum proof before moving to phases')
+  .replace(/- `.buildprint\/ui-evidence\.md`[\s\S]*?\n/, '')
+  .replace(/- The first viewport proves an action surface[\s\S]*?\n/, ''))
+expectFailure('mapper eval rejects UI identity without evidence binder/action gate',
+  ['packet', 'check', weakUiIdentityEvidenceBinder],
+  ['✗ ui identity requires evidence binder and action surface gate'])
+
 const weakHandoverTypedGates = copyTemplate('weak-handover-typed-gates')
 edit(weakHandoverTypedGates, 'HANDOVER.md', (s) => s.replace(/- Typed quality gates:[\s\S]*?(?=- Central output quality evidence:)/, ''))
 expectFailure('mapper eval requires typed gate handover', ['packet', 'check', weakHandoverTypedGates], ['✗ handover captures typed quality gate results'])
+
+const weakHandoverUiEvidence = copyTemplate('weak-handover-ui-evidence')
+edit(weakHandoverUiEvidence, 'HANDOVER.md', (s) => s
+  .replace(/  - UI evidence binder[^\n]*\n/, '')
+  .replace(/  - Consumer\/action UI proven[^\n]*\n/, '')
+  .replace(/  - Nearest bad silhouette comparison[^\n]*\n/, '')
+  .replace(/- <consumer\/action UI claim[^\n]*\n/, '')
+  .replace(/ Do not claim consumer-grade[\s\S]*?nearest bad silhouette\./, ''))
+expectFailure('mapper eval requires UI evidence handover', ['packet', 'check', weakHandoverUiEvidence], ['✗ handover captures UI evidence and action gate'])
 
 const weakObjective = copyTemplate('weak-objective')
 edit(weakObjective, '03-phases/02-core-product-loop.md', (s) => s.replace(/## Building objective[\s\S]*?## DO NOT/, '## Building objective\n\nBuild stuff.\n\n## DO NOT'))
@@ -217,6 +280,15 @@ expectFailure('mapper eval rejects missing comprehensive phase heading', ['packe
 const weakFlow = copyTemplate('weak-flow')
 edit(weakFlow, '03-phases/phase-flow.md', () => '# Phase Flow\n\nJust code all phases.\n')
 expectFailure('mapper eval rejects weak phase flow', ['packet', 'check', weakFlow], ['✗ phase flow defines active phase loop', '✗ phase flow rejects proof theater', '✗ phase flow defines repair routing'])
+
+const weakFlowUiEvidence = copyTemplate('weak-flow-ui-evidence')
+edit(weakFlowUiEvidence, '03-phases/phase-flow.md', (s) => s
+  .replace(/, `\.buildprint\/ui-evidence\.md` grounding identity\/action claims in screenshot or source evidence/, '')
+  .replace(/, missing UI evidence binder/, '')
+  .replace(/, or the first viewport cannot prove an action surface stronger than "type and send"/, ''))
+expectFailure('mapper eval rejects phase flow without UI evidence binder gate',
+  ['packet', 'check', weakFlowUiEvidence],
+  ['✗ phase flow requires UI identity verification before completion'])
 
 const weakCriticalReviewExperience = copyTemplate('weak-critical-review-experience')
 edit(weakCriticalReviewExperience, '03-phases/critical-review-pushback.md', (s) => s
@@ -246,6 +318,18 @@ edit(weakCriticalReviewCapture, '03-phases/critical-review-pushback.md', (s) => 
   .replace(/ Capture UI screenshots using the screenshot-capture protocol:[\s\S]*?desktop-only or single capture\./, ''))
 expectFailure('mapper eval rejects critical review without capture protocol', ['packet', 'check', weakCriticalReviewCapture], ['✗ critical-review-pushback defines screenshot capture protocol'])
 
+const weakCriticalReviewUiEvidence = copyTemplate('weak-critical-review-ui-evidence')
+edit(weakCriticalReviewUiEvidence, '03-phases/critical-review-pushback.md', (s) => s
+  .replace(/4\. Before scoring, inspect `\.buildprint\/ui-evidence\.md`[\s\S]*?rubric scores\.\n/, '')
+  .replace(/- \*\*Missing UI evidence binder\*\*:[\s\S]*?\n/, '')
+  .replace(/- \*\*Weak action surface\*\*:[\s\S]*?\n/, '')
+  .replace(/- \*\*Prose-only identity compliance\*\*:[\s\S]*?\n/, '')
+  .replace(/- `\.buildprint\/ui-evidence\.md` exists[\s\S]*?\n/, '')
+  .replace(/, Evidence Binder and Action Surface Gate verdicts/, ''))
+expectFailure('mapper eval rejects critical review without UI evidence/action gate',
+  ['packet', 'check', weakCriticalReviewUiEvidence],
+  ['✗ critical-review-pushback requires evidence binder and action surface gate'])
+
 const cliHelp = runAgb(['--help']).output
 for (const stale of ['persona --slice', 'state derive', 'slice status']) {
   if (cliHelp.includes(stale)) {
@@ -266,6 +350,7 @@ for (const required of [
   'AGENTS.md',
   '.agents/skills/setup-runbook/SKILL.md',
   '.agents/skills/frontend-ui-product-design/SKILL.md',
+  '.agents/skills/frontend-ui-product-design/references/product-taste.md',
   '.agents/skills/subagent-driven-implementation/SKILL.md',
   '.agents/skills/verify-and-review/SKILL.md'
 ]) {
@@ -281,12 +366,27 @@ for (const forbidden of ['.codex/skills', '.claude/skills', '.cline/skills', '.c
   }
 }
 expectPass('cli eval checkup warns until setup artifacts exist', ['harness', 'checkup', harnessFixture], ['Harness checkup: WARN', '.buildprint/setup-receipt.md exists'])
+fs.mkdirSync(path.join(harnessFixture, '.buildprint'), { recursive: true })
+fs.writeFileSync(path.join(harnessFixture, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
+expectFailure('cli eval checkup fails completed phase work without UI identity',
+  ['harness', 'checkup', harnessFixture],
+  ['Harness checkup: MISSING', 'UI identity artifact exists when the project is UI-bearing'])
+fs.writeFileSync(path.join(harnessFixture, 'UI-IDENTITY.md'), '# UI Identity\n\nnot-ui-bearing\n')
+expectPass('cli eval checkup accepts explicit non-UI identity marker', ['harness', 'checkup', harnessFixture], ['Harness checkup: WARN'])
 expectPass('cli eval initializes webapp profile skills', ['harness', 'init', harnessFixture, '--profile', 'webapp'], ['Profiles: webapp', 'frontend-visual-qa', 'asset-pipeline'])
 expectPass('cli eval initializes multiple profile skills', ['harness', 'init', harnessFixture, '--profile', 'webapp', '--profile', 'backend'], ['Profiles: webapp, backend', 'api-contract-checks', 'frontend-visual-qa'])
 const harnessAgentsMd = fs.readFileSync(path.join(harnessFixture, 'AGENTS.md'), 'utf8')
+const frontendSkillMd = fs.readFileSync(path.join(harnessFixture, '.agents/skills/frontend-ui-product-design/SKILL.md'), 'utf8')
+const productTasteRef = fs.readFileSync(path.join(harnessFixture, '.agents/skills/frontend-ui-product-design/references/product-taste.md'), 'utf8')
 if (!/Buildprint Skill Harness/.test(harnessAgentsMd) || !/setup-runbook/.test(harnessAgentsMd) || !/frontend-ui-product-design/.test(harnessAgentsMd) || !/subagent-driven-implementation/.test(harnessAgentsMd) || !/verify-and-review/.test(harnessAgentsMd) || !/completion_signal/.test(harnessAgentsMd)) {
   console.error(harnessAgentsMd)
   console.error('cli eval failed; AGENTS.md harness section is incomplete')
+  process.exit(1)
+}
+if (!/references\/product-taste\.md/.test(frontendSkillMd) || !/Design Read/.test(productTasteRef) || !/Taste Dials/.test(productTasteRef) || !/Craft Gate/.test(productTasteRef) || !/docs\/DESIGN\.md/.test(productTasteRef)) {
+  console.error(frontendSkillMd)
+  console.error(productTasteRef)
+  console.error('cli eval failed; frontend-ui-product-design skill is missing product taste discipline')
   process.exit(1)
 }
 console.log('✓ cli eval writes project-local skill harness')
@@ -359,7 +459,7 @@ const redactionFiles = {
   '/BUILDPRINT.md': '# BUILDPRINT: Redaction Package\n\nThis file is long enough for snapshot minimum checks. Read 00-questions.md, 01-project-setup.md, 02-ui-identity.md, 03-phases/phase-index.yaml, 03-phases/phase-flow.md, README.md, HANDOVER.md.\n',
   '/00-questions.md': '# 00 Questions\n\nHard-stop questions, Assumable defaults, and Deferrable questions. If blocked, stop before 01-project-setup.md.\n',
   '/01-project-setup.md': '# 01 Project Setup\n\nThis project setup file is long enough for snapshot checks and requires agb harness init, agb harness checkup, Buildprint skill harness, setup-runbook, frontend-ui-product-design, subagent-driven-implementation, verify-and-review, triggers, skips, completion_signal, .agents/skills, docs/architecture.md, command/proof path, applicable/not applicable setup, AGENTS.md, .env.example, setup-receipt.md, placeholder commands, real secrets, hide hard-stop, proven_implementation_requirements, libraries, runtimes, SDKs, platform services, hand-roll, and from-scratch.\n',
-  '/02-ui-identity.md': '# 02 UI Identity\n\nUX is a must. The experience must be understandable and a confusing interface is not a finished product. This runs after 01-project-setup.md and before 03-phases/*. Generate a local docs/ui-identity.md or UI-IDENTITY.md after setup and before phase work. Load frontend-ui-product-design from .agents/skills/frontend-ui-product-design/SKILL.md and references/screen-states.md, returning to 01-project-setup.md if missing. Required sections include First-run comprehension contract, User-language map, Creative product concept, product metaphor, dominant object, primary gesture, moment-to-moment manipulation, Silhouette rejection, forbidden default silhouette, generic dashboard, renamed workbench, card grid, proof console, Product identity thesis, Chosen style direction, Layout model, Interaction model, Component language, Color and typography tokens, Content stress fixtures, Proof obligations, screenshot delta review, exact semantic color, typography, state colors, focus, empty/loading/error/blocked, functionless buttons, dead controls, raw JSON, and evaluator language. Think deeply about the golden path and central output before phase implementation.\n',
+  '/02-ui-identity.md': '# 02 UI Identity\n\nUX is a must. The experience must be understandable and a confusing interface is not a finished product. This runs after 01-project-setup.md and before 03-phases/*. Generate local docs/ui-identity.md or UI-IDENTITY.md plus docs/DESIGN.md after setup and before phase work. Load frontend-ui-product-design from .agents/skills/frontend-ui-product-design/SKILL.md and references/product-taste.md and references/screen-states.md, returning to 01-project-setup.md if missing. Required sections include First-run comprehension contract, User-language map, Creative product concept, product metaphor, dominant object, primary gesture, moment-to-moment manipulation, Silhouette rejection, forbidden default silhouette, generic dashboard, renamed workbench, card grid, proof console, Product identity thesis, Chosen style direction, Layout model, Interaction model, Component language, Color and typography tokens, Content stress fixtures, Proof obligations, screenshot delta review, exact semantic color, typography, state colors, focus, empty/loading/error/blocked, functionless buttons, dead controls, raw JSON, evaluator language, Required sections in generated DESIGN.md, visual taste system, Design read, Taste dials, Visual atmosphere, Screenshot craft checks. Do not collapse docs/ui-identity.md and docs/DESIGN.md. Think deeply about the golden path and central output before phase implementation.\n',
   '/blueprint.yaml': 'schema_version: mapper-os/executable-blueprint/v3\nexecution_start: BUILDPRINT.md\nmachine_contract: blueprint.yaml\nharness:\n  provider: agents\n  profiles:\n    - webapp\n    - backend\nproven_implementation_requirements:\n  rule: use proven libraries, proven packages, or a proven tool path for fixed-format export, rich text editing, document parsing, drag reorder behavior, provider clients, task status, migrations, and any from-scratch custom implementation.\n',
   '/03-phases/phase-index.yaml': 'schema_version: mapper-os/phase-index/v3\nactive_phase: 03-phases/01-start.md\nphases:\n  - phase_id: 01-start\n    file: 03-phases/01-start.md\n    status: included\n',
   '/03-phases/phase-flow.md': '# Phase Flow\n\nUse active phase only.\n',
@@ -528,7 +628,7 @@ expectFailure(
 )
 
 // ---------------------------------------------------------------------------
-// agb verify ui: slop project fixture (expect fail on 3 checks)
+// agb verify ui: slop project fixture (expect fail on missing identity + raw UI checks)
 // ---------------------------------------------------------------------------
 const slopProject = path.join(tmp, 'slop-project')
 fs.mkdirSync(path.join(slopProject, '.buildprint'), { recursive: true })
@@ -548,14 +648,46 @@ function renderEvents(events) {
 `)
 {
   const { failed, output } = runAgb(['verify', 'ui', slopProject])
-  const missing = ['decisions-stub', 'raw-json-in-dom'].filter((id) => !output.includes(id))
+  const missing = ['decisions-stub', 'raw-json-in-dom', 'ui-identity-present', 'forbidden-words'].filter((id) => !output.includes(id))
   if (!failed || missing.length) {
     console.error(output)
     console.error(`agb verify ui slop fixture test failed; missing expected checks: ${missing.join(', ') || '(none)'}`)
     process.exit(1)
   }
-  console.log('✓ agb verify ui correctly fails slop project (decisions-stub + raw-json-in-dom)')
-  console.log(['  - decisions-stub', '  - raw-json-in-dom'].join('\n'))
+  console.log('✓ agb verify ui correctly fails slop project (missing identity + raw-json-in-dom)')
+  console.log(['  - decisions-stub', '  - raw-json-in-dom', '  - ui-identity-present', '  - forbidden-words'].join('\n'))
+}
+
+// ---------------------------------------------------------------------------
+// agb verify ui: debug/proof console fixture (expect fail on app-facing terms)
+// ---------------------------------------------------------------------------
+const proofConsoleProject = path.join(tmp, 'proof-console-project')
+fs.mkdirSync(path.join(proofConsoleProject, '.buildprint'), { recursive: true })
+fs.mkdirSync(path.join(proofConsoleProject, 'public'), { recursive: true })
+fs.mkdirSync(path.join(proofConsoleProject, 'docs'), { recursive: true })
+fs.writeFileSync(path.join(proofConsoleProject, '.buildprint', 'decisions.md'), '# Decisions\n\n| Question | Answer |\n|---|---|\n| Deployment posture | trusted_local |\n')
+fs.writeFileSync(path.join(proofConsoleProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
+fs.writeFileSync(path.join(proofConsoleProject, 'docs', 'ui-identity.md'), '# UI Identity\n\n## 5) User-language map\n\n- Forbidden main surface words:\n  - "proof"\n  - "fixture"\n')
+fs.writeFileSync(path.join(proofConsoleProject, 'public', 'index.html'), `<!doctype html>
+<html><head><title>Agentic Chat</title></head>
+<body>
+<main>
+  <h1>Response engine setup</h1>
+  <section>Run ledger</section>
+  <button>Blocked provider proof</button>
+</main>
+</body></html>
+`)
+{
+  const { failed, output } = runAgb(['verify', 'ui', proofConsoleProject])
+  const missing = ['proof-console-leakage', 'forbidden-words'].filter((id) => !output.includes(id))
+  if (!failed || missing.length) {
+    console.error(output)
+    console.error(`agb verify ui proof console fixture test failed; missing expected checks: ${missing.join(', ') || '(none)'}`)
+    process.exit(1)
+  }
+  console.log('✓ agb verify ui correctly fails proof/debug console UI')
+  console.log(['  - proof-console-leakage', '  - forbidden-words'].join('\n'))
 }
 
 // ---------------------------------------------------------------------------
@@ -568,6 +700,7 @@ fs.mkdirSync(path.join(cleanProject, 'docs'), { recursive: true })
 fs.writeFileSync(path.join(cleanProject, '.buildprint', 'decisions.md'), '# Decisions\n\n| Question | Answer |\n|---|---|\n| Deployment posture | trusted_local |\n')
 fs.writeFileSync(path.join(cleanProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
 fs.writeFileSync(path.join(cleanProject, 'docs', 'ui-identity.md'), '# UI Identity\n\n## 5) User-language map\n\n- Forbidden main surface words:\n  - "proof"\n')
+fs.writeFileSync(path.join(cleanProject, 'docs', 'DESIGN.md'), '# DESIGN\n\n## Design read\n\nReading this as a clean app for a local operator, where the first screen should feel calm and direct, not a generic proof console.\n')
 fs.writeFileSync(path.join(cleanProject, 'public', 'index.html'), `<!doctype html>
 <html><head><title>Clean App</title></head>
 <body>

@@ -1,5 +1,68 @@
 const FRONTEND_UI_REFERENCES = [
   {
+    path: 'references/product-taste.md',
+    body: `# Product Taste
+
+Use this before UI identity or UI implementation. It adapts taste-skill discipline to product apps, tools, dashboards, editors, and chat interfaces.
+
+## Design Read
+
+Before choosing layout or style, write a one-line design read:
+
+- Reading this as: <product genre> for <audience>, where the first screen should feel <quality bar>, not <nearest lazy default>.
+
+The design read must name the product genre. A chat app, editor, dashboard, creative canvas, review queue, setup flow, and landing page have different taste rules.
+
+## Taste Dials
+
+Set 4-7 dials from 1 to 10 before UI code. Use dials that fit the product genre, for example:
+
+- Genre fidelity.
+- System visibility.
+- Visual density.
+- Motion restraint.
+- Action directness.
+- Consumer polish.
+- Information scent.
+- Mobile comfort.
+
+For chat products, include chat dominance, composer polish, inline action naturalness, system-label suppression, and empty-state restraint.
+
+## Anti-Default List
+
+Name the 3-6 defaults this artifact must not fall into. Examples:
+
+- SaaS dashboard by habit.
+- Chat plus right inspector.
+- Mission sheet replacing chat.
+- Feature-demo cards before user intent.
+- Internal status labels as primary UI.
+- Blank center with a giant bordered shell.
+
+## Craft Gate
+
+Before handoff, compare screenshots against the design read and dials. Fail if:
+
+- The first viewport shows capabilities instead of the user's natural first action.
+- The UI advertises internals before the user needs them.
+- Empty state feels like a feature demo.
+- Every surface has the same bordered-card treatment.
+- Mobile is only desktop stacked tighter.
+- The screenshot could belong to any generic AI product after title changes.
+
+Taste claims need screenshot paths, regions, and concrete repair notes. "Looks clean" is not evidence.
+
+## DESIGN.md Contract
+
+For UI-bearing Buildprint work, write or update \`docs/DESIGN.md\` as the visual taste system after product identity is understood and before UI code hardens. Keep it distinct from \`docs/ui-identity.md\`:
+
+- \`docs/ui-identity.md\` says what product this must be, what the user does first, what interaction model and screen states exist, and which product silhouettes are forbidden.
+- \`docs/DESIGN.md\` says how the product visually feels: atmosphere, color, typography, spacing, radii, density, component styling, motion, responsive collapse, and visual anti-patterns.
+
+The evidence binder must prove both. A beautiful surface that violates the product genre fails; a correct product silhouette with weak visual taste also fails.
+`
+  },
+  {
     path: 'references/preflight.md',
     body: `# Preflight
 
@@ -311,7 +374,7 @@ Save to \`.buildprint/screenshots/\` with descriptive names that encode surface,
 
 ## Analyze Each Capture
 
-Compare every screenshot against \`docs/ui-identity.md\`: the dominant surface is dominant, the forbidden and adjacent silhouettes are not matched, hierarchy reads, and there is no overflow, clipping, overlap, or unreadable text. Confirm keyboard focus is visible where relevant.
+Compare every screenshot against \`docs/ui-identity.md\` and \`docs/DESIGN.md\`: the dominant surface is dominant, the forbidden and adjacent silhouettes are not matched, the visual atmosphere/tokens/component styling match the design system, hierarchy reads, and there is no overflow, clipping, overlap, or unreadable text. Confirm keyboard focus is visible where relevant.
 
 ## Rules
 
@@ -430,19 +493,23 @@ Use before UI code. The goal is not decoration; the goal is a product surface th
 
 ## Core Workflow
 
-1. Read \`references/preflight.md\` when the project already has files, design tokens, components, CSS, or a framework.
-2. Read \`references/screen-states.md\` before layout for any screen, app shell, or workflow.
-3. Read \`references/structural-variety.md\` before choosing the page or screen structure.
-4. Read \`references/aesthetic-direction.md\` before choosing the visual style; commit to one named direction with concrete type, color, shape, and motion choices.
-5. Read \`references/design-tokens.md\` before writing colors, fonts, spacing, focus, or state styles.
-6. Read \`references/component-states.md\` for single components or interactive controls.
-7. Read \`references/mobile-hard-floor.md\` before responsive verification.
-8. Read \`references/screenshot-capture.md\` before capturing UI proof.
-9. Read \`references/slop-review.md\` before final handoff.
+1. Read \`references/product-taste.md\` before choosing product genre, visual quality bar, taste dials, or anti-defaults.
+2. Read \`references/preflight.md\` when the project already has files, design tokens, components, CSS, or a framework.
+3. Read \`references/screen-states.md\` before layout for any screen, app shell, or workflow.
+4. Read \`references/structural-variety.md\` before choosing the page or screen structure.
+5. Read \`references/aesthetic-direction.md\` before choosing the visual style; commit to one named direction with concrete type, color, shape, and motion choices.
+6. Read \`references/design-tokens.md\` before writing colors, fonts, spacing, focus, or state styles.
+7. Read \`references/component-states.md\` for single components or interactive controls.
+8. Read \`references/mobile-hard-floor.md\` before responsive verification.
+9. Read \`references/screenshot-capture.md\` before capturing UI proof.
+10. Read \`references/slop-review.md\` before final handoff.
 
 ## Required Decisions
 
 - Audience, current task, dominant object, primary gesture, first action.
+- Design read: product genre, audience, desired first-screen feeling, and nearest lazy default rejected.
+- Taste dials: 4-7 product-specific dials with target values and screenshot-checkable implications.
+- DESIGN.md split: \`docs/ui-identity.md\` governs product/interaction; \`docs/DESIGN.md\` governs visual taste, tokens, components, motion, and responsive craft.
 - Scope: component, screen state, multi-step flow, or full app shell.
 - Named aesthetic direction from \`references/aesthetic-direction.md\`, the concrete tokens it commits to, and the adjacent direction rejected.
 - Current screen state: visible now, reachable later, placement for details, and what must not be visible together.
@@ -453,10 +520,11 @@ Use before UI code. The goal is not decoration; the goal is a product surface th
 - Generic dashboard, renamed workbench, card grid, admin shell, proof console, or raw JSON as the main experience.
 - Stuffing all capabilities into one permanent page to show requirement coverage.
 - Template rhythm reused without product reason.
+- Empty-state feature demos, generic seeded cards, internal status labels, or blank dead zones that make the UI feel like a harness instead of a product.
 - Untokenized colors/fonts, invented proof copy, fake chrome, and display-heading italics.
 - UI copy that exposes evaluator/build/proof terms unless the artifact is explicitly a developer tool.
 
-End the identity or UI-design handoff with \`UI_IDENTITY_DONE\` only after the generated local identity artifact or UI implementation proof exists.
+End the identity or UI-design handoff with \`UI_IDENTITY_DONE\` only after the generated local identity artifact, \`docs/DESIGN.md\`, and UI implementation proof exist, or an explicit non-UI blocker is recorded.
 `,
     references: FRONTEND_UI_REFERENCES
   },
@@ -537,7 +605,7 @@ Use before claiming a phase, checkpoint, or Buildprint is complete.
 
 1. Re-read the active acceptance criteria and setup receipt.
 2. Run the strongest available proof command, browser/API/runtime check, screenshot inspection, persistence readback, or manual check.
-3. For UI-bearing work, capture screenshots per the frontend skill's \`references/screenshot-capture.md\`: named tool chain, every required viewport, saved to \`.buildprint/screenshots/\`, and analyzed against \`docs/ui-identity.md\`.
+3. For UI-bearing work, capture screenshots per the frontend skill's \`references/screenshot-capture.md\`: named tool chain, every required viewport, saved to \`.buildprint/screenshots/\`, and analyzed against \`docs/ui-identity.md\` and \`docs/DESIGN.md\`.
 4. Inspect the diff and list unrelated changes, dead controls, placeholder paths, mocked/sample-only proof, and claim gaps.
 5. Compare proof against the predicted failure modes from phase-flow.
 6. Patch one concrete weakness if found, then rerun the relevant proof.
@@ -573,11 +641,11 @@ completion_signal: FRONTEND_VISUAL_QA_DONE
 
 # Frontend Visual QA
 
-Use after UI implementation to verify the shipped surface matches \`docs/ui-identity.md\` and survives real viewports and states. The goal is to catch layout failures, silhouette violations, and missing states before handoff, not after.
+Use after UI implementation to verify the shipped surface matches \`docs/ui-identity.md\` and \`docs/DESIGN.md\` and survives real viewports and states. The goal is to catch layout failures, silhouette violations, visual craft drift, and missing states before handoff, not after.
 
 ## Workflow
 
-1. Load \`docs/ui-identity.md\` (or the local equivalent) and extract the forbidden silhouette, dominant surface, screen-state contract, and proof obligations defined there.
+1. Load \`docs/ui-identity.md\` (or the local equivalent) and \`docs/DESIGN.md\`. Extract the forbidden silhouette, dominant surface, screen-state contract, proof obligations, design read, taste dials, token/component rules, and visual anti-patterns defined there.
 2. Capture screenshots following \`references/screenshot-capture.md\`: use the named tool chain, capture every required viewport, save to \`.buildprint/screenshots/\` with viewport-and-state names. If a prior screenshot exists, run a delta review: fail if the dominant surface, interaction model, or central object is unchanged while palette, copy, or spacing differs only cosmetically.
 3. For each viewport, verify: no horizontal page scroll, no clipped controls or text, no overlapping elements, no two-line clickable labels, and the dominant surface is visually dominant.
 4. Check all required screen states are reachable and render without layout collapse: empty, loading, streaming, blocked, error, success, and selected.
@@ -589,6 +657,7 @@ Use after UI implementation to verify the shipped surface matches \`docs/ui-iden
 ## Hard Rules
 
 - Do not pass a UI whose silhouette matches the forbidden silhouette named in \`docs/ui-identity.md\`.
+- Do not pass a UI whose visual craft violates \`docs/DESIGN.md\`, even if the product silhouette is correct.
 - Do not pass if any required screen state is missing or collapses the layout.
 - Do not accept a screenshot as proof without stating which viewport it represents.
 - Slop-review scores below 3 require repair, not a note saying "future work."
