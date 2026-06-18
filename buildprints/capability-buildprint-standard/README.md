@@ -225,6 +225,7 @@ type: capability
 capability: billing.subscriptions
 description: Adds Stripe Checkout subscriptions, signed webhook handling, and persisted entitlement checks to compatible web apps.
 execution_profile: guarded
+claim_status: unproven
 host_frameworks:
   - nextjs
 host_detection:

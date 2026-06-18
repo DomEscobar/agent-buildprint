@@ -44,6 +44,6 @@
   ],
   "publicStatus": {
     "label": "Draft authoring workflow",
-    "explanation": "Ready to create the first real capability packet, likely Stripe subscriptions or RBAC."
+    "explanation": "Used to create real Stripe, RBAC, and API key capability packets; still draft until more host-applied receipts exist."
   }
 }

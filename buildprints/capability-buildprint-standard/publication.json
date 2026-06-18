@@ -26,7 +26,7 @@
     "starter JSON schema for scanner/tool validation"
   ],
   "risks": [
-    "Draft standard needs real capability packets to harden edge cases",
+    "Draft standard needs continued dogfooding to harden edge cases across more host frameworks",
     "Scanner and registry UI do not yet deeply validate capability.yaml",
     "Examples are contract examples, not full provider implementations"
   ],
@@ -52,7 +52,7 @@
   ],
   "publicStatus": {
     "label": "Draft v0",
-    "explanation": "Ready for dogfooding with real Stripe, RBAC, and auth capability packets."
+    "explanation": "Dogfooded with Stripe, RBAC, and API key capability packets; still draft until broader host evidence exists."
   },
   "whatYouGet": [
     "A compact file shape for reusable capability packets",

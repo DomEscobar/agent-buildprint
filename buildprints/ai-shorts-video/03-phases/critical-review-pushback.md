@@ -136,4 +136,4 @@ Scoring anchors:
 
 ## Handoff note
 
-Record the final critical-review score, the worst category, the most important flaw fixed, the proof command or screenshot that changed after repair, reviewer independence confirmation, and any remaining blocker that future phases must not overclaim.
+Record the final critical-review score, the worst category, the most important flaw fixed, the proof command or screenshot that changed after repair, reviewer independence confirmation, the `phase_core_passed` versus `claim_qualified` judgment, and any remaining blocker that future phases must not overclaim.

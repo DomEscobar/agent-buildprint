@@ -79,6 +79,11 @@ From this repository:
 node ./bin/agb.js --help
 npm run check:syntax
 npm run check:packet:mapper
+npm run check:packets
+npm run check:capabilities
+npm run check:authors
+npm run check:capability:regressions
+npm run eval:mapper-overhaul
 npm pack --dry-run
 ```
 

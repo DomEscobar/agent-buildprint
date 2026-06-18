@@ -174,6 +174,121 @@ function expectFailure(name, args, snippets) {
 
 expectPass('mapper v3 template packet passes', ['packet', 'check', template], ['Packet check: PASS'])
 
+const mapperRoot = path.join(root, 'buildprints/buildprint-mapper-os')
+expectPass('mapper os root packet passes', ['packet', 'check', mapperRoot], ['Packet check: PASS'])
+
+const mapperMissingCriticalSource = path.join(tmp, 'mapper-missing-critical-source')
+fs.cpSync(mapperRoot, mapperMissingCriticalSource, { recursive: true })
+edit(mapperMissingCriticalSource, 'buildprint.json', (s) => s.replaceAll('templates/executable-packet/03-phases/critical-review-pushback.md', 'templates/executable-packet/03-phases/phase-flow.md'))
+expectFailure('mapper eval rejects root manifest without critical review template source',
+  ['packet', 'check', mapperMissingCriticalSource],
+  ['✗ mapper manifest includes critical review template source'])
+
+const mapperMissingUiEvidencePolicy = path.join(tmp, 'mapper-missing-ui-evidence-policy')
+fs.cpSync(mapperRoot, mapperMissingUiEvidencePolicy, { recursive: true })
+edit(mapperMissingUiEvidencePolicy, 'policies/quality.md', (s) => s
+  .replace(/For UI-bearing artifacts, `\.buildprint\/ui-evidence\.md`[\s\S]*?cannot qualify a final product claim\.\n\n/, ''))
+edit(mapperMissingUiEvidencePolicy, 'CONTRACTS.md', (s) => s
+  .replace(/`\.buildprint\/ui-evidence\.md`[\s\S]*?prose-only evidence cannot pass\.\n\n/, ''))
+for (const rootPolicyFile of ['CONTRACTS.md', 'SPEC.md', 'README.md', 'policies/quality.md']) {
+  edit(mapperMissingUiEvidencePolicy, rootPolicyFile, (s) => s
+    .replaceAll('.buildprint/ui-evidence.md', '.buildprint/evidence.md')
+    .replaceAll('ui-evidence.md', 'evidence.md')
+    .replaceAll('UI evidence binder', 'evidence binder')
+    .replaceAll('screenshot or `file:line` evidence', 'evidence')
+    .replaceAll('screenshot paths or source `file:line` evidence', 'evidence'))
+}
+expectFailure('mapper eval rejects root policy without UI evidence binder',
+  ['packet', 'check', mapperMissingUiEvidencePolicy],
+  ['✗ mapper root requires UI evidence binder'])
+
+const mapperTemplateStaticDom = path.join(tmp, 'mapper-template-static-dom')
+fs.cpSync(mapperRoot, mapperTemplateStaticDom, { recursive: true })
+edit(mapperTemplateStaticDom, 'templates/executable-packet/01-project-setup.md', (s) => s
+  .replace(/Vanilla\/static DOM\/CSS is allowed only with an explicit `ui_stack_exception`[^.]*\./g, 'Static DOM scripting and plain CSS may be selected by default.')
+  .replaceAll('`ui_stack_exception`', '`ui_exception`')
+  .replaceAll('ui_stack_exception', 'ui_exception'))
+expectFailure('mapper eval rejects template that permits static DOM without exception',
+  ['packet', 'check', mapperTemplateStaticDom],
+  ['✗ project setup routes proven implementation requirements'])
+
+const mapperTemplateNoClaimQualification = path.join(tmp, 'mapper-template-no-claim-qualification')
+fs.cpSync(mapperRoot, mapperTemplateNoClaimQualification, { recursive: true })
+edit(mapperTemplateNoClaimQualification, 'templates/executable-packet/03-phases/critical-review-pushback.md', (s) => s
+  .replace(/phase_core_passed/g, 'phase passed')
+  .replace(/claim_qualified/g, 'claim qualified'))
+expectFailure('mapper eval rejects template without final claim qualification split',
+  ['packet', 'check', mapperTemplateNoClaimQualification],
+  ['✗ critical-review-pushback separates phase core pass from claim qualification'])
+
+const authorPacket = path.join(root, 'buildprints/capability-buildprint-author')
+expectPass('capability author packet passes', ['packet', 'check', authorPacket], ['Packet check: PASS'])
+
+const authorWithoutDeepsearch = path.join(tmp, 'author-without-deepsearch')
+fs.cpSync(authorPacket, authorWithoutDeepsearch, { recursive: true })
+edit(authorWithoutDeepsearch, 'author.yaml', (s) => s.replace(/required_when_user_context_is_thin:\s*true/g, 'required_when_user_context_is_thin: false'))
+edit(authorWithoutDeepsearch, 'BUILDPRINT.md', (s) => s.replace(/before asking broad questions|before broad questions/gi, 'during authoring'))
+edit(authorWithoutDeepsearch, '00-internet-deepsearch.md', (s) => s.replace(/before asking broad questions|before broad questions/gi, 'during authoring'))
+expectFailure('capability author eval rejects author packet without deepsearch gate',
+  ['packet', 'check', authorWithoutDeepsearch],
+  ['✗ author requires internet deepsearch before broad questions'])
+
+const authorTemplatePlaceholder = path.join(tmp, 'author-template-placeholder')
+fs.cpSync(authorPacket, authorTemplatePlaceholder, { recursive: true })
+edit(authorTemplatePlaceholder, 'templates/capability-packet/capability.yaml', (s) => s
+  .replace('audit-log-events', 'example-host-capability')
+  .replace('observability.audit_log_events', 'domain.specific_capability')
+  .replace('nextjs', '<framework>'))
+expectFailure('capability author eval rejects placeholder capability template',
+  ['packet', 'check', authorTemplatePlaceholder],
+  ['✗ capability template has no placeholder fields'])
+
+const authorNoTechniqueEvidence = path.join(tmp, 'author-no-technique-evidence')
+fs.cpSync(authorPacket, authorNoTechniqueEvidence, { recursive: true })
+for (const authorFile of ['BUILDPRINT.md', 'author.yaml', '00-internet-deepsearch.md', '00-intake.md', '01-capability-boundary.md', '02-contract-authoring.md', '04-validation-and-publication.md', 'README.md']) {
+  edit(authorNoTechniqueEvidence, authorFile, (s) => s
+    .replaceAll('selected technique', 'chosen approach')
+    .replaceAll('selected best-current technique', 'chosen approach')
+    .replaceAll('rejected techniques', 'other approaches')
+    .replaceAll('official provider/framework docs', 'references')
+    .replaceAll('official docs', 'references')
+    .replaceAll('source examples', 'samples')
+    .replaceAll('confidence', 'certainty'))
+}
+expectFailure('capability author eval rejects current/proven claims without source basis',
+  ['packet', 'check', authorNoTechniqueEvidence],
+  ['✗ author records selected and rejected current techniques with source basis'])
+
+const authorHappyPathSecurity = path.join(tmp, 'author-happy-path-security')
+fs.cpSync(authorPacket, authorHappyPathSecurity, { recursive: true })
+for (const authorFile of ['BUILDPRINT.md', 'author.yaml', '00-internet-deepsearch.md', '00-intake.md', '01-capability-boundary.md', '02-contract-authoring.md', '03-phase-authoring.md', '04-validation-and-publication.md', '05-brutal-quality-gate.md', 'README.md', 'templates/capability-packet/BUILDPRINT.md', 'templates/capability-packet/capability.yaml']) {
+  edit(authorHappyPathSecurity, authorFile, (s) => s
+    .replace(/negative tests/g, 'happy-path checks')
+    .replace(/negative proof/g, 'happy-path proof')
+    .replace(/failure modes/g, 'success modes')
+    .replace(/happy-path-only/g, 'happy path')
+    .replace(/happy path only/g, 'happy path')
+    .replace(/not only happy-path/g, 'only happy-path')
+    .replace(/not only happy path/g, 'only happy path')
+    .replace(/denial, failure, and abuse paths/g, 'successful paths'))
+}
+expectFailure('capability author eval rejects happy-path-only security verification',
+  ['packet', 'check', authorHappyPathSecurity],
+  ['✗ author requires security negative tests and failure modes'])
+
+const authorPublicationOutrunsProof = path.join(tmp, 'author-publication-outruns-proof')
+fs.cpSync(authorPacket, authorPublicationOutrunsProof, { recursive: true })
+for (const authorFile of ['BUILDPRINT.md', 'author.yaml', '00-intake.md', '01-capability-boundary.md', '02-contract-authoring.md', '03-phase-authoring.md', '04-validation-and-publication.md', '05-brutal-quality-gate.md', 'README.md', 'publication.json', 'templates/capability-packet/BUILDPRINT.md', 'templates/capability-packet/capability.yaml']) {
+  edit(authorPublicationOutrunsProof, authorFile, (s) => s
+    .replace(/publication copy/g, 'publication summary')
+    .replace(/outrun/g, 'exceed')
+    .replace(/outruns/g, 'exceeds')
+    .replace(/beyond/g, 'past'))
+}
+expectFailure('capability author eval rejects publication copy outrunning proof',
+  ['packet', 'check', authorPublicationOutrunsProof],
+  ['✗ author validation blocks publication copy outrunning proof'])
+
 const weakAgenticChatNativeGate = path.join(tmp, 'weak-agentic-chat-native-gate')
 fs.cpSync(agenticChatPacket, weakAgenticChatNativeGate, { recursive: true })
 edit(weakAgenticChatNativeGate, '02-ui-identity.md', (s) => s

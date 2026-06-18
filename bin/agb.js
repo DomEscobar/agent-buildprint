@@ -270,6 +270,19 @@ function isCapabilityPacket(dir) {
     /type:\s*capability/i.test(capability)
 }
 
+function isBuildprintAuthorPacket(dir) {
+  const authorFile = path.join(dir, 'author.yaml')
+  if (!exists(authorFile)) return false
+  const author = safeReadText(authorFile)
+  return /type:\s*buildprint-author/i.test(author) ||
+    /schema:\s*agent-buildprint\/author\.v0/i.test(author)
+}
+
+function isMapperOsRoot(dir) {
+  return exists(path.join(dir, 'buildprint.json')) &&
+    exists(path.join(dir, 'templates', 'executable-packet', 'blueprint.yaml'))
+}
+
 function yamlScalar(text, key) {
   const match = text.match(new RegExp(`^\\s*${key}:\\s*([^\\n#]+)`, 'mi'))
   return match ? match[1].trim().replace(/^['"]|['"]$/g, '') : ''
@@ -313,6 +326,15 @@ function yamlListItemsInSection(text, sectionKey, listKey) {
 
 function normalizedCapabilityItem(value) {
   return String(value || '').toLowerCase().replace(/[`'"]/g, '').replace(/\s+/g, ' ').trim()
+}
+
+function hasGenericPlaceholder(value) {
+  return /<[a-z][a-z0-9_.\s-]*>|\bplaceholder\b|\bTODO\b|\bTBD\b|\blorem ipsum\b|\bmapped artifact\b|\bcentral surface\b|\bgeneric capability\b|\bexample[-_]|domain\.specific_capability|detected-host-framework|Replace this example/i.test(String(value || ''))
+}
+
+function yamlListHasConcreteItems(text, key) {
+  const items = yamlListItems(text, key)
+  return items.length > 0 && items.every((item) => !hasGenericPlaceholder(item))
 }
 
 function listItemsOverlap(left, right) {
@@ -445,7 +467,17 @@ function capabilityPacketCheckResults(dir) {
   ok('capability.yaml has stable kebab-case name', /^[a-z0-9][a-z0-9-]{1,80}$/.test(yamlScalar(capability, 'name')))
   ok('capability.yaml declares dotted capability id', /^[a-z][a-z0-9_.-]*\.[a-z0-9_.-]+$/i.test(yamlScalar(capability, 'capability')))
   ok('capability.yaml declares execution profile', /execution_profile:\s*(light|guarded|strict)/i.test(capability))
-  ok('capability.yaml declares host frameworks', yamlListItems(capability, 'host_frameworks').length > 0)
+  ok('capability.yaml declares host frameworks', yamlListHasConcreteItems(capability, 'host_frameworks'))
+  ok('capability.yaml has no generic placeholder values',
+    !hasGenericPlaceholder(yamlScalar(capability, 'name')) &&
+    !hasGenericPlaceholder(yamlScalar(capability, 'capability')) &&
+    !hasGenericPlaceholder(yamlScalar(capability, 'description')) &&
+    !hasGenericPlaceholder(yamlSection(capability, 'risk')) &&
+    !hasGenericPlaceholder(yamlSection(capability, 'failure_modes')) &&
+    !hasGenericPlaceholder(yamlSection(capability, 'verify')) &&
+    !hasGenericPlaceholder(yamlSection(capability, 'evidence'))
+  )
+  ok('capability.yaml declares claim proof ceiling', /claim_status:\s*(unproven|fixture_proven|host_proven|blocked)/i.test(capability))
   ok('capability.yaml declares host detection signals', /host_detection:\s*\n[\s\S]*(package_files|route_signals|auth_signals|database_signals):/i.test(capability))
   ok('capability.yaml declares existing capabilities or human decisions', /requires:\s*\n[\s\S]*(existing_capabilities|human_decisions|env):/i.test(capability))
   ok('capability.yaml declares touched surfaces', yamlListItems(capability, 'touches').length >= 3)
@@ -498,7 +530,111 @@ function capabilityPacketCheckResults(dir) {
   return checks
 }
 
+function buildprintAuthorCheckResults(dir) {
+  const checks = []
+  const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
+  const files = new Set(packetFiles(dir))
+  const author = safeReadText(path.join(dir, 'author.yaml'))
+  const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
+  const classifier = safeReadText(path.join(dir, '00-request-classifier.md'))
+  const deepsearch = safeReadText(path.join(dir, '00-internet-deepsearch.md'))
+  const intake = safeReadText(path.join(dir, '00-intake.md'))
+  const boundary = safeReadText(path.join(dir, '01-capability-boundary.md'))
+  const contract = safeReadText(path.join(dir, '02-contract-authoring.md'))
+  const phaseAuthoring = safeReadText(path.join(dir, '03-phase-authoring.md'))
+  const validation = safeReadText(path.join(dir, '04-validation-and-publication.md'))
+  const brutalGate = safeReadText(path.join(dir, '05-brutal-quality-gate.md'))
+  const capabilityTemplate = safeReadText(path.join(dir, 'templates/capability-packet/capability.yaml'))
+  const templateBuildprint = safeReadText(path.join(dir, 'templates/capability-packet/BUILDPRINT.md'))
+  const combined = [author, buildprint, classifier, deepsearch, intake, boundary, contract, phaseAuthoring, validation, brutalGate, capabilityTemplate, templateBuildprint].join('\n')
+
+  for (const file of [
+    'BUILDPRINT.md',
+    'author.yaml',
+    '00-request-classifier.md',
+    '00-internet-deepsearch.md',
+    '00-intake.md',
+    '01-capability-boundary.md',
+    '02-contract-authoring.md',
+    '03-phase-authoring.md',
+    '04-validation-and-publication.md',
+    '05-brutal-quality-gate.md',
+    'templates/capability-packet/BUILDPRINT.md',
+    'templates/capability-packet/capability.yaml',
+  ]) ok(`author file exists: ${file}`, files.has(file))
+
+  ok('author.yaml declares buildprint-author schema', /schema:\s*agent-buildprint\/author\.v0/i.test(author) && /type:\s*buildprint-author/i.test(author))
+  ok('author read order runs classifier before authoring', /00-request-classifier\.md[\s\S]*00-internet-deepsearch\.md[\s\S]*00-intake\.md[\s\S]*01-capability-boundary\.md[\s\S]*02-contract-authoring\.md[\s\S]*03-phase-authoring\.md/i.test(author))
+  ok('author routes greenfield products away from capability packets', /greenfield_product:[\s\S]*do_not_create_capability_packet:\s*true/i.test(author) && /whole new product|app|SaaS|dashboard|agent system/i.test(author))
+  ok('author requires internet deepsearch before broad questions', /required_when_user_context_is_thin:\s*true/i.test(author) && /before broad questions|before asking broad questions|before questions/i.test(`${author}\n${buildprint}\n${deepsearch}`))
+  ok('author records selected and rejected current techniques with source basis',
+    /selected technique/i.test(combined) &&
+    /rejected techniques/i.test(combined) &&
+    /official docs/i.test(combined) &&
+    /source examples/i.test(combined) &&
+    /confidence/i.test(combined)
+  )
+  ok('author hard-stops setup-changing capability decisions',
+    /host/i.test(intake) &&
+    /secret|provider access/i.test(intake) &&
+    /destructive/i.test(intake) &&
+    /migration/i.test(intake) &&
+    /security posture|auth\/tenant|auth\/tenant boundaries/i.test(intake) &&
+    /billing|provider side effects|external billing/i.test(`${intake}\n${templateBuildprint}`)
+  )
+  ok('author requires real-host proof and adversarial review before 10/10 claims',
+    /real[- ]host proof/i.test(combined) &&
+    /adversarial review/i.test(combined) &&
+    /10\/10|perfect/i.test(combined) &&
+    /downgrade/i.test(combined)
+  )
+  ok('author requires security negative tests and failure modes',
+    /negative tests/i.test(combined) &&
+    /failure modes/i.test(combined) &&
+    /happy-path-only|happy path only|not only happy-path|not only happy path/i.test(combined)
+  )
+  ok('capability template has no placeholder fields',
+    !hasGenericPlaceholder(capabilityTemplate) &&
+    yamlListHasConcreteItems(capabilityTemplate, 'host_frameworks') &&
+    yamlListHasConcreteItems(capabilityTemplate, 'failure_modes') &&
+    yamlListHasConcreteItems(yamlSection(capabilityTemplate, 'verify'), 'commands')
+  )
+  ok('capability template declares claim proof ceiling', /claim_status:\s*(unproven|fixture_proven|host_proven|blocked)/i.test(capabilityTemplate))
+  ok('author validation blocks publication copy outrunning proof',
+    /publication copy/i.test(combined) &&
+    /outrun|outruns|beyond/i.test(combined) &&
+    /evidence|proof/i.test(combined) &&
+    /not[- ]proven|blocked|downgrade/i.test(combined)
+  )
+
+  return checks
+}
+
+function mapperOsRootCheckResults(dir) {
+  const checks = []
+  const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
+  const buildprintJson = safeReadText(path.join(dir, 'buildprint.json'))
+  const contracts = safeReadText(path.join(dir, 'CONTRACTS.md'))
+  const quality = safeReadText(path.join(dir, 'policies/quality.md'))
+  const spec = safeReadText(path.join(dir, 'SPEC.md'))
+  const readme = safeReadText(path.join(dir, 'README.md'))
+  const templateDir = path.join(dir, 'templates', 'executable-packet')
+  const templateChecks = packetCheckResults(templateDir)
+  const rootText = [buildprintJson, contracts, quality, spec, readme].join('\n')
+
+  ok('mapper manifest includes critical review template source', /templates\/executable-packet\/03-phases\/critical-review-pushback\.md/i.test(buildprintJson))
+  ok('mapper root requires hard-stop decisions before setup', /hard-stop/i.test(rootText) && /decisions\.md/i.test(rootText) && /before .*setup|before any phase work/i.test(rootText))
+  ok('mapper root requires architecture framework and styling decisions', /Framework And Styling Decisions/i.test(rootText) && /ui_stack_exception/i.test(rootText) && /static DOM|plain CSS|static\/vanilla/i.test(rootText))
+  ok('mapper root requires design construction contract', /docs\/DESIGN\.md/i.test(rootText) && /construction contract/i.test(rootText) && /taste prose|moodboard/i.test(rootText))
+  ok('mapper root requires UI evidence binder', /\.buildprint\/ui-evidence\.md/i.test(rootText) && /screenshot|file:line/i.test(rootText) && /Identity prose is not evidence|prose-only/i.test(rootText))
+  ok('mapper root separates phase core pass from claim qualification', /phase_core_passed/i.test(rootText) && /claim_qualified/i.test(rootText))
+
+  return [...checks, ...templateChecks]
+}
+
 function packetCheckResults(dir) {
+  if (isMapperOsRoot(dir)) return mapperOsRootCheckResults(dir)
+  if (isBuildprintAuthorPacket(dir)) return buildprintAuthorCheckResults(dir)
   dir = packetCheckRoot(dir)
   if (isCapabilityPacket(dir)) return capabilityPacketCheckResults(dir)
   const checks = []
@@ -909,6 +1045,10 @@ function packetCheckResults(dir) {
     ok('critical-review-pushback references artifact verification',
       /agb verify ui/i.test(criticalReviewText) &&
       /artifact-check\.md/i.test(criticalReviewText)
+    )
+    ok('critical-review-pushback separates phase core pass from claim qualification',
+      /phase_core_passed/i.test(criticalReviewText) &&
+      /claim_qualified/i.test(criticalReviewText)
     )
     ok('critical-review-pushback defines three-track pass requirement',
       /Track A/i.test(criticalReviewText) &&

@@ -62,9 +62,11 @@ Output existence is not enough. Input-derived output is not enough. A selected p
 
 Some mapped products depend on hard technical domains that should not be casually hand-rolled. Buildprint Mapper must preserve those as product requirements without making the selected packet stack-fixed.
 
-When source evidence shows fixed-format export, rich editing, document extraction, drag/reorder/canvas interactions, charts/diagrams/visual primitives, provider SDKs/OAuth/webhooks/external APIs, long-running jobs, queues, migrations, durable storage, or similar specialized domains, the selected `blueprint.yaml` must include `proven_implementation_requirements`.
+When source evidence shows fixed-format export, rich editing, document extraction, drag/reorder/canvas interactions, charts/diagrams/visual primitives, frontend UI runtime, stateful screen composition, component/state styling, design token enforcement, responsive viewport proof, provider SDKs/OAuth/webhooks/external APIs, long-running jobs, queues, migrations, durable storage, or similar specialized domains, the selected `blueprint.yaml` must include `proven_implementation_requirements`.
 
 That section must name source-derived hard domains, require a proven library/SDK/runtime/platform service or equivalent tool category for each applicable domain, keep implementation choices stack-neutral unless source evidence makes a specific stack part of product behavior, allow from-scratch alternatives only with explicit justification and proof equal to the proven-tool path, and route selected package/runtime decisions into `01-project-setup.md` and `docs/architecture.md`.
+
+For UI-bearing artifacts, `docs/architecture.md` must include `Framework And Styling Decisions`: selected frontend framework/runtime, selected styling/design-system path, rejected alternatives, proof commands, and how the chosen tools cover stateful screen composition, component states, design tokens, and responsive viewport proof. Static DOM, plain CSS, static/vanilla WebUI, and custom DOM scripting require an explicit `ui_stack_exception`; otherwise they are not acceptable architecture for a UI-bearing packet.
 
 ## UI identity contract
 
@@ -78,6 +80,8 @@ That section must name source-derived hard domains, require a proven library/SDK
 For non-UI artifacts, it must explicitly say `not-ui-bearing` and define the developer/operator experience with equivalent specificity.
 
 When the source provides no precise visual direction, the mapper must not leave blanks for the implementation agent. The packet must require an autonomous design decision before UI work: choose style direction, color tokens, typography scale, layout model, component language, responsive behavior, and state treatment from the artifact type and user workflow. Vague adjectives are not a valid contract.
+
+Generated `docs/DESIGN.md` must be a screen construction contract, not taste prose. It must define exact tokens, type scale, layout contract, component specs, state matrix, implementation mapping, screenshot acceptance, and banned patterns. `.buildprint/ui-evidence.md` must then prove major UI identity, design, and action claims with screenshot paths or source `file:line` references; prose-only evidence cannot pass.
 
 ## Typed proof contract
 
@@ -148,3 +152,5 @@ The `Building objective` must be comprehensive and product-specific. It should r
 ## Completion contract
 
 A downstream implementation can only claim done when the real product path is checked. Packet structure alone never proves product completion.
+
+Final review must keep `phase_core_passed` separate from `claim_qualified`. A phase-local proof can pass while the product claim remains unqualified because UI evidence, architecture proof, hard-stop decisions, provider proof, or independent review is incomplete.

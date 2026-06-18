@@ -12,6 +12,7 @@ Write `capability.yaml` and `compatibility.md` as the contract the applying agen
 - `capability`
 - `description`
 - `execution_profile`
+- `claim_status` with one of `unproven`, `fixture_proven`, `host_proven`, or `blocked`
 - `host_frameworks`
 - `host_detection`
 - `requires`
@@ -51,6 +52,7 @@ Before moving on, compare:
 - `apply.steps` against `verify.runtime_checks`
 - `failure_modes` against required negative tests
 - `publication.json` claims against actual examples, receipts, and proof level
+- `claim_status` against the available proof ceiling, so fixture-only proof cannot read as host-proven
 
 Any adaptation such as user-owned to service-account-owned behavior must be reflected in every relevant contract section, or recorded as blocked/not-proven.
 
@@ -70,3 +72,4 @@ For credential, token, secret, or API-key packets, the contract must include:
 - Do not use benchmark language without a cited benchmark or explicit no-benchmark-found note.
 - Do not put secret values into the packet.
 - Do not leave security-sensitive negative tests implicit.
+- Do not leave template placeholders, angle-bracket fields, or generic framework/proof entries in the authored packet.

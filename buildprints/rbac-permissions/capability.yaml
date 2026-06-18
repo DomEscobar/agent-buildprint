@@ -4,6 +4,7 @@ type: capability
 capability: auth.rbac
 description: Adds role-based access control with explicit roles, centralized permission checks, protected routes or actions, and verifiable allow/deny behavior.
 execution_profile: guarded
+claim_status: fixture_proven
 host_frameworks:
   - nextjs
   - express

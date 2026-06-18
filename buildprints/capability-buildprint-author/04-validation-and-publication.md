@@ -35,6 +35,7 @@ The packet must make these claims checkable:
 - execution profile
 - failure modes
 - verification proof level
+- claim proof ceiling via `claim_status`
 - receipt output
 - benchmark/proven/recommended claims, or explicit `No benchmark evidence found`
 - contradiction checks between machine contract sections, especially `requires`, `composition`, `apply`, and `verify`
@@ -69,3 +70,4 @@ Do not publish until one of these is true:
 - Do not hide unknown proof as future work.
 - Do not publish "best practice" or "recommended" claims that are only based on LLM knowledge.
 - Do not publish a 10/10 or perfect-quality claim without the brutal quality gate, real-host proof, and adversarial review notes.
+- Do not let publication copy outrun evidence; every public claim must be backed by docs/source/runtime proof or downgraded to `not-proven`, `blocked`, or the matching `claim_status`.

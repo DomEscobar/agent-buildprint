@@ -1,11 +1,14 @@
 schema: agent-buildprint/capability.v0
-name: <capability-slug>
+name: audit-log-events
 type: capability
-capability: <domain.capability>
-description: <specific capability promise>
+capability: observability.audit_log_events
+description: Adds append-only audit event recording for selected host actions, with actor, target, outcome, timestamp, and verification proof for write/readback behavior.
 execution_profile: guarded
+claim_status: unproven
 host_frameworks:
-  - <framework>
+  - nextjs
+  - express
+  - hono
 host_detection:
   package_files:
     - package.json
@@ -19,7 +22,7 @@ apply:
     - current host implementation and overlapping systems
     - current official docs/source for volatile or high-risk assumptions
   steps:
-    - map the generic capability contract to concrete host files before edits
+    - map this capability contract to concrete host files before edits
     - implement the smallest real host surface that proves the capability
     - add negative tests for relevant denial, failure, and abuse paths
   forbidden:
@@ -44,11 +47,12 @@ evidence:
   stale_risk: []
 risk:
   level: medium
-  reason: <why this risk level fits>
+  reason: Audit logs touch security review, data retention, and operator trust; missing or mutable events can hide sensitive action history.
 failure_modes:
   - happy-path-only proof hides broken denial or recovery behavior
   - machine contract contradicts markdown instructions
   - publication copy claims more than receipts prove
+  - selected framework or provider technique is stale, unsupported, or not backed by current source evidence
 composition:
   expects: []
   provides: []

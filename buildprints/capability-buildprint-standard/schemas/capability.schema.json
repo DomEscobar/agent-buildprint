@@ -10,6 +10,7 @@
     "capability",
     "description",
     "execution_profile",
+    "claim_status",
     "host_frameworks",
     "host_detection",
     "requires",
@@ -40,6 +41,9 @@
     },
     "execution_profile": {
       "enum": ["light", "guarded", "strict"]
+    },
+    "claim_status": {
+      "enum": ["unproven", "fixture_proven", "host_proven", "blocked"]
     },
     "host_frameworks": {
       "type": "array",

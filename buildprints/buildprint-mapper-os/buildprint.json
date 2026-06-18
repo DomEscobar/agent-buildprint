@@ -114,6 +114,10 @@
       "role": "source"
     },
     {
+      "path": "templates/executable-packet/03-phases/critical-review-pushback.md",
+      "role": "source"
+    },
+    {
       "path": "templates/executable-packet/HANDOVER.md",
       "role": "source"
     }
@@ -148,7 +152,8 @@
     "policies/questions.md",
     "templates/executable-packet/02-ui-identity.md",
     "templates/executable-packet/01-project-setup.md",
-    "templates/executable-packet/03-phases/phase-flow.md"
+    "templates/executable-packet/03-phases/phase-flow.md",
+    "templates/executable-packet/03-phases/critical-review-pushback.md"
   ],
   "schemaVersion": "mapper-os/executable-blueprint/v3",
   "keywords": []

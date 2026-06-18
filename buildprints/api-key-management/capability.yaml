@@ -4,6 +4,7 @@ type: capability
 capability: auth.api_key_management
 description: Adds secure API key generation, hash-only storage, scopes, revocation, rotation, request authentication, and audit evidence to compatible SaaS apps.
 execution_profile: guarded
+claim_status: fixture_proven
 host_frameworks:
   - nextjs
   - express

@@ -34,6 +34,8 @@ Then ask only narrow hard-stop questions that internet deepsearch cannot answer:
 - acceptable risk, cost, migration, or security tradeoffs
 - permission to inspect private repositories or systems
 - product decisions that official docs and source evidence cannot decide
+- secrets, API keys, OAuth apps, billing accounts, webhook destinations, provider side effects, or external charges
+- destructive behavior, data-loss behavior, schema migrations, tenant/auth boundary changes, and security posture
 
 Do not ask broad "what should this include?" or "which approach should I use?" questions while official docs, source files, known examples, and competing techniques are still unchecked.
 
@@ -42,3 +44,5 @@ Do not ask broad "what should this include?" or "which approach should I use?" q
 If intake reveals that the classifier was wrong and the request requires building a whole app, stop and route to Product Buildprint / Buildprint Mapper instead.
 
 If the capability cannot be bounded to one central promise, ask for scope before authoring files.
+
+If host, secrets, destructive behavior, migration risk, security posture, billing, or provider side effects are unresolved, record them as hard-stop blockers. Do not turn them into author assumptions.

@@ -64,6 +64,7 @@ minimum_capability_fields:
   - capability
   - description
   - execution_profile
+  - claim_status
   - host_frameworks
   - host_detection
   - requires

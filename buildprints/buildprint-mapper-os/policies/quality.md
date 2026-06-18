@@ -16,6 +16,7 @@ Buildprint Mapper quality is judged by whether a downstream AI builder can build
 - Every phase reads `02-ui-identity.md` as standing comprehension, user-language, and visual identity responsibility.
 - UI identity must define a product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, and screenshot-level acceptance criteria. A UI identity that can be satisfied by a generic dashboard, renamed workbench, card grid, or proof console is invalid.
 - Claims stay conservative until the built product path is verified.
+- Selected packets must separate `phase_core_passed` from `claim_qualified`; a phase can prove its local core loop while the final product claim remains blocked by UI, architecture, provider, decision, or review evidence.
 
 ## Anti-slop requirements
 
@@ -37,6 +38,10 @@ Selected packets must explicitly reject:
 ## UI/style quality bar
 
 For UI-bearing artifacts, `02-ui-identity.md` must open with UX importance and understandability, include a small checklist, and then define a strong identity schema: product metaphor, dominant object, primary gesture/manipulation, forbidden default silhouette, design thesis, style direction, color tokens, typography, layout/spatial rhythm, component language, motion, empty/loading/error/blocked states, anti-generic rules, and phase obligation. If the UI identity could fit ten unrelated products unchanged, it is too generic. First-run comprehension is necessary but not sufficient; for creative, generative, editor, or operator tools, the emotional/operational affordance and primary manipulation are required quality gates.
+
+Generated `docs/DESIGN.md` must be a construction contract, not taste prose or a moodboard. It must contain exact tokens, type scale, layout contract, component specs, state matrix, implementation mapping, screenshot acceptance, and banned patterns. Claims in `docs/DESIGN.md` must map to selectors, component names, or `file:line` evidence when the app exists.
+
+For UI-bearing artifacts, `.buildprint/ui-evidence.md` must ground major identity, design, and action-surface claims in screenshot paths or source `file:line` evidence. Identity prose is not evidence. Prose-only UI evidence, missing screenshot files, or a first viewport whose only action is "type and send" cannot qualify a final product claim.
 
 The silhouette rejection section must name the adjacent at-risk silhouette the chosen layout is structurally closest to, and state the concrete structural and visual treatment that distinguishes it. Token, palette, copy, spacing, label, or icon changes alone do not count as a distinguishing treatment.
 
@@ -61,6 +66,8 @@ Buildprint Mapper should keep the packet stack-neutral while still requiring pro
 ## Architecture quality bar
 
 Setup must produce a best-effort architecture, not a thin stack list. `docs/architecture.md` must name the scalability seams (data growth, concurrency, load, feature growth) and where the design absorbs that growth without a rewrite; the maintainability boundaries (module ownership, separation of concerns, testability) that keep later phases from forcing a rewrite; and the enforced coding standards (SOLID, KISS, DRY, typed boundaries, explicit error handling) with the lint, format, and type-check gates that enforce them. A thin or default architecture that omits scalability, maintainability, or coding standards is a setup failure, not a minimal-scope win.
+
+For UI-bearing artifacts, `docs/architecture.md` must include `Framework And Styling Decisions`: selected frontend framework/runtime, selected styling/design-system path, rejected alternatives, proof commands, and a mapping from the chosen tools to stateful screen composition, component states, design tokens, and responsive viewport proof. Static DOM, plain CSS, static/vanilla WebUI, or custom DOM scripting is allowed only with an explicit `ui_stack_exception` that explains why a framework is inappropriate and what proof covers equivalent state complexity.
 
 ## Typed proof bar
 
