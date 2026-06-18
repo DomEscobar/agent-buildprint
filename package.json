@@ -3,7 +3,7 @@
   "version": "0.0.15",
   "type": "module",
   "bin": {
-    "agb": "./bin/agb.js"
+    "agb": "bin/agb.js"
   },
   "dependencies": {},
   "scripts": {
