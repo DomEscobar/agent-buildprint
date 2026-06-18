@@ -11,7 +11,7 @@ Project setup must create the architecture baseline and local skill harness with
 For UI-bearing artifacts, the builder must generate both local identity artifacts before starting any phase:
 
 - `docs/ui-identity.md` or `UI-IDENTITY.md` — the product and interaction contract: product genre, dominant user job, first action, user-language map, screen states, action model, forbidden silhouettes, and screenshot-level product-fit acceptance.
-- `docs/DESIGN.md` — the visual taste system: design read, atmosphere, palette, typography, spacing, radii, component styling, density, motion, responsive collapse, and exact visual bans.
+- `docs/DESIGN.md` — the screen construction contract: visual thesis, exact semantic tokens, type scale, layout dimensions, component specs, state matrix, implementation mappings, screenshot acceptance, and exact visual bans.
 
 For non-UI libraries/services, write `not-ui-bearing` and generate an equivalent developer/operator identity covering command shape, output formatting, error tone, docs style, and recovery flow. Do not collapse `docs/ui-identity.md` and `docs/DESIGN.md` into one file for UI-bearing products: a surface can be visually tasteful while violating the product genre, so both contracts must exist and remain distinct.
 
@@ -67,7 +67,7 @@ Write the following sections in `docs/ui-identity.md` or `UI-IDENTITY.md` in com
 12. Content stress fixtures: long names, long titles, dense data, empty data, failed provider/runtime, failed persistence/export, and mobile/narrow cases the UI must survive.
 13. Proof obligations: screenshots, screenshot delta review against prior/default builds when available, viewport checks, no-overlap/no-clipping, keyboard/focus checks where relevant, content-specificity checks, edit/readback proof, and blocked-state proof. Include an anti-silhouette distinctiveness screenshot check: compare the shipped first-screen screenshot against the forbidden silhouette and the named adjacent silhouette, and fail if the screenshot is indistinguishable from them once the copy is ignored. Mechanical checks alone (overlap, clipping, viewport, focus) do not satisfy this obligation.
 14. Anti-generic rules: what must not appear in the main product surface, including generic shells, raw JSON dumps, proof-theater labels, dead controls, fake success, decorative-only views, unclear empty states, and internal status jargon.
-15. Evidence binder requirements: every major UI identity claim must become a screenshot-checkable or source-checkable acceptance claim in `.buildprint/ui-evidence.md`. The binder must list claim, required evidence, screenshot path and region or source file/line, nearest bad silhouette, pass/fail judgment, and why the shipped UI is structurally different. Identity prose is not evidence.
+15. Evidence binder requirements: every major UI identity claim must become a screenshot-checkable or source-checkable acceptance claim in `.buildprint/ui-evidence.md`. The binder must use machine-checkable rows or sections with these exact field labels: `claim:`, `evidence_type:`, `screenshot_path_or_file_line:`, `viewport_state:`, `nearest_bad_silhouette:`, `pass_fail:`, and `structural_difference:`. Each screenshot reference must point to a real `.buildprint/screenshots/` file, or each source reference must include a real `file:line`. Identity prose is not evidence.
 16. Action surface gate: the first viewport must prove a user action loop stronger than "type and send." The evidence binder must name the next powerful user action, what the agent will do next, what visible state/result changes, what recovery/approval/memory action appears at the moment of need, and why status panels are subordinate to user progress.
 17. Chat-native action gate: for Agentic Chat specifically, the dominant first viewport must remain a conversation thread and composer/input. The action loop must be embedded in chat-native affordances such as composer action chips, inline approval cards, inline memory save prompts, message-attached tool confirmations, and recovery suggestions. It fails if the primary surface becomes a mission sheet, guided-run form, task dashboard, status lane, or workflow console with the transcript pushed below the fold.
 18. Design read and taste dials: include a one-line design read and 4-7 product-specific taste dials. For Agentic Chat, the dials must include chat dominance, composer polish, inline action naturalness, system-label suppression, empty-state restraint, mobile comfort, and consumer polish. Each dial needs a target value and a screenshot-checkable implication.
@@ -75,18 +75,17 @@ Write the following sections in `docs/ui-identity.md` or `UI-IDENTITY.md` in com
 
 ## Required sections in generated DESIGN.md
 
-Write `docs/DESIGN.md` as a semantic visual system, not a moodboard and not a duplicate of `docs/ui-identity.md`. It must include:
+Write `docs/DESIGN.md` as a screen construction contract, not a moodboard, not a philosophical essay, and not a duplicate of `docs/ui-identity.md`. It must include these exact section names:
 
-1. Design read: one sentence naming the product genre, audience, desired first-screen feeling, and nearest lazy visual default rejected.
-2. Taste dials: 4-7 product-specific dials with target values and screenshot-checkable implications.
-3. Visual atmosphere: the concrete emotional/operational feel, density, contrast, and hierarchy the first viewport must produce.
-4. Color system: exact semantic roles, state colors, focus treatment, contrast notes, and forbidden palette pitfalls.
-5. Typography system: font stack, scale, weights, line heights, label/copy treatment, and mobile adjustments.
-6. Layout rhythm: spacing, grid behavior, surface hierarchy, fixed-format dimensions, responsive collapse, and scroll ownership.
-7. Component styling: controls, inputs, cards/items, menus, tabs, chips, overlays, messages, empty/loading/error/blocked states, and selected/hover/focus states.
-8. Motion and feedback: transitions, loading behavior, reduced-motion stance, and interaction feedback timing.
-9. Visual anti-patterns: exact bans for this artifact, including any palette, typography, container, card, icon, decoration, or density choices that would make it generic.
-10. Screenshot craft checks: desktop/mobile regions that must be inspected and the visual craft failures that force repair.
+1. Visual Thesis: one short paragraph naming the product feel, first-viewport hierarchy, and rejected silhouette. This is the only atmospheric prose section.
+2. Exact Tokens: a table with semantic token name, CSS variable name, exact value, functional role, and usage notes for canvas, surface, raised surface, border, text, muted text, primary, focus, success, warning, danger, spacing, radius, and elevation. Color rows must include exact hex/rgb/oklch values or cite `file:line` where the token is defined.
+3. Type Scale: a table with role, font stack, size, weight, line-height, max width, and mobile adjustment for app title, message body, metadata, buttons, textarea/input, state labels, and code/trace text.
+4. Layout Contract: concrete desktop, tablet, mobile, and narrow-mobile dimensions for regions, gutters, composer height, side/supporting rail behavior, fixed-format elements, scroll ownership, and responsive collapse. It must include numeric px/rem values or file:line references.
+5. Component Specs: construction rules for every visible component family, including message bubble, composer/input, send button, inline action/approval, restore/recovery action, trace/details disclosure, supporting state rail, empty state, loading/streaming state, error state, blocked state, hover, focus-visible, active, disabled, selected, and saved states.
+6. State Matrix: a table for empty, typing, streaming, blocked, error, saved, restored, offline/no-provider, and mobile/narrow states. Each row must define visible UI, forbidden UI, layout behavior, recovery/action affordance, and proof screenshot.
+7. Implementation Mapping: cite the selectors, component names, or file:line references where each major token, layout region, and component spec is or will be implemented. Design claims without implementation mapping fail.
+8. Screenshot Acceptance: list required screenshot paths or capture names for desktop default, tablet/streaming, mobile blocked, and narrow composer states, plus what each screenshot must prove. Generic "inspect mobile" prose is not enough.
+9. Banned Patterns: exact bans for this artifact, including any palette, typography, container, card, icon, decoration, density, seeded-feature, proof-console, dashboard/workbench, raw JSON, provider-banner, or status-leak pattern that would make the surface generic.
 
 ## Minimum proof before moving to phases
 
@@ -99,7 +98,7 @@ Write `docs/DESIGN.md` as a semantic visual system, not a moodboard and not a du
 - Layout and interaction are defined before phase scaffolding.
 - Color, typography, component, and state rules are concrete enough to implement.
 - Proof obligations name the checks that would catch the artifact's most likely UI failure, and include an anti-silhouette distinctiveness screenshot check that fails a build matching the forbidden or adjacent silhouette.
-- `.buildprint/ui-evidence.md` exists and grounds identity, design, and action claims in screenshot paths, screenshot regions or source file/line references, nearest bad silhouette comparison, visual craft checks, and pass/fail judgments.
+- `.buildprint/ui-evidence.md` exists and grounds identity, design, and action claims in structured fields: `claim:`, `evidence_type:`, `screenshot_path_or_file_line:`, `viewport_state:`, `nearest_bad_silhouette:`, `pass_fail:`, and `structural_difference:`. Screenshot references must point to real `.buildprint/screenshots/` files.
 - The first viewport proves an action surface stronger than "type and send"; if the next powerful user action cannot be identified from screenshot evidence, return to UI identity and implementation before moving on.
 - The first viewport proves a chat-native surface: conversation thread and composer/input are dominant, agentic actions are inline in the conversation/composer, and any mission brief, run lane, status panel, side rail, or workflow controls are subordinate. If screenshots show a form-first guided-run surface or chat below the fold, return to UI identity and implementation before moving on.
 - The first viewport passes the Consumer Chat Craft Gate: no seeded approval/memory/restore cards before user intent, no giant blank dead zone, no internal status labels as first-screen primary copy, no boxy uniform card stack, no cramped mobile composer/chips, and no generic harness-demo empty state.
@@ -116,4 +115,5 @@ Write `docs/DESIGN.md` as a semantic visual system, not a moodboard and not a du
 - Do not replace the chat interface with a mission sheet, guided-run launcher, task dashboard, or status lane. For Agentic Chat, action UI enhances chat; it does not displace chat.
 - Do not seed approval, memory, restore, tool, or provider cards before the user asks something. Agentic controls appear at the moment of need, not as empty-state feature advertising.
 - Do not expose `local route`, `live route needs key`, memory counts, provider/setup status, or similar system labels in the default first viewport unless the user requested or triggered that capability.
+- Do not accept a prose-only evidence binder, missing screenshot file references, or a default first viewport whose proof is limited to no-overlap/no-console-error checks.
 - Do not let phases start until the identity plan exists, the artifact is explicitly `not-ui-bearing`, or a blocker is recorded.

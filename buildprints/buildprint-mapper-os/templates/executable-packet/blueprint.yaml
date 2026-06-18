@@ -130,7 +130,7 @@ state_and_handoff:
   handover_template: HANDOVER.md
 
 proven_implementation_requirements:
-  rule: Replace or specialize this template-level rule during selected extraction. Hard product domains must use proven libraries, SDKs, runtimes, or platform services unless a from-scratch alternative is explicitly justified and proven against the same acceptance criteria. Keep selected packets stack-neutral, but do not let builders casually hand-roll fixed-format export, rich editing, document parsing, drag interactions, chart rendering, provider clients, task orchestration, or migrations.
+  rule: Replace or specialize this template-level rule during selected extraction. Hard product domains must use proven libraries, SDKs, runtimes, or platform services unless a from-scratch alternative is explicitly justified and proven against the same acceptance criteria. Keep selected packets stack-neutral, but do not let builders casually hand-roll fixed-format export, rich editing, document parsing, drag interactions, chart rendering, provider clients, task orchestration, frontend UI runtime, component/state styling, design token enforcement, responsive viewport proof, or migrations.
   detect_from_source:
     - fixed-format export or rendering
     - rich text or inline editing
@@ -138,6 +138,7 @@ proven_implementation_requirements:
     - drag/reorder/canvas interaction
     - charts, diagrams, maps, timelines, code rendering, or visual primitives
     - live provider SDKs, OAuth, webhooks, external APIs, or local model runtimes
+    - frontend UI runtime, stateful screen composition, component/state styling, responsive viewport proof, or design token enforcement
     - background jobs, export tasks, queues, retries, or long-running work
     - durable persistence, migrations, file/object storage, or sync
   selected_packet_must:
@@ -165,3 +166,9 @@ proven_implementation_requirements:
       requirement: Use a real task/status model for long-running work; heavier deployments may use queues, but local proof still needs durable task state or honest blockers.
     persistence_and_migrations:
       requirement: Use a database layer with migrations or an explicit schema evolution path; browser-only or memory-only state is forbidden when durability is claimed.
+    frontend_ui_runtime:
+      requirement: UI-bearing artifacts must choose a proven frontend runtime for stateful screen composition; default to React + Vite + TypeScript unless the source/host app already proves another framework.
+    component_state_styling:
+      requirement: UI-bearing artifacts must choose a proven styling/design-system path for tokens, responsive states, and component variants; default to Tailwind CSS v4 + tokenized CSS variables unless the source/host app already proves another styling system.
+    responsive_viewport_proof:
+      requirement: UI-bearing artifacts must prove desktop/tablet/mobile/narrow states with screenshot evidence tied to docs/DESIGN.md and .buildprint/ui-evidence.md.

@@ -25,6 +25,14 @@ Use the selected gates and proof surfaces in `docs/architecture.md` to decide wh
 
 For non-UI products, polish the operator/developer experience: CLI help, API error bodies, logs, docs, examples, and handoff commands.
 
+Product-proof contract for this phase:
+
+- Named product loop: name the human-facing loop being judged for product fit and interaction completeness.
+- User/operator action: name the click, keystroke, form submit, command, retry, or recovery action that proves the surface.
+- Named output/state: name the visible state, component, message, report, artifact, or operator response that changes.
+- Failure mode: name the empty, loading, blocked, error, long-content, mobile, or accessibility case being repaired.
+- Concrete proof artifact: name the screenshot path, browser transcript, keyboard/focus check, overflow measurement, or CLI/API output.
+
 ## DO NOT
 
 - Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.

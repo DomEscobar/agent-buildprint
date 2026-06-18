@@ -19,6 +19,14 @@ Every phase must keep `02-ui-identity.md` and the generated local UI identity op
 
 Define and implement the core session, message, trace, provider, telemetry, checkpoint, memory, and configuration contracts for `agentic-chat`. The first loop should create a session, append a user message, persist records, read them back, and expose enough API or CLI surface for later streaming/provider work without relying on memory-only state.
 
+Product-proof contract for this phase:
+
+- Named product loop: Session Message Append Readback.
+- User/operator action: create a chat session, submit one user message, and request the session back through the documented API or UI path.
+- Named output/state: persisted `session`, `message`, `trace_event`, `provider_route`, `telemetry`, `checkpoint`, and `memory_summary` records with a schema version or migration/evolution path.
+- Failure mode: concurrent or repeated appends must not silently corrupt the JSON/database store; unknown provider/config input returns an actionable blocked state.
+- Concrete proof artifact: command/API transcript plus persistence readback after process restart or an explicit blocker; `.buildprint/evidence-phase-01.md` records schema, migration/evolution stance, append/readback result, and concurrency stance.
+
 This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
@@ -42,4 +50,3 @@ This phase should leave a user, operator, or developer with a real path they can
 ## Handoff note
 
 Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
-

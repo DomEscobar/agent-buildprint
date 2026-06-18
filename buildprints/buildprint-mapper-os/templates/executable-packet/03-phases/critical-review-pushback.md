@@ -10,6 +10,14 @@ Read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, project `AGENTS.md`
 
 The phase passes only when the artifact earns a credible pass score from an independent reviewer and no high-severity blocker remains hidden behind optimistic language.
 
+Product-proof contract for this phase:
+
+- Named product loop: Final Claim Qualification Review.
+- User/operator action: run the built artifact through the documented command, browser, API, CLI, or runtime path as a fresh-context reviewer.
+- Named output/state: `.buildprint/critical-review-pushback.md`, `.buildprint/artifact-check.md`, `.buildprint/ui-evidence.md`, screenshot set, rubric score, and final claim status.
+- Failure mode: self-review, missing artifact proof, missing screenshot evidence, Track B/C failure, thin architecture, dead controls, or generic UI blocks PASS.
+- Concrete proof artifact: independent review note with cited artifacts, `agb verify ui .`, screenshots, runtime/API/browser transcripts, repair loop entries, and final `phase_core_passed` versus `claim_qualified` judgment.
+
 ## External reviewer independence protocol
 
 Critical review requires a fresh-context reviewer — a dispatched subagent or a new agent session that did not implement the artifact.

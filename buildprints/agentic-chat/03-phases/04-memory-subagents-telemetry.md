@@ -19,6 +19,14 @@ Every phase must keep `02-ui-identity.md` and the generated local UI identity op
 
 Build scoped memory retrieval, memory write policy, compaction, subagent delegation records, token/cost telemetry, and recovery behavior. The agent should use memory in context without dumping private stores, record why memory or subagents were used, and continue gracefully when memory, compaction, or subagent work is blocked.
 
+Product-proof contract for this phase:
+
+- Named product loop: Scoped Memory And Delegation Trace.
+- User/operator action: run a chat turn that reads a scoped memory summary, proposes or writes a memory according to policy, and records a subagent/delegation decision when applicable.
+- Named output/state: `memory_read`, `memory_write_decision`, `compaction_summary`, `subagent_record`, `usage_telemetry`, and recovery suggestion attached to the turn.
+- Failure mode: memory unavailable, compaction failure, privacy block, or subagent runtime block must leave the chat usable and explain the recovery path without dumping private stores.
+- Concrete proof artifact: turn transcript, persisted trace/readback, telemetry record, and UI/API evidence for scoped memory/recovery behavior.
+
 This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
@@ -42,4 +50,3 @@ This phase should leave a user, operator, or developer with a real path they can
 ## Handoff note
 
 Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
-

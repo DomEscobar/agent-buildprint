@@ -19,6 +19,16 @@ Every phase must keep `02-ui-identity.md` and the generated local UI identity op
 
 Deliver the evented chat turn engine: provider registry, deterministic test provider, streaming runtime loop, context-builder skeleton, checkpoint persistence, failure events, and normalized usage events. The local proof must show `turn.started`, `model.delta`, telemetry, completion or failure, persisted messages, and actionable unknown-provider diagnostics.
 
+Product-proof contract for this phase:
+
+- Named product loop: Streaming Agent Turn.
+- User/operator action: send a message through the local deterministic provider and watch the first `model.delta` arrive before the turn completes.
+- Named output/state: `turn.started`, incremental `model.delta`, `usage.delta`, `turn.completed` or `turn.failed`, persisted assistant message, checkpoint, and provider trace events.
+- Failure mode: cancellation via `AbortSignal`, provider timeout, unavailable live credential, and unknown provider each produce normalized failure events without fake completion.
+- Concrete proof artifact: API/browser transcript proving a real `ReadableStream` or SSE stream where the first delta is observed before completion, plus persisted readback of events and messages.
+
+This phase fails if the endpoint buffers all events and returns NDJSON only after the turn completes. A deterministic provider may be local, but the transport must be incremental: the verifier must be able to read a first chunk, cancel or continue the stream, and then inspect the persisted trace. The provider runtime interface must define cancellation, timeout policy, retry/non-retry failure taxonomy, usage normalization, and blocked live-provider diagnostics before any live provider claim is made.
+
 This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
@@ -42,4 +52,3 @@ This phase should leave a user, operator, or developer with a real path they can
 ## Handoff note
 
 Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
-

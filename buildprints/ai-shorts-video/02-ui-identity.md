@@ -11,7 +11,7 @@ Project setup must create the architecture baseline and local skill harness with
 For UI-bearing artifacts, the builder must generate both local identity artifacts before starting any phase:
 
 - `docs/ui-identity.md` or `UI-IDENTITY.md` — the product and interaction contract: product genre, dominant user job, first action, user-language map, screen states, action model, forbidden silhouettes, and screenshot-level product-fit acceptance.
-- `docs/DESIGN.md` — the visual taste system: design read, atmosphere, palette, typography, spacing, radii, component styling, density, motion, responsive collapse, and exact visual bans.
+- `docs/DESIGN.md` - the screen construction contract: visual thesis, exact semantic tokens, type scale, layout dimensions, component specs, state matrix, implementation mappings, screenshot acceptance, and exact visual bans.
 
 For non-UI libraries/services, write `not-ui-bearing` and generate an equivalent developer/operator identity covering command shape, output formatting, error tone, docs style, and recovery flow. Do not collapse `docs/ui-identity.md` and `docs/DESIGN.md` into one file for UI-bearing products: a surface can be visually tasteful while violating the product genre, so both contracts must exist and remain distinct.
 
@@ -70,18 +70,17 @@ Write the following sections in `docs/ui-identity.md` or `UI-IDENTITY.md` in com
 
 ## Required sections in generated DESIGN.md
 
-Write `docs/DESIGN.md` as a semantic visual system, not a moodboard and not a duplicate of `docs/ui-identity.md`. It must include:
+Write `docs/DESIGN.md` as a screen construction contract, not a moodboard, not a philosophical essay, and not a duplicate of `docs/ui-identity.md`. It must include these exact section names:
 
-1. Design read: one sentence naming the product genre, audience, desired first-screen feeling, and nearest lazy visual default rejected.
-2. Taste dials: 4-7 product-specific dials with target values and screenshot-checkable implications.
-3. Visual atmosphere: the concrete emotional/operational feel, density, contrast, and hierarchy the first viewport must produce.
-4. Color system: exact semantic roles, state colors, focus treatment, contrast notes, and forbidden palette pitfalls.
-5. Typography system: font stack, scale, weights, line heights, label/copy treatment, and mobile adjustments.
-6. Layout rhythm: spacing, grid behavior, surface hierarchy, fixed-format dimensions, responsive collapse, and scroll ownership.
-7. Component styling: controls, inputs, cards/items, menus, tabs, chips, overlays, messages, empty/loading/error/blocked states, and selected/hover/focus states.
-8. Motion and feedback: transitions, loading behavior, reduced-motion stance, and interaction feedback timing.
-9. Visual anti-patterns: exact bans for this artifact, including any palette, typography, container, card, icon, decoration, or density choices that would make it generic.
-10. Screenshot craft checks: desktop/mobile regions that must be inspected and the visual craft failures that force repair.
+1. Visual Thesis: one short paragraph naming the product feel, first-viewport hierarchy, and rejected silhouette. This is the only atmospheric prose section.
+2. Exact Tokens: a table with semantic token name, CSS variable name, exact value, functional role, and usage notes for canvas, surface, raised surface, border, text, muted text, primary, focus, success, warning, danger, spacing, radius, and elevation. Color rows must include exact hex/rgb/oklch values or cite `file:line` where the token is defined.
+3. Type Scale: a table with role, font stack, size, weight, line-height, max width, and mobile adjustment for app title, message body, metadata, buttons, textarea/input, state labels, and code/trace text.
+4. Layout Contract: concrete desktop, tablet, mobile, and narrow-mobile dimensions for regions, gutters, primary input height, side/supporting region behavior, fixed-format elements, scroll ownership, and responsive collapse. It must include numeric px/rem values or file:line references.
+5. Component Specs: construction rules for every visible component family, including controls, repeated items, primary input, primary action, inline action/approval, restore/recovery action, trace/details disclosure, supporting state rail or context region, empty state, loading/streaming state, error state, blocked state, hover, focus-visible, active, disabled, selected, and saved states.
+6. State Matrix: a table for empty, typing/input, streaming/loading, blocked, error, saved, restored/recovered, offline/no-provider, and mobile/narrow states. Each row must define visible UI, forbidden UI, layout behavior, recovery/action affordance, and proof screenshot.
+7. Implementation Mapping: cite the selectors, component names, or file:line references where each major token, layout region, and component spec is or will be implemented. Design claims without implementation mapping fail.
+8. Screenshot Acceptance: list required screenshot paths or capture names for desktop default, tablet active/loading, mobile blocked/error, and narrow primary-input states, plus what each screenshot must prove. Generic "inspect mobile" prose is not enough.
+9. Banned Patterns: exact bans for this artifact, including any palette, typography, container, card, icon, decoration, density, seeded-feature, proof-console, dashboard/workbench, raw JSON, provider-banner, or status-leak pattern that would make the surface generic.
 
 ## Minimum proof before moving to phases
 

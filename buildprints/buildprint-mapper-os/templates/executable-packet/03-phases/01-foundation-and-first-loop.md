@@ -23,6 +23,14 @@ This phase should not chase feature breadth. It should make the product shape un
 
 If the artifact is UI-bearing, the first surface should already reflect the visual/interaction direction from `02-ui-identity.md`. If the artifact is API/CLI/worker-first, the first command or endpoint should prove the central interface and error/blocker semantics.
 
+Product-proof contract for this phase:
+
+- Named product loop: instantiate the mapped product's first runnable loop by name; do not leave this as "mapped artifact" or "central surface" in the selected packet.
+- User/operator action: name the exact first action a user, operator, or developer performs.
+- Named output/state: name the record, screen state, file, command output, or domain object that changes.
+- Failure mode: name one realistic blocked/error path and how it appears without fake success.
+- Concrete proof artifact: name the command output, API transcript, screenshot, readback record, or `.buildprint/*` evidence file that proves the loop.
+
 ## DO NOT
 
 - Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.

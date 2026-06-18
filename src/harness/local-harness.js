@@ -3,6 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { exists, readText } from '../shared/fs.js'
 import { toPosixPath } from '../shared/paths.js'
+import { hardStopDecisionChecks } from '../product-proof-checks.js'
 import { HARNESS_CORE_SKILL_NAMES, HARNESS_PROFILES, harnessSkillsForProfiles, normalizeHarnessProfiles } from './skill-templates.js'
 
 const HARNESS_SECTION_START = '<!-- AGB_HARNESS_START -->'
@@ -254,6 +255,15 @@ function checkupArtifacts(projectRoot, agentsText) {
       status: /completion_signal/i.test(agentsText) || /completion signals/i.test(agentsText) ? 'pass' : 'warn'
     }
   ]
+  if (hasCompletedPhaseWork) {
+    for (const check of hardStopDecisionChecks(projectRoot)) {
+      checks.push({
+        id: check.id,
+        label: check.evidence || check.id,
+        status: check.pass ? 'pass' : 'fail'
+      })
+    }
+  }
   return checks
 }
 

@@ -169,6 +169,7 @@ proven_implementation_requirements:
     - drag/reorder/canvas interaction
     - charts, diagrams, maps, timelines, code rendering, or visual primitives
     - live provider SDKs, OAuth, webhooks, external APIs, or local model runtimes
+    - frontend UI runtime, stateful screen composition, component/state styling, responsive viewport proof, or design token enforcement
     - background jobs, export tasks, queues, retries, or long-running work
     - durable persistence, migrations, file/object storage, or sync
   selected_packet_must:
@@ -186,4 +187,9 @@ proven_implementation_requirements:
       requirement: Use explicit allowlists, typed results, audit records, and blocked states for tools, skills, MCP, and browser automation.
     persistence_and_memory:
       requirement: Persist sessions, messages, traces, memory, compaction summaries, and telemetry with schema evolution or migration path.
-
+    frontend_ui_runtime:
+      requirement: Use a proven frontend runtime for stateful chat UI composition; default to React + Vite + TypeScript unless an existing host framework is already proven.
+    component_state_styling:
+      requirement: Use a proven styling/design-system path for tokens, responsive states, and component variants; default to Tailwind CSS v4 + tokenized CSS variables unless an existing design system is already proven.
+    responsive_viewport_proof:
+      requirement: Prove desktop/tablet/mobile/narrow states with screenshots and viewport checks tied to docs/DESIGN.md and .buildprint/ui-evidence.md.

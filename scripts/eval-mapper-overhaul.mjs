@@ -37,6 +37,118 @@ function runAgbAsync(args) {
   })
 }
 
+function hardStopDecisionMarkdown(confirmedBy = 'user') {
+  return `# Decisions
+
+| Question | answer | confirmed_by | delegation_quote | reversible | blocks_setup |
+|---|---|---|---|---:|---:|
+| Deployment posture | trusted_local | ${confirmedBy} |  | no | no |
+| Secrets and provider policy | deterministic providers only; live keys blocked unless configured | ${confirmedBy} |  | no | no |
+| Destructive/data-loss behavior | no external mutation or deletion without explicit UI confirmation | ${confirmedBy} |  | no | no |
+| Privacy/compliance exposure | local private operator data only; no regulated claims | ${confirmedBy} |  | no | no |
+| Product/artifact identity | chat-native agent conversation artifact | ${confirmedBy} |  | no | no |
+`
+}
+
+function constructionDesignMarkdown(screenshotPath = '.buildprint/screenshots/1280-default.png') {
+  return `# DESIGN
+
+## Visual Thesis
+
+A product-specific first viewport where the dominant task surface is obvious and the rejected silhouette is a dashboard/workbench shell.
+
+## Exact Tokens
+
+| semantic token | css variable | exact value | role | usage notes |
+|---|---|---|---|---|
+| canvas | --canvas | #F7F4EE | background | page canvas |
+| surface | --surface | #FFFDF8 | surface | main product region |
+| raised surface | --surface-raised | #F2EDE3 | surface | message/detail surfaces |
+| border | --border | #D8CEC0 | border | structural lines |
+| text | --text | #171412 | text | primary copy |
+| muted text | --muted | #6F665C | text | metadata |
+| primary | --primary | #167C72 | action | primary action |
+| focus | --focus | #C98222 | state | focus-visible ring |
+| success | --success | #2E7D4F | state | saved state |
+| warning | --warning | #9A6A13 | state | caution |
+| danger | --danger | #A83A32 | state | blocked/error |
+| spacing | --space-panel | 1rem | spacing | panel padding |
+| radius | --radius-panel | 8px | radius | framed regions |
+| elevation | --shadow-low | 0 8px 20px rgb(23 20 18 / 8%) | elevation | raised surface |
+
+## Type Scale
+
+| role | font stack | size | weight | line-height | max width | mobile adjustment |
+|---|---|---:|---:|---:|---:|---|
+| app title | system sans | 1.5rem | 650 | 1.2 | 36ch | 1.25rem |
+| message body | system sans | 1rem | 400 | 1.55 | 68ch | 1rem |
+| metadata | system sans | .8125rem | 500 | 1.35 | 40ch | .8125rem |
+| buttons | system sans | .9375rem | 650 | 1.2 | auto | .9375rem |
+| textarea/input | system sans | 1rem | 400 | 1.4 | 100% | 1rem |
+| state labels | system sans | .75rem | 700 | 1.2 | 28ch | .75rem |
+| code/trace text | ui-monospace | .8125rem | 500 | 1.4 | 72ch | .75rem |
+
+## Layout Contract
+
+Desktop uses 24px page gutters, a dominant product region, and a 280px supporting region. Tablet collapses support below the dominant region. Mobile uses 16px gutters and one column. Narrow mobile keeps the primary input at 44px minimum height. Scroll ownership belongs to the dominant region; the page itself must not create horizontal scroll.
+
+## Component Specs
+
+Primary input, primary action, repeated items, inline action/approval, restore/recovery action, trace/details disclosure, supporting state rail or context region, empty state, loading/streaming state, error state, blocked state, hover, focus-visible, active, disabled, selected, and saved states each preserve layout shape and use the tokens above.
+
+## State Matrix
+
+| state | visible UI | forbidden UI | layout behavior | recovery/action affordance | proof screenshot |
+|---|---|---|---|---|---|
+| empty | one primary input and one useful prompt | feature card grid | dominant surface remains visible | primary action enabled when valid | ${screenshotPath} |
+| typing/input | typed content and send affordance | provider setup banner | composer/input stays stable | submit or clear | ${screenshotPath} |
+| streaming/loading | incremental loading text | spinner-only blank state | message area reserves height | cancel/stop affordance | ${screenshotPath} |
+| blocked | blocked explanation | raw JSON dump | inline block keeps context | approval/retry action | ${screenshotPath} |
+| error | clear inline error | full-page crash shell | error preserves layout | retry/recover | ${screenshotPath} |
+| saved | saved state label | success confetti | no layout jump | continue action | ${screenshotPath} |
+| restored/recovered | restored marker | hidden recovery | context remains attached | undo/continue | ${screenshotPath} |
+| offline/no-provider | local-only state | live-provider promise | input remains usable | configure later | ${screenshotPath} |
+| mobile/narrow | stacked controls | horizontal overflow | single column | reachable details | ${screenshotPath} |
+
+## Implementation Mapping
+
+| design claim | implementation mapping |
+|---|---|
+| tokens | public/styles.css:1 |
+| dominant region | selector: main |
+| primary input | selector: textarea |
+| primary action | selector: button[type="submit"] |
+| state rail/context | component: SupportingStateRegion |
+
+## Screenshot Acceptance
+
+- ${screenshotPath} proves desktop default hierarchy, token usage, type scale, component states, and no dashboard/workbench shell.
+
+## Banned Patterns
+
+No dashboard/workbench shell, proof-console labels, raw JSON, seeded-feature cards, provider-banner before user intent, status-leak labels, neon gradients, generic cards, dead controls, or horizontal mobile overflow.
+`
+}
+
+function provenUiArchitectureMarkdown() {
+  return `# Architecture
+
+Scalability seams cover data growth and provider load. Maintainability relies on SOLID, KISS, and DRY module boundaries. Schema evolution uses migration notes. Provider adapter interface boundaries isolate runtime growth.
+
+## Framework And Styling Decisions
+
+Selected UI runtime/framework: React + Vite + TypeScript for stateful screen composition, conversation state, streaming updates, blocked states, restored states, and mobile/narrow branching.
+
+Selected styling/design-system path: Tailwind CSS v4 + tokenized CSS variables for component/state styling, design tokens, focus-visible states, responsive variants, and docs/DESIGN.md token enforcement.
+
+Rejected alternatives: static DOM scripting, plain CSS, custom DOM updates, and backend-only Hono/Zod/Bun UI claims are rejected because they do not provide a proven stateful component model or styling system for the required UI-state complexity.
+
+Proof commands: bun run typecheck, bun run build, bun test, and bun run verify:ui validate framework usage, styling imports, responsive viewport proof, and component states.
+
+UI-state complexity mapping: React covers stateful screen composition and component states; Tailwind CSS v4 plus tokenized CSS variables covers design tokens and responsive viewport proof through desktop, tablet, mobile, and narrow screenshots.
+`
+}
+
 function expectPass(name, args, snippets = []) {
   const { failed, output } = runAgb(args)
   const missing = snippets.filter((snippet) => !output.includes(snippet))
@@ -171,6 +283,15 @@ const missingQuestions = copyTemplate('missing-questions')
 fs.rmSync(path.join(missingQuestions, '00-questions.md'))
 expectFailure('mapper eval requires 00-questions', ['packet', 'check', missingQuestions], ['✗ packet file exists: 00-questions.md'])
 
+const weakHardStopQuestions = copyTemplate('weak-hard-stop-questions')
+edit(weakHardStopQuestions, '00-questions.md', (s) => s
+  .replace(/These require `confirmed_by: user`[\s\S]*?\.buildprint\/decisions\.md`\./, 'These require explicit human confirmation before setup, UI identity, or implementation:')
+  .replace(/Assumable defaults apply only[\s\S]*?scope-presentation mismatch\./, 'If not answered, the agent may choose a reversible default and record it in setup.')
+  .replace(/`confirmed_by: agent_assumption` is invalid for hard-stop rows\.[^\n]*\n/, ''))
+expectFailure('mapper eval rejects hard-stop questions that can self-default',
+  ['packet', 'check', weakHardStopQuestions],
+  ['✗ questions forbid hard-stop self-defaults'])
+
 const missingCentralOutput = copyTemplate('missing-central-output-contract')
 edit(missingCentralOutput, 'blueprint.yaml', (s) => s.replace(/central_output_contract:/g, 'central_output_contract_removed:'))
 expectFailure('mapper eval requires central output quality contract', ['packet', 'check', missingCentralOutput], ['✗ blueprint declares central output quality contract'])
@@ -271,7 +392,40 @@ expectFailure('mapper eval requires UI evidence handover', ['packet', 'check', w
 
 const weakObjective = copyTemplate('weak-objective')
 edit(weakObjective, '03-phases/02-core-product-loop.md', (s) => s.replace(/## Building objective[\s\S]*?## DO NOT/, '## Building objective\n\nBuild stuff.\n\n## DO NOT'))
-expectFailure('mapper eval rejects tiny phase objectives', ['packet', 'check', weakObjective], ['✗ 03-phases/02-core-product-loop.md has substantial building objective'])
+expectFailure('mapper eval rejects tiny phase objectives', ['packet', 'check', weakObjective], ['✗ 03-phases/02-core-product-loop.md has substantial building objective', '✗ 03-phases/02-core-product-loop.md declares product-proof phase anchors'])
+
+const genericObjectiveFiller = copyTemplate('generic-objective-filler')
+edit(genericObjectiveFiller, '03-phases/02-core-product-loop.md', (s) => s.replace(/## Building objective[\s\S]*?## DO NOT/, `## Building objective
+
+Every phase must keep \`02-ui-identity.md\` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract.
+
+Build the mapped artifact central surface and product path with enough words to look substantial. The mapped artifact should have a central surface, useful output, and a product path that appears complete for a reviewer. This text intentionally avoids a named loop, named action, named output state, failure mode, and concrete proof artifact while still being long enough to resemble a phase objective.
+
+## DO NOT`))
+expectFailure('mapper eval rejects generic objective filler',
+  ['packet', 'check', genericObjectiveFiller],
+  ['✗ 03-phases/02-core-product-loop.md declares product-proof phase anchors',
+    '✗ 03-phases/02-core-product-loop.md is not generic objective filler'])
+
+const uninstantiatedAgenticCentralOutput = path.join(tmp, 'uninstantiated-agentic-central-output')
+fs.cpSync(agenticChatPacket, uninstantiatedAgenticCentralOutput, { recursive: true })
+edit(uninstantiatedAgenticCentralOutput, 'blueprint.yaml', (s) => s.replace(/central_output:\s*Durable streaming agent conversation with tool\/memory\/provider trace and actionable blocked states\./, 'central_output: source-derived artifact output.'))
+expectFailure('agentic-chat eval rejects uninstantiated central output',
+  ['packet', 'check', uninstantiatedAgenticCentralOutput],
+  ['✗ blueprint central output is instantiated, not template filler'])
+
+const bufferedAgenticStreamingPhase = path.join(tmp, 'buffered-agentic-streaming-phase')
+fs.cpSync(agenticChatPacket, bufferedAgenticStreamingPhase, { recursive: true })
+edit(bufferedAgenticStreamingPhase, '03-phases/02-provider-streaming-runtime.md', (s) => s
+  .replace(/ReadableStream|SSE|Server-Sent Events/g, 'NDJSON response')
+  .replace(/incremental/g, 'evented')
+  .replace(/before completion/g, 'after completion')
+  .replace(/AbortSignal/g, 'stop button')
+  .replace(/timeout/g, 'failure')
+  .replace(/provider runtime interface/g, 'provider layer'))
+expectFailure('agentic-chat eval rejects buffered streaming phase',
+  ['packet', 'check', bufferedAgenticStreamingPhase],
+  ['✗ agentic-chat phase 02 requires real incremental streaming proof'])
 
 const missingHeading = copyTemplate('missing-phase-heading')
 edit(missingHeading, '03-phases/03-state-runtime-and-integrations.md', (s) => s.replace('## Handoff note', '## Notes'))
@@ -371,6 +525,7 @@ fs.writeFileSync(path.join(harnessFixture, '.buildprint', 'state.json'), JSON.st
 expectFailure('cli eval checkup fails completed phase work without UI identity',
   ['harness', 'checkup', harnessFixture],
   ['Harness checkup: MISSING', 'UI identity artifact exists when the project is UI-bearing'])
+fs.writeFileSync(path.join(harnessFixture, '.buildprint', 'decisions.md'), hardStopDecisionMarkdown())
 fs.writeFileSync(path.join(harnessFixture, 'UI-IDENTITY.md'), '# UI Identity\n\nnot-ui-bearing\n')
 expectPass('cli eval checkup accepts explicit non-UI identity marker', ['harness', 'checkup', harnessFixture], ['Harness checkup: WARN'])
 expectPass('cli eval initializes webapp profile skills', ['harness', 'init', harnessFixture, '--profile', 'webapp'], ['Profiles: webapp', 'frontend-visual-qa', 'asset-pipeline'])
@@ -525,7 +680,12 @@ try {
     console.error('cli eval failed; next-agent missing blueprint-declared harness profiles')
     process.exit(1)
   }
-  if (/01-ui-identity\.md|02-project-setup\.md|02-uiux-decision\.md|04-review\.md|05-handover\.md|smallest real usable slice/.test(nextAgent)) {
+  if (!nextAgent.includes('stop at `00-questions.md` unless every hard-stop row is user-confirmed, explicitly delegated, or recorded as a blocker')) {
+    console.error(nextAgent)
+    console.error('cli eval failed; next-agent missing hard-stop question gate')
+    process.exit(1)
+  }
+  if (/01-ui-identity\.md|02-project-setup\.md|02-uiux-decision\.md|04-review\.md|05-handover\.md|smallest real usable slice|stop only for true hard-stop decisions/.test(nextAgent)) {
     console.error(nextAgent)
     console.error('cli eval failed; next-agent still references obsolete v2 files/language')
     process.exit(1)
@@ -658,16 +818,33 @@ function renderEvents(events) {
   console.log(['  - decisions-stub', '  - raw-json-in-dom', '  - ui-identity-present', '  - forbidden-words'].join('\n'))
 }
 
+const agentAssumedDecisionsProject = path.join(tmp, 'agent-assumed-decisions-project')
+fs.mkdirSync(path.join(agentAssumedDecisionsProject, '.buildprint'), { recursive: true })
+fs.mkdirSync(path.join(agentAssumedDecisionsProject, 'public'), { recursive: true })
+fs.mkdirSync(path.join(agentAssumedDecisionsProject, 'docs'), { recursive: true })
+fs.writeFileSync(path.join(agentAssumedDecisionsProject, '.buildprint', 'decisions.md'), hardStopDecisionMarkdown('agent_assumption'))
+fs.writeFileSync(path.join(agentAssumedDecisionsProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
+fs.writeFileSync(path.join(agentAssumedDecisionsProject, 'docs', 'ui-identity.md'), '# UI Identity\n\n## 5) User-language map\n')
+fs.writeFileSync(path.join(agentAssumedDecisionsProject, 'docs', 'DESIGN.md'), '# DESIGN\n')
+fs.writeFileSync(path.join(agentAssumedDecisionsProject, 'docs', 'architecture.md'), '# Architecture\n\nScalability, maintainability, SOLID, KISS, DRY, schema evolution, migration, adapter boundary, provider interface.\n')
+fs.writeFileSync(path.join(agentAssumedDecisionsProject, 'public', 'index.html'), '<!doctype html><html><body><main><textarea></textarea></main></body></html>\n')
+expectFailure('agb verify ui rejects hard-stop decisions self-confirmed by agent',
+  ['verify', 'ui', agentAssumedDecisionsProject],
+  ['hard-stop-decisions-no-agent-assumption', 'hard-stop-decisions-confirmed'])
+
 // ---------------------------------------------------------------------------
 // agb verify ui: debug/proof console fixture (expect fail on app-facing terms)
 // ---------------------------------------------------------------------------
 const proofConsoleProject = path.join(tmp, 'proof-console-project')
 fs.mkdirSync(path.join(proofConsoleProject, '.buildprint'), { recursive: true })
+fs.mkdirSync(path.join(proofConsoleProject, '.buildprint', 'screenshots'), { recursive: true })
 fs.mkdirSync(path.join(proofConsoleProject, 'public'), { recursive: true })
 fs.mkdirSync(path.join(proofConsoleProject, 'docs'), { recursive: true })
-fs.writeFileSync(path.join(proofConsoleProject, '.buildprint', 'decisions.md'), '# Decisions\n\n| Question | Answer |\n|---|---|\n| Deployment posture | trusted_local |\n')
+fs.writeFileSync(path.join(proofConsoleProject, '.buildprint', 'decisions.md'), hardStopDecisionMarkdown())
 fs.writeFileSync(path.join(proofConsoleProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
 fs.writeFileSync(path.join(proofConsoleProject, 'docs', 'ui-identity.md'), '# UI Identity\n\n## 5) User-language map\n\n- Forbidden main surface words:\n  - "proof"\n  - "fixture"\n')
+fs.writeFileSync(path.join(proofConsoleProject, '.buildprint', 'screenshots', '1280-default.png'), 'fake png bytes')
+fs.writeFileSync(path.join(proofConsoleProject, 'docs', 'DESIGN.md'), constructionDesignMarkdown())
 fs.writeFileSync(path.join(proofConsoleProject, 'public', 'index.html'), `<!doctype html>
 <html><head><title>Agentic Chat</title></head>
 <body>
@@ -691,16 +868,165 @@ fs.writeFileSync(path.join(proofConsoleProject, 'public', 'index.html'), `<!doct
 }
 
 // ---------------------------------------------------------------------------
+// agb verify ui: structured evidence, screenshot refs, shell language, architecture depth
+// ---------------------------------------------------------------------------
+const proseEvidenceProject = path.join(tmp, 'prose-evidence-project')
+fs.mkdirSync(path.join(proseEvidenceProject, '.buildprint'), { recursive: true })
+fs.mkdirSync(path.join(proseEvidenceProject, '.buildprint', 'screenshots'), { recursive: true })
+fs.mkdirSync(path.join(proseEvidenceProject, 'public'), { recursive: true })
+fs.mkdirSync(path.join(proseEvidenceProject, 'docs'), { recursive: true })
+fs.writeFileSync(path.join(proseEvidenceProject, '.buildprint', 'decisions.md'), hardStopDecisionMarkdown())
+fs.writeFileSync(path.join(proseEvidenceProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
+fs.writeFileSync(path.join(proseEvidenceProject, 'docs', 'ui-identity.md'), '# UI Identity\n\nAgentic Chat is a chat-native agent interface.\n\n## 5) User-language map\n\n- Forbidden main surface words:\n  - "proof"\n')
+fs.writeFileSync(path.join(proseEvidenceProject, '.buildprint', 'screenshots', '1280-default.png'), 'fake png bytes')
+fs.writeFileSync(path.join(proseEvidenceProject, 'docs', 'DESIGN.md'), constructionDesignMarkdown())
+fs.writeFileSync(path.join(proseEvidenceProject, 'docs', 'architecture.md'), '# Architecture\n\nScalability, maintainability, SOLID, KISS, DRY, schema evolution, migration, adapter boundary, provider interface.\n')
+fs.writeFileSync(path.join(proseEvidenceProject, '.buildprint', 'ui-evidence.md'), 'The UI looks good in a screenshot.\n')
+fs.writeFileSync(path.join(proseEvidenceProject, 'public', 'index.html'), '<!doctype html><html><body><main><textarea></textarea></main></body></html>\n')
+expectFailure('agb verify ui rejects prose-only ui evidence',
+  ['verify', 'ui', proseEvidenceProject],
+  ['ui-evidence-structured', 'ui-evidence-screenshot-refs-exist'])
+
+const missingScreenshotProject = path.join(tmp, 'missing-screenshot-project')
+fs.cpSync(proseEvidenceProject, missingScreenshotProject, { recursive: true })
+fs.writeFileSync(path.join(missingScreenshotProject, '.buildprint', 'ui-evidence.md'), `claim: default chat viewport
+evidence_type: screenshot
+screenshot_path_or_file_line: .buildprint/screenshots/1280-missing.png
+viewport_state: 1280-default
+nearest_bad_silhouette: proof console
+pass_fail: PASS
+structural_difference: conversation and composer dominate
+`)
+expectFailure('agb verify ui rejects missing screenshot reference',
+  ['verify', 'ui', missingScreenshotProject],
+  ['ui-evidence-screenshot-refs-exist'])
+
+const philosophicalDesignProject = path.join(tmp, 'philosophical-design-project')
+fs.cpSync(proseEvidenceProject, philosophicalDesignProject, { recursive: true })
+fs.writeFileSync(path.join(philosophicalDesignProject, '.buildprint', 'ui-evidence.md'), `claim: default chat viewport
+evidence_type: screenshot
+screenshot_path_or_file_line: .buildprint/screenshots/1280-default.png
+viewport_state: 1280-default
+nearest_bad_silhouette: proof console
+pass_fail: PASS
+structural_difference: conversation and composer dominate
+`)
+fs.writeFileSync(path.join(philosophicalDesignProject, 'docs', 'DESIGN.md'), `# Agentic Chat Design System
+
+## Design Read
+
+A warm chat-native local agent interface for personal work, rejecting the lazy dashboard-with-status-cards default.
+
+## Taste Dials
+
+- Chat dominance: target 5/5; first viewport is thread plus composer.
+- Composer polish: target 4/5; stable textarea, visible focus, clear primary action.
+
+## Visual Atmosphere
+
+Warm, calm, and local. The UI should feel like a reliable personal chat surface, not an admin product.
+
+## Color System
+
+Use semantic tokens from public/styles.css.
+`)
+expectFailure('agb verify ui rejects philosophical design system without construction contract',
+  ['verify', 'ui', philosophicalDesignProject],
+  ['design-system-construction-sections', 'design-system-token-specificity'])
+
+const genericShellProject = path.join(tmp, 'generic-shell-project')
+fs.cpSync(missingScreenshotProject, genericShellProject, { recursive: true })
+fs.mkdirSync(path.join(genericShellProject, '.buildprint', 'screenshots'), { recursive: true })
+fs.writeFileSync(path.join(genericShellProject, '.buildprint', 'screenshots', '1280-default.png'), 'fake png bytes')
+fs.writeFileSync(path.join(genericShellProject, 'public', 'index.html'), '<!doctype html><html><body><main><h1>Agent Workbench Dashboard</h1></main></body></html>\n')
+expectFailure('agb verify ui rejects generic dashboard workbench shell',
+  ['verify', 'ui', genericShellProject],
+  ['generic-shell-language'])
+
+const thinArchitectureProject = path.join(tmp, 'thin-architecture-project')
+fs.cpSync(genericShellProject, thinArchitectureProject, { recursive: true })
+fs.writeFileSync(path.join(thinArchitectureProject, 'public', 'index.html'), '<!doctype html><html><body><main><textarea></textarea></main></body></html>\n')
+fs.writeFileSync(path.join(thinArchitectureProject, 'docs', 'architecture.md'), '# Architecture\n\nNode, HTML, JSON files.\n')
+expectFailure('agb verify ui rejects thin architecture after phase work',
+  ['verify', 'ui', thinArchitectureProject],
+  ['architecture-foundation-depth'])
+
+const staticWebUiArchitectureProject = path.join(tmp, 'static-webui-architecture-project')
+fs.cpSync(proseEvidenceProject, staticWebUiArchitectureProject, { recursive: true })
+fs.writeFileSync(path.join(staticWebUiArchitectureProject, '.buildprint', 'ui-evidence.md'), `claim: default chat viewport
+evidence_type: screenshot
+screenshot_path_or_file_line: .buildprint/screenshots/1280-default.png
+viewport_state: 1280-default
+nearest_bad_silhouette: proof console
+pass_fail: PASS
+structural_difference: conversation and composer dominate
+`)
+fs.writeFileSync(path.join(staticWebUiArchitectureProject, 'docs', 'architecture.md'), `# Architecture
+
+Scalability seams cover data growth and provider load. Maintainability relies on SOLID, KISS, and DRY module boundaries. Schema evolution uses migration notes. Provider adapter interface boundaries isolate runtime growth.
+
+## Framework And Styling Decisions
+
+The app uses a static WebUI with custom DOM scripting and plain CSS. Hono, Zod, and Bun own the app stack. Proof commands are bun run typecheck, bun run build, and bun test.
+`)
+expectFailure('agb verify ui rejects static WebUI architecture without exception',
+  ['verify', 'ui', staticWebUiArchitectureProject],
+  ['architecture-ui-static-exception'])
+
+const backendOnlyUiArchitectureProject = path.join(tmp, 'backend-only-ui-architecture-project')
+fs.cpSync(staticWebUiArchitectureProject, backendOnlyUiArchitectureProject, { recursive: true })
+fs.writeFileSync(path.join(backendOnlyUiArchitectureProject, 'docs', 'architecture.md'), `# Architecture
+
+Scalability seams cover data growth and provider load. Maintainability relies on SOLID, KISS, and DRY module boundaries. Schema evolution uses migration notes. Provider adapter interface boundaries isolate runtime growth.
+
+## Framework And Styling Decisions
+
+Selected runtime: Hono + Zod + Bun. Proof commands: bun run typecheck, bun run build, and bun test. The UI renders HTML from public files.
+`)
+expectFailure('agb verify ui rejects backend-only stack as UI framework proof',
+  ['verify', 'ui', backendOnlyUiArchitectureProject],
+  ['architecture-ui-framework-choice', 'architecture-ui-styling-choice'])
+
+const stylingPhilosophyArchitectureProject = path.join(tmp, 'styling-philosophy-architecture-project')
+fs.cpSync(staticWebUiArchitectureProject, stylingPhilosophyArchitectureProject, { recursive: true })
+fs.writeFileSync(path.join(stylingPhilosophyArchitectureProject, 'docs', 'architecture.md'), `# Architecture
+
+Scalability seams cover data growth and provider load. Maintainability relies on SOLID, KISS, and DRY module boundaries. Schema evolution uses migration notes. Provider adapter interface boundaries isolate runtime growth.
+
+## Framework And Styling Decisions
+
+Selected UI runtime/framework: React + Vite + TypeScript for stateful screen composition and component states.
+Styling direction: warm, calm, premium, and chat-native. The palette should feel local and polished.
+Rejected alternatives: dashboard shell and generic workbench.
+Proof commands: bun run typecheck and bun run build.
+UI-state complexity mapping: stateful screen composition, component states, design tokens, and responsive viewport proof are all required.
+`)
+expectFailure('agb verify ui rejects styling philosophy without proven styling path',
+  ['verify', 'ui', stylingPhilosophyArchitectureProject],
+  ['architecture-ui-styling-choice'])
+
+// ---------------------------------------------------------------------------
 // agb verify ui: clean project fixture (expect pass)
 // ---------------------------------------------------------------------------
 const cleanProject = path.join(tmp, 'clean-project')
 fs.mkdirSync(path.join(cleanProject, '.buildprint'), { recursive: true })
+fs.mkdirSync(path.join(cleanProject, '.buildprint', 'screenshots'), { recursive: true })
 fs.mkdirSync(path.join(cleanProject, 'public'), { recursive: true })
 fs.mkdirSync(path.join(cleanProject, 'docs'), { recursive: true })
-fs.writeFileSync(path.join(cleanProject, '.buildprint', 'decisions.md'), '# Decisions\n\n| Question | Answer |\n|---|---|\n| Deployment posture | trusted_local |\n')
+fs.writeFileSync(path.join(cleanProject, '.buildprint', 'decisions.md'), hardStopDecisionMarkdown())
 fs.writeFileSync(path.join(cleanProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
 fs.writeFileSync(path.join(cleanProject, 'docs', 'ui-identity.md'), '# UI Identity\n\n## 5) User-language map\n\n- Forbidden main surface words:\n  - "proof"\n')
-fs.writeFileSync(path.join(cleanProject, 'docs', 'DESIGN.md'), '# DESIGN\n\n## Design read\n\nReading this as a clean app for a local operator, where the first screen should feel calm and direct, not a generic proof console.\n')
+fs.writeFileSync(path.join(cleanProject, 'docs', 'DESIGN.md'), constructionDesignMarkdown())
+fs.writeFileSync(path.join(cleanProject, 'docs', 'architecture.md'), provenUiArchitectureMarkdown())
+fs.writeFileSync(path.join(cleanProject, '.buildprint', 'screenshots', '1280-default.png'), 'fake png bytes')
+fs.writeFileSync(path.join(cleanProject, '.buildprint', 'ui-evidence.md'), `claim: default viewport is calm and direct
+evidence_type: screenshot
+screenshot_path_or_file_line: .buildprint/screenshots/1280-default.png
+viewport_state: 1280-default
+nearest_bad_silhouette: proof console
+pass_fail: PASS
+structural_difference: feed surface dominates without debug panels
+`)
 fs.writeFileSync(path.join(cleanProject, 'public', 'index.html'), `<!doctype html>
 <html><head><title>Clean App</title></head>
 <body>
@@ -718,3 +1044,22 @@ function renderMessages(messages) {
 </body></html>
 `)
 expectPass('agb verify ui passes clean project', ['verify', 'ui', cleanProject])
+
+// ---------------------------------------------------------------------------
+// agb claim check: final qualification requires artifact, UI evidence, and independent review
+// ---------------------------------------------------------------------------
+const unqualifiedClaimProject = path.join(tmp, 'unqualified-claim-project')
+fs.mkdirSync(path.join(unqualifiedClaimProject, '.buildprint'), { recursive: true })
+fs.writeFileSync(path.join(unqualifiedClaimProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
+expectFailure('agb claim check rejects phase completion without qualification evidence',
+  ['claim', 'check', unqualifiedClaimProject],
+  ['hard-stop-decisions-present', 'claim-phase-core-vs-qualified', 'claim-artifact-check-pass', 'claim-independent-critical-review'])
+
+const qualifiedClaimProject = path.join(tmp, 'qualified-claim-project')
+fs.mkdirSync(path.join(qualifiedClaimProject, '.buildprint'), { recursive: true })
+fs.writeFileSync(path.join(qualifiedClaimProject, '.buildprint', 'state.json'), JSON.stringify({ completedPhases: ['01-setup'] }))
+fs.writeFileSync(path.join(qualifiedClaimProject, '.buildprint', 'decisions.md'), hardStopDecisionMarkdown())
+fs.writeFileSync(path.join(qualifiedClaimProject, '.buildprint', 'artifact-check.md'), '# Artifact Check\n\nArtifact check: PASS\n\nphase_core_passed: true\nclaim_qualified: true\n')
+fs.writeFileSync(path.join(qualifiedClaimProject, '.buildprint', 'ui-evidence.md'), 'pass_fail: PASS\nstructural_difference: verified against nearest bad silhouette\n')
+fs.writeFileSync(path.join(qualifiedClaimProject, '.buildprint', 'critical-review-pushback.md'), '## Reviewer independence\n\nfresh-context reviewer confirmed.\n\nPASS\n\nphase_core_passed: true\nclaim_qualified: true\n')
+expectPass('agb claim check passes qualified project', ['claim', 'check', qualifiedClaimProject])

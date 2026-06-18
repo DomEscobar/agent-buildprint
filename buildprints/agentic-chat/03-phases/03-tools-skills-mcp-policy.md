@@ -19,6 +19,14 @@ Every phase must keep `02-ui-identity.md` and the generated local UI identity op
 
 Implement the policy boundary and runtime records for tools, skills, MCP adapters, and browser or file actions. The user path should show what is allowed, blocked, delegated, retried, or failed; tool output must be typed and auditable. Dangerous actions must require explicit configuration and never execute from implicit model text.
 
+Product-proof contract for this phase:
+
+- Named product loop: Inline Tool Approval And Block.
+- User/operator action: trigger a deterministic tool/skill/MCP decision from a chat turn and approve, deny, or inspect the inline card at the message moment where it matters.
+- Named output/state: typed `tool_decision`, `policy_result`, `approval_record`, `tool_result`, blocked-state copy, and trace event attached to the message/turn.
+- Failure mode: disallowed file/browser/MCP action must render as an actionable inline blocked record, not a decorative capability panel or silent no-op.
+- Concrete proof artifact: API/browser transcript plus screenshot/source evidence showing inline approval/blocking tied to the chat message and persisted in the trace.
+
 This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
@@ -42,4 +50,3 @@ This phase should leave a user, operator, or developer with a real path they can
 ## Handoff note
 
 Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
-

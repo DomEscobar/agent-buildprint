@@ -10,6 +10,14 @@ Read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, project `AGENTS.md`
 
 The phase passes only when the artifact earns a credible pass score from an independent reviewer and no high-severity blocker remains hidden behind optimistic language.
 
+Product-proof contract for this phase:
+
+- Named product loop: Final Chat Claim Qualification Review.
+- User/operator action: run the Agentic Chat surface through a fresh deterministic streaming turn, blocked provider/tool path, persistence readback, and responsive screenshot review as a fresh-context reviewer.
+- Named output/state: `.buildprint/critical-review-pushback.md`, `.buildprint/artifact-check.md`, `.buildprint/ui-evidence.md`, screenshot set, rubric score, and final chat claim status.
+- Failure mode: self-review, buffered fake streaming, missing screenshot evidence, generic dashboard/workbench UI, thin architecture, dead controls, Track B/C failure, or unresolved blockers prevents PASS.
+- Concrete proof artifact: independent review note with cited artifacts, `agb verify ui .`, `agb claim check .`, screenshots, streaming transcript, persistence readback, repair loop entries, and final `phase_core_passed` versus `claim_qualified` judgment.
+
 ## External reviewer independence protocol
 
 Critical review requires a fresh-context reviewer — a dispatched subagent or a new agent session that did not implement the artifact.

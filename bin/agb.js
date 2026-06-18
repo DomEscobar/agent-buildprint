@@ -6,6 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { checkBlueprint, printBlueprintResults } from '../src/blueprint/blueprint-check.js'
 import { evidenceCheck } from '../src/evidence/evidence-ledger.js'
 import { harnessCheckResult, harnessInit, printHarnessResult } from '../src/harness/local-harness.js'
+import { architectureUiStackChecks, centralOutputInstantiationChecks, claimChecks, designSystemChecks, hardStopDecisionChecks, phaseProofChecks, uiEvidenceChecks } from '../src/product-proof-checks.js'
 
 const cwd = process.cwd()
 const cliDir = path.dirname(fileURLToPath(import.meta.url))
@@ -63,6 +64,7 @@ Usage:
   agb harness checkup [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
   agb evidence check <evidence-ledger-jsonl>
   agb verify ui [project-folder]
+  agb claim check [project-folder]
 
 Examples:
   agb check ./my-buildprint
@@ -76,6 +78,7 @@ Examples:
   agb evidence check .buildprint/evidence/evidence-ledger.jsonl
   agb verify ui .
   agb verify ui /path/to/my-build
+  agb claim check .
 
 Mapper note:
   The old agb map CLI has been removed. To map a source project, run an agent
@@ -578,6 +581,7 @@ function packetCheckResults(dir) {
     /reviewer_acceptance_questions:/i.test(blueprint) &&
     /claim_gates:/i.test(blueprint)
   )
+  for (const check of centralOutputInstantiationChecks(blueprint, isMapperTemplatePacket, isAgenticChatPacket)) ok(check.label, check.pass, check.detail || '')
   ok('blueprint declares harness provider and profile selection',
     /harness:\s*\n[\s\S]*profiles:/i.test(blueprint) &&
     /provider:\s*agents/i.test(blueprint) &&
@@ -603,6 +607,10 @@ function packetCheckResults(dir) {
     /drag|reorder/i.test(blueprint) &&
     /provider/i.test(blueprint) &&
     /task/i.test(blueprint) &&
+    /frontend UI runtime/i.test(blueprint) &&
+    /component\/state styling/i.test(blueprint) &&
+    /responsive viewport proof/i.test(blueprint) &&
+    /design token enforcement/i.test(blueprint) &&
     /migration/i.test(blueprint) &&
     /from-scratch|custom implementation/i.test(blueprint)
   )
@@ -620,6 +628,12 @@ function packetCheckResults(dir) {
   const hardStopBeforeFile = usesSetupFirstIdentitySecond ? setupFile : uiIdentityFile
   ok('questions classify blocking power', /Hard-stop questions/i.test(questions) && /Assumable defaults/i.test(questions) && /Deferrable questions/i.test(questions) && new RegExp(`stop before \`?${hardStopBeforeFile.replace('.', '\\.')}\`?`, 'i').test(questions))
   ok('questions hard-stop sensitive decisions', /Deployment posture/i.test(questions) && /Secrets and provider policy/i.test(questions) && /Destructive\/data-loss behavior/i.test(questions) && /Privacy\/compliance exposure/i.test(questions) && /Product\/artifact identity/i.test(questions))
+  ok('questions forbid hard-stop self-defaults',
+    /confirmed_by:\s*user/i.test(questions) &&
+    /confirmed_by:\s*explicit_user_delegation/i.test(questions) &&
+    /agent_assumption.*invalid|invalid.*agent_assumption/i.test(questions) &&
+    !/If not answered,\s*the agent may choose a reversible default/i.test(questions)
+  )
 
   const setup = safeReadText(path.join(dir, setupFile))
   ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && (/Do not start `?03-phases\/\*`?/i.test(setup) || /Do not start `?02-ui-identity\.md`? or `?03-phases\/\*`?/i.test(setup)))
@@ -650,7 +664,11 @@ function packetCheckResults(dir) {
     /proven_implementation_requirements/i.test(setup) &&
     /docs\/architecture\.md/i.test(setup) &&
     /libraries|runtimes|SDKs|platform services/i.test(setup) &&
-    /hand-roll|from-scratch/i.test(setup)
+    /hand-roll|from-scratch/i.test(setup) &&
+    /Framework And Styling Decisions/i.test(setup) &&
+    /React \+ Vite \+ TypeScript/i.test(setup) &&
+    /Tailwind CSS v4 \+ tokenized CSS variables/i.test(setup) &&
+    /ui_stack_exception/i.test(setup)
   )
   ok('project setup requires engineering quality bar',
     /scalab/i.test(setup) &&
@@ -745,11 +763,16 @@ function packetCheckResults(dir) {
   ok('ui identity requires separate DESIGN.md visual taste system',
     !usesSetupFirstIdentitySecond ||
     (/Required sections in generated DESIGN\.md/i.test(uiux) &&
-     /visual taste system/i.test(uiux) &&
-     /Design read/i.test(uiux) &&
-     /Taste dials/i.test(uiux) &&
-     /Visual atmosphere/i.test(uiux) &&
-     /Screenshot craft checks/i.test(uiux) &&
+     /screen construction contract/i.test(uiux) &&
+     /Visual Thesis/i.test(uiux) &&
+     /Exact Tokens/i.test(uiux) &&
+     /Type Scale/i.test(uiux) &&
+     /Layout Contract/i.test(uiux) &&
+     /Component Specs/i.test(uiux) &&
+     /State Matrix/i.test(uiux) &&
+     /Implementation Mapping/i.test(uiux) &&
+     /Screenshot Acceptance/i.test(uiux) &&
+     /Banned Patterns/i.test(uiux) &&
      /Do not collapse `?docs\/ui-identity\.md`? and `?docs\/DESIGN\.md`?/i.test(uiux))
   )
   ok('agentic-chat requires chat-native action gate',
@@ -951,6 +974,7 @@ function packetCheckResults(dir) {
     ok(`${file} reads required phase context`, /03-phases\/phase-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text) && text.includes(uiIdentityFile))
     ok(`${file} forbids placeholders/functionless/mocks`, /placeholders/i.test(text) && /functionless buttons/i.test(text) && /mocked\/sample data/i.test(text))
     ok(`${file} does not use decomposed v2/schema machinery`, !/slice\.yaml|acceptance-spec|build-brief|requires_roles|capability_id|proof_contract|evidence-ledger\.jsonl/i.test(text))
+    for (const check of phaseProofChecks({ file, text, objective, isMapperTemplatePacket, isAgenticChatPacket })) ok(check.label, check.pass, check.detail || '')
   }
 
   const handover = safeReadText(path.join(dir, 'HANDOVER.md'))
@@ -1347,7 +1371,20 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
     ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared product-led phase-flow state.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, ${usesSetupFirstIdentitySecond ? 'complete product setup and local skill harness, generate UI identity' : 'initialize the local skill harness, generate UI identity, complete product setup'}, then execute the active phase loop.\n`
     : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
-  fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions\n\nNo implementation decisions recorded yet. Add confirmed alignment choices here.\n`)
+  fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions
+
+No implementation decisions recorded yet. Add confirmed alignment choices here.
+
+Hard-stop rows must be filled before setup or phase work. Use \`confirmed_by: user\`, \`confirmed_by: explicit_user_delegation\`, or \`confirmed_by: blocker\`; never use \`confirmed_by: agent_assumption\` for hard-stops.
+
+| Question | answer | confirmed_by | delegation_quote | reversible | blocks_setup |
+|---|---|---|---|---:|---:|
+| Deployment posture |  |  |  | no | yes |
+| Secrets and provider policy |  |  |  | no | yes |
+| Destructive/data-loss behavior |  |  |  | no | yes |
+| Privacy/compliance exposure |  |  |  | no | yes |
+| Product/artifact identity |  |  |  | no | yes |
+`)
   fs.writeFileSync(path.join(stateDir, 'blockers.md'), `# Blockers\n\nNone currently.\n`)
   fs.writeFileSync(path.join(stateDir, 'next-agent.md'), isExecutablePacket ? `# Next Agent Instructions
 
@@ -1357,7 +1394,7 @@ This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stal
 
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`${snapshotPathFor(file)}\``).join(' -> ')}.
-3. Read \`${snapshotPathFor('00-questions.md')}\`; stop only for true hard-stop decisions.
+3. Read \`${snapshotPathFor('00-questions.md')}\`; stop at \`00-questions.md\` unless every hard-stop row is user-confirmed, explicitly delegated, or recorded as a blocker in \`.buildprint/decisions.md\`. Ask unresolved hard-stop questions before \`${snapshotPathFor(setupFile)}\`.
 4. Read and complete \`${snapshotPathFor(setupFile)}\`; initialize the project-local skill harness from the profiles declared in \`${snapshotPathFor('blueprint.yaml')}\` by running \`${harnessInitCommand}\` if \`agb\` is available. Then run \`agb harness check . --provider agents${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\` and \`agb harness checkup . --provider agents${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\`. If \`agb\` is unavailable, create the \`AGENTS.md\` harness section and local skills described by the setup file.
 5. Read \`${snapshotPathFor(uiIdentityFile)}\`; for UI-bearing artifacts, load the local \`frontend-ui-product-design\` skill and generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before phase work.
 6. Confirm setup and identity proof are complete before phase work.
@@ -1512,6 +1549,7 @@ function verifyUiChecks(projectRoot) {
   ]
   const uiIdentityFile = uiIdentityFiles.find((file) => exists(file)) || uiIdentityFiles[0]
   const designSystemFile = path.join(projectRoot, 'docs', 'DESIGN.md')
+  const architectureFile = path.join(projectRoot, 'docs', 'architecture.md')
   const uiEvidenceFile = path.join(buildprintDir, 'ui-evidence.md')
   const results = []
 
@@ -1531,6 +1569,7 @@ function verifyUiChecks(projectRoot) {
       ? `${path.relative(projectRoot, decisionsFile)} still contains the empty stub while ${stateCompletedPhases.length} phase(s) are marked complete in state.json`
       : '',
   })
+  if (hasPhasesCompleted) results.push(...hardStopDecisionChecks(projectRoot))
 
   // Check 2: raw-json-in-dom
   // Fails when HTML/JS renders payloads via JSON.stringify(..., null, 2) bound to .textContent / innerHTML.
@@ -1610,9 +1649,11 @@ function verifyUiChecks(projectRoot) {
           ? 'artifact is marked not-ui-bearing in the UI identity artifact'
           : 'missing docs/DESIGN.md; UI-bearing artifacts must generate a visual taste system before phase work and handoff'),
   })
+  results.push(...designSystemChecks({ projectRoot, designSystemFile, isUiBearing: !isExplicitNonUi }))
 
   const isAgenticChatArtifact = /Agentic Chat|chat-native agent interface/i.test(uiIdentity)
   const uiEvidence = safeReadText(uiEvidenceFile)
+  results.push(...uiEvidenceChecks({ projectRoot, uiEvidenceFile, isUiBearing: !isExplicitNonUi }))
 
   // Check 4c: agentic-chat-consumer-craft-evidence
   // Agentic Chat has an additional shipment gate: evidence must explicitly prove
@@ -1728,6 +1769,48 @@ function verifyUiChecks(projectRoot) {
     evidence: debugUiEvidence.length > 0 ? `debug/build/proof terms found in app-facing UI: ${debugUiEvidence.join('; ')}` : '',
   })
 
+  const GENERIC_SHELL_PATTERNS = [
+    /\bdashboard\b/i,
+    /\bworkbench\b/i,
+    /\bstudio\b/i,
+    /\bcontrol panel\b/i,
+    /\bstatus panel\b/i,
+  ]
+  const shellEvidence = []
+  if (isAgenticChatArtifact && !isExplicitNonUi) {
+    for (const file of uiSurfaceFiles) {
+      const lines = safeReadText(file).split(/\r?\n/)
+      lines.forEach((line, idx) => {
+        if (shellEvidence.length >= 20) return
+        const match = GENERIC_SHELL_PATTERNS.find((pattern) => pattern.test(line))
+        if (match) shellEvidence.push(`${path.relative(projectRoot, file)}:${idx + 1} matches ${match}`)
+      })
+    }
+  }
+  results.push({
+    id: 'generic-shell-language',
+    pass: shellEvidence.length === 0,
+    evidence: shellEvidence.length > 0 ? `generic dashboard/workbench shell language found: ${shellEvidence.join('; ')}` : '',
+  })
+
+  const architecture = safeReadText(architectureFile)
+  const architectureRequired = hasPhasesCompleted || exists(architectureFile)
+  const architectureDeepEnough = /scalab/i.test(architecture) &&
+    /maintainab/i.test(architecture) &&
+    /\bSOLID\b/i.test(architecture) &&
+    /\bKISS\b/i.test(architecture) &&
+    /\bDRY\b/i.test(architecture) &&
+    /schema evolution|migration/i.test(architecture) &&
+    /boundary|interface|adapter/i.test(architecture)
+  results.push({
+    id: 'architecture-foundation-depth',
+    pass: !architectureRequired || architectureDeepEnough,
+    evidence: architectureRequired
+      ? 'docs/architecture.md must name scalability, maintainability, SOLID/KISS/DRY, schema evolution or migrations, and runtime/module boundaries'
+      : '',
+  })
+  results.push(...architectureUiStackChecks({ architectureText: architecture, isUiBearing: !isExplicitNonUi }))
+
   // Check 6: forbidden-words
   // Reads docs/ui-identity.md to derive the project's own forbidden-word list and "not a X" claims,
   // then checks whether the shipped UI markup uses those words.
@@ -1794,6 +1877,25 @@ function verifyUi(projectRoot) {
   return printVerifyUiResults(checks, resolved)
 }
 
+function printClaimResults(checks) {
+  let failed = 0
+  for (const check of checks) {
+    if (check.pass) console.log(`âœ“ ${check.id}`)
+    else {
+      failed++
+      console.log(`âœ— ${check.id}: ${check.evidence}`)
+    }
+  }
+  console.log(`\nClaim check: ${failed ? `FAIL (${failed} failed)` : 'PASS'}`)
+  return failed === 0
+}
+
+function claimCheck(projectRoot) {
+  const resolved = path.resolve(projectRoot || '.')
+  if (!exists(resolved)) throw new Error(`project folder not found: ${resolved}`)
+  return printClaimResults(claimChecks(resolved))
+}
+
 if (args[0] === 'verify') {
   const sub = args[1]
   const project = args[2] || '.'
@@ -1803,6 +1905,19 @@ if (args[0] === 'verify') {
     throw new Error(`unknown verify subcommand: ${sub}`)
   } catch (error) {
     console.error(`Verify ${sub} failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
+if (args[0] === 'claim') {
+  const sub = args[1]
+  const project = args[2] || '.'
+  if (!sub || isHelp(sub)) usage(0)
+  try {
+    if (sub === 'check') process.exit(claimCheck(project) ? 0 : 1)
+    throw new Error(`unknown claim subcommand: ${sub}`)
+  } catch (error) {
+    console.error(`Claim ${sub} failed: ${error.message}`)
     process.exit(1)
   }
 }

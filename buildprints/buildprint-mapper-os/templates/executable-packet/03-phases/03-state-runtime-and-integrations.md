@@ -25,6 +25,14 @@ Use `proven_implementation_requirements` in `blueprint.yaml` for runtime-heavy d
 
 This phase should turn the core loop from a local demo into a trustworthy local product path.
 
+Product-proof contract for this phase:
+
+- Named product loop: name the durable/reloadable loop that crosses persistence, provider, task, or integration boundaries.
+- User/operator action: name the reload, retry, provider selection, import/export, or integration action being exercised.
+- Named output/state: name the durable record, task status, adapter result, audit entry, or recovered UI/API state.
+- Failure mode: name the missing credential, provider failure, persistence failure, retry exhaustion, or unsafe action block.
+- Concrete proof artifact: name the restart/readback transcript, adapter trace, migration proof, retry log, screenshot, or API evidence.
+
 ## DO NOT
 
 - Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.

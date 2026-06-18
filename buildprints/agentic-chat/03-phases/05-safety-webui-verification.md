@@ -19,6 +19,16 @@ Every phase must keep `02-ui-identity.md` and the generated local UI identity op
 
 Create the WebUI/API workbench and final safety boundaries for local use: empty chat, streaming, provider blocked, tool blocked, memory state, failure, retry, and success paths. Verify the deterministic runtime through UI or API, prove persistence readback, inspect responsive states, and record live-provider/tool/MCP blockers without overclaiming.
 
+Product-proof contract for this phase:
+
+- Named product loop: Verified Chat Surface And Claim Qualification.
+- User/operator action: start the app, send a deterministic streaming turn, inspect inline trace/memory/tool state, retry or recover from one blocked path, and reload to verify persistence.
+- Named output/state: polished default chat viewport, streaming message state, inline blocked/error/success states, persisted readback, `.buildprint/ui-evidence.md`, `.buildprint/artifact-check.md`, and final handover claim status.
+- Failure mode: generic dashboard/workbench UI, buffered fake streaming, dead controls, missing screenshots, missing UI evidence, or unresolved live-provider/tool/MCP blockers must prevent `claim_qualified`.
+- Concrete proof artifact: desktop/mobile screenshots, API/browser streaming transcript, `agb verify ui .`, `agb claim check .`, persistence readback, and independent critical review evidence.
+
+This phase is not where the WebUI is first invented. If prior phases left only a raw API or generic shell, return to the responsible phase and repair it before final verification. This phase qualifies claims: `phase_core_passed` may be true for the local deterministic loop while `claim_qualified` remains false until UI evidence, runtime proof, blockers, and independent review align.
+
 This phase should leave a user, operator, or developer with a real path they can trigger, inspect, and trust within the stated claim ceiling. The path must expose honest blocked states for missing credentials, unavailable runtimes, failed persistence, rejected policy gates, and provider/network unavailability. The output must be specific to the product contract, not generic generated text, sample cards, raw JSON, or proof prose.
 
 ## DO NOT
@@ -42,4 +52,3 @@ This phase should leave a user, operator, or developer with a real path they can
 ## Handoff note
 
 Write what was built, what works, commands run, proof observed, blockers, unproven claims, and which next phase can trust this work.
-

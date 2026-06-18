@@ -168,6 +168,7 @@ proven_implementation_requirements:
     - drag/reorder/canvas interaction
     - charts, diagrams, maps, timelines, code rendering, or visual primitives
     - live provider SDKs, OAuth, webhooks, external APIs, or local model runtimes
+    - frontend UI runtime, stateful screen composition, component/state styling, responsive viewport proof, or design token enforcement
     - background jobs, export tasks, queues, retries, or long-running work
     - durable persistence, migrations, file/object storage, or sync
   selected_packet_must:
@@ -185,4 +186,9 @@ proven_implementation_requirements:
       requirement: Implement validators that block ungrounded factual claims and invalid metadata/schema/feed/build output.
     publishing_side_effects:
       requirement: Use approval gates and provider adapters for scheduling/publishing; direct publishing is never enabled by default.
-
+    frontend_ui_runtime:
+      requirement: Use a proven frontend runtime for stateful editorial workflow UI composition; default to React + Vite + TypeScript unless an existing host framework is already proven.
+    component_state_styling:
+      requirement: Use a proven styling/design-system path for tokens, responsive states, and component variants; default to Tailwind CSS v4 + tokenized CSS variables unless an existing design system is already proven.
+    responsive_viewport_proof:
+      requirement: Prove desktop/tablet/mobile/narrow states with screenshots and viewport checks tied to docs/DESIGN.md and .buildprint/ui-evidence.md.

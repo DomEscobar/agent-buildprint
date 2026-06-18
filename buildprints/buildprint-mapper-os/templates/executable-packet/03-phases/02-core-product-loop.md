@@ -27,6 +27,14 @@ Do not confuse "input-derived" with "good." The central output should include th
 
 For UI-bearing products, every visible control in this path must work or block honestly. For API/CLI/service products, every documented command/endpoint in this path must return meaningful success/error output and avoid hidden side effects.
 
+Product-proof contract for this phase:
+
+- Named product loop: instantiate the selected golden path with source-derived nouns, not generic "mapped product loop" language.
+- User/operator action: name the exact input/configuration/start action that triggers the loop.
+- Named output/state: name the central result and the persisted or visible state that changes.
+- Failure mode: name one domain-specific invalid input, unavailable provider, failed dependency, or blocked action.
+- Concrete proof artifact: name the command/API/browser evidence and output-quality note that proves the result is useful, not only input-derived.
+
 ## DO NOT
 
 - Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.

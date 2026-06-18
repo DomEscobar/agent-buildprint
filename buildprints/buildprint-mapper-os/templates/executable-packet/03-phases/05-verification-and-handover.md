@@ -31,6 +31,14 @@ Update `README.md` as the product-facing README for the artifact that now exists
 
 Update `HANDOVER.md` with exactly what was built, commands run, observed results, blockers, unproven claims, and recommended next actions. Keep `README.md` and `HANDOVER.md` consistent: the README is for users/operators, and the handover is for the next builder.
 
+Product-proof contract for this phase:
+
+- Named product loop: name the final end-to-end loop being re-run from a fresh start.
+- User/operator action: name the exact start command and first user/operator action used for final proof.
+- Named output/state: name the central output, durable readback state, UI/API state, and handover claim that changes.
+- Failure mode: name one negative or blocked path that prevents overclaiming.
+- Concrete proof artifact: name the commands, screenshots, transcripts, README section, HANDOVER section, and claim qualification evidence.
+
 ## DO NOT
 
 - Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
