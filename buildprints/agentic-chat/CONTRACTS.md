@@ -13,6 +13,6 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 - `ProviderFailure`: normalized code, retryability, and user-facing recovery text.
 - `Telemetry`: prompt/output tokens, latency, provider id, model id, and cost (zero/unknown when not paid).
 
-## Deferred contracts (EXTENSIONS.md, not in 1.0)
+## Full Agentic Chat contracts (EXTENSIONS.md and phase 04)
 
-- `ToolSpec`, `SkillSpec`, `McpServerSpec`, `MemoryState`, and `TeamTask` are designed as future seams only; they are not built in 1.0.
+- `ToolSpec`, `SkillSpec`, `McpServerSpec`, `MemoryState`, and `TeamTask` are full-maturity contracts. They may remain blocked at the streaming-core floor, but a complete `agentic_chat` claim must prove typed runtime paths, policy states, audit records, product-loop evidence, or explicit blockers for each enabled capability.

@@ -35,6 +35,23 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - <what the output makes clear>
   - <what still feels generic or weak>
   - <what a user/operator can do next from the output>
+- Capability maturity:
+  - `streaming_chat_core` — <PASS/FAIL/blocker with real streaming, routing, persistence, retry/cancel, and chat UI proof>
+  - `agentic_chat` — <PASS/FAIL/blocker with goal-to-action loop proof; do not pass from streaming chat alone>
+- Builder loop:
+  - observe/interpret/plan/act/inspect/critique/repair/verify/decide — <what changed during the repair loop and what evidence changed after rerun>
+- Product loop:
+  - goal intake — <screenshot/API/source proof or blocker>
+  - plan or next-step state — <proof or blocker>
+  - action selection — <model/tool/skill/MCP/memory/subagent proof or blocker>
+  - policy/approval — <approval or blocked side-effect proof>
+  - observation ingestion — <result attached to conversation proof>
+  - critique/retry/recovery — <bounded retry or recovery proof>
+  - resumable state — <restart/readback proof>
+  - final synthesis — <proof that final answer ties back to original user goal>
+- Proof loop:
+  - score/reject/route/patch/rerun/rescore — <checks run, failed evidence rejected, repair made, rerun result>
+  - plan-mode baseline — <comparison result against normal coding-agent plan mode or blocker; keep `agentic_chat` unqualified if not run>
 
 ## Blocked
 
@@ -42,7 +59,8 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 ## Not proven
 
-- deferred capabilities (tools/skills, MCP, memory/compaction, subagents) — out of 1.0 scope per `EXTENSIONS.md`; do not claim them as working
+- full `agentic_chat` maturity when only `streaming_chat_core` is proven
+- tools/skills, MCP, memory/compaction, or subagents when they lack typed runtime paths, policy states, audit records, and product-loop proof
 - paid-provider quality or public hosting when only the local default provider was proven
 - <claim that should not be made yet>
 - <central output quality claim that should not be made yet>

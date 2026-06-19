@@ -650,9 +650,11 @@ function packetCheckResults(dir) {
   const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') ||
     normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet') ||
     /Replace this template-level rule with the selected artifact's source-derived central output contract/i.test(blueprint)
+  const uiIdentityText = safeReadText(path.join(dir, '02-ui-identity.md'))
   const isAgenticChatPacket = normalizedPacketDir.endsWith('buildprints/agentic-chat') ||
-    /Product:\s*Agentic Chat/i.test(safeReadText(path.join(dir, '02-ui-identity.md'))) ||
-    /Agentic Chat/i.test(buildprint)
+    /Product:\s*Agentic Chat/i.test(uiIdentityText) ||
+    /capability_maturity:[\s\S]*full_claim:\s*agentic_chat/i.test(blueprint) ||
+    /central_output_contract:[\s\S]*Agentic Chat/i.test(blueprint)
   const requiresTypedQualityRouting = isMapperTemplatePacket
   const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint)
   const requiresCriticalReviewPushback = isMapperTemplatePacket ||
@@ -718,6 +720,36 @@ function packetCheckResults(dir) {
     /claim_gates:/i.test(blueprint)
   )
   for (const check of centralOutputInstantiationChecks(blueprint, isMapperTemplatePacket, isAgenticChatPacket)) ok(check.label, check.pass, check.detail || '')
+  ok('agentic-chat declares explicit agentic execution model',
+    !isAgenticChatPacket ||
+    (/execution_model:/i.test(blueprint) &&
+     /mode:\s*agentic_loop/i.test(blueprint) &&
+     /builder_loop:/i.test(blueprint) &&
+     /product_loop:/i.test(blueprint) &&
+     /proof_loop:/i.test(blueprint) &&
+     /Observe|observe/i.test(blueprint) &&
+     /Interpret|interpret/i.test(blueprint) &&
+     /Plan|plan/i.test(blueprint) &&
+     /Act|act/i.test(blueprint) &&
+     /Inspect|inspect/i.test(blueprint) &&
+     /Critique|critique/i.test(blueprint) &&
+     /Repair|repair/i.test(blueprint) &&
+     /Verify|verify/i.test(blueprint) &&
+     /Decide|decide/i.test(blueprint))
+  )
+  ok('agentic-chat separates streaming core from full agentic maturity',
+    !isAgenticChatPacket ||
+    (/capability_maturity:/i.test(blueprint) &&
+     /current_floor:\s*streaming_chat_core/i.test(blueprint) &&
+     /full_claim:\s*agentic_chat/i.test(blueprint) &&
+     /Do not call the artifact a complete Agentic Chat/i.test(blueprint) &&
+     /planning\/next-step loop|plan or next-step/i.test(blueprint) &&
+     /tool\/skill execution policy|tool.*skill/i.test(blueprint) &&
+     /MCP adapter posture/i.test(blueprint) &&
+     /memory\/compaction/i.test(blueprint) &&
+     /subagent\/delegation/i.test(blueprint) &&
+     /benchmark evidence/i.test(blueprint))
+  )
   ok('blueprint declares harness provider and profile selection',
     /harness:\s*\n[\s\S]*profiles:/i.test(blueprint) &&
     /provider:\s*agents/i.test(blueprint) &&
@@ -946,6 +978,18 @@ function packetCheckResults(dir) {
     /one concrete weakness repair/i.test(phaseFlow) &&
     /what the proof does not prove/i.test(phaseFlow)
   )
+  ok('agentic-chat phase flow binds builder, product, and proof loops',
+    !isAgenticChatPacket ||
+    (/builder loop/i.test(phaseFlow) &&
+     /product loop/i.test(phaseFlow) &&
+     /proof loop/i.test(phaseFlow) &&
+     /goal intake/i.test(phaseFlow) &&
+     /action selection/i.test(phaseFlow) &&
+     /policy\/approval/i.test(phaseFlow) &&
+     /observation ingestion/i.test(phaseFlow) &&
+     /critique\/retry\/recovery/i.test(phaseFlow) &&
+     /agentic_chat:\s*blocked|agentic_chat:\s*not_qualified/i.test(phaseFlow))
+  )
   ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
   ok('phase flow requires UI identity verification before completion',
     /missing local UI identity/i.test(phaseFlow) &&
@@ -1155,6 +1199,16 @@ function packetCheckResults(dir) {
      /Taste Dials/i.test(handover) &&
      /composer quality/i.test(handover) &&
      /system-label suppression/i.test(handover))
+  )
+  ok('agentic-chat handover captures maturity and loop proof',
+    !isAgenticChatPacket ||
+    (/Capability maturity/i.test(handover) &&
+     /streaming_chat_core/i.test(handover) &&
+     /agentic_chat/i.test(handover) &&
+     /Builder loop/i.test(handover) &&
+     /Product loop/i.test(handover) &&
+     /Proof loop/i.test(handover) &&
+     /plan-mode baseline/i.test(handover))
   )
   ok('handover warns against overclaiming', /Do not claim completion beyond the evidence/i.test(handover))
 

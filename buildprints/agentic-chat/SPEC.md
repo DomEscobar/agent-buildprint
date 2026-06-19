@@ -12,8 +12,8 @@ The stack is stack-neutral and chosen via `00-questions.md`. Build a local perso
 - normalized token/usage telemetry per turn and provider;
 - durable persistence for sessions, messages, stream events, provider routes, and telemetry with a migration path;
 - a polished chat WebUI/API with honest empty, streaming, blocked, error, retry, and success states;
-- diagnostics that keep paid-provider, public hosting, and deferred-capability claims honest.
+- diagnostics that keep paid-provider, public hosting, and full agentic-capability claims honest.
 
-## Deferred (out of 1.0 scope)
+## Full Agentic Chat maturity
 
-Tools/skills, MCP adapter policy, memory/compaction, and subagent delegation are documented as seams in `EXTENSIONS.md`. They are not part of the 1.0 build and must not be stubbed or claimed as working.
+Tools/skills, MCP adapter policy, memory/compaction, and subagent delegation are documented in `EXTENSIONS.md` and implemented through `03-phases/04-agentic-loop-runtime.md` when claiming full `agentic_chat` maturity. They may remain blocked after the streaming core floor, but they must not be stubbed or claimed as working without typed runtime paths, policy states, audit records, and product-loop proof.

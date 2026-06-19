@@ -14,7 +14,7 @@ Then create or update the implementation project foundation. Do not start `02-ui
 
 ## Setup objective
 
-Create the real base project structure for Agentic Chat, centered on a real-model streaming chat turn that persists messages, trace events, provider route, usage telemetry, and blocked states in a way a user can inspect and continue. Tools, MCP, memory, and subagents are deferred to `EXTENSIONS.md`; design their seams but keep them out of 1.0 scope. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the module boundaries, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
+Create the real base project structure for Agentic Chat, centered on a real-model streaming chat turn that persists messages, trace events, provider route, usage telemetry, and blocked states in a way a user can inspect and continue. Also design the module seams for the full agentic loop: tool/skill policy, MCP posture, memory/compaction, delegation/subagents, approvals, action results, audit records, and resumable traces. These capabilities may stay blocked at the streaming-core maturity level, but the architecture must not make them bolt-on theater later. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the module boundaries, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
 
 The setup output should make the identity step and first implementation phase obvious: where code goes, what commands run, how state persists, what is mocked in tests, what is blocked in live mode, and what good enough to continue means.
 
@@ -33,7 +33,7 @@ The stack is **stack-neutral and chosen by the user** via the stack and provider
 - Streaming: an incrementally readable transport (SSE or equivalent) with token-by-token rendering and end-to-end cancellation; buffered-after-completion responses do not qualify.
 - Persistence: a durable store with a typed schema and a migration path for `session`, `message`, `turn`, `stream_event`, `provider_route`, and `telemetry`.
 - Behavioral depth (required regardless of stack): a normalized provider error taxonomy and a bounded retry/backoff policy.
-- Deferred to `EXTENSIONS.md` and out of 1.0 scope: tools/skills, MCP policy, memory/compaction, subagents. Record their seams, do not build or fake them.
+- Agentic maturity boundary: tools/skills, MCP policy, memory/compaction, and subagents require typed runtime paths, policy states, audit records, and proof before a full `agentic_chat` claim. Record seams and blockers; do not build or fake empty versions during the streaming-core foundation.
 
 Suggested (non-binding) starting points if the user expresses no preference: local Ollama for the free real-model path, the Vercel AI SDK for provider clients, SSE transport, and SQLite for persistence. The UI runtime/styling default below still applies unless the user selects otherwise.
 

@@ -13,13 +13,13 @@ Before writing code, read:
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
-This phase is qualification and repair, not first invention. If the real streaming chat loop or the provider routing boundary is missing, return to the responsible phase instead of creating a thin verification facade. Capabilities deferred to `EXTENSIONS.md` (tools/skills, MCP policy, memory/compaction, subagents) are out of 1.0 scope: do not stub or fake them in the UI, and do not advertise them as working.
+This phase is qualification and repair for the streaming chat core, not first invention. If the real streaming chat loop or the provider routing boundary is missing, return to the responsible phase instead of creating a thin verification facade. Capabilities described in `EXTENSIONS.md` (tools/skills, MCP policy, memory/compaction, subagents) belong to the full Agentic Chat maturity path in `04-agentic-loop-runtime.md`: do not stub or fake them in the UI, and do not advertise them as working before phase 04 proves or blocks them.
 
 ## Building objective
 
 Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
-Qualify the WebUI/API product to a real, shippable quality bar for the committed 1.0 core: empty chat, streaming real tokens, provider blocked, failure, retry/recovery, persisted reload, and success paths. The result should feel like a polished consumer chat product with honest agentic inspection and recovery, not a generic evaluator dashboard. With the real-model outcome floor from phase 01, the claim ceiling can be raised honestly for the local default model; paid-provider, hosting, and deferred-capability claims remain blocked until separately proven.
+Qualify the WebUI/API product to a real, shippable quality bar for `streaming_chat_core`: empty chat, streaming real tokens, provider blocked, failure, retry/recovery, persisted reload, and success paths. The result should feel like a polished consumer chat product with honest agentic inspection and recovery, not a generic evaluator dashboard. With the real-model outcome floor from phase 01, the claim ceiling can be raised honestly for the local default model; paid-provider, hosting, and full agentic-capability claims remain blocked until separately proven.
 
 Required verification surfaces:
 
@@ -37,7 +37,7 @@ Product-proof contract for this phase:
 - Named product loop: Verified Chat Surface And Claim Qualification.
 - User/operator action: start the app, send a real streaming turn, inspect inline route/usage/trace, retry or recover from one blocked/failed path, and reload to verify persistence.
 - Named output/state: polished default chat viewport, streaming message state, inline blocked/error/success states, persisted readback, `.buildprint/ui-evidence.md`, `.buildprint/artifact-check.md`, and final handover claim status.
-- Failure modes: generic dashboard/workbench UI, buffered fake streaming, dead controls, missing screenshots, missing UI evidence, raw JSON UI, proof-console language, faked deferred capabilities, or unresolved paid-provider/hosting blockers must prevent `claim_qualified`.
+- Failure modes: generic dashboard/workbench UI, buffered fake streaming, dead controls, missing screenshots, missing UI evidence, raw JSON UI, proof-console language, faked agentic capabilities, or unresolved paid-provider/hosting blockers must prevent `claim_qualified`.
 - Concrete proof artifact: desktop/mobile screenshots, API/browser streaming transcript, `agb verify ui .`, `agb claim check .`, persistence readback, and independent critical review evidence.
 
 This phase qualifies claims: `phase_core_passed` may be true for the real local default-model loop while `claim_qualified` remains false until UI evidence, runtime proof, blockers, and independent review align. If the UI presents broader readiness than the runtime proves, `.buildprint/decisions.md` and handoff must state that scope-presentation decision explicitly.
@@ -57,7 +57,7 @@ This phase should leave a user, operator, or developer with a real path they can
 
 - Do not invent the first real WebUI here if prior phases skipped it; route back and repair the responsible phase.
 - Do not pass a UI that looks like a dashboard, harness, proof console, or generic workbench with chat labels.
-- Do not stub, mock, or advertise the deferred `EXTENSIONS.md` capabilities as working.
+- Do not stub, mock, or advertise the `EXTENSIONS.md`/phase 04 capabilities as working before they are proven through the product loop.
 - Do not count `agb verify ui .` as sufficient without browser/screenshot inspection and real surface use.
 - Do not claim public hosting or paid-provider readiness from local default-model proof.
 - Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only surfaces.
@@ -80,4 +80,4 @@ This phase should leave a user, operator, or developer with a real path they can
 
 ## Handoff note
 
-Write the qualified claim status, UI/API/browser proof, screenshot paths, artifact-check and claim-check results, persistence/readback proof, the deferred-capability boundary, unresolved blockers, exact claims not proven, and why the final critical-review phase can or cannot trust the artifact.
+Write the qualified claim status, UI/API/browser proof, screenshot paths, artifact-check and claim-check results, persistence/readback proof, the full agentic-capability boundary, unresolved blockers, exact claims not proven, and why phase 04 and the final critical-review phase can or cannot trust the artifact.

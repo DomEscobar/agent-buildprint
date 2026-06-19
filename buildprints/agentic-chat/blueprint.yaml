@@ -10,7 +10,7 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
-  claim_ceiling: a user-selected real provider streaming real tokens is the proven outcome floor; paid-provider and public hosting claims require configured credentials plus runtime proof; tools/skills, MCP, memory/compaction, and subagents are deferred to EXTENSIONS.md and are out of 1.0 scope.
+  claim_ceiling: a user-selected real provider streaming real tokens is the proven outcome floor; paid-provider and public hosting claims require configured credentials plus runtime proof; tools/skills, MCP, memory/compaction, and subagents require typed runtime paths, product-loop proof, or explicit blockers before full Agentic Chat maturity.
 
 read_order:
   - BUILDPRINT.md
@@ -24,8 +24,8 @@ read_order:
   - HANDOVER.md
 
 packet_shape:
-  style: phase_driven_comprehensive
-  principle: YAML routes; markdown teaches and builds.
+  style: phase_driven_comprehensive_with_agentic_loop
+  principle: YAML routes; markdown teaches and builds; execution loops are explicit contracts, not optional prose.
   required_files:
     - BUILDPRINT.md
     - 00-questions.md
@@ -66,9 +66,82 @@ phase_contract:
     - generated/agent-prompt.md
     - generated/codex-handoff.md
 
+execution_model:
+  mode: agentic_loop
+  rule: Buildprints are not linear phase recipes. A coding agent must iterate through builder, product, and proof loops until the product contract passes, an iteration budget is exhausted, or an external blocker is recorded.
+  iteration_budget:
+    minimum_repair_iterations: 1
+    maximum_repair_iterations: 5
+    stop_only_on:
+      - contract_passed_with_evidence
+      - external_blocker_recorded
+      - iteration_budget_exhausted_with_failure
+  builder_loop:
+    name: Buildprint Builder Loop
+    steps:
+      - observe current repo, app, screenshots, logs, tests, and handoff state
+      - interpret gaps against central_output_contract, capability_maturity, local docs/ui-identity.md, and docs/DESIGN.md
+      - plan the smallest real repair that advances the product contract
+      - act by changing implementation, tests, docs, fixtures, or proof artifacts
+      - inspect runtime, browser, API, logs, persistence, and generated evidence
+      - critique the result against predicted failure modes and nearest bad silhouettes
+      - repair one concrete weakness before advancing unless none is found
+      - verify with commands, browser/API transcripts, screenshots, readback, and claim checks
+      - decide pass, continue, or fail honestly
+  product_loop:
+    name: Agentic Chat Product Loop
+    required_for_full_agentic_claim:
+      - goal intake in the chat composer or thread context
+      - plan or next-step state visible in product language
+      - action selection for model, tool, memory, or delegation paths
+      - policy/approval gate before side-effecting actions
+      - execution trace attached to the relevant message or turn
+      - observation/result ingestion back into the conversation
+      - critique/retry/recovery path for failed actions
+      - resumable state after reload or restart
+      - final synthesis tied to the original user goal
+  proof_loop:
+    name: Evidence Repair Loop
+    steps:
+      - score the current artifact against central output, maturity, UI, runtime, and claim gates
+      - reject stale, generic, prose-only, screenshot-missing, or fake-success evidence
+      - route each failure to setup, UI identity, implementation phase, or critical review
+      - patch the smallest real weakness
+      - rerun the affected proof
+      - rescore until pass, blocker, or iteration budget exhaustion
+  stop_conditions:
+    pass: every active maturity gate has fresh evidence, no hard fail remains, and HANDOVER.md claim ceiling matches proof
+    blocked: exact missing credential, runtime, decision, permission, or external dependency is recorded
+    fail: loop budget exhausted, product remains generic, or Buildprint run does not beat a normal plan-mode baseline on the benchmark
+
+capability_maturity:
+  current_floor: streaming_chat_core
+  full_claim: agentic_chat
+  rule: Do not call the artifact a complete Agentic Chat until the full agentic product loop is proven. The streaming chat core is a necessary foundation, not the final product.
+  levels:
+    streaming_chat_core:
+      claim: real-model streaming chat foundation
+      required:
+        - real provider token streaming
+        - provider routing and blocked states
+        - durable sessions/messages/events/routes/telemetry
+        - cancellation/retry/error recovery
+        - polished chat-native UI
+    agentic_chat:
+      claim: complete agentic chat system
+      required:
+        - planning/next-step loop
+        - tool/skill execution policy with typed results
+        - MCP adapter posture and allowlist boundary when enabled
+        - memory/compaction read/write policy with audit trail
+        - subagent/delegation records when used
+        - approval gates for side effects
+        - trace, observation, critique, retry, and resumable state
+        - benchmark evidence that the Buildprint output beats a normal plan-mode build on completeness, UI, runtime behavior, and proof quality
+
 agent_contract:
   role: Senior Product Engineer
-  rule: Build the agentic chat runtime honestly. Streaming, provider, tool, MCP, memory, subagent, telemetry, WebUI, and safety claims require direct proof or explicit blockers.
+  rule: Build the agentic chat runtime honestly. Streaming, provider, tool, MCP, memory, subagent, telemetry, WebUI, and safety claims require direct proof or explicit blockers. A streaming-only product may pass the foundation floor but must not be marketed as full Agentic Chat.
 
 harness:
   provider: agents
@@ -80,7 +153,7 @@ harness:
 
 central_output_contract:
   rule: The central output must be specific to Agentic Chat, not a generic shell with renamed labels.
-  central_output: Durable real-model streaming conversation with provider/route/usage trace and actionable blocked states.
+  central_output: Durable real-model streaming conversation with provider/route/usage trace, actionable blocked states, and an explicit agentic loop maturity path.
   output_primitives:
     - session and message records
     - incremental streaming turn events
@@ -93,6 +166,7 @@ central_output_contract:
     - messages and traces survive readback after restart
     - normalized failures retry within a bounded policy or block honestly
     - UI shows empty, streaming, blocked, error, and success states without log parsing
+    - full Agentic Chat claims show plan/action/observation/critique/retry state in the product loop, not only a chat transcript
   unacceptable_generic_substitutes:
     - static chat mockup
     - deterministic echo presented as a real product turn
@@ -104,13 +178,16 @@ central_output_contract:
     - Can the user send a turn and see real model tokens stream incrementally?
     - Can the operator inspect which provider/model/route and usage path was used?
     - Can blocked or failed providers recover safely within the retry policy?
-    - Which paid-provider or hosting claims remain blocked?
+    - Can a full Agentic Chat claim prove goal intake, action selection, tool/memory/delegation policy, observation, critique, retry, and resumable state?
+    - Which paid-provider, hosting, tool, MCP, memory, or delegation claims remain blocked?
   claim_gates:
     - real provider success requires a real streaming token trace, not the test double
     - paid provider success requires a configured key and response trace
     - durability requires persistence readback after restart or blocker
     - public hosting requires auth, abuse, and secrets proof
-  minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome.
+    - full Agentic Chat requires proven product-loop traces for planning, action, observation, critique, retry, and resumability
+    - if only streaming_chat_core passes, the handoff must say agentic_chat remains unqualified
+  minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome. This is the streaming core floor, not a full Agentic Chat claim.
 
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
@@ -188,7 +265,7 @@ proven_implementation_requirements:
     streaming_runtime:
       requirement: Implement incremental streaming over a transport selected in setup (SSE or equivalent) with trace, checkpoint, AbortSignal-style cancellation, timeout/error behavior, a bounded retry/backoff policy, and normalized usage events. Buffered-after-completion responses do not qualify.
     deferred_capabilities:
-      requirement: Tools/skills, MCP policy, memory/compaction, and subagents are deferred to EXTENSIONS.md; do not build, stub, or claim them in 1.0. When implemented later they must use explicit allowlists, typed results, audit records, and blocked states.
+      requirement: Tools/skills, MCP policy, memory/compaction, and subagents are required for full Agentic Chat maturity but may remain blocked after the streaming core floor if the blocker is explicit. Do not stub or claim them without explicit allowlists, typed results, audit records, and blocked states.
     persistence_and_memory:
       requirement: Persist sessions, messages, traces, provider routes, and telemetry in the user-selected durable store with a migration path.
     frontend_ui_runtime:

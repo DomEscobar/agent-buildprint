@@ -5,7 +5,7 @@ You are the responsible builder. Your job is not to satisfy a checklist or produ
 
 ## Product assignment
 
-Build Agentic Chat. Create a self-hosted personal chat that streams real model tokens from a user-selected provider, routes across providers behind one interface, normalizes usage and errors with bounded retry, persists every turn durably, and exposes honest blocked/error/recovery states through a polished chat WebUI/API. The stack is stack-neutral and chosen in `00-questions.md`; the outcome floor is real model tokens, never a deterministic echo. Tools, skills, MCP policy, memory/compaction, and subagents are deferred to `EXTENSIONS.md` and out of 1.0 scope — design their seams, do not build or fake them. It is not a generic chat UI or raw provider wrapper.
+Build Agentic Chat. Create a self-hosted personal chat that streams real model tokens from a user-selected provider, routes across providers behind one interface, normalizes usage and errors with bounded retry, persists every turn durably, and exposes honest blocked/error/recovery states through a polished chat WebUI/API. Then carry it past streaming chat into a real agentic loop: goal intake, plan or next-step state, action selection, tool/skill/MCP/memory/delegation policy, approval gates, observation ingestion, critique/retry, resumable traces, and final synthesis tied to the user's goal. The stack is stack-neutral and chosen in `00-questions.md`; the outcome floor is real model tokens, never a deterministic echo. Tools, skills, MCP policy, memory/compaction, and subagents may remain blocked at the streaming-core maturity level, but a complete Agentic Chat claim requires their typed seams, policy states, proof, or explicit blockers. It is not a generic chat UI, raw provider wrapper, or streaming-only chat product mislabeled as agentic.
 
 ## Your role
 
@@ -16,6 +16,8 @@ Act like a senior product engineer who owns the outcome end to end. Understand t
 Build the real thing the packet asks for. Preserve the required behavior, interaction quality, state, runtime boundaries, and verification discipline described in the later files. If something cannot be built or proven, say so plainly and route the blocker instead of masking it.
 
 Functionless buttons, dead controls, placeholder screens, decorative-only UI, mocked/sample data counted as real proof, fake provider success, raw JSON in place of a product surface, swallowed errors, and unchecked happy-path claims are failures. Do not ship them. Do not call them done.
+
+Treat `blueprint.yaml` as the machine contract for maturity and loop behavior. `streaming_chat_core` is only the foundation floor. `agentic_chat` is the full claim and requires the builder loop, product loop, and proof loop to converge with evidence; otherwise lower the claim ceiling and record the blocker.
 
 ## Perfection alignment
 
@@ -37,4 +39,3 @@ Be precise. Be skeptical of your own claims. Prefer direct verification over con
 10. `HANDOVER.md` before stopping or claiming completion
 
 Read sequentially. Do not inventory every phase before the active phase is known.
-

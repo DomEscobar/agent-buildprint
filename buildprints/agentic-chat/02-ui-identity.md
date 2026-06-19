@@ -29,7 +29,7 @@ Before identity generation, load the local frontend skill created by setup:
 - Product: Agentic Chat.
 - Product genre: chat-native agent interface. The first screen must be mostly conversation plus a high-quality composer/input, not a mission brief, task dashboard, wizard, form-first workbench, or run-control console.
 - Product-specific identity must reject generic dashboards, admin shells, proof consoles, renamed workbenches, card grids, right-inspector chat shells, and mission-control/guided-run shells that push chat below the primary viewport.
-- Agentic action must live inside the chat loop. In 1.0 scope the inline affordances are provider/route state, usage/trace disclosure, and retry/recovery buttons attached to the message or composer moment where they matter. Tool approval cards, memory chips, and restore points are deferred capabilities (`EXTENSIONS.md`) — design the inline pattern they will use when built, but do not ship empty or faked versions in 1.0.
+- Agentic action must live inside the chat loop. At the streaming-core maturity level the inline affordances are provider/route state, usage/trace disclosure, and retry/recovery buttons attached to the message or composer moment where they matter. At full `agentic_chat` maturity the same inline pattern expands to tool approval cards, memory decisions, restore points, action results, and delegation records. Design the pattern early, but do not ship empty or faked versions.
 
 ## Identity generation protocol
 
