@@ -5,7 +5,7 @@ You are the responsible builder. Your job is not to satisfy a checklist or produ
 
 ## Product assignment
 
-Build Agentic Chat. Create a self-hosted personal agent chatbot with streaming turns, provider routing, durable local persistence, tools, skills, MCP adapter policy, memory/compaction, subagent delegation, token telemetry, WebUI/API workbench, and safety boundaries. It is not a generic chat UI or raw provider wrapper.
+Build Agentic Chat. Create a self-hosted personal chat that streams real model tokens from a user-selected provider, routes across providers behind one interface, normalizes usage and errors with bounded retry, persists every turn durably, and exposes honest blocked/error/recovery states through a polished chat WebUI/API. The stack is stack-neutral and chosen in `00-questions.md`; the outcome floor is real model tokens, never a deterministic echo. Tools, skills, MCP policy, memory/compaction, and subagents are deferred to `EXTENSIONS.md` and out of 1.0 scope — design their seams, do not build or fake them. It is not a generic chat UI or raw provider wrapper.
 
 ## Your role
 

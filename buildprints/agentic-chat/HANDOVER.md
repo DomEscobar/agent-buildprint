@@ -42,6 +42,8 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 ## Not proven
 
+- deferred capabilities (tools/skills, MCP, memory/compaction, subagents) — out of 1.0 scope per `EXTENSIONS.md`; do not claim them as working
+- paid-provider quality or public hosting when only the local default provider was proven
 - <claim that should not be made yet>
 - <central output quality claim that should not be made yet>
 - <selected typed quality gate that did not run or did not pass>

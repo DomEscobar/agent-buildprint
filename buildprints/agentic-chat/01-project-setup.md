@@ -14,7 +14,7 @@ Then create or update the implementation project foundation. Do not start `02-ui
 
 ## Setup objective
 
-Create the real base project structure for Agentic Chat, centered on a streaming personal agent chat turn that persists messages, trace events, memory, provider usage, tool decisions, and blocked states in a way a user can inspect and continue. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the module boundaries, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
+Create the real base project structure for Agentic Chat, centered on a real-model streaming chat turn that persists messages, trace events, provider route, usage telemetry, and blocked states in a way a user can inspect and continue. Tools, MCP, memory, and subagents are deferred to `EXTENSIONS.md`; design their seams but keep them out of 1.0 scope. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the module boundaries, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
 
 The setup output should make the identity step and first implementation phase obvious: where code goes, what commands run, how state persists, what is mocked in tests, what is blocked in live mode, and what good enough to continue means.
 
@@ -23,6 +23,19 @@ Use `typed_quality_gates` in `blueprint.yaml` as a selector, not as decoration. 
 Use `proven_implementation_requirements` in `blueprint.yaml` to choose libraries, SDKs, runtimes, and platform services for hard domains. The selected packet should stay stack-neutral, but setup is not allowed to casually hand-roll fixed-format export, rich editing, document extraction, drag/reorder interactions, charts/diagrams, provider clients, task orchestration, or migrations. If a from-scratch alternative is chosen, `docs/architecture.md` must justify it and name the proof that will show it satisfies the same product bar as a proven tool path.
 
 For UI-bearing artifacts, setup must also choose a proven frontend runtime and styling/design-system path. `docs/architecture.md` must include a `## Framework And Styling Decisions` section that names the selected UI runtime/framework, selected styling/design-system path, rejected alternatives, proof commands, and how the chosen tools cover stateful screen composition, component states, design tokens, and responsive viewport proof. Default to `React + Vite + TypeScript` for UI runtime and `Tailwind CSS v4 + tokenized CSS variables` for styling unless the source/host project already proves a different framework. Vanilla/static DOM/CSS is allowed only with an explicit `ui_stack_exception` entry that names why a framework is inappropriate and what proof will cover equivalent UI-state complexity.
+
+## Stack selection (from 00-questions)
+
+The stack is **stack-neutral and chosen by the user** via the stack and provider questions in `00-questions.md`. Do not hard-commit a toolset in this packet. Record the user's selected provider/model, frontend/backend framework, and persistence choice in `docs/architecture.md`. What this packet enforces is **stack-independent behavior and contracts**, not a fixed toolset:
+
+- Real-model outcome floor: a real, user-selected provider must stream tokens incrementally. The deterministic provider is a **test double** for automated tests only, never the delivered product turn.
+- Provider layer: a local `ChatProvider` interface with the signature `stream(req, signal): AsyncIterable<ProviderStreamEvent>` plus `countTokens(messages)`, so no provider-specific code leaks into the runtime. The concrete client/SDK is the user's choice.
+- Streaming: an incrementally readable transport (SSE or equivalent) with token-by-token rendering and end-to-end cancellation; buffered-after-completion responses do not qualify.
+- Persistence: a durable store with a typed schema and a migration path for `session`, `message`, `turn`, `stream_event`, `provider_route`, and `telemetry`.
+- Behavioral depth (required regardless of stack): a normalized provider error taxonomy and a bounded retry/backoff policy.
+- Deferred to `EXTENSIONS.md` and out of 1.0 scope: tools/skills, MCP policy, memory/compaction, subagents. Record their seams, do not build or fake them.
+
+Suggested (non-binding) starting points if the user expresses no preference: local Ollama for the free real-model path, the Vercel AI SDK for provider clients, SSE transport, and SQLite for persistence. The UI runtime/styling default below still applies unless the user selects otherwise.
 
 Architecture is a best-effort engineering decision, not a thin stack list. `docs/architecture.md` must reason about scalability, maintainability, and the coding standards the build will enforce. Name the scalability seams - data growth, concurrency, load, and feature growth - and where the design absorbs that growth without a rewrite. Name the module boundaries, separation of concerns, and testability that keep the code maintainable as phases stack on it. Name the enforced coding standards and best practices the build must follow - SOLID, KISS, DRY, typed boundaries, and explicit error handling - and the lint, format, and type-check gates that enforce them. A thin or default architecture that ignores scalability, maintainability, or coding standards is a setup failure, not a minimal-scope win.
 
@@ -44,7 +57,7 @@ Create these in the implementation project unless the project already has equiva
 ## DO NOT
 
 - Do not start identity or feature phase code before foundation exists.
-- Do not start phase work while `.buildprint/decisions.md` still contains the empty stub; all five hard-stop questions from `00-questions.md` must be resolved first with `answer`, `confirmed_by`, `reversible`, and `blocks_setup` fields.
+- Do not start phase work while `.buildprint/decisions.md` still contains the empty stub; all hard-stop questions from `00-questions.md` (provider/model, stack/framework, design direction, and the safety/scope gates) must be resolved first with `answer`, `confirmed_by`, `reversible`, and `blocks_setup` fields.
 - Do not create placeholder commands that silently pass.
 - Do not put real secrets in `.env.example`, docs, tests, logs, screenshots, or handover.
 - Do not choose a stack only because it is familiar if it cannot prove the golden path.
@@ -60,7 +73,7 @@ Create these in the implementation project unless the project already has equiva
 
 ## Minimum proof before moving on
 
-- `.buildprint/decisions.md` records confirmed answers (or honest blockers) for all five hard-stop questions from `00-questions.md`; each row includes `answer`, `confirmed_by`, `reversible`, and `blocks_setup`; `confirmed_by` is `user`, `explicit_user_delegation`, or `blocker`, never `agent_assumption`; the file must not contain the empty "No implementation decisions recorded yet" stub;
+- `.buildprint/decisions.md` records confirmed answers (or honest blockers) for all hard-stop questions from `00-questions.md` (including provider/model, stack/framework, and design direction alongside the safety/scope gates); each row includes `answer`, `confirmed_by`, `reversible`, and `blocks_setup`; `confirmed_by` is `user`, `explicit_user_delegation`, or `blocker`, never `agent_assumption`; the file must not contain the empty "No implementation decisions recorded yet" stub;
 - setup artifacts exist and are specific to this product;
 - `AGENTS.md` has a Buildprint Skill Harness section;
 - local core skill files exist for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`;

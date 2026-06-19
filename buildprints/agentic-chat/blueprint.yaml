@@ -2,7 +2,7 @@ schema_version: mapper-os/executable-blueprint/v3
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
-qualification_label: source_mapped_local_build_requires_review
+qualification_label: local_real_model_build_requires_review
 
 deployment_posture:
   current: trusted_local
@@ -10,7 +10,7 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
-  claim_ceiling: live provider, tool execution, MCP, browser automation, and public hosting claims require configured credentials plus runtime proof.
+  claim_ceiling: a user-selected real provider streaming real tokens is the proven outcome floor; paid-provider and public hosting claims require configured credentials plus runtime proof; tools/skills, MCP, memory/compaction, and subagents are deferred to EXTENSIONS.md and are out of 1.0 scope.
 
 read_order:
   - BUILDPRINT.md
@@ -54,7 +54,7 @@ phase_contract:
     - DO NOT
     - Minimum proof before moving on
     - Handoff note
-  rule: Each phase must contain one comprehensive, product-specific building objective. Do not decompose phase guidance into tiny schema sections or slice YAML.
+  rule: Each phase must be an executable engineering brief with concrete user/operator loop, runtime contracts, persisted state, surface behavior, failure matrix, proof artifacts, and claim ceiling. Do not decompose phase guidance into tiny schema sections or slice YAML.
   forbidden_shapes:
     - slices/
     - gates/
@@ -80,38 +80,37 @@ harness:
 
 central_output_contract:
   rule: The central output must be specific to Agentic Chat, not a generic shell with renamed labels.
-  central_output: Durable streaming agent conversation with tool/memory/provider trace and actionable blocked states.
+  central_output: Durable real-model streaming conversation with provider/route/usage trace and actionable blocked states.
   output_primitives:
     - session and message records
-    - streaming turn events
-    - provider usage telemetry
-    - tool/skill/MCP decision records
-    - memory and compaction summaries
-    - WebUI/API workbench state
+    - incremental streaming turn events
+    - provider route and credential posture
+    - normalized provider usage telemetry
+    - WebUI/API chat surface state
   quality_signals:
-    - deltas stream before completion
-    - unknown providers and tool blocks are actionable
-    - messages and traces survive readback
-    - memory is scoped and summarized rather than dumped
+    - real model tokens stream before completion
+    - unknown and unavailable providers are actionable, not silently substituted
+    - messages and traces survive readback after restart
+    - normalized failures retry within a bounded policy or block honestly
     - UI shows empty, streaming, blocked, error, and success states without log parsing
   unacceptable_generic_substitutes:
     - static chat mockup
-    - raw provider JSON
+    - deterministic echo presented as a real product turn
+    - raw provider JSON as the main surface
     - in-memory-only state claimed as durable
     - silent fallback on unknown providers
-    - unsafe tool execution without policy
-    - generic dashboard replacing chat workbench
+    - generic dashboard replacing the chat surface
   reviewer_acceptance_questions:
-    - Can the user send a turn and see streamed progress?
-    - Can the operator inspect what provider/tool/memory path was used?
-    - Can blocked providers, tools, MCP, or memory failures recover safely?
-    - Which live-provider or hosting claims remain blocked?
+    - Can the user send a turn and see real model tokens stream incrementally?
+    - Can the operator inspect which provider/model/route and usage path was used?
+    - Can blocked or failed providers recover safely within the retry policy?
+    - Which paid-provider or hosting claims remain blocked?
   claim_gates:
-    - live provider success requires configured key and response trace
-    - tool/MCP execution requires explicit allowlist and audit
+    - real provider success requires a real streaming token trace, not the test double
+    - paid provider success requires a configured key and response trace
     - durability requires persistence readback after restart or blocker
     - public hosting requires auth, abuse, and secrets proof
-  minimum_standard: A local deterministic provider can stream a chat turn, persist the session, expose trace/usage, and surface blocked states through API or UI.
+  minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome.
 
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
@@ -151,7 +150,7 @@ typed_quality_gates:
     applies_when: serious executable packet or user-facing artifact
     phase_id: 99-critical-review-pushback
     phase: 03-phases/critical-review-pushback.md
-    pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"
+    pass_threshold: "50/60, every category 4 or 5, no unresolved high-severity finding"
     repair_loop: "up to five flaw -> fix -> proof -> rescore iterations unless externally blocked"
 
 state_and_handoff:
@@ -178,15 +177,20 @@ proven_implementation_requirements:
     - keep implementation choices stack-neutral unless the source makes a specific stack part of the product contract
     - allow from-scratch alternatives only with explicit justification and proof equal to the proven tool path
     - record selected package/runtime choices in docs/architecture.md during setup
+  stack_selection:
+    note: The stack is stack-neutral and chosen by the user via 00-questions (provider/model, frontend/backend framework, persistence), then recorded in docs/architecture.md. Suggestions below are non-binding starting points, not mandates. The depth this packet enforces is stack-independent behavior (real-model floor, error taxonomy, bounded retry, cancellation, migration path), not a fixed toolset.
+    provider_suggestions: local Ollama (free, no key) or any official/well-supported client (OpenAI, Anthropic, OpenRouter, Bedrock-compatible)
+    transport_suggestion: any incrementally readable transport such as SSE or WebSocket
+    persistence_suggestion: any durable store with a migration path such as SQLite
   product_domains:
     provider_abstraction:
-      requirement: Use a local provider interface with deterministic test provider and official/well-supported clients for live providers.
+      requirement: Use a local ChatProvider interface with a deterministic test double and official/well-supported clients for the user-selected real provider(s). The interface is required; the specific client/SDK is the user's choice.
     streaming_runtime:
-      requirement: Implement evented streaming with trace, checkpoint, cancellation/error behavior, and normalized usage events.
-    tools_skills_mcp:
-      requirement: Use explicit allowlists, typed results, audit records, and blocked states for tools, skills, MCP, and browser automation.
+      requirement: Implement incremental streaming over a transport selected in setup (SSE or equivalent) with trace, checkpoint, AbortSignal-style cancellation, timeout/error behavior, a bounded retry/backoff policy, and normalized usage events. Buffered-after-completion responses do not qualify.
+    deferred_capabilities:
+      requirement: Tools/skills, MCP policy, memory/compaction, and subagents are deferred to EXTENSIONS.md; do not build, stub, or claim them in 1.0. When implemented later they must use explicit allowlists, typed results, audit records, and blocked states.
     persistence_and_memory:
-      requirement: Persist sessions, messages, traces, memory, compaction summaries, and telemetry with schema evolution or migration path.
+      requirement: Persist sessions, messages, traces, provider routes, and telemetry in the user-selected durable store with a migration path.
     frontend_ui_runtime:
       requirement: Use a proven frontend runtime for stateful chat UI composition; default to React + Vite + TypeScript unless an existing host framework is already proven.
     component_state_styling:

@@ -1,28 +1,19 @@
 schema_version: mapper-os/phase-index/v3
-active_phase: 03-phases/01-contracts-storage.md
+active_phase: 03-phases/01-real-streaming-chat.md
 phases:
-  - phase_id: 01-contracts-storage
-    file: 03-phases/01-contracts-storage.md
+  - phase_id: 01-real-streaming-chat
+    file: 03-phases/01-real-streaming-chat.md
     status: included
     depends_on: []
-  - phase_id: 02-provider-streaming-runtime
-    file: 03-phases/02-provider-streaming-runtime.md
+  - phase_id: 02-provider-routing-hardening
+    file: 03-phases/02-provider-routing-hardening.md
     status: included
-    depends_on: [01-contracts-storage]
-  - phase_id: 03-tools-skills-mcp-policy
-    file: 03-phases/03-tools-skills-mcp-policy.md
+    depends_on: [01-real-streaming-chat]
+  - phase_id: 03-webui-and-verification
+    file: 03-phases/03-webui-and-verification.md
     status: included
-    depends_on: [02-provider-streaming-runtime]
-  - phase_id: 04-memory-subagents-telemetry
-    file: 03-phases/04-memory-subagents-telemetry.md
-    status: included
-    depends_on: [03-tools-skills-mcp-policy]
-  - phase_id: 05-safety-webui-verification
-    file: 03-phases/05-safety-webui-verification.md
-    status: included
-    depends_on: [04-memory-subagents-telemetry]
+    depends_on: [02-provider-routing-hardening]
   - phase_id: 99-critical-review-pushback
     file: 03-phases/critical-review-pushback.md
     status: included
-    depends_on: [05-safety-webui-verification]
-
+    depends_on: [03-webui-and-verification]

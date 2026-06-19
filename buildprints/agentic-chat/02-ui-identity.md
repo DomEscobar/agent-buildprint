@@ -29,7 +29,7 @@ Before identity generation, load the local frontend skill created by setup:
 - Product: Agentic Chat.
 - Product genre: chat-native agent interface. The first screen must be mostly conversation plus a high-quality composer/input, not a mission brief, task dashboard, wizard, form-first workbench, or run-control console.
 - Product-specific identity must reject generic dashboards, admin shells, proof consoles, renamed workbenches, card grids, right-inspector chat shells, and mission-control/guided-run shells that push chat below the primary viewport.
-- Agentic action must live inside the chat loop: inline tool approval cards, memory chips, recovery buttons, suggested next actions, route/provider state, and restore points should attach to messages or the composer moment where they matter.
+- Agentic action must live inside the chat loop. In 1.0 scope the inline affordances are provider/route state, usage/trace disclosure, and retry/recovery buttons attached to the message or composer moment where they matter. Tool approval cards, memory chips, and restore points are deferred capabilities (`EXTENSIONS.md`) — design the inline pattern they will use when built, but do not ship empty or faked versions in 1.0.
 
 ## Identity generation protocol
 
@@ -43,7 +43,7 @@ Before writing identity output, read:
 - current workspace or target project `AGENTS.md` if present
 - the local `frontend-ui-product-design` skill and relevant references
 
-Then think deeply about the product, user, artifact type, golden path, central output, risk, density, review proof, and what a confused first-time user would misunderstand. Generate a full local UI identity plan in the implementation project. Do not ask for visual direction unless a hard-stop question in `00-questions.md` says the product identity itself is unknown.
+Then think deeply about the product, user, artifact type, golden path, central output, risk, density, review proof, and what a confused first-time user would misunderstand. Use the user's **design direction / visual wishes** answer from `00-questions.md` (aesthetic, brand/tone, reference products to emulate or avoid, density, light/dark intent) as the binding seed for this work; do not override it with a generic default. Generate a full local UI identity plan in the implementation project. Do not re-ask for visual direction that the design-direction hard-stop already captured; only ask when that answer is missing or a hard-stop says the product identity itself is unknown.
 
 The generated identity and design system must be specific enough that a later agent can build the same product surface without guessing. If either file could apply unchanged to ten unrelated products, it fails.
 
