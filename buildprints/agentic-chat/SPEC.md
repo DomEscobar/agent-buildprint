@@ -6,6 +6,7 @@ This legacy spine file is retained for package compatibility. The authoritative 
 
 The stack is stack-neutral and chosen via `00-questions.md`. Build a local personal chat with:
 
+- setup-generated architecture diagrams and project structure that use product-specific Agentic Chat responsibilities, labeled flows, component-to-code mappings, and component/file/proof traceability before implementation starts;
 - a real-model streaming chat runtime over an incrementally readable transport, with the deterministic provider as a test double only;
 - a `ChatProvider` interface routing the user-selected default provider and optional paid providers via official/well-supported clients;
 - a normalized error taxonomy with bounded retry/backoff and explicit credential posture;

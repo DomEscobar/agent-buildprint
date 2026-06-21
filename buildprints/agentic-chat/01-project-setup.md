@@ -1,6 +1,6 @@
 # 01 Project Setup
 
-This is the foundation pour. Before any identity or phase code, create enough architecture, standards, local skill harness, and local commands that future agents cannot invent a random project shape.
+This is the foundation pour. Before any identity or phase code, create enough architecture, project structure, standards, local skill harness, and local commands that future agents cannot invent a random project shape.
 
 ## How to implement setup
 
@@ -10,13 +10,64 @@ Before writing code, read:
 - `00-questions.md`
 - current workspace or target project `AGENTS.md` if present
 
-Then create or update the implementation project foundation. Do not start `02-ui-identity.md` or `03-phases/*` until setup has enough concrete decisions to guide coding and the project-local skill harness exists.
+Then create or update the implementation project foundation. Do not start `02-ui-identity.md` or `03-phases/*` until setup has enough concrete decisions to guide coding, the project-local skill harness exists, and the architecture/file-structure readiness gate passes.
 
 ## Setup objective
 
-Create the real base project structure for Agentic Chat, centered on a real-model streaming chat turn that persists messages, trace events, provider route, usage telemetry, and blocked states in a way a user can inspect and continue. Also design the module seams for the full agentic loop: tool/skill policy, MCP posture, memory/compaction, delegation/subagents, approvals, action results, audit records, and resumable traces. These capabilities may stay blocked at the streaming-core maturity level, but the architecture must not make them bolt-on theater later. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the module boundaries, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
+Create the real base project structure for Agentic Chat, centered on a real-model streaming chat turn that persists messages, trace events, provider route, usage telemetry, and blocked states in a way a user can inspect and continue. Also design the module seams for the full agentic loop: tool/skill policy, MCP posture, memory/compaction, delegation/subagents, approvals, action results, audit records, and resumable traces. These capabilities may stay blocked at the streaming-core maturity level, but the architecture must not make them bolt-on theater later. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the architecture diagrams, module boundaries, project file structure, persistence model, provider/runtime seams, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
 
 The setup output should make the identity step and first implementation phase obvious: where code goes, what commands run, how state persists, what is mocked in tests, what is blocked in live mode, and what good enough to continue means.
+
+## Architecture and structure readiness gate
+
+Project setup must create a product-specific architecture packet before identity or implementation starts. The packet is a build input, not documentation after the fact. Create these files unless the implementation project already has stronger equivalents:
+
+- `architecture/system-architecture.md`
+- `architecture/agent-runtime-loop.md`
+- `architecture/chat-turn-sequence.md`
+- `architecture/state-and-memory-model.md`
+- `architecture/failure-recovery-flow.md`
+- `PROJECT_STRUCTURE.md`
+- `ARCHITECTURE_STRUCTURE_TRACE.md`
+
+Each `architecture/*.md` file must include a Mermaid diagram, component legend, state or data ownership notes where relevant, failure/blocked states where relevant, and an `Implementation Mapping` section that maps every named component to planned files/modules. A diagram is invalid if it is only a generic layer sketch such as `Frontend -> Backend -> Database`, or if it uses generic unlabeled boxes like `API`, `Auth`, `Agent`, `Service`, `Utils`, or `DB` without product/runtime responsibility.
+
+Required diagram rules:
+
+- Every edge must be labeled with the data, event, command, policy decision, approval, observation, or error flowing across it.
+- Component names must describe Agentic Chat responsibilities, such as `Chat Composer`, `Streaming Response Renderer`, `Chat API Route`, `Agent Runtime Orchestrator`, `Tool Invocation Registry`, `Conversation State Store`, `Run/Event Log`, `Memory Retrieval Layer`, `Approval Gate`, `Failure Recovery Controller`, or sharper stack-specific equivalents.
+- The system architecture must show UI, API/runtime, provider adapter, persistence, telemetry/trace, blocked-state, and deployment/secret boundaries.
+- The agent runtime loop must show observe, interpret/plan, act, inspect observation, critique/retry, update state, continue/stop, and explicit approval or blocked paths.
+- The chat-turn sequence must show a real user turn from composer through streaming transport, provider, persistence, UI event rendering, cancellation/error paths, and readback.
+- The state and memory model must separate durable records, ephemeral runtime state, provider route/usage telemetry, memory read/write/skip/block decisions, and claim ceilings.
+- The failure recovery flow must show provider failure, timeout, cancellation, unavailable credentials, tool/memory/delegation blocked states, retry budget, and user-visible recovery.
+
+`PROJECT_STRUCTURE.md` must describe the intended file tree by product/runtime responsibility, not by vague technical buckets. A structure based mainly on `components/`, `utils/`, `services/`, `api/`, or `pages/` is invalid unless each folder is narrowed by product responsibility and mapped to architecture. Every top-level source area must state:
+
+- Purpose and ownership.
+- What belongs there.
+- What explicitly does not belong there.
+- Which architecture component(s) it implements.
+- Which tests/evals prove it.
+
+`ARCHITECTURE_STRUCTURE_TRACE.md` must prove traceability before code begins:
+
+- Every architecture component maps to one or more planned files/modules or an explicit blocker.
+- Every important planned file/module maps back to an architecture component.
+- Every runtime responsibility has a test, eval, command, or explicit proof blocker.
+- No miscellaneous dumping ground (`misc`, `helpers`, `utils`, `services`, `lib`) is allowed without a narrow named responsibility.
+- Any missing component, missing file owner, generic folder, unlabeled edge, stale diagram, or unproven runtime responsibility is a setup blocker.
+
+Use this anti-lazy quality rubric and record the score in `.buildprint/setup-receipt.md`:
+
+- `0` - generic boxes or generic file tree; useless.
+- `1` - technical layers only; no Agentic Chat responsibilities.
+- `2` - some product-specific names but weak flow/ownership.
+- `3` - concrete components, labeled flows, and plausible structure.
+- `4` - component-to-code mapping, state ownership, and proof mapping.
+- `5` - score 4 plus failure paths, claim ceilings, and eval/test mapping.
+
+The build may continue only with architecture score `4` or `5`, or with an exact external blocker that keeps the claim ceiling below implementation.
 
 Use `typed_quality_gates` in `blueprint.yaml` as a selector, not as decoration. During setup, record applicable/not applicable gates, command/proof path, and blocker if missing inside `docs/architecture.md`. Do not add irrelevant gates just to look thorough. Matching gates need a real proof path or an honest blocker.
 
@@ -48,6 +99,9 @@ Create these in the implementation project unless the project already has equiva
 - `AGENTS.md` - local implementation constitution, mandatory read order, ownership map, no-fake rules, verification expectations, and Buildprint Skill Harness section.
 - `.agents/skills/setup-runbook/SKILL.md`, `.agents/skills/frontend-ui-product-design/SKILL.md`, `.agents/skills/subagent-driven-implementation/SKILL.md`, and `.agents/skills/verify-and-review/SKILL.md`, plus selected profile skills under `.agents/skills/` only for the default provider.
 - `docs/architecture.md` - selected stack, runtime topology, adapters, persistence, deployment posture, state ownership, golden path, central output contract, proof strategy, selected typed quality gates, command/proof paths, blockers, and claim ceilings.
+- `architecture/system-architecture.md`, `architecture/agent-runtime-loop.md`, `architecture/chat-turn-sequence.md`, `architecture/state-and-memory-model.md`, and `architecture/failure-recovery-flow.md` - Mermaid architecture packet with labeled edges, component legends, implementation mappings, state/failure notes, and claim ceilings.
+- `PROJECT_STRUCTURE.md` - product/runtime-responsibility file tree with ownership, exclusions, architecture mapping, and proof mapping.
+- `ARCHITECTURE_STRUCTURE_TRACE.md` - component-to-file-to-proof traceability matrix and anti-lazy architecture score.
 - `docs/architecture.md` must also name selected package/runtime/service choices for every applicable `proven_implementation_requirements` domain, including frontend UI runtime, component/state styling, responsive viewport proof, and design token enforcement for UI-bearing artifacts, or record why no hard-domain library requirement applies.
 - `docs/architecture.md` must include `## Framework And Styling Decisions` for UI-bearing artifacts, with the chosen runtime/framework, styling/design-system path, rejected alternatives, proof commands, UI-state complexity mapping, and any `ui_stack_exception`.
 - `docs/architecture.md` must include an engineering quality bar: named scalability seams, maintainability boundaries with separation of concerns and testability, and enforced coding standards (SOLID, KISS, DRY, typed boundaries, explicit error handling) with the lint, format, and type-check gates that enforce them.
@@ -64,6 +118,9 @@ Create these in the implementation project unless the project already has equiva
 - Do not hand-roll hard domains when proven libraries/runtimes exist unless the alternative is justified and proof-bound.
 - Do not use static DOM scripting, plain CSS, or custom DOM updates as the UI architecture for a UI-bearing artifact unless `ui_stack_exception` is explicit and proof-bound in `docs/architecture.md`.
 - Do not ship a thin or default architecture that omits scalability seams, maintainability boundaries, or enforced coding standards just to keep scope minimal.
+- Do not ship generic architecture diagrams with unlabeled arrows, vague boxes, or no component-to-code mapping.
+- Do not ship a generic project structure organized mainly as `components`, `utils`, `services`, `api`, `pages`, or `lib` without product/runtime responsibility, ownership, exclusions, and architecture traceability.
+- Do not start implementation until `architecture/*.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md` exist and pass the readiness gate.
 - Do not hide hard-stop questions as assumptions.
 - Do not skip `agb harness init . --provider agents` or the equivalent manual local harness creation before identity or phase work.
 - Do not skip `agb harness check . --provider agents` after harness initialization or `agb harness checkup . --provider agents` before phase implementation; record checkup warnings as setup blockers or accepted claim ceilings.
@@ -82,6 +139,9 @@ Create these in the implementation project unless the project already has equiva
 - package/build/test commands are named, even if some are currently blocked;
 - `.env.example` has blank secrets only;
 - `docs/architecture.md` exists and names stack, runtime topology, persistence, providers, commands, central output contract, selected typed quality gates, proof surfaces, blockers, and claim ceilings;
+- `architecture/system-architecture.md`, `architecture/agent-runtime-loop.md`, `architecture/chat-turn-sequence.md`, `architecture/state-and-memory-model.md`, and `architecture/failure-recovery-flow.md` exist, contain valid Mermaid diagrams, use product-specific component names, label every edge, and include implementation mappings;
+- `PROJECT_STRUCTURE.md` exists and maps the planned file tree to product/runtime responsibilities, explicit exclusions, architecture components, and tests/evals;
+- `ARCHITECTURE_STRUCTURE_TRACE.md` exists and proves every architecture component maps to planned files/modules and proof, records no generic dumping-ground folders, and records architecture score `4` or `5` or an exact blocker;
 - `docs/architecture.md` records proven library/runtime decisions for applicable hard domains or honest blockers;
 - `docs/architecture.md` records Framework And Styling Decisions for UI-bearing artifacts: frontend framework/runtime, styling/design-system path, rejected alternatives, proof commands, UI-state complexity mapping, and any `ui_stack_exception`;
 - `docs/architecture.md` names scalability seams, maintainability boundaries, and enforced coding standards (SOLID, KISS, DRY, typed boundaries, error handling) with lint/format/type-check gates;

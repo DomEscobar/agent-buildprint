@@ -47,6 +47,42 @@ packet_shape:
     - generated/agent-prompt.md
     - generated/codex-handoff.md
 
+setup_architecture_contract:
+  rule: Project setup must generate a product-specific architecture packet and project structure before identity or implementation starts. Architecture is a start model for coding agents, not a post-build explanation.
+  required_artifacts:
+    - architecture/system-architecture.md
+    - architecture/agent-runtime-loop.md
+    - architecture/chat-turn-sequence.md
+    - architecture/state-and-memory-model.md
+    - architecture/failure-recovery-flow.md
+    - PROJECT_STRUCTURE.md
+    - ARCHITECTURE_STRUCTURE_TRACE.md
+  diagram_requirements:
+    - every architecture file contains Mermaid, a component legend, and an Implementation Mapping section
+    - every edge is labeled with the data, event, command, policy decision, approval, observation, or error that flows across it
+    - component names describe Agentic Chat runtime responsibilities, not generic layers
+    - diagrams cover UI/API/runtime, provider adapter, persistence, telemetry/trace, agent loop, memory/blocked states, failure recovery, and claim ceilings
+  forbidden_lazy_shapes:
+    - Frontend -> Backend -> Database without product-specific responsibilities
+    - generic boxes such as API, Auth, Agent, Service, Utils, or DB without ownership and behavior
+    - unlabeled arrows
+    - project trees dominated by components, utils, services, api, pages, lib, helpers, or misc without narrowed product/runtime responsibility
+    - diagrams without component-to-code mapping
+    - file trees without test/eval/proof mapping
+  project_structure_rule: PROJECT_STRUCTURE.md must organize files by Agentic Chat product/runtime responsibilities and state purpose, ownership, exclusions, architecture mapping, and tests/evals for every top-level source area.
+  traceability_rule: ARCHITECTURE_STRUCTURE_TRACE.md must prove every diagram component maps to planned files/modules and proof, every important file maps back to architecture, and every runtime responsibility has test/eval/command proof or an explicit blocker.
+  score_gate:
+    minimum_to_continue: 4
+    maximum: 5
+    rubric:
+      0: generic boxes or generic file tree; useless
+      1: technical layers only; no Agentic Chat responsibilities
+      2: some product-specific names but weak flow or ownership
+      3: concrete components, labeled flows, and plausible structure
+      4: component-to-code mapping, state ownership, and proof mapping
+      5: score 4 plus failure paths, claim ceilings, and eval/test mapping
+    failure_route: return_to_setup
+
 phase_contract:
   required_headings:
     - How to implement this phase
@@ -181,6 +217,7 @@ central_output_contract:
     - Can a full Agentic Chat claim prove goal intake, action selection, tool/memory/delegation policy, observation, critique, retry, and resumable state?
     - Which paid-provider, hosting, tool, MCP, memory, or delegation claims remain blocked?
   claim_gates:
+    - implementation cannot start until setup architecture and project structure artifacts pass the architecture score gate or record an exact blocker
     - real provider success requires a real streaming token trace, not the test double
     - paid provider success requires a configured key and response trace
     - durability requires persistence readback after restart or blocker
@@ -191,6 +228,15 @@ central_output_contract:
 
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
+  architecture_structure_readiness:
+    applies_when: project setup creates a new implementation project or materially changes architecture
+    requires:
+      - Mermaid architecture packet with product-specific component names
+      - required edge labels
+      - component-to-code mapping
+      - responsibility-based PROJECT_STRUCTURE.md
+      - ARCHITECTURE_STRUCTURE_TRACE.md proving component/file/proof traceability
+      - anti-lazy architecture score 4 or 5, or exact blocker and lowered claim ceiling
   ui_decision_precision:
     applies_when: artifact has human-facing UI, reports, generated outputs, visual workflows, forms, or operator surfaces
     requires:

@@ -19,6 +19,8 @@ Functionless buttons, dead controls, placeholder screens, decorative-only UI, mo
 
 Treat `blueprint.yaml` as the machine contract for maturity and loop behavior. `streaming_chat_core` is only the foundation floor. `agentic_chat` is the full claim and requires the builder loop, product loop, and proof loop to converge with evidence; otherwise lower the claim ceiling and record the blocker.
 
+Project setup must produce the architecture and structure start model before implementation. Do not code against a vague mental model. The setup packet must contain product-specific Mermaid diagrams, a responsibility-based `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md` mapping components to planned files and proof. Generic layer diagrams, unlabeled arrows, and file trees organized as catch-all `components`, `utils`, `services`, `api`, `pages`, or `lib` without ownership and traceability are setup failures.
+
 ## Perfection alignment
 
 Aim for a result that a demanding human would recognize as intentionally built: coherent structure, tight feedback loops, visible state, graceful empty/error/blocked paths, consistent copy, and no hidden fake-success shortcuts. Every phase should leave the artifact more real, more usable, and easier for the next agent to continue.

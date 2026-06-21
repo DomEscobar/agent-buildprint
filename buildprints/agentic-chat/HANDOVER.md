@@ -10,6 +10,12 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 - Command/API/browser/runtime proof:
   - `<command>` — <result>
+- Setup architecture and project structure gate:
+  - Architecture packet — <paths to architecture/system-architecture.md, architecture/agent-runtime-loop.md, architecture/chat-turn-sequence.md, architecture/state-and-memory-model.md, architecture/failure-recovery-flow.md; PASS/FAIL/blocker>
+  - Mermaid/labeled-edge check — <PASS/FAIL/blocker; cite generic boxes or unlabeled edges if failed>
+  - `PROJECT_STRUCTURE.md` — <PASS/FAIL/blocker; cite product/runtime responsibility mapping and any rejected generic folders>
+  - `ARCHITECTURE_STRUCTURE_TRACE.md` — <PASS/FAIL/blocker; component-to-file-to-proof trace coverage and architecture score 0-5>
+  - Architecture drift — <none, updated, or blocker; cite changed components/files>
 - Screenshot/browser/API/readback evidence:
   - <what was inspected>
 - UI identity and screenshot gate:
@@ -23,6 +29,7 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - Consumer chat craft gate — <PASS/FAIL/blocker; cite screenshot/source proof for Design Read, Taste Dials, polished empty state, composer quality, mobile comfort, system-label suppression, and no seeded feature-demo cards>
   - Nearest bad silhouette comparison — <named silhouette, screenshot/source evidence, and why the shipped UI is structurally different>
 - Typed quality gates:
+  - Architecture structure readiness — <applicable/not applicable> — <architecture packet, project structure, traceability proof, score, or blocker>
   - UI decision precision — <applicable/not applicable> — <proof or reason>
   - Visual viewport acceptance — <applicable/not applicable> — <desktop/mobile/overflow proof or reason>
   - Editor/content stress acceptance — <applicable/not applicable> — <fixture/proof or reason>
@@ -63,6 +70,7 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 - tools/skills, MCP, memory/compaction, or subagents when they lack typed runtime paths, policy states, audit records, and product-loop proof
 - paid-provider quality or public hosting when only the local default provider was proven
 - <claim that should not be made yet>
+- <architecture, project structure, or runtime ownership claim that is not proven by architecture/*.md, PROJECT_STRUCTURE.md, and ARCHITECTURE_STRUCTURE_TRACE.md>
 - <central output quality claim that should not be made yet>
 - <selected typed quality gate that did not run or did not pass>
 - <consumer/action UI or visual taste claim that is not proven by .buildprint/ui-evidence.md, independent review, docs/DESIGN.md, and screenshot comparison>
@@ -76,4 +84,4 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 ## Handoff warning
 
-Do not claim completion beyond the evidence above. Visible controls must work or block honestly; provider/deployment/security claims require matching proof. Do not treat technically input-derived but domain-generic output as product completion. Do not claim consumer-grade, action-forward, visually tasteful, or distinctive UI unless `docs/ui-identity.md`, `docs/DESIGN.md`, `.buildprint/ui-evidence.md`, screenshots, and independent review prove it against the nearest bad silhouette and visual craft checks.
+Do not claim completion beyond the evidence above. Visible controls must work or block honestly; provider/deployment/security claims require matching proof. Do not treat technically input-derived but domain-generic output as product completion. Do not claim the implementation has a sound architecture or maintainable project structure unless `architecture/*.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md` prove product-specific components, labeled flows, component-to-code mapping, responsibility ownership, and score `4` or `5`. Do not claim consumer-grade, action-forward, visually tasteful, or distinctive UI unless `docs/ui-identity.md`, `docs/DESIGN.md`, `.buildprint/ui-evidence.md`, screenshots, and independent review prove it against the nearest bad silhouette and visual craft checks.

@@ -9,18 +9,21 @@ Before writing code, read:
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`
 - `01-project-setup.md`
+- `architecture/agent-runtime-loop.md`, `architecture/state-and-memory-model.md`, `architecture/failure-recovery-flow.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md` from the implementation project
 - `02-ui-identity.md` as the standing UI identity and user-language responsibility for every UI-bearing artifact
 - `blueprint.yaml`, especially `execution_model`, `capability_maturity`, and `central_output_contract`
 
 Then implement this phase as one coherent product path. Do not split the work into tiny abstract checklist fragments. Understand the objective, build the smallest complete product path that satisfies it, verify it, and only then move on.
 
-This phase is the difference between a strong streaming chat core and a real Agentic Chat. If phases 01 through 03 are missing real streaming, provider routing, persistence, or a qualified chat-native UI, return to the responsible phase first. Do not use agentic labels to cover a weak chat foundation.
+This phase is the difference between a strong streaming chat core and a real Agentic Chat. If phases 01 through 03 are missing real streaming, provider routing, persistence, or a qualified chat-native UI, return to the responsible phase first. If setup lacks product-specific architecture diagrams, a responsibility-based project structure, or component-to-code-to-proof traceability, return to `01-project-setup.md` before building the loop. Do not use agentic labels to cover a weak chat foundation.
 
 ## Building objective
 
 Every phase must keep `02-ui-identity.md` and the generated local UI identity open as the product comprehension, visual identity, and user-language contract. Even backend, runtime, or verification work changes what the user sees through states, copy, blockers, reports, detail views, or controls; preserve the generated identity unless the artifact is explicitly marked `not-ui-bearing`.
 
 Build the smallest useful full Agentic Chat loop on top of the streaming core: a user states a goal in the chat, the assistant records a plan or next-step state in product language, selects a model/tool/memory/delegation action, passes through policy and approval when the action can have side effects, executes or blocks honestly, ingests the observation back into the conversation, critiques or retries on failure, persists the trace, survives reload/restart, and synthesizes a final answer tied to the original goal. If a tool, MCP server, memory store, or subagent runtime is unavailable, build the typed seam and blocked state, not a fake success.
+
+The runtime implementation must follow the setup architecture packet. `architecture/agent-runtime-loop.md` is the source model for observe/plan/act/inspect/critique/retry/continue/stop. `architecture/state-and-memory-model.md` is the source model for durable records, ephemeral runtime state, memory decisions, and claim ceilings. `architecture/failure-recovery-flow.md` is the source model for retry budgets, approval blocks, unavailable capabilities, cancellation, and user-visible recovery. If code needs to diverge, update the architecture and `ARCHITECTURE_STRUCTURE_TRACE.md` in the same phase or record architecture drift as a blocker.
 
 Required runtime contracts:
 
@@ -54,6 +57,8 @@ This phase should leave a user, operator, or developer with a real path they can
 ## DO NOT
 
 - Do not call a streaming-only chat product a complete Agentic Chat.
+- Do not build the agent loop against an implicit or stale architecture model.
+- Do not add broad `utils`, `services`, `lib`, or generic agent folders that are not mapped in `PROJECT_STRUCTURE.md` and `ARCHITECTURE_STRUCTURE_TRACE.md`.
 - Do not stub, mock, or advertise tool/skill/MCP/memory/subagent capabilities as working without a typed runtime path and proof.
 - Do not let model text implicitly execute side effects.
 - Do not hide action policy, approval, blocked, or failure states.
@@ -69,6 +74,7 @@ This phase should leave a user, operator, or developer with a real path they can
 ## Minimum proof before moving on
 
 - Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Prove the changed runtime files map back to `architecture/agent-runtime-loop.md`, `architecture/state-and-memory-model.md`, `architecture/failure-recovery-flow.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md`; update those files or record architecture drift as a blocker.
 - Inspect the full goal-to-action product loop through browser/UI plus API/CLI/runtime where useful, not only source files.
 - Prove goal intake, plan or next-step state, action selection, policy/approval, execution or honest block, observation ingestion, critique/retry/recovery, resumable state, and final synthesis.
 - Prove at least one side-effecting action blocks or waits for approval without side effects when not approved.
@@ -80,4 +86,4 @@ This phase should leave a user, operator, or developer with a real path they can
 
 ## Handoff note
 
-Write the proven maturity level (`streaming_chat_core` or `agentic_chat`), the exact goal-to-action loop surfaces used, approval and policy proof, memory/delegation proof or blockers, trace/readback proof, retry/recovery proof, benchmark result against normal plan mode, unresolved blockers, and which final critical-review claims can or cannot be trusted.
+Write the proven maturity level (`streaming_chat_core` or `agentic_chat`), the exact goal-to-action loop surfaces used, architecture/structure files trusted or updated, approval and policy proof, memory/delegation proof or blockers, trace/readback proof, retry/recovery proof, benchmark result against normal plan mode, unresolved blockers, and which final critical-review claims can or cannot be trusted.

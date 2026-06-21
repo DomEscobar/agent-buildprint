@@ -41,10 +41,22 @@ This packet is **stack-neutral**. Provider/model, framework, transport, and pers
 
 ## Proof Boundary
 
+Project setup must first produce the architecture start model that coding agents will build against:
+
+- `architecture/system-architecture.md`
+- `architecture/agent-runtime-loop.md`
+- `architecture/chat-turn-sequence.md`
+- `architecture/state-and-memory-model.md`
+- `architecture/failure-recovery-flow.md`
+- `PROJECT_STRUCTURE.md`
+- `ARCHITECTURE_STRUCTURE_TRACE.md`
+
+The architecture packet must use product-specific components, labeled Mermaid edges, component-to-code mappings, and an anti-lazy score of `4` or `5`. Generic diagrams or file trees are setup failures, not harmless documentation gaps.
+
 The outcome floor is real model tokens, not a deterministic echo. The first implementation phase must prove a usable local loop: create or open a session, send a turn to the selected real provider, observe the first token before completion, persist messages/events/telemetry, read them back after restart, prove cancellation, and surface blocked provider states. The deterministic provider exists only as a test fixture. Local default-provider proof does not prove paid-provider quality, public hosting, or full Agentic Chat maturity.
 
 The full Agentic Chat proof must additionally show goal intake, plan/next-step state, action selection, policy/approval, execution or honest block, observation ingestion, critique/retry/recovery, persisted trace readback, and benchmark comparison against normal plan mode.
 
 ## Buildprint Flow
 
-Start with `BUILDPRINT.md`, answer the hard-stop questions in `00-questions.md` (provider/model, stack, design direction, and the safety/scope gates), run setup through `01-project-setup.md` (which records the user-chosen stack), generate UI/operator identity with `02-ui-identity.md`, then execute the active phase from `03-phases/phase-index.yaml` using `03-phases/phase-flow.md`. The active first phase is the real streaming chat slice; do not stop at contracts/storage and do not ship the deterministic echo as the product. Continue through `04-agentic-loop-runtime.md` before claiming complete Agentic Chat.
+Start with `BUILDPRINT.md`, answer the hard-stop questions in `00-questions.md` (provider/model, stack, design direction, and the safety/scope gates), run setup through `01-project-setup.md` (which records the user-chosen stack and generates the architecture/project-structure packet), generate UI/operator identity with `02-ui-identity.md`, then execute the active phase from `03-phases/phase-index.yaml` using `03-phases/phase-flow.md`. The active first phase is the real streaming chat slice; do not stop at contracts/storage and do not ship the deterministic echo as the product. Continue through `04-agentic-loop-runtime.md` before claiming complete Agentic Chat.
