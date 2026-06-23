@@ -13,6 +13,7 @@ BUILDPRINT.md
 capability.yaml
 compatibility.md
 00-host-assessment.md
+00-assessment-questions.md
 01-integration-plan.md
 apply.md
 02-implementation-phases/01-contract-and-config.md
@@ -30,6 +31,7 @@ The packet must make these claims checkable:
 
 - evidence basis and source freshness
 - host compatibility
+- assessment-led questions after host assessment
 - required env/secrets/services
 - integration surfaces
 - execution profile

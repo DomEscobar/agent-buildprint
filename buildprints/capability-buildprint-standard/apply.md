@@ -68,6 +68,7 @@ Before implementation:
 
 ```text
 .buildprint/host-assessment.md
+.buildprint/capability-questions.md
 .buildprint/capability-plan.md
 ```
 
@@ -77,7 +78,7 @@ After implementation:
 .buildprint/capability-receipt.md
 ```
 
-The agent must not make source edits before the host assessment and capability plan exist. The plan must map the generic capability to this host repo's framework, auth, data, env, route, UI/operator, and verification reality.
+The agent must run `00-assessment-questions.md` after host assessment and before integration planning. It must not make source edits before the host assessment, assessment-led question gate, and capability plan exist. The plan must map the generic capability to this host repo's framework, auth, data, env, route, UI/operator, and verification reality.
 
 If the host assessment says `block`, implementation must not start. If it says `proceed with assumptions`, the plan and receipt must carry those assumptions as claim ceilings until proof resolves them.
 

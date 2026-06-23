@@ -8,10 +8,11 @@ Install the Secure Hybrid RAG MCP capability through a strict, phased grafting w
 
 1. Read `capability.yaml`.
 2. Run `00-host-assessment.md`.
-3. Run `01-integration-plan.md`.
-4. Implement each file in `02-implementation-phases/` in order.
-5. Run `verify.md`.
-6. Write `.buildprint/capability-receipt.md`.
+3. Run `00-assessment-questions.md`.
+4. Run `01-integration-plan.md`.
+5. Implement each file in `02-implementation-phases/` in order.
+6. Run `verify.md`.
+7. Write `.buildprint/capability-receipt.md`.
 
 ## Local outputs
 

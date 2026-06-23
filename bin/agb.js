@@ -449,10 +449,12 @@ function capabilityPacketCheckResults(dir) {
     'apply.md',
     'verify.md',
     '00-host-assessment.md',
+    '00-assessment-questions.md',
     '01-integration-plan.md',
     ...phaseFiles,
   ]
   const phaseTexts = phaseFiles.map((file) => safeReadText(path.join(dir, file)))
+  const assessmentQuestions = safeReadText(path.join(dir, '00-assessment-questions.md'))
   const combinedCapabilityText = [capability, buildprint, apply, verify, compatibility, publication, ...phaseTexts].join('\n')
   const requiredCapabilityItems = yamlListItemsInSection(capability, 'requires', 'existing_capabilities')
   const expectedCapabilityItems = yamlListItemsInSection(capability, 'composition', 'expects')
@@ -493,13 +495,20 @@ function capabilityPacketCheckResults(dir) {
   }
 
   ok('BUILDPRINT identifies bounded capability, not whole product', /bounded capability|not a whole-product/i.test(buildprint) && !/Product Buildprint builds a whole/i.test(buildprint))
-  ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
+  ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*00-assessment-questions\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
   ok('BUILDPRINT forbids implementation before assessment and plan', /No source edits before host assessment and capability plan/i.test(buildprint) || /must not make source edits before.*host assessment.*capability plan/i.test(buildprint))
   ok('capability packet requires discovery decision gate', hasDiscoveryDecisionGate(`${buildprint}\n${safeReadText(path.join(dir, '00-host-assessment.md'))}\n${apply}`))
+  ok('capability packet requires assessment-led questions after host assessment',
+    /after `?00-host-assessment\.md`?.*before `?01-integration-plan\.md`?/i.test(assessmentQuestions) &&
+    /Hard-stop questions/i.test(assessmentQuestions) &&
+    /Assumable defaults/i.test(assessmentQuestions) &&
+    /Deferrable questions/i.test(assessmentQuestions) &&
+    /agent_assumption.*invalid|invalid.*agent_assumption/i.test(assessmentQuestions)
+  )
   ok('capability packet requires proof reconciliation and claim downgrade', hasAssessmentReconciliation(`${verify}\n${safeReadText(path.join(dir, '01-integration-plan.md'))}\n${buildprint}`))
 
   ok('compatibility names host signals and block conditions', /host app|host project/i.test(compatibility) && /block|blocked|must not proceed/i.test(compatibility))
-  ok('apply requires assessment, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))
+  ok('apply requires assessment, questions, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*00-assessment-questions\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))
   ok('apply forbids over-broad rewrites', /bounded|Do not redesign|Do not.*whole/i.test(apply))
   ok('verify defines structural/runtime/blocker checks', /Required structural checks/i.test(verify) && /Runtime checks/i.test(verify) && /Blocked checks/i.test(verify))
   ok('verify requires receipt before success claim', /capability-receipt\.md/i.test(verify) && /Pass condition/i.test(verify))

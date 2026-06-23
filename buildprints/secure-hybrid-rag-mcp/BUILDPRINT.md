@@ -10,15 +10,16 @@ This is not a generic vector-search recipe. It is a bounded capability packet fo
 2. `capability.yaml`
 3. `compatibility.md`
 4. `00-host-assessment.md`
-5. `01-integration-plan.md`
-6. `apply.md`
-7. `02-implementation-phases/01-contract-and-config.md`
-8. `02-implementation-phases/02-core-integration.md`
-9. `02-implementation-phases/03-host-wiring.md`
-10. `02-implementation-phases/04-user-operator-surface.md`
-11. `02-implementation-phases/05-verification-and-receipt.md`
-12. `verify.md`
-13. `references/research-basis.md`
+5. `00-assessment-questions.md`
+6. `01-integration-plan.md`
+7. `apply.md`
+8. `02-implementation-phases/01-contract-and-config.md`
+9. `02-implementation-phases/02-core-integration.md`
+10. `02-implementation-phases/03-host-wiring.md`
+11. `02-implementation-phases/04-user-operator-surface.md`
+12. `02-implementation-phases/05-verification-and-receipt.md`
+13. `verify.md`
+14. `references/research-basis.md`
 
 ## Capability promise
 

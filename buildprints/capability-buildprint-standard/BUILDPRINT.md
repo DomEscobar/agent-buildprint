@@ -14,18 +14,19 @@ This is not a whole-product phase plan. Product Buildprints build systems. Capab
 2. `capability.yaml`
 3. `compatibility.md`
 4. `00-host-assessment.md`
-5. `01-integration-plan.md`
-6. `apply.md`
-7. `02-implementation-phases/01-contract-and-config.md`
-8. `02-implementation-phases/02-core-integration.md`
-9. `02-implementation-phases/03-host-wiring.md`
-10. `02-implementation-phases/04-user-operator-surface.md`
-11. `02-implementation-phases/05-verification-and-receipt.md`
-12. `verify.md`
-13. `schemas/capability.schema.json`
-14. `examples/stripe-subscriptions/capability.yaml`
-15. `examples/rbac-permissions/capability.yaml`
-16. `README.md`
+5. `00-assessment-questions.md`
+6. `01-integration-plan.md`
+7. `apply.md`
+8. `02-implementation-phases/01-contract-and-config.md`
+9. `02-implementation-phases/02-core-integration.md`
+10. `02-implementation-phases/03-host-wiring.md`
+11. `02-implementation-phases/04-user-operator-surface.md`
+12. `02-implementation-phases/05-verification-and-receipt.md`
+13. `verify.md`
+14. `schemas/capability.schema.json`
+15. `examples/stripe-subscriptions/capability.yaml`
+16. `examples/rbac-permissions/capability.yaml`
+17. `README.md`
 
 Read only what is needed for the capability you are authoring or evaluating. Do not inventory unrelated examples unless compatibility or composition is unclear.
 
@@ -47,6 +48,7 @@ Produce a packet that answers these questions directly:
 BUILDPRINT.md
 capability.yaml
 00-host-assessment.md
+00-assessment-questions.md
 01-integration-plan.md
 apply.md
 verify.md
@@ -77,7 +79,8 @@ The profile changes proof depth, not the core workflow. Even light capabilities 
 ## Non-negotiables
 
 - Do not ship a capability packet without concrete apply and verify instructions.
-- Do not implement before host assessment and integration plan are written.
+- Do not implement before host assessment, assessment-led hard-stop questions, and integration plan are written.
+- Do not ask broad capability questions before host assessment. Capability questions must be evidence-led and run after `00-host-assessment.md`.
 - Do not continue past host assessment when the implementation path depends on an unresolved product, auth, data, security, migration, or provider decision.
 - Do not hide secrets, webhooks, migrations, auth, billing, provider, or destructive side effects behind vague prose.
 - Do not claim support for a framework unless the required host signals and file patterns are named.
