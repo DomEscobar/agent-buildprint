@@ -1,0 +1,10 @@
+{
+  "name": "secure-hybrid-rag-mcp",
+  "title": "Secure Hybrid RAG MCP",
+  "summary": "Strict capability for rights-aware hybrid RAG with MCP tools, citations, evaluation, and RAGOps.",
+  "status": "draft",
+  "kind": "capability",
+  "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md", "MCP", "RAG", "Postgres", "pgvector", "full-text search"],
+  "canonical_start": "BUILDPRINT.md",
+  "tags": ["rag", "mcp", "search", "security", "retrieval", "ai"]
+}
