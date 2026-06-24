@@ -359,6 +359,12 @@ function isCredentialCapability(capability, buildprint, publication) {
   return /api[-_\s]?key management|token management|secret management|credential management/i.test(`${buildprint}\n${publication}`)
 }
 
+function isSecureRagCapability(capability, buildprint, publication) {
+  const text = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'description')} ${buildprint}\n${publication}`
+  return /\brag\b|retrieval[- ]augmented generation|hybrid retrieval/i.test(text) &&
+    /acl|authorization|permission|rights-aware|secure/i.test(text)
+}
+
 function hasDiscoveryDecisionGate(text) {
   return /infer safely/i.test(text) &&
     /patch locally/i.test(text) &&
@@ -459,6 +465,7 @@ function capabilityPacketCheckResults(dir) {
   const requiredCapabilityItems = yamlListItemsInSection(capability, 'requires', 'existing_capabilities')
   const expectedCapabilityItems = yamlListItemsInSection(capability, 'composition', 'expects')
   const credentialCapability = isCredentialCapability(capability, buildprint, publication)
+  const secureRagCapability = isSecureRagCapability(capability, buildprint, publication)
 
   for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
   ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
@@ -525,6 +532,23 @@ function capabilityPacketCheckResults(dir) {
     ok('credential capability proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(combinedCapabilityText))
     ok('credential capability.yaml proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(capability))
     ok('credential verify.md proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(verify))
+  }
+
+  if (secureRagCapability) {
+    ok('secure RAG capability requires pre-retrieval authorization',
+      /pre[- ]retrieval authorization|access control happens before retrieval|authorized corpus is computed before/i.test(combinedCapabilityText))
+    ok('secure RAG capability forbids post-retrieval filtering as security boundary',
+      /post[- ]retrieval filtering/i.test(combinedCapabilityText) && /(invalid|not the security boundary|not.*primary security mechanism|forbidden)/i.test(combinedCapabilityText))
+    ok('secure RAG capability requires shared vector and keyword authorization filter',
+      /(vector|dense)[\s\S]{0,120}(keyword|full-text)[\s\S]{0,160}(same|shared|equivalent)[\s\S]{0,120}(authorization|auth|filter|boundary)|same[\s\S]{0,120}(authorization|auth|filter|boundary)[\s\S]{0,160}(vector|dense)[\s\S]{0,120}(keyword|full-text)/i.test(combinedCapabilityText))
+    ok('secure RAG capability proves allow and deny retrieval paths',
+      /allowed subject|allowed retrieval|authorized users/i.test(verify) && /denied subject|denied retrieval|unauthorized users|denied path/i.test(verify))
+    ok('secure RAG capability requires cited generation and weak-evidence uncertainty',
+      /citation|citations|cited/i.test(combinedCapabilityText) && /uncertainty|weak evidence|unsupported/i.test(combinedCapabilityText))
+    ok('secure RAG capability covers deletion and reindex lifecycle',
+      /reindex/i.test(combinedCapabilityText) && /delete|deletion|invalidate/i.test(combinedCapabilityText))
+    ok('secure RAG capability forbids raw sensitive context logging by default',
+      /(do not log|must not log|forbid|forbidden)[\s\S]{0,120}(raw|sensitive)[\s\S]{0,80}(chunk|content|context)|raw sensitive[\s\S]{0,80}(logging|logs)[\s\S]{0,80}(default)/i.test(combinedCapabilityText))
   }
 
   for (const file of phaseFiles) {

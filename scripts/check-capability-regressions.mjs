@@ -5,11 +5,18 @@ import path from 'node:path'
 
 const root = path.resolve(import.meta.dirname, '..')
 const source = path.join(root, 'buildprints', 'api-key-management')
+const secureRagSource = path.join(root, 'buildprints', 'secure-hybrid-rag-mcp')
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'agb-capability-regression-'))
 
 function copyPacket(name) {
   const packet = path.join(temp, name)
   fs.cpSync(source, packet, { recursive: true })
+  return packet
+}
+
+function copySecureRagPacket(name) {
+  const packet = path.join(temp, name)
+  fs.cpSync(secureRagSource, packet, { recursive: true })
   return packet
 }
 
@@ -22,6 +29,15 @@ function replaceInFile(packet, relativePath, replacements) {
 
 function expectCapabilityFailure(name, mutate, expectedFailures) {
   const packet = copyPacket(name)
+  expectPacketFailure(name, packet, mutate, expectedFailures)
+}
+
+function expectSecureRagFailure(name, mutate, expectedFailures) {
+  const packet = copySecureRagPacket(name)
+  expectPacketFailure(name, packet, mutate, expectedFailures)
+}
+
+function expectPacketFailure(name, packet, mutate, expectedFailures) {
   mutate(packet)
   let output = ''
   try {
@@ -80,6 +96,36 @@ try {
       [/\r?\n## Assessment Reconciliation\r?\n/g, '\n'],
     ])
   }, ['capability packet requires proof reconciliation and claim downgrade'])
+
+  expectSecureRagFailure('capability regression catches missing secure RAG pre-retrieval invariant', (packet) => {
+    replaceInFile(packet, 'BUILDPRINT.md', [
+      [/Access control must happen before retrieval\.[\s\S]*?evaluation fixtures must share the same authorization boundary\./g, 'Access control must be handled consistently.'],
+    ])
+    replaceInFile(packet, 'README.md', [
+      [/## Security invariant[\s\S]*?(?=\r?\n## Preferred baseline stack)/g, ''],
+    ])
+    replaceInFile(packet, 'capability.yaml', [
+      [/\r?\n\s+- pre-retrieval authorization/g, ''],
+    ])
+    replaceInFile(packet, 'compatibility.md', [
+      [/pre-retrieval filters/g, 'filters'],
+    ])
+    replaceInFile(packet, '02-implementation-phases/01-contract-and-config.md', [
+      [/The authorized corpus is computed before dense search, keyword search, fusion, reranking, citation, and generation\. Post-retrieval filtering is not the security boundary\./g, 'Authorization must be handled consistently.'],
+    ])
+  }, ['secure RAG capability requires pre-retrieval authorization'])
+
+  expectSecureRagFailure('capability regression catches missing secure RAG deny proof', (packet) => {
+    replaceInFile(packet, 'verify.md', [
+      [/\r?\n- Denied subject receives no candidates before dense retrieval\./g, ''],
+      [/\r?\n- Denied subject receives no candidates before keyword retrieval\./g, ''],
+      [/\r?\n- denied path is proven/g, ''],
+    ])
+    replaceInFile(packet, 'capability.yaml', [
+      [/\r?\n\s+- denied retrieval test passes before dense and keyword search/g, ''],
+      [/\r?\n\s+- claim success without denied-path proof/g, ''],
+    ])
+  }, ['secure RAG capability proves allow and deny retrieval paths'])
 } finally {
   fs.rmSync(temp, { recursive: true, force: true })
 }
