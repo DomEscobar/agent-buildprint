@@ -40,9 +40,9 @@ export function phaseProofChecks({ file, text, objective, isMapperTemplatePacket
       !/\bsource-derived artifact output\b|\bmapped product loop\b/i.test(objective),
   })
 
-  if (isAgenticChatPacket && /02-provider-streaming-runtime\.md$/i.test(file)) {
+  if (isAgenticChatPacket && /01-real-streaming-chat\.md$/i.test(file)) {
     checks.push({
-      label: 'agentic-chat phase 02 requires real incremental streaming proof',
+      label: 'agentic-chat phase 01 requires real incremental streaming proof',
       pass: hasAll(text, [
         /ReadableStream|SSE|Server-Sent Events/i,
         /incremental/i,

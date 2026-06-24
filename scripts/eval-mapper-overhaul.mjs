@@ -524,14 +524,14 @@ expectFailure('mapper eval rejects generic objective filler',
 
 const uninstantiatedAgenticCentralOutput = path.join(tmp, 'uninstantiated-agentic-central-output')
 fs.cpSync(agenticChatPacket, uninstantiatedAgenticCentralOutput, { recursive: true })
-edit(uninstantiatedAgenticCentralOutput, 'blueprint.yaml', (s) => s.replace(/central_output:\s*Durable streaming agent conversation with tool\/memory\/provider trace and actionable blocked states\./, 'central_output: source-derived artifact output.'))
+edit(uninstantiatedAgenticCentralOutput, 'blueprint.yaml', (s) => s.replace(/central_output:\s*A chat-native agent that streams real model tokens, autonomously selects and runs allowlisted tools\/MCP\/memory actions behind approval gates, and at full maturity dispatches a parallel subagent swarm whose results the supervisor synthesizes into one answer \u2014 all durably traced and inspectable\./, 'central_output: source-derived artifact output.'))
 expectFailure('agentic-chat eval rejects uninstantiated central output',
   ['packet', 'check', uninstantiatedAgenticCentralOutput],
   ['✗ blueprint central output is instantiated, not template filler'])
 
 const bufferedAgenticStreamingPhase = path.join(tmp, 'buffered-agentic-streaming-phase')
 fs.cpSync(agenticChatPacket, bufferedAgenticStreamingPhase, { recursive: true })
-edit(bufferedAgenticStreamingPhase, '03-phases/02-provider-streaming-runtime.md', (s) => s
+edit(bufferedAgenticStreamingPhase, '03-phases/01-real-streaming-chat.md', (s) => s
   .replace(/ReadableStream|SSE|Server-Sent Events/g, 'NDJSON response')
   .replace(/incremental/g, 'evented')
   .replace(/before completion/g, 'after completion')
@@ -540,7 +540,7 @@ edit(bufferedAgenticStreamingPhase, '03-phases/02-provider-streaming-runtime.md'
   .replace(/provider runtime interface/g, 'provider layer'))
 expectFailure('agentic-chat eval rejects buffered streaming phase',
   ['packet', 'check', bufferedAgenticStreamingPhase],
-  ['✗ agentic-chat phase 02 requires real incremental streaming proof'])
+  ['✗ agentic-chat phase 01 requires real incremental streaming proof'])
 
 const missingHeading = copyTemplate('missing-phase-heading')
 edit(missingHeading, '03-phases/03-state-runtime-and-integrations.md', (s) => s.replace('## Handoff note', '## Notes'))
