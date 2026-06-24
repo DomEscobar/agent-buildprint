@@ -4,6 +4,9 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 
 ## Foundation contracts (streaming_chat_core)
 
+- `ArchitecturePacket`: setup-created `architecture/*.md` files with Mermaid diagrams, product-specific components, labeled edges, state/failure notes, claim ceilings, and implementation mappings.
+- `ProjectStructurePlan`: setup-created `PROJECT_STRUCTURE.md` organized by Agentic Chat product/runtime responsibility, with ownership, exclusions, architecture mapping, and tests/evals for each top-level source area.
+- `ArchitectureStructureTrace`: setup-created `ARCHITECTURE_STRUCTURE_TRACE.md` proving component-to-file-to-proof traceability and recording the anti-lazy architecture score.
 - `Session`: conversation with messages, active provider/model route, checkpoints, events, and usage.
 - `Message`: id, session id, role, content, status (`pending`/`streaming`/`completed`/`failed`/`blocked`), and timestamps.
 - `Turn`: id, session id, provider id, model id, status, timing, cancellation/timeout/error fields, and checkpoint id.
@@ -13,7 +16,7 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 - `ProviderFailure`: normalized code, retryability, and user-facing recovery text.
 - `Telemetry`: prompt/output tokens, latency, provider id, model id, and cost (zero/unknown when not paid).
 
-## Agentic loop contracts (agentic_chat)
+## Agentic loop contracts (agentic_chat — phase 04)
 
 - `ToolSpec` / `SkillSpec`: id, description, typed JSON input/output schema, side-effect class (`none`/`read`/`write`/`external`), and allowlist status. Exposed to the model as native tool/function definitions.
 - `McpServerSpec`: server id, transport/command, connection posture, allowlisted tools, credential posture, side-effect class, and timeout/error policy.
@@ -25,7 +28,7 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 - `AgentStep`: ordered record of model decision, action request, policy/approval, observation, and critique.
 - `MemoryEntry`: scope, key/content, write decision (`auto`/`ask`/`skip`/`block`), retention posture, and audit trail; `CompactionSummary` summarizes history in product language.
 
-## Swarm contracts (agentic_swarm)
+## Swarm contracts (agentic_swarm — phase 05)
 
 - `SwarmRun`: id, session id, parent agent run id, goal, decomposition plan, concurrency limit, status, aggregation/synthesis output, and cancellation state; resumable after restart.
 - `SubtaskSpec`: id, swarm id, typed objective, inputs, dependencies, and assigned tool/MCP scope.
@@ -34,3 +37,9 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 - `AggregationRecord`: fan-in inputs (per-subagent outputs), partial-failure notes, and the supervisor synthesis tied to the original goal.
 
 These contracts are **built and proven** at their maturity level, not deferred. Unbuilt levels remain honest blocked seams per `EXTENSIONS.md`.
+
+## Setup architecture gate
+
+- Implementation must not start until `ArchitecturePacket`, `ProjectStructurePlan`, and `ArchitectureStructureTrace` exist and score `4` or `5` on the setup architecture rubric, or until an exact external blocker lowers the claim ceiling.
+- Generic diagrams are invalid: unlabeled edges, vague boxes such as `Frontend`, `Backend`, `API`, `Agent`, `Service`, `Utils`, or `DB`, and missing component-to-code mappings fail the gate.
+- Generic file structures are invalid: `components/`, `utils/`, `services/`, `api/`, `pages/`, `lib/`, `helpers/`, or `misc/` may exist only when narrowed by product/runtime responsibility, explicit exclusions, architecture traceability, and proof mapping.

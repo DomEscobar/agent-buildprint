@@ -15,7 +15,7 @@ Product-proof contract for this phase:
 - Named product loop: Final Chat Claim Qualification Review.
 - User/operator action: run the Agentic Chat surface through a fresh deterministic streaming turn, blocked provider/tool path, persistence readback, and responsive screenshot review as a fresh-context reviewer.
 - Named output/state: `.buildprint/critical-review-pushback.md`, `.buildprint/artifact-check.md`, `.buildprint/ui-evidence.md`, screenshot set, rubric score, and final chat claim status.
-- Failure mode: self-review, buffered fake streaming, missing screenshot evidence, generic dashboard/workbench UI, thin architecture, dead controls, Track B/C failure, or unresolved blockers prevents PASS.
+- Failure mode: self-review, buffered fake streaming, missing screenshot evidence, generic dashboard/workbench UI, thin architecture, lazy setup diagrams, generic project structure, dead controls, Track B/C failure, or unresolved blockers prevents PASS.
 - Concrete proof artifact: independent review note with cited artifacts, `agb verify ui .`, `agb claim check .`, screenshots, streaming transcript, persistence readback, repair loop entries, and final `phase_core_passed` versus `claim_qualified` judgment.
 
 ## External reviewer independence protocol
@@ -26,6 +26,7 @@ The reviewer receives only:
 
 - The running artifact: screenshots, browser/API/CLI output, relevant source files, and command results.
 - `docs/architecture.md` and the enforced lint/format/type-check gate output when present.
+- `architecture/*.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md` when present.
 - `02-ui-identity.md`, the generated local identity artifact, and `docs/DESIGN.md` when present.
 - Active phase acceptance criteria from the Buildprint.
 - `.buildprint/blockers.md` for claim-ceiling facts only.
@@ -43,23 +44,24 @@ The review note must include a `## Reviewer independence` section that records: 
 2. Start a review note at `.buildprint/critical-review-pushback.md` with the `## Reviewer independence` section.
 3. **Run `agb verify ui .` first and paste `.buildprint/artifact-check.md` into the review.** Any FAIL result in the artifact check is a hard phase fail regardless of rubric scores or runtime evidence. Do not proceed to scoring until the artifact check either passes or each failing check is justified as a genuine external blocker with evidence.
 4. Before scoring, inspect `.buildprint/ui-evidence.md`. It must convert every major UI identity, `docs/DESIGN.md`, and action-surface claim into evidence: claim, required evidence, screenshot path and region or source `file:line`, nearest bad silhouette, visual craft check, pass/fail judgment, and why the shipped UI is structurally different. If this binder is missing, prose-only, or cannot prove a first-viewport action loop stronger than "type and send" plus the visual craft promised in `docs/DESIGN.md`, fail Track B before assigning rubric scores.
-5. Before scoring, list the **five worst flaws** a demanding human would call out. Each flaw must cite concrete evidence: a screenshot region, `file:line`, or command output. Do not score until this section exists.
-6. List the artifact surfaces or commands reviewed, including screenshots, browser paths, API/CLI checks, exports, persistence/readback checks, and blockers. Capture UI screenshots using the screenshot-capture protocol: the named tool chain (Playwright MCP, then the IDE/Cursor browser screenshot tool, then a project script, then ask the user), at viewports 375, 768, 1280, and 1440, across the default plus the real empty/loading/error/blocked/success states, saved to `.buildprint/screenshots/` with viewport-and-state names. Do not run the screenshot reviews below on a desktop-only or single capture. The reviewer must explicitly compare the first-screen screenshots against `docs/ui-identity.md`, `docs/DESIGN.md`, the forbidden silhouette, and the named adjacent at-risk silhouette; if the screenshot is indistinguishable after ignoring copy/color/icon changes, or if it violates the promised visual taste system, fail Track B.
-7. Run screenshot delta review when this is a rerun or redesign: compare old and new screenshots and state whether the dominant surface, interaction model, creative/operator object, user flow, and information hierarchy changed. Palette, copy, labels, spacing, iconography, and section-title changes alone fail this review.
-8. Run a progressive-disclosure screenshot review for every UI-bearing result, even when there is no prior screenshot. Count the permanent first-screen surfaces and name which capabilities are visible now versus reachable later. The review fails if the screenshot permanently displays more than one dominant creative/operator surface, one supporting context surface, and one action/status surface, or if major product capabilities compete on one page.
-9. Run **objective auto-fail checks** (see below). Record each check as pass or triggered. Any triggered check caps affected categories and forces a repair loop.
-10. Score the artifact on the rubric below from 0 to 5 per category. Each score must cite a concrete artifact — screenshot region, `file:line`, or command output. A prose-only justification without a cited artifact is invalid for that category and counts as score 0 for that category.
-11. Compute the total score out of 60.
-12. Pass threshold: at least 50/60 overall, no category below 4, no unresolved high-severity finding, no failed experience-originality, screenshot delta, or progressive-disclosure review, no triggered objective auto-fail, and a valid independent reviewer. **Track B (product/UI) and Track C (decisions/honesty) must both be fully clear before any PASS or PENDING_RECHECK verdict. A build may not reach PASS or PENDING_RECHECK by resolving only Track A (runtime/proof) while Track B or Track C failures remain open.**
-13. If the score fails, run a repair loop:
+5. Before scoring, inspect the setup architecture/structure packet. `architecture/*.md` must contain product-specific Mermaid diagrams with labeled edges and implementation mappings. `PROJECT_STRUCTURE.md` must organize files by Agentic Chat runtime/product responsibility with ownership and exclusions. `ARCHITECTURE_STRUCTURE_TRACE.md` must map components to files to proof and record score `4` or `5`, or a blocker with a lowered claim ceiling. If this packet is missing, generic, stale, unlabeled, unmapped, or scored below `4`, trigger the setup architecture auto-fail.
+6. Before scoring, list the **five worst flaws** a demanding human would call out. Each flaw must cite concrete evidence: a screenshot region, `file:line`, or command output. Do not score until this section exists.
+7. List the artifact surfaces or commands reviewed, including screenshots, browser paths, API/CLI checks, exports, persistence/readback checks, architecture/structure files, and blockers. Capture UI screenshots using the screenshot-capture protocol: the named tool chain (Playwright MCP, then the IDE/Cursor browser screenshot tool, then a project script, then ask the user), at viewports 375, 768, 1280, and 1440, across the default plus the real empty/loading/error/blocked/success states, saved to `.buildprint/screenshots/` with viewport-and-state names. Do not run the screenshot reviews below on a desktop-only or single capture. The reviewer must explicitly compare the first-screen screenshots against `docs/ui-identity.md`, `docs/DESIGN.md`, the forbidden silhouette, and the named adjacent at-risk silhouette; if the screenshot is indistinguishable after ignoring copy/color/icon changes, or if it violates the promised visual taste system, fail Track B.
+8. Run screenshot delta review when this is a rerun or redesign: compare old and new screenshots and state whether the dominant surface, interaction model, creative/operator object, user flow, and information hierarchy changed. Palette, copy, labels, spacing, iconography, and section-title changes alone fail this review.
+9. Run a progressive-disclosure screenshot review for every UI-bearing result, even when there is no prior screenshot. Count the permanent first-screen surfaces and name which capabilities are visible now versus reachable later. The review fails if the screenshot permanently displays more than one dominant creative/operator surface, one supporting context surface, and one action/status surface, or if major product capabilities compete on one page.
+10. Run **objective auto-fail checks** (see below). Record each check as pass or triggered. Any triggered check caps affected categories and forces a repair loop.
+11. Score the artifact on the rubric below from 0 to 5 per category. Each score must cite a concrete artifact — screenshot region, `file:line`, or command output. A prose-only justification without a cited artifact is invalid for that category and counts as score 0 for that category.
+12. Compute the total score out of 60.
+13. Pass threshold: at least 50/60 overall, no category below 4, no unresolved high-severity finding, no failed experience-originality, screenshot delta, or progressive-disclosure review, no triggered objective auto-fail, and a valid independent reviewer. **Track B (product/UI) and Track C (decisions/honesty) must both be fully clear before any PASS or PENDING_RECHECK verdict. A build may not reach PASS or PENDING_RECHECK by resolving only Track A (runtime/proof) while Track B or Track C failures remain open.**
+14. If the score fails, run a repair loop:
     - name the flaw and severity;
     - identify the responsible file, phase, surface, command, or blocker;
     - patch the smallest real fix;
     - rerun the relevant proof or inspect the product again;
     - rescore the affected categories with a fresh-context reviewer when practical;
     - repeat until pass or until a real external blocker is recorded.
-14. Cap self-contained repair loops at five iterations unless the user explicitly asks for more. Stop early only for a genuine blocker, not because the review is uncomfortable.
-15. Update `.buildprint/progress.md`, `.buildprint/blockers.md`, and handoff notes with the final score, repaired flaws, proof commands, and remaining risks.
+15. Cap self-contained repair loops at five iterations unless the user explicitly asks for more. Stop early only for a genuine blocker, not because the review is uncomfortable.
+16. Update `.buildprint/progress.md`, `.buildprint/blockers.md`, and handoff notes with the final score, repaired flaws, proof commands, and remaining risks.
 
 ## Objective auto-fail triggers
 
@@ -69,6 +71,7 @@ These checks are taste-independent. If any trigger fires, cap the named categori
 
 - **Echo or canned core output**: the central product output is an echo of user input, a fixed constant string, repeated template copy, or sample data presented as real output → cap **Core output quality** at 2.
 - **Self-review without independence**: the review was performed by the same agent or session that implemented the artifact, or the `## Reviewer independence` section is missing or records `REVIEW_INVALID` → **fail the phase** regardless of score.
+- **Lazy setup architecture or structure**: `architecture/*.md`, `PROJECT_STRUCTURE.md`, or `ARCHITECTURE_STRUCTURE_TRACE.md` is missing after setup, diagrams use generic boxes or unlabeled edges, components do not map to planned files/modules, the project tree is dominated by vague folders such as `components`, `utils`, `services`, `api`, `pages`, `lib`, `helpers`, or `misc` without responsibility/exclusion/proof mapping, or the recorded architecture score is below `4` → cap **Runtime/proof integrity**, **Handoff quality**, and **Ad hoc flaw repair** at 2.
 
 ### Track B — Product and UI
 
@@ -95,7 +98,7 @@ These require `.buildprint/decisions.md` to be filled. Any Track C trigger block
 - **Unfilled hard-stop decisions stub**: `.buildprint/decisions.md` still contains the "No implementation decisions recorded yet" placeholder while phases are complete. The `agb verify ui` `decisions-stub` check must be clean → **fail the phase** until filled.
 - **Scope-presentation mismatch**: the shipped UI presents as a broad product (multi-panel workbench, full product UI, many competing capabilities on one screen) while the runtime posture is a local proof or mock-only with no live provider path, and this mismatch was not recorded as a confirmed decision in `decisions.md` → cap **Product intent fit** and **State honesty** at 2.
 
-Any category capped at 2 triggers the mandatory repair loop in step 12.
+Any category capped at 2 triggers the mandatory repair loop in step 14.
 
 ## Rubric
 
@@ -139,6 +142,7 @@ Scoring anchors:
 - `docs/DESIGN.md` exists for UI-bearing artifacts or an explicit `not-ui-bearing` marker explains why no visual system is needed.
 - `.buildprint/ui-evidence.md` exists and includes Evidence Binder and Action Surface Gate results: identity/design/action claims, required evidence, screenshot path and region or source `file:line`, nearest bad silhouette, visual craft check, pass/fail judgment, structural-difference proof, next powerful user action, agent next move, visible state/result change, moment-of-need recovery/approval/memory action, and status-panel subordination proof.
 - `.buildprint/critical-review-pushback.md` exists and includes `## Reviewer independence`, the five worst flaws with cited evidence, objective auto-fail check results for all three tracks (A/B/C), reviewed surfaces, rubric scores with cited evidence per category, total score, pass/fail status, findings, repairs, progressive-disclosure screenshot review, Evidence Binder and Action Surface Gate verdicts, and final residual risks.
+- Setup architecture proof is included in the review: `architecture/*.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md` are listed as reviewed surfaces with pass/fail/blocker, and any architecture drift is recorded.
 - If this was a rerun/redesign, screenshot delta review records old vs new dominant surface, interaction model, creative/operator object, user flow, and information hierarchy.
 - If the first score failed, at least one repair loop entry records flaw -> fix -> proof -> rescore, or a genuine blocker explains why repair cannot continue.
 - The final score is at least 50/60, every category is 4 or 5, experience originality and progressive disclosure are not below 4, screenshot delta and progressive-disclosure reviews are not failed, no objective auto-fail trigger remains unresolved, the reviewer was independent, and no high-severity finding remains unresolved unless it is recorded as a real blocker.

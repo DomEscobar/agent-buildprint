@@ -1,8 +1,10 @@
 # Extensions and capability seams
 
-This packet builds a **capability ladder** (`capability_maturity` in `blueprint.yaml`): `streaming_chat_core` → `agentic_chat` → `agentic_swarm`. The agentic action loop, the tool/skill/MCP/memory policy path, and the parallel subagent swarm are now **in scope and built through phases 04 and 05** — not deferred 1.0 cut-content.
+This packet builds a **capability ladder** (`capability_maturity` in `blueprint.yaml`): `streaming_chat_core` → `agentic_chat` → `agentic_swarm`. The agentic action loop, the tool/skill/MCP/memory policy path, and the parallel subagent swarm are now **in scope and built through phases 04 and 05** — not deferred 1.0 cut-content. `03-phases/04-agentic-loop-runtime.md` promotes the loop/tool/MCP/memory seams into the goal-to-action product loop; `03-phases/05-swarm-dispatching.md` promotes the swarm seam.
 
 The honesty discipline is unchanged: a level counts as built only when it is proven by a real product path. Until a level is proven it stays an **honest blocked seam** — designed, wired, and surfaced as a blocked state, never stubbed, faked, keyword-matched, or advertised as working. Half-shipping tools, MCP, memory, and subagents as deterministic stubs is exactly the breadth-without-depth failure this packet avoids.
+
+Hard rule: do not advertise an unavailable adapter as working. Either prove it through the product loop or show a user-visible blocked state with an exact missing credential, permission, runtime, command, or decision.
 
 ## In scope, built with proof discipline
 

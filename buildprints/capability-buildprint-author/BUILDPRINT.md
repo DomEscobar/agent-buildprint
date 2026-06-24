@@ -29,6 +29,7 @@ Create a folder for one capability:
   capability.yaml
   compatibility.md
   00-host-assessment.md
+  00-assessment-questions.md
   01-integration-plan.md
   apply.md
   02-implementation-phases/

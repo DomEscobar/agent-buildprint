@@ -1,6 +1,6 @@
 # Agentic Chat
 
-A self-hosted personal chat that streams real model tokens, routes across providers, and persists/inspects every turn — built to a shippable local-first quality bar, with honest blocked states for anything not yet proven.
+A self-hosted personal Agentic Chat that streams real model tokens, routes across providers, persists/inspects every turn, and proves an agentic goal-to-action loop before claiming full maturity — built to a shippable local-first quality bar, with honest blocked states for anything not yet proven.
 
 ![Version](https://img.shields.io/badge/version-v3-blue) ![Buildprint](https://img.shields.io/badge/buildprint-executable%20packet-2ea44f) ![Runtime](https://img.shields.io/badge/runtime-local%20first-555) ![Status](https://img.shields.io/badge/status-build%20required-f59e0b)
 
@@ -16,14 +16,14 @@ This packet is deliberately deep and **stack-neutral**. Provider/model, framewor
 - Honest states — empty, streaming, blocked, error, retry/recovery, and success, inspectable without log parsing.
 - Polished chat WebUI — conversation-first surface, not a dashboard.
 
-**Level 2 — agentic_chat (model-driven action loop)**
+**Level 2 — agentic_chat (model-driven action loop)** — built through `03-phases/04-agentic-loop-runtime.md`
 
 - The model itself selects actions via provider tool/function calling — no slash commands, no keyword/regex intent matching.
 - One allowlist-gated policy path for tools, skills, and MCP servers, with typed results, inline approval/block cards, and audit records.
 - Scoped memory read/write decisions and compaction summaries in product language.
 - Observations feed back into the loop; bounded retry; resumable agent-run trace; final synthesis tied to the goal.
 
-**Level 3 — agentic_swarm (parallel multi-agent dispatching)**
+**Level 3 — agentic_swarm (parallel multi-agent dispatching)** — built through `03-phases/05-swarm-dispatching.md`
 
 - A supervisor decomposes a goal and dispatches real parallel subagents with isolated context and scoped tool access.
 - Fan-in synthesis into one goal-tied answer, honest partial-failure handling, cancellation, and resumable swarm/subagent runs.
@@ -43,8 +43,22 @@ Each level is a higher claim with its own proof. Lower levels never imply higher
 
 ## Proof Boundary
 
-The outcome floor is real model tokens, not a deterministic echo. The first implementation phase must prove a usable local loop: create or open a session, send a turn to the selected real provider, observe the first token before completion, persist messages/events/telemetry, read them back after restart, prove cancellation, and surface blocked provider states. The deterministic provider exists only as a test fixture. Local default-provider proof does not prove paid-provider quality or public hosting. The `agentic_chat` claim additionally requires a model-driven action-selection trace plus an approval-gated, audited tool/MCP/memory execution; the `agentic_swarm` claim additionally requires a real parallel subagent run with supervisor fan-in synthesis. Each higher claim needs its own proof and is otherwise an honest blocker.
+Project setup must first produce the architecture start model that coding agents will build against:
+
+- `architecture/system-architecture.md`
+- `architecture/agent-runtime-loop.md`
+- `architecture/chat-turn-sequence.md`
+- `architecture/state-and-memory-model.md`
+- `architecture/failure-recovery-flow.md`
+- `PROJECT_STRUCTURE.md`
+- `ARCHITECTURE_STRUCTURE_TRACE.md`
+
+The architecture packet must use product-specific components, labeled Mermaid edges, component-to-code mappings, and an anti-lazy score of `4` or `5`. Generic diagrams or file trees are setup failures, not harmless documentation gaps.
+
+The outcome floor is real model tokens, not a deterministic echo. The first implementation phase must prove a usable local loop: create or open a session, send a turn to the selected real provider, observe the first token before completion, persist messages/events/telemetry, read them back after restart, prove cancellation, and surface blocked provider states. The deterministic provider exists only as a test fixture. Local default-provider proof does not prove paid-provider quality or public hosting.
+
+The `agentic_chat` claim additionally requires a model-driven action-selection trace plus an approval-gated, audited tool/MCP/memory execution, with observation ingestion, critique/retry/recovery, persisted trace readback, and benchmark comparison against normal plan mode. The `agentic_swarm` claim additionally requires a real parallel subagent run with supervisor fan-in synthesis. Each higher claim needs its own proof and is otherwise an honest blocker.
 
 ## Buildprint Flow
 
-Start with `BUILDPRINT.md`, answer the hard-stop questions in `00-questions.md` (provider/model, stack, design direction, and the safety/scope gates), run setup through `01-project-setup.md` (which records the user-chosen stack), generate UI/operator identity with `02-ui-identity.md`, then execute the active phase from `03-phases/phase-index.yaml` using `03-phases/phase-flow.md`. The active first phase is the real streaming chat slice; do not stop at contracts/storage and do not ship the deterministic echo as the product.
+Start with `BUILDPRINT.md`, answer the hard-stop questions in `00-questions.md` (provider/model, stack, design direction, and the safety/scope gates), run setup through `01-project-setup.md` (which records the user-chosen stack and generates the architecture/project-structure packet), generate UI/operator identity with `02-ui-identity.md`, then execute the active phase from `03-phases/phase-index.yaml` using `03-phases/phase-flow.md`. The active first phase is the real streaming chat slice; do not stop at contracts/storage and do not ship the deterministic echo as the product. Continue through `04-agentic-loop-runtime.md` before claiming `agentic_chat`, and through `05-swarm-dispatching.md` before claiming `agentic_swarm`.

@@ -359,6 +359,16 @@ function isCredentialCapability(capability, buildprint, publication) {
   return /api[-_\s]?key management|token management|secret management|credential management/i.test(`${buildprint}\n${publication}`)
 }
 
+function isSecureRagCapability(capability, buildprint, publication) {
+  const identity = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'title')} ${yamlScalar(capability, 'description')}`
+  return /(secure[-_\s]?hybrid[-_\s]?rag|secure[-_\s]?rag|hybrid[-_\s]?rag|rights-aware hybrid retrieval|ai\.secure-hybrid-rag-mcp)/i.test(identity)
+}
+
+function isAgenticChatEvalCapability(capability, buildprint, publication) {
+  const identity = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'title')} ${yamlScalar(capability, 'description')} ${publication}`
+  return /agentic[-_\s]?chat/i.test(identity) && /eval|harness|evaluation/i.test(identity)
+}
+
 function hasDiscoveryDecisionGate(text) {
   return /infer safely/i.test(text) &&
     /patch locally/i.test(text) &&
@@ -449,14 +459,18 @@ function capabilityPacketCheckResults(dir) {
     'apply.md',
     'verify.md',
     '00-host-assessment.md',
+    '00-assessment-questions.md',
     '01-integration-plan.md',
     ...phaseFiles,
   ]
   const phaseTexts = phaseFiles.map((file) => safeReadText(path.join(dir, file)))
+  const assessmentQuestions = safeReadText(path.join(dir, '00-assessment-questions.md'))
   const combinedCapabilityText = [capability, buildprint, apply, verify, compatibility, publication, ...phaseTexts].join('\n')
   const requiredCapabilityItems = yamlListItemsInSection(capability, 'requires', 'existing_capabilities')
   const expectedCapabilityItems = yamlListItemsInSection(capability, 'composition', 'expects')
   const credentialCapability = isCredentialCapability(capability, buildprint, publication)
+  const secureRagCapability = isSecureRagCapability(capability, buildprint, publication)
+  const agenticChatEvalCapability = isAgenticChatEvalCapability(capability, buildprint, publication)
 
   for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
   ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
@@ -493,13 +507,20 @@ function capabilityPacketCheckResults(dir) {
   }
 
   ok('BUILDPRINT identifies bounded capability, not whole product', /bounded capability|not a whole-product/i.test(buildprint) && !/Product Buildprint builds a whole/i.test(buildprint))
-  ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
+  ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*00-assessment-questions\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
   ok('BUILDPRINT forbids implementation before assessment and plan', /No source edits before host assessment and capability plan/i.test(buildprint) || /must not make source edits before.*host assessment.*capability plan/i.test(buildprint))
   ok('capability packet requires discovery decision gate', hasDiscoveryDecisionGate(`${buildprint}\n${safeReadText(path.join(dir, '00-host-assessment.md'))}\n${apply}`))
+  ok('capability packet requires assessment-led questions after host assessment',
+    /after `?00-host-assessment\.md`?.*before `?01-integration-plan\.md`?/i.test(assessmentQuestions) &&
+    /Hard-stop questions/i.test(assessmentQuestions) &&
+    /Assumable defaults/i.test(assessmentQuestions) &&
+    /Deferrable questions/i.test(assessmentQuestions) &&
+    /agent_assumption.*invalid|invalid.*agent_assumption/i.test(assessmentQuestions)
+  )
   ok('capability packet requires proof reconciliation and claim downgrade', hasAssessmentReconciliation(`${verify}\n${safeReadText(path.join(dir, '01-integration-plan.md'))}\n${buildprint}`))
 
   ok('compatibility names host signals and block conditions', /host app|host project/i.test(compatibility) && /block|blocked|must not proceed/i.test(compatibility))
-  ok('apply requires assessment, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))
+  ok('apply requires assessment, questions, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*00-assessment-questions\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))
   ok('apply forbids over-broad rewrites', /bounded|Do not redesign|Do not.*whole/i.test(apply))
   ok('verify defines structural/runtime/blocker checks', /Required structural checks/i.test(verify) && /Runtime checks/i.test(verify) && /Blocked checks/i.test(verify))
   ok('verify requires receipt before success claim', /capability-receipt\.md/i.test(verify) && /Pass condition/i.test(verify))
@@ -516,6 +537,40 @@ function capabilityPacketCheckResults(dir) {
     ok('credential capability proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(combinedCapabilityText))
     ok('credential capability.yaml proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(capability))
     ok('credential verify.md proves full-secret verification after prefix lookup', /valid[- ]prefix\/wrong[- ]secret|valid prefix with wrong secret|wrong secret body/i.test(verify))
+  }
+
+  if (secureRagCapability) {
+    ok('secure RAG capability requires pre-retrieval authorization',
+      /pre[- ]retrieval authorization|access control happens before retrieval|authorized corpus is computed before/i.test(combinedCapabilityText))
+    ok('secure RAG capability forbids post-retrieval filtering as security boundary',
+      /post[- ]retrieval filtering/i.test(combinedCapabilityText) && /(invalid|not the security boundary|not.*primary security mechanism|forbidden)/i.test(combinedCapabilityText))
+    ok('secure RAG capability requires shared vector and keyword authorization filter',
+      /(vector|dense)[\s\S]{0,120}(keyword|full-text)[\s\S]{0,160}(same|shared|equivalent)[\s\S]{0,120}(authorization|auth|filter|boundary)|same[\s\S]{0,120}(authorization|auth|filter|boundary)[\s\S]{0,160}(vector|dense)[\s\S]{0,120}(keyword|full-text)/i.test(combinedCapabilityText))
+    ok('secure RAG capability proves allow and deny retrieval paths',
+      /allowed subject|allowed retrieval|authorized users/i.test(verify) && /denied subject|denied retrieval|unauthorized users|denied path/i.test(verify))
+    ok('secure RAG capability requires cited generation and weak-evidence uncertainty',
+      /citation|citations|cited/i.test(combinedCapabilityText) && /uncertainty|weak evidence|unsupported/i.test(combinedCapabilityText))
+    ok('secure RAG capability covers deletion and reindex lifecycle',
+      /reindex/i.test(combinedCapabilityText) && /delete|deletion|invalidate/i.test(combinedCapabilityText))
+    ok('secure RAG capability forbids raw sensitive context logging by default',
+      /(do not log|must not log|forbid|forbidden)[\s\S]{0,120}(raw|sensitive)[\s\S]{0,80}(chunk|content|context)|raw sensitive[\s\S]{0,80}(logging|logs)[\s\S]{0,80}(default)/i.test(combinedCapabilityText))
+  }
+
+  if (agenticChatEvalCapability) {
+    ok('agentic chat eval requires trace-aware scenario harness',
+      /scenario/i.test(combinedCapabilityText) && /trace|span/i.test(combinedCapabilityText) && /scenario-based|scenario runner|scenario fixtures/i.test(combinedCapabilityText))
+    ok('agentic chat eval forbids final-answer-only grading',
+      /final[- ]answer[- ]only|score only final|grade only the final answer|No pass from final text alone/i.test(combinedCapabilityText))
+    ok('agentic chat eval requires tool side-effect proof',
+      /tool|action/i.test(combinedCapabilityText) && /side[- ]effect/i.test(combinedCapabilityText) && /proof|receipt|expected/i.test(combinedCapabilityText))
+    ok('agentic chat eval bounds model-judge scoring behind deterministic gates',
+      /model[- ]judge/i.test(combinedCapabilityText) && /deterministic/i.test(combinedCapabilityText) && /(never the sole proof|cannot be overridden|override|bounded|advisory)/i.test(combinedCapabilityText))
+    ok('agentic chat eval requires safe sandbox or mock mode for destructive tools',
+      /destructive/i.test(combinedCapabilityText) && /sandbox|mock|blocked/i.test(combinedCapabilityText))
+    ok('agentic chat eval handles optional RAG profile as proven or not-proven/blocked',
+      /optional RAG profile|rag profile/i.test(combinedCapabilityText) && /not-proven|blocked/i.test(combinedCapabilityText))
+    ok('agentic chat eval ships example scenario and receipt artifacts',
+      files.has('examples/core-chat-scenario.yaml') && files.has('examples/eval-receipt.md'))
   }
 
   for (const file of phaseFiles) {
@@ -650,9 +705,11 @@ function packetCheckResults(dir) {
   const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') ||
     normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet') ||
     /Replace this template-level rule with the selected artifact's source-derived central output contract/i.test(blueprint)
+  const uiIdentityText = safeReadText(path.join(dir, '02-ui-identity.md'))
   const isAgenticChatPacket = normalizedPacketDir.endsWith('buildprints/agentic-chat') ||
-    /Product:\s*Agentic Chat/i.test(safeReadText(path.join(dir, '02-ui-identity.md'))) ||
-    /Agentic Chat/i.test(buildprint)
+    /Product:\s*Agentic Chat/i.test(uiIdentityText) ||
+    /capability_maturity:[\s\S]*full_claim:\s*agentic_chat/i.test(blueprint) ||
+    /central_output_contract:[\s\S]*Agentic Chat/i.test(blueprint)
   const requiresTypedQualityRouting = isMapperTemplatePacket
   const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint)
   const requiresCriticalReviewPushback = isMapperTemplatePacket ||
@@ -718,6 +775,36 @@ function packetCheckResults(dir) {
     /claim_gates:/i.test(blueprint)
   )
   for (const check of centralOutputInstantiationChecks(blueprint, isMapperTemplatePacket, isAgenticChatPacket)) ok(check.label, check.pass, check.detail || '')
+  ok('agentic-chat declares explicit agentic execution model',
+    !isAgenticChatPacket ||
+    (/execution_model:/i.test(blueprint) &&
+     /mode:\s*agentic_loop/i.test(blueprint) &&
+     /builder_loop:/i.test(blueprint) &&
+     /product_loop:/i.test(blueprint) &&
+     /proof_loop:/i.test(blueprint) &&
+     /Observe|observe/i.test(blueprint) &&
+     /Interpret|interpret/i.test(blueprint) &&
+     /Plan|plan/i.test(blueprint) &&
+     /Act|act/i.test(blueprint) &&
+     /Inspect|inspect/i.test(blueprint) &&
+     /Critique|critique/i.test(blueprint) &&
+     /Repair|repair/i.test(blueprint) &&
+     /Verify|verify/i.test(blueprint) &&
+     /Decide|decide/i.test(blueprint))
+  )
+  ok('agentic-chat separates streaming core from full agentic maturity',
+    !isAgenticChatPacket ||
+    (/capability_maturity:/i.test(blueprint) &&
+     /current_floor:\s*streaming_chat_core/i.test(blueprint) &&
+     /full_claim:\s*agentic_(chat|swarm)/i.test(blueprint) &&
+     /Do not call the artifact (a complete Agentic Chat|agentic)/i.test(blueprint) &&
+     /planning\/next-step loop|plan or next-step/i.test(blueprint) &&
+     /tool\/skill execution policy|tool.*skill/i.test(blueprint) &&
+     /MCP adapter posture/i.test(blueprint) &&
+     /memory\/compaction/i.test(blueprint) &&
+     /subagent\/delegation/i.test(blueprint) &&
+     /benchmark evidence/i.test(blueprint))
+  )
   ok('blueprint declares harness provider and profile selection',
     /harness:\s*\n[\s\S]*profiles:/i.test(blueprint) &&
     /provider:\s*agents/i.test(blueprint) &&
@@ -946,6 +1033,18 @@ function packetCheckResults(dir) {
     /one concrete weakness repair/i.test(phaseFlow) &&
     /what the proof does not prove/i.test(phaseFlow)
   )
+  ok('agentic-chat phase flow binds builder, product, and proof loops',
+    !isAgenticChatPacket ||
+    (/builder loop/i.test(phaseFlow) &&
+     /product loop/i.test(phaseFlow) &&
+     /proof loop/i.test(phaseFlow) &&
+     /goal intake/i.test(phaseFlow) &&
+     /action selection/i.test(phaseFlow) &&
+     /policy\/approval/i.test(phaseFlow) &&
+     /observation ingestion/i.test(phaseFlow) &&
+     /critique\/retry\/recovery/i.test(phaseFlow) &&
+     /agentic_chat:\s*blocked|agentic_chat:\s*not_qualified/i.test(phaseFlow))
+  )
   ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
   ok('phase flow requires UI identity verification before completion',
     /missing local UI identity/i.test(phaseFlow) &&
@@ -1155,6 +1254,16 @@ function packetCheckResults(dir) {
      /Taste Dials/i.test(handover) &&
      /composer quality/i.test(handover) &&
      /system-label suppression/i.test(handover))
+  )
+  ok('agentic-chat handover captures maturity and loop proof',
+    !isAgenticChatPacket ||
+    (/Capability maturity/i.test(handover) &&
+     /streaming_chat_core/i.test(handover) &&
+     /agentic_chat/i.test(handover) &&
+     /Builder loop/i.test(handover) &&
+     /Product loop/i.test(handover) &&
+     /Proof loop/i.test(handover) &&
+     /plan-mode baseline/i.test(handover))
   )
   ok('handover warns against overclaiming', /Do not claim completion beyond the evidence/i.test(handover))
 

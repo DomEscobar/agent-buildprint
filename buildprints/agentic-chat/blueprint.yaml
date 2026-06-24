@@ -47,6 +47,42 @@ packet_shape:
     - generated/agent-prompt.md
     - generated/codex-handoff.md
 
+setup_architecture_contract:
+  rule: Project setup must generate a product-specific architecture packet and project structure before identity or implementation starts. Architecture is a start model for coding agents, not a post-build explanation.
+  required_artifacts:
+    - architecture/system-architecture.md
+    - architecture/agent-runtime-loop.md
+    - architecture/chat-turn-sequence.md
+    - architecture/state-and-memory-model.md
+    - architecture/failure-recovery-flow.md
+    - PROJECT_STRUCTURE.md
+    - ARCHITECTURE_STRUCTURE_TRACE.md
+  diagram_requirements:
+    - every architecture file contains Mermaid, a component legend, and an Implementation Mapping section
+    - every edge is labeled with the data, event, command, policy decision, approval, observation, or error that flows across it
+    - component names describe Agentic Chat runtime responsibilities, not generic layers
+    - diagrams cover UI/API/runtime, provider adapter, persistence, telemetry/trace, agent loop, memory/blocked states, failure recovery, and claim ceilings
+  forbidden_lazy_shapes:
+    - Frontend -> Backend -> Database without product-specific responsibilities
+    - generic boxes such as API, Auth, Agent, Service, Utils, or DB without ownership and behavior
+    - unlabeled arrows
+    - project trees dominated by components, utils, services, api, pages, lib, helpers, or misc without narrowed product/runtime responsibility
+    - diagrams without component-to-code mapping
+    - file trees without test/eval/proof mapping
+  project_structure_rule: PROJECT_STRUCTURE.md must organize files by Agentic Chat product/runtime responsibilities and state purpose, ownership, exclusions, architecture mapping, and tests/evals for every top-level source area.
+  traceability_rule: ARCHITECTURE_STRUCTURE_TRACE.md must prove every diagram component maps to planned files/modules and proof, every important file maps back to architecture, and every runtime responsibility has test/eval/command proof or an explicit blocker.
+  score_gate:
+    minimum_to_continue: 4
+    maximum: 5
+    rubric:
+      0: generic boxes or generic file tree; useless
+      1: technical layers only; no Agentic Chat responsibilities
+      2: some product-specific names but weak flow or ownership
+      3: concrete components, labeled flows, and plausible structure
+      4: component-to-code mapping, state ownership, and proof mapping
+      5: score 4 plus failure paths, claim ceilings, and eval/test mapping
+    failure_route: return_to_setup
+
 phase_contract:
   required_headings:
     - How to implement this phase
@@ -68,7 +104,7 @@ phase_contract:
 
 execution_model:
   mode: agentic_loop
-  rule: Buildprints are not linear phase recipes. A coding agent iterates through builder, product, and proof loops until the product contract passes, an iteration budget is exhausted, or an external blocker is recorded.
+  rule: Buildprints are not linear phase recipes. A coding agent must iterate through builder, product, and proof loops until the product contract passes, an iteration budget is exhausted, or an external blocker is recorded.
   iteration_budget:
     minimum_repair_iterations: 1
     maximum_repair_iterations: 5
@@ -80,7 +116,7 @@ execution_model:
     name: Buildprint Builder Loop
     steps:
       - observe current repo, app, screenshots, logs, tests, and handoff state
-      - interpret gaps against central_output_contract, capability_maturity, docs/ui-identity.md, and docs/DESIGN.md
+      - interpret gaps against central_output_contract, capability_maturity, local docs/ui-identity.md, and docs/DESIGN.md
       - plan the smallest real repair that advances the product contract
       - act by changing implementation, tests, docs, fixtures, or proof artifacts
       - inspect runtime, browser, API, logs, persistence, and generated evidence
@@ -118,11 +154,15 @@ execution_model:
       - patch the smallest real weakness
       - rerun the affected proof
       - rescore until pass, blocker, or iteration budget exhaustion
+  stop_conditions:
+    pass: every active maturity gate has fresh evidence, no hard fail remains, and HANDOVER.md claim ceiling matches proof
+    blocked: exact missing credential, runtime, decision, permission, or external dependency is recorded
+    fail: loop budget exhausted, product remains generic, or Buildprint run does not beat a normal plan-mode baseline on the benchmark
 
 capability_maturity:
   current_floor: streaming_chat_core
   full_claim: agentic_swarm
-  rule: Do not call the artifact agentic until the model-driven action loop is proven, and do not call it a swarm until parallel subagent dispatch with supervisor synthesis is proven. Each level is a strictly higher claim with its own evidence.
+  rule: Do not call the artifact agentic until the model-driven action loop is proven, and do not call it a swarm until parallel subagent dispatch with supervisor synthesis is proven. The streaming chat core is a necessary foundation, not the final product; each level is a strictly higher claim with its own evidence.
   levels:
     streaming_chat_core:
       claim: real-model streaming chat foundation
@@ -140,6 +180,7 @@ capability_maturity:
         - tool/skill execution policy with typed results
         - MCP adapter posture and allowlist boundary when enabled
         - memory/compaction read/write policy with audit trail
+        - subagent/delegation records when used
         - approval gates for side effects
         - observation re-ingestion, critique, bounded retry, and resumable trace
         - final synthesis tied to the original goal
@@ -190,6 +231,7 @@ central_output_contract:
     - messages, agent runs, swarm runs, and traces survive readback after restart
     - normalized failures retry within a bounded policy or block honestly
     - UI shows empty, streaming, blocked, error, approval, running-subagent, and success states without log parsing
+    - agentic claims show plan/action/observation/critique/retry state in the product loop, not only a chat transcript
   unacceptable_generic_substitutes:
     - static chat mockup
     - deterministic echo presented as a real product turn
@@ -206,20 +248,32 @@ central_output_contract:
     - Can blocked or failed providers recover safely within the retry policy?
     - Does the model itself decide to call a tool/MCP/memory action from natural language, without the user typing a command?
     - Does every side-effecting action pass through an inline approval gate and leave an audit record?
+    - Can an agentic_chat claim prove goal intake, action selection, tool/memory/delegation policy, observation, critique, retry, and resumable state?
     - Does a goal that needs parallel work spawn real concurrent subagents whose results the supervisor synthesizes into one goal-tied answer?
     - Do agent runs and swarm runs survive restart and remain inspectable?
     - Which paid-provider, hosting, agentic, or swarm claims remain blocked?
   claim_gates:
+    - implementation cannot start until setup architecture and project structure artifacts pass the architecture score gate or record an exact blocker
     - real provider success requires a real streaming token trace, not the test double
     - paid provider success requires a configured key and response trace
     - durability requires persistence readback after restart or blocker
     - public hosting requires auth, abuse, and secrets proof
     - agentic_chat requires a model-driven action selection trace (provider tool/function call) plus an approval-gated, audited tool/MCP/memory execution, not a slash-command demo
     - agentic_swarm requires a real parallel subagent run trace with isolated per-worker context and a supervisor fan-in synthesis, not sequential or fabricated workers
-  minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome. To claim agentic_chat, the model autonomously selects an allowlisted action, the side effect is approval-gated and audited, and the observation re-enters the loop. To claim agentic_swarm, a supervisor dispatches real parallel subagents and synthesizes their fan-in results into one goal-tied answer with honest partial-failure handling.
+    - if only streaming_chat_core passes, the handoff must say agentic_chat and agentic_swarm remain unqualified
+  minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome. This is the streaming core floor, not an agentic claim. To claim agentic_chat, the model autonomously selects an allowlisted action, the side effect is approval-gated and audited, and the observation re-enters the loop. To claim agentic_swarm, a supervisor dispatches real parallel subagents and synthesizes their fan-in results into one goal-tied answer with honest partial-failure handling.
 
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
+  architecture_structure_readiness:
+    applies_when: project setup creates a new implementation project or materially changes architecture
+    requires:
+      - Mermaid architecture packet with product-specific component names
+      - required edge labels
+      - component-to-code mapping
+      - responsibility-based PROJECT_STRUCTURE.md
+      - ARCHITECTURE_STRUCTURE_TRACE.md proving component/file/proof traceability
+      - anti-lazy architecture score 4 or 5, or exact blocker and lowered claim ceiling
   ui_decision_precision:
     applies_when: artifact has human-facing UI, reports, generated outputs, visual workflows, forms, or operator surfaces
     requires:

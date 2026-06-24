@@ -1,0 +1,214 @@
+schema: agent-buildprint/capability.v0
+name: secure-hybrid-rag-mcp
+type: capability
+title: Secure Hybrid RAG MCP
+description: Adds rights-aware hybrid retrieval, cited structured generation, evaluation, and RAGOps through MCP-compatible tools.
+capability: ai.secure-hybrid-rag-mcp
+status: draft
+canonical_start: BUILDPRINT.md
+execution_profile: strict
+claim_status: unproven
+host_frameworks:
+  - nextjs
+  - express
+  - hono
+  - fastapi
+  - django
+  - node-api
+  - python-api
+host_detection:
+  package_files:
+    - package.json
+    - pyproject.toml
+    - requirements.txt
+  auth_signals:
+    - current user/session helper
+    - auth middleware
+    - role, group, membership, or permission helper
+    - tenant, project, customer, or document ownership model
+  database_signals:
+    - prisma/schema.prisma
+    - drizzle.config.*
+    - migrations
+    - sql schema
+    - postgres
+    - pgvector
+  document_signals:
+    - upload route
+    - file storage adapter
+    - document model
+    - background job worker
+  route_signals:
+    - app
+    - pages
+    - app/api
+    - pages/api
+    - server/routes
+    - src/routes
+  inspect_paths:
+    - package.json
+    - pyproject.toml
+    - requirements.txt
+    - prisma/schema.prisma
+    - drizzle.config.*
+    - migrations/
+    - app/
+    - src/
+    - server/
+    - api/
+    - db/
+    - auth/
+    - middleware/
+    - tests/
+requires:
+  env:
+    - embedding provider key when external embeddings are used
+    - reranker/model provider key when external reranking or generation is used
+  existing_capabilities:
+    - auth.user_identity
+    - auth.permission_check
+    - storage.document_store
+    - database.durable_metadata
+  human_decisions:
+    - external parser/model approval for private documents
+    - tenant/project/customer permission source
+    - document retention and deletion policy
+    - parser and embedding provider choice
+    - production migration approval
+    - external parser/model approval for private documents
+touches:
+  - MCP server/tool definitions
+  - ingestion workers
+  - database schema/migrations
+  - document metadata models
+  - retrieval service
+  - generation service
+  - evaluation fixtures
+  - tests
+  - observability/logging
+  - raw document references
+  - parsed documents
+  - chunks
+  - embeddings
+  - keyword indexes
+  - ACL metadata
+  - retrieval receipts
+  - evaluation runs
+contract:
+  mcp_tools:
+    - rag.ingest_file
+    - rag.ingest_project
+    - rag.get_ingestion_status
+    - rag.search
+    - rag.retrieve_evidence
+    - rag.generate_answer
+    - rag.generate_structured_output
+    - rag.evaluate_query
+    - rag.explain_sources
+    - rag.reindex_document
+    - rag.delete_document
+  mandatory_request_fields:
+    - subject
+    - scope
+    - purpose
+    - query_or_task
+  mandatory_subject_fields:
+    - user_id
+    - tenant_id
+    - roles
+    - groups
+    - project_memberships
+    - permissions
+  mandatory_chunk_acl_fields:
+    - tenant_id
+    - project_id
+    - customer_id
+    - document_owner_id
+    - visibility
+    - sensitivity
+    - allowed_roles
+    - allowed_user_ids
+    - denied_user_ids
+    - source_system
+    - retention_policy
+apply:
+  inspect:
+    - current user identity and auth source
+    - tenant/project/customer/document boundaries
+    - existing permission helper or policy engine
+    - document upload/import/storage path
+    - database schema and migration tooling
+    - current search/vector/indexing systems
+    - background job framework
+    - test/lint/typecheck/build commands
+  steps:
+    - assess host identity, auth, storage, and test baseline
+    - write integration and security plans
+    - define contracts, schemas, config, and feature flags
+    - implement ingestion, parsing, chunking, ACL assignment, and indexing
+    - implement authorized hybrid retrieval and reranking
+    - implement cited generation and host/MCP surfaces
+    - implement evaluation, observability, deletion, and receipts
+  forbidden:
+    - search all chunks and filter forbidden chunks afterward
+    - use different authorization filters for vector and keyword retrieval
+    - index chunks without ACL metadata
+    - log raw sensitive chunks by default
+    - send private documents to external providers without approval
+    - claim success without denied-path proof
+    - replace the host auth system with an unrelated parallel system
+verify:
+  proof_level: runtime
+  commands:
+    - baseline tests/build pass or blockers recorded
+    - package test command if present
+    - package lint/typecheck command if present
+    - package build command if relevant
+    - migration dry-run command if present
+  runtime_checks:
+    - allowed retrieval test passes
+    - denied retrieval test passes before dense and keyword search
+    - vector and keyword queries share authorization filter
+    - generated output has citations and uncertainty flags
+    - parser/chunker/embedding/index versions recorded
+    - evaluation golden set exists
+    - deletion/reindex path removes or refreshes derived indexes
+  blocked_checks:
+    - no auth/session model blocks with a clear prerequisite
+    - no tenant/project permission source blocks implementation
+    - no ACL assignment path blocks indexing
+    - vector store without pre-filter support blocks secure retrieval
+    - external provider privacy approval missing blocks private document ingestion
+risk:
+  level: critical
+  reason: Touches authorization and tenant boundaries, handles private documents, creates derived indexes and model context, and may affect offer, pricing, or legal outputs.
+failure_modes:
+  - post-retrieval filtering leaks forbidden information through scores, logs, prompts, or citations
+  - high-cardinality ACL filters reduce approximate vector recall
+  - parser loses table structure or page context
+  - chunking breaks line items, units, prices, or legal clauses
+  - model invents unsupported quantities, prices, or conclusions
+  - stale indexes keep deleted or permission-revoked content
+  - observability logs sensitive raw context
+composition:
+  expects:
+    - auth.user_identity
+    - auth.permission_check
+    - storage.document_store
+  provides:
+    - ai.rag_ingestion
+    - ai.authorized_hybrid_retrieval
+    - ai.cited_generation
+    - ai.rag_evaluation
+    - ai.retrieval_receipts
+  composes_with:
+    - rbac-permissions
+    - api-key-management
+    - background-jobs
+    - audit-log
+    - file-upload
+    - billing
+  conflicts_with:
+    - unauthenticated public document search
+    - provider-only hosted file search as sole datastore for multi-tenant production data
+    - retrieval systems that cannot pre-filter by authorization scope

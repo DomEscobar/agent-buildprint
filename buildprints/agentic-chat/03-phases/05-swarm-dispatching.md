@@ -11,7 +11,7 @@ Before writing code, read:
 - current project `AGENTS.md` if it exists
 - `BUILDPRINT.md`, `SPEC.md`, `CONTRACTS.md`, `EXTENSIONS.md`
 - `blueprint.yaml` (`execution_model.product_loop.required_for_agentic_swarm_claim`, `capability_maturity.agentic_swarm`)
-- `04-agentic-action-loop.md` — the swarm reuses the proven single-agent loop as the worker runtime
+- `04-agentic-loop-runtime.md` — the swarm reuses the proven single-agent loop as the worker runtime
 - `01-project-setup.md` and `02-ui-identity.md`
 
 Build the swarm on top of the proven phase-04 loop: each subagent is an instance of the single-agent action loop with its own run id, isolated context window, and scoped tool/MCP allowlist. Do not invent a second, weaker agent implementation for workers. Use a real concurrency primitive (worker pool / bounded task queue / `Promise`-based scheduler with a concurrency cap), not sequential awaits.
@@ -33,6 +33,7 @@ Product-proof contract for this phase:
 
 - Named product loop: Swarm Dispatch and Synthesis.
 - User/operator action: send a goal that needs parallel work; watch the supervisor decompose it; approve a side-effecting swarm; see multiple subagents run concurrently with live status; read the synthesized goal-tied answer; expand any subagent's independent trace; reload and confirm the swarm run, subagent runs, and aggregation persisted.
+- Named output/state: persisted `swarm_run`, ordered `subtask_spec` records, per-worker `subagent_run` records linked to their own `agent_run`/`agent_step` traces, the `aggregation_record` fan-in, approval/cancellation state, and the inline swarm-panel state attached to the supervisor message.
 - Failure modes that must produce honest product-visible states: a subagent fails or times out (swarm continues, partial-failure synthesis is honest about gaps), all subagents fail (honest failed state, no fabricated answer), concurrency limit reached (queueing visible, not dropped work), whole-swarm cancellation (in-flight subagents cancelled, state persisted as `cancelled`), single-subagent cancellation, and persistence failure.
 - Concrete proof artifact: `.buildprint/evidence-phase-05.md` with an API/browser transcript and timing evidence proving the subagents ran **concurrently** (overlapping start/finish timestamps, not strictly sequential), at least one injected partial failure handled honestly, the supervisor fan-in synthesis tied to the goal, cancellation behavior, and persisted readback after restart.
 
@@ -53,6 +54,9 @@ Required surface behavior:
 - Do not hide partial failures behind a confident synthesis; report what failed.
 - Do not let the swarm UI become a task dashboard/kanban that displaces the chat thread.
 - Do not regress the phase-04 single-agent loop or the streaming foundation.
+- Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only swarm surfaces.
+- Do not create functionless buttons, inert worker rows, swallowed errors, or fake progress in the swarm panel.
+- Do not count mocked/sample data or fabricated subagent output as proof for real concurrent execution, persistence, or synthesis.
 - Do not mark this phase complete from code edits or prose alone.
 
 ## Minimum proof before moving on

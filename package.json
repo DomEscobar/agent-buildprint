@@ -1,6 +1,6 @@
 {
   "name": "agent-buildprint",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "type": "module",
   "bin": {
     "agb": "bin/agb.js"
@@ -9,7 +9,7 @@
   "scripts": {
     "check:syntax": "node --check bin/agb.js",
     "check:capability": "node bin/agb.js packet check buildprints/api-key-management",
-    "check:capabilities": "node bin/agb.js packet check buildprints/api-key-management && node bin/agb.js packet check buildprints/rbac-permissions && node bin/agb.js packet check buildprints/stripe-subscriptions",
+    "check:capabilities": "node bin/agb.js packet check buildprints/agentic-chat-eval-harness && node bin/agb.js packet check buildprints/api-key-management && node bin/agb.js packet check buildprints/rbac-permissions && node bin/agb.js packet check buildprints/secure-hybrid-rag-mcp && node bin/agb.js packet check buildprints/stripe-subscriptions",
     "check:authors": "node bin/agb.js packet check buildprints/capability-buildprint-author",
     "check:capability:regressions": "node scripts/check-capability-regressions.mjs",
     "check:packet:mapper": "node bin/agb.js packet check buildprints/buildprint-mapper-os",

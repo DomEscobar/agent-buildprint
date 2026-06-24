@@ -10,6 +10,12 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 - Command/API/browser/runtime proof:
   - `<command>` — <result>
+- Setup architecture and project structure gate:
+  - Architecture packet — <paths to architecture/system-architecture.md, architecture/agent-runtime-loop.md, architecture/chat-turn-sequence.md, architecture/state-and-memory-model.md, architecture/failure-recovery-flow.md; PASS/FAIL/blocker>
+  - Mermaid/labeled-edge check — <PASS/FAIL/blocker; cite generic boxes or unlabeled edges if failed>
+  - `PROJECT_STRUCTURE.md` — <PASS/FAIL/blocker; cite product/runtime responsibility mapping and any rejected generic folders>
+  - `ARCHITECTURE_STRUCTURE_TRACE.md` — <PASS/FAIL/blocker; component-to-file-to-proof trace coverage and architecture score 0-5>
+  - Architecture drift — <none, updated, or blocker; cite changed components/files>
 - Screenshot/browser/API/readback evidence:
   - <what was inspected>
 - UI identity and screenshot gate:
@@ -23,6 +29,7 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - Consumer chat craft gate — <PASS/FAIL/blocker; cite screenshot/source proof for Design Read, Taste Dials, polished empty state, composer quality, mobile comfort, system-label suppression, and no seeded feature-demo cards>
   - Nearest bad silhouette comparison — <named silhouette, screenshot/source evidence, and why the shipped UI is structurally different>
 - Typed quality gates:
+  - Architecture structure readiness — <applicable/not applicable> — <architecture packet, project structure, traceability proof, score, or blocker>
   - UI decision precision — <applicable/not applicable> — <proof or reason>
   - Visual viewport acceptance — <applicable/not applicable> — <desktop/mobile/overflow proof or reason>
   - Editor/content stress acceptance — <applicable/not applicable> — <fixture/proof or reason>
@@ -40,6 +47,20 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - <what the output makes clear>
   - <what still feels generic or weak>
   - <what a user/operator can do next from the output>
+- Builder loop:
+  - observe/interpret/plan/act/inspect/critique/repair/verify/decide — <what changed during the repair loop and what evidence changed after rerun>
+- Product loop:
+  - goal intake — <screenshot/API/source proof or blocker>
+  - plan or next-step state — <proof or blocker>
+  - action selection — <model/tool/skill/MCP/memory/subagent proof or blocker>
+  - policy/approval — <approval or blocked side-effect proof>
+  - observation ingestion — <result attached to conversation proof>
+  - critique/retry/recovery — <bounded retry or recovery proof>
+  - resumable state — <restart/readback proof>
+  - final synthesis — <proof that final answer ties back to original user goal>
+- Proof loop:
+  - score/reject/route/patch/rerun/rescore — <checks run, failed evidence rejected, repair made, rerun result>
+  - plan-mode baseline — <comparison result against normal coding-agent plan mode or blocker; keep `agentic_chat` unqualified if not run>
 
 ## Blocked
 
@@ -50,8 +71,10 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 - any capability maturity level whose proof above is blocked — do not claim `agentic_chat` without a model-driven action + approval-gated audited execution trace, and do not claim `agentic_swarm` without a real parallel subagent + supervisor synthesis trace
 - model-driven action selection claimed while the build still relies on user-typed slash commands or keyword/regex intent matching
 - parallel swarm claimed while subagents actually run sequentially or are fabricated
+- tools/skills, MCP, memory/compaction, or subagents when they lack typed runtime paths, policy states, audit records, and product-loop proof
 - paid-provider quality or public hosting when only the local default provider was proven
 - <claim that should not be made yet>
+- <architecture, project structure, or runtime ownership claim that is not proven by architecture/*.md, PROJECT_STRUCTURE.md, and ARCHITECTURE_STRUCTURE_TRACE.md>
 - <central output quality claim that should not be made yet>
 - <selected typed quality gate that did not run or did not pass>
 - <consumer/action UI or visual taste claim that is not proven by .buildprint/ui-evidence.md, independent review, docs/DESIGN.md, and screenshot comparison>
@@ -74,4 +97,4 @@ Always offer the next agent a concrete continue menu, and gate the live items on
 
 ## Handoff warning
 
-Do not claim completion beyond the evidence above. Visible controls must work or block honestly; provider/deployment/security claims require matching proof. Do not treat technically input-derived but domain-generic output as product completion. Do not claim consumer-grade, action-forward, visually tasteful, or distinctive UI unless `docs/ui-identity.md`, `docs/DESIGN.md`, `.buildprint/ui-evidence.md`, screenshots, and independent review prove it against the nearest bad silhouette and visual craft checks.
+Do not claim completion beyond the evidence above. Visible controls must work or block honestly; provider/deployment/security claims require matching proof. Do not treat technically input-derived but domain-generic output as product completion. Do not claim the implementation has a sound architecture or maintainable project structure unless `architecture/*.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md` prove product-specific components, labeled flows, component-to-code mapping, responsibility ownership, and score `4` or `5`. Do not claim consumer-grade, action-forward, visually tasteful, or distinctive UI unless `docs/ui-identity.md`, `docs/DESIGN.md`, `.buildprint/ui-evidence.md`, screenshots, and independent review prove it against the nearest bad silhouette and visual craft checks.
