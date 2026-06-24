@@ -537,7 +537,7 @@ edit(bufferedAgenticStreamingPhase, '03-phases/01-real-streaming-chat.md', (s) =
   .replace(/before completion/g, 'after completion')
   .replace(/AbortSignal/g, 'stop button')
   .replace(/timeout/g, 'failure')
-  .replace(/provider runtime interface/g, 'provider layer'))
+  .replace(/ChatProvider|provider interface/g, 'provider layer'))
 expectFailure('agentic-chat eval rejects buffered streaming phase',
   ['packet', 'check', bufferedAgenticStreamingPhase],
   ['✗ agentic-chat phase 01 requires real incremental streaming proof'])

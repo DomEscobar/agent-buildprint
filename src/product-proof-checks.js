@@ -49,7 +49,7 @@ export function phaseProofChecks({ file, text, objective, isMapperTemplatePacket
         /not buffered|before completion|first delta/i,
         /cancel|AbortSignal/i,
         /timeout/i,
-        /provider runtime interface/i,
+        /ChatProvider|provider interface/i,
       ]),
     })
   }
