@@ -10,7 +10,7 @@
   "runtime": ["Capability Buildprint packet"],
   "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md", "00-host-assessment.md", "00-assessment-questions.md", "01-integration-plan.md", "02-implementation-phases/", "references/research-basis.md", "examples/core-chat-scenario.yaml", "examples/eval-receipt.md"],
   "iconKeys": ["chat", "trace", "shield"],
-  "difficulty": "Hard",
+  "difficulty": "Advanced",
   "featured": true,
   "summary": "A trace-aware, scenario-based Capability Buildprint for grafting a rigorous Agentic Chat evaluation harness into an existing host, with profiles for core chat, tool/actions, memory/state, provider routing, UI proof, and optional RAG grounding.",
   "promise": "Gives coding agents a phased implementation contract for proving whether an existing Agentic Chat runtime behaves correctly under multi-turn, tool, state, routing, UI, and optional RAG scenarios, with deterministic gates behind any model-judge scoring.",
