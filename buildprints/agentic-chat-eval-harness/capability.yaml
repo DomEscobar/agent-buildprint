@@ -1,0 +1,318 @@
+schema: agent-buildprint/capability.v0
+name: agentic-chat-eval-harness
+type: capability
+title: Agentic Chat Eval Harness
+description: Adds a trace-aware, scenario-based eval harness for existing Agentic Chat systems, with optional RAG grounding and permission profiles.
+capability: eval.agentic-chat-harness
+status: draft
+canonical_start: BUILDPRINT.md
+execution_profile: strict
+claim_status: unproven
+host_frameworks:
+  - nextjs
+  - react
+  - node-api
+  - python-api
+  - fastapi
+  - django
+  - express
+  - hono
+  - openai-agents-sdk
+  - langchain
+  - llamaindex
+  - custom-agent-runtime
+host_detection:
+  package_files:
+    - package.json
+    - pyproject.toml
+    - requirements.txt
+  chat_signals:
+    - chat route, chat component, or conversation service
+    - agent loop, planner, tool runner, or action dispatcher
+    - provider router, model adapter, or streaming helper
+    - transcript, message, run, state, memory, or trace model
+  tool_signals:
+    - tool registry
+    - MCP client/server
+    - action executor
+    - background job worker
+    - side-effect services
+  rag_signals:
+    - retrieval service
+    - vector store
+    - keyword search
+    - citation/evidence model
+    - document/chunk tables
+  ui_signals:
+    - streaming UI
+    - tool status display
+    - receipt/debug route
+    - screenshot/e2e test tooling
+  inspect_paths:
+    - package.json
+    - pyproject.toml
+    - requirements.txt
+    - app/
+    - src/
+    - server/
+    - api/
+    - agents/
+    - tools/
+    - mcp/
+    - evals/
+    - tests/
+    - docs/
+requires:
+  env:
+    - model provider key when model-judge or live model regression is used
+    - optional observability backend key when host chooses SaaS tracing
+  existing_capabilities:
+    - chat.agentic_runtime
+    - chat.conversation_transcript
+    - eval.host_test_runner
+  human_decisions:
+    - which chat flows are production-critical
+    - which tools/actions may execute in tests
+    - whether destructive actions must be mocked, sandboxed, or blocked
+    - whether model-judge scoring may call external providers
+    - whether RAG profile is in scope for this host
+    - which observability backend, if any, is approved
+touches:
+  - eval runner
+  - scenario fixtures
+  - trace/span schema
+  - model/provider adapter
+  - chat runtime adapter
+  - tool/action adapter
+  - simulated user adapter
+  - scorer registry
+  - CI/regression scripts
+  - receipts and reports
+  - optional RAG evaluation fixtures
+  - optional UI proof fixtures
+contract:
+  profiles:
+    - core-chat
+    - tool-actions
+    - memory-state
+    - provider-routing
+    - ui-proof
+    - rag
+  mandatory_scenario_fields:
+    - id
+    - title
+    - profile
+    - starting_state
+    - user_goal
+    - allowed_tools
+    - forbidden_tools
+    - expected_trace_events
+    - expected_outcome
+    - pass_gates
+  mandatory_trace_span_fields:
+    - run_id
+    - scenario_id
+    - span_id
+    - parent_span_id
+    - span_type
+    - started_at
+    - ended_at
+    - actor
+    - input_ref
+    - output_ref
+    - status
+    - error
+  mandatory_receipt_fields:
+    - run_id
+    - scenario_version
+    - host_commit
+    - profiles_run
+    - commands_run
+    - pass_fail_summary
+    - score_summary
+    - trace_artifacts
+    - blockers
+    - claim_status
+apply:
+  inspect:
+    - chat runtime and conversation loop
+    - streaming and provider routing path
+    - tool registry, action executor, and side-effect surfaces
+    - transcript, state, memory, and trace persistence
+    - host test runner and CI pattern
+    - existing observability or tracing hooks
+    - optional RAG retrieval and citation surfaces
+    - optional UI/e2e screenshot tooling
+  steps:
+    - assess host runtime, tools, state, proof surfaces, and risk boundaries
+    - write eval harness plan, profile plan, and safety plan
+    - define scenario schema, trace schema, scorer registry, and receipt schema
+    - implement core runner and host adapters
+    - implement deterministic scorers and bounded judge scorers
+    - implement profile fixtures for core chat, tools, memory, routing, UI, and optional RAG
+    - wire regression command and CI-friendly receipt output
+    - run scenarios and reconcile final proof level
+  forbidden:
+    - grade only the final answer while ignoring trace and side effects
+    - execute destructive tools against production systems
+    - let model-judge scores override deterministic security or side-effect failures
+    - report RAG quality without retrieved context and citation artifacts
+    - report UI quality without screenshot, DOM, or interaction proof
+    - hide flaky or unavailable host checks behind a success claim
+verify:
+  proof_level: runtime
+  commands:
+    - baseline tests/build pass or blockers recorded
+    - package test command if present
+    - package lint/typecheck command if present
+    - package build command if relevant
+    - eval harness regression command
+  runtime_checks:
+    - at least one core-chat scenario passes with trace evidence
+    - at least one tool-action scenario proves expected side effects
+    - at least one blocked/error scenario proves recovery or honest stop
+    - trace spans include model, tool, state, and final response events
+    - receipt records scenario version, host commit, commands, artifacts, and claim status
+    - model-judge scorers are rubric-bound and not sole proof for sensitive gates
+    - optional RAG profile proves allow, deny, citation, and weak-evidence behavior when enabled
+    - optional UI profile proves streaming/action states with screenshot or DOM evidence when enabled
+  blocked_checks:
+    - no accessible chat runtime blocks implementation
+    - no safe test runner or sandbox blocks runtime proof
+    - destructive tools without sandbox block tool-action scenarios
+    - missing trace hooks cap proof below runtime
+    - no scenario owner or production-critical flow list blocks usefulness claim
+    - external judge provider approval missing blocks live judge scoring
+risk:
+  level: high
+  reason: Evaluates agent behavior that may call tools, mutate state, use private transcripts, trigger external providers, inspect RAG evidence, or produce false confidence about production readiness.
+failure_modes:
+  - final-answer-only grading hides bad tool calls or unsafe side effects
+  - model judge rewards plausible text despite failed trace or state proof
+  - test tools hit production services or perform destructive actions
+  - missing trace hooks create unverified pass claims
+  - RAG profile passes answer relevance while leaking forbidden context
+  - UI proof claims success while the user sees stuck, fake, or raw debug states
+  - scenario fixtures drift from production flows
+  - flaky live-model runs are treated as deterministic regression proof
+composition:
+  expects:
+    - chat.agentic_runtime
+    - chat.conversation_transcript
+    - eval.host_test_runner
+  provides:
+    - eval.agentic_chat_scenarios
+    - eval.trace_scoring
+    - eval.tool_action_scoring
+    - eval.memory_state_scoring
+    - eval.provider_routing_scoring
+    - eval.regression_receipts
+  composes_with:
+    - eval.rag-harness
+    - ai.secure-hybrid-rag-mcp
+    - llm.observability
+    - ui.proof-harness
+    - tool-use-eval
+  conflicts_with:
+    - transcript-only chat systems with no testable runtime path
+    - production-only tool execution with no sandbox or mock mode
+    - eval approaches that rely only on model-judge final answer scoring
+proposed_integration_paths:
+  default: self-contained
+  decision: deferred
+  rationale: Default path keeps the harness auditable in one place. Adoption of any 3rd-party path requires an adapter layer so existing gates and invariants stay authoritative.
+  paths:
+    - id: inspect-ai-runtime
+      summary: Use Inspect AI as runtime layer for scenario execution, model-graded checks, and trace structure behind the existing gates.
+      target_profiles: [core-chat, tool-actions, memory-state]
+      adapter_layer: required
+      integration:
+        - scenarios executed via Inspect solvers/tools
+        - model-graded checks run as bounded scorers behind deterministic gates
+        - Inspect traces mapped into the TraceSpan contract
+        - existing pass/forbid/forbidden rules stay authoritative
+      tradeoffs:
+        - pros: serious multi-turn/multi-model eval framework, model-graded checks, native tools
+        - cons: heavier runtime, new dependency surface, additional audit boundary
+      decision_questions:
+        - does the host need model-graded judge capability beyond deterministic gates?
+        - can the host accept a Python-leaning runtime dependency (or adapter shim)?
+        - who owns the adapter layer between Inspect and the TraceSpan contract?
+    - id: braintrust-telemetry
+      summary: Use Braintrust as observability and UI layer for ScoreResult, eval history, and regression comparison.
+      target_profiles: [provider-routing, ui-proof]
+      adapter_layer: required
+      integration:
+        - ScoreResult events streamed to Braintrust
+        - eval history used for regression comparison
+        - receipts remain the authoritative pass/fail artifact
+      tradeoffs:
+        - pros: eval UI, history, regression comparison, scoring libraries
+        - cons: hosted or self-hosted cost, data flows outside the host, new privacy boundary
+      decision_questions:
+        - is hosted eval telemetry acceptable, or must it be self-hosted?
+        - which data may leave the host boundary?
+        - does the host already use Braintrust for other telemetry?
+    - id: ragas-trulens-rag-metrics
+      summary: Use Ragas/TruLens metrics inside the optional rag profile only.
+      target_profiles: [rag]
+      adapter_layer: required
+      integration:
+        - Ragas context precision/recall, faithfulness, answer relevance
+        - TruLens RAG triad (context relevance, groundedness, answer relevance)
+        - scores feed into rag profile ScoreResult; gates remain authoritative
+      tradeoffs:
+        - pros: specialized, well-tested RAG metrics
+        - cons: RAG only, extra dependency surface, additional scoring semantics to govern
+      decision_questions:
+        - is the optional rag profile in scope for this host?
+        - does the host accept Ragas/TruLens as the rag profile scoring library?
+        - who owns the metric-to-gate mapping?
+    - id: tau-bench-scenario-pattern
+      summary: Adopt tau-bench pattern: simulated user + tools + policies + verifiable task state for core-chat scenarios.
+      target_profiles: [core-chat]
+      adapter_layer: optional
+      integration:
+        - simulated user persona, goal, and tool policies per scenario
+        - verifiable end-state checks
+        - existing trace/side-effect gates still authoritative
+      tradeoffs:
+        - pros: realistic multi-turn testing, deterministic user, verifiable task completion
+        - cons: scenario authoring cost, deterministic user simulation required
+      decision_questions:
+        - does the host have production-critical flows that need simulated-user scenarios?
+        - is the host willing to author/maintain scenario personas and policies?
+    - id: openai-evals-iteration-loop
+      summary: Adopt OpenAI Evals iteration loop pattern (private/custom eval registry) for core-chat and tool-actions.
+      target_profiles: [core-chat, tool-actions]
+      adapter_layer: optional
+      integration:
+        - private eval registry with versioned scenarios
+        - iteration loop (run -> grade -> diff -> improve) wired to the receipt format
+        - no external dependency required to adopt the pattern
+      tradeoffs:
+        - pros: lightweight pattern, self-implementable
+        - cons: less scaffolding than full frameworks
+      decision_questions:
+        - does the host want a versioned eval registry beyond the scenario files?
+        - is the iteration loop valuable even without a managed eval runner?
+    - id: hybrid-self-plus-adapter
+      summary: Keep this buildprint self-contained and add an optional adapter layer per adopted path.
+      target_profiles: [core-chat, tool-actions, memory-state, provider-routing, ui-proof, rag]
+      adapter_layer: required
+      integration:
+        - adapter layer wraps 3rd-party tools behind the existing contracts
+        - gates remain authoritative regardless of which adapter is active
+        - adapter presence/absence is recorded in the receipt
+      tradeoffs:
+        - pros: harness stays auditable, 3rd-party tools remain opt-in
+        - cons: adapter authoring cost, dual maintenance
+      decision_questions:
+        - is the host willing to maintain an adapter layer?
+        - which 3rd-party paths are likely to be adopted?
+  guardrails:
+    - any adopted path must run behind the existing deterministic gates
+    - model-judge scores may never override security, side-effect, or proof gates
+    - adapters must surface in the receipt (present/absent/version)
+    - destructive tools stay sandboxed/mocked/blocked regardless of adapter
+    - adopted paths keep trace evidence as the primary signal over the final answer alone

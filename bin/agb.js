@@ -360,9 +360,13 @@ function isCredentialCapability(capability, buildprint, publication) {
 }
 
 function isSecureRagCapability(capability, buildprint, publication) {
-  const text = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'description')} ${buildprint}\n${publication}`
-  return /\brag\b|retrieval[- ]augmented generation|hybrid retrieval/i.test(text) &&
-    /acl|authorization|permission|rights-aware|secure/i.test(text)
+  const identity = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'title')} ${yamlScalar(capability, 'description')}`
+  return /(secure[-_\s]?hybrid[-_\s]?rag|secure[-_\s]?rag|hybrid[-_\s]?rag|rights-aware hybrid retrieval|ai\.secure-hybrid-rag-mcp)/i.test(identity)
+}
+
+function isAgenticChatEvalCapability(capability, buildprint, publication) {
+  const identity = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'title')} ${yamlScalar(capability, 'description')} ${publication}`
+  return /agentic[-_\s]?chat/i.test(identity) && /eval|harness|evaluation/i.test(identity)
 }
 
 function hasDiscoveryDecisionGate(text) {
@@ -466,6 +470,7 @@ function capabilityPacketCheckResults(dir) {
   const expectedCapabilityItems = yamlListItemsInSection(capability, 'composition', 'expects')
   const credentialCapability = isCredentialCapability(capability, buildprint, publication)
   const secureRagCapability = isSecureRagCapability(capability, buildprint, publication)
+  const agenticChatEvalCapability = isAgenticChatEvalCapability(capability, buildprint, publication)
 
   for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
   ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
@@ -549,6 +554,23 @@ function capabilityPacketCheckResults(dir) {
       /reindex/i.test(combinedCapabilityText) && /delete|deletion|invalidate/i.test(combinedCapabilityText))
     ok('secure RAG capability forbids raw sensitive context logging by default',
       /(do not log|must not log|forbid|forbidden)[\s\S]{0,120}(raw|sensitive)[\s\S]{0,80}(chunk|content|context)|raw sensitive[\s\S]{0,80}(logging|logs)[\s\S]{0,80}(default)/i.test(combinedCapabilityText))
+  }
+
+  if (agenticChatEvalCapability) {
+    ok('agentic chat eval requires trace-aware scenario harness',
+      /scenario/i.test(combinedCapabilityText) && /trace|span/i.test(combinedCapabilityText) && /scenario-based|scenario runner|scenario fixtures/i.test(combinedCapabilityText))
+    ok('agentic chat eval forbids final-answer-only grading',
+      /final[- ]answer[- ]only|score only final|grade only the final answer|No pass from final text alone/i.test(combinedCapabilityText))
+    ok('agentic chat eval requires tool side-effect proof',
+      /tool|action/i.test(combinedCapabilityText) && /side[- ]effect/i.test(combinedCapabilityText) && /proof|receipt|expected/i.test(combinedCapabilityText))
+    ok('agentic chat eval bounds model-judge scoring behind deterministic gates',
+      /model[- ]judge/i.test(combinedCapabilityText) && /deterministic/i.test(combinedCapabilityText) && /(never the sole proof|cannot be overridden|override|bounded|advisory)/i.test(combinedCapabilityText))
+    ok('agentic chat eval requires safe sandbox or mock mode for destructive tools',
+      /destructive/i.test(combinedCapabilityText) && /sandbox|mock|blocked/i.test(combinedCapabilityText))
+    ok('agentic chat eval handles optional RAG profile as proven or not-proven/blocked',
+      /optional RAG profile|rag profile/i.test(combinedCapabilityText) && /not-proven|blocked/i.test(combinedCapabilityText))
+    ok('agentic chat eval ships example scenario and receipt artifacts',
+      files.has('examples/core-chat-scenario.yaml') && files.has('examples/eval-receipt.md'))
   }
 
   for (const file of phaseFiles) {

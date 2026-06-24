@@ -1,0 +1,142 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": true,
+  "slug": "agentic-chat-eval-harness",
+  "title": "Agentic Chat Eval Harness",
+  "creator": "Agent Buildprint",
+  "category": "Feature / Extension",
+  "tier": "agent-grade",
+  "status": "publishable-draft",
+  "runtime": ["Capability Buildprint packet"],
+  "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md", "00-host-assessment.md", "00-assessment-questions.md", "01-integration-plan.md", "02-implementation-phases/", "references/research-basis.md", "examples/core-chat-scenario.yaml", "examples/eval-receipt.md"],
+  "iconKeys": ["chat", "trace", "shield"],
+  "difficulty": "Hard",
+  "featured": true,
+  "summary": "A trace-aware, scenario-based Capability Buildprint for grafting a rigorous Agentic Chat evaluation harness into an existing host, with profiles for core chat, tool/actions, memory/state, provider routing, UI proof, and optional RAG grounding.",
+  "promise": "Gives coding agents a phased implementation contract for proving whether an existing Agentic Chat runtime behaves correctly under multi-turn, tool, state, routing, UI, and optional RAG scenarios, with deterministic gates behind any model-judge scoring.",
+  "includes": [
+    "Agentic Chat eval capability contract with 6 profiles (core-chat, tool-actions, memory-state, provider-routing, ui-proof, optional rag)",
+    "trace-aware scenario harness contract (Scenario, TraceSpan, EvalRun, ScoreResult, Receipt)",
+    "host assessment checkpoint before any source edits",
+    "assessment-led questions after host assessment",
+    "3rd Party Integration Discovery questions for Inspect AI, Braintrust, Ragas/TruLens, tau-bench pattern, OpenAI Evals loop, and hybrid self+adapter paths",
+    "phased grafting protocol with 5 implementation phases",
+    "machine-readable capability.yaml standard",
+    "compatibility and composition model",
+    "example scenario fixture (core-chat-scenario.yaml)",
+    "example eval receipt (eval-receipt.md)",
+    "research basis with OpenAI Evals, Inspect AI, Braintstack, Ragas, TruLens, and tau-bench references"
+  ],
+  "risks": [
+    "Evaluates agent behavior that may call tools, mutate state, use private transcripts, trigger external providers, inspect RAG evidence, or produce false confidence about production readiness",
+    "Model-judge scoring can reward plausible text despite failed trace or state proof if not bounded by deterministic gates",
+    "Test tools may hit production services or perform destructive actions unless sandbox/mocked/blocked",
+    "Missing trace hooks create unverified pass claims",
+    "RAG profile can pass answer relevance while leaking forbidden context if allow/deny/citation proof is skipped",
+    "UI proof claims can hide stuck, fake, or raw debug states behind a success claim",
+    "Scenario fixtures drift from production flows if not versioned",
+    "Flaky live-model runs can be treated as deterministic regression proof if not bounded",
+    "3rd-party integration paths (Inspect AI, Braintstack, Ragas/TruLens, tau-bench pattern) introduce new audit boundaries that must run behind deterministic gates"
+  ],
+  "checks": [
+    "Read BUILDPRINT.md first",
+    "Write host assessment before edits",
+    "Write capability plan before implementation",
+    "Use trace-aware scenario harness; do not grade only the final answer",
+    "Capture model, tool, state, retrieval (when present), and final response events in trace spans",
+    "Prove tool/action side effects; sandbox/mock/block destructive tools",
+    "Bound model-judge scoring behind deterministic gates",
+    "Prove optional RAG allow, deny, citation, and weak-evidence behavior before claiming RAG coverage",
+    "Prove optional UI streaming/action/error/blocked states with screenshot, DOM, or interaction evidence",
+    "Write capability receipt with proof level and blockers",
+    "Record 3rd-party integration path decision (default: deferred/self-contained)"
+  ],
+  "trustBadges": [
+    {
+      "label": "Guarded capability",
+      "detail": "Uses phased host assessment, planning, implementation, verification, and receipt.",
+      "tone": "info"
+    },
+    {
+      "label": "Trace-aware",
+      "detail": "Scores trace + side effects + state, not just the final answer.",
+      "tone": "success"
+    },
+    {
+      "label": "High risk declared",
+      "detail": "Evaluates agent behavior that may call tools, mutate state, and inspect RAG evidence.",
+      "tone": "warning"
+    },
+    {
+      "label": "3rd-party optional",
+      "detail": "Proposes Inspect AI, Braintstack, Ragas/TruLens, tau-bench pattern, and OpenAI Evals loop as deferred adapters behind the existing gates.",
+      "tone": "info"
+    },
+    {
+      "label": "Locally verifiable",
+      "detail": "Scenario + receipt fixtures and deterministic gates can prove core-chat, tool, state, routing, UI, and optional RAG behavior.",
+      "tone": "success"
+    }
+  ],
+  "publicStatus": {
+    "label": "Draft v0 (publishable)",
+    "explanation": "First draft of the Agentic Chat Eval Harness Capability Buildprint. Shipped with full packet structure, trace-aware scenario contract, deterministic-gate invariant, optional RAG profile, 3rd-party integration path discovery, and example scenario + receipt fixtures. Has not yet been applied to a real host with runtime proof; runtime dogfooding receipts will be added under examples/ as they are produced."
+  },
+  "whatYouGet": [
+    "A bounded Agentic Chat eval harness contract",
+    "Trace-aware scenario harness with model/tool/state/retrieval/final-response spans",
+    "Six evaluation profiles including optional RAG grounding",
+    "Deterministic gates behind any model-judge scoring",
+    "Sandbox/mock/block policy for destructive tools",
+    "Phased implementation files (contract, runner, host wiring, scorers, verification)",
+    "Compatibility and composition model",
+    "Example scenario fixture and example eval receipt",
+    "3rd-party integration path discovery (Inspect AI, Braintstack, Ragas/TruLens, tau-bench pattern, OpenAI Evals loop)"
+  ],
+  "whatYouNeed": [
+    "An existing Agentic Chat host runtime with conversation loop, transcript, and test runner",
+    "A traceable tool/action surface with sandbox or mock mode for destructive tools",
+    "A provider router or model adapter that can be observed under eval",
+    "An optional RAG retrieval and citation surface if the rag profile is enabled",
+    "An optional UI surface if the ui-proof profile is enabled",
+    "A regression command that gates future changes",
+    "Acceptable cost, latency, and flakiness ceiling for live-model scenarios"
+  ],
+  "howToUse": [
+    {
+      "title": "Load the packet",
+      "detail": "Use the package manifest and read BUILDPRINT.md first."
+    },
+    {
+      "title": "Assess the host",
+      "detail": "Write .buildprint/host-assessment.md before edits."
+    },
+    {
+      "title": "Answer hard-stop questions",
+      "detail": "Resolve production-critical flows, tool side-effect policy, sandbox strategy, model-judge privacy, RAG privacy, and CI cost ceiling before implementation."
+    },
+    {
+      "title": "Decide 3rd-party integration",
+      "detail": "Run the 3rd Party Integration Discovery in 00-assessment-questions.md. Default path is self-contained (deferred). Adopted paths run behind the existing deterministic gates."
+    },
+    {
+      "title": "Plan and graft",
+      "detail": "Write .buildprint/capability-plan.md, then implement each phase in order."
+    },
+    {
+      "title": "Verify honestly",
+      "detail": "Prove scenario, trace, side-effect, optional RAG, and optional UI behavior, then record the actual proof level and integration-path decision."
+    }
+  ],
+  "resultChecklist": [
+    "Scenario fixtures are versioned and runnable",
+    "Trace spans capture model, tool, state, retrieval (when present), and final response events",
+    "Deterministic scorers fail on wrong tool calls, missing side effects, unsafe state changes, and missing artifacts",
+    "Model-judge scorers are optional, rubric-bound, and never the sole proof for high-risk gates",
+    "Receipt records commands, artifacts, scenarios, scores, blockers, and claim status",
+    "Optional RAG profile proves allow, deny, citation, weak-evidence, and stale/deleted-content behavior before claiming RAG coverage",
+    "Optional UI profile proves streaming/action/error/blocked states with screenshot, DOM, or interaction evidence",
+    "Destructive tools are sandboxed, mocked, or blocked",
+    "Integration path decision is recorded (default: deferred/self-contained)"
+  ]
+}

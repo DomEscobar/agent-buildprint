@@ -6,6 +6,7 @@ import path from 'node:path'
 const root = path.resolve(import.meta.dirname, '..')
 const source = path.join(root, 'buildprints', 'api-key-management')
 const secureRagSource = path.join(root, 'buildprints', 'secure-hybrid-rag-mcp')
+const agenticChatEvalSource = path.join(root, 'buildprints', 'agentic-chat-eval-harness')
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'agb-capability-regression-'))
 
 function copyPacket(name) {
@@ -20,11 +21,39 @@ function copySecureRagPacket(name) {
   return packet
 }
 
+function copyAgenticChatEvalPacket(name) {
+  const packet = path.join(temp, name)
+  fs.cpSync(agenticChatEvalSource, packet, { recursive: true })
+  return packet
+}
+
 function replaceInFile(packet, relativePath, replacements) {
   const file = path.join(packet, relativePath)
   let text = fs.readFileSync(file, 'utf8')
   for (const [pattern, replacement] of replacements) text = text.replace(pattern, replacement)
   fs.writeFileSync(file, text)
+}
+
+function replaceInAllFiles(packet, replacements) {
+  function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) {
+        walk(full)
+        continue
+      }
+      if (!entry.isFile()) continue
+      let text = fs.readFileSync(full, 'utf8')
+      let changed = false
+      for (const [pattern, replacement] of replacements) {
+        const next = text.replace(pattern, replacement)
+        changed = changed || next !== text
+        text = next
+      }
+      if (changed) fs.writeFileSync(full, text)
+    }
+  }
+  walk(packet)
 }
 
 function expectCapabilityFailure(name, mutate, expectedFailures) {
@@ -34,6 +63,11 @@ function expectCapabilityFailure(name, mutate, expectedFailures) {
 
 function expectSecureRagFailure(name, mutate, expectedFailures) {
   const packet = copySecureRagPacket(name)
+  expectPacketFailure(name, packet, mutate, expectedFailures)
+}
+
+function expectAgenticChatEvalFailure(name, mutate, expectedFailures) {
+  const packet = copyAgenticChatEvalPacket(name)
   expectPacketFailure(name, packet, mutate, expectedFailures)
 }
 
@@ -126,6 +160,33 @@ try {
       [/\r?\n\s+- claim success without denied-path proof/g, ''],
     ])
   }, ['secure RAG capability proves allow and deny retrieval paths'])
+
+  expectAgenticChatEvalFailure('capability regression catches missing agentic chat trace harness', (packet) => {
+    replaceInAllFiles(packet, [
+      [/\btrace-aware\b/gi, 'event-aware'],
+      [/trace/gi, 'event'],
+      [/span/gi, 'event'],
+    ])
+  }, ['agentic chat eval requires trace-aware scenario harness'])
+
+  expectAgenticChatEvalFailure('capability regression catches final-answer-only eval drift', (packet) => {
+    replaceInFile(packet, 'README.md', [
+      [/\r?\n- No pass from final text alone\./g, ''],
+    ])
+    replaceInFile(packet, 'capability.yaml', [
+      [/\r?\n\s+- grade only the final answer while ignoring trace and side effects/g, ''],
+      [/\r?\n\s+- final-answer-only grading hides bad tool calls or unsafe side effects/g, ''],
+      [/    - adopted paths keep trace evidence as the primary signal over the final answer alone\r?\n/g, ''],
+    ])
+    replaceInFile(packet, 'apply.md', [
+      [/\r?\n- Do not score only final assistant text\./g, ''],
+    ])
+  }, ['agentic chat eval forbids final-answer-only grading'])
+
+  expectAgenticChatEvalFailure('capability regression catches missing agentic chat examples', (packet) => {
+    fs.rmSync(path.join(packet, 'examples', 'core-chat-scenario.yaml'), { force: true })
+    fs.rmSync(path.join(packet, 'examples', 'eval-receipt.md'), { force: true })
+  }, ['agentic chat eval ships example scenario and receipt artifacts'])
 } finally {
   fs.rmSync(temp, { recursive: true, force: true })
 }
