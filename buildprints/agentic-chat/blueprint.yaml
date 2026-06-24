@@ -10,7 +10,7 @@ deployment_posture:
     - trusted_local
     - private_authenticated
     - public_webapp
-  claim_ceiling: a user-selected real provider streaming real tokens is the proven outcome floor; paid-provider and public hosting claims require configured credentials plus runtime proof; tools/skills, MCP, memory/compaction, and subagents are deferred to EXTENSIONS.md and are out of 1.0 scope.
+  claim_ceiling: a user-selected real provider streaming real tokens is the proven outcome floor; paid-provider and public hosting claims require configured credentials plus runtime proof; the model-driven tool/skill/MCP/memory action loop (agentic_chat) and parallel subagent swarm dispatching (agentic_swarm) require typed runtime paths, approval gates, per-run traces, and product-loop proof, or explicit blockers, before their claims may be made.
 
 read_order:
   - BUILDPRINT.md
@@ -24,8 +24,8 @@ read_order:
   - HANDOVER.md
 
 packet_shape:
-  style: phase_driven_comprehensive
-  principle: YAML routes; markdown teaches and builds.
+  style: phase_driven_comprehensive_with_agentic_swarm
+  principle: YAML routes; markdown teaches and builds; execution loops are explicit contracts, not optional prose.
   required_files:
     - BUILDPRINT.md
     - 00-questions.md
@@ -66,9 +66,99 @@ phase_contract:
     - generated/agent-prompt.md
     - generated/codex-handoff.md
 
+execution_model:
+  mode: agentic_loop
+  rule: Buildprints are not linear phase recipes. A coding agent iterates through builder, product, and proof loops until the product contract passes, an iteration budget is exhausted, or an external blocker is recorded.
+  iteration_budget:
+    minimum_repair_iterations: 1
+    maximum_repair_iterations: 5
+    stop_only_on:
+      - contract_passed_with_evidence
+      - external_blocker_recorded
+      - iteration_budget_exhausted_with_failure
+  builder_loop:
+    name: Buildprint Builder Loop
+    steps:
+      - observe current repo, app, screenshots, logs, tests, and handoff state
+      - interpret gaps against central_output_contract, capability_maturity, docs/ui-identity.md, and docs/DESIGN.md
+      - plan the smallest real repair that advances the product contract
+      - act by changing implementation, tests, docs, fixtures, or proof artifacts
+      - inspect runtime, browser, API, logs, persistence, and generated evidence
+      - critique the result against predicted failure modes and nearest bad silhouettes
+      - repair one concrete weakness before advancing unless none is found
+      - verify with commands, browser/API transcripts, screenshots, readback, and claim checks
+      - decide pass, continue, or fail honestly
+  product_loop:
+    name: Agentic Chat Product Loop
+    required_for_agentic_chat_claim:
+      - goal intake in the chat composer or thread context
+      - plan or next-step state visible in product language
+      - model-driven action selection across model, tool, skill, MCP, and memory paths (not user-typed slash commands or keyword pattern-matching)
+      - policy/approval gate before side-effecting actions
+      - execution trace attached to the relevant message or turn
+      - observation/result ingestion fed back to the model for the next step
+      - critique/retry/recovery path for failed actions within a bounded budget
+      - resumable state after reload or restart
+      - final synthesis tied to the original user goal
+    required_for_agentic_swarm_claim:
+      - supervisor decomposes a goal into typed, parallelizable subtasks
+      - parallel subagent dispatch with bounded concurrency and a work queue
+      - per-subagent run id, isolated context, scoped tool/MCP access, and independent trace
+      - fan-in aggregation that the supervisor synthesizes into one answer tied to the goal
+      - approval gate before spawning a swarm that performs side effects
+      - per-subagent and whole-swarm cancellation
+      - bounded per-subagent retry and partial-failure handling (some workers fail, swarm still synthesizes honestly)
+      - resumable swarm run, subagent records, and aggregation after restart
+  proof_loop:
+    name: Evidence Repair Loop
+    steps:
+      - score the current artifact against central output, maturity, UI, runtime, and claim gates
+      - reject stale, generic, prose-only, screenshot-missing, or fake-success evidence
+      - route each failure to setup, UI identity, implementation phase, or critical review
+      - patch the smallest real weakness
+      - rerun the affected proof
+      - rescore until pass, blocker, or iteration budget exhaustion
+
+capability_maturity:
+  current_floor: streaming_chat_core
+  full_claim: agentic_swarm
+  rule: Do not call the artifact agentic until the model-driven action loop is proven, and do not call it a swarm until parallel subagent dispatch with supervisor synthesis is proven. Each level is a strictly higher claim with its own evidence.
+  levels:
+    streaming_chat_core:
+      claim: real-model streaming chat foundation
+      required:
+        - real provider token streaming
+        - provider routing and blocked states
+        - durable sessions/messages/events/routes/telemetry
+        - cancellation/retry/error recovery
+        - polished chat-native UI
+    agentic_chat:
+      claim: model-driven single-agent tool loop
+      required:
+        - planning/next-step loop
+        - model-driven action selection via provider tool/function calling, not slash commands or keyword pattern-matching
+        - tool/skill execution policy with typed results
+        - MCP adapter posture and allowlist boundary when enabled
+        - memory/compaction read/write policy with audit trail
+        - approval gates for side effects
+        - observation re-ingestion, critique, bounded retry, and resumable trace
+        - final synthesis tied to the original goal
+    agentic_swarm:
+      claim: parallel multi-agent swarm dispatching
+      required:
+        - supervisor goal decomposition into typed subtasks
+        - parallel subagent spawning with bounded concurrency and queue
+        - isolated per-subagent context, scoped tool/MCP access, and independent trace
+        - fan-out dispatch and fan-in supervisor synthesis tied to the goal
+        - approval gate before side-effecting swarms
+        - per-subagent and whole-swarm cancellation
+        - bounded retry and honest partial-failure synthesis
+        - resumable swarm run, subagent records, and aggregation after restart
+        - benchmark evidence that the swarm build beats a single-agent and normal plan-mode baseline on completeness, latency-aware orchestration, UI, runtime behavior, and proof quality
+
 agent_contract:
   role: Senior Product Engineer
-  rule: Build the agentic chat runtime honestly. Streaming, provider, tool, MCP, memory, subagent, telemetry, WebUI, and safety claims require direct proof or explicit blockers.
+  rule: Build the agentic chat runtime honestly. Streaming, provider, tool, MCP, memory, subagent, swarm, telemetry, WebUI, and safety claims require direct proof or explicit blockers. A streaming-only product may pass the foundation floor but must not be marketed as agentic; a single-agent loop must not be marketed as a swarm.
 
 harness:
   provider: agents
@@ -79,20 +169,27 @@ harness:
   selection_rule: Use only profiles that match this artifact. Do not expand to full unless broad coverage is explicitly worth the extra context.
 
 central_output_contract:
-  rule: The central output must be specific to Agentic Chat, not a generic shell with renamed labels.
-  central_output: Durable real-model streaming conversation with provider/route/usage trace and actionable blocked states.
+  rule: The central output must be specific to Agentic Chat, not a generic shell with renamed labels. At full maturity it is a model-driven multi-agent swarm that conducts real work inside a chat-native surface.
+  central_output: A chat-native agent that streams real model tokens, autonomously selects and runs allowlisted tools/MCP/memory actions behind approval gates, and at full maturity dispatches a parallel subagent swarm whose results the supervisor synthesizes into one answer — all durably traced and inspectable.
   output_primitives:
     - session and message records
     - incremental streaming turn events
     - provider route and credential posture
     - normalized provider usage telemetry
-    - WebUI/API chat surface state
+    - model-selected action requests with policy/approval records and typed tool/MCP/memory results
+    - agent run trace with plan, steps, observations, critique, and final synthesis
+    - swarm run with supervisor decomposition, per-subagent runs, isolated traces, and fan-in aggregation
+    - WebUI/API chat surface state including inline action, approval, and swarm-progress affordances
   quality_signals:
     - real model tokens stream before completion
     - unknown and unavailable providers are actionable, not silently substituted
-    - messages and traces survive readback after restart
+    - the model (not a keyword matcher) decides when a tool, MCP, memory, or subagent action is needed
+    - side-effecting actions block on an inline approval gate and persist an audit record
+    - observations feed back into the model so the next step is informed, not scripted
+    - a swarm decomposes the goal, runs subagents in parallel, and synthesizes a goal-tied answer with honest partial-failure handling
+    - messages, agent runs, swarm runs, and traces survive readback after restart
     - normalized failures retry within a bounded policy or block honestly
-    - UI shows empty, streaming, blocked, error, and success states without log parsing
+    - UI shows empty, streaming, blocked, error, approval, running-subagent, and success states without log parsing
   unacceptable_generic_substitutes:
     - static chat mockup
     - deterministic echo presented as a real product turn
@@ -100,17 +197,26 @@ central_output_contract:
     - in-memory-only state claimed as durable
     - silent fallback on unknown providers
     - generic dashboard replacing the chat surface
+    - user-typed slash commands or keyword/regex intent pattern-matching presented as model-driven action selection
+    - fabricated, sequential, or fake-parallel subagent work presented as a real swarm
+    - tool/MCP/memory/subagent capabilities advertised as working while permanently blocked or stubbed
   reviewer_acceptance_questions:
     - Can the user send a turn and see real model tokens stream incrementally?
     - Can the operator inspect which provider/model/route and usage path was used?
     - Can blocked or failed providers recover safely within the retry policy?
-    - Which paid-provider or hosting claims remain blocked?
+    - Does the model itself decide to call a tool/MCP/memory action from natural language, without the user typing a command?
+    - Does every side-effecting action pass through an inline approval gate and leave an audit record?
+    - Does a goal that needs parallel work spawn real concurrent subagents whose results the supervisor synthesizes into one goal-tied answer?
+    - Do agent runs and swarm runs survive restart and remain inspectable?
+    - Which paid-provider, hosting, agentic, or swarm claims remain blocked?
   claim_gates:
     - real provider success requires a real streaming token trace, not the test double
     - paid provider success requires a configured key and response trace
     - durability requires persistence readback after restart or blocker
     - public hosting requires auth, abuse, and secrets proof
-  minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome.
+    - agentic_chat requires a model-driven action selection trace (provider tool/function call) plus an approval-gated, audited tool/MCP/memory execution, not a slash-command demo
+    - agentic_swarm requires a real parallel subagent run trace with isolated per-worker context and a supervisor fan-in synthesis, not sequential or fabricated workers
+  minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome. To claim agentic_chat, the model autonomously selects an allowlisted action, the side effect is approval-gated and audited, and the observation re-enters the loop. To claim agentic_swarm, a supervisor dispatches real parallel subagents and synthesizes their fan-in results into one goal-tied answer with honest partial-failure handling.
 
 typed_quality_gates:
   rule: Select only the gates that match the artifact type; do not copy every possible gate into every packet.
@@ -168,6 +274,8 @@ proven_implementation_requirements:
     - drag/reorder/canvas interaction
     - charts, diagrams, maps, timelines, code rendering, or visual primitives
     - live provider SDKs, OAuth, webhooks, external APIs, or local model runtimes
+    - provider tool/function calling, structured-output action selection, or agent-orchestration control flow
+    - multi-agent / subagent orchestration, concurrency pools, work queues, fan-out/fan-in, or supervisor synthesis
     - frontend UI runtime, stateful screen composition, component/state styling, responsive viewport proof, or design token enforcement
     - background jobs, export tasks, queues, retries, or long-running work
     - durable persistence, migrations, file/object storage, or sync
@@ -178,7 +286,7 @@ proven_implementation_requirements:
     - allow from-scratch alternatives only with explicit justification and proof equal to the proven tool path
     - record selected package/runtime choices in docs/architecture.md during setup
   stack_selection:
-    note: The stack is stack-neutral and chosen by the user via 00-questions (provider/model, frontend/backend framework, persistence), then recorded in docs/architecture.md. Suggestions below are non-binding starting points, not mandates. The depth this packet enforces is stack-independent behavior (real-model floor, error taxonomy, bounded retry, cancellation, migration path), not a fixed toolset.
+    note: The stack is stack-neutral and chosen by the user via 00-questions (provider/model, frontend/backend framework, persistence), then recorded in docs/architecture.md. Suggestions below are non-binding starting points, not mandates. The depth this packet enforces is stack-independent behavior (real-model floor, error taxonomy, bounded retry, cancellation, migration path, model-driven action selection, approval-gated tool/MCP/memory execution, and parallel supervisor/worker swarm orchestration with fan-in synthesis), not a fixed toolset. A provider with native tool/function calling (or a structured-output equivalent) is required for the agentic_chat and agentic_swarm claims.
     provider_suggestions: local Ollama (free, no key) or any official/well-supported client (OpenAI, Anthropic, OpenRouter, Bedrock-compatible)
     transport_suggestion: any incrementally readable transport such as SSE or WebSocket
     persistence_suggestion: any durable store with a migration path such as SQLite
@@ -187,10 +295,16 @@ proven_implementation_requirements:
       requirement: Use a local ChatProvider interface with a deterministic test double and official/well-supported clients for the user-selected real provider(s). The interface is required; the specific client/SDK is the user's choice.
     streaming_runtime:
       requirement: Implement incremental streaming over a transport selected in setup (SSE or equivalent) with trace, checkpoint, AbortSignal-style cancellation, timeout/error behavior, a bounded retry/backoff policy, and normalized usage events. Buffered-after-completion responses do not qualify.
-    deferred_capabilities:
-      requirement: Tools/skills, MCP policy, memory/compaction, and subagents are deferred to EXTENSIONS.md; do not build, stub, or claim them in 1.0. When implemented later they must use explicit allowlists, typed results, audit records, and blocked states.
+    agentic_action_loop:
+      requirement: Implement model-driven action selection using the provider's native tool/function-calling interface (or an equivalent structured-output contract). The model decides when to call a tool/skill/MCP/memory action; a keyword matcher or user-typed slash command does not satisfy this. Each action runs through a typed policy → approval → execution → observation path that re-enters the loop, with a bounded step/retry budget and a resumable trace. Use a proven agent-orchestration approach (provider tool-calling loop, or a library such as the Vercel AI SDK, LangGraph, or an explicit typed state machine); do not hand-roll fragile regex intent parsing.
+    tools_skills_mcp:
+      requirement: Tools, skills, and MCP servers run through one allowlist-gated policy path with typed inputs/outputs, audit records, inline approval/block UI attached to the message, and no execution from implicit model text. External MCP/browser/file execution stays blocked until allowlist, credentials, side-effect class, timeout/error handling, and proof exist.
+    memory_and_compaction:
+      requirement: Scoped memory read/write decisions (auto-write/ask/skip/block) and compaction summaries that affect or explain a real turn, summarized in product language (no raw vector/store dumps), with privacy/retention posture and audit trail.
+    swarm_orchestration:
+      requirement: Implement a supervisor/worker swarm with goal decomposition, bounded-concurrency parallel subagent dispatch (a real concurrency primitive such as a worker pool or task queue, not sequential calls labeled parallel), isolated per-subagent context and scoped tool/MCP access, per-subagent and whole-swarm cancellation, bounded per-subagent retry, honest partial-failure synthesis, and fan-in aggregation the supervisor turns into one goal-tied answer. Persist the swarm run, subagent runs, and steps with a migration path; runs must be resumable and inspectable after restart.
     persistence_and_memory:
-      requirement: Persist sessions, messages, traces, provider routes, and telemetry in the user-selected durable store with a migration path.
+      requirement: Persist sessions, messages, traces, provider routes, telemetry, agent runs/steps, action/approval/audit records, memory entries, swarm runs, and subagent runs/steps in the user-selected durable store with a migration path.
     frontend_ui_runtime:
       requirement: Use a proven frontend runtime for stateful chat UI composition; default to React + Vite + TypeScript unless an existing host framework is already proven.
     component_state_styling:

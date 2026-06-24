@@ -2,9 +2,11 @@
 
 This legacy spine file is retained for package compatibility. The authoritative implementation contract is `BUILDPRINT.md`; executable phase detail lives in `03-phases/phase-index.yaml` and `03-phases/phase-flow.md`.
 
-## Product specification (1.0 core)
+## Product specification — capability ladder
 
-The stack is stack-neutral and chosen via `00-questions.md`. Build a local personal chat with:
+The stack is stack-neutral and chosen via `00-questions.md`. The product is built as three strictly increasing claims (`capability_maturity` in `blueprint.yaml`).
+
+### Level 1 — streaming_chat_core (foundation floor)
 
 - a real-model streaming chat runtime over an incrementally readable transport, with the deterministic provider as a test double only;
 - a `ChatProvider` interface routing the user-selected default provider and optional paid providers via official/well-supported clients;
@@ -12,8 +14,26 @@ The stack is stack-neutral and chosen via `00-questions.md`. Build a local perso
 - normalized token/usage telemetry per turn and provider;
 - durable persistence for sessions, messages, stream events, provider routes, and telemetry with a migration path;
 - a polished chat WebUI/API with honest empty, streaming, blocked, error, retry, and success states;
-- diagnostics that keep paid-provider, public hosting, and deferred-capability claims honest.
+- diagnostics that keep paid-provider, public hosting, and higher-maturity claims honest.
 
-## Deferred (out of 1.0 scope)
+### Level 2 — agentic_chat (model-driven single-agent loop)
 
-Tools/skills, MCP adapter policy, memory/compaction, and subagent delegation are documented as seams in `EXTENSIONS.md`. They are not part of the 1.0 build and must not be stubbed or claimed as working.
+- model-driven action selection via the provider's native tool/function-calling interface (or a structured-output equivalent) — the model decides when to act; slash commands and keyword/regex intent matching do not qualify;
+- one allowlist-gated policy path for tools, skills, and MCP servers with typed inputs/outputs, audit records, and inline approval/block UI attached to the message;
+- scoped memory read/write decisions (auto-write/ask/skip/block) and compaction summaries in product language, with privacy/retention posture;
+- observation re-ingestion so each tool/memory result informs the next model step, with a bounded step/retry budget and a resumable agent run trace;
+- a final synthesis tied to the original user goal;
+- no execution from implicit model text and no side effect without an approval record.
+
+### Level 3 — agentic_swarm (parallel multi-agent dispatching)
+
+- a supervisor that decomposes a goal into typed, parallelizable subtasks;
+- bounded-concurrency parallel subagent dispatch over a real concurrency primitive (worker pool/queue), never sequential calls relabeled as parallel;
+- isolated per-subagent context, scoped tool/MCP access, independent trace, and a per-subagent run record;
+- fan-in aggregation that the supervisor synthesizes into one goal-tied answer with honest partial-failure handling;
+- approval gate before spawning a side-effecting swarm, plus per-subagent and whole-swarm cancellation;
+- bounded per-subagent retry and resumable swarm/subagent state after restart.
+
+## Honesty rule
+
+Lower levels do not imply higher levels. A streaming-only build is not agentic; a single-agent loop is not a swarm. Unproven levels remain honestly blocked seams (`EXTENSIONS.md`), never stubbed or advertised as working.

@@ -22,6 +22,8 @@ A phase passes only when the building objective is satisfied by a real product p
 
 Do not create phase-run markdown, evidence ledgers, or planning artifacts by default. The thinking checkpoint is behavioral: it should shape the work, not become paperwork. Persist only concise progress, blockers, and handoff facts needed for continuation.
 
+This packet is a capability ladder (`capability_maturity` in `blueprint.yaml`): `streaming_chat_core` (phases 01-03) → `agentic_chat` (phase 04) → `agentic_swarm` (phase 05). Phases 04 and 05 are in scope, not deferred. The foundation floor passes at phase 03, but the packet's full claim is only reached when the model-driven action loop and the parallel swarm are proven by their phase proofs, or each unreached level is recorded as an honest blocker. Do not market streaming-only work as agentic, or a single-agent loop as a swarm.
+
 Final completion is impossible until phase `99-critical-review-pushback` has run and either passed or recorded an external blocker. Treat it as the last phase in the phase graph, not as optional review prose.
 
 Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`, `UI_IDENTITY_DONE`, `SUBAGENT_PHASE_DONE` when subagents governed the work, and `VERIFY_REVIEW_DONE` before phase completion.
@@ -37,6 +39,9 @@ Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`,
 - For Agentic Chat, if the UI drifts away from a chat-native interface — for example a mission sheet, guided-run launcher, task dashboard, status lane, or form-first workflow displaces the conversation thread and composer/input — return to `02-ui-identity.md` and repair the UI before advancing.
 - For Agentic Chat, if the default first viewport feels like a harness demo rather than a polished consumer chat — seeded feature cards before user intent, giant blank dead zone, internal status labels, uniform bordered card stack, or cramped mobile composer/chips — return to `02-ui-identity.md` and repair the Consumer Chat Craft Gate before advancing.
 - If runtime/provider/deployment is unavailable, build the seam and record a blocker; do not fake live success.
+- If the agentic loop selects actions via slash commands, keyword matching, or regex intent parsing instead of model-driven provider tool/function calling, return to `03-phases/04-agentic-action-loop.md` before claiming `agentic_chat`.
+- If a side-effecting action runs without an approval record, or a tool/MCP/memory capability is stubbed and presented as working, return to `03-phases/04-agentic-action-loop.md` and repair the policy/approval/audit path.
+- If subagents run sequentially while being presented as parallel, or worker output is fabricated, or workers have unscoped global tool access, return to `03-phases/05-swarm-dispatching.md` before claiming `agentic_swarm`.
 
 ## Handoff discipline
 

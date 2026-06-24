@@ -13,7 +13,15 @@ phases:
     file: 03-phases/03-webui-and-verification.md
     status: included
     depends_on: [02-provider-routing-hardening]
+  - phase_id: 04-agentic-action-loop
+    file: 03-phases/04-agentic-action-loop.md
+    status: included
+    depends_on: [03-webui-and-verification]
+  - phase_id: 05-swarm-dispatching
+    file: 03-phases/05-swarm-dispatching.md
+    status: included
+    depends_on: [04-agentic-action-loop]
   - phase_id: 99-critical-review-pushback
     file: 03-phases/critical-review-pushback.md
     status: included
-    depends_on: [03-webui-and-verification]
+    depends_on: [05-swarm-dispatching]

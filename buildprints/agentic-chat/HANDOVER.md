@@ -31,6 +31,11 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - Critical review pushback — <score/result or blocker>
 - Proven implementation requirements:
   - <hard domain> — <library/runtime/service used, custom proof, not applicable reason, or blocker>
+- Capability maturity (see `capability_maturity` in `blueprint.yaml`):
+  - streaming_chat_core — <proven/blocked; cite streaming token trace + persistence readback>
+  - agentic_chat — <proven/blocked; cite a model-driven action-selection trace (provider tool call), an approval-gated audited tool/MCP/memory execution, and observation re-ingestion>
+  - agentic_swarm — <proven/blocked; cite a real parallel subagent run trace, isolated per-worker context, supervisor fan-in synthesis, and partial-failure handling>
+  - Highest honest claim — <streaming_chat_core | agentic_chat | agentic_swarm>
 - Central output quality evidence:
   - <what the output makes clear>
   - <what still feels generic or weak>
@@ -42,7 +47,9 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 ## Not proven
 
-- deferred capabilities (tools/skills, MCP, memory/compaction, subagents) — out of 1.0 scope per `EXTENSIONS.md`; do not claim them as working
+- any capability maturity level whose proof above is blocked — do not claim `agentic_chat` without a model-driven action + approval-gated audited execution trace, and do not claim `agentic_swarm` without a real parallel subagent + supervisor synthesis trace
+- model-driven action selection claimed while the build still relies on user-typed slash commands or keyword/regex intent matching
+- parallel swarm claimed while subagents actually run sequentially or are fabricated
 - paid-provider quality or public hosting when only the local default provider was proven
 - <claim that should not be made yet>
 - <central output quality claim that should not be made yet>
@@ -55,6 +62,15 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 
 1. <next useful action>
 2. <alternate action if blocked>
+
+## Continue paths (propose, do not auto-run)
+
+Always offer the next agent a concrete continue menu, and gate the live items on missing inputs instead of treating them as done. In particular:
+
+- If a real provider key is still missing, propose a credential-gated continue: "when `OPENROUTER_API_KEY` (or the selected provider key) is set, run the live verification chain" — live streaming floor, live model-driven tool/MCP/memory chat (no slash commands), live swarm dispatch with concurrency-timestamp proof, then capture `evidence-phase-04`/`evidence-phase-05`, screenshots, and re-run `agb verify ui .` + `agb claim check .` to lift the maturity claims.
+- If a key is present but live traces are not yet captured, propose running each maturity proof and recording its evidence before claiming the level.
+- Offer a no-credential continue too (UX/polish/test repairs) so progress is possible while live proof is blocked.
+- Keep every proposed continue honest: a proposed verification is not a proven claim until its trace exists.
 
 ## Handoff warning
 
