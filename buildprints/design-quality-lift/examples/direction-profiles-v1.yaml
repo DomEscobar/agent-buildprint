@@ -1,0 +1,221 @@
+# Direction Profiles v1 - design-quality-lift Buildprint
+#
+# This file is a copy of /root/.openclaw/workspace/research/design-quality-creative-alignment-2026-06-24/direction-profiles-v1.yaml
+# It is the canonical example artifact for this buildprint.
+# When applying the buildprint, copy the chosen direction's profile to .buildprint/design-direction.yaml.
+
+v1_directions:
+  - id: clean-minimal
+    references: [Linear, Vercel, Stripe, Notion (calm mode)]
+    mapped_to_skill: taste-skill/minimalist-skill
+    signature_moment: typografischer Hero-Moment (Display Size + Custom Pairing + unerwarteter Hierarchie-Bruch)
+    typography_pairing: [Geist + Geist Mono, Satoshi + JetBrains Mono, Cabinet Grotesk + Inter Tight, GT America + IBM Plex Mono]
+    banned:
+      - gradients
+      - illustrations >10% viewport
+      - animation >300ms
+      - color >3 hues
+      - decorative icons
+      - Inter+slate-900 universal
+      - Fraunces / Instrument_Serif
+    required:
+      - eight_pt_baseline_grid
+      - mono_accent_le_2_surfaces
+      - max_two_type_weights
+      - motion_le_120ms
+      - prefers-reduced-motion fallback
+      - prefers-reduced-transparency fallback
+      - sans_display_font
+      - one_phosphor_icon_family_regular
+    color_approach: cool grays + single accent
+    motion_language: subtle, short, intent-driven
+    density_target: high info-density, low visual density
+    three_d_role: forbidden
+    icon_system: Phosphor (regular weight)
+    visual_risk_budget:
+      - asymmetric_grid_in_one_section
+      - oversized_single_quote_in_one_hero
+      - mono_accent_bleed_in_one_moment
+    receipt_criteria:
+      - lighthouse_accessibility_ge_95
+      - axe_audit_pass
+      - bundle_size_audit
+      - before_after_screenshots
+      - motion_inventory
+      - no_gradient_anywhere
+
+  - id: warm-human
+    references: [Notion (warm mode), Cron, Linear (warm side), Headspace]
+    mapped_to_skill: taste-skill/soft-skill
+    signature_moment: menschen-gemachter Moment (hand-drawn illustration, personal microcopy, or analog texture)
+    typography_pairing: [PP Editorial New + PP Neue Montreal, GT Walsheim + GT America Mono, Söhne Breit + Söhne Mono]
+    banned:
+      - harsh_contrasts
+      - sharp_edges_radius_zero
+      - technical_jargon
+      - cold_grays_only
+      - ai_purple_gradients
+      - generic_friendly_microcopy
+      - stock_emoji_as_icons
+      - lucide_as_default
+    required:
+      - radius_ge_8px
+      - warm_accent_not_blue
+      - soft_shadows_le_2_levels
+      - conversational_microcopy_first_person
+      - max_three_type_families
+      - hand_drawn_or_custom_empty_state
+    color_approach: warm grays + warm accent
+    motion_language: soft, spring-based, generous easing
+    density_target: medium info-density, generous whitespace
+    three_d_role: optional
+    icon_system: Phosphor (duotone or fill)
+    visual_risk_budget:
+      - one_hand_drawn_element_per_app
+      - one_personal_microcopy_per_surface
+      - one_unexpected_warm_color_moment
+    receipt_criteria:
+      - lighthouse_accessibility_ge_95
+      - axe_audit_pass
+      - microcopy_inventory_with_voice
+      - empty_state_illustrations_custom_or_hand_drawn
+      - motion_inventory_spring_based_le_400ms
+      - color_palette_audit_warm_accent
+
+  - id: brutalist
+    references: [Vercel docs (brutalist), Bauhaus, Swiss typography, indie brutalist, Linear blog typography]
+    mapped_to_skill: taste-skill/brutalist-skill
+    signature_moment: raw strukturelle Aussage (exposed grid, brutalist grid moment, or system reveal)
+    typography_pairing: [Neue Haas Grotesk Display + GT America Mono, Söhne + Söhne Mono, IBM Plex Sans + IBM Plex Mono, Neue Machina + IBM Plex Mono]
+    banned:
+      - gradients_any
+      - shadows_gt_1_level
+      - rounded_corners_gt_4px
+      - friendly_microcopy
+      - illustrations
+      - decorative_elements
+      - centered_layouts_as_default
+      - animation_as_decoration
+      - soft_color_palettes
+    required:
+      - raw_structural_elements_visible
+      - mono_font_presence_every_screen
+      - sharp_90_angles
+      - max_contrast_pure_black_white
+      - max_one_accent
+      - no_drop_shadows_or_max_1_hard_offset
+    color_approach: pure black/white + max 1 accent
+    motion_language: instant or short, no easing curves
+    density_target: dense, structured, tight spacing
+    three_d_role: forbidden
+    icon_system: Tabler Icons (1.5 stroke) or hand-drawn line art
+    visual_risk_budget:
+      - one_exposed_grid_moment_per_app
+      - one_unstyled_raw_element
+      - one_brutalist_typography_moment
+    receipt_criteria:
+      - lighthouse_accessibility_ge_95
+      - axe_audit_pass
+      - no_gradient_anywhere
+      - all_border_radius_le_4px
+      - mono_font_visible_every_screen
+      - motion_inventory_instant_or_le_100ms
+      - color_palette_pure_black_white_plus_one_accent_max
+
+  - id: premium-luxury
+    references: [Apple, Stripe (premium), Linear (premium), Arc browser, Linear marketing site]
+    mapped_to_skill: taste-skill/high-end-visual-design
+    signature_moment: feine Detail Aussage (custom illustration, signature sound, or material moment)
+    typography_pairing: [Söhne Breit + Söhne + Söhne Mono, Migra Italic + Migra Sans + IBM Plex Mono, Tiempos Headline + Söhne + Söhne Mono, GT Sectra Display + GT America + IBM Plex Mono]
+    banned:
+      - stock_illustrations
+      - gradients_or_only_very_subtle
+      - generic_saas_buttons
+      - harsh_shadows
+      - multiple_type_families_in_body
+      - ai_purple_accents
+      - bright_saturated_accent_colors
+      - cheap_feeling_microcopy
+    required:
+      - custom_or_premium_curated_illustrations
+      - fine_typography_hierarchy
+      - soft_shadows_1_to_2_levels
+      - generous_spacing
+      - signature_detail_textured_or_cursor_or_transition
+      - max_three_type_families
+    color_approach: deep neutrals + sophisticated accent
+    motion_language: smooth, spring-based, generous timing
+    density_target: medium-low, generous breathing room
+    three_d_role: recommended
+    icon_system: Phosphor (thin) or Hugeicons (line, 1.0)
+    visual_risk_budget:
+      - one_custom_illustration_per_app
+      - one_signature_transition
+      - one_subtle_texture_moment
+    receipt_criteria:
+      - lighthouse_accessibility_ge_95
+      - axe_audit_pass
+      - custom_illustrations_not_stock
+      - signature_transition_with_custom_easing
+      - type_family_count_max_3
+      - color_palette_deep_neutrals_plus_sophisticated_accent
+      - no_gradient_abuse
+
+  - id: wild-creative
+    references: [Nothing, Teenage Engineering, Apple (bold moments), awwwards.com (art direction), Arc (creative mode), Linear marketing (creative moments), studio sites (Locomotive, Active Theory)]
+    mapped_to_skill: taste-skill/image-to-code-skill + taste-skill/gpt-tasteskill
+    signature_moment: unerwartete Interaktion (custom cursor, scroll-choreografie, signature transition, or 3D reveal)
+    typography_pairing: [PP Neue Machina + PP Neue Montreal, Migra Display + Migra Sans, GT Sectra Display + GT America, Neue Haas Grotesk Display oversized, Söhne Breit Kursiv + Söhne]
+    banned:
+      - stock_illustrations
+      - generic_tailwind_defaults
+      - monotone_grays_throughout
+      - plain_saas_buttons
+      - conventional_centered_layouts
+      - lucide_as_default
+      - phosphor_regular
+      - inter_slate_900_universal
+    required:
+      - distinctive_typography_custom_or_unexpected
+      - hero_motion_gt_600ms_with_intent
+      - signature_color_moment
+      - one_unexpected_interaction
+      - scroll_driven_moments_where_applicable
+      - one_3d_moment
+    color_approach: bold, high-contrast, distinctive palette
+    motion_language: cinematic, spring physics, scroll-driven
+    density_target: variable, can be sparse or dense intentionally
+    three_d_role: required
+    icon_system: Hugeicons (bold) or custom
+    visual_risk_budget:
+      - asymmetric_grid_throughout
+      - oversized_typography_up_to_200px
+      - unusual_color_combinations
+      - scroll_driven_hierarchy_breaks
+      - custom_cursor_morph
+    receipt_criteria:
+      - lighthouse_accessibility_ge_95
+      - axe_audit_pass
+      - one_3d_moment
+      - one_custom_or_unexpected_interaction
+      - one_distinctive_typography_pairing
+      - motion_inventory_cinematic_spring_physics
+      - color_palette_distinctive_not_monotone
+
+cross_direction_rules:
+  - brief_inference_first
+  - three_dials_configured
+  - direction_profile_locked_in_receipt
+  - banned_defaults_absent
+  - prefers_reduced_motion_fallback
+  - prefers_reduced_transparency_fallback
+  - lighthouse_accessibility_ge_95
+  - axe_audit_pass
+  - no_hand_rolled_svg_icons
+  - sans_display_font_first
+
+v2_directions_deferred:
+  - editorial-magazine
+  - dense-power
+  - playful
+  - technical-dev

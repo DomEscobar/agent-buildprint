@@ -1,0 +1,36 @@
+:root {
+  --canvas: #fbfbf8;
+  --surface: #ffffff;
+  --ink: #171717;
+  --accent: #2563eb;
+  --focus: #f59e0b;
+  --radius: 6px;
+  --space-2: 8px;
+  --motion-fast: 120ms ease-out;
+}
+
+.button {
+  border-radius: var(--radius);
+  transition: background-color var(--motion-fast), color var(--motion-fast);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms;
+    transition-duration: 1ms;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .surface {
+    backdrop-filter: none;
+    background: var(--surface);
+  }
+}

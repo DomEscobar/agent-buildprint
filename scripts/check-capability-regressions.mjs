@@ -7,6 +7,7 @@ const root = path.resolve(import.meta.dirname, '..')
 const source = path.join(root, 'buildprints', 'api-key-management')
 const secureRagSource = path.join(root, 'buildprints', 'secure-hybrid-rag-mcp')
 const agenticChatEvalSource = path.join(root, 'buildprints', 'agentic-chat-eval-harness')
+const designQualityLiftSource = path.join(root, 'buildprints', 'design-quality-lift')
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'agb-capability-regression-'))
 
 function copyPacket(name) {
@@ -24,6 +25,12 @@ function copySecureRagPacket(name) {
 function copyAgenticChatEvalPacket(name) {
   const packet = path.join(temp, name)
   fs.cpSync(agenticChatEvalSource, packet, { recursive: true })
+  return packet
+}
+
+function copyDesignQualityLiftPacket(name) {
+  const packet = path.join(temp, name)
+  fs.cpSync(designQualityLiftSource, packet, { recursive: true })
   return packet
 }
 
@@ -46,7 +53,7 @@ function replaceInAllFiles(packet, replacements) {
       let text = fs.readFileSync(full, 'utf8')
       let changed = false
       for (const [pattern, replacement] of replacements) {
-        const next = text.replace(pattern, replacement)
+        const next = text.replaceAll(pattern, replacement)
         changed = changed || next !== text
         text = next
       }
@@ -68,6 +75,11 @@ function expectSecureRagFailure(name, mutate, expectedFailures) {
 
 function expectAgenticChatEvalFailure(name, mutate, expectedFailures) {
   const packet = copyAgenticChatEvalPacket(name)
+  expectPacketFailure(name, packet, mutate, expectedFailures)
+}
+
+function expectDesignQualityLiftFailure(name, mutate, expectedFailures) {
+  const packet = copyDesignQualityLiftPacket(name)
   expectPacketFailure(name, packet, mutate, expectedFailures)
 }
 
@@ -190,6 +202,39 @@ try {
     fs.rmSync(path.join(packet, 'examples', 'core-chat-scenario.yaml'), { force: true })
     fs.rmSync(path.join(packet, 'examples', 'eval-receipt.md'), { force: true })
   }, ['agentic chat eval ships example scenario and receipt artifacts'])
+
+  expectDesignQualityLiftFailure('capability regression catches missing direction lock', (packet) => {
+    replaceInAllFiles(packet, [
+      [/direction[- ]?lock/gi, 'direction identification'],
+      [/direction_profile_locked/gi, 'direction_profile_identified'],
+      [/locked direction/gi, 'identified direction'],
+      [/\blocked\b/gi, 'identified'],
+      [/\block\b/gi, 'identify'],
+      [/must not produce code without a locked direction/gi, 'may suggest a direction'],
+      [/before any code/gi, 'before detailed implementation'],
+      [/direction is a hard gate/gi, 'direction is a recommendation'],
+      [/agent may not produce code/gi, 'agent may suggest a direction'],
+    ])
+  }, ['design quality lift locks direction profile before any code'])
+
+  expectDesignQualityLiftFailure('capability regression catches missing banned defaults enforcement', (packet) => {
+    replaceInFile(packet, 'capability.yaml', [
+      [/banned_defaults:[\s\S]*?(?=\r?\nrequired_patterns:)/g, ''],
+    ])
+  }, ['design quality lift enforces banned defaults list'])
+
+  expectDesignQualityLiftFailure('capability regression catches missing signature moment requirement', (packet) => {
+    replaceInAllFiles(packet, [
+      [/signature moment/gi, 'creative highlight'],
+      [/signature_moment/gi, 'creative_highlight'],
+      [/required signature moment/gi, 'optional creative highlight'],
+    ])
+  }, ['design quality lift requires per-direction signature moment'])
+
+  expectDesignQualityLiftFailure('capability regression catches missing design quality examples', (packet) => {
+    fs.rmSync(path.join(packet, 'examples', 'direction-profiles-v1.yaml'), { force: true })
+    fs.rmSync(path.join(packet, 'examples', 'design-quality-lift-receipt.md'), { force: true })
+  }, ['design quality lift ships direction profiles and example receipt'])
 } finally {
   fs.rmSync(temp, { recursive: true, force: true })
 }

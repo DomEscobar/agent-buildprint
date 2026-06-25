@@ -1,0 +1,10 @@
+{
+  "name": "design-quality-lift",
+  "title": "Design Quality Lift",
+  "summary": "A trace-aware, direction-locked, signature-required Capability Buildprint for grafting a holistic design quality lift onto an existing app — with banned defaults, per-direction creative moments, and before/after receipts at a named quality bar.",
+  "status": "draft",
+  "kind": "capability",
+  "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md", "00-host-assessment.md", "00-assessment-questions.md", "01-integration-plan.md", "02-implementation-phases/", "examples/direction-profiles-v1.yaml", "examples/design-direction.example.yaml", "examples/design-quality-lift-receipt.md", "references/research-basis.md"],
+  "canonical_start": "BUILDPRINT.md",
+  "tags": ["design", "design-system", "ui", "ux", "typography", "motion", "microcopy", "accessibility", "anti-slop", "creative", "taste", "premium"]
+}

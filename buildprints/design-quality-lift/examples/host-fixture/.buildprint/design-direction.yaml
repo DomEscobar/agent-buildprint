@@ -1,0 +1,14 @@
+direction: clean-minimal
+three_dials:
+  DESIGN_VARIANCE: 5
+  MOTION_INTENSITY: 3
+  VISUAL_DENSITY: 3
+visual_risk_budget:
+  - asymmetric_grid_in_one_section
+typography_pairing:
+  display: Geist
+  body: Geist
+  mono: Geist Mono
+icon_library: phosphor
+three_d_role: forbidden
+direction_locked_by: fixture

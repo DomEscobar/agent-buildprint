@@ -65,6 +65,7 @@ Usage:
   agb evidence check <evidence-ledger-jsonl>
   agb verify ui [project-folder]
   agb claim check [project-folder]
+  agb check:design-quality-lift [project-folder]
 
 Examples:
   agb check ./my-buildprint
@@ -79,6 +80,7 @@ Examples:
   agb verify ui .
   agb verify ui /path/to/my-build
   agb claim check .
+  agb check:design-quality-lift .
 
 Mapper note:
   The old agb map CLI has been removed. To map a source project, run an agent
@@ -369,6 +371,11 @@ function isAgenticChatEvalCapability(capability, buildprint, publication) {
   return /agentic[-_\s]?chat/i.test(identity) && /eval|harness|evaluation/i.test(identity)
 }
 
+function isDesignQualityLiftCapability(capability, buildprint, publication) {
+  const identity = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'title')} ${yamlScalar(capability, 'description')} ${publication}`
+  return /design[-_\s]?quality[-_\s]?lift|design[-_\s]?taste|design[-_\s]?enhancement/i.test(identity)
+}
+
 function hasDiscoveryDecisionGate(text) {
   return /infer safely/i.test(text) &&
     /patch locally/i.test(text) &&
@@ -471,6 +478,7 @@ function capabilityPacketCheckResults(dir) {
   const credentialCapability = isCredentialCapability(capability, buildprint, publication)
   const secureRagCapability = isSecureRagCapability(capability, buildprint, publication)
   const agenticChatEvalCapability = isAgenticChatEvalCapability(capability, buildprint, publication)
+  const designQualityLiftCapability = isDesignQualityLiftCapability(capability, buildprint, publication)
 
   for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
   ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
@@ -571,6 +579,44 @@ function capabilityPacketCheckResults(dir) {
       /optional RAG profile|rag profile/i.test(combinedCapabilityText) && /not-proven|blocked/i.test(combinedCapabilityText))
     ok('agentic chat eval ships example scenario and receipt artifacts',
       files.has('examples/core-chat-scenario.yaml') && files.has('examples/eval-receipt.md'))
+  }
+
+  if (designQualityLiftCapability) {
+    const bannedDefaultsSection = yamlSection(capability, 'banned_defaults')
+    const directionProfilesSection = yamlSection(capability, 'direction_profiles')
+    ok('design quality lift locks direction profile before any code',
+      /(direction[-_ ]profile[-_ ]locked|direction[- ]locked|locked direction|lock a direction|direction lock)/i.test(combinedCapabilityText) &&
+      /(hard[- ]?stop|mandatory|before any code|before.*source)/i.test(combinedCapabilityText))
+    ok('design quality lift enforces banned defaults list',
+      /patterns:/i.test(bannedDefaultsSection) &&
+      /(Fraunces|Instrument_Serif)/i.test(bannedDefaultsSection) &&
+      /(AI-purple|ai-purple-gradient|purple|violet|fuchsia|indigo)/i.test(bannedDefaultsSection) &&
+      /(inter[- ]slate|slate-900|Inter)/i.test(bannedDefaultsSection) &&
+      /hand-rolled-svg-icons/i.test(bannedDefaultsSection) &&
+      /generic-friendly-microcopy/i.test(bannedDefaultsSection))
+    ok('design quality lift requires three dials recorded per direction',
+      /three[- ]dials?/i.test(combinedCapabilityText) && /DESIGN_VARIANCE|MOTION_INTENSITY|VISUAL_DENSITY/i.test(combinedCapabilityText))
+    ok('design quality lift requires per-direction signature moment',
+      (directionProfilesSection.match(/signature_moment:/gi) || []).length >= 5 &&
+      /required/i.test(directionProfilesSection))
+    ok('design quality lift requires visual risk budget with 1-3 rule breaks',
+      /visual[- ]risk[- ]budget/i.test(combinedCapabilityText) && /(rule[- ]break|allowed)/i.test(combinedCapabilityText))
+    ok('design quality lift requires sans display first with serif as exception',
+      /sans[- ]display/i.test(combinedCapabilityText) && /(serif|very discouraged|exception)/i.test(combinedCapabilityText))
+    ok('design quality lift requires icon library without hand-rolled SVGs',
+      /icon[- ]library/i.test(combinedCapabilityText) && /hand[- ]rolled[- ]SVG/i.test(combinedCapabilityText))
+    ok('design quality lift requires prefers-reduced-motion and reduced-transparency fallbacks',
+      /prefers[- ]reduced[- ]motion/i.test(combinedCapabilityText) && /prefers[- ]reduced[- ]transparency/i.test(combinedCapabilityText))
+    ok('design quality lift bounds model-judge behind visual proof gates',
+      /(model[- ]judge|visual[- ]judge)/i.test(combinedCapabilityText) && /override|never the sole proof|bounded/i.test(combinedCapabilityText))
+    ok('design quality lift requires before/after screenshots in receipt',
+      /before.*after.*screenshot/i.test(combinedCapabilityText))
+    ok('design quality lift requires lighthouse and axe audit in receipt',
+      /lighthouse/i.test(combinedCapabilityText) && /axe/i.test(combinedCapabilityText))
+    ok('design quality lift ships direction profiles and example receipt',
+      files.has('examples/direction-profiles-v1.yaml') && files.has('examples/design-quality-lift-receipt.md'))
+    ok('design quality lift references taste-skill or animations-dev research basis',
+      files.has('references/research-basis.md') && (/taste-skill/i.test(combinedCapabilityText) || /animations\.dev/i.test(combinedCapabilityText) || /emil kowalski/i.test(combinedCapabilityText)))
   }
 
   for (const file of phaseFiles) {
@@ -2145,6 +2191,143 @@ function claimCheck(projectRoot) {
   return printClaimResults(claimChecks(resolved))
 }
 
+function hostAuditFiles(projectRoot) {
+  const ignoredDirs = new Set([
+    '.git',
+    'node_modules',
+    'dist',
+    'build',
+    '.next',
+    '.expo',
+    'coverage',
+    'backups',
+  ])
+  const allowed = /\.(css|scss|sass|less|html|js|jsx|ts|tsx|vue|svelte|mdx?)$/i
+  const out = []
+  function visit(dir) {
+    if (!exists(dir)) return
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (ignoredDirs.has(entry.name)) continue
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) {
+        if (full.includes(`${path.sep}.buildprint${path.sep}screenshots`)) continue
+        visit(full)
+        continue
+      }
+      if (entry.isFile() && allowed.test(entry.name)) out.push(full)
+    }
+  }
+  visit(projectRoot)
+  return out
+}
+
+function firstPatternHit(files, pattern, projectRoot, limit = 20) {
+  const hits = []
+  for (const file of files) {
+    const lines = safeReadText(file).split(/\r?\n/)
+    lines.forEach((line, index) => {
+      if (hits.length >= limit) return
+      pattern.lastIndex = 0
+      if (pattern.test(line)) hits.push(`${path.relative(projectRoot, file)}:${index + 1}`)
+    })
+    if (hits.length >= limit) break
+  }
+  return hits
+}
+
+function designQualityLiftChecks(projectRoot) {
+  const buildprintDir = path.join(projectRoot, '.buildprint')
+  const directionFile = path.join(buildprintDir, 'design-direction.yaml')
+  const receiptFile = path.join(buildprintDir, 'design-quality-lift-receipt.md')
+  const direction = safeReadText(directionFile)
+  const receipt = safeReadText(receiptFile)
+  const files = hostAuditFiles(projectRoot)
+  const combined = files.map((file) => safeReadText(file)).join('\n')
+  const checks = []
+  const ok = (id, pass, evidence = '') => checks.push({ id, pass, evidence })
+
+  ok('direction-profile-locked',
+    exists(directionFile) &&
+      /^direction:\s*(clean-minimal|warm-human|brutalist|premium-luxury|wild-creative|custom:[a-z0-9][a-z0-9_-]*)\s*$/mi.test(direction),
+    exists(directionFile) ? '' : 'missing .buildprint/design-direction.yaml')
+  ok('three-dials-recorded',
+    /DESIGN_VARIANCE:\s*(10|[1-9])\b/i.test(direction) &&
+      /MOTION_INTENSITY:\s*(10|[1-9])\b/i.test(direction) &&
+      /VISUAL_DENSITY:\s*(10|[1-9])\b/i.test(direction),
+    'design-direction.yaml must set DESIGN_VARIANCE, MOTION_INTENSITY, and VISUAL_DENSITY to 1-10')
+  ok('visual-risk-budget-recorded',
+    /visual_risk_budget:\s*\n\s*-\s+\S+/i.test(direction),
+    'design-direction.yaml must record at least one visual risk budget item')
+  ok('typography-and-icon-recorded',
+    /typography_pairing:/i.test(direction) && /icon_library:\s*\S+/i.test(direction),
+    'design-direction.yaml must record typography_pairing and icon_library')
+
+  const receiptFields = [
+    'direction_profile_locked',
+    'three_dials_recorded',
+    'before_after_screenshots',
+    'lighthouse_audit',
+    'axe_audit',
+    'microcopy_inventory',
+    'motion_inventory',
+    'icon_library_inventory',
+    'typography_pairing_recorded',
+    'signature_moment_proof',
+    'visual_risk_budget_audit',
+    'banned_defaults_audit',
+  ]
+  const missingReceiptFields = receiptFields.filter((field) => !new RegExp(field, 'i').test(receipt))
+  ok('design-quality-receipt-complete',
+    exists(receiptFile) && missingReceiptFields.length === 0,
+    exists(receiptFile)
+      ? `missing receipt fields: ${missingReceiptFields.join(', ')}`
+      : 'missing .buildprint/design-quality-lift-receipt.md')
+
+  const bannedDefaults = [
+    ['llm-default-serif-display', /\b(Fraunces|Instrument_Serif|Playfair Display|Cormorant Garamond)\b/i],
+    ['llm-default-inter-slate', /Inter[\s\S]{0,80}(slate-900|#0f172a)|slate-900[\s\S]{0,80}Inter/i],
+    ['ai-purple-gradient', /linear-gradient\([^)]*(purple|violet|fuchsia|indigo)[^)]*\)/i],
+    ['centered-hero-dark-mesh', /radial-gradient\([^)]*(purple|violet|fuchsia|indigo|slate|black)[^)]*\)/i],
+    ['three-equal-feature-cards', /\b(three|3)\s+equal\s+(feature\s+)?cards\b/i],
+    ['hand-rolled-svg-icons', /<svg[\s\S]{0,240}<path\s+d=/i],
+    ['generic-friendly-microcopy', /\b(Oops|Whoopsie|Whoops)\b/i],
+    ['infinite-loop-animations', /\banimation\s*:[^;{}]*\binfinite\b|\banimate-spin\b/i],
+    ['random-cubic-bezier', /cubic-bezier\((?!0\.2,\s*0,\s*0,\s*1|0\.4,\s*0,\s*0\.2,\s*1|0,\s*0,\s*0\.2,\s*1)[^)]+\)/i],
+  ]
+  for (const [id, pattern] of bannedDefaults) {
+    const hits = firstPatternHit(files, pattern, projectRoot)
+    ok(`banned-default-${id}`, hits.length === 0, hits.length ? hits.join(', ') : '')
+  }
+
+  ok('prefers-reduced-motion-fallback',
+    /prefers-reduced-motion/i.test(combined),
+    'missing prefers-reduced-motion fallback in audited host files')
+  ok('prefers-reduced-transparency-fallback',
+    /prefers-reduced-transparency/i.test(combined),
+    'missing prefers-reduced-transparency fallback in audited host files')
+
+  return checks
+}
+
+function printDesignQualityLiftResults(checks) {
+  let failed = 0
+  for (const check of checks) {
+    if (check.pass) console.log(`✓ ${check.id}`)
+    else {
+      failed++
+      console.log(`✗ ${check.id}: ${check.evidence}`)
+    }
+  }
+  console.log(`\nDesign quality lift check: ${failed ? `FAIL (${failed} failed)` : 'PASS'}`)
+  return failed === 0
+}
+
+function designQualityLiftCheck(projectRoot) {
+  const resolved = path.resolve(projectRoot || '.')
+  if (!exists(resolved)) throw new Error(`project folder not found: ${resolved}`)
+  return printDesignQualityLiftResults(designQualityLiftChecks(resolved))
+}
+
 if (args[0] === 'verify') {
   const sub = args[1]
   const project = args[2] || '.'
@@ -2167,6 +2350,17 @@ if (args[0] === 'claim') {
     throw new Error(`unknown claim subcommand: ${sub}`)
   } catch (error) {
     console.error(`Claim ${sub} failed: ${error.message}`)
+    process.exit(1)
+  }
+}
+
+if (args[0] === 'check:design-quality-lift') {
+  const project = args[1] || '.'
+  if (isHelp(project)) usage(0)
+  try {
+    process.exit(designQualityLiftCheck(project) ? 0 : 1)
+  } catch (error) {
+    console.error(`Design quality lift check failed: ${error.message}`)
     process.exit(1)
   }
 }

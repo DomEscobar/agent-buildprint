@@ -1,0 +1,39 @@
+# design-direction.yaml example for clean-minimal direction
+#
+# Copy this file to .buildprint/design-direction.yaml and edit per host.
+# This is the locked direction at assessment. The receipt cites this file.
+
+direction: clean-minimal
+
+three_dials:
+  DESIGN_VARIANCE: 5
+  MOTION_INTENSITY: 3
+  VISUAL_DENSITY: 3
+
+visual_risk_budget:
+  - asymmetric_grid_in_one_section
+  - oversized_single_quote_in_one_hero
+  # mono_accent_bleed_in_one_moment not used in this lift
+
+typography_pairing:
+  display: Geist
+  body: Geist
+  mono: Geist Mono
+
+icon_library: phosphor
+icon_weight: regular
+
+three_d_role: forbidden
+
+signature_moment:
+  description: oversized single quote in hero, paired with quiet body text
+  surface: marketing landing hero
+  proof: screenshot at .buildprint/screenshots/after/hero.png
+
+direction_locked_by: "user-confirmed at YYYY-MM-DD"
+design_read: "Reading this as: B2B SaaS app for technical buyers, with a Linear-style minimalist language, leaning toward Tailwind utilities + Geist + restrained motion."
+
+3rd_party_paths:
+  decision: deferred
+  adopted: []
+  rationale: self-contained; no adapter installed at this time

@@ -1,0 +1,510 @@
+schema: agent-buildprint/capability.v0
+name: design-quality-lift
+type: capability
+title: Design Quality Lift
+description: Grafts a holistic design quality lift onto an existing app — visual system, components, states, motion, microcopy, accessibility, and information architecture — with per-direction signature moments, banned defaults, and before/after receipts at a named quality bar.
+capability: design.quality-lift
+execution_profile: strict
+claim_status: unproven
+status: draft
+canonical_start: BUILDPRINT.md
+
+host_frameworks:
+  - nextjs
+  - react
+  - vue
+  - svelte
+  - astro
+  - tailwindcss
+  - shadcn
+  - angular
+  - vanilla-js
+  - any-web-app-with-css
+
+host_detection:
+  package_files:
+    - package.json
+    - pnpm-lock.yaml
+    - yarn.lock
+    - package-lock.json
+  route_signals:
+    - pages/
+    - app/
+    - src/
+    - public/
+    - src/app
+    - src/pages
+  auth_signals:
+    - auth/ directory
+    - session cookie or token handling
+    - login/signup routes
+  database_signals:
+    - any database client import
+    - ORM config
+    - schema files
+
+requires:
+  env:
+    - node for npm run scripts
+    - browser for lighthouse and axe audits
+    - optional icon library package
+  existing_capabilities:
+    - browser-proof-harness or any screenshot tooling
+    - test runner (jest, vitest, playwright, etc.)
+  human_decisions:
+    - which direction profile to lock (clean-minimal, warm-human, brutalist, premium-luxury, wild-creative, or custom)
+    - whether to adopt any 3rd-party adapter paths (taste-skill, animations.dev, Spline, GSAP, etc.)
+    - which existing design system tokens to keep vs replace
+    - whether motion is appropriate for this product
+    - visual risk budget (1-3 rule breaks)
+    - proof level target (sandbox, host-applied, or production)
+
+touches:
+  - css tokens and design system variables
+  - component source files (buttons, cards, inputs, modals)
+  - empty/loading/error/success/offline/blocked states
+  - typography imports and font loading
+  - icon library imports and usage
+  - motion/animation CSS or JS
+  - microcopy strings
+  - accessibility attributes (aria, focus, keyboard)
+  - information architecture (nav, hierarchy, density)
+  - signature moment implementation
+  - receipt artifacts
+
+contract:
+  profiles:
+    - brief-and-direction
+    - visual-system
+    - components
+    - states
+    - motion
+    - microcopy
+    - accessibility
+    - information-architecture
+    - signature-moment
+    - receipts
+
+read_order:
+  - BUILDPRINT.md
+  - capability.yaml
+  - compatibility.md
+  - 00-host-assessment.md
+  - 00-assessment-questions.md
+  - 01-integration-plan.md
+  - apply.md
+  - 02-implementation-phases/01-contract-and-config.md
+  - 02-implementation-phases/02-core-integration.md
+  - 02-implementation-phases/03-host-wiring.md
+  - 02-implementation-phases/04-user-operator-surface.md
+  - 02-implementation-phases/05-verification-and-receipt.md
+  - verify.md
+  - README.md
+  - examples/
+  - references/research-basis.md
+
+profiles:
+  - id: brief-and-direction
+    required: true
+    summary: Lock the design direction before any code, with banned defaults enforced.
+  - id: visual-system
+    required: true
+    summary: Token system (color, type, space, radius, elevation, motion) used in components.
+  - id: components
+    required: true
+    summary: Direction-specific component library, no hand-rolled SVG icons.
+  - id: states
+    required: true
+    summary: Empty, loading, error, success, offline, and blocked states for every interactive surface.
+  - id: motion
+    required: true
+    summary: Easing, duration, and choreography tokens, with reduced-motion fallback.
+  - id: microcopy
+    required: true
+    summary: Voice guide, error messages, empty states, onboarding with opinions.
+  - id: accessibility
+    required: true
+    summary: WCAG 2.2 AA minimum, keyboard navigation, focus visible, screen reader labels.
+  - id: information-architecture
+    required: false
+    summary: Nav, hierarchy, density decisions recorded and reviewed.
+  - id: signature-moment
+    required: true
+    summary: Per-direction required creative moment with visual risk budget.
+  - id: receipts
+    required: true
+    summary: Before/after screenshots, lighthouse, axe, microcopy and motion inventories.
+
+direction_profiles:
+  - id: clean-minimal
+    references: [Linear, Vercel, Stripe, Notion (calm mode)]
+    mapped_to_skill: taste-skill/minimalist-skill
+    signature_moment: typografischer Hero-Moment (Display Size + Custom Pairing + unerwarteter Hierarchie-Bruch)
+    three_d_role: forbidden
+    icon_system: phosphor
+  - id: warm-human
+    references: [Notion, Cron, Linear (warm side), Headspace]
+    mapped_to_skill: taste-skill/soft-skill
+    signature_moment: menschen-gemachter Moment (hand-drawn illustration, personal microcopy, analog texture)
+    three_d_role: optional
+    icon_system: phosphor-duotone
+  - id: brutalist
+    references: [Vercel docs (brutalist), Bauhaus, Swiss typography, indie brutalist]
+    mapped_to_skill: taste-skill/brutalist-skill
+    signature_moment: raw strukturelle Aussage (exposed grid, brutalist grid moment, system reveal)
+    three_d_role: forbidden
+    icon_system: tabler
+  - id: premium-luxury
+    references: [Apple, Stripe (premium), Linear (premium), Arc browser]
+    mapped_to_skill: taste-skill/high-end-visual-design
+    signature_moment: feine Detail Aussage (custom illustration, signature transition, material moment)
+    three_d_role: recommended
+    icon_system: phosphor-thin
+  - id: wild-creative
+    references: [Nothing, Teenage Engineering, Apple (bold), awwwards.com, Arc (creative)]
+    mapped_to_skill: taste-skill/image-to-code-skill + taste-skill/gpt-tasteskill
+    signature_moment: unerwartete Interaktion (custom cursor, scroll-choreografie, signature transition)
+    three_d_role: required
+    icon_system: hugeicons-bold
+
+banned_defaults:
+  description: Hard-fail patterns when present without explicit user opt-in and rationale.
+  patterns:
+    - id: llm-default-serif-display
+      pattern: 'font-family[^;}]*(Fraunces|Instrument_Serif|Playfair Display|Cormorant Garamond)[^;}]*'
+      rationale: AI tell, lazy default for "creative" briefs.
+    - id: llm-default-inter-slate
+      pattern: 'bg-slate-900[^\n]*text-white|font-family[^;}]*Inter[^;}]*slate'
+      rationale: Most-tested AI tell in production rounds.
+    - id: ai-purple-gradient
+      pattern: 'linear-gradient[^;}]*(purple|violet|fuchsia|indigo)[^;}]*'
+      rationale: Anti-creative gradient crutch.
+    - id: centered-hero-dark-mesh
+      pattern: 'radial-gradient[^;}]*mesh|mesh-gradient'
+      rationale: AI-default hero cliche.
+    - id: three-equal-feature-cards
+      pattern: 'grid-cols-3[^\n]*gap-4[^\n]*\n[^\n]*\n[^\n]*\n[^\n]*\n[^\n]*\n[^\n]*\n[^\n]*'
+      rationale: Cookie-cutter layout.
+    - id: hand-rolled-svg-icons
+      pattern: '<svg[^>]*>\s*<path[^>]*d="M[0-9.]{1,4} '
+      rationale: Use a library (Phosphor, Hugeicons, Radix, Tabler).
+    - id: generic-friendly-microcopy
+      pattern: '(Oops|Whoopsie|Whoops)[!.]?$'
+      rationale: Lazy microcopy, no voice.
+    - id: infinite-loop-animations
+      pattern: 'animation:[^;}]*infinite|animate-spin[^a-z]'
+      rationale: Distracts from content.
+    - id: random-cubic-bezier
+      pattern: 'cubic-bezier\([^0-9.]*[2-9]'
+      rationale: Use named easing tokens.
+
+required_patterns:
+  description: Hard-required patterns per direction.
+  universal:
+    - prefers_reduced_motion_fallback
+    - prefers_reduced_transparency_fallback
+    - keyboard_navigation_for_interactive
+    - focus_visible_everywhere
+    - lighthouse_accessibility_ge_95
+    - axe_audit_pass
+    - icon_library_used_no_hand_rolled_svg
+    - direction_profile_locked_in_receipt
+    - three_dials_recorded_in_receipt
+  per_direction:
+    clean-minimal: [eight_pt_baseline_grid, mono_accent_le_2_surfaces, max_two_type_weights, motion_le_120ms, sans_display_first]
+    warm-human: [radius_ge_8px, warm_accent_not_blue, soft_shadows_le_2_levels, conversational_microcopy, hand_drawn_or_custom_empty_state]
+    brutalist: [border_radius_zero_or_le_4px, pure_black_white_plus_one_accent, mono_font_visible, motion_le_100ms, raw_structural_elements_visible]
+    premium-luxury: [custom_illustration_per_app, signature_transition_with_custom_easing, type_families_le_3, deep_neutrals_plus_sophisticated_accent, soft_shadows_le_2]
+    wild-creative: [distinctive_typography_pairing, hero_motion_gt_600ms, signature_color_moment, one_3d_moment, one_unexpected_interaction]
+
+typography_pairings:
+  description: Approved pairings, never Inter + slate-900 as universal default.
+  approved:
+    - display: 'Geist'
+      body: 'Geist'
+      mono: 'Geist Mono'
+      direction: [clean-minimal]
+    - display: 'Satoshi'
+      body: 'Satoshi'
+      mono: 'JetBrains Mono'
+      direction: [clean-minimal]
+    - display: 'Cabinet Grotesk'
+      body: 'Inter Tight'
+      mono: 'JetBrains Mono'
+      direction: [clean-minimal]
+      note: Only when user explicitly wants Inter
+    - display: 'GT America'
+      body: 'GT America'
+      mono: 'IBM Plex Mono'
+      direction: [clean-minimal]
+    - display: 'PP Editorial New'
+      body: 'PP Neue Montreal'
+      mono: 'PP Neue Montreal Mono'
+      direction: [warm-human]
+    - display: 'GT Walsheim'
+      body: 'GT Walsheim'
+      mono: 'GT America Mono'
+      direction: [warm-human]
+    - display: 'Söhne Breit'
+      body: 'Söhne'
+      mono: 'Söhne Mono'
+      direction: [warm-human, premium-luxury]
+    - display: 'ABC Diatype Mono'
+      body: 'ABC Diatype'
+      mono: 'ABC Diatype Mono'
+      direction: [warm-human]
+    - display: 'Neue Haas Grotesk Display'
+      body: 'Neue Haas Grotesk'
+      mono: 'GT America Mono'
+      direction: [brutalist]
+    - display: 'Söhne'
+      body: 'Söhne'
+      mono: 'Söhne Mono'
+      direction: [brutalist]
+    - display: 'IBM Plex Sans'
+      body: 'IBM Plex Sans'
+      mono: 'IBM Plex Mono'
+      direction: [brutalist]
+    - display: 'Neue Machina'
+      body: 'Neue Machina'
+      mono: 'IBM Plex Mono'
+      direction: [brutalist, wild-creative]
+    - display: 'Söhne Breit'
+      body: 'Söhne'
+      mono: 'Söhne Mono'
+      direction: [premium-luxury]
+    - display: 'Migra Italic'
+      body: 'Migra Sans'
+      mono: 'IBM Plex Mono'
+      direction: [premium-luxury, wild-creative]
+    - display: 'Tiempos Headline'
+      body: 'Söhne'
+      mono: 'Söhne Mono'
+      direction: [premium-luxury]
+    - display: 'GT Sectra Display'
+      body: 'GT America'
+      mono: 'IBM Plex Mono'
+      direction: [premium-luxury, wild-creative]
+    - display: 'PP Neue Machina'
+      body: 'PP Neue Montreal'
+      mono: 'PP Neue Montreal Mono'
+      direction: [wild-creative]
+    - display: 'GT Sectra Display'
+      body: 'GT America'
+      mono: 'IBM Plex Mono'
+      direction: [wild-creative]
+  banned_universal:
+    - 'Inter + slate-900'
+    - 'system-ui as sole sans'
+
+motion_tokens:
+  easing:
+    - id: 'ease-out'
+      usage: enter, exit, appear
+      source: animations.dev
+    - id: 'ease-in-out'
+      usage: on-screen movement, choreography
+      source: animations.dev
+    - id: 'ease'
+      usage: hover, color transitions
+      source: animations.dev
+  duration_by_direction:
+    clean-minimal: { enter: '120ms', exit: '120ms', hover: '80ms' }
+    warm-human: { enter: '320ms', exit: '280ms', hover: '200ms' }
+    brutalist: { enter: '100ms', exit: '100ms', hover: '0ms' }
+    premium-luxury: { enter: '400ms', exit: '360ms', hover: '240ms' }
+    wild-creative: { enter: '700ms', exit: '600ms', hover: '320ms' }
+  when_not_to_animate:
+    - elements seen 100+ times daily (toggles, common buttons)
+    - decorative-only motion with no information role
+    - color transitions on plain text (use weight change instead)
+
+visual_risk_budget:
+  description: Per direction, 1-3 explicit rule breaks allowed to escape generic output.
+  clean-minimal: [asymmetric_grid_in_one_section, oversized_single_quote_in_one_hero, mono_accent_bleed_in_one_moment]
+  warm-human: [one_hand_drawn_element_per_app, one_personal_microcopy_per_surface, one_unexpected_warm_color_moment]
+  brutalist: [one_exposed_grid_moment_per_app, one_unstyled_raw_element, one_brutalist_typography_moment]
+  premium-luxury: [one_custom_illustration_per_app, one_signature_transition, one_subtle_texture_moment]
+  wild-creative: [asymmetric_grid_throughout, oversized_typography, unusual_color_combinations, scroll_driven_hierarchy_breaks, custom_cursor_morph]
+
+composition:
+  provides:
+    - direction-locked design quality lift
+    - token system
+    - component upgrade receipts
+    - motion inventory
+    - microcopy inventory
+    - accessibility audit pass
+  conflicts_with:
+    - ship-fast-without-visual-receipt
+    - "looks don't matter" culture
+    - hosts without browser-proof-path
+    - hosts without test runner
+    - LLM-default-driven UI generation without direction lock
+    - serious-b2b-only with no creative latitude
+
+apply:
+  inspect:
+    - host app current design system and tokens
+    - host app component inventory
+    - host app state coverage (empty, loading, error, success, offline, blocked)
+    - host app motion usage (if any)
+    - host app microcopy inventory
+    - host app accessibility status
+    - host app icon library imports
+    - host app typography imports
+    - host app build pipeline for bundle size audit
+    - host app test runner
+  steps:
+    - run 00-host-assessment.md to audit current state
+    - run 00-assessment-questions.md to lock direction and gather decisions
+    - run 01-integration-plan.md to reconcile assessment with plan
+    - implement 02-implementation-phases/01-contract-and-config.md (direction lock + tokens)
+    - implement 02-implementation-phases/02-core-integration.md (components + states)
+    - implement 02-implementation-phases/03-host-wiring.md (motion + microcopy)
+    - implement 02-implementation-phases/04-user-operator-surface.md (accessibility + IA)
+    - implement 02-implementation-phases/05-verification-and-receipt.md (signature moment + receipt)
+    - run verify.md to verify all gates pass
+    - write capability-receipt.md with all required outputs
+  forbidden:
+    - Do not redesign the whole product without direction lock
+    - Do not replace existing functionality — only lift visual quality
+    - Do not install 3rd-party adapters without user approval
+    - Do not proceed without locked direction profile
+    - Do not skip banned defaults audit
+    - Do not skip before/after screenshots
+    - Do not claim success without capability-receipt.md
+
+verify:
+  proof_level: sandbox
+  commands:
+    - npm run build or equivalent
+    - npm run test if available
+    - lighthouse accessibility audit
+    - axe accessibility audit
+    - banned defaults regex scan
+    - icon library import scan
+    - bundle size audit
+    - screenshot comparison (before/after)
+  runtime_checks:
+    - no banned default patterns in built CSS/JS
+    - icon library used, no hand-rolled SVGs in primary components
+    - prefers-reduced-motion media query present
+    - prefers-reduced-transparency media query present
+    - lighthouse accessibility score >= 95
+    - axe audit passes with 0 critical/serious issues
+    - direction profile locked in receipt
+    - three dials recorded in receipt
+    - signature moment implemented with proof
+    - motion tokens match direction defaults
+    - microcopy has voice attribution
+    - no generic friendly microcopy (Oops/Whoopsie)
+    - typography pairing recorded in receipt
+    - visual risk budget audit shows 1-3 rule breaks max
+  blocked_checks:
+    - no direction profile locked blocks implementation
+    - banned defaults present block claim
+    - hand-rolled SVG icons block component phase
+    - missing reduced-motion fallback blocks motion phase
+    - missing reduced-transparency fallback blocks visual phase
+    - lighthouse score < 95 blocks accessibility claim
+    - axe critical/serious issues block accessibility claim
+    - missing before/after screenshots block receipt
+    - missing signature moment proof blocks direction claim
+    - missing motion inventory blocks motion claim
+    - missing microcopy inventory blocks microcopy claim
+
+risk:
+  level: medium
+  reason: Design quality lift touches UI, motion, and microcopy across all user-facing surfaces. Risk of breaking existing accessibility, introducing banned defaults, or overclaiming without receipts. Mitigated by direction lock, banned defaults audit, and visual proof requirements.
+
+failure_modes:
+  - direction-less-default — Agent produces generic LLM-default output without locking a direction. Detection: receipt missing direction_profile_locked.
+  - banned-default-drift — LLM-default patterns (Fraunces, Inter+slate, AI-purple gradient) reappear. Detection: banned_defaults_audit non-empty.
+  - signature-missing — Direction's required signature moment is absent or generic. Detection: signature_moment_proof missing or matches another direction.
+  - motion-without-tokens — Raw cubic-bezier or random ms durations instead of named tokens. Detection: motion_inventory missing token IDs.
+  - hand-rolled-svg — Inline SVG paths instead of icon library import. Detection: banned_patterns:hand-rolled-svg-icons match.
+  - a11y-shortcut — Reduced-motion or reduced-transparency fallback missing. Detection: prefers-reduced-* media query scan.
+  - empty-microcopy — Generic friendly microcopy without voice guide. Detection: microcopy_inventory missing voice attribution.
+  - bundle-bloat — Multiple icon libraries imported or unused icons in bundle. Detection: import scan + bundle size audit.
+  - no-receipt — Claim made without capability-receipt.md. Detection: verify step missing receipt.
+
+execution:
+  decision_mode: deferred
+  default: self-contained
+  rationale: Default path keeps the harness auditable in one place. Adoption of any 3rd-party path requires an adapter layer so existing gates stay authoritative.
+
+proposed_integration_paths:
+  default: self-contained
+  decision: deferred
+  paths:
+    - id: taste-skill-adapter
+      target_profiles: [brief-and-direction, motion]
+      summary: Use taste-skill v2 SKILL as the brief inference + design system map engine.
+      adapter_layer: optional
+      install: 'npx skills add https://github.com/Leonxlnx/taste-skill --skill design-taste-frontend'
+    - id: animations-dev-adapter
+      target_profiles: [motion]
+      summary: Use animations.dev SKILL.md for motion theory, easing, duration rules.
+      adapter_layer: optional
+    - id: spline-3d-adapter
+      target_profiles: [signature-moment]
+      summary: Use Spline for 3D signature moment in warm-human, premium-luxury, wild-creative.
+      adapter_layer: required when 3d_role is required/recommended
+    - id: gsap-adapter
+      target_profiles: [signature-moment, motion]
+      summary: Use GSAP for kinetic typography and scroll hijacks when needed.
+      adapter_layer: optional
+      scope: 'kinetic typography + scroll hijacks only per taste-skill'
+    - id: react-three-fiber-adapter
+      target_profiles: [signature-moment]
+      summary: Use React Three Fiber for custom 3D in code (wild-creative, premium-luxury).
+      adapter_layer: required when 3d_role is required/recommended
+    - id: phosphor-icons-adapter
+      target_profiles: [components]
+      summary: Use Phosphor Icons as primary icon family (default for clean-minimal, warm-human, premium-luxury).
+      adapter_layer: optional
+    - id: hugeicons-adapter
+      target_profiles: [components]
+      summary: Use Hugeicons (bold) for wild-creative, fill weight for warm-human.
+      adapter_layer: optional
+    - id: tabler-icons-adapter
+      target_profiles: [components]
+      summary: Use Tabler Icons (1.5 stroke) for brutalist.
+      adapter_layer: optional
+    - id: designmd-format-adapter
+      target_profiles: [visual-system, components, states]
+      summary: Use designmd.ai DESIGN.md format as optional design contract delivery.
+      adapter_layer: optional
+    - id: hybrid-self-plus-adapter
+      target_profiles: [all]
+      summary: Keep self-contained, add optional adapter layer per adopted path.
+      adapter_layer: required
+  guardrails:
+    - adopted paths must run behind existing deterministic gates
+    - model-judge scores may never override visual proof gates
+    - adapters must surface in the receipt (present/absent/version)
+    - no adopted path may produce banned defaults
+    - 3D adapter is only enabled when direction three_d_role is required or recommended
+    - direction profile may not be silently changed by an adapter
+
+receipt:
+  required_outputs:
+    - direction_profile_locked
+    - three_dials_recorded
+    - before_after_screenshots
+    - lighthouse_audit
+    - axe_audit
+    - microcopy_inventory
+    - motion_inventory
+    - icon_library_inventory
+    - typography_pairing_recorded
+    - signature_moment_proof
+    - visual_risk_budget_audit
+    - banned_defaults_audit
+  proof_levels:
+    - none
+    - inferred
+    - sandbox
+    - host-applied
+    - production
