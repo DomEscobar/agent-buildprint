@@ -376,6 +376,11 @@ function isDesignQualityLiftCapability(capability, buildprint, publication) {
   return /design[-_\s]?quality[-_\s]?lift|design[-_\s]?taste|design[-_\s]?enhancement/i.test(identity)
 }
 
+function isEvolutionaryCodingRuntimeCapability(capability, buildprint, publication) {
+  const identity = `${yamlScalar(capability, 'name')} ${yamlScalar(capability, 'capability')} ${yamlScalar(capability, 'title')} ${yamlScalar(capability, 'description')} ${publication}`
+  return /evolutionary[-_\s]?coding[-_\s]?agent|evolutionary[-_\s]?coding[-_\s]?runtime|alphaevolve|codeevolve|agents\.evolutionary_coding_runtime/i.test(identity)
+}
+
 function hasDiscoveryDecisionGate(text) {
   return /infer safely/i.test(text) &&
     /patch locally/i.test(text) &&
@@ -479,6 +484,7 @@ function capabilityPacketCheckResults(dir) {
   const secureRagCapability = isSecureRagCapability(capability, buildprint, publication)
   const agenticChatEvalCapability = isAgenticChatEvalCapability(capability, buildprint, publication)
   const designQualityLiftCapability = isDesignQualityLiftCapability(capability, buildprint, publication)
+  const evolutionaryCodingRuntimeCapability = isEvolutionaryCodingRuntimeCapability(capability, buildprint, publication)
 
   for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
   ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
@@ -617,6 +623,45 @@ function capabilityPacketCheckResults(dir) {
       files.has('examples/direction-profiles-v1.yaml') && files.has('examples/design-quality-lift-receipt.md'))
     ok('design quality lift references taste-skill or animations-dev research basis',
       files.has('references/research-basis.md') && (/taste-skill/i.test(combinedCapabilityText) || /animations\.dev/i.test(combinedCapabilityText) || /emil kowalski/i.test(combinedCapabilityText)))
+  }
+
+  if (evolutionaryCodingRuntimeCapability) {
+    ok('evolutionary coding runtime requires deterministic evaluator as hard dependency',
+      /deterministic/i.test(combinedCapabilityText) &&
+      /evaluator|fitness function|benchmark/i.test(combinedCapabilityText) &&
+      /No deterministic evaluator|no deterministic evaluator/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime requires sandbox limits before candidate execution',
+      /sandbox/i.test(combinedCapabilityText) &&
+      /timeout/i.test(combinedCapabilityText) &&
+      /memory/i.test(combinedCapabilityText) &&
+      /(execute candidates without sandbox|without sandbox|No sandbox boundary)/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime requires forbidden mutation scope',
+      /(forbidden mutation|forbidden-file|forbidden file|forbidden paths|forbidden-file guardrails)/i.test(combinedCapabilityText) &&
+      /(secrets|credentials|deployment|billing|production data)/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime requires baseline versus winner proof',
+      /baseline/i.test(combinedCapabilityText) &&
+      /winner/i.test(combinedCapabilityText) &&
+      /same evaluator|same settings|baseline comparison/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime requires lineage archive fields',
+      /lineage/i.test(combinedCapabilityText) &&
+      /parent/i.test(combinedCapabilityText) &&
+      /mutation prompt/i.test(combinedCapabilityText) &&
+      /patch/i.test(combinedCapabilityText) &&
+      /score/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime requires no-improvement honest receipt path',
+      /no[- ]improvement/i.test(combinedCapabilityText) &&
+      /not[- ]proven/i.test(combinedCapabilityText) &&
+      /receipt/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime rejects model-judge-only scoring',
+      /model[- ]judge/i.test(combinedCapabilityText) &&
+      /(advisory|cannot override|cannot.*override|not.*override)/i.test(combinedCapabilityText) &&
+      /deterministic/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime blocks uncontrolled self-modification',
+      /self[- ]modification|self[- ]improvement|self-modifying/i.test(combinedCapabilityText) &&
+      /approval/i.test(combinedCapabilityText) &&
+      /rollback/i.test(combinedCapabilityText))
+    ok('evolutionary coding runtime ships fixture run and receipt examples',
+      files.has('examples/minimal-evolution-run.json') && files.has('examples/fixture-evolution-receipt.md'))
   }
 
   for (const file of phaseFiles) {

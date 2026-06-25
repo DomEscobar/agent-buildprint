@@ -1,0 +1,124 @@
+schema: agent-buildprint/capability.v0
+name: evolutionary-coding-agent-runtime
+type: capability
+title: Evolutionary Coding Agent Runtime
+capability: agents.evolutionary_coding_runtime
+description: Adds a bounded evolutionary improvement loop for coding-agent hosts with sandboxed mutation, deterministic fitness evaluation, selection, lineage, and receipts.
+execution_profile: strict
+claim_status: unproven
+
+host_frameworks:
+  - TypeScript or Python coding-agent host
+  - CLI, worker, or web app with a task runner
+  - repository with tests, benchmark tasks, or measurable evaluation fixtures
+
+host_detection:
+  package_files:
+    - package.json
+    - pyproject.toml
+    - requirements.txt
+  route_signals:
+    - agent run command
+    - benchmark or eval command
+    - worker or queue entrypoint
+  auth_signals:
+    - provider key loading
+    - tool allowlist
+    - approval policy
+  database_signals:
+    - candidate lineage store
+    - run/result table
+    - file-backed archive
+
+requires:
+  existing_capabilities:
+    - deterministic test, benchmark, or task-evaluation harness
+    - sandboxed candidate execution or host-approved isolation plan
+    - versioned source control or rollback path
+  human_decisions:
+    - mutation scope and forbidden files
+    - allowed model providers and budget ceiling
+    - approval policy for self-modifying code
+  env:
+    - optional provider keys for mutation models
+
+touches:
+  - agent runtime orchestration
+  - evaluation harness
+  - sandbox execution boundary
+  - persistence/archive layer
+  - CLI or operator UI
+  - audit and receipts
+
+apply:
+  inspect:
+    - existing benchmark commands and expected outputs
+    - candidate execution isolation
+    - mutation-safe file zones
+    - provider/model configuration and budget controls
+    - persistence and trace storage
+  steps:
+    - define candidate schema, score schema, and lineage records
+    - add mutation engine with patch validation and forbidden-file guardrails
+    - add evaluator runner with timeout, memory, and deterministic score parsing
+    - add selection/archive loop with baseline comparison and checkpointing
+    - add operator controls, receipts, and rollback guidance
+  forbidden:
+    - mutate secrets, deployment configs, credentials, billing files, or production data
+    - execute candidates without sandbox, timeout, and resource limits
+    - claim self-improvement from a single candidate or model-judge text alone
+    - hide regressions, failed candidates, or cost overruns
+
+verify:
+  commands:
+    - run baseline evaluator against current host
+    - run at least one bounded evolution cycle with two or more candidates
+    - rerun evaluator for winner and baseline under the same settings
+  runtime_checks:
+    - sandbox timeout and memory limit trigger on bad candidate
+    - forbidden mutation path is rejected
+    - lineage records parent, mutation prompt, patch, score, failure, and winner
+    - no-improvement run records honest not-proven status
+  blocked_checks:
+    - no deterministic evaluator
+    - no sandbox boundary
+    - no mutation scope
+    - no lineage receipt
+
+risk:
+  level: high
+  reason: The capability can run generated code and mutate agent behavior. It needs hard sandboxing, explicit mutation boundaries, budget controls, rollback, and receipts to avoid unsafe self-modification or false improvement claims.
+
+failure_modes:
+  - evaluator-overfit — Candidates exploit weak tests instead of improving real capability.
+  - sandbox-escape-risk — Candidate code runs with too much filesystem, network, or credential access.
+  - mutation-scope-creep — The loop edits secrets, deploy files, or unrelated production code.
+  - no-real-improvement — The best candidate does not beat baseline under repeated deterministic evaluation.
+  - archive-collapse — Selection converges too early and loses diversity.
+  - cost-runaway — Mutation/eval loop keeps spending after plateau or failure.
+
+composition:
+  expects:
+    - deterministic test, benchmark, or task-evaluation harness
+    - sandboxed candidate execution or host-approved isolation plan
+    - versioned source control or rollback path
+  provides:
+    - evolutionary candidate loop
+    - mutation boundary and patch validation
+    - fitness evaluation receipt
+    - lineage/archive storage
+    - selection and checkpoint protocol
+  conflicts_with:
+    - autonomous production self-modification without approval
+    - hosts with no measurable fitness signal
+    - untrusted code execution without sandbox
+
+evidence:
+  required:
+    - baseline score and command
+    - candidate count and lineage
+    - sandbox proof
+    - winner score and baseline comparison
+    - cost and model usage summary
+    - claim ceiling with not-proven fields
+

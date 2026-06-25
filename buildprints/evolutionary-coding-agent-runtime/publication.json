@@ -1,0 +1,10 @@
+{
+  "name": "evolutionary-coding-agent-runtime",
+  "title": "Evolutionary Coding Agent Runtime",
+  "summary": "A bounded Capability Buildprint for adding AlphaEvolve / CodeEvolve style population, LLM mutation, sandboxed fitness evaluation, selection, lineage, and receipts to existing coding-agent hosts.",
+  "status": "draft",
+  "kind": "capability",
+  "stack": ["BUILDPRINT.md", "capability.yaml", "compatibility.md", "apply.md", "verify.md", "00-host-assessment.md", "00-assessment-questions.md", "01-integration-plan.md", "02-implementation-phases/", "examples/minimal-evolution-run.json", "examples/fixture-evolution-receipt.md", "references/research-basis.md"],
+  "canonical_start": "BUILDPRINT.md",
+  "tags": ["agents", "evolution", "self-improvement", "coding-agent", "evaluation", "sandbox", "benchmarks", "lineage"]
+}

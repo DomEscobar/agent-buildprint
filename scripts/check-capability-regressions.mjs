@@ -8,6 +8,7 @@ const source = path.join(root, 'buildprints', 'api-key-management')
 const secureRagSource = path.join(root, 'buildprints', 'secure-hybrid-rag-mcp')
 const agenticChatEvalSource = path.join(root, 'buildprints', 'agentic-chat-eval-harness')
 const designQualityLiftSource = path.join(root, 'buildprints', 'design-quality-lift')
+const evolutionaryRuntimeSource = path.join(root, 'buildprints', 'evolutionary-coding-agent-runtime')
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'agb-capability-regression-'))
 
 function copyPacket(name) {
@@ -31,6 +32,12 @@ function copyAgenticChatEvalPacket(name) {
 function copyDesignQualityLiftPacket(name) {
   const packet = path.join(temp, name)
   fs.cpSync(designQualityLiftSource, packet, { recursive: true })
+  return packet
+}
+
+function copyEvolutionaryRuntimePacket(name) {
+  const packet = path.join(temp, name)
+  fs.cpSync(evolutionaryRuntimeSource, packet, { recursive: true })
   return packet
 }
 
@@ -80,6 +87,11 @@ function expectAgenticChatEvalFailure(name, mutate, expectedFailures) {
 
 function expectDesignQualityLiftFailure(name, mutate, expectedFailures) {
   const packet = copyDesignQualityLiftPacket(name)
+  expectPacketFailure(name, packet, mutate, expectedFailures)
+}
+
+function expectEvolutionaryRuntimeFailure(name, mutate, expectedFailures) {
+  const packet = copyEvolutionaryRuntimePacket(name)
   expectPacketFailure(name, packet, mutate, expectedFailures)
 }
 
@@ -235,6 +247,56 @@ try {
     fs.rmSync(path.join(packet, 'examples', 'direction-profiles-v1.yaml'), { force: true })
     fs.rmSync(path.join(packet, 'examples', 'design-quality-lift-receipt.md'), { force: true })
   }, ['design quality lift ships direction profiles and example receipt'])
+
+  expectEvolutionaryRuntimeFailure('capability regression catches missing deterministic evaluator', (packet) => {
+    replaceInAllFiles(packet, [
+      [/deterministic/g, 'measured'],
+      [/Deterministic/g, 'Measured'],
+      [/DETERMINISTIC/g, 'MEASURED'],
+    ])
+  }, ['evolutionary coding runtime requires deterministic evaluator as hard dependency'])
+
+  expectEvolutionaryRuntimeFailure('capability regression catches missing sandbox limits', (packet) => {
+    replaceInAllFiles(packet, [
+      [/sandbox/g, 'worker'],
+      [/Sandbox/g, 'Worker'],
+      [/timeout/g, 'deadline'],
+      [/Timeout/g, 'Deadline'],
+      [/memory/g, 'resource'],
+      [/Memory/g, 'Resource'],
+    ])
+  }, ['evolutionary coding runtime requires sandbox limits before candidate execution'])
+
+  expectEvolutionaryRuntimeFailure('capability regression catches missing lineage archive fields', (packet) => {
+    replaceInAllFiles(packet, [
+      [/lineage/g, 'history'],
+      [/Lineage/g, 'History'],
+      [/parent/g, 'ancestor'],
+      [/Parent/g, 'Ancestor'],
+      [/mutation prompt/g, 'change prompt'],
+      [/Mutation prompt/g, 'Change prompt'],
+      [/patch/g, 'diff'],
+      [/Patch/g, 'Diff'],
+      [/score/g, 'rating'],
+      [/Score/g, 'Rating'],
+    ])
+  }, ['evolutionary coding runtime requires lineage archive fields'])
+
+  expectEvolutionaryRuntimeFailure('capability regression catches missing no-improvement receipt path', (packet) => {
+    replaceInAllFiles(packet, [
+      [/no-improvement/g, 'inconclusive'],
+      [/No-improvement/g, 'Inconclusive'],
+      [/no improvement/g, 'inconclusive result'],
+      [/No improvement/g, 'Inconclusive result'],
+      [/not-proven/g, 'inconclusive'],
+      [/Not-proven/g, 'Inconclusive'],
+    ])
+  }, ['evolutionary coding runtime requires no-improvement honest receipt path'])
+
+  expectEvolutionaryRuntimeFailure('capability regression catches missing evolutionary examples', (packet) => {
+    fs.rmSync(path.join(packet, 'examples', 'minimal-evolution-run.json'), { force: true })
+    fs.rmSync(path.join(packet, 'examples', 'fixture-evolution-receipt.md'), { force: true })
+  }, ['evolutionary coding runtime ships fixture run and receipt examples'])
 } finally {
   fs.rmSync(temp, { recursive: true, force: true })
 }
