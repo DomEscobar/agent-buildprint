@@ -42,6 +42,8 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
   - streaming_chat_core — <proven/blocked; cite streaming token trace + persistence readback>
   - agentic_chat — <proven/blocked; cite a model-driven action-selection trace (provider tool call), an approval-gated audited tool/MCP/memory execution, and observation re-ingestion>
   - agentic_swarm — <proven/blocked; cite a real parallel subagent run trace, isolated per-worker context, supervisor fan-in synthesis, and partial-failure handling>
+  - claim-gates — <.buildprint/claim-gates.json PASS/FAIL/blocker; cite highest_honest_claim and hard_failures>
+  - claim-check — <.buildprint/claim-check.md PASS/FAIL/blocker; cite lowered claims and next verification run>
   - Highest honest claim — <streaming_chat_core | agentic_chat | agentic_swarm>
 - Central output quality evidence:
   - <what the output makes clear>
@@ -69,8 +71,11 @@ Use this template when stopping or finishing. Keep it concise, concrete, and evi
 ## Not proven
 
 - any capability maturity level whose proof above is blocked — do not claim `agentic_chat` without a model-driven action + approval-gated audited execution trace, and do not claim `agentic_swarm` without a real parallel subagent + supervisor synthesis trace
+- any higher maturity level not passed by `.buildprint/claim-gates.json`
 - model-driven action selection claimed while the build still relies on user-typed slash commands or keyword/regex intent matching
+- action results claimed as agentic while they are not re-ingested into a next model step
 - parallel swarm claimed while subagents actually run sequentially or are fabricated
+- swarm isolation claimed while workers share unscoped context or global tool access
 - tools/skills, MCP, memory/compaction, or subagents when they lack typed runtime paths, policy states, audit records, and product-loop proof
 - paid-provider quality or public hosting when only the local default provider was proven
 - <claim that should not be made yet>

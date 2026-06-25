@@ -130,21 +130,27 @@ execution_model:
       - goal intake in the chat composer or thread context
       - plan or next-step state visible in product language
       - model-driven action selection across model, tool, skill, MCP, and memory paths (not user-typed slash commands or keyword pattern-matching)
+      - ActionSelectionEvidence proving provider-native tool/function calling or a normalized model action record, not slash commands, keywords, regex, or button-only routing
       - policy/approval gate before side-effecting actions
       - execution trace attached to the relevant message or turn
       - observation/result ingestion fed back to the model for the next step
+      - ObservationReingestionEvidence proving the action result influenced the next model step and final synthesis
       - critique/retry/recovery path for failed actions within a bounded budget
       - resumable state after reload or restart
+      - AgenticRestartEvidence for agent_run, ordered agent_step, action_request, policy_result, approval_record when applicable, action_result, and agent_trace
       - final synthesis tied to the original user goal
     required_for_agentic_swarm_claim:
       - supervisor decomposes a goal into typed, parallelizable subtasks
       - parallel subagent dispatch with bounded concurrency and a work queue
+      - SwarmConcurrencyEvidence proving overlapping subagent timestamps under a real concurrency primitive
       - per-subagent run id, isolated context, scoped tool/MCP access, and independent trace
+      - WorkerIsolationEvidence proving workers do not inherit unscoped global context or tool access
       - fan-in aggregation that the supervisor synthesizes into one answer tied to the goal
       - approval gate before spawning a swarm that performs side effects
       - per-subagent and whole-swarm cancellation
       - bounded per-subagent retry and partial-failure handling (some workers fail, swarm still synthesizes honestly)
       - resumable swarm run, subagent records, and aggregation after restart
+      - SwarmRestartEvidence for swarm_run, subtask_spec, subagent_run, per-worker agent traces, and aggregation_record
   proof_loop:
     name: Evidence Repair Loop
     steps:
@@ -155,7 +161,7 @@ execution_model:
       - rerun the affected proof
       - rescore until pass, blocker, or iteration budget exhaustion
   stop_conditions:
-    pass: every active maturity gate has fresh evidence, no hard fail remains, and HANDOVER.md claim ceiling matches proof
+    pass: every active maturity gate has fresh evidence, .buildprint/claim-gates.json computes the same highest honest claim as HANDOVER.md, no hard fail remains, and HANDOVER.md claim ceiling matches proof
     blocked: exact missing credential, runtime, decision, permission, or external dependency is recorded
     fail: loop budget exhausted, product remains generic, or Buildprint run does not beat a normal plan-mode baseline on the benchmark
 
@@ -184,6 +190,7 @@ capability_maturity:
         - approval gates for side effects
         - observation re-ingestion, critique, bounded retry, and resumable trace
         - final synthesis tied to the original goal
+        - .buildprint/claim-gates.json records agentic_chat.status as pass with cited evidence
     agentic_swarm:
       claim: parallel multi-agent swarm dispatching
       required:
@@ -196,6 +203,7 @@ capability_maturity:
         - bounded retry and honest partial-failure synthesis
         - resumable swarm run, subagent records, and aggregation after restart
         - benchmark evidence that the swarm build beats a single-agent and normal plan-mode baseline on completeness, latency-aware orchestration, UI, runtime behavior, and proof quality
+        - .buildprint/claim-gates.json records agentic_swarm.status as pass with cited evidence
 
 agent_contract:
   role: Senior Product Engineer

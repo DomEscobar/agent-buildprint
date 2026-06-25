@@ -21,7 +21,11 @@ phases:
     file: 03-phases/05-swarm-dispatching.md
     status: included
     depends_on: [04-agentic-loop-runtime]
+  - phase_id: 06-claim-verification
+    file: 03-phases/06-claim-verification.md
+    status: included
+    depends_on: [05-swarm-dispatching]
   - phase_id: 99-critical-review-pushback
     file: 03-phases/critical-review-pushback.md
     status: included
-    depends_on: [05-swarm-dispatching]
+    depends_on: [06-claim-verification]

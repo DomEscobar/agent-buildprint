@@ -15,6 +15,7 @@ Use this loop for the active phase only. Do not read every phase upfront. Do not
 8. Repair visible slop and fake-success shortcuts before continuing. Do one concrete weakness repair unless none is found. If the phase touches a full Agentic Chat claim, repair one missing plan/action/observation/critique/retry/resume affordance or record the exact blocker.
 9. Record what works, what is blocked, what was verified, what the proof does not prove, which capability maturity level is currently proven, and what the next phase may trust.
 10. Continue through the dependency-ready implementation phases in `03-phases/phase-index.yaml`.
+98. Mandatory claim verification before final review: run `03-phases/06-claim-verification.md`. If `.buildprint/claim-gates.json` is missing, invalid, or computes a lower `highest_honest_claim` than the UI/README/HANDOVER claims, lower the claim or capture the missing proof before continuing.
 99. Final mandatory phase: run `03-phases/critical-review-pushback.md` as `99-critical-review-pushback`; if the rubric does not pass, fix the named ad hoc flaws and rerun the relevant proof before claiming done.
 
 ## Completion rule
@@ -23,11 +24,13 @@ A phase passes only when the building objective is satisfied by a real product p
 
 For Agentic Chat, `streaming_chat_core` and `agentic_chat` are separate claim levels. Real streaming chat can pass the foundation floor. Full Agentic Chat cannot pass until the product loop proves goal intake, plan or next-step state, action selection, policy/approval, execution trace, observation ingestion, critique/retry/recovery, resumable state, and final synthesis tied to the user goal. If those are not built and proven, the handoff must say `agentic_chat: blocked` or `agentic_chat: not_qualified`.
 
+Phase 06 is authoritative for final claim level. It must derive `highest_honest_claim` from `.buildprint/claim-gates.json`. A prose handoff, UI label, screenshot, config file, SDK import, or mock/sample transcript cannot override a failed or blocked claim gate.
+
 Do not create phase-run markdown, evidence ledgers, or planning artifacts by default. The thinking checkpoint is behavioral: it should shape the work, not become paperwork. Persist only concise progress, blockers, and handoff facts needed for continuation.
 
-This packet is a capability ladder (`capability_maturity` in `blueprint.yaml`): `streaming_chat_core` (phases 01-03) → `agentic_chat` (phase 04) → `agentic_swarm` (phase 05). Phases 04 and 05 are in scope, not deferred. The foundation floor passes at phase 03, but the packet's full claim is only reached when the model-driven action loop and the parallel swarm are proven by their phase proofs, or each unreached level is recorded as an honest blocker. Do not market streaming-only work as agentic, or a single-agent loop as a swarm.
+This packet is a capability ladder (`capability_maturity` in `blueprint.yaml`): `streaming_chat_core` (phases 01-03) → `agentic_chat` (phase 04) → `agentic_swarm` (phase 05) → claim verification (phase 06). Phases 04 and 05 are in scope, not deferred. The foundation floor passes at phase 03, but the packet's full claim is only reached when the model-driven action loop and the parallel swarm are proven by their phase proofs and phase 06 computes the matching highest honest claim, or each unreached level is recorded as an honest blocker. Do not market streaming-only work as agentic, or a single-agent loop as a swarm.
 
-Final completion is impossible until phase `99-critical-review-pushback` has run and either passed or recorded an external blocker. Treat it as the last phase in the phase graph, not as optional review prose.
+Final completion is impossible until phase `06-claim-verification` has produced a valid claim verdict and phase `99-critical-review-pushback` has run and either passed or recorded an external blocker. Treat both as phase graph requirements, not optional review prose.
 
 Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`, `UI_IDENTITY_DONE`, `SUBAGENT_PHASE_DONE` when subagents governed the work, and `VERIFY_REVIEW_DONE` before phase completion.
 
@@ -47,6 +50,7 @@ Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`,
 - If the agentic loop selects actions via slash commands, keyword matching, or regex intent parsing instead of model-driven provider tool/function calling, return to `03-phases/04-agentic-loop-runtime.md` before claiming `agentic_chat`.
 - If a side-effecting action runs without an approval record, or a tool/MCP/memory capability is stubbed and presented as working, return to `03-phases/04-agentic-loop-runtime.md` and repair the policy/approval/audit path.
 - If subagents run sequentially while being presented as parallel, or worker output is fabricated, or workers have unscoped global tool access, return to `03-phases/05-swarm-dispatching.md` before claiming `agentic_swarm`.
+- If `.buildprint/claim-gates.json` is missing, invalid, cites missing evidence, or computes a lower claim than the product presents, return to `03-phases/06-claim-verification.md` and lower the claim or capture proof.
 
 ## Handoff discipline
 

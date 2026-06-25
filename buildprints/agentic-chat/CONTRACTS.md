@@ -27,6 +27,9 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 - `AgentRun`: id, session id, goal, status, plan/next-step state, step list, bounded step/retry budget, and final synthesis; resumable after restart.
 - `AgentStep`: ordered record of model decision, action request, policy/approval, observation, and critique.
 - `MemoryEntry`: scope, key/content, write decision (`auto`/`ask`/`skip`/`block`), retention posture, and audit trail; `CompactionSummary` summarizes history in product language.
+- `ActionSelectionEvidence`: model/provider request id, model/provider response id or normalized action id, selected action id, typed arguments, model rationale or tool-call payload, originating message id, policy result, approval requirement, side-effect class, and proof that the selection was not slash-command, keyword, regex, or button-only routing.
+- `ObservationReingestionEvidence`: action result id, next model request id, observation payload reference, final synthesis reference, and proof that the next step used the observed result rather than a scripted local append.
+- `AgenticRestartEvidence`: `agent_run`, ordered `agent_step`, `action_request`, `policy_result`, `approval_record` when applicable, `action_result`, and `agent_trace` read back after reload or process restart with matching ids and order.
 
 ## Swarm contracts (agentic_swarm — phase 05)
 
@@ -35,8 +38,17 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 - `SubagentRun`: id, swarm id, subtask id, isolated context, status (`queued`/`running`/`completed`/`failed`/`blocked`/`cancelled`), retry count, output summary, and independent trace link.
 - `SubagentStep`: ordered per-worker model decision, action, observation, and critique records.
 - `AggregationRecord`: fan-in inputs (per-subagent outputs), partial-failure notes, and the supervisor synthesis tied to the original goal.
+- `SwarmConcurrencyEvidence`: concurrency primitive name/configuration, limit, queued count, at least two subagent ids with overlapping `started_at`/`finished_at` intervals, and proof that the run was not sequential awaits relabeled as parallel.
+- `WorkerIsolationEvidence`: per-subagent context reference, scoped tool/MCP allowlist, independent trace link, and proof that no worker inherited unscoped global access.
+- `SwarmRestartEvidence`: `swarm_run`, `subtask_spec`, `subagent_run`, per-worker `agent_run`/`agent_step`, and `aggregation_record` read back after reload or process restart.
 
 These contracts are **built and proven** at their maturity level, not deferred. Unbuilt levels remain honest blocked seams per `EXTENSIONS.md`.
+
+## Claim verification contracts (phase 06)
+
+- `ClaimGateEvidence`: `.buildprint/claim-gates.json` with schema version, checked timestamp, computed `highest_honest_claim`, per-level status, cited evidence ids, and hard-failure arrays.
+- `ClaimCheckReport`: `.buildprint/claim-check.md` explaining the pass/fail/blocker verdict for each maturity level, every lowered claim, and the smallest verification run needed to lift a blocked level.
+- A higher claim may not pass from prose, screenshots alone, UI labels, configuration, SDK imports, fixtures, or sample/mock output. It needs the runtime records above plus restart/readback evidence.
 
 ## Setup architecture gate
 

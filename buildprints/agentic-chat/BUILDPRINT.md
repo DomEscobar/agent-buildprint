@@ -15,6 +15,8 @@ This packet is built as a **capability ladder**, not a single 1.0 line (see `cap
 
 Each level is a strictly higher claim with its own proof. Do not market streaming-only work as agentic, and do not market a single-agent loop as a swarm. Capabilities you have not yet proven stay as honestly blocked states with designed seams — never stubbed, faked, or advertised as working. The intent classification that drives action selection must be done by the model, never by regex/keyword pattern-matching.
 
+Before final completion, run `03-phases/06-claim-verification.md`. It computes the highest honest claim from concrete evidence artifacts. If `.buildprint/claim-gates.json` is missing, invalid, or cannot prove model-driven action selection, observation re-ingestion, real concurrency, scoped worker isolation, and restart readback, the product claim must be lowered even if the UI looks complete.
+
 ## Your role
 
 Act like a senior product engineer who owns the outcome end to end. Understand the intent, make sharp implementation decisions, protect the user experience, and refuse shallow completion. You are expected to notice missing assumptions, repair weak abstractions, and turn vague direction into a working artifact without silently shrinking scope.
@@ -46,6 +48,7 @@ Be precise. Be skeptical of your own claims. Prefer direct verification over con
 7. `03-phases/phase-flow.md`
 8. The active phase file named by `03-phases/phase-index.yaml`
 9. `README.md` as the product/operator-facing overview before final handoff
-10. `HANDOVER.md` before stopping or claiming completion
+10. `03-phases/06-claim-verification.md` before any `agentic_chat` or `agentic_swarm` completion claim
+11. `HANDOVER.md` before stopping or claiming completion
 
 Read sequentially. Do not inventory every phase before the active phase is known.

@@ -36,6 +36,7 @@ Product-proof contract for this phase:
 - Named output/state: persisted `swarm_run`, ordered `subtask_spec` records, per-worker `subagent_run` records linked to their own `agent_run`/`agent_step` traces, the `aggregation_record` fan-in, approval/cancellation state, and the inline swarm-panel state attached to the supervisor message.
 - Failure modes that must produce honest product-visible states: a subagent fails or times out (swarm continues, partial-failure synthesis is honest about gaps), all subagents fail (honest failed state, no fabricated answer), concurrency limit reached (queueing visible, not dropped work), whole-swarm cancellation (in-flight subagents cancelled, state persisted as `cancelled`), single-subagent cancellation, and persistence failure.
 - Concrete proof artifact: `.buildprint/evidence-phase-05.md` with an API/browser transcript and timing evidence proving the subagents ran **concurrently** (overlapping start/finish timestamps, not strictly sequential), at least one injected partial failure handled honestly, the supervisor fan-in synthesis tied to the goal, cancellation behavior, and persisted readback after restart.
+- Claim-gate artifact: `.buildprint/claim-gates.json` must include `agentic_swarm.status = pass` before this phase may raise the maturity claim. The gate must cite `SwarmConcurrencyEvidence`, `WorkerIsolationEvidence`, fan-in synthesis evidence, partial-failure evidence, cancellation evidence, UI state evidence, and `SwarmRestartEvidence`.
 
 Required surface behavior:
 
@@ -68,6 +69,7 @@ Required surface behavior:
 - Prove approval-gated dispatch for a side-effecting swarm, and both whole-swarm and single-subagent cancellation.
 - Prove each subagent had isolated context and scoped tool access.
 - Prove `swarm_run`, `subtask_spec`, `subagent_run`, and `aggregation_record` persist and read back after restart.
+- Produce or update `.buildprint/claim-gates.json` and `.buildprint/claim-check.md`; if the swarm gate is missing, blocked, or has sequential timestamps, keep `agentic_swarm` unqualified.
 - Capture screenshot/browser/API evidence for the decomposition, awaiting-approval, concurrent-running, partial-failure, and synthesized states.
 - Record any blocker with the exact missing dependency, credential, command, or decision.
 

@@ -42,6 +42,7 @@ Product-proof contract for this phase:
 - Named output/state: persisted `agent_run`, ordered `agent_step` records, policy/approval state, typed `action_request`, typed `action_result`, `memory_decision` when memory is enabled or blocked, `delegation_record` when delegation is enabled or blocked, and `agent_trace` linked to the session.
 - Failure modes: functionless tool buttons, hidden side effects, implicit execution from model text, fake memory writes, fabricated subagent work, raw MCP output as product UI, missing approval state, non-resumable run state, and retry loops without bounded policy must prevent a full Agentic Chat claim.
 - Concrete proof artifact: `.buildprint/evidence-phase-04.md` with browser/API transcripts showing goal intake, plan/next-step state, action selection, approval/block path, executed or blocked result, observation ingestion, critique/retry behavior, persisted trace readback after restart, and claim comparison against the plan-mode baseline.
+- Claim-gate artifact: `.buildprint/claim-gates.json` must include `agentic_chat.status = pass` before this phase may raise the maturity claim. The gate must cite `ActionSelectionEvidence`, `ObservationReingestionEvidence`, side-effect denial/no-execution proof, UI state evidence, and `AgenticRestartEvidence`.
 
 Required surface behavior:
 
@@ -80,6 +81,7 @@ This phase should leave a user, operator, or developer with a real path they can
 - Prove at least one side-effecting action blocks or waits for approval without side effects when not approved.
 - Prove memory and delegation either work with audit records or block honestly with user-visible explanations.
 - Prove persisted readback for `agent_run`, `agent_step`, `action_request`, `action_result`, `agent_trace`, and any memory/delegation records after restart, or record the exact persistence blocker.
+- Produce or update `.buildprint/claim-gates.json` and `.buildprint/claim-check.md`; if the agentic gate is missing or blocked, keep `agentic_chat` unqualified.
 - Capture screenshot/browser/API/runtime evidence for planning, awaiting approval, acting/observing, blocked/failed, retry/recovery, completed, and restored states.
 - Record benchmark evidence comparing the Buildprint-guided result against a normal plan-mode baseline, or record why the benchmark could not run and keep `agentic_chat` unqualified.
 - Record any blocker with the exact missing dependency, command, credential, permission, or decision.
