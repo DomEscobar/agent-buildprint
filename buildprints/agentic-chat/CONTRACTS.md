@@ -18,22 +18,33 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 
 ## Agentic loop contracts (agentic_chat — phase 04)
 
+- `AgentHarness`: caller-owned transcript, stateless provider/tool loop inside harness, provider-neutral event stream, single-runner invariant, steering/follow-up queue, cancellation token, and dangling tool-call repair before the next model request.
+- `SessionEvent`: append-only typed session entry (`message`, `model_step`, `compaction`, `approval`, `budget`, `custom`); active state derived by replay; supports branch/resume when implemented.
+- `BudgetPolicy`: token, time, tool-call, step, and cost budgets with warn thresholds, hard-stop actions, and consumed-budget records attached to the run.
+- `LoopBreaker`: no-progress or repeated-action detection with typed stop reason; pairs with bounded step/retry budget.
+- `ContextPack`: ranked/filtered context slice with trust-zone labels, budget check, and compaction provenance before each model call.
+- `TrustZone`: source label (`system`, `user`, `tool_output`, `retrieved`, `memory`) and packing authority for each context segment.
+- `CapabilityGrant`: scoped tool/MCP/data access for one action or subtask, with expiry/revocation and audit link.
+- `ActionScreening`: prompt-injection action firewall result comparing proposed action to original user intent when untrusted context influenced the model (`allow` / `block` / `escalate`).
+- `VerifierResult`: goal acceptance check, rubric/tests outcome, or typed blocker preventing fake completion.
+- `RunReceipt`: exportable structured record of run id, goal, steps, tool calls, approvals, budgets, errors, synthesis, provenance links, and redaction policy.
+- `IdempotencyKey`: key/ledger entry for write/external side effects to prevent duplicate execution on retry or crash recovery.
 - `ToolSpec` / `SkillSpec`: id, description, typed JSON input/output schema, side-effect class (`none`/`read`/`write`/`external`), and allowlist status. Exposed to the model as native tool/function definitions.
 - `McpServerSpec`: server id, transport/command, connection posture, allowlisted tools, credential posture, side-effect class, and timeout/error policy.
 - `ActionRequest`: model-selected action with kind (`tool`/`skill`/`mcp`/`memory`), typed arguments, originating message/turn, and the model rationale that selected it.
 - `PolicyResult`: `allow` / `ask` / `block` with reason and required approval scope.
 - `ApprovalRecord`: action id, decision (`approved`/`denied`), actor, and timestamp.
 - `ActionResult`: typed output, status (`completed`/`failed`/`blocked`), latency, and error taxonomy; fed back into the loop as an observation.
-- `AgentRun`: id, session id, goal, status, plan/next-step state, step list, bounded step/retry budget, and final synthesis; resumable after restart.
+- `AgentRun`: id, session id, goal, status, plan/next-step state, step list, bounded step/retry budget, budget consumption, loop-breaker state, verifier result, harness run id, and final synthesis; resumable after restart.
 - `AgentStep`: ordered record of model decision, action request, policy/approval, observation, and critique.
 - `MemoryEntry`: scope, key/content, write decision (`auto`/`ask`/`skip`/`block`), retention posture, and audit trail; `CompactionSummary` summarizes history in product language.
 - `ActionSelectionEvidence`: model/provider request id, model/provider response id or normalized action id, selected action id, typed arguments, model rationale or tool-call payload, originating message id, policy result, approval requirement, side-effect class, and proof that the selection was not slash-command, keyword, regex, or button-only routing.
 - `ObservationReingestionEvidence`: action result id, next model request id, observation payload reference, final synthesis reference, and proof that the next step used the observed result rather than a scripted local append.
-- `AgenticRestartEvidence`: `agent_run`, ordered `agent_step`, `action_request`, `policy_result`, `approval_record` when applicable, `action_result`, and `agent_trace` read back after reload or process restart with matching ids and order.
+- `AgenticRestartEvidence`: `agent_run`, ordered `agent_step`, `action_request`, `policy_result`, `approval_record` when applicable, `action_result`, `agent_trace`, `session_event` log readback, and `run_receipt` after reload or process restart with matching ids and order.
 
 ## Swarm contracts (agentic_swarm — phase 05)
 
-- `SwarmRun`: id, session id, parent agent run id, goal, decomposition plan, concurrency limit, status, aggregation/synthesis output, and cancellation state; resumable after restart.
+- `SwarmRun`: id, session id, parent agent run id, goal, decomposition plan, concurrency limit, delegation ledger, no-progress breaker state, status, aggregation/synthesis output, and cancellation state; resumable after restart.
 - `SubtaskSpec`: id, swarm id, typed objective, inputs, dependencies, and assigned tool/MCP scope.
 - `SubagentRun`: id, swarm id, subtask id, isolated context, status (`queued`/`running`/`completed`/`failed`/`blocked`/`cancelled`), retry count, output summary, and independent trace link.
 - `SubagentStep`: ordered per-worker model decision, action, observation, and critique records.

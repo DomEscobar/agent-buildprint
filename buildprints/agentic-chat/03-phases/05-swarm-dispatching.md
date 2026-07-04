@@ -6,6 +6,7 @@ This phase promotes the product from `agentic_chat` to `agentic_swarm` — the f
 
 Before writing code, read:
 
+- `references/runtime-techniques-basis.md`
 - `03-phases/phase-flow.md`
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
@@ -20,11 +21,12 @@ Build the swarm on top of the proven phase-04 loop: each subagent is an instance
 
 Keep `02-ui-identity.md` open: swarm progress must render as an **inline, chat-native** affordance — a compact live panel of parallel workers attached to the supervisor message, each expandable to its own trace. It must not become a separate task dashboard or kanban that displaces the conversation thread.
 
-Build the smallest useful **supervisor/worker swarm**: a user states a goal that benefits from parallel work; the supervisor (a model-driven step) decomposes it into typed subtasks with dependencies; an approval gate fires before any side-effecting swarm; the dispatcher spawns subagents up to a concurrency limit; each subagent runs the phase-04 loop in isolation; the dispatcher streams per-subagent status; on completion (including partial failure) the supervisor performs fan-in synthesis tied to the original goal. The swarm run, subagent runs, and steps persist and resume after restart.
+Build the smallest useful **supervisor/worker swarm** using multi-agent runtime techniques from `references/runtime-techniques-basis.md`: a user states a goal that benefits from parallel work; the supervisor (a model-driven step) decomposes it into typed subtasks with dependencies and records a **delegation ledger**; a **no-progress breaker** stops handoff/delegation drift; an approval gate fires before any side-effecting swarm; the dispatcher spawns subagents up to a concurrency limit; each subagent runs the phase-04 harnessed loop in isolation with scoped capability grants; the dispatcher streams per-subagent status; on completion (including partial failure) the supervisor performs fan-in synthesis with verifier/partial-failure honesty tied to the original goal; per-worker and swarm **run receipts** persist. The swarm run, subagent runs, and steps persist and resume after restart.
 
 Required runtime contracts (extend the phase-04 store; add a migration):
 
-- `swarm_run`: id, session id, parent agent run id, goal text, decomposition plan, concurrency limit, status (`planning`/`awaiting_approval`/`running`/`synthesizing`/`completed`/`failed`/`partial`/`cancelled`), aggregation/synthesis output, cancellation state, schema version.
+- `swarm_run`: id, session id, parent agent run id, goal text, decomposition plan, concurrency limit, delegation ledger, no-progress breaker state, status (`planning`/`awaiting_approval`/`running`/`synthesizing`/`completed`/`failed`/`partial`/`cancelled`), aggregation/synthesis output, cancellation state, schema version.
+- `delegation_ledger`: ordered handoff records with worker id, subtask id, typed result schema reference, and trace link.
 - `subtask_spec`: id, swarm id, typed objective, inputs, dependency ids, and assigned tool/MCP scope.
 - `subagent_run`: id, swarm id, subtask id, isolated context reference, status (`queued`/`running`/`completed`/`failed`/`blocked`/`cancelled`), retry count, output summary, and trace link to its own `agent_run`/`agent_step` records.
 - `aggregation_record`: swarm id, per-subagent inputs to fan-in, partial-failure notes, and the supervisor synthesis.
@@ -69,6 +71,8 @@ Required surface behavior:
 - Prove approval-gated dispatch for a side-effecting swarm, and both whole-swarm and single-subagent cancellation.
 - Prove each subagent had isolated context and scoped tool access.
 - Prove `swarm_run`, `subtask_spec`, `subagent_run`, and `aggregation_record` persist and read back after restart.
+- Prove `delegation_ledger` and no-progress breaker behavior, or record blockers.
+- Prove per-worker and swarm-level run receipts, or record blockers.
 - Produce or update `.buildprint/claim-gates.json` and `.buildprint/claim-check.md`; if the swarm gate is missing, blocked, or has sequential timestamps, keep `agentic_swarm` unqualified.
 - Capture screenshot/browser/API evidence for the decomposition, awaiting-approval, concurrent-running, partial-failure, and synthesized states.
 - Record any blocker with the exact missing dependency, credential, command, or decision.

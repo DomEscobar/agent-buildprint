@@ -4,7 +4,7 @@ Use this loop for the active phase only. Do not read every phase upfront. Do not
 
 ## How to run a phase
 
-1. Read `BUILDPRINT.md`, `00-questions.md`, `01-project-setup.md`, and `02-ui-identity.md` before every active phase. For UI-bearing artifacts, `02-ui-identity.md`, the generated local UI identity, and `docs/DESIGN.md` are standing contracts, not optional polish files: `docs/ui-identity.md` governs product/interaction fit, and `docs/DESIGN.md` governs visual taste and craft.
+1. Read `BUILDPRINT.md`, `references/runtime-techniques-basis.md`, `00-questions.md`, `01-project-setup.md`, and `02-ui-identity.md` before every active phase. For UI-bearing artifacts, `02-ui-identity.md`, the generated local UI identity, and `docs/DESIGN.md` are standing contracts, not optional polish files: `docs/ui-identity.md` governs product/interaction fit, and `docs/DESIGN.md` governs visual taste and craft.
 1a. Before implementation edits, confirm the setup architecture start model exists: `architecture/system-architecture.md`, `architecture/agent-runtime-loop.md`, `architecture/chat-turn-sequence.md`, `architecture/state-and-memory-model.md`, `architecture/failure-recovery-flow.md`, `PROJECT_STRUCTURE.md`, and `ARCHITECTURE_STRUCTURE_TRACE.md`. If any are missing, generic, unlabeled, unmapped to code, or scored below `4`, return to `01-project-setup.md`.
 2. Read `.buildprint/next-agent.md` and current project `AGENTS.md` if they exist.
 3. Read the active phase file named in `03-phases/phase-index.yaml`.
@@ -46,6 +46,7 @@ Skill completion signals are part of the handoff contract: `SETUP_RUNBOOK_DONE`,
 - For Agentic Chat, if the UI drifts away from a chat-native interface — for example a mission sheet, guided-run launcher, task dashboard, status lane, or form-first workflow displaces the conversation thread and composer/input — return to `02-ui-identity.md` and repair the UI before advancing.
 - For Agentic Chat, if the default first viewport feels like a harness demo rather than a polished consumer chat — seeded feature cards before user intent, giant blank dead zone, internal status labels, uniform bordered card stack, or cramped mobile composer/chips — return to `02-ui-identity.md` and repair the Consumer Chat Craft Gate before advancing.
 - For Agentic Chat, if the product only proves real streaming chat but claims complete agentic behavior, route to `03-phases/04-agentic-loop-runtime.md` and repair the product loop or lower the claim ceiling.
+- For Agentic Chat, if the agentic loop lacks harness, budget policy, loop breaker, verifier, run receipt, or session-event durability, return to `03-phases/04-agentic-loop-runtime.md` and repair the runtime or lower the claim ceiling.
 - If runtime/provider/deployment is unavailable, build the seam and record a blocker; do not fake live success.
 - If the agentic loop selects actions via slash commands, keyword matching, or regex intent parsing instead of model-driven provider tool/function calling, return to `03-phases/04-agentic-loop-runtime.md` before claiming `agentic_chat`.
 - If a side-effecting action runs without an approval record, or a tool/MCP/memory capability is stubbed and presented as working, return to `03-phases/04-agentic-loop-runtime.md` and repair the policy/approval/audit path.

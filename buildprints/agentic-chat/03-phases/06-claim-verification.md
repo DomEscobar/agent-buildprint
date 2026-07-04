@@ -6,6 +6,7 @@ This phase is the anti-overclaim gate for Agentic Chat. It does not add new prod
 
 Before claiming completion, read:
 
+- `references/runtime-techniques-basis.md`
 - `03-phases/phase-flow.md`
 - `.buildprint/next-agent.md` if it exists
 - current project `AGENTS.md` if it exists
@@ -53,6 +54,17 @@ Product-proof contract for this phase:
   },
   "agentic_chat": {
     "status": "pass | fail | blocked",
+    "stateful_harness_and_steering": "<pass/fail/blocker>",
+    "cancellation_and_dangling_tool_repair": "<evidence id>",
+    "context_packing_and_trust_zones": "<evidence id>",
+    "action_screening_against_user_intent": "<evidence id>",
+    "scoped_capability_grants": "<evidence id>",
+    "runtime_budget_policy": "<evidence id>",
+    "loop_breaker_or_no_progress_stop": "<evidence id>",
+    "verifier_or_goal_done_check": "<evidence id>",
+    "run_receipt_export": "<evidence id>",
+    "session_event_log_readback": "<evidence id>",
+    "idempotency_on_write_external_effects": "<evidence id>",
     "model_driven_action_selection": "<pass/fail/blocker>",
     "provider_tool_call_or_normalized_action_trace": "<evidence id>",
     "no_slash_keyword_or_regex_intent_routing": "<evidence id>",
@@ -66,6 +78,9 @@ Product-proof contract for this phase:
   },
   "agentic_swarm": {
     "status": "pass | fail | blocked",
+    "delegation_ledger": "<evidence id>",
+    "no_progress_breaker": "<evidence id>",
+    "per_worker_run_receipts": "<evidence id>",
     "supervisor_decomposition": "<evidence id>",
     "bounded_concurrency_primitive": "<evidence id>",
     "overlapping_subagent_timestamps": "<evidence id>",
@@ -90,14 +105,20 @@ If an evidence field cannot cite a concrete artifact, set the level to `blocked`
 
 - The model selected the action through provider-native tool/function calling or a normalized model action record. User-typed slash commands, keyword matching, regex intent routing, button-only action selection, or deterministic shortcut code fail this gate.
 - The trace contains an `ActionSelectionEvidence` record with: model/provider request id, model/provider response id or normalized action id, selected tool/skill/MCP/memory id, typed arguments, model rationale or tool-call payload, originating message id, policy result, approval requirement, and side-effect class.
+- The trace contains harness, budget, loop-breaker, verifier, run receipt, and session-event evidence, or the gate records exact blockers.
 - At least one side-effecting action is denied or left unapproved and the proof shows no side effect executed. A UI card saying "approval required" is insufficient without the audit result.
 - At least one allowed action produces a typed `ActionResult` and the result is fed back into the next model step as an observation. The final answer must reflect that observation; a scripted local append does not count.
 - The trace contains bounded critique/retry/recovery for one failure or blocked action.
-- `agent_run`, ordered `agent_step`, `action_request`, `policy_result`, `approval_record` when applicable, `action_result`, and `agent_trace` read back after reload or process restart with the same ids/order.
+- `agent_run`, ordered `agent_step`, `action_request`, `policy_result`, `approval_record` when applicable, `action_result`, `agent_trace`, `session_event` log, and `run_receipt` read back after reload or process restart with the same ids/order.
 - The UI evidence shows the plan/next-step, approval/block, action result, observation, retry/recovery, and restored trace in a chat-native surface.
 
 Hard failures that force `agentic_chat.status = fail`:
 
+- missing stateful harness boundary or steering queue when runs are interactive
+- dangling tool calls not repaired after cancellation before the next model step
+- missing runtime budget policy or loop breaker on multi-step runs
+- final synthesis without verifier pass or honest typed blocker
+- missing run receipt or session-event readback
 - action selection is slash-command, keyword, regex, or button-only
 - model text implicitly triggers side effects
 - action execution occurs before approval for `write` or `external` side effects

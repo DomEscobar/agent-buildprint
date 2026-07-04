@@ -14,6 +14,7 @@ deployment_posture:
 
 read_order:
   - BUILDPRINT.md
+  - references/runtime-techniques-basis.md
   - 00-questions.md
   - 01-project-setup.md
   - 02-ui-identity.md
@@ -28,6 +29,7 @@ packet_shape:
   principle: YAML routes; markdown teaches and builds; execution loops are explicit contracts, not optional prose.
   required_files:
     - BUILDPRINT.md
+    - references/runtime-techniques-basis.md
     - 00-questions.md
     - 01-project-setup.md
     - 02-ui-identity.md
@@ -128,28 +130,43 @@ execution_model:
     name: Agentic Chat Product Loop
     required_for_agentic_chat_claim:
       - goal intake in the chat composer or thread context
-      - plan or next-step state visible in product language
+      - plan or next-step state visible in product language with stale-plan replan when needed
+      - stateful harness boundary separating agent brain from UI/session with caller-owned transcript and event stream
+      - steering or follow-up queue that can inject user input during an active run without corrupting state
+      - cancellation with dangling tool-call repair before the next model request
       - model-driven action selection across model, tool, skill, MCP, and memory paths (not user-typed slash commands or keyword pattern-matching)
       - ActionSelectionEvidence proving provider-native tool/function calling or a normalized model action record, not slash commands, keywords, regex, or button-only routing
-      - policy/approval gate before side-effecting actions
+      - context packing or compaction before model calls with trust-zone labels and budget check
+      - prompt-injection action firewall screening proposed actions against original user intent when untrusted context influenced the model
+      - scoped capability grants per action with expiry; no unscoped global tool access
+      - policy/approval gate before side-effecting actions with reject/edit/resume branches
       - execution trace attached to the relevant message or turn
       - observation/result ingestion fed back to the model for the next step
       - ObservationReingestionEvidence proving the action result influenced the next model step and final synthesis
+      - tool error recovery as typed observations, not silent retries
+      - loop detection or no-progress circuit breaker within the bounded step/retry budget
+      - runtime budget policy for tokens, time, tool calls, steps, and cost with warn/hard-stop UI states
+      - idempotency keys on write/external side effects where duplicate execution would be harmful
+      - verifier or goal done-check before final synthesis, or honest typed blocker when verification fails
+      - run receipt export and append-only session event log supporting replay/readback
       - critique/retry/recovery path for failed actions within a bounded budget
       - resumable state after reload or restart
-      - AgenticRestartEvidence for agent_run, ordered agent_step, action_request, policy_result, approval_record when applicable, action_result, and agent_trace
-      - final synthesis tied to the original user goal
+      - AgenticRestartEvidence for agent_run, ordered agent_step, action_request, policy_result, approval_record when applicable, action_result, agent_trace, session events, and run receipt
+      - final synthesis tied to the original user goal with provenance links to observations
     required_for_agentic_swarm_claim:
       - supervisor decomposes a goal into typed, parallelizable subtasks
+      - delegation ledger and max handoff depth or no-progress breaker on the swarm run
       - parallel subagent dispatch with bounded concurrency and a work queue
       - SwarmConcurrencyEvidence proving overlapping subagent timestamps under a real concurrency primitive
       - per-subagent run id, isolated context, scoped tool/MCP access, and independent trace
       - WorkerIsolationEvidence proving workers do not inherit unscoped global context or tool access
       - fan-in aggregation that the supervisor synthesizes into one answer tied to the goal
+      - verifier or partial-failure honesty on fan-in synthesis; no hidden worker failures
       - approval gate before spawning a swarm that performs side effects
       - per-subagent and whole-swarm cancellation
       - bounded per-subagent retry and partial-failure handling (some workers fail, swarm still synthesizes honestly)
       - resumable swarm run, subagent records, and aggregation after restart
+      - per-worker and swarm-level run receipts
       - SwarmRestartEvidence for swarm_run, subtask_spec, subagent_run, per-worker agent traces, and aggregation_record
   proof_loop:
     name: Evidence Repair Loop
@@ -179,17 +196,24 @@ capability_maturity:
         - cancellation/retry/error recovery
         - polished chat-native UI
     agentic_chat:
-      claim: model-driven single-agent tool loop
+      claim: model-driven single-agent tool loop with production runtime layers
       required:
-        - planning/next-step loop
+        - stateful harness with steering queue, cancellation, and dangling tool-call repair
+        - planning/next-step loop with stale-plan replan
         - model-driven action selection via provider tool/function calling, not slash commands or keyword pattern-matching
-        - tool/skill execution policy with typed results
+        - context packing with trust zones before model calls
+        - prompt-injection action firewall and scoped capability grants
+        - tool/skill execution policy with typed results and tool error recovery
         - MCP adapter posture and allowlist boundary when enabled
         - memory/compaction read/write policy with audit trail
+        - runtime budget policy and loop detection circuit breaker
+        - idempotency keys on write/external side effects where needed
+        - verifier or goal done-check before final synthesis
+        - run receipt and append-only session event log
         - subagent/delegation records when used
-        - approval gates for side effects
+        - approval gates for side effects with reject/edit/resume
         - observation re-ingestion, critique, bounded retry, and resumable trace
-        - final synthesis tied to the original goal
+        - final synthesis tied to the original goal with provenance links
         - .buildprint/claim-gates.json records agentic_chat.status as pass with cited evidence
     agentic_swarm:
       claim: parallel multi-agent swarm dispatching
@@ -217,29 +241,106 @@ harness:
     - agentic
   selection_rule: Use only profiles that match this artifact. Do not expand to full unless broad coverage is explicitly worth the extra context.
 
+runtime_techniques:
+  research_basis: references/runtime-techniques-basis.md
+  external_catalog: https://github.com/DomEscobar/agentic-runtime-techniques
+  primary_use_cases:
+    - simple_tool_assistant
+    - multi_step_task_agent
+    - risky_action_agent
+    - durable_background_agent
+    - multi_agent_system
+  composition_recipe:
+    name: Reliable General Agentic Chat
+    stack:
+      - Intent / context router
+      - Stateful Harness Around Pure Agent Loop
+      - ReAct tool loop via provider tool/function calling
+      - Plan-and-execute next-step state
+      - Tool error recovery
+      - Loop detection circuit breaker
+      - Runtime budget policy engine
+      - Context packing before model calls
+      - Prompt-injection action firewall
+      - Context trust zones
+      - Capability / least-privilege grants
+      - HITL approval gate
+      - Verifier / goal done-check
+      - Run receipt and append-only session event log
+      - Supervisor + bounded worker pool when claiming agentic_swarm
+  required_layers:
+    harness_and_durability:
+      - stateful harness separating agent brain from UI/session/persistence
+      - caller-owned transcript and provider-neutral event stream
+      - steering and follow-up queue during active runs
+      - cancellation token and dangling tool-call repair
+      - append-only session event log with replay-derived active state
+      - agent run status events decoupled from one HTTP/stream lifetime
+    safety_and_governance:
+      - original user intent record for action screening
+      - context trust zones on packed context
+      - prompt-injection action firewall before side-effecting execution
+      - scoped capability grants per action/subtask with expiry
+      - HITL approval with reject/edit/resume branches
+    reliability:
+      - loop detection and no-progress circuit breaker
+      - runtime budget policy for tokens, time, tool calls, steps, and cost
+      - tool error-to-observation recovery with typed taxonomy
+      - idempotency keys on write/external side effects
+      - stale-plan detection and replan trigger
+    observability:
+      - run receipt export with redaction policy
+      - provenance links from synthesis and claims to tool/observation ids
+    correctness:
+      - verifier or goal loop before final synthesis
+      - typed blocker when done cannot be verified
+  optional_seams:
+    - model cascading / tiered routing
+    - semantic or prompt caching
+    - A2A remote agent protocol
+    - test-time compute search loops
+    - saga / compensating transactions beyond idempotency keys
+    - offline regression eval harness integration
+  anti_patterns:
+    - keyword, regex, or slash-command action routing
+    - prompt-only agentic behavior without harness, budget, or receipt
+    - flat transcript as the only durable state
+    - self-certifying completion without verifier or typed blocker
+    - sequential subagents relabeled as parallel
+
 central_output_contract:
   rule: The central output must be specific to Agentic Chat, not a generic shell with renamed labels. At full maturity it is a model-driven multi-agent swarm that conducts real work inside a chat-native surface.
   central_output: A chat-native agent that streams real model tokens, autonomously selects and runs allowlisted tools/MCP/memory actions behind approval gates, and at full maturity dispatches a parallel subagent swarm whose results the supervisor synthesizes into one answer — all durably traced and inspectable.
   output_primitives:
     - session and message records
+    - append-only session event log and replay-derived active state
     - incremental streaming turn events
     - provider route and credential posture
     - normalized provider usage telemetry
+    - agent harness event stream with steering queue and cancellation
+    - runtime budget consumption and loop-breaker events
     - model-selected action requests with policy/approval records and typed tool/MCP/memory results
-    - agent run trace with plan, steps, observations, critique, and final synthesis
-    - swarm run with supervisor decomposition, per-subagent runs, isolated traces, and fan-in aggregation
-    - WebUI/API chat surface state including inline action, approval, and swarm-progress affordances
+    - context trust zones and capability grant records
+    - agent run trace with plan, steps, observations, critique, verifier result, and final synthesis
+    - run receipt export with provenance links and redaction policy
+    - swarm run with supervisor decomposition, delegation ledger, per-subagent runs, isolated traces, and fan-in aggregation
+    - WebUI/API chat surface state including inline action, approval, budget, and swarm-progress affordances
   quality_signals:
     - real model tokens stream before completion
     - unknown and unavailable providers are actionable, not silently substituted
     - the model (not a keyword matcher) decides when a tool, MCP, memory, or subagent action is needed
     - side-effecting actions block on an inline approval gate and persist an audit record
+    - untrusted context cannot silently escalate tool authority; actions are screened against original intent
+    - context is packed with trust zones and budget checks before each model call
+    - runs respect token/time/tool/step budgets with visible warn and hard-stop states
+    - loop detection stops no-progress wandering instead of infinite retry
     - observations feed back into the model so the next step is informed, not scripted
+    - final synthesis passes a verifier or surfaces an honest blocked state
     - a swarm decomposes the goal, runs subagents in parallel, and synthesizes a goal-tied answer with honest partial-failure handling
-    - messages, agent runs, swarm runs, and traces survive readback after restart
+    - messages, session events, agent runs, swarm runs, run receipts, and traces survive readback after restart
     - normalized failures retry within a bounded policy or block honestly
-    - UI shows empty, streaming, blocked, error, approval, running-subagent, and success states without log parsing
-    - agentic claims show plan/action/observation/critique/retry state in the product loop, not only a chat transcript
+    - UI shows empty, streaming, blocked, error, approval, budget, running-subagent, and success states without log parsing
+    - agentic claims show plan/action/observation/critique/verifier/retry state in the product loop, not only a chat transcript
   unacceptable_generic_substitutes:
     - static chat mockup
     - deterministic echo presented as a real product turn
@@ -358,7 +459,7 @@ proven_implementation_requirements:
     streaming_runtime:
       requirement: Implement incremental streaming over a transport selected in setup (SSE or equivalent) with trace, checkpoint, AbortSignal-style cancellation, timeout/error behavior, a bounded retry/backoff policy, and normalized usage events. Buffered-after-completion responses do not qualify.
     agentic_action_loop:
-      requirement: Implement model-driven action selection using the provider's native tool/function-calling interface (or an equivalent structured-output contract). The model decides when to call a tool/skill/MCP/memory action; a keyword matcher or user-typed slash command does not satisfy this. Each action runs through a typed policy → approval → execution → observation path that re-enters the loop, with a bounded step/retry budget and a resumable trace. Use a proven agent-orchestration approach (provider tool-calling loop, or a library such as the Vercel AI SDK, LangGraph, or an explicit typed state machine); do not hand-roll fragile regex intent parsing.
+      requirement: Implement model-driven action selection using the provider's native tool/function-calling interface (or an equivalent structured-output contract). Wrap the loop in a stateful harness that separates the agent brain from UI/session/persistence, with caller-owned transcript, provider-neutral events, steering/follow-up queue, cancellation, and dangling tool-call repair. Each action runs through context packing with trust zones, prompt-injection action screening, scoped capability grants, typed policy → approval → execution → observation, tool error recovery, loop detection, runtime budget policy, idempotency keys on write/external effects, verifier/goal done-check, run receipt emission, and append-only session events. Use a proven agent-orchestration approach (provider tool-calling loop, or a library such as the Vercel AI SDK, LangGraph, or an explicit typed state machine); do not hand-roll fragile regex intent parsing.
     tools_skills_mcp:
       requirement: Tools, skills, and MCP servers run through one allowlist-gated policy path with typed inputs/outputs, audit records, inline approval/block UI attached to the message, and no execution from implicit model text. External MCP/browser/file execution stays blocked until allowlist, credentials, side-effect class, timeout/error handling, and proof exist.
     memory_and_compaction:

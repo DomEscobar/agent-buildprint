@@ -17,22 +17,28 @@ The stack is stack-neutral and chosen via `00-questions.md`. The product is buil
 - a polished chat WebUI/API with honest empty, streaming, blocked, error, retry, and success states;
 - diagnostics that keep paid-provider, public hosting, and higher-maturity claims honest.
 
-### Level 2 — agentic_chat (model-driven single-agent loop)
+### Level 2 — agentic_chat (model-driven single-agent loop with production runtime layers)
 
-Implemented through `03-phases/04-agentic-loop-runtime.md`.
+Implemented through `03-phases/04-agentic-loop-runtime.md`. Technique basis: `references/runtime-techniques-basis.md`.
 
+- **Stateful harness** separating agent brain from UI/session with steering queue, cancellation, and dangling tool-call repair.
 - model-driven action selection via the provider's native tool/function-calling interface (or a structured-output equivalent) — the model decides when to act; slash commands and keyword/regex intent matching do not qualify;
+- **Plan-and-execute** next-step state with stale-plan replan; **context packing** with trust zones before model calls;
+- **Prompt-injection action firewall** and **scoped capability grants** per action;
 - one allowlist-gated policy path for tools, skills, and MCP servers with typed inputs/outputs, audit records, and inline approval/block UI attached to the message;
+- **Runtime budget policy**, **loop detection**, **tool error recovery**, and **idempotency keys** on write/external side effects;
 - scoped memory read/write decisions (auto-write/ask/skip/block) and compaction summaries in product language, with privacy/retention posture;
+- **Verifier/goal done-check** before final synthesis;
+- **Run receipt** and **append-only session event log** for replay/readback;
 - observation re-ingestion so each tool/memory result informs the next model step, with a bounded step/retry budget and a resumable agent run trace;
-- a final synthesis tied to the original user goal;
+- a final synthesis tied to the original user goal with provenance links to observations;
 - no execution from implicit model text and no side effect without an approval record.
 
 ### Level 3 — agentic_swarm (parallel multi-agent dispatching)
 
 Implemented through `03-phases/05-swarm-dispatching.md`.
 
-- a supervisor that decomposes a goal into typed, parallelizable subtasks;
+- a supervisor that decomposes a goal into typed, parallelizable subtasks with a **delegation ledger** and **no-progress breaker**;
 - bounded-concurrency parallel subagent dispatch over a real concurrency primitive (worker pool/queue), never sequential calls relabeled as parallel;
 - isolated per-subagent context, scoped tool/MCP access, independent trace, and a per-subagent run record;
 - fan-in aggregation that the supervisor synthesizes into one goal-tied answer with honest partial-failure handling;

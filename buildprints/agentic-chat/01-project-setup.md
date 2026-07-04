@@ -7,6 +7,7 @@ This is the foundation pour. Before any identity or phase code, create enough ar
 Before writing code, read:
 
 - `BUILDPRINT.md`
+- `references/runtime-techniques-basis.md`
 - `00-questions.md`
 - current workspace or target project `AGENTS.md` if present
 
@@ -14,7 +15,7 @@ Then create or update the implementation project foundation. Do not start `02-ui
 
 ## Setup objective
 
-Create the real base project structure for Agentic Chat, centered on a real-model streaming chat turn that persists messages, trace events, provider route, usage telemetry, and blocked states in a way a user can inspect and continue. This packet is a capability ladder (`capability_maturity` in `blueprint.yaml`): the streaming foundation, then a model-driven tool/skill/MCP/memory action loop (`agentic_chat`, phase 04), then a parallel supervisor/worker swarm (`agentic_swarm`, phase 05). All three are in scope. Setup must design the **seams for the full ladder now** — the agent-run/step/action/approval/audit model, the memory policy boundary, and the swarm supervisor/subagent concurrency and persistence model — even though they are implemented and proven in later phases. The architecture must not make them bolt-on theater later. Choose a provider that exposes native tool/function calling (or a structured-output equivalent), since the agentic and swarm claims depend on model-driven action selection, not keyword matching. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the architecture diagrams, module boundaries, project file structure, persistence model, provider/runtime seams, concurrency model for subagents, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
+Create the real base project structure for Agentic Chat, centered on a real-model streaming chat turn that persists messages, trace events, provider route, usage telemetry, and blocked states in a way a user can inspect and continue. Read `references/runtime-techniques-basis.md` and design the **full runtime composition** during setup — not only streaming tables. The architecture must name the stateful harness boundary, append-only session event log, budget governor, loop breaker, context packing pipeline, trust zones, action screening, capability grants, verifier path, and run receipt export, even when phase 04 implements them. Choose a provider that exposes native tool/function calling (or a structured-output equivalent), since the agentic and swarm claims depend on model-driven action selection, not keyword matching. Choose a stack that can actually implement the product contract and golden path mirrored in `blueprint.yaml`. Define the architecture diagrams, module boundaries, project file structure, persistence model, provider/runtime seams, concurrency model for subagents, commands, safety rules, and verification strategy. The goal is not to over-plan; the goal is to prevent the next agent from building generic slop.
 
 The setup output should make the identity step and first implementation phase obvious: where code goes, what commands run, how state persists, what is mocked in tests, what is blocked in live mode, and what good enough to continue means.
 
@@ -35,12 +36,12 @@ Each `architecture/*.md` file must include a Mermaid diagram, component legend, 
 Required diagram rules:
 
 - Every edge must be labeled with the data, event, command, policy decision, approval, observation, or error flowing across it.
-- Component names must describe Agentic Chat responsibilities, such as `Chat Composer`, `Streaming Response Renderer`, `Chat API Route`, `Agent Runtime Orchestrator`, `Tool Invocation Registry`, `Conversation State Store`, `Run/Event Log`, `Memory Retrieval Layer`, `Approval Gate`, `Failure Recovery Controller`, or sharper stack-specific equivalents.
+- Component names must describe Agentic Chat responsibilities, such as `Chat Composer`, `Streaming Response Renderer`, `Chat API Route`, `Agent Runtime Harness`, `Agent Loop Orchestrator`, `Context Packing Layer`, `Budget Policy Governor`, `Loop Breaker`, `Action Screening Gate`, `Capability Grant Registry`, `Tool Invocation Registry`, `Session Event Log`, `Run Receipt Exporter`, `Conversation State Store`, `Memory Retrieval Layer`, `Approval Gate`, `Verifier Gate`, `Failure Recovery Controller`, or sharper stack-specific equivalents.
 - The system architecture must show UI, API/runtime, provider adapter, persistence, telemetry/trace, blocked-state, and deployment/secret boundaries.
-- The agent runtime loop must show observe, interpret/plan, act, inspect observation, critique/retry, update state, continue/stop, and explicit approval or blocked paths.
+- The agent runtime loop must show harness boundary, observe, interpret/plan, context pack, act, screen action, grant capability, inspect observation, critique/retry, verify/done-check, budget/loop-break decisions, update state, continue/stop, and explicit approval or blocked paths.
 - The chat-turn sequence must show a real user turn from composer through streaming transport, provider, persistence, UI event rendering, cancellation/error paths, and readback.
-- The state and memory model must separate durable records, ephemeral runtime state, provider route/usage telemetry, memory read/write/skip/block decisions, and claim ceilings.
-- The failure recovery flow must show provider failure, timeout, cancellation, unavailable credentials, tool/memory/delegation blocked states, retry budget, and user-visible recovery.
+- The state and memory model must separate durable records, append-only session events, ephemeral runtime state, context packing/trust zones, capability grants, provider route/usage telemetry, memory read/write/skip/block decisions, budget consumption, and claim ceilings.
+- The failure recovery flow must show provider failure, timeout, cancellation with dangling tool-call repair, budget exhaustion, loop-break stop, unavailable credentials, tool/memory/delegation blocked states, retry budget, idempotency on write/external effects, and user-visible recovery.
 
 `PROJECT_STRUCTURE.md` must describe the intended file tree by product/runtime responsibility, not by vague technical buckets. A structure based mainly on `components/`, `utils/`, `services/`, `api/`, or `pages/` is invalid unless each folder is narrowed by product responsibility and mapped to architecture. Every top-level source area must state:
 
@@ -85,7 +86,7 @@ The stack is **stack-neutral and chosen by the user** via the stack and provider
 - Persistence: a durable store with a typed schema and a migration path for `session`, `message`, `turn`, `stream_event`, `provider_route`, and `telemetry`.
 - Behavioral depth (required regardless of stack): a normalized provider error taxonomy and a bounded retry/backoff policy.
 - Agentic depth (built in phases 04-05, seamed now): model-driven action selection via provider tool/function calling; a typed tool/skill/MCP/memory policy → approval → execution → observation path with audit records; scoped memory read/write decisions; and a supervisor/worker swarm with a real bounded-concurrency primitive, isolated per-subagent context, scoped tool access, fan-in synthesis, cancellation, and resumable persistence. These require typed runtime paths, policy states, audit records, and proof before their claims. Design these seams during setup; do not stub or fake them, and do not select a keyword/regex intent classifier as the action selector.
-- Persistence must be designed to extend to `agent_run`/`agent_step`/`action_request`/`approval_record`/`action_result`/`memory_entry` (phase 04) and `swarm_run`/`subtask_spec`/`subagent_run`/`aggregation_record` (phase 05) via the migration path, not only the foundation tables.
+- Persistence must be designed to extend to `session_event`, `agent_harness`, `budget_policy`, `run_receipt`, `agent_run`/`agent_step`/`action_request`/`approval_record`/`action_result`/`memory_entry` (phase 04) and `swarm_run`/`delegation_ledger`/`subtask_spec`/`subagent_run`/`aggregation_record` (phase 05) via the migration path, not only the foundation tables.
 
 Suggested (non-binding) starting points if the user expresses no preference: local Ollama for the free real-model path, the Vercel AI SDK for provider clients, SSE transport, and SQLite for persistence. The UI runtime/styling default below still applies unless the user selects otherwise.
 
