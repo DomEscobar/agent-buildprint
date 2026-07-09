@@ -15,6 +15,8 @@ It does not build a chat product. It adds a repeatable proof layer that can eval
 - streaming and UI proof checks
 - optional RAG profile for retrieval, citation, grounding, permission, and stale-index checks
 - deterministic scorers plus bounded model-judge scorers
+- event-sourced eval archive with regression baseline tracking
+- interactive Eval Operator Console (local web UI + CLI)
 - regression command and machine-readable receipts
 
 ## Design thesis
@@ -98,6 +100,6 @@ Optional profile. Evaluates adversarial injection regression, prompt-injection a
 
 Start with `BUILDPRINT.md`. The README is the human overview; the Buildprint files are the executable contract.
 
-See `examples/core-chat-scenario.yaml` for a minimal scenario shape, `examples/harness-runtime-scenario.yaml` for harness-primitive checks, and `examples/eval-receipt.md` for the expected receipt structure.
+See `examples/core-chat-scenario.yaml` for a minimal scenario shape, `examples/harness-runtime-scenario.yaml` for harness-primitive checks, `examples/eval-receipt.md` for the expected receipt structure, and `examples/eval-archive-event.json` for archive event shape.
 
-For technique selection and failure-mode mapping, read `references/runtime-techniques-basis.md`.
+For technique selection and failure-mode mapping, read `references/runtime-techniques-basis.md`. For eval control plane architecture, archive, and console design, read `references/eval-control-plane-basis.md`. For scenario splits and dataset quality, read `references/eval-spec-and-dataset-guide.md`.

@@ -39,6 +39,14 @@ Do not apply this capability when:
 
 Block conditions must be written explicitly. A host with no callable runtime, no safe tool mode, no scenario owner, or no validation command is not compatible until the missing prerequisite is supplied.
 
+## Composition with agentic-chat
+
+When the host also applied `buildprints/agentic-chat`:
+
+- Eval Operator Console is an **operator/dev tool**, separate from the agentic-chat WebUI product surface
+- Reuse agentic-chat `claim-gates.json` pattern for console claim ceiling banner
+- Optional future seam: export `agent_run` / `run_receipt` from chat as scenario fixture candidate (not v1 blocker)
+
 ## Optional backend compatibility
 
 The capability is backend-adaptable:

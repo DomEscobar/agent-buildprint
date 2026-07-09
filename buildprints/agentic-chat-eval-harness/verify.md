@@ -35,7 +35,9 @@ Confirm:
 - simulated user or recorded-turn adapter exists
 - tool/action adapter exists when tools are in scope
 - scorer registry separates deterministic scorers from model-judge scorers
+- eval archive writer exists and appends every run
 - receipt writer exists
+- Eval Operator Console exists or explicit console blocker is recorded
 - regression command exists
 - optional RAG profile is either implemented with fixtures or marked not-proven/blocked
 - optional UI profile is either implemented with proof artifacts or marked not-proven/blocked
@@ -100,6 +102,18 @@ When enabled:
 - capability grant scope matches scenario and revokes on completion
 - budget exhaustion or loop breaker produces honest typed blocker
 
+## Console checks
+
+When claiming `runtime` or higher:
+
+- Run Explorer lists real archive events
+- Trace Timeline renders spans from a completed scenario
+- Gate Failure Panel shows failure record triad for a negative proof case
+- Regression Diff works against last-green baseline
+- screenshot evidence exists in `.buildprint/eval-console-evidence/` or explicit console blocker is recorded
+
+If console is blocked, cap claim at `fixture` or below.
+
 ## Blocked checks
 
 Record blockers for:
@@ -123,6 +137,7 @@ The capability can be called installed only if:
 - structural checks pass
 - fixture/runtime checks pass at the claimed proof level
 - deterministic failure paths are proven
+- eval archive and console proof exist or honest blockers are recorded
 - model-judge usage is bounded and never the only proof for high-risk gates
 - optional profile claims are proven or marked not-proven/blocked
 - `.buildprint/agentic-chat-eval-receipt.md` reconciles every host-assessment blocker, assumption, baseline failure, and hard-stop question with the final proof level

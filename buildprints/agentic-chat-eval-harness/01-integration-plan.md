@@ -25,6 +25,9 @@ The harness plan must define:
 - `TraceSpan` fields
 - `EvalRun` fields
 - `ScoreResult` fields
+- `EvalArchiveEvent` fields
+- `FailureRecord` fields
+- `ConsoleConfig` fields
 - `Receipt` fields
 - core runner command
 - simulated user or recorded-turn strategy
@@ -32,6 +35,8 @@ The harness plan must define:
 - model-judge scorer policy
 - fixture versioning strategy
 - artifact retention strategy
+- eval archive directory and last-green baseline policy
+- console host path and evidence directory
 
 ## Safety plan
 
@@ -73,9 +78,11 @@ Keep the first implementation small but real:
 - one runner command
 - one trace schema
 - one receipt schema
+- one eval archive (JSONL or SQLite)
 - one core-chat scenario
 - one tool-action scenario when tools exist
 - one blocked/error scenario
+- CLI + local Eval Operator Console after core runner proven
 - optional RAG/UI profiles only when proof surfaces exist
 
-Do not build a dashboard, hosted benchmark service, or new agent runtime until the core proof passes.
+Do not build a hosted benchmark service or new agent runtime until the core proof passes. The local Eval Operator Console is required for `runtime` proof — not optional.

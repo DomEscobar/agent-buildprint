@@ -18,6 +18,7 @@ Ask and stop when the host assessment cannot resolve:
 - whether private RAG documents may be inspected by the harness or external judge
 - which observability backend, if any, is approved
 - which regression command should gate future changes
+- how the local Eval Operator Console will be served (Next.js route, Vite dev server, static HTML)
 - acceptable cost, latency, and flakiness ceiling for live-model scenarios
 
 Hard-stop answers must be `confirmed_by: user`, `confirmed_by: explicit_user_delegation`, or recorded as blockers. `agent_assumption` is invalid for hard-stop decisions.
@@ -41,7 +42,7 @@ Record meaningful assumptions in `.buildprint/capability-plan.md`.
 Do not block on:
 
 - full benchmark leaderboard
-- hosted observability dashboard
+- hosted SaaS eval control plane (Braintrust/Langfuse eval features as gate owner)
 - advanced synthetic scenario generation
 - every production chat flow
 - every RAG metric

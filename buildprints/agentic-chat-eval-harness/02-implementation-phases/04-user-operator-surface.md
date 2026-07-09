@@ -108,16 +108,26 @@ When enabled:
 - never let trajectory score override failed security, side-effect, or trace gates
 - document model/provider and rubric version in receipt
 
-## Operator surface
+## Operator surface (CLI + JSON)
 
-Provide at least one local surface:
+Provide at least one local non-console surface:
 
 - markdown receipt
 - JSON summary
 - CLI summary
 - test output summary
 
-Do not build a dashboard unless explicitly scoped.
+Suggested CLI commands (adapt to host):
+
+```text
+eval:run --scenario <id>
+eval:show --run latest
+eval:diff --baseline last-green
+eval:replay --scenario <id>
+eval:archive --list [--profile <profile>]
+```
+
+Interactive Eval Operator Console is required in phase 06. Do not skip the console by claiming CLI-only proof at `runtime` or higher.
 
 ## Proof before moving on
 
@@ -125,3 +135,4 @@ Do not build a dashboard unless explicitly scoped.
 - deterministic gates fail when expected artifacts are missing
 - model-judge scorers include rubric and examples if enabled
 - receipt summarizes pass/fail, artifacts, blockers, and claim ceiling
+- CLI commands documented; console deferred to phase 06

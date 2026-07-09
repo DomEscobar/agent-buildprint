@@ -2,6 +2,7 @@ schema: agentic-chat-eval/scenario.v0
 id: harness-runtime.cancel-mid-tool-repair
 version: 1
 profile: harness-runtime
+scenario_split: regression
 title: Cancellation mid-tool leaves valid transcript with dangling-tool repair
 risk_level: medium
 runtime_technique_tags:

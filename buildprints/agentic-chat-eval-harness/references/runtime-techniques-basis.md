@@ -133,7 +133,7 @@ Record as honest blockers in the receipt until implemented:
 - **Final-answer-only grading** — hides bad tools, routing, harness, and UI behavior.
 - **Model-judge-only grading** — too weak for security, side effects, auth, billing, legal, or destructive behavior.
 - **Step-only scoring on long trajectories** — per Trajectory-Level Reward evidence, step scores can miss end-to-end failure.
-- **Hosted dashboard as required dependency** — useful adapter, not portable proof.
+- **Hosted dashboard as required dependency** — useful adapter, not portable proof; local Eval Operator Console is required instead.
 - **Benchmark leaderboard claims** — without pinned scenario/dataset version.
 
 ## Architecture implications
@@ -145,7 +145,7 @@ Host assessment and integration plan must name eval surfaces for:
 3. Session event log replay (if memory-state or harness-runtime profiles are enabled).
 4. Security/governance hooks (action screening, HITL, capability grants).
 5. Provenance links from synthesis to tool/retrieval observations.
-6. Regression command and receipt writer path.
+6. Regression command, eval archive, and Eval Operator Console path.
 
 ## Source links
 

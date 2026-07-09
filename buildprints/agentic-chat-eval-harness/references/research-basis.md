@@ -50,7 +50,8 @@ Validated on 2026-06-24 with 22 sources, 22 fetched pages, and 19 evidence claim
 - Final-answer-only grading: hides bad tools, state, routing, and UI behavior.
 - Model-judge-only grading: too weak for security, side effects, auth, billing, legal, or destructive behavior.
 - One combined Agentic Chat + RAG monolith: mixes agent behavior with retrieval truth and makes proof gates blurry.
-- Hosted observability dashboard as required dependency: useful but not portable enough for a Buildprint.
+- Hosted observability dashboard as required dependency: useful adapter, not portable proof.
+- Hosted SaaS eval control plane (Braintrust/Langfuse eval features as gate owner): use as lens only.
 
 ## Source freshness constraints
 
@@ -60,6 +61,7 @@ Framework APIs and benchmark repos move quickly. Applying agents should re-check
 
 ### Runtime techniques catalog
 
+- https://github.com/DomEscobar/agentic-eval-evolution-runtime
 - https://github.com/DomEscobar/agentic-runtime-techniques
 - https://raw.githubusercontent.com/DomEscobar/agentic-runtime-techniques/main/docs/tau-harness-techniques.md
 - https://raw.githubusercontent.com/DomEscobar/agentic-runtime-techniques/main/docs/security-governance-patterns.md

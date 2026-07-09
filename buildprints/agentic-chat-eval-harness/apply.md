@@ -27,6 +27,8 @@ The applying agent must create:
 .buildprint/agentic-chat-eval-safety-plan.md
 .buildprint/agentic-chat-eval-receipt.md
 .buildprint/capability-receipt.md
+.buildprint/eval-archive/
+.buildprint/eval-console-evidence/
 ```
 
 ## Implementation rule
@@ -63,8 +65,9 @@ The harness is safe-by-default:
 1. Contract and config
 2. Runner and trace core
 3. Host wiring and adapters
-4. Scorers, profiles, and operator surface
-5. Verification, regression, and receipt
+4. Scorers, profiles, and operator surface (CLI + JSON)
+5. Interactive Eval Operator Console
+6. Verification, regression, and receipt
 
 Each phase must leave the repo in a buildable or honestly blocked state. If a phase cannot be completed, write the blocker to `.buildprint/agentic-chat-eval-receipt.md` and `.buildprint/capability-receipt.md`, then stop.
 

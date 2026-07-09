@@ -17,14 +17,17 @@ This is a bounded capability, not a whole-product Buildprint. Do not build a new
 9. `02-implementation-phases/02-core-integration.md`
 10. `02-implementation-phases/03-host-wiring.md`
 11. `02-implementation-phases/04-user-operator-surface.md`
-12. `02-implementation-phases/05-verification-and-receipt.md`
-13. `verify.md`
-14. `references/runtime-techniques-basis.md`
-15. `references/research-basis.md`
+12. `02-implementation-phases/06-interactive-eval-console.md`
+13. `02-implementation-phases/05-verification-and-receipt.md`
+14. `verify.md`
+15. `references/runtime-techniques-basis.md`
+16. `references/eval-control-plane-basis.md`
+17. `references/eval-spec-and-dataset-guide.md`
+18. `references/research-basis.md`
 
 ## Capability promise
 
-Add an Agentic Chat Eval Harness that can run versioned scenarios, drive simulated or recorded user conversations, capture trace spans, score model/tool/state/UI behavior, optionally score RAG grounding, and write receipts suitable for regression and handover.
+Add an Agentic Chat Eval Harness that can run versioned scenarios, drive simulated or recorded user conversations, capture trace spans, score model/tool/state/UI behavior, optionally score RAG grounding, maintain an event-sourced eval archive, provide an interactive Eval Operator Console, and write receipts suitable for regression and handover.
 
 ## Scope boundary
 
@@ -45,7 +48,7 @@ The harness does not replace the agent runtime, provider router, tool registry, 
 
 ## Runtime techniques alignment
 
-Before phase 01, read `references/runtime-techniques-basis.md`. Scenario design and scorers must cover the failure modes named in the agentic-runtime-techniques decision guide (`regression_after_change`, `trajectory_fails_end_to_end`, `unsafe_tool_action`, `infinite_tool_loop`, `fake_completion`). When the host implements a stateful harness (Tau-style), enable the `harness-runtime` profile. When the host implements governance surfaces, enable the `security-governance` profile.
+Before phase 01, read `references/runtime-techniques-basis.md` and `references/eval-control-plane-basis.md`. Scenario design and scorers must cover the failure modes named in the agentic-runtime-techniques decision guide (`regression_after_change`, `trajectory_fails_end_to_end`, `unsafe_tool_action`, `infinite_tool_loop`, `fake_completion`). When the host implements a stateful harness (Tau-style), enable the `harness-runtime` profile. When the host implements governance surfaces, enable the `security-governance` profile. Scenario splits and dataset quality rules live in `references/eval-spec-and-dataset-guide.md`.
 
 ## Proposed integration paths
 
@@ -109,6 +112,8 @@ Do not claim the Agentic Chat Eval Harness is installed unless verification prov
 - scenario fixtures are versioned and runnable
 - trace spans capture model, tool, state, retrieval when present, and final response events
 - deterministic scorers fail on wrong tool calls, missing side effects, unsafe state changes, and missing artifacts
+- eval archive records every run with lineage and failure mechanism when gates fail
+- interactive Eval Operator Console inspects runs, traces, gate failures, and regression diffs
 - model-judge scorers are optional, rubric-bound, and never the sole proof for high-risk gates
 - receipts record commands, artifacts, scenarios, scores, blockers, and claim status
 - optional RAG profile proves allow, deny, citation, weak-evidence, and stale/deleted-content behavior before claiming RAG coverage

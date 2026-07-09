@@ -8,6 +8,13 @@
 - claim_status: `installed | partial | blocked`
 - proof_level: `structure | fixture | runtime | profile-proven | production-regression`
 
+## Archive and Console
+
+- archive_path: `.buildprint/eval-archive/events.jsonl`
+- last_green_baseline: `<run-id-or-not-set>`
+- console_url: `<http://localhost:PORT/eval or not-applicable>`
+- console_evidence: `.buildprint/eval-console-evidence/`
+
 ## Commands
 
 - `<baseline test command>`: `pass | fail | unavailable`
@@ -54,7 +61,15 @@
 - fake UI success fails when UI profile is enabled: `pass | fail | blocked | not-applicable`
 - injection bypass fails when security-governance profile is enabled: `pass | fail | blocked | not-applicable`
 - missing dangling-tool repair fails when harness-runtime profile is enabled: `pass | fail | blocked | not-applicable`
-- side effect without HITL pause fails when security-governance profile is enabled: `pass | fail | blocked | not-applicable`
+  - side effect without HITL pause fails when security-governance profile is enabled: `pass | fail | blocked | not-applicable`
+
+## Failure Records
+
+### `<scenario-id>` (when failed)
+
+- verifier_outcome: `<gate-id>: <pass|fail> — <message>`
+- agent_behavior_from_trace: `<span/tool excerpt>`
+- abstract_failure_mechanism: `<e.g. fake_completion, injection_bypass, missing_repair_span>`
 
 ## Runtime Techniques
 

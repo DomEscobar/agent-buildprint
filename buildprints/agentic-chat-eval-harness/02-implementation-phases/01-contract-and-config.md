@@ -11,6 +11,8 @@ Define the harness boundary, schemas, config, and safety defaults before impleme
 - `.buildprint/agentic-chat-eval-plan.md`
 - `.buildprint/agentic-chat-eval-safety-plan.md`
 - `references/runtime-techniques-basis.md`
+- `references/eval-control-plane-basis.md`
+- `references/eval-spec-and-dataset-guide.md`
 
 ## Required outputs
 
@@ -19,10 +21,14 @@ Define the harness boundary, schemas, config, and safety defaults before impleme
 - typed or schema-validated `EvalRun`
 - typed or schema-validated `ScoreResult`
 - typed or schema-validated `EvalReceipt`
+- typed or schema-validated `EvalArchiveEvent`
+- typed or schema-validated `FailureRecord`
+- typed or schema-validated `ConsoleConfig`
 - profile configuration
 - model-judge configuration disabled by default unless approved
 - safe tool/action mode configuration
 - artifact directory convention
+- eval archive directory convention (default `.buildprint/eval-archive/`)
 - regression command placeholder wired to real runner once implemented
 
 ## Scenario contract
@@ -32,6 +38,7 @@ Each scenario must include:
 - `id`
 - `version`
 - `profile`
+- `scenario_split` (`train`, `validation`, `holdout`, `redteam`, `regression`, `core`, `edge`, `negative`)
 - `title`
 - `risk_level`
 - `starting_state`
@@ -94,6 +101,53 @@ Define two scorer classes:
 
 Deterministic high-risk failures must override model-judge and trajectory-level passes.
 
+## Eval archive contract
+
+Each `EvalArchiveEvent` must include:
+
+- `run_id`
+- `parent_run_id` (null for first run of a scenario lineage)
+- `scenario_id`
+- `scenario_version`
+- `host_commit`
+- `profile`
+- `scenario_split`
+- `gate_results` (map of gate id → pass/fail/not-applicable)
+- `aggregate_pass_fail`
+- `trace_summary` (span count, key span types, error count)
+- `failure_record` (see below; null on clean pass)
+- `cost` and `latency` (or explicit unavailable)
+- `timestamp`
+- `model_versions` when live models used
+
+Append every run to the archive — pass and fail. Storage: JSONL or SQLite under `.buildprint/eval-archive/` (host choice).
+
+Maintain `last-green.json` pointing to the most recent all-gates-pass run per regression manifest baseline.
+
+## Failure record contract
+
+When a run fails a gate, write a `FailureRecord` triad:
+
+- `verifier_outcome` — gate id, result, assertion message
+- `agent_behavior_from_trace` — ordered span summary or tool/action excerpt
+- `abstract_failure_mechanism` — root cause class (e.g. `fake_completion`, `injection_bypass`, `missing_repair_span`, `forbidden_tool_called`)
+
+Include failure records in receipt `failure_records` and archive `failure_record`.
+
+## Console config contract
+
+Define `ConsoleConfig` with:
+
+- `archive_directory` (default `.buildprint/eval-archive/`)
+- `events_file` (default `events.jsonl`)
+- `last_green_file` (default `last-green.json`)
+- `evidence_directory` (default `.buildprint/eval-console-evidence/`)
+- `host_path` — how the console is served (Next.js route, Vite dev server, static HTML)
+- `port` when applicable
+- `redaction_policy` — local and redacted by default
+
+Console reads archive and receipt artifacts; it does not override deterministic gates.
+
 ## Safety defaults
 
 - destructive tools disabled
@@ -107,7 +161,8 @@ Deterministic high-risk failures must override model-judge and trajectory-level 
 
 ## Proof before moving on
 
-- scenario, trace, score, and receipt contracts are visible
+- scenario, trace, score, receipt, archive, and console config contracts are visible
+- scenario_split values are documented per fixture
 - enabled/disabled profiles are explicit
 - safety config defaults to local/sandbox behavior
 - no runner executes real tools before safe mode exists

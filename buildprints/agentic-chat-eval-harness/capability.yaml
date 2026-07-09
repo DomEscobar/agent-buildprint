@@ -81,6 +81,8 @@ touches:
   - eval runner
   - scenario fixtures
   - trace/span schema
+  - eval archive
+  - eval operator console
   - model/provider adapter
   - chat runtime adapter
   - tool/action adapter
@@ -104,6 +106,7 @@ contract:
     - id
     - title
     - profile
+    - scenario_split
     - starting_state
     - user_goal
     - allowed_tools
@@ -111,6 +114,15 @@ contract:
     - expected_trace_events
     - expected_outcome
     - pass_gates
+  scenario_split_values:
+    - train
+    - validation
+    - holdout
+    - redteam
+    - regression
+    - core
+    - edge
+    - negative
   mandatory_trace_span_fields:
     - run_id
     - scenario_id
@@ -133,8 +145,33 @@ contract:
     - pass_fail_summary
     - score_summary
     - trace_artifacts
+    - archive_path
+    - console_url
+    - last_green_baseline
+    - failure_records
     - blockers
     - claim_status
+  mandatory_archive_fields:
+    - run_id
+    - parent_run_id
+    - scenario_id
+    - scenario_version
+    - host_commit
+    - profile
+    - scenario_split
+    - gate_results
+    - aggregate_pass_fail
+    - trace_summary
+    - failure_record
+    - cost
+    - latency
+    - timestamp
+  console_config_defaults:
+    archive_directory: .buildprint/eval-archive/
+    events_file: events.jsonl
+    last_green_file: last-green.json
+    evidence_directory: .buildprint/eval-console-evidence/
+    redaction_policy: local_and_redacted_by_default
 apply:
   inspect:
     - chat runtime and conversation loop
@@ -174,7 +211,9 @@ verify:
     - at least one tool-action scenario proves expected side effects
     - at least one blocked/error scenario proves recovery or honest stop
     - trace spans include model, tool, state, and final response events
-    - receipt records scenario version, host commit, commands, artifacts, and claim status
+    - eval archive appends every run with gate results and failure record on failure
+    - Eval Operator Console inspects runs, traces, and regression diff or explicit console blocker recorded
+    - receipt records scenario version, host commit, commands, artifacts, archive path, console URL, and claim status
     - model-judge scorers are rubric-bound and not sole proof for sensitive gates
     - optional RAG profile proves allow, deny, citation, and weak-evidence behavior when enabled
     - optional UI profile proves streaming/action states with screenshot or DOM evidence when enabled
@@ -214,6 +253,8 @@ composition:
     - eval.memory_state_scoring
     - eval.provider_routing_scoring
     - eval.regression_receipts
+    - eval.event_sourced_archive
+    - eval.operator_console
   composes_with:
     - buildprints/agentic-chat
     - eval.rag-harness

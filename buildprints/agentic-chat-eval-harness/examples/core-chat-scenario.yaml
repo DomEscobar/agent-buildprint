@@ -2,6 +2,7 @@ schema: agentic-chat-eval/scenario.v0
 id: core-chat.blocked-tool-recovery
 version: 1
 profile: core-chat
+scenario_split: regression
 title: Blocked tool action recovers with a user-facing question
 risk_level: medium
 runtime_technique_tags:

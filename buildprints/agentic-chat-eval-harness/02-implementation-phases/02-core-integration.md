@@ -22,7 +22,9 @@ Implement the core scenario runner and trace collection without depending on opt
 7. Capture model, provider, tool, state, and final response spans.
 8. Run deterministic scorers.
 9. Run approved model-judge scorers if enabled.
-10. Write trace artifacts, scores, and receipt draft.
+10. Append `EvalArchiveEvent` to archive (pass and fail).
+11. Update `last-green.json` when all regression gates pass.
+12. Write trace artifacts, scores, and receipt draft.
 
 ## Trace rules
 
@@ -32,6 +34,15 @@ Implement the core scenario runner and trace collection without depending on opt
 - Redact secrets and raw sensitive data by default.
 - Record errors as spans, not only thrown exceptions.
 - Keep enough data to debug a failed score without rerunning live models.
+- Emit OTel-compatible trace JSON when the host supports it; otherwise host-neutral JSON spans.
+- Write `failure_record` triad on gate failure for archive and receipt.
+
+## Archive rules
+
+- Append every run to `.buildprint/eval-archive/events.jsonl` (or SQLite equivalent).
+- Include `scenario_split`, gate results, trace summary, cost, latency, timestamp.
+- Maintain `last-green.json` for regression diff baseline.
+- Never delete failed runs from archive during normal operation.
 
 ## First scenarios
 
@@ -68,6 +79,7 @@ Prefer fixture, stub, or low-temperature deterministic mode for regression. If l
 
 - runner command executes at least one scenario
 - trace file is written
+- archive event appended for the run
 - receipt draft is written
-- failing scenario can produce a failed score
+- failing scenario can produce a failed score and failure record
 - private data and secrets are not written in raw logs by default
