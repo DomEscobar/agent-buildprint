@@ -1,21 +1,50 @@
 # Evolutionary Coding Agent Runtime
 
-A Capability Buildprint for adding an AlphaEvolve / CodeEvolve inspired loop to an existing coding-agent project: population -> LLM mutation -> sandboxed evaluation -> selection -> archive -> repeat.
+A Capability Buildprint for adding an **eval-guided patch loop** to an existing coding-agent host: task spec → repo snapshot → coding agent patch → unit-test gate → benchmark/regression oracle → promote or rollback → archive → repeat.
 
-It is for hosts that already have or can add a measurable fitness function: SWE-style task pass rate, benchmark score, latency/cost metric, generated-code correctness, algorithm quality, or another deterministic evaluator.
+Primary architecture source: [agentic-eval-evolution-runtime](https://github.com/DomEscobar/agentic-eval-evolution-runtime) (research package; no runnable code yet).
 
-## Core Promise
+## Core idea
 
-The buildprint helps a coding-agent host evolve variants of prompts, policies, orchestration code, tool routing, or bounded solution files while keeping execution sandboxed and claims evidence-led.
+```text
+system variant -> eval -> score/trace -> patch or mutate -> archive -> gate -> repeat
+```
 
-## Non-Claims
+For coding agents (Mode B), the eval system is the judge; the agent is the patch producer:
 
-- It does not promise AlphaEvolve-level results.
-- It does not allow uncontrolled self-editing.
-- It does not replace a benchmark. The hard part is still evaluation.
+```text
+Benchmark / Spec
+  -> Coding Agent proposes code patch
+  -> Unit tests gate the patch
+  -> Benchmark eval compares against best snapshot
+  -> Regression triggers rollback
+  -> Improvement updates best snapshot
+  -> Archive records lineage
+```
+
+## What this buildprint is for
+
+Hosts that already have or can add:
+
+- a measurable fitness function (SWE-style tasks, project-local benchmarks, algorithm evals);
+- visible and hidden tests with evaluator integrity protection;
+- sandboxed candidate execution and rollback;
+- lineage/archive storage.
+
+## Optional profiles
+
+- **patch-loop** (default) — TDAD-style single-patch iterations with best-snapshot rollback
+- **population-evolution** — multi-candidate LLM mutation, selection, optional island migration (AlphaEvolve / CodeEvolve inspired)
+- **scaffold-self-improve** (deferred) — agent proposes scaffold/tooling changes as reviewable PRs; human gate required
+
+## Non-claims
+
+- It does not promise AlphaEvolve, DGM, or TDAD headline benchmark numbers.
+- It does not allow uncontrolled self-editing of evaluators, hidden tests, or guardrails.
+- It does not replace benchmark and dataset construction — that is milestone 1.
 - It does not run untrusted candidate code outside a sandbox.
+- It does not prove Mode A (config/prompt evolution for RAG/chat) unless explicitly extended.
 
 ## Start
 
-Read `BUILDPRINT.md`, then follow the host assessment and integration plan before writing code.
-
+Read `BUILDPRINT.md`, then follow host assessment and the integration plan before writing code.

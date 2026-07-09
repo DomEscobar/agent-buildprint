@@ -1,0 +1,73 @@
+schema: agent-buildprint/patch-loop-task.v0
+id: local-fix.auth-middleware-regression
+version: 1
+profile: patch-loop
+title: Fix auth middleware regression without touching eval harness
+risk_level: high
+source_repo_alignment: agentic-eval-evolution-runtime Mode B
+
+repo_snapshot_ref: snapshots/best_003
+baseline_snapshot_ref: snapshots/best_003
+
+issue_or_goal_text: |
+  POST /api/sessions returns 401 for valid tokens after the last refactor.
+  Fix the auth middleware so valid sessions pass and invalid tokens still fail.
+
+editable_surfaces:
+  - src/middleware/auth.ts
+  - src/middleware/auth.test.ts
+  - src/routes/sessions.ts
+
+forbidden_zones:
+  - eval/**
+  - tests/hidden/**
+  - .github/workflows/**
+  - .env
+  - .env.*
+  - deploy/**
+
+visible_test_command: npm test -- src/middleware/auth.test.ts
+benchmark_command: npm run eval:local-tasks -- --split held_in
+hidden_test_command: npm run eval:local-tasks -- --split held_out
+regression_oracle_ref: oracles/auth-regression-v2.yaml
+
+evaluator_checksum_ref: checksums/eval-harness.sha256
+
+agent_policy:
+  max_changed_files: 5
+  max_diff_lines: 200
+  one_focused_patch: true
+  network: disabled
+  sandbox_timeout_ms: 120000
+
+dual_acceptance:
+  held_in_task_ids:
+    - local-fix.auth-middleware-regression
+  held_out_task_ids:
+    - local-fix.auth-session-create
+    - local-fix.auth-invalid-token
+
+budget:
+  max_iterations: 10
+  max_model_cost_usd: 2.00
+  max_wall_clock_minutes: 45
+  consecutive_reverts_before_restore: 5
+
+pass_gates:
+  - id: editable-surface
+    type: deterministic
+    assertion: changed files subset of editable_surfaces
+  - id: evaluator-integrity
+    type: deterministic
+    assertion: evaluator checksum unchanged
+  - id: unit-tests
+    type: deterministic
+    assertion: visible_test_command exits 0 before benchmark
+  - id: held-in-improvement
+    type: deterministic
+    assertion: held_in benchmark score >= baseline
+  - id: held-out-no-regression
+    type: deterministic
+    assertion: held_out regression count does not increase
+
+claim_ceiling: fixture

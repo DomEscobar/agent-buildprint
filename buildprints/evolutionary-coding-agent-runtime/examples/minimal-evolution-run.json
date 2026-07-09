@@ -1,18 +1,28 @@
 {
   "schema": "agent-buildprint/evolutionary-run-example.v0",
   "run_id": "evo_fixture_001",
+  "profile": "patch-loop",
   "claim_status": "fixture_proven",
+  "source_alignment": "agentic-eval-evolution-runtime Mode B / TDAD loop",
   "baseline": {
-    "candidate_id": "baseline",
-    "command": "npm run eval:fixture",
+    "snapshot_ref": "snapshots/best_003",
+    "command": "npm run eval:local-tasks -- --split held_in",
     "score": 0.5,
+    "regression_count": 0,
     "passed": true,
     "duration_ms": 420
   },
+  "evaluator_integrity": {
+    "checksum_ref": "checksums/eval-harness.sha256",
+    "checksum_before": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "checksum_after": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "unchanged": true
+  },
   "budget": {
-    "max_candidates": 2,
+    "max_iterations": 10,
     "max_wall_clock_seconds": 120,
-    "max_model_cost_usd": 0.25
+    "max_model_cost_usd": 0.25,
+    "consecutive_reverts_before_restore": 5
   },
   "sandbox": {
     "mode": "process-isolated-fixture",
@@ -21,54 +31,61 @@
     "network": "disabled",
     "candidate_can_read_provider_keys": false
   },
-  "mutation_scope": {
+  "editable_surfaces": {
     "allowed_paths": [
-      "src/policies/*.ts",
-      "prompts/*.md"
+      "src/middleware/auth.ts",
+      "src/middleware/auth.test.ts",
+      "src/routes/sessions.ts"
     ],
-    "forbidden_paths": [
+    "forbidden_zones": [
+      "eval/**",
+      "tests/hidden/**",
       ".env",
       ".env.*",
-      "deploy/**",
-      "billing/**",
-      "migrations/**"
+      "deploy/**"
     ]
   },
-  "candidates": [
+  "iterations": [
     {
+      "iteration_id": "iter_001",
       "candidate_id": "cand_001",
-      "parent_id": "baseline",
-      "mutation_model": "qwen3-coder-30b",
-      "mutation_prompt_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "parent_snapshot_ref": "snapshots/best_003",
       "patch_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
-      "score": 0.7,
-      "passed": true,
-      "failure": null
+      "unit_tests": { "passed": true, "command": "npm test -- src/middleware/auth.test.ts" },
+      "benchmark": { "score": 0.7, "regression_count": 0, "held_out_passed": true },
+      "failure_record": null,
+      "outcome": "promoted",
+      "new_best_snapshot_ref": "snapshots/best_004"
     },
     {
+      "iteration_id": "iter_002",
       "candidate_id": "cand_002",
-      "parent_id": "baseline",
-      "mutation_model": "qwen3-coder-30b",
-      "mutation_prompt_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "parent_snapshot_ref": "snapshots/best_004",
       "patch_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
-      "score": 0,
-      "passed": false,
-      "failure": "sandbox_timeout"
+      "unit_tests": { "passed": false, "command": "npm test -- src/middleware/auth.test.ts" },
+      "benchmark": null,
+      "failure_record": {
+        "verifier_outcome": "unit_test_failure",
+        "agent_behavior_from_trace": "edited token parser without updating test fixture",
+        "abstract_failure_mechanism": "incomplete cross-file refactor"
+      },
+      "outcome": "rolled_back",
+      "rollback_reason": "unit_test_gate"
     }
   ],
   "selection": {
-    "policy": "best_score_with_baseline_comparison",
-    "winner_id": "cand_001",
-    "winner_score": 0.7,
+    "policy": "best_snapshot_with_dual_acceptance",
+    "best_snapshot_ref": "snapshots/best_004",
+    "best_score": 0.7,
     "beats_baseline": true,
     "same_evaluator_settings": true
   },
   "lineage_archive": {
-    "path": ".buildprint/evolution/archive/evo_fixture_001.json",
+    "path": ".buildprint/evolution/archive/evo_fixture_001.jsonl",
     "records_parent": true,
-    "records_mutation_prompt": true,
     "records_patch": true,
-    "records_score": true,
-    "records_failure": true
+    "records_failure_record": true,
+    "records_regression_count": true,
+    "records_evaluator_checksum": true
   }
 }

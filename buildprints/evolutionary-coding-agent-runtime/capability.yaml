@@ -3,9 +3,15 @@ name: evolutionary-coding-agent-runtime
 type: capability
 title: Evolutionary Coding Agent Runtime
 capability: agents.evolutionary_coding_runtime
-description: Adds a bounded evolutionary improvement loop for coding-agent hosts with sandboxed mutation, deterministic fitness evaluation, selection, lineage, and receipts.
+description: Adds an eval-guided patch loop for coding-agent hosts with editable-surface allowlists, checksum-protected evaluators, TDAD-style rollback, sandboxed execution, archive lineage, and honest improvement receipts.
 execution_profile: strict
 claim_status: unproven
+canonical_start: BUILDPRINT.md
+source_repositories:
+  - url: https://github.com/DomEscobar/agentic-eval-evolution-runtime
+    role: primary architecture and research basis
+    maturity: research-only
+    validated: 2026-07-09
 
 host_frameworks:
   - TypeScript or Python coding-agent host
@@ -36,66 +42,159 @@ requires:
     - sandboxed candidate execution or host-approved isolation plan
     - versioned source control or rollback path
   human_decisions:
-    - mutation scope and forbidden files
+    - editable surfaces (allowlist) and forbidden zones
+    - hidden test ownership and holdout hygiene
     - allowed model providers and budget ceiling
-    - approval policy for self-modifying code
+    - approval policy for applying winning patches
+    - regression oracle or specification surface when using kitchen-loop profile
   env:
     - optional provider keys for mutation models
 
 touches:
   - agent runtime orchestration
-  - evaluation harness
+  - evaluation harness and hidden tests
   - sandbox execution boundary
+  - repo snapshot and rollback
   - persistence/archive layer
   - CLI or operator UI
   - audit and receipts
 
+contract:
+  profiles:
+    - patch-loop
+    - population-evolution
+    - scaffold-self-improve
+  default_profile: patch-loop
+  architecture_thesis: evals_are_control_plane
+  mandatory_task_spec_fields:
+    - id
+    - title
+    - repo_snapshot_ref
+    - issue_or_goal_text
+    - editable_surfaces
+    - visible_test_command
+    - benchmark_command
+    - hidden_test_command
+    - baseline_snapshot_ref
+    - cost_budget
+    - regression_oracle_ref
+  mandatory_archive_fields:
+    - candidate_id
+    - parent_id
+    - task_id
+    - repo_snapshot
+    - patch_diff
+    - changed_files
+    - commands_run
+    - visible_test_result
+    - hidden_test_summary
+    - benchmark_score
+    - regression_count
+    - hard_gate_result
+    - failure_record
+    - rollback_reason
+    - cost
+    - latency
+    - model_versions
+    - timestamp
+  mandatory_failure_record_fields:
+    - verifier_outcome
+    - agent_behavior_from_trace
+    - abstract_failure_mechanism
+
+proposed_integration_paths:
+  - id: tdad-patch-loop
+    default: true
+    description: Unit-test gate, benchmark subset, best-snapshot rollback, consecutive-revert restore
+    adapter_boundary: host owns gates; optional TDAD mechanics as library calls
+  - id: self-harness-gates
+    default: true
+    description: Editable-surface allowlist, causal weakness mining, dual acceptance on held-in and held-out splits
+    adapter_boundary: proposer receives allowlist only; mutator never sees hidden tests
+  - id: swe-bench-shape
+    default: false
+    description: Project-local task spec mirroring issue + repo snapshot + hidden tests
+    adapter_boundary: task loader only; host benchmark remains authoritative
+  - id: kitchen-loop-oracle
+    default: false
+    description: Specification surface and regression oracle alongside benchmark score
+    adapter_boundary: oracle cases are host-owned data assets
+  - id: population-evolution
+    default: false
+    description: Multi-candidate LLM mutation, selection, optional island migration
+    adapter_boundary: shares archive and gates with patch-loop profile
+  - id: inspect-ai-runner
+    default: false
+    description: Inspect AI as eval runner library behind host hard gates
+    adapter_boundary: no Inspect types in archive schema
+  - id: deepeval-runner
+    default: false
+    description: DeepEval as eval runner library behind host hard gates
+    adapter_boundary: no DeepEval types in archive schema
+  - id: hybrid-self-plus-adapter
+    default: false
+    description: Self-contained loop plus optional adapter per adopted path
+    adapter_boundary: adapters are swappable libraries, not control plane
+
 apply:
   inspect:
     - existing benchmark commands and expected outputs
+    - visible vs hidden test split and evaluator checksum plan
+    - editable surfaces vs evaluator/guardrail protection
     - candidate execution isolation
-    - mutation-safe file zones
     - provider/model configuration and budget controls
     - persistence and trace storage
+    - rollback and best-snapshot promotion path
   steps:
-    - define candidate schema, score schema, and lineage records
-    - add mutation engine with patch validation and forbidden-file guardrails
-    - add evaluator runner with timeout, memory, and deterministic score parsing
-    - add selection/archive loop with baseline comparison and checkpointing
+    - define task spec, editable surfaces, and archive schema
+    - protect evaluator and hidden tests with checksum and read-only enforcement
+    - add patch-loop runner with unit-test gate and benchmark comparison
+    - add causal failure records and dual-acceptance gates
+    - add optional population-evolution mutator behind same gates
     - add operator controls, receipts, and rollback guidance
   forbidden:
     - mutate secrets, deployment configs, credentials, billing files, or production data
+    - allow agent to patch evaluator, hidden tests, guardrails, or archive
     - execute candidates without sandbox, timeout, and resource limits
     - claim self-improvement from a single candidate or model-judge text alone
     - hide regressions, failed candidates, or cost overruns
+    - rebuild general eval ecosystem from scratch when mature runners exist
 
 verify:
   commands:
-    - run baseline evaluator against current host
-    - run at least one bounded evolution cycle with two or more candidates
-    - rerun evaluator for winner and baseline under the same settings
+    - run baseline evaluator against current host best snapshot
+    - run at least one bounded patch cycle with unit-test and benchmark gates
+    - rerun evaluator for candidate and baseline under the same settings
   runtime_checks:
+    - editable-surface violation is rejected before eval
+    - evaluator checksum unchanged after agent run
     - sandbox timeout and memory limit trigger on bad candidate
-    - forbidden mutation path is rejected
-    - lineage records parent, mutation prompt, patch, score, failure, and winner
+    - unit-test failure triggers rollback without benchmark spend
+    - regression on held-out split blocks promotion
+    - archive persists parent, patch, failure record, score, and rollback reason
     - no-improvement run records honest not-proven status
   blocked_checks:
     - no deterministic evaluator
     - no sandbox boundary
-    - no mutation scope
+    - no editable-surface allowlist
+    - evaluator not protected from agent edits
+    - no baseline comparison
     - no lineage receipt
 
 risk:
   level: high
-  reason: The capability can run generated code and mutate agent behavior. It needs hard sandboxing, explicit mutation boundaries, budget controls, rollback, and receipts to avoid unsafe self-modification or false improvement claims.
+  reason: The capability can run generated code and mutate agent behavior. It needs hard sandboxing, explicit editable surfaces, evaluator integrity, budget controls, rollback, and receipts to avoid unsafe self-modification or false improvement claims.
 
 failure_modes:
-  - evaluator-overfit — Candidates exploit weak tests instead of improving real capability.
+  - evaluator-overfit — Candidates exploit weak visible tests instead of improving real capability.
+  - evaluator-tampering — Agent patches benchmark, hidden tests, or guardrails.
   - sandbox-escape-risk — Candidate code runs with too much filesystem, network, or credential access.
-  - mutation-scope-creep — The loop edits secrets, deploy files, or unrelated production code.
-  - no-real-improvement — The best candidate does not beat baseline under repeated deterministic evaluation.
+  - editable-surface-creep — Allowlist grows until eval infrastructure becomes mutable.
+  - no-real-improvement — Best snapshot does not beat baseline under repeated deterministic evaluation.
+  - regression-blind-promotion — Held-out or hidden tests regress while visible score improves.
   - archive-collapse — Selection converges too early and loses diversity.
-  - cost-runaway — Mutation/eval loop keeps spending after plateau or failure.
+  - cost-runaway — Patch/eval loop keeps spending after plateau or failure.
+  - goodhart-benchmark — Benchmark score rises while product behavior degrades outside measured dimensions.
 
 composition:
   expects:
@@ -103,22 +202,42 @@ composition:
     - sandboxed candidate execution or host-approved isolation plan
     - versioned source control or rollback path
   provides:
-    - evolutionary candidate loop
-    - mutation boundary and patch validation
+    - eval-guided patch loop
+    - editable-surface enforcement
+    - evaluator integrity protection
+    - TDAD-style rollback and best-snapshot promotion
     - fitness evaluation receipt
     - lineage/archive storage
-    - selection and checkpoint protocol
+    - optional population-evolution profile
   conflicts_with:
     - autonomous production self-modification without approval
     - hosts with no measurable fitness signal
     - untrusted code execution without sandbox
+    - blocklist-only mutation scope without explicit user acceptance
 
 evidence:
   required:
-    - baseline score and command
-    - candidate count and lineage
+    - baseline command and score
+    - evaluator checksum proof
+    - patch cycle count and lineage
     - sandbox proof
-    - winner score and baseline comparison
+    - unit-test gate proof
+    - regression gate proof
+    - best-snapshot comparison
     - cost and model usage summary
     - claim ceiling with not-proven fields
-
+  research_tags:
+    solid:
+      - SWE-bench
+      - SWE-agent
+      - DSPy
+      - GEPA
+    directional:
+      - Darwin Godel Machine
+      - Self-Harness
+      - Huxley-Godel Machine
+      - AlphaEvolve
+    speculative:
+      - TDAD headline subset numbers
+      - Kitchen Loop
+      - Live-SWE-agent

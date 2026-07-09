@@ -1,0 +1,39 @@
+schema: agent-buildprint/regression-oracle.v0
+id: auth-regression-v2
+version: 2
+title: Auth specification surface — sessions must not regress
+profile: kitchen-loop-oracle
+source_repo_alignment: Kitchen Loop counterweight (speculative evidence)
+
+specification_surface:
+  - claim: Valid bearer tokens authorize session creation
+  - claim: Missing or malformed tokens return 401 without side effects
+  - claim: Rate limiting still applies after auth fix
+
+regression_oracle_cases:
+  - id: oracle.valid-token-creates-session
+    action: POST /api/sessions with valid token
+    expect:
+      status: 201
+      side_effects:
+        sessions_created: 1
+  - id: oracle.invalid-token-rejected
+    action: POST /api/sessions with expired token
+    expect:
+      status: 401
+      side_effects:
+        sessions_created: 0
+  - id: oracle.rate-limit-unchanged
+    action: burst 20 requests from same IP
+    expect:
+      status_in: [401, 429]
+      side_effects:
+        sessions_created: 0
+
+oracle_command: npm run oracle:auth-regression-v2
+
+usage_note: |
+  Use alongside benchmark score, not instead of hidden tests.
+  Oracle failure disqualifies promotion even when held_in score improves.
+
+claim_ceiling: fixture
