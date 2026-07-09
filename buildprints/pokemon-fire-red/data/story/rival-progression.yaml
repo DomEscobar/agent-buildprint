@@ -1,0 +1,113 @@
+# Rival (Blue) Progression — FRLG
+
+All battles are **mandatory** for `kanto_complete`. Party species/levels scale with player starter and badge count.
+
+Implement in `data/manual/trainers/rival/` with dynamic party builder reading `gameState.starter` and `gameState.badges`.
+
+```yaml
+schema: agent-buildprint/pokemon-frlg-rival/v1
+
+rival_name: BLUE
+starter_counter:
+  bulbasaur: charmander   # player grass → rival fire
+  charmander: squirtle
+  squirtle: bulbasaur
+
+battles:
+  - id: rival_oaks_lab_1
+    quest: quest_first_rival_battle
+    map: oaks_lab
+    trigger: script_after_starter
+    party_rules:
+      slot1: { species: starter_counter, level: 5 }
+    reward_money: 175
+
+  - id: rival_route22_1
+    quest: quest_route22_early_rival
+    map: route_22
+    trigger: walk_in_sight
+    flags_required: [pokedex_received]
+    flags_set: [rival_route22_1_defeated]
+    party_rules:
+      slot1: { species: starter_counter, level: 9, evolves: false }
+    reward_money: 144
+
+  - id: rival_cerulean
+    quest: quest_badge_cascade
+    map: cerulean_city
+    trigger: script_north_bridge
+    flags_required: [badge_cascade]
+    party_rules:
+      slot1: { species: starter_counter, level: 16, evolves: true }
+      slot2: { species: pidgey, level: 15 }
+    reward_money: 220
+    note: Battle occurs after Misty; blocks bridge until defeated
+
+  - id: rival_ss_anne
+    quest: quest_ss_anne
+    map: ss_anne_b1f
+    trigger: walk_in_sight
+    party_rules:
+      slot1: { species: starter_counter, level: 18, evolves: true }
+      slot2: { species: pidgey, level: 17 }
+      slot3: { species: abra, level: 16 }
+    reward_money: 324
+
+  - id: rival_pokemon_tower
+    quest: quest_pokemon_tower
+    map: pokemon_tower_6f
+    trigger: walk_in_sight
+    party_rules:
+      slot1: { species: starter_counter, level: 22, evolves: true }
+      slot2: { species: pidgeotto, level: 20 }
+      slot3: { species: gyarados_or_equivalent, level: 20 }
+    reward_money: 440
+
+  - id: rival_silph_co
+    quest: quest_silph_co
+    map: silph_co_7f
+    trigger: script_floor_7
+    party_rules:
+      slot1: { species: starter_counter, level: 25, evolves: true }
+      slot2: { species: pidgeotto, level: 23 }
+      slot3: { species: growlithe, level: 22 }
+      slot4: { species: alakazam_or_kadabra, level: 20 }
+    reward_money: 580
+
+  - id: rival_route22_2
+    quest: quest_route22_final_rival
+    map: route_22
+    trigger: walk_in_sight
+    flags_required: [badge_earth]
+    party_rules:
+      slot1: { species: starter_counter, level: 32, evolves: true, final_evolution: true }
+      slot2: { species: pidgeotto, level: 29 }
+      slot3: { species: growlithe, level: 29 }
+      slot4: { species: alakazam_or_kadabra, level: 27 }
+    reward_money: 728
+
+  - id: rival_champion
+    quest: quest_elite_four
+    map: champion_room
+    trigger: script_champion_door
+    party_rules:
+      slot1: { species: starter_counter, level: 59, final_evolution: true }
+      slot2: { species: pidgeot, level: 57 }
+      slot3: { species: arcanine, level: 58 }
+      slot4: { species: alakazam, level: 55 }
+      slot5: { species: rhydon, level: 56 }
+      slot6: { species: exeggutor_or_gyarados, level: 58 }
+    reward_money: 11600
+
+dynamic_party_implementation:
+  module: src/battle/rival-party-builder.ts
+  inputs: [gameState.starter, gameState.badges, battleId]
+  tests: tests/battle/rival-party.test.ts
+  proof: every battle id produces correct counter-starter species
+
+postgame_rematches:
+  required_for: [postgame_sevii]
+  location: sevii_pokemon_center_network
+  note: Implement after Champion; levels 65-70; see sevii-quest-chain.yaml
+
+```

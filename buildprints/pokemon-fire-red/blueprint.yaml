@@ -1,0 +1,242 @@
+schema_version: mapper-os/executable-blueprint/v3
+execution_start: BUILDPRINT.md
+machine_contract: blueprint.yaml
+claim_status: product_build_required
+qualification_label: fan_game_build_requires_playthrough_review
+
+deployment_posture:
+  current: trusted_local
+  allowed_values:
+    - trusted_local
+    - private_demo
+    - public_web
+  claim_ceiling: local browser playthrough from new game through Champion is the minimum proven outcome for kanto_complete; Sevii and public hosting require additional proof or explicit blockers.
+
+read_order:
+  - BUILDPRINT.md
+  - references/asset-policy.md
+  - references/data-sources-and-techniques-basis.md
+  - 00-questions.md
+  - 01-project-setup.md
+  - 02-ui-identity.md
+  - blueprint.yaml
+  - 03-phases/phase-index.yaml
+  - 03-phases/phase-flow.md
+  - README.md
+  - HANDOVER.md
+
+packet_shape:
+  style: phase_driven_comprehensive_game
+  principle: YAML routes; markdown teaches and builds; story graph and battle math are explicit contracts.
+  required_files:
+    - BUILDPRINT.md
+    - references/data-sources-and-techniques-basis.md
+    - 00-questions.md
+    - 01-project-setup.md
+    - 02-ui-identity.md
+    - blueprint.yaml
+    - 03-phases/phase-index.yaml
+    - 03-phases/phase-flow.md
+    - README.md
+    - HANDOVER.md
+
+story_scope:
+  region: kanto
+  version: firered
+  mechanics: gen3
+  asset_policy: references/asset-policy.md
+  pokemon_sprites:
+    source: pokeapi
+    mandatory: true
+    forbidden: [custom_svg, external_pokemon_packs, rom_extracts]
+    cache_dir: public/data/generated/sprites/pokemon
+  world_art:
+    user_choice: true
+    question_id: world_overworld_art_mode
+    allowed_modes:
+      - external_sprite_sheets
+      - custom_svg
+    applies_to: [player_overworld, npcs, trainers_overworld, map_tiles, buildings, ui_chrome_optional]
+    excludes: [pokemon_battle, pokemon_party, pokedex_species, evolution_sprites]
+  story_contract_dir: data/story
+  story_contract_files:
+    - data/story/story-graph.yaml
+    - data/story/map-manifest.yaml
+    - data/story/rival-progression.yaml
+    - data/story/sevii-quest-chain.yaml
+  validation_commands:
+    - npm run maps:validate
+    - npm run story:validate
+    - npm run story:lint
+  kanto_complete_requires:
+    maps: 82
+    quests: 100_percent_from_story_graph
+    rival_battles: 8
+    mid_checkpoints: [CP-M1, CP-M2, CP-M3]
+  main_story_beats:
+    - intro_oak_starter_rival
+    - viridian_forest_brock
+    - mt_moon_misty
+    - ss_anne_surge
+    - rock_tunnel_erika
+    - lavender_pokemon_tower
+    - silph_co_saffron_giovanni
+    - cycling_road_koga
+    - seafoam_blaine
+    - victory_road_elite_four_champion
+  postgame_beats:
+    - sevii_islands_one_through_seven
+    - national_dex_upgrade
+    - postgame_rival_rematches
+  out_of_scope_v1:
+    - link_cable_trade_battle
+    - mystery_gift
+    - wireless_club
+    - leafgreen_exclusive_story_diffs_unless_documented
+
+capability_maturity:
+  current_floor: data_pipeline
+  full_claim: postgame_sevii
+  rule: Do not claim kanto_complete until Champion battle is playable with proof. Do not claim postgame_sevii until Sevii Island 1 quest line is playable or explicitly blocked.
+  levels:
+    data_pipeline:
+      claim: offline cached game data from PokeAPI + manual tables
+      required:
+        - build script fetches and caches species 1-386 subset
+        - firered-leafgreen move learnsets normalized
+        - manual override files for types, items, encounters, trainers
+        - PokeAPI FRLG sprites cached for all species used (mandatory)
+        - npm run assets:validate passes — no non-PokeAPI Pokémon graphics
+        - data/schema validation tests pass
+    overworld_core:
+      claim: walkable maps with warps and wild grass
+      required:
+        - at least pallet_town, route_1, viridian_city loaded
+        - 4-direction movement, collision, ledges
+        - map transitions and spawn points
+        - grass encounter trigger
+    battle_core:
+      claim: wild and trainer battles
+      required:
+        - turn order by speed
+        - damage formula gen3
+        - type effectiveness
+        - switch, faint, exp gain
+        - battle UI with move selection
+    progression_core:
+      claim: party, bag, PC, badges, HMs
+      required:
+        - catch/store Pokémon
+        - items use in and out of battle
+        - evolution and move learn on level-up
+        - badge count gates HM usage
+        - story flags set/get
+    kanto_complete:
+      claim: main story playable start to Champion
+      required:
+        - 100% quests in story-graph.yaml tagged kanto_complete
+        - 100% maps in map-manifest.yaml tagged kanto_complete (82 maps)
+        - all 8 rival battles from rival-progression.yaml
+        - all 8 gyms winnable in FRLG order
+        - mandatory side quests (parcel, tea, rocket hideout, silph, safari, snorlax, tower)
+        - Elite Four + Champion sequence
+        - save/load mid-story from phase 08 onward
+        - mid-story checkpoints CP-M1 CP-M2 CP-M3 pass
+    postgame_sevii:
+      claim: full Sevii Islands arc islands 1-7
+      required:
+        - 100% quests in sevii-quest-chain.yaml
+        - 100% postgame maps (18 maps)
+        - Network Machine Ruby + Sapphire complete
+        - National Dex upgrade
+        - CP-SeviiComplete pass
+    release_polish:
+      claim: shippable fan game quality bar
+      required:
+        - title, options, Pokedex, save slots
+        - audio BGM/SFX hooks
+        - critical review pass >= 45/60
+
+central_output_contract:
+  rule: The central output is a playable Pokémon FireRed-style game, not a Pokédex viewer or battle calculator.
+  central_output: A browser game where the player completes the Kanto journey — catch Pokémon, battle trainers, earn badges, defeat Team Rocket, beat the Elite Four, and continue to Sevii Islands — with Gen III battle mechanics and PokeAPI-backed data.
+  output_primitives:
+    - game_state (player, party, bag, flags, badges, money, play_time)
+    - map_instance (tiles, collision, npcs, warps, encounters)
+    - battle_state (active mons, turn queue, weather, field effects)
+    - script_runner (dialogue, choices, battles, item gives, flag sets)
+    - data_cache (species, moves, items, trainers, encounters)
+    - save_slot (serialized game_state with checksum)
+  quality_signals:
+    - new game reaches first wild battle in under 5 minutes
+    - Brock winnable at intended level without debug cheats
+    - map warps never drop player inside collision
+    - battle damage matches gen3 reference spot checks
+    - story flags gate gyms and HM fields correctly
+    - save after badge persists badge on reload
+  unacceptable_generic_substitutes:
+    - static map screenshot only
+    - battle UI with hardcoded Pikachu vs Rattata forever
+    - JSON editor as main game interface
+    - random encounter levels without route tables
+    - "TODO" gyms that auto-grant badges
+  claim_gates:
+    - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 82/82 maps
+    - postgame_sevii requires `npm run story:validate -- --claim postgame_sevii` + CP-SeviiComplete
+    - no ripped ROM assets in repo
+
+proven_implementation_requirements:
+  stack_selection:
+    engine: Phaser 3.x (pin minor version)
+    language: TypeScript 5.x
+    bundler: Vite
+    maps: Tiled Map Editor (.tmx export)
+    data_fetch: node script at build time hitting PokeAPI with disk cache
+    persistence: IndexedDB via idb or localforage
+  product_domains:
+    tile_overworld:
+      requirement: Phaser Tilemap + arcade physics or grid movement; no freeform pixel collision hand-roll without map tool
+    turn_battle_engine:
+      requirement: Deterministic battle state machine with explicit phases (command, execute, end turn); reference Bulbapedia Gen III damage formula; unit tests for formula
+    script_vm:
+      requirement: Data-driven event scripts (YAML or DSL) for NPC dialogue, battles, flag sets; no hardcoded story in scene files
+    pokeapi_ingestion:
+      requirement: Build-time fetch with rate-conscious sequential requests; output `public/data/generated/` JSON; never fetch at runtime in production build
+    save_system:
+      requirement: Versioned save schema with migration id; checksum; export/import file
+
+execution_model:
+  mode: phased_game_build
+  iteration_budget:
+    minimum_repair_iterations: 1
+    maximum_repair_iterations: 5
+  builder_loop:
+    steps:
+      - observe repo, playable build, save file, test output
+      - interpret gaps against capability_maturity and story_scope
+      - plan smallest real repair
+      - implement + test
+      - playtest checkpoint
+      - verify or record blocker
+
+state_and_handoff:
+  local_state_dir: .buildprint/
+  setup_receipt: .buildprint/setup-receipt.md
+  playthrough_receipt: .buildprint/playthrough-receipt.md
+  claim_gates: .buildprint/claim-gates.json
+
+evidence:
+  official_docs:
+    - url: https://pokeapi.co/docs/v2
+      inspected: 2026-07-09
+    - url: https://photonstorm.github.io/phaser3-docs/
+      note: verify current Phaser 3 tilemap API at implementation time
+  source_examples:
+    - name: pokered.ts
+      url: https://github.com/mattbruv/pokered.ts
+      note: fidelity reference; different data source
+    - name: pokemon-team-planner-tools
+      url: https://github.com/Pokemon-Team-Planner/pokemon-team-planner-tools
+      note: PokeAPI FRLG export patterns and past_types handling
+  benchmarks: []
+  no_benchmark_evidence_found: true

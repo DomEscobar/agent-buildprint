@@ -1,0 +1,337 @@
+# Story Graph — Pokémon FireRed (FRLG mechanics)
+
+Machine-readable main-story contract. Applying agents **must** implement every quest node; phases must not advance until `npm run story:validate` passes for the target claim.
+
+Schema: `agent-buildprint/pokemon-frlg-story/v1`
+
+## How to use
+
+1. Read this file before phase 06 (script VM).
+2. Each quest defines: `id`, `flags_set`, `flags_required`, `maps`, `scripts`, `trainers`, `items`, `blocks_until_complete`.
+3. Implement scripts at paths listed in `scripts`.
+4. Phase 10 proof: **100%** of quests where `required_for: kanto_complete` must be `complete` in `.buildprint/story-progress.json`.
+5. Phase 12 proof: **100%** of quests where `required_for: postgame_sevii`.
+
+## Validation
+
+Implementation repo must add:
+
+```bash
+npm run story:validate   # checks story-progress.json vs this graph + map-manifest
+```
+
+---
+
+```yaml
+# Embedded contract — also load as data/story/story-graph.yaml in implementation repo
+
+meta:
+  version: firered_leafgreen
+  mechanics: gen3
+  canonical_reference: bulbapedia_walkthrough_frlg
+  no_simplification_rule: >
+    Safari Zone, Tea/Saffron guards, Rocket Hideout, Flash/Rock Tunnel,
+    Snorlax, Fossil revival, and Silph Co are mandatory for kanto_complete.
+    No "gift HM" shortcuts unless flagged as blocker with user approval.
+
+quests:
+  # ─── ACT 0: INTRO ─────────────────────────────────────────
+  - id: quest_game_start
+    title: New game + Oak intro
+    required_for: [kanto_complete]
+    flags_required: []
+    flags_set: [met_oak, rival_name_set]
+    maps: [pallet_town, oaks_lab]
+    scripts:
+      - data/scripts/maps/pallet_town.yaml#oak_blocks_exit
+      - data/scripts/maps/oaks_lab.yaml#starter_choice
+    trainers: [rival_oaks_lab_1]
+    blocks: [route_1_north_until_starter]
+
+  - id: quest_first_rival_battle
+    title: Rival battle in Oak's Lab
+    required_for: [kanto_complete]
+    flags_required: [starter_chosen]
+    flags_set: [rival_lab_defeated]
+    trainers: [rival_oaks_lab_1]
+
+  # ─── ACT 1: PARCEL + POKÉDEX ──────────────────────────────
+  - id: quest_oaks_parcel
+    title: Deliver Oak's Parcel
+    required_for: [kanto_complete]
+    flags_required: [rival_lab_defeated]
+    flags_set: [parcel_received, parcel_delivered, pokedex_received]
+    maps: [pallet_town, route_1, viridian_city, viridian_mart, oaks_lab]
+    scripts:
+      - data/scripts/maps/pallet_town.yaml#oak_gives_parcel
+      - data/scripts/maps/viridian_mart.yaml#deliver_parcel
+      - data/scripts/maps/oaks_lab.yaml#oak_gives_pokedex
+    items: [oaks_parcel, pokedex]
+    blocks: [route_2_until_parcel_delivered]
+    npcs: [viridian_old_man_route2]
+
+  - id: quest_route22_early_rival
+    title: Rival on Route 22 (first blocking battle)
+    required_for: [kanto_complete]
+    flags_required: [pokedex_received]
+    flags_set: [rival_route22_1_defeated]
+    maps: [route_22]
+    trainers: [rival_route22_1]
+
+  # ─── ACT 2: BOCK / MT MOON ────────────────────────────────
+  - id: quest_badge_boulder
+    title: Defeat Brock
+    required_for: [kanto_complete]
+    flags_required: [pokedex_received]
+    flags_set: [badge_boulder]
+    maps: [route_2, viridian_forest, route_3, route_4, pewter_city, pewter_gym]
+    trainers: [gym_brock]
+    hm_unlocks: [cut_usable_after_badge]
+
+  - id: quest_mt_moon_fossil
+    title: Mt Moon + Fossil choice
+    required_for: [kanto_complete]
+    flags_required: [badge_boulder]
+    flags_set: [fossil_chosen_helix_or_dome, mt_moon_completed]
+    maps: [mt_moon_1f, mt_moon_b1f, mt_moon_b2f]
+    scripts:
+      - data/scripts/maps/mt_moon_b2f.yaml#super_nerd_fossil_choice
+    items: [helix_fossil, dome_fossil]  # mutually exclusive
+    trainers: [super_nerd_mtmoon]
+
+  - id: quest_fossil_revival
+    title: Revive fossil at Cinnabar Lab
+    required_for: [kanto_complete]
+    flags_required: [fossil_chosen_helix_or_dome]
+    flags_set: [fossil_revived]
+    maps: [cinnabar_island, cinnabar_lab]
+    scripts:
+      - data/scripts/maps/cinnabar_lab.yaml#revive_fossil
+    note: Can complete late; must be reachable before Champion proof
+
+  # ─── ACT 3: MISTY / SS ANNE ───────────────────────────────
+  - id: quest_badge_cascade
+    title: Defeat Misty
+    required_for: [kanto_complete]
+    flags_required: [mt_moon_completed]
+    flags_set: [badge_cascade]
+    maps: [cerulean_city, cerulean_gym]
+    trainers: [gym_misty]
+
+  - id: quest_bills_pc
+    title: Help Bill on Route 25
+    required_for: [kanto_complete]
+    flags_required: [badge_cascade]
+    flags_set: [bill_helped, ss_anne_ticket_received]
+    maps: [route_24, route_25, bills_house]
+    scripts:
+      - data/scripts/maps/bills_house.yaml#bill_pc_event
+    items: [ss_anne_ticket]
+
+  - id: quest_ss_anne
+    title: S.S. Anne — meet Captain, get Cut
+    required_for: [kanto_complete]
+    flags_required: [ss_anne_ticket_received]
+    flags_set: [ss_anne_captain_met, hm_cut_received, ss_anne_departed]
+    maps: [vermilion_city, ss_anne_1f, ss_anne_b1f, ss_anne_deck]
+    scripts:
+      - data/scripts/maps/ss_anne_captain.yaml#captain_cutscene
+    items: [hm01_cut]
+    trainers: [rival_ss_anne]
+
+  - id: quest_badge_thunder
+    title: Defeat Lt. Surge
+    required_for: [kanto_complete]
+    flags_required: [hm_cut_received]
+    flags_set: [badge_thunder]
+    maps: [vermilion_gym]
+    trainers: [gym_surge]
+    field_gates: [cut_trees_route9_route10]
+
+  # ─── ACT 4: ROCK TUNNEL / TOWER ───────────────────────────
+  - id: quest_flash_rock_tunnel
+    title: Get Flash + traverse Rock Tunnel
+    required_for: [kanto_complete]
+    flags_required: [badge_thunder]
+    flags_set: [hm_flash_received, rock_tunnel_cleared]
+    maps: [pewter_city, route_9, route_10, rock_tunnel_1f, rock_tunnel_b1f]
+    items: [hm05_flash]
+    scripts:
+      - data/scripts/maps/pewter_gym_helper.yaml#flash_giver
+    note: Flash from aide after badge count or Pewter guide; darken maps without Flash
+
+  - id: quest_pokemon_tower
+    title: Pokémon Tower — ghost Marowak, rescue Mr. Fuji
+    required_for: [kanto_complete]
+    flags_required: [silph_scope_received]
+    flags_set: [marowak_identified, fuji_rescued, pokeflute_received]
+    maps: [lavender_town, pokemon_tower_1f, pokemon_tower_2f, pokemon_tower_3f, pokemon_tower_4f, pokemon_tower_5f, pokemon_tower_6f, pokemon_tower_7f]
+    scripts:
+      - data/scripts/maps/pokemon_tower_6f.yaml#marowak_battle
+      - data/scripts/maps/pokemon_tower_top.yaml#fuji_rescue
+    items: [silph_scope, pokeflute]
+    trainers: [rival_pokemon_tower, channelers]
+
+  - id: quest_rocket_hideout
+    title: Celadon Game Corner → Rocket Hideout → Silph Scope
+    required_for: [kanto_complete]
+    flags_required: [badge_thunder]
+    flags_set: [rocket_hideout_cleared, silph_scope_received, lift_key_received]
+    maps: [celadon_city, celadon_game_corner, rocket_hideout_b1, rocket_hideout_b2, rocket_hideout_b3, rocket_hideout_b4, rocket_hideout_elevator]
+    scripts:
+      - data/scripts/maps/rocket_hideout.yaml#giovanni_escape_scope
+    trainers: [rocket_grunts_hideout, rocket_giovanni_hideout]
+
+  - id: quest_badge_rainbow
+    title: Defeat Erika
+    required_for: [kanto_complete]
+    flags_required: [rock_tunnel_cleared]
+    flags_set: [badge_rainbow]
+    maps: [route_8, celadon_city, celadon_gym]
+    trainers: [gym_erika]
+
+  # ─── ACT 5: SAFFRON / SILPH ───────────────────────────────
+  - id: quest_saffron_tea
+    title: Celadon Tea for Saffron guards
+    required_for: [kanto_complete]
+    flags_required: [badge_rainbow]
+    flags_set: [tea_received, saffron_guards_passed]
+    maps: [celadon_mart, saffron_city, saffron_gates]
+    items: [tea]
+    blocks: [saffron_city_until_tea]
+
+  - id: quest_silph_co
+    title: Silph Co takeover — rescue President, Lapras
+    required_for: [kanto_complete]
+    flags_required: [saffron_guards_passed]
+    flags_set: [silph_co_cleared, master_ball_received, lapras_received]
+    maps: [saffron_city, silph_co_1f, silph_co_2f, silph_co_3f, silph_co_4f, silph_co_5f, silph_co_6f, silph_co_7f, silph_co_8f, silph_co_9f, silph_co_10f, silph_co_11f]
+    scripts:
+      - data/scripts/maps/silph_co_7f.yaml#president_rescue
+      - data/scripts/maps/silph_co_7f.yaml#lapras_gift
+    items: [master_ball, lapras_gift]
+    trainers: [rival_silph_co, rocket_grunts_silph, rocket_giovanni_silph]
+
+  - id: quest_badge_marsh
+    title: Defeat Sabrina
+    required_for: [kanto_complete]
+    flags_required: [silph_co_cleared]
+    flags_set: [badge_marsh]
+    maps: [saffron_gym]
+    trainers: [gym_sabrina]
+
+  # ─── ACT 6: SAFARI / SURF / STRENGTH ──────────────────────
+  - id: quest_safari_zone
+    title: Safari Zone — Surf + Gold Teeth
+    required_for: [kanto_complete]
+    flags_required: [badge_marsh]
+    flags_set: [safari_completed, hm_surf_received, gold_teeth_returned, hm_strength_received]
+    maps: [fuchsia_city, safari_zone_center, safari_zone_east, safari_zone_north, safari_zone_west, wardens_house]
+    scripts:
+      - data/scripts/maps/safari_zone.yaml#surf_hm
+      - data/scripts/maps/wardens_house.yaml#teeth_strength
+    items: [hm03_surf, gold_teeth, hm04_strength]
+    note: Full Safari minigame OR honest blocked sub-claim; no silent HM gift shortcut
+
+  - id: quest_snorlax_route12
+    title: Wake Snorlax on Route 12 (Poké Flute)
+    required_for: [kanto_complete]
+    flags_required: [pokeflute_received, hm_cut_received]
+    flags_set: [snorlax_route12_defeated_or_caught]
+    maps: [route_12]
+    field_gates: [snorlax_blocks_route12]
+
+  - id: quest_badge_volcano
+    title: Defeat Blaine
+    required_for: [kanto_complete]
+    flags_required: [hm_surf_received]
+    flags_set: [badge_volcano]
+    maps: [route_19, route_20, seafoam_islands, cinnabar_island, cinnabar_gym]
+    trainers: [gym_blaine]
+    optional: [legendary_articuno_seafoam]
+
+  # ─── ACT 7: CYCLING / GIOVANNI ────────────────────────────
+  - id: quest_snorlax_route16
+    title: Wake Snorlax on Route 16
+    required_for: [kanto_complete]
+    flags_required: [pokeflute_received]
+    flags_set: [snorlax_route16_defeated_or_caught]
+    maps: [route_16, route_17, route_18]
+    field_gates: [snorlax_blocks_route16, cycling_road_bike_required]
+
+  - id: quest_badge_earth
+    title: Defeat Giovanni (Viridian Gym)
+    required_for: [kanto_complete]
+    flags_required: [badge_volcano, silph_co_cleared]
+    flags_set: [badge_earth, giovanni_viridian_defeated]
+    maps: [viridian_gym]
+    trainers: [gym_giovanni]
+
+  - id: quest_route22_final_rival
+    title: Rival before Victory Road
+    required_for: [kanto_complete]
+    flags_required: [badge_earth]
+    flags_set: [rival_route22_2_defeated]
+    maps: [route_22]
+    trainers: [rival_route22_2]
+
+  # ─── ACT 8: ELITE FOUR ────────────────────────────────────
+  - id: quest_victory_road
+    title: Traverse Victory Road
+    required_for: [kanto_complete]
+    flags_required: [badge_earth, rival_route22_2_defeated]
+    flags_set: [victory_road_cleared]
+    maps: [route_23, victory_road_1f, victory_road_2f, victory_road_3f, indigo_plateau]
+    field_gates: [boulder_puzzles_strength]
+
+  - id: quest_elite_four
+    title: Elite Four gauntlet
+    required_for: [kanto_complete]
+    flags_required: [victory_road_cleared]
+    flags_set: [elite_four_defeated, hall_of_fame_entered]
+    maps: [elite_four_lorelei, elite_four_bruno, elite_four_agatha, elite_four_lance, champion_room, hall_of_fame]
+    trainers: [elite_lorelei, elite_bruno, elite_agatha, elite_lance, rival_champion]
+
+  # ─── POSTGAME: SEVII (see sevii-quest-chain.yaml) ─────────
+  - id: quest_sevii_unlock
+    title: Bill/Celio — Sevii Islands unlocked
+    required_for: [postgame_sevii]
+    flags_required: [hall_of_fame_entered]
+    flags_set: [sevii_unlocked]
+    imports: data/story/sevii-quest-chain.yaml
+
+flag_registry:
+  # Core progression
+  - starter_chosen
+  - rival_lab_defeated
+  - parcel_delivered
+  - pokedex_received
+  - badge_boulder
+  - badge_cascade
+  - badge_thunder
+  - badge_rainbow
+  - badge_marsh
+  - badge_volcano
+  - badge_earth
+  - hall_of_fame_entered
+  # Rival
+  - rival_route22_1_defeated
+  - rival_route22_2_defeated
+  # Key items / HMs
+  - ss_anne_ticket_received
+  - hm_cut_received
+  - hm_flash_received
+  - hm_surf_received
+  - hm_strength_received
+  - silph_scope_received
+  - pokeflute_received
+  - tea_received
+  # Story arcs
+  - rocket_hideout_cleared
+  - silph_co_cleared
+  - fuji_rescued
+  - safari_completed
+  - sevii_unlocked
+  # See sevii-quest-chain.yaml for postgame flags
+
+```

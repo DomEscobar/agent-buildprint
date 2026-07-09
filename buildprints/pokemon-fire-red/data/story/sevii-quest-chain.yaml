@@ -1,0 +1,92 @@
+# Sevii Islands Quest Chain — postgame_sevii
+
+**All quests below are mandatory** for `postgame_sevii` claim. No "islands 1-3 only" shortcut.
+
+```yaml
+schema: agent-buildprint/pokemon-frlg-sevii/v1
+
+prerequisite: hall_of_fame_entered
+
+quests:
+  - id: sevii_celio_intro
+    title: Meet Bill and Celio on One Island
+    flags_set: [celio_met, network_machine_introduced]
+    maps: [one_island, sevii_pokemon_center_network]
+    scripts:
+      - data/scripts/postgame/sevii_intro.yaml
+
+  - id: sevii_ruby_ember
+    title: Mt Ember — Team Rocket + Ruby
+    flags_required: [celio_met]
+    flags_set: [ruby_retrieved, mt_ember_cleared]
+    maps: [kindle_road, mt_ember_1f, mt_ember_summit]
+    trainers: [rocket_mt_ember]
+    items: [ruby]
+
+  - id: sevii_sapphire_icefall
+    title: Four Island — Icefall Cave + Sapphire
+    flags_required: [ruby_retrieved]
+    flags_set: [sapphire_retrieved, icefall_cleared]
+    maps: [four_island, icefall_cave]
+    items: [sapphire]
+
+  - id: sevii_network_part1
+    title: Install Ruby in Network Machine
+    flags_required: [ruby_retrieved]
+    flags_set: [network_ruby_installed]
+    maps: [sevii_pokemon_center_network]
+
+  - id: sevii_islands_1_3_exploration
+    title: Explore Islands 1-3 — gem handoffs
+    flags_required: [network_ruby_installed]
+    flags_set: [islands_1_3_cleared]
+    maps: [one_island, two_island, three_island, cape_brink, bond_bridge, berry_forest]
+
+  - id: sevii_rocket_warehouse
+    title: Five Island — Rocket Warehouse on Five Isle Meadow
+    flags_required: [islands_1_3_cleared]
+    flags_set: [rocket_warehouse_cleared]
+    maps: [five_island, rocket_warehouse]
+    trainers: [rocket_warehouse_grunts, gideon]
+
+  - id: sevii_network_complete
+    title: Complete Network Machine (Ruby + Sapphire)
+    flags_required: [sapphire_retrieved, rocket_warehouse_cleared]
+    flags_set: [network_complete, national_dex_enabled]
+    maps: [sevii_pokemon_center_network]
+    scripts:
+      - data/scripts/postgame/network_complete.yaml
+    items: [rainbow_pass]
+
+  - id: sevii_islands_4_7
+    title: Islands 4-7 + Tanoby Chambers
+    flags_required: [network_complete]
+    flags_set: [sevii_arc_complete]
+    maps: [four_island, five_island, six_island, seven_island, dotted_hole, tanoby_chambers]
+    optional: [deoxys_event_seven_island]
+
+  - id: sevii_cerulean_cave_unlock
+    title: Cerulean Cave opens (Mewtwo)
+    flags_required: [national_dex_enabled]
+    flags_set: [cerulean_cave_open]
+    maps: [cerulean_cave]
+    optional: true
+    note: Legendary battle optional; cave entrance must open
+
+national_dex:
+  trigger_flag: national_dex_enabled
+  effect: pokedex_mode_national
+  proof: pokedex_shows_152_plus_species_entry
+
+rainbow_pass:
+  grants_access: [four_island, five_island, six_island, seven_island]
+  required_for: sevii_islands_4_7
+
+claim_gate:
+  postgame_sevii_requires:
+    - sevii_arc_complete
+    - national_dex_enabled
+    - 100% maps in map-manifest tagged postgame_sevii
+    - CP-F through CP-SeviiComplete (see phase-flow.md)
+
+```

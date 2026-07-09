@@ -1,0 +1,76 @@
+schema_version: mapper-os/phase-index/v3
+active_phase: 03-phases/01-data-pipeline.md
+phases:
+  - phase_id: 01-data-pipeline
+    file: 03-phases/01-data-pipeline.md
+    status: included
+    maturity_gate: data_pipeline
+    depends_on: []
+  - phase_id: 02-engine-shell
+    file: 03-phases/02-engine-shell.md
+    status: included
+    maturity_gate: overworld_core
+    depends_on: [01-data-pipeline]
+  - phase_id: 03-overworld-core
+    file: 03-phases/03-overworld-core.md
+    status: included
+    maturity_gate: overworld_core
+    depends_on: [02-engine-shell]
+  - phase_id: 04-wild-encounters-battle-ui
+    file: 03-phases/04-wild-encounters-battle-ui.md
+    status: included
+    maturity_gate: battle_core
+    depends_on: [03-overworld-core]
+  - phase_id: 05-battle-engine-gen3
+    file: 03-phases/05-battle-engine-gen3.md
+    status: included
+    maturity_gate: battle_core
+    depends_on: [04-wild-encounters-battle-ui]
+  - phase_id: 06-script-vm-dialogue
+    file: 03-phases/06-script-vm-dialogue.md
+    status: included
+    maturity_gate: progression_core
+    depends_on: [05-battle-engine-gen3]
+  - phase_id: 07-party-pc-evolution
+    file: 03-phases/07-party-pc-evolution.md
+    status: included
+    maturity_gate: progression_core
+    depends_on: [06-script-vm-dialogue]
+  - phase_id: 08-items-bag-shops-hms
+    file: 03-phases/08-items-bag-shops-hms.md
+    status: included
+    maturity_gate: progression_core
+    depends_on: [07-party-pc-evolution]
+  - phase_id: 09-trainers-rival-ai
+    file: 03-phases/09-trainers-rival-ai.md
+    status: included
+    maturity_gate: progression_core
+    depends_on: [08-items-bag-shops-hms]
+  - phase_id: 10-story-gyms-dungeons
+    file: 03-phases/10-story-gyms-dungeons.md
+    status: included
+    maturity_gate: kanto_complete
+    depends_on: [09-trainers-rival-ai]
+  - phase_id: 11-elite-four-champion
+    file: 03-phases/11-elite-four-champion.md
+    status: included
+    maturity_gate: kanto_complete
+    depends_on: [10-story-gyms-dungeons]
+  - phase_id: 12-sevii-postgame
+    file: 03-phases/12-sevii-postgame.md
+    status: included
+    maturity_gate: postgame_sevii
+    depends_on: [11-elite-four-champion]
+  - phase_id: 13-menus-audio-polish
+    file: 03-phases/13-menus-audio-polish.md
+    status: included
+    maturity_gate: release_polish
+    depends_on: [12-sevii-postgame]
+  - phase_id: 14-claim-verification
+    file: 03-phases/14-claim-verification.md
+    status: included
+    depends_on: [13-menus-audio-polish]
+  - phase_id: 99-critical-review-pushback
+    file: 03-phases/critical-review-pushback.md
+    status: included
+    depends_on: [14-claim-verification]

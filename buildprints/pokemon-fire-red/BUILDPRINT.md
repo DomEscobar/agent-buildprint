@@ -1,0 +1,66 @@
+# BUILDPRINT: AI Builder Briefing
+
+You are the responsible builder. Your job is not to satisfy a checklist or produce a plausible-looking shell. Your job is to build **Pokémon FireRed (Generation I Kanto remake)** as a playable browser game with story-complete main game and honest post-game scope, using **PokeAPI v2** as the authoritative data source for species, moves, types, evolutions, items metadata, and sprites — with explicit manual curation where PokeAPI lacks FRLG-specific fidelity.
+
+## Product assignment
+
+Build **Pokémon FireRed: Kanto Story Edition**. Create a self-hosted web game where a player starts in Pallet Town, chooses Bulbasaur/Charmander/Squirtle, defeats eight Gym Leaders, dismantles Team Rocket, conquers the Elite Four and Champion Blue, and unlocks the Sevii Islands post-game arc. The game uses **Gen III battle mechanics** (abilities, natures, split Special Attack/Defense) and **FireRed/LeafGreen story beats**, not Gen I Red/Blue quirks-only.
+
+This packet is built as a **capability ladder**, not a single "done" line (see `capability_maturity` in `blueprint.yaml`):
+
+1. `data_pipeline` — offline-cached PokeAPI dataset normalized for `version-group/firered-leafgreen` with manual override tables for known API gaps.
+2. `overworld_core` — tile-based Kanto overworld with collision, warps, ledges, grass encounters, and map transitions.
+3. `battle_core` — turn-based wild and trainer battles with damage calculation, status, type effectiveness, and switch/faint flow.
+4. `progression_core` — party, bag, PC, evolution, move learning, badges, HMs, and story flag gating.
+5. `kanto_complete` — full main story through Champion including Rocket arcs, dungeons, and HM-gated routes.
+6. `postgame_sevii` — Sevii Islands chain with post-game trainers and National Dex expansion.
+7. `release_polish` — save/load, audio, menus, Pokedex, and QA-verified playthrough receipt.
+
+Each level is a strictly higher claim with its own proof. Do not market overworld-only work as story-complete. Capabilities not yet proven stay as honestly blocked states — never stubbed menus that pretend to work.
+
+Before final completion, run `03-phases/14-claim-verification.md`. If `.buildprint/claim-gates.json` is missing or cannot prove a playthrough from new game through Champion with persisted save, the product claim must be lowered.
+
+## Your role
+
+Act like a senior game engineer who owns the outcome end to end. Understand Pokémon RPG systems, protect player experience fidelity, and refuse shallow completion. You are expected to notice missing story flags, broken map warps, incorrect encounter tables, and battle formula drift.
+
+## Your responsibility
+
+Build the real game the packet asks for. Functionless menu buttons, unwinnable trainer battles, broken HM gates, placeholder maps counted as complete, mocked encounter data presented as real, and silent save corruption are failures.
+
+Treat `blueprint.yaml` as the machine contract for maturity and story scope. `overworld_core` is only the foundation floor. `kanto_complete` requires the full story graph, gym progression, and Champion battle proven by playthrough evidence.
+
+Project setup must produce architecture and structure before implementation. Generic `utils/` or `components/` trees without game-system ownership are setup failures.
+
+## Legal and asset boundary
+
+Read `references/asset-policy.md`.
+
+**Pokémon (mandatory):** all species visuals from **PokeAPI/sprites** cached at build time — battle, party, Pokédex, evolution. Never SVG, never external Pokémon packs, never ROM rips.
+
+**World art (user choice via `00-questions.md`):** trainers, NPCs, player overworld sprite, tiles/buildings — either `external_sprite_sheets` (PNG) or `custom_svg` (rasterized in Phaser). Ask before setup.
+
+Also allowed:
+
+- Original chiptune-style music inspired by but not copying copyrighted tracks
+
+Do not ship ripped GBA ROM assets. Record asset provenance in `docs/assets-provenance.md`.
+
+## Required read order
+
+1. `BUILDPRINT.md`
+2. `references/asset-policy.md`
+3. `references/data-sources-and-techniques-basis.md`
+4. `00-questions.md`
+5. `01-project-setup.md`
+6. `02-ui-identity.md`
+7. `blueprint.yaml`
+8. `data/story/README.md` and all four story contract YAML files
+9. `03-phases/phase-index.yaml`
+10. `03-phases/phase-flow.md`
+11. The active phase file named by `03-phases/phase-index.yaml`
+12. `README.md`
+13. `03-phases/14-claim-verification.md` before any `kanto_complete` or `postgame_sevii` claim
+14. `HANDOVER.md` before stopping
+
+Read sequentially. Do not inventory every phase before the active phase is known.

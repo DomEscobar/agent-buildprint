@@ -1,0 +1,263 @@
+# Map Manifest — required maps per claim
+
+Every map listed here must exist as `data/maps/{map_id}.tmx` (or JSON equivalent) and load without error for the listed claim.
+
+Validation: `npm run maps:validate` compares filesystem to this manifest.
+
+```yaml
+schema: agent-buildprint/pokemon-frlg-maps/v1
+
+claims:
+  kanto_complete: all maps tagged kanto_complete or both
+  postgame_sevii: all maps in this file
+
+maps:
+  # ─── PALLET / START ───────────────────────────────────────
+  - id: pallet_town
+    required_for: [kanto_complete, postgame_sevii]
+  - id: player_house_1f
+    required_for: [kanto_complete]
+  - id: player_house_2f
+    required_for: [kanto_complete]
+  - id: rivals_house
+    required_for: [kanto_complete]
+  - id: oaks_lab
+    required_for: [kanto_complete]
+
+  # ─── EARLY ROUTES ─────────────────────────────────────────
+  - id: route_1
+    required_for: [kanto_complete]
+  - id: viridian_city
+    required_for: [kanto_complete]
+  - id: viridian_mart
+    required_for: [kanto_complete]
+  - id: route_2
+    required_for: [kanto_complete]
+  - id: viridian_forest
+    required_for: [kanto_complete]
+  - id: route_3
+    required_for: [kanto_complete]
+  - id: route_4
+    required_for: [kanto_complete]
+  - id: route_22
+    required_for: [kanto_complete]
+
+  # ─── PEWTER / MT MOON ─────────────────────────────────────
+  - id: pewter_city
+    required_for: [kanto_complete]
+  - id: pewter_gym
+    required_for: [kanto_complete]
+  - id: pewter_museum_1f
+    required_for: [kanto_complete]
+  - id: mt_moon_1f
+    required_for: [kanto_complete]
+  - id: mt_moon_b1f
+    required_for: [kanto_complete]
+  - id: mt_moon_b2f
+    required_for: [kanto_complete]
+
+  # ─── CERULEAN / BILL ──────────────────────────────────────
+  - id: cerulean_city
+    required_for: [kanto_complete]
+  - id: cerulean_gym
+    required_for: [kanto_complete]
+  - id: cerulean_bike_shop
+    required_for: [kanto_complete]
+  - id: route_24
+    required_for: [kanto_complete]
+  - id: route_25
+    required_for: [kanto_complete]
+  - id: bills_house
+    required_for: [kanto_complete]
+
+  # ─── VERMILION / SS ANNE ────────────────────────────────────
+  - id: route_5
+    required_for: [kanto_complete]
+  - id: underground_path_5_6
+    required_for: [kanto_complete]
+  - id: route_6
+    required_for: [kanto_complete]
+  - id: vermilion_city
+    required_for: [kanto_complete]
+  - id: vermilion_gym
+    required_for: [kanto_complete]
+  - id: ss_anne_exterior
+    required_for: [kanto_complete]
+  - id: ss_anne_1f
+    required_for: [kanto_complete]
+  - id: ss_anne_b1f
+    required_for: [kanto_complete]
+  - id: ss_anne_captain_room
+    required_for: [kanto_complete]
+
+  # ─── ROCK TUNNEL / LAVENDER ─────────────────────────────────
+  - id: route_9
+    required_for: [kanto_complete]
+  - id: route_10
+    required_for: [kanto_complete]
+  - id: rock_tunnel_1f
+    required_for: [kanto_complete]
+  - id: rock_tunnel_b1f
+    required_for: [kanto_complete]
+  - id: lavender_town
+    required_for: [kanto_complete]
+  - id: pokemon_tower_1f
+    required_for: [kanto_complete]
+  - id: pokemon_tower_3f
+    required_for: [kanto_complete]
+  - id: pokemon_tower_6f
+    required_for: [kanto_complete]
+  - id: pokemon_tower_7f
+    required_for: [kanto_complete]
+
+  # ─── CELADON / ROCKET HIDEOUT ───────────────────────────────
+  - id: route_8
+    required_for: [kanto_complete]
+  - id: celadon_city
+    required_for: [kanto_complete]
+  - id: celadon_gym
+    required_for: [kanto_complete]
+  - id: celadon_mart
+    required_for: [kanto_complete]
+  - id: celadon_game_corner
+    required_for: [kanto_complete]
+  - id: rocket_hideout_b1f
+    required_for: [kanto_complete]
+  - id: rocket_hideout_b2f
+    required_for: [kanto_complete]
+  - id: rocket_hideout_b3f
+    required_for: [kanto_complete]
+  - id: rocket_hideout_b4f
+    required_for: [kanto_complete]
+
+  # ─── SAFFRON / SILPH ────────────────────────────────────────
+  - id: route_7
+    required_for: [kanto_complete]
+  - id: saffron_city
+    required_for: [kanto_complete]
+  - id: saffron_gym
+    required_for: [kanto_complete]
+  - id: silph_co_1f
+    required_for: [kanto_complete]
+  - id: silph_co_5f
+    required_for: [kanto_complete]
+  - id: silph_co_7f
+    required_for: [kanto_complete]
+  - id: silph_co_11f
+    required_for: [kanto_complete]
+
+  # ─── FUCHSA / SAFARI / SOUTH ────────────────────────────────
+  - id: route_11
+    required_for: [kanto_complete]
+  - id: route_12
+    required_for: [kanto_complete]
+  - id: route_15
+    required_for: [kanto_complete]
+  - id: fuchsia_city
+    required_for: [kanto_complete]
+  - id: fuchsia_gym
+    required_for: [kanto_complete]
+  - id: safari_zone_entrance
+    required_for: [kanto_complete]
+  - id: safari_zone_area_1
+    required_for: [kanto_complete]
+  - id: wardens_house
+    required_for: [kanto_complete]
+
+  # ─── CYCLING / CINNABAR ─────────────────────────────────────
+  - id: route_16
+    required_for: [kanto_complete]
+  - id: route_17
+    required_for: [kanto_complete]
+  - id: route_18
+    required_for: [kanto_complete]
+  - id: route_19
+    required_for: [kanto_complete]
+  - id: route_20
+    required_for: [kanto_complete]
+  - id: seafoam_islands_1f
+    required_for: [kanto_complete]
+  - id: cinnabar_island
+    required_for: [kanto_complete]
+  - id: cinnabar_gym
+    required_for: [kanto_complete]
+  - id: cinnabar_lab
+    required_for: [kanto_complete]
+  - id: pokemon_mansion_1f
+    required_for: [kanto_complete]
+
+  # ─── ENDGAME ────────────────────────────────────────────────
+  - id: route_21
+    required_for: [kanto_complete]
+  - id: route_23
+    required_for: [kanto_complete]
+  - id: victory_road_1f
+    required_for: [kanto_complete]
+  - id: victory_road_2f
+    required_for: [kanto_complete]
+  - id: indigo_plateau
+    required_for: [kanto_complete]
+  - id: elite_four_lorelei
+    required_for: [kanto_complete]
+  - id: elite_four_bruno
+    required_for: [kanto_complete]
+  - id: elite_four_agatha
+    required_for: [kanto_complete]
+  - id: elite_four_lance
+    required_for: [kanto_complete]
+  - id: champion_room
+    required_for: [kanto_complete]
+  - id: hall_of_fame
+    required_for: [kanto_complete]
+
+  # ─── SEVII ISLANDS (postgame_sevii) ─────────────────────────
+  - id: one_island
+    required_for: [postgame_sevii]
+  - id: kindle_road
+    required_for: [postgame_sevii]
+  - id: mt_ember_1f
+    required_for: [postgame_sevii]
+  - id: mt_ember_summit
+    required_for: [postgame_sevii]
+  - id: two_island
+    required_for: [postgame_sevii]
+  - id: cape_brink
+    required_for: [postgame_sevii]
+  - id: three_island
+    required_for: [postgame_sevii]
+  - id: bond_bridge
+    required_for: [postgame_sevii]
+  - id: berry_forest
+    required_for: [postgame_sevii]
+  - id: four_island
+    required_for: [postgame_sevii]
+  - id: icefall_cave
+    required_for: [postgame_sevii]
+  - id: five_island
+    required_for: [postgame_sevii]
+  - id: rocket_warehouse
+    required_for: [postgame_sevii]
+  - id: six_island
+    required_for: [postgame_sevii]
+  - id: dotted_hole
+    required_for: [postgame_sevii]
+  - id: seven_island
+    required_for: [postgame_sevii]
+  - id: tanoby_chambers
+    required_for: [postgame_sevii]
+  - id: sevii_pokemon_center_network
+    required_for: [postgame_sevii]
+
+optional_maps:
+  # Not required for kanto_complete claim; implement if time permits
+  - cerulean_cave
+  - trainer_tower
+  - birth_island
+  - navel_rock
+
+totals:
+  kanto_complete: 82
+  postgame_sevii: 18 additional
+  note: Interior houses for flavor may be added; these are minimum story-critical maps
+
+```
