@@ -1,5 +1,17 @@
 # Research Basis
 
+## Primary runtime catalog
+
+Research artifact:
+
+```text
+C:\repos\agentic-runtime-techniques
+```
+
+Validated 2026-07-09. See `references/runtime-techniques-basis.md` for how this catalog maps to eval profiles, scorers, and failure-mode coverage. Start with `data/agent-discovery-index.yml` (`regression_after_change`, `trajectory_fails_end_to_end`) and `data/techniques.yml` (`Offline Regression Eval Loop`, `Adversarial Red-Team / Injection-Regression Loop`, `Trajectory-Level Reward / Verifier`, `Run Receipt / Trace-First Runtime`).
+
+## Supplemental eval-framework sweep
+
 Research artifact:
 
 ```text
@@ -9,6 +21,19 @@ Research artifact:
 Validated on 2026-06-24 with 22 sources, 22 fetched pages, and 19 evidence claims.
 
 ## Selected techniques
+
+### From agentic-runtime-techniques
+
+- Offline Regression Eval Loop: golden scenario replay with pass/fail gate and CI integration.
+- Adversarial Red-Team / Injection-Regression Loop: replay known injection payloads; track bypass vs blocked over time.
+- Trajectory-Level Reward / Verifier: score full tool-integrated trajectories; advisory scorer only.
+- Run Receipt / Trace-First Runtime: structured spans and receipts as primary proof signal.
+- Stateful Harness Around Pure Agent Loop: eval harness-runtime profile for steering, cancellation, dangling-tool repair.
+- Append-Only Session Event Log: replay-derived state checks in memory-state profile.
+- Artifact Provenance Graph: claim-to-source/tool links for RAG and audit scorers.
+- Tau harness patterns: provider-neutral events, steering/follow-up queues, single-runner invariant.
+
+### From eval-framework sweep
 
 - OpenAI Evals: custom/private eval registry and iteration loop.
 - OpenAI Agents tracing: model calls, tool calls, handoffs, guardrails, and custom events as trace evidence.
@@ -32,6 +57,15 @@ Validated on 2026-06-24 with 22 sources, 22 fetched pages, and 19 evidence claim
 Framework APIs and benchmark repos move quickly. Applying agents should re-check current docs before implementing adapters, especially for OpenAI Evals, Inspect AI, DeepEval, Braintrust, Phoenix, Langfuse, and Ragas.
 
 ## Source links
+
+### Runtime techniques catalog
+
+- https://github.com/DomEscobar/agentic-runtime-techniques
+- https://raw.githubusercontent.com/DomEscobar/agentic-runtime-techniques/main/docs/tau-harness-techniques.md
+- https://raw.githubusercontent.com/DomEscobar/agentic-runtime-techniques/main/docs/security-governance-patterns.md
+- https://raw.githubusercontent.com/DomEscobar/agentic-runtime-techniques/main/docs/decision-guide.md
+
+### Eval frameworks and benchmarks
 
 - https://github.com/openai/evals
 - https://developers.openai.com/api/docs/guides/evals

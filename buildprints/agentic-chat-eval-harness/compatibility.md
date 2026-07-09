@@ -21,6 +21,8 @@ Proceed only after explicit user approval when the host:
 - has chat UI but no callable runtime/test entrypoint
 - has tools that can only run against production services
 - has no trace hooks and no place to add adapter spans
+- has no harness event stream and no session replay path when harness-runtime is required
+- has no governance hooks when security-governance is required
 - has no persistent transcript/state model
 - relies on live models with high cost or unstable outputs
 - has RAG but no citation/evidence surface

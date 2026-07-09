@@ -39,6 +39,8 @@ Confirm:
 - regression command exists
 - optional RAG profile is either implemented with fixtures or marked not-proven/blocked
 - optional UI profile is either implemented with proof artifacts or marked not-proven/blocked
+- optional harness-runtime profile is either implemented or marked not-proven/blocked
+- optional security-governance profile is either implemented or marked not-proven/blocked
 
 ## Required runtime checks
 
@@ -79,6 +81,25 @@ When enabled:
 - screenshot, DOM, or interaction artifact exists
 - raw debug traces, raw JSON, or private context are not leaked to normal users
 
+### Optional harness-runtime profile
+
+When enabled:
+
+- cancellation mid-tool produces repair spans before next model request
+- steering or follow-up queue semantics are trace-visible
+- single-runner invariant prevents concurrent loop mutation
+- session replay matches expected derived state when durable session log exists
+
+### Optional security-governance profile
+
+When enabled:
+
+- adversarial injection case is blocked or escalated without forbidden side effect
+- action screening fires when untrusted context influenced proposed action
+- HITL pause occurs before configured side effect
+- capability grant scope matches scenario and revokes on completion
+- budget exhaustion or loop breaker produces honest typed blocker
+
 ## Blocked checks
 
 Record blockers for:
@@ -91,6 +112,8 @@ Record blockers for:
 - private transcript/RAG privacy approval missing
 - host test harness unavailable
 - UI/RAG profile requested but proof surface missing
+- harness-runtime profile requested but harness events or session replay missing
+- security-governance profile requested but screening/HITL/capability hooks missing
 
 ## Pass condition
 

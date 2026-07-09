@@ -12,8 +12,9 @@ Install the Agentic Chat Eval Harness through a strict, phased grafting workflow
 4. Run `01-integration-plan.md`.
 5. Implement each file in `02-implementation-phases/` in order.
 6. Run `verify.md`.
-7. Write `.buildprint/agentic-chat-eval-receipt.md`.
-8. Mirror or link the final receipt at `.buildprint/capability-receipt.md` for generic Capability Buildprint tooling.
+7. Reconcile profiles against `references/runtime-techniques-basis.md`.
+8. Write `.buildprint/agentic-chat-eval-receipt.md`.
+9. Mirror or link the final receipt at `.buildprint/capability-receipt.md` for generic Capability Buildprint tooling.
 
 ## Local outputs
 

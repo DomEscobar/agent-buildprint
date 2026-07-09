@@ -19,7 +19,8 @@ This is a bounded capability, not a whole-product Buildprint. Do not build a new
 11. `02-implementation-phases/04-user-operator-surface.md`
 12. `02-implementation-phases/05-verification-and-receipt.md`
 13. `verify.md`
-14. `references/research-basis.md`
+14. `references/runtime-techniques-basis.md`
+15. `references/research-basis.md`
 
 ## Capability promise
 
@@ -37,8 +38,14 @@ The harness evaluates these behaviors:
 - memory writes, state diffs, compaction, and stale-state avoidance
 - streaming UI, tool/action status, error/blocked states, and receipt visibility
 - optional RAG retrieval, citation, grounding, weak-evidence behavior, and permission denial
+- optional harness-runtime behavior: steering queues, cancellation, dangling tool-call repair, session event replay
+- optional security-governance behavior: injection regression, action screening, HITL, capability grants, budget exhaustion
 
 The harness does not replace the agent runtime, provider router, tool registry, memory system, UI framework, or RAG service. It adapts to them.
+
+## Runtime techniques alignment
+
+Before phase 01, read `references/runtime-techniques-basis.md`. Scenario design and scorers must cover the failure modes named in the agentic-runtime-techniques decision guide (`regression_after_change`, `trajectory_fails_end_to_end`, `unsafe_tool_action`, `infinite_tool_loop`, `fake_completion`). When the host implements a stateful harness (Tau-style), enable the `harness-runtime` profile. When the host implements governance surfaces, enable the `security-governance` profile.
 
 ## Proposed integration paths
 

@@ -4,6 +4,9 @@ version: 1
 profile: core-chat
 title: Blocked tool action recovers with a user-facing question
 risk_level: medium
+runtime_technique_tags:
+  - Offline Regression Eval Loop
+  - Tool Error Recovery
 starting_state:
   conversation:
     user_id: fixture-user

@@ -34,6 +34,9 @@ Prove at least one failure path:
 - forbidden tool call fails
 - missing citation fails when RAG profile is enabled
 - fake UI success fails when UI profile is enabled
+- injection bypass fails when security-governance profile is enabled
+- missing dangling-tool repair fails when harness-runtime profile is enabled
+- side effect without HITL pause fails when security-governance profile is enabled
 
 Do not rely only on happy-path passing scenarios.
 
@@ -50,6 +53,8 @@ Write `.buildprint/agentic-chat-eval-receipt.md` with:
 - score summary
 - deterministic failures tested
 - model-judge policy and provider use
+- trajectory-level scorer policy if enabled
+- adversarial case library version if security-governance profile is enabled
 - privacy/sandbox decisions
 - remaining risks
 - blocked items

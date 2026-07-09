@@ -21,6 +21,8 @@
 - provider-routing: `proven | partial | blocked | not-proven`
 - ui-proof: `proven | partial | blocked | not-proven`
 - rag: `proven | partial | blocked | not-proven`
+- harness-runtime: `proven | partial | blocked | not-proven`
+- security-governance: `proven | partial | blocked | not-proven`
 
 ## Scenario Results
 
@@ -50,6 +52,15 @@
 - forbidden tool call fails: `pass | fail | blocked`
 - missing citation fails when RAG profile is enabled: `pass | fail | blocked | not-applicable`
 - fake UI success fails when UI profile is enabled: `pass | fail | blocked | not-applicable`
+- injection bypass fails when security-governance profile is enabled: `pass | fail | blocked | not-applicable`
+- missing dangling-tool repair fails when harness-runtime profile is enabled: `pass | fail | blocked | not-applicable`
+- side effect without HITL pause fails when security-governance profile is enabled: `pass | fail | blocked | not-applicable`
+
+## Runtime Techniques
+
+- runtime_techniques_basis: `references/runtime-techniques-basis.md`
+- adversarial_case_library_version: `<version-or-not-applicable>`
+- trajectory_level_scorer: `enabled | disabled | not-applicable`
 
 ## Reconciliation
 

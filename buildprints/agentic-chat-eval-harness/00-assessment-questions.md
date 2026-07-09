@@ -14,6 +14,7 @@ Ask and stop when the host assessment cannot resolve:
 - which tools/actions must be mocked, sandboxed, or blocked
 - whether external model-judge providers may receive transcripts, tool outputs, traces, screenshots, or retrieved evidence
 - whether optional RAG profile is in scope
+- whether optional harness-runtime or security-governance profiles are in scope
 - whether private RAG documents may be inspected by the harness or external judge
 - which observability backend, if any, is approved
 - which regression command should gate future changes
@@ -46,6 +47,8 @@ Do not block on:
 - every RAG metric
 - voice/full-duplex evaluation
 - broad cross-model bakeoff
+- full adversarial case library (start with a small pinned set)
+- trajectory-level scorer calibration
 
 Move deferrable items to `.buildprint/agentic-chat-eval-receipt.md`.
 

@@ -72,7 +72,15 @@ Evaluates streaming, action visibility, loading/error/blocked states, receipt ac
 
 ### RAG
 
-Optional profile. Evaluates retrieval allow/deny behavior, context precision, context recall, groundedness, answer relevance, citation coverage, unsupported claim rate, stale/deleted content exclusion, and weak-evidence uncertainty.
+Optional profile. Evaluates retrieval allow/deny behavior, context precision, context recall, groundedness, answer relevance, citation coverage, unsupported claim rate, stale/deleted content exclusion, and weak-evidence uncertainty. When the host exposes provenance links, scorers may assert claim-to-source/tool edges per the Artifact Provenance Graph pattern.
+
+### Harness runtime
+
+Optional profile. Evaluates stateful harness behavior separate from final answer quality: provider-neutral event stream, steering and follow-up queues, single-runner invariant, cancellation with dangling tool-call repair, and append-only session event log replay when the host implements durable session entries.
+
+### Security governance
+
+Optional profile. Evaluates adversarial injection regression, prompt-injection action screening, context trust zones, HITL approval/deny/resume paths, scoped capability grants, runtime budget exhaustion, and loop-breaker stops. Model-judge scores may never be the sole proof for this profile.
 
 ## Non-negotiables
 
@@ -83,9 +91,13 @@ Optional profile. Evaluates retrieval allow/deny behavior, context precision, co
 - No model-judge-only pass for security, billing, legal, destructive, or permission-sensitive behavior.
 - No benchmark claim without pinned scenario/dataset version.
 - No production claim without a regression command and `.buildprint/agentic-chat-eval-receipt.md`.
+- No harness-runtime pass without trace evidence for cancellation, repair, or queue semantics when those surfaces exist.
+- No security-governance pass from final text alone; injection and side-effect gates require deterministic artifacts.
 
 ## Where to start
 
 Start with `BUILDPRINT.md`. The README is the human overview; the Buildprint files are the executable contract.
 
-See `examples/core-chat-scenario.yaml` for a minimal scenario shape and `examples/eval-receipt.md` for the expected receipt structure.
+See `examples/core-chat-scenario.yaml` for a minimal scenario shape, `examples/harness-runtime-scenario.yaml` for harness-primitive checks, and `examples/eval-receipt.md` for the expected receipt structure.
+
+For technique selection and failure-mode mapping, read `references/runtime-techniques-basis.md`.

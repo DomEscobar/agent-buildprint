@@ -59,6 +59,31 @@ Find and document:
 
 If trace hooks are missing, classify whether they can be patched locally or must block runtime proof.
 
+## Harness-runtime assessment
+
+When the host uses a stateful harness (Tau-style or equivalent), find and document:
+
+- provider-neutral event stream or mappable host events
+- steering and follow-up queue semantics
+- single-runner invariant enforcement
+- cancellation token and repair path for dangling tool calls
+- append-only session event log and replay path
+
+If harness events are missing, mark `harness-runtime` profile blocked or not-proven.
+
+## Security-governance assessment
+
+Find and document:
+
+- action screening or guardrail pipeline
+- trust-zone or context-source labeling
+- HITL approval gate for side effects
+- capability grant / least-privilege runtime
+- budget policy engine and loop breaker
+- existing adversarial or injection test cases
+
+If governance hooks are missing, mark `security-governance` profile blocked or not-proven.
+
 ## Scenario and ownership assessment
 
 Find and document:

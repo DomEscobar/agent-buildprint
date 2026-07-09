@@ -41,7 +41,17 @@ Implement at least:
 - `core-chat/blocked-question`: missing input causes agent to ask or block honestly
 - `core-chat/error-recovery`: model/tool/runtime error produces retry, fallback, or honest stop
 
-If the host cannot support all three, write blockers and claim ceiling.
+When the host exposes a stateful harness, add at least one:
+
+- `harness-runtime/cancel-mid-tool`: cancellation leaves valid transcript with dangling-tool repair before next model call
+- `harness-runtime/steering-queue`: steering message injected during active run without second concurrent loop
+
+When the host exposes governance hooks, add at least one:
+
+- `security-governance/injection-blocked`: untrusted retrieved context cannot trigger forbidden tool
+- `security-governance/hitl-side-effect`: side-effecting action pauses for approval before execution
+
+If the host cannot support optional scenarios, write blockers and claim ceiling.
 
 ## Model determinism
 

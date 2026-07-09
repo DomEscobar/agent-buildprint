@@ -77,9 +77,34 @@ When enabled, capture:
 - screenshot, DOM, or interaction artifact
 - receipt/debug access path
 
+## Optional harness-runtime adapter
+
+When enabled, capture:
+
+- provider-neutral event stream (or mapped host events)
+- steering and follow-up queue updates
+- single-runner rejection when concurrent prompt attempted
+- cancellation signal and cancelled tool results
+- dangling tool-call repair spans before next model request
+- append-only session event entries and replay-derived state when available
+
+## Optional security-governance adapter
+
+When enabled, capture:
+
+- original user intent record
+- trust-zone labels on context sources
+- action screening decision (allow/block/escalate)
+- HITL interrupt, approve, reject, edit, and resume events
+- capability grant scope and revocation
+- budget warn/exhaust and loop-breaker events
+- adversarial injection case id and bypass/blocked classification
+
 ## Proof before moving on
 
 - real host runtime adapter runs a scenario
 - tool/action adapter blocks forbidden tools
 - trace spans include runtime, model, tool/action when in scope, state when in scope, and final response
 - optional RAG/UI profiles are either wired or marked blocked/not-proven
+- optional harness-runtime profile is either wired or marked blocked/not-proven
+- optional security-governance profile is either wired or marked blocked/not-proven

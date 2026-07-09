@@ -98,6 +98,8 @@ contract:
     - provider-routing
     - ui-proof
     - rag
+    - harness-runtime
+    - security-governance
   mandatory_scenario_fields:
     - id
     - title
@@ -176,6 +178,8 @@ verify:
     - model-judge scorers are rubric-bound and not sole proof for sensitive gates
     - optional RAG profile proves allow, deny, citation, and weak-evidence behavior when enabled
     - optional UI profile proves streaming/action states with screenshot or DOM evidence when enabled
+    - optional harness-runtime profile proves cancellation, dangling-tool repair, or queue semantics when host exposes harness events
+    - optional security-governance profile proves injection regression, HITL, or capability-grant behavior when host exposes governance hooks
   blocked_checks:
     - no accessible chat runtime blocks implementation
     - no safe test runner or sandbox blocks runtime proof
@@ -195,6 +199,9 @@ failure_modes:
   - UI proof claims success while the user sees stuck, fake, or raw debug states
   - scenario fixtures drift from production flows
   - flaky live-model runs are treated as deterministic regression proof
+  - harness cancellation scenarios pass without dangling-tool repair evidence
+  - injection regression passes on final text while forbidden tools executed
+  - trajectory-level score overrides deterministic security or side-effect failure
 composition:
   expects:
     - chat.agentic_runtime
@@ -208,6 +215,7 @@ composition:
     - eval.provider_routing_scoring
     - eval.regression_receipts
   composes_with:
+    - buildprints/agentic-chat
     - eval.rag-harness
     - ai.secure-hybrid-rag-mcp
     - llm.observability
@@ -268,6 +276,20 @@ proposed_integration_paths:
         - is the optional rag profile in scope for this host?
         - does the host accept Ragas/TruLens as the rag profile scoring library?
         - who owns the metric-to-gate mapping?
+    - id: tau-harness-event-pattern
+      summary: Map Tau-style provider-neutral harness events into TraceSpan contract for harness-runtime profile.
+      target_profiles: [harness-runtime, core-chat]
+      adapter_layer: optional
+      integration:
+        - harness events (turn, queue, cancellation, repair) mapped to TraceSpan
+        - steering/follow-up queue scenarios use queue_update spans
+        - dangling-tool repair spans required before next model request
+      tradeoffs:
+        - pros: aligns eval with production harness semantics; strong cancellation proof
+        - cons: host must expose or adapt event stream
+      decision_questions:
+        - does the host use a stateful harness with provider-neutral events?
+        - can cancellation and repair be triggered from test harness?
     - id: tau-bench-scenario-pattern
       summary: Adopt tau-bench pattern: simulated user + tools + policies + verifiable task state for core-chat scenarios.
       target_profiles: [core-chat]

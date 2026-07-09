@@ -57,8 +57,10 @@ For each enabled profile, define at least one scenario:
 - `provider-routing`: fallback/retry/degraded-mode proof
 - `ui-proof`: streaming/action/error/blocked proof
 - `rag`: allow/deny/citation/weak-evidence proof
+- `harness-runtime`: cancellation, steering, dangling-tool repair, session replay proof
+- `security-governance`: injection regression, HITL, capability grant, budget/loop-breaker proof
 
-Profiles can be marked `not-proven` when the host lacks the surface. Do not silently skip requested profiles.
+Profiles can be marked `not-proven` when the host lacks the surface. Do not silently skip requested profiles. Cross-reference `references/runtime-techniques-basis.md` when selecting scenario families for each enabled profile.
 
 ## Assessment Reconciliation
 
