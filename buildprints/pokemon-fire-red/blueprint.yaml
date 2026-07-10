@@ -15,6 +15,7 @@ deployment_posture:
 read_order:
   - BUILDPRINT.md
   - references/asset-policy.md
+  - references/world-art-sources.md
   - references/data-sources-and-techniques-basis.md
   - 00-questions.md
   - 01-project-setup.md
@@ -30,6 +31,8 @@ packet_shape:
   principle: YAML routes; markdown teaches and builds; story graph and battle math are explicit contracts.
   required_files:
     - BUILDPRINT.md
+    - references/asset-policy.md
+    - references/world-art-sources.md
     - references/data-sources-and-techniques-basis.md
     - 00-questions.md
     - 01-project-setup.md
@@ -62,7 +65,32 @@ story_scope:
     cache_dir: public/data/generated/sprites/pokemon
   world_art:
     user_choice: true
+    source_decision_is_hard_blocker: true
     question_id: world_overworld_art_mode
+    source_reference: references/world-art-sources.md
+    required_before:
+      - 01-project-setup completion
+      - phase 03 map implementation
+      - CP-VS playable proof
+    approved_source_strategies:
+      safe_cc0_default:
+        recommended: true
+        mode: external_sprite_sheets
+        sources:
+          - Ninja Adventure Asset Pack
+          - Kenney RPG Urban Pack
+          - OpenGameArt Top Down Pokemon-esque Sprites
+          - OpenGameArt Character 4 directional walking
+          - OpenGameArt Zelda-like tilesets and sprites
+          - Open RPG Fantasy Tilesets
+      pokemon_community_exception:
+        recommended: false
+        requires_explicit_user_approval: true
+        source: Ekat's Public Gen 3 Tilesets
+        public_web_default: blocked_until_license_review
+      custom_authored:
+        recommended: false
+        requires_authored_files_before_phase_03: true
     allowed_modes:
       - external_sprite_sheets
       - custom_svg
@@ -201,6 +229,7 @@ central_output_contract:
     - Does the current proof support the claimed maturity level, or must HANDOVER lower the claim?
   claim_gates:
     - battle_core visual certification requires `.buildprint/sprite-audit.json` pass + CP-VS + `.buildprint/ui-evidence.md`
+    - world art source selection requires `.buildprint/decisions.md` + `docs/assets-provenance.md` + approved source strategy from `references/world-art-sources.md`
     - phase 06+ blocked until 05-playable-proof passes (see phase-index.yaml)
     - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 82/82 maps
     - postgame_sevii requires `npm run story:validate -- --claim postgame_sevii` + CP-SeviiComplete

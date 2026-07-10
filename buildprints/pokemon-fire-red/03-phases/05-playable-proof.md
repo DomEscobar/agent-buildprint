@@ -4,7 +4,7 @@
 
 Hard gate before any story scripting (phase 06). This phase does **not** add new scope. It proves the engine, sprites, and first gameplay loop are real — not placeholders, prose, or debug shells.
 
-Read `references/asset-policy.md`, `02-ui-identity.md`, `docs/DESIGN.md`, and all evidence from phases 01–05 before scoring.
+Read `references/asset-policy.md`, `references/world-art-sources.md`, `02-ui-identity.md`, `docs/DESIGN.md`, and all evidence from phases 01–05 before scoring.
 
 
 
@@ -43,8 +43,12 @@ All items below must pass before `active_phase` advances to phase 06. Any failur
 
 Default expectation: `external_sprite_sheets` with documented pack in `docs/assets-provenance.md`.
 
+Approved default source expectation: `safe_cc0_default` from `references/world-art-sources.md`. If using `pokemon_community_exception`, CP-VS must record explicit user approval and license/credit review. If using `custom_authored`, CP-VS must prove authored player/NPC/tiles exist on disk; design intent alone is not enough.
+
 - Screenshot: `.buildprint/screenshots/cp-vs-overworld-route1-2x.png` showing player sprite + tile variety
 - Screenshot: `.buildprint/screenshots/cp-vs-walk-cycle.png` or animation note proving 4-frame walk per direction
+- `npm run assets:world:validate` passes
+- `public/assets/world-source-manifest.json` records selected strategy, source URL, license, original path, runtime path, and coverage
 
 ### Pixel rendering (non-negotiable)
 
@@ -87,8 +91,10 @@ Write or update:
   },
   "world_sprites": {
     "status": "pass | fail | blocked",
+    "source_strategy": "safe_cc0_default | pokemon_community_exception | custom_authored",
     "player_walk_cycle": true,
     "tileset_source": "path or pack name",
+    "source_manifest": "public/assets/world-source-manifest.json",
     "screenshot_overworld": ".buildprint/screenshots/cp-vs-overworld-route1-2x.png"
   },
   "pixel_rendering": {
@@ -110,6 +116,9 @@ Write or update:
 - Colored rectangle or CSS shape substitutes for Pokémon or player sprite
 - Missing PokeAPI cache files for any species shown on screen
 - Flat single-color map with no tileset PNG
+- Missing world source strategy or `public/assets/world-source-manifest.json`
+- Pokemon-community tiles without explicit approval and provenance
+- RPG Maker RTP/company assets without license review for Phaser/browser use
 - Blurry non-integer scaling in 2× screenshot
 - Prose-only evidence with no screenshot paths
 - `custom_svg` world art without explicit user opt-in in decisions ledger
@@ -139,6 +148,8 @@ If any sprite or gameplay blocker remains, stay on this phase and repair — do 
 
 - CP-VS playtest recorded
 - `sprite-audit.json` committed with all gates pass
+- `public/assets/world-source-manifest.json` committed with player/NPC/tiles coverage
+- `docs/assets-provenance.md` names selected source strategy and URLs
 - `.buildprint/ui-evidence.md` updated
 - Three required CP-VS screenshots on disk
 - `.buildprint/evidence-phase-05-playable-proof.md`

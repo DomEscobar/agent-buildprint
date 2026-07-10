@@ -42,11 +42,11 @@ The perfection target is not "a Pokemon-themed demo." The target is a player-bel
 
 ## Legal and asset boundary
 
-Read `references/asset-policy.md`.
+Read `references/asset-policy.md` and `references/world-art-sources.md`.
 
 **Pokémon (mandatory):** all species visuals from **PokeAPI/sprites** cached at build time — battle, party, Pokédex, evolution. Never SVG, never external Pokémon packs, never ROM rips.
 
-**World art (user choice via `00-questions.md`):** trainers, NPCs, player overworld sprite, tiles/buildings — either `external_sprite_sheets` (PNG) or `custom_svg` (rasterized in Phaser). Ask before setup.
+**World art (hard blocker via `00-questions.md`):** trainers, NPCs, player overworld sprite, tiles/buildings — choose an approved source strategy from `references/world-art-sources.md` before setup completes. Default recommendation is `safe_cc0_default` with external sprite sheets. Do not allow placeholder rectangles, undocumented sprite sheets, or random Pokemon-looking assets.
 
 Also allowed:
 
@@ -58,17 +58,18 @@ Do not ship ripped GBA ROM assets. Record asset provenance in `docs/assets-prove
 
 1. `BUILDPRINT.md`
 2. `references/asset-policy.md`
-3. `references/data-sources-and-techniques-basis.md`
-4. `00-questions.md`
-5. `01-project-setup.md`
-6. `02-ui-identity.md`
-7. `blueprint.yaml`
-8. `data/story/README.md` and all four story contract YAML files
-9. `03-phases/phase-index.yaml`
-10. `03-phases/phase-flow.md`
-11. The active phase file named by `03-phases/phase-index.yaml`
-12. `README.md`
-13. `03-phases/14-claim-verification.md` before any `kanto_complete` or `postgame_sevii` claim
-14. `HANDOVER.md` before stopping
+3. `references/world-art-sources.md`
+4. `references/data-sources-and-techniques-basis.md`
+5. `00-questions.md`
+6. `01-project-setup.md`
+7. `02-ui-identity.md`
+8. `blueprint.yaml`
+9. `data/story/README.md` and all four story contract YAML files
+10. `03-phases/phase-index.yaml`
+11. `03-phases/phase-flow.md`
+12. The active phase file named by `03-phases/phase-index.yaml`
+13. `README.md`
+14. `03-phases/14-claim-verification.md` before any `kanto_complete` or `postgame_sevii` claim
+15. `HANDOVER.md` before stopping
 
 Read sequentially. Do not inventory every phase before the active phase is known.

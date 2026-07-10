@@ -35,12 +35,14 @@ npm run dev
 ## Read order
 
 1. `BUILDPRINT.md`
-2. `references/data-sources-and-techniques-basis.md`
-3. `00-questions.md`
-4. `01-project-setup.md`
-5. `02-ui-identity.md`
-6. `blueprint.yaml`
-7. `03-phases/phase-index.yaml` → active phase
+2. `references/asset-policy.md`
+3. `references/world-art-sources.md`
+4. `references/data-sources-and-techniques-basis.md`
+5. `00-questions.md`
+6. `01-project-setup.md`
+7. `02-ui-identity.md`
+8. `blueprint.yaml`
+9. `03-phases/phase-index.yaml` → active phase
 
 ## Story contract (mandatory)
 
@@ -78,6 +80,19 @@ Before phase 06, read and implement against:
 
 - [PokeAPI v2](https://pokeapi.co/docs/v2) — species, moves, types, sprites (cached at build time)
 - Manual JSON — encounters, trainers, items, story scripts, maps (Tiled)
+- World/player/NPC/tiles sources — must be chosen from `references/world-art-sources.md` before setup completes
+
+## World Art Blocker
+
+Do not start overworld/map implementation until the applying agent records:
+
+- selected source strategy: `safe_cc0_default`, `pokemon_community_exception`, or `custom_authored`
+- selected source URLs and licenses in `docs/assets-provenance.md`
+- local original paths under `third_party_assets/world/`
+- normalized runtime files under `public/assets/ow/` and `public/assets/tilesets/`
+- `public/assets/world-source-manifest.json`
+
+Recommended default: `safe_cc0_default` + `external_sprite_sheets` using Ninja Adventure, Kenney RPG Urban Pack, and OpenGameArt supplemental sources listed in `references/world-art-sources.md`.
 
 ## Claim ladder
 
@@ -90,7 +105,7 @@ Fan/educational use. Include disclaimer in game title screen and README. Cache P
 **Asset rules:**
 
 - **Pokémon:** always PokeAPI (mandatory)
-- **Trainers / NPCs / tiles:** user chooses `external_sprite_sheets` or `custom_svg` via `00-questions.md`
+- **Trainers / NPCs / tiles:** source strategy is a blocker. Use `safe_cc0_default` unless Dom explicitly approves a higher-risk exception.
 
 ## Authoring metadata
 

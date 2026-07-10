@@ -32,7 +32,7 @@ Implementation:
 
 ## Rule 2: World art — user chooses (hard-stop question)
 
-Ask in `00-questions.md` before setup:
+Ask in `00-questions.md` before setup. Also read `references/world-art-sources.md`; the source strategy is part of the hard-stop answer.
 
 **World/overworld art mode** — for player, NPCs, gym leaders, trainers (overworld), map tiles, buildings, items on ground:
 
@@ -42,6 +42,16 @@ Ask in `00-questions.md` before setup:
 | `custom_svg` | Custom/programmatic SVG for trainers, NPCs, player, UI chrome; rasterize at load in Phaser | **Blocks CP-VS and `release_polish`** unless user explicitly opts in |
 
 Default if user delegates: `external_sprite_sheets` (better fit for GBA pixel fidelity). **Agents must not choose `custom_svg` without explicit user opt-in.**
+
+### Approved world source strategies
+
+Use one of:
+
+- `safe_cc0_default` — recommended. Use CC0/open sources listed in `references/world-art-sources.md`: Ninja Adventure, Kenney RPG Urban Pack, OpenGameArt Top Down Pokemon-esque Sprites, OpenGameArt Character 4 directional walking, OpenGameArt Zelda-like tilesets and sprites, and Open RPG Fantasy Tilesets.
+- `pokemon_community_exception` — visually closest but risky. Requires explicit user approval and full credit/license capture before any use. Default public web posture is blocked until license review.
+- `custom_authored` — authored in-repo world/player/NPC/tiles. Still must provide real player/NPC/tiles before phase 03; not a placeholder escape hatch.
+
+Do not start phase 03 unless `docs/assets-provenance.md` records selected strategy, source URLs, licenses, local original paths, normalized runtime paths, coverage categories, attribution text, and redistribution status.
 
 ### World art is a MUST blocker
 
@@ -73,6 +83,14 @@ Record pack URL/path and license in `docs/assets-provenance.md` before phase 03.
 - Trainer battle backdrops optional
 
 Record pack URL/path and license in `docs/assets-provenance.md`.
+
+Minimum required external files for CP-VS:
+
+- player overworld sheet: 4 directions, at least 4 frames per direction
+- NPC sheet
+- 16x16 exterior tileset PNG for Pallet/Route 1/Viridian-style map
+- tall grass/encounter tile
+- building/door/warp visual
 
 ## Rule 3: Phaser loading by mode
 
@@ -109,6 +127,9 @@ Checks:
 - No Pokémon PNG/SVG outside `public/data/generated/sprites/pokemon/`
 - World art files match selected `world_art_mode`
 - `docs/assets-provenance.md` exists and matches mode
+- `references/world-art-sources.md` chosen strategy is recorded in `.buildprint/decisions.md`
+- selected source has local originals under `third_party_assets/`
+- runtime assets exist under `public/assets/ow/` and `public/assets/tilesets/`
 - **Starter + Route 1 species (1, 4, 7, 16, 19) have front.png and back.png**
 - **If `external_sprite_sheets`: player OW sheet and at least one tileset PNG exist on disk**
 - **If `custom_svg`: decisions ledger records explicit user opt-in**

@@ -8,8 +8,9 @@ Before writing game code, read:
 
 - `BUILDPRINT.md`
 - `references/asset-policy.md`
+- `references/world-art-sources.md`
 - `references/data-sources-and-techniques-basis.md`
-- `00-questions.md` — confirm `world_overworld_art_mode` answered
+- `00-questions.md` — confirm `world_overworld_art_mode` and world source strategy answered
 - confirmed `.buildprint/decisions.md`
 
 If `.buildprint/decisions.md` does not exist or says `No implementation decisions recorded yet`, stop. Return to `00-questions.md`; do not hide hard-stop questions behind defaults.
@@ -42,6 +43,8 @@ Create a Vite + TypeScript + Phaser 3 project with:
 - `npm run maps:validate` — compare `data/maps/` to `data/story/map-manifest.yaml`
 - `npm run story:validate` — compare `.buildprint/story-progress.json` to story graph
 - `npm run assets:validate` — Pokémon sprites from PokeAPI cache only; world art matches `world_art_mode`; starter + Route 1 species sprite files exist
+- `npm run assets:world:prepare` — download/copy selected world source packs into `third_party_assets/` and normalize runtime files
+- `npm run assets:world:validate` — player/NPC/tiles/grass/building coverage and provenance checks
 - `npm run typecheck` — tsc --noEmit
 
 ## Architecture files (required)
@@ -54,6 +57,7 @@ Copy story contract files from Buildprint packet:
 - `data/story/sevii-quest-chain.yaml`
 
 Implement validators in `scripts/validate-maps.ts` and `scripts/validate-story.ts`.
+Implement world asset scripts in `scripts/prepare-world-assets.ts` and `scripts/validate-world-assets.ts`.
 
 Create before phase 01:
 
@@ -67,6 +71,7 @@ Create before phase 01:
 - `ARCHITECTURE_STRUCTURE_TRACE.md`
 - `docs/architecture.md` — summary + framework decisions
 - `docs/assets-provenance.md` — legal/asset sources
+- `public/assets/world-source-manifest.json` — selected source strategy, source URLs, local originals, runtime outputs, coverage status
 - `.env.example` — non-secret runtime configuration and PokeAPI/cache knobs
 - `.buildprint/setup-receipt.md` — setup proof and blockers
 
@@ -99,6 +104,8 @@ src/
 scripts/
   fetch-pokeapi.ts        # build-time data ingestion
   validate-data.ts
+  prepare-world-assets.ts # selected CC0/source pack normalization
+  validate-world-assets.ts
 data/
   manual/                 # encounters, trainers, items, type overrides
   maps/                   # Tiled sources (.tmx)
@@ -110,6 +117,9 @@ public/
     ow/                     # external_sprite_sheets mode: PNG sheets
     svg/                    # custom_svg mode: trainers, NPCs, player
     tilesets/               # Tiled PNG tilesets
+  assets/world-source-manifest.json
+third_party_assets/
+  world/                    # original downloaded/unpacked source packs; do not edit in place
 tests/
   battle/damage.test.ts
   data/schema.test.ts
@@ -123,6 +133,8 @@ Record:
 
 - **Pokémon sprites:** PokeAPI FRLG cache only (`references/asset-policy.md` Rule 1)
 - **World art mode:** `external_sprite_sheets` | `custom_svg` from decisions ledger
+- **World art source strategy:** `safe_cc0_default` | `pokemon_community_exception` | `custom_authored` from `references/world-art-sources.md`
+- **World asset sources:** selected source URLs, licenses, local `third_party_assets/` paths, normalized `public/assets/` outputs, redistribution status
 - **Phaser 3** — tilemaps, scenes, input, WebAudio
 - **Vite** — dev server and bundle
 - **Vitest** — unit tests for battle math and data schema
@@ -147,6 +159,30 @@ Implement `scripts/fetch-pokeapi.ts` that:
 3. Writes `public/data/generated/pokemon/{id}.json`
 4. Merges `data/manual/overrides/` on top
 5. Outputs manifest `public/data/generated/manifest.json`
+
+## World asset pipeline skeleton
+
+Implement `scripts/prepare-world-assets.ts` that:
+
+1. Reads `.buildprint/decisions.md` for world source strategy and mode.
+2. For `safe_cc0_default`, accepts source archives/paths for approved sources from `references/world-art-sources.md` and copies originals under `third_party_assets/world/`.
+3. Extracts or copies runtime files into:
+   - `public/assets/ow/player.png`
+   - `public/assets/ow/npc-basic.png`
+   - `public/assets/tilesets/kanto-exterior.png`
+   - optional `public/assets/tilesets/kanto-interior.png`
+4. Writes `public/assets/world-source-manifest.json` with source URL, license, original path, runtime path, dimensions, and coverage.
+5. Fails if required coverage is missing.
+
+Implement `scripts/validate-world-assets.ts` that fails unless:
+
+- `docs/assets-provenance.md` exists and names the selected strategy
+- `public/assets/world-source-manifest.json` exists
+- player OW sheet has 4 directions and at least 4 frames per direction, or a documented equivalent
+- NPC sheet exists
+- exterior 16x16 tileset exists
+- tall grass and building/door/warp coverage is declared
+- no hard-banned source is used
 
 ## Setup receipt
 
@@ -173,7 +209,7 @@ Engineering quality bar:
 - Do not skip ARCHITECTURE_STRUCTURE_TRACE.md
 - Do not use placeholder commands, real secrets, or hide hard-stop blockers in setup notes
 - Do not start `03-phases/*` until the foundation, architecture, harness, and setup receipt pass
-- Do not start phase 03 until `world_overworld_art_mode` is recorded and (if `external_sprite_sheets`) a tileset + player OW pack path exists or honest blocker is recorded
+- Do not start phase 03 until `world_overworld_art_mode`, world source strategy, source URLs/paths, provenance, player OW sheet, NPC sheet, and exterior tileset are recorded or an honest blocker is recorded
 
 ## Minimum proof before moving on
 
@@ -182,6 +218,8 @@ Engineering quality bar:
 - `npm run test` passes (even if minimal)
 - architecture score >= 4 in setup receipt
 - `.buildprint/decisions.md` populated from 00-questions
+- `npm run assets:world:validate` passes or setup records an honest blocker before phase 03
+- `docs/assets-provenance.md` links every selected world source and local path
 
 ## Handoff note
 

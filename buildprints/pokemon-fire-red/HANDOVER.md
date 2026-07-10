@@ -42,8 +42,25 @@ Machine-readable story enforcement — see `data/story/`.
 ## Asset policy (added 2026-07-09)
 
 - **Pokémon sprites:** always PokeAPI (mandatory, not a question)
-- **Trainers / NPCs / tiles:** user chooses via `00-questions.md` — `external_sprite_sheets` or `custom_svg`
+- **Trainers / NPCs / tiles:** source selection is a hard blocker via `00-questions.md` and `references/world-art-sources.md`
+- Recommended default: `safe_cc0_default` + `external_sprite_sheets`
+- Risky exception: `pokemon_community_exception` only with explicit user approval and full provenance
 - See `references/asset-policy.md`
+- See `references/world-art-sources.md`
+
+## World art source patch (added 2026-07-10)
+
+The Buildprint now provides approved source guidance instead of leaving agents to search randomly:
+
+- Ninja Adventure Asset Pack
+- Kenney RPG Urban Pack
+- OpenGameArt Top Down Pokemon-esque Sprites
+- OpenGameArt Character 4 directional walking
+- OpenGameArt Zelda-like tilesets and sprites
+- Open RPG Fantasy Tilesets
+- Ekat's Public Gen 3 Tilesets only as explicit high-risk exception
+
+Applying agents must create `docs/assets-provenance.md`, `public/assets/world-source-manifest.json`, local originals under `third_party_assets/world/`, and normalized runtime assets under `public/assets/`.
 
 ## Recommended next direction
 
@@ -77,6 +94,7 @@ Machine-readable story enforcement — see `data/story/`.
 
 - Actual game implementation is not started in this packet.
 - World art mode remains a hard-stop applying-agent decision unless user delegation is recorded.
+- World source strategy, source URLs, local paths, licenses, and coverage are hard-stop applying-agent decisions unless user delegation is recorded.
 - No public hosting, trademark/legal review, or full playthrough proof exists.
 
 ## Not proven

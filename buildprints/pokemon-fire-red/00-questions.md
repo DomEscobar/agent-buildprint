@@ -4,7 +4,7 @@ These questions are scoped to **Pokémon FireRed: Kanto Story Edition**.
 
 Ask only questions that change implementation. If a hard-stop question is unanswered, stop before `01-project-setup.md`.
 
-Read `references/asset-policy.md` before recording visual decisions.
+Read `references/asset-policy.md` and `references/world-art-sources.md` before recording visual decisions.
 
 ## Non-negotiable (not a question)
 
@@ -33,11 +33,13 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
    - `postgame_sevii` (main story + Sevii Islands)
    - `kanto_complete` with Sevii explicitly deferred as blocked
 2. **Platform and stack** — Browser-only web game (default: TypeScript + Vite + Phaser 3), or another target? Record engine choice.
-3. **World/overworld art mode** — For **trainers, NPCs, player avatar, map tiles, buildings** (NOT Pokémon):
-   - `external_sprite_sheets` — **(Recommended)** PNG tilesets + OW character sheets (PokeCommunity, OpenGameArt, itch.io, or user-supplied pack path). Required for CP-VS / visual `battle_core` certification.
+3. **World/player/NPC/tiles source strategy and art mode** — For **trainers, NPCs, player avatar, map tiles, buildings** (NOT Pokémon):
+   - `safe_cc0_default` + `external_sprite_sheets` — **(Recommended)** approved CC0/open pool from `references/world-art-sources.md`: Ninja Adventure, Kenney RPG Urban Pack, OpenGameArt Top Down Pokemon-esque Sprites, OpenGameArt Character 4 directional walking, OpenGameArt Zelda-like tilesets and sprites, and Open RPG Fantasy Tilesets. Required default for CP-VS / visual `battle_core` certification.
+   - `pokemon_community_exception` + `external_sprite_sheets` — Ekat's Public Gen 3 Tilesets. Visually closest, but risky; only with explicit user approval and full credit/license capture. Public web blocked until license review.
+   - `custom_authored` — custom in-repo sprites/tiles created by the agent or user. Must include real player/NPC/tiles before phase 03; not placeholders.
    - `custom_svg` — custom/programmatic SVG rasterized in Phaser. **Only with explicit user opt-in** — blocks CP-VS and `release_polish` visual claims by default because it tends to produce non-GBA results.
    
-   If user supplies a pack path, record it. Pokémon remain PokeAPI regardless of this answer.
+   If user supplies a pack path, record it. Pokémon remain PokeAPI regardless of this answer. If the user delegates, choose `safe_cc0_default` + `external_sprite_sheets`.
 4. **Fidelity mode** — `frlg_mechanics` (Gen III stats/abilities/natures, FRLG story) vs `gen1_nostalgia` (Gen I battle quirks). Default: `frlg_mechanics`.
 
 ### Safety and scope gates
@@ -54,7 +56,7 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
 | Pokémon sprites | **always PokeAPI** (mandatory) | user | "we may use the https://pokeapi.co/docs/v2" | no | yes |
 | Scope ceiling | postgame_sevii | explicit_user_delegation | "perfect finished pokemon Gen 1 fire red" | no | yes |
 | Platform and stack | Browser: TS + Vite + Phaser 3 + Tiled | explicit_user_delegation | "coding agent needs to create" | no | yes |
-| World/overworld art mode | **unanswered — agent must ask user** | — | user said Pokémon=PokeAPI; trainers/world=optional sprites vs SVG | yes | yes |
+| World/player/NPC/tiles source strategy | **unanswered — agent must ask user or receive explicit delegation** | — | user said Pokémon=PokeAPI; world/player sprites now blocker | yes | yes |
 | Fidelity mode | frlg_mechanics | explicit_user_delegation | FireRed remake scope | no | yes |
 | Legal/trademark posture | fan/educational + disclaimer | explicit_user_delegation | fan recreation | no | yes |
 | Product/artifact identity | Pokémon FireRed (Kanto + Sevii) | user | stated in request | no | yes |
@@ -65,7 +67,7 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
 
 After hard-stop rows are confirmed or delegated:
 
-- If user delegates world art mode: default `external_sprite_sheets` (better GBA pixel fidelity)
+- If user delegates world art mode/source strategy: default `safe_cc0_default` + `external_sprite_sheets` using `references/world-art-sources.md`
 - English language dialogue first
 - Keyboard + gamepad; touch virtual D-pad for mobile
 - 2× integer pixel scale on desktop
@@ -85,8 +87,10 @@ After hard-stop rows are confirmed or delegated:
 | Pokémon sprites | always PokeAPI | user | mandatory policy | no | yes | data pipeline + battle/party/pokedex |
 | Scope ceiling |  |  |  | no | yes | phase graph |
 | Platform and stack |  |  |  | no | yes | engine |
+| World/player/NPC/tiles source strategy | safe_cc0_default OR pokemon_community_exception OR custom_authored |  |  | yes | yes | asset source, legal posture, map art pipeline |
 | World/overworld art mode | external_sprite_sheets OR custom_svg |  |  | yes | yes | asset loader, Tiled vs SVG pipeline |
-| External pack path (if external) |  |  |  | yes | no | provenance + load paths |
+| External pack URL/path (if external) |  |  |  | yes | yes | provenance + load paths |
+| Runtime asset coverage | player OW, NPC, tileset, grass, building/door |  |  | no | yes | CP-VS and phase 03 |
 | Fidelity mode |  |  |  | no | yes | battle formula |
 | Legal/trademark posture |  |  |  | no | yes | README, provenance |
 | Product/artifact identity |  |  |  | no | yes | story scope |
