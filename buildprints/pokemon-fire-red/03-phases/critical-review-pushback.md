@@ -66,6 +66,9 @@ Any trigger below forces failure until repaired:
 - Thin or default architecture: generic components/services/utils tree without game-system ownership.
 - Self-review without independence.
 - Missing local UI identity or missing `ui-identity-present` evidence.
+- **Placeholder or flat-color sprites** for Pokémon, player, or map tiles when CP-VS or sprite-audit is claimed pass.
+- **Missing `.buildprint/sprite-audit.json`** or CP-VS screenshots when advancing past phase 05 battle engine.
+- **Battle_core claimed** without playable proof pass (damage tests alone insufficient).
 - Proof/debug console leakage into the primary player surface; record `proof-console-leakage` if any proof/debug UI dominates the player surface.
 - Missing UI evidence binder.
 - Weak action surface with no next powerful user action.

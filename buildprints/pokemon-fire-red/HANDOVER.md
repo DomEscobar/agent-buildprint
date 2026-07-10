@@ -33,6 +33,7 @@ Created **Product Buildprint** at `buildprints/pokemon-fire-red/` for a coding a
 3. **Trade evolutions** — blocked in v1 unless trade system added
 4. **Safari minigame** — full zone required; simplification only with lowered claim
 5. **No game code yet** — Buildprint packet only
+6. **Sprite gate added 2026-07-10** — CP-VS + `sprite-audit.json` hard-stops phase 06+; placeholder art is no longer acceptable past phase 02
 
 ## Story contract (added 2026-07-09)
 
@@ -47,10 +48,11 @@ Machine-readable story enforcement — see `data/story/`.
 ## Recommended next direction
 
 1. Applying agent runs `01-project-setup.md` in a new `pokemon-fire-red-game/` implementation repo
-2. Execute phases 01→03 for vertical slice (Pallet → Viridian + wild battle)
-3. Playtest checkpoint CP-B before expanding map content
-4. Parallel content authoring: maps + trainers while engine phases continue
-5. Run phase 14 + 99 before any `kanto_complete` public claim
+2. Execute phases 01→05 for vertical slice (data, engine, overworld, battle UI, battle engine)
+3. **Mandatory: phase `05-playable-proof` — CP-VS + sprite-audit.json + ui-evidence before any story work**
+4. Playtest checkpoint CP-VS before expanding map content or phase 06+
+5. Parallel content authoring: maps + trainers while engine phases continue (only after CP-VS)
+6. Run phase 14 + 99 before any `kanto_complete` public claim
 
 ## Claim status for this packet
 

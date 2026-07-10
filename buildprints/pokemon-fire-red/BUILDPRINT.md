@@ -12,13 +12,13 @@ This packet is built as a **capability ladder**, not a single "done" line (see `
 
 1. `data_pipeline` — offline-cached PokeAPI dataset normalized for `version-group/firered-leafgreen` with manual override tables for known API gaps.
 2. `overworld_core` — tile-based Kanto overworld with collision, warps, ledges, grass encounters, and map transitions.
-3. `battle_core` — turn-based wild and trainer battles with damage calculation, status, type effectiveness, and switch/faint flow.
-4. `progression_core` — party, bag, PC, evolution, move learning, badges, HMs, and story flag gating.
+3. `battle_core` — turn-based wild and trainer battles with damage calculation, status, type effectiveness, and switch/faint flow. **Visual certification requires CP-VS (phase 05 playable proof) with correct PokeAPI + world sprites.**
+4. `progression_core` — party, bag, PC, evolution, move learning, badges, HMs, and story flag gating. **Blocked until CP-VS passes.**
 5. `kanto_complete` — full main story through Champion including Rocket arcs, dungeons, and HM-gated routes.
 6. `postgame_sevii` — Sevii Islands chain with post-game trainers and National Dex expansion.
 7. `release_polish` — save/load, audio, menus, Pokedex, and QA-verified playthrough receipt.
 
-Each level is a strictly higher claim with its own proof. Do not market overworld-only work as story-complete. Capabilities not yet proven stay as honestly blocked states — never stubbed menus that pretend to work.
+Each level is a strictly higher claim with its own proof. Do not market overworld-only work as story-complete. **Do not claim `battle_core` after damage tests alone — CP-VS and sprite-audit must pass.** Capabilities not yet proven stay as honestly blocked states — never stubbed menus that pretend to work.
 
 Before final completion, run `03-phases/14-claim-verification.md`. If `.buildprint/claim-gates.json` is missing or cannot prove a playthrough from new game through Champion with persisted save, the product claim must be lowered.
 

@@ -133,6 +133,9 @@ capability_maturity:
         - type effectiveness
         - switch, faint, exp gain
         - battle UI with move selection
+        - CP-VS pass via 05-playable-proof (sprite-audit.json, ui-evidence, screenshots)
+        - PokeAPI FRLG battle sprites on screen — not placeholders
+        - world tileset + player OW sheet if claiming visual battle_core
     progression_core:
       claim: party, bag, PC, badges, HMs
       required:
@@ -197,6 +200,8 @@ central_output_contract:
     - Do screenshots prove title, overworld, battle, party, bag, dialogue, shop, faint, victory, and mobile/narrow layouts instead of prose-only claims?
     - Does the current proof support the claimed maturity level, or must HANDOVER lower the claim?
   claim_gates:
+    - battle_core visual certification requires `.buildprint/sprite-audit.json` pass + CP-VS + `.buildprint/ui-evidence.md`
+    - phase 06+ blocked until 05-playable-proof passes (see phase-index.yaml)
     - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 82/82 maps
     - postgame_sevii requires `npm run story:validate -- --claim postgame_sevii` + CP-SeviiComplete
     - no ripped ROM assets in repo
@@ -262,6 +267,7 @@ state_and_handoff:
   local_state_dir: .buildprint/
   setup_receipt: .buildprint/setup-receipt.md
   playthrough_receipt: .buildprint/playthrough-receipt.md
+  sprite_audit: .buildprint/sprite-audit.json
   claim_gates: .buildprint/claim-gates.json
 
 evidence:

@@ -4,6 +4,8 @@
 
 Data-driven NPC and story scripting. No hardcoded Oak lecture in `OverworldScene.ts`.
 
+**Prerequisite:** phase `05-playable-proof` must pass — verify `.buildprint/sprite-audit.json` and CP-VS before starting story work.
+
 
 
 Standard phase context: before editing, read `03-phases/phase-flow.md`, `.buildprint/next-agent.md`, `AGENTS.md`, `02-ui-identity.md`, `docs/DESIGN.md`, and the current proof artifacts. If any file is missing, record the blocker and continue only when the phase can still make a real verified improvement.

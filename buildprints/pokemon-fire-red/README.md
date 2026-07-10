@@ -62,6 +62,7 @@ Before phase 06, read and implement against:
 | 03 | Overworld maps + movement |
 | 04 | Wild encounters + battle UI |
 | 05 | Gen III battle engine |
+| 05b | **Playable proof (sprites + CP-VS)** — blocks phase 06+ |
 | 06 | Script VM + Oak/starter story |
 | 07 | Party, PC, evolution |
 | 08 | Items, bag, shops, HMs |

@@ -72,6 +72,8 @@ Full paralysis and sleep prevent move selection
 - Trainer battle stub: fixed party foe executes moves
 - `.buildprint/evidence-phase-05.md` with test output
 
+**Do not advance to phase 06 (script VM).** Next phase is **`05-playable-proof`** — sprite audit + CP-VS + ui-evidence. Battle math passing alone is insufficient.
+
 ## Handoff note
 
 Formula module path, test coverage list, known simplifications vs canonical Gen III.

@@ -41,7 +41,7 @@ Create a Vite + TypeScript + Phaser 3 project with:
 - `npm run data:validate` — schema validation on generated JSON
 - `npm run maps:validate` — compare `data/maps/` to `data/story/map-manifest.yaml`
 - `npm run story:validate` — compare `.buildprint/story-progress.json` to story graph
-- `npm run assets:validate` — Pokémon sprites from PokeAPI cache only; world art matches `world_art_mode`
+- `npm run assets:validate` — Pokémon sprites from PokeAPI cache only; world art matches `world_art_mode`; starter + Route 1 species sprite files exist
 - `npm run typecheck` — tsc --noEmit
 
 ## Architecture files (required)
@@ -173,6 +173,7 @@ Engineering quality bar:
 - Do not skip ARCHITECTURE_STRUCTURE_TRACE.md
 - Do not use placeholder commands, real secrets, or hide hard-stop blockers in setup notes
 - Do not start `03-phases/*` until the foundation, architecture, harness, and setup receipt pass
+- Do not start phase 03 until `world_overworld_art_mode` is recorded and (if `external_sprite_sheets`) a tileset + player OW pack path exists or honest blocker is recorded
 
 ## Minimum proof before moving on
 

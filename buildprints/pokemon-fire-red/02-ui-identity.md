@@ -99,6 +99,7 @@ Action surface gate:
 Proof obligations:
 
 - Capture title, overworld, battle, party, bag, dialogue, shop, faint, victory, 1280px desktop, and 375px mobile/narrow screenshots.
+- **Early proof (CP-VS):** before phase 06, minimum screenshots must prove PokeAPI battle sprites + world tileset + player walk cycle at 2× scale (see `05-playable-proof.md`).
 - Include content stress fixtures: long trainer names, 12-letter move names, six-party display, fainted party, full bag, empty PC box, loading data, error/blocked data, and save migration warning.
 - Empty, loading, error, and blocked states must look designed and must not expose raw JSON.
 - Reject generic dead UI: functionless buttons, dead controls, raw JSON player surfaces, proof labels, proof terms, and evaluator language are all failures.

@@ -74,8 +74,11 @@ Read `references/asset-policy.md` before implementing sprites.
 - CP-A playtest: Pallet → Route 1 → Viridian without clipping
 - Warp back to Pallet works both directions
 - Ledge on Route 1 behaves correctly
-- Screenshot per map
+- **World sprite gate:** player 4-direction walk cycle visible; tileset is 16×16 PNG from Tiled — screenshot must show tile variety, not single-color fill
+- Screenshot per map: `.buildprint/screenshots/phase-03-{map_id}-2x.png`
 - `.buildprint/evidence-phase-03.md`
+
+**Do not advance to phase 04** if maps use flat color tiles or player is a colored rectangle.
 
 ## Handoff note
 

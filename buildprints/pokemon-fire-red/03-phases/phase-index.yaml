@@ -26,11 +26,16 @@ phases:
     status: included
     maturity_level: battle_core
     depends_on: [04-wild-encounters-battle-ui]
+  - phase_id: 05-playable-proof
+    file: 03-phases/05-playable-proof.md
+    status: included
+    maturity_level: battle_core
+    depends_on: [05-battle-engine-gen3]
   - phase_id: 06-script-vm-dialogue
     file: 03-phases/06-script-vm-dialogue.md
     status: included
     maturity_level: progression_core
-    depends_on: [05-battle-engine-gen3]
+    depends_on: [05-playable-proof]
   - phase_id: 07-party-pc-evolution
     file: 03-phases/07-party-pc-evolution.md
     status: included

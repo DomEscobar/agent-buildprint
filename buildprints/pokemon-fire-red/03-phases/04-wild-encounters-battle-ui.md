@@ -60,8 +60,11 @@ Stepping grass on Route 1 triggers wild battle vs Rattata/Pidgey per encounter t
 
 - CP-B partial: enter wild battle from Route 1 grass
 - Run succeeds sometimes; fight menu opens
-- Screenshot: battle UI wild Rattata
+- **Pokémon sprite gate:** foe front and player back sprites visible from PokeAPI cache — verify species id matches encounter roll
+- Screenshot: `.buildprint/screenshots/phase-04-battle-rattata-2x.png`
 - `.buildprint/evidence-phase-04.md`
+
+**Do not advance to phase 05** if battle uses placeholder graphics instead of cached PokeAPI PNGs.
 
 ## Handoff note
 

@@ -26,6 +26,7 @@ Produce `.buildprint/claim-gates.json` and finalize `.buildprint/playthrough-rec
     "data_pipeline": { "status": "pass|fail|blocked", "evidence": "path" },
     "overworld_core": { "status": "...", "evidence": "..." },
     "battle_core": { "status": "...", "evidence": "..." },
+    "vertical_slice": { "status": "pass|fail|blocked", "evidence": ".buildprint/sprite-audit.json" },
     "progression_core": { "status": "...", "evidence": "..." },
     "kanto_complete": { "status": "...", "evidence": ".buildprint/evidence-playthrough-kanto.md" },
     "postgame_sevii": { "status": "...", "evidence": "..." },
@@ -91,6 +92,8 @@ Lower claim if:
 - Missing maps cause story softlock
 - Battle formula tests fail
 - Ripped ROM assets found in repo
+- **sprite-audit.json fails or CP-VS not pass** — max claim is `overworld_core` or `data_pipeline` depending on what is proven
+- **Placeholder art on screen** for Pokémon or world despite battle logic passing
 
 ## DO NOT
 

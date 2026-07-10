@@ -75,9 +75,13 @@ schemas/
 - `npm run data:fetch` completes for species 1-151 minimum (386 for postgame track)
 - `npm run data:validate` passes
 - `npm run assets:validate` passes — Pokémon sprites only from PokeAPI cache
+- **Sprite sample gate:** Bulbasaur (1), Charmander (4), Squirtle (7), Rattata (16), Pidgey (19) each have `front.png` and `back.png` under `public/data/generated/sprites/pokemon/{id}/`
+- **Screenshot:** `.buildprint/screenshots/phase-01-starters-sprites.png` showing the three starter front sprites loaded in a simple viewer or battle test harness — proves cache is real PNG, not placeholder
 - Manifest lists counts and version group
 - Document override rationale in `data/manual/README.md`
-- Evidence: `.buildprint/evidence-phase-01.md` with sample JSON paths and test output
+- Evidence: `.buildprint/evidence-phase-01.md` with sample JSON paths, test output, and screenshot path
+
+**Do not advance to phase 02** if any starter or Route 1 species sprite is missing from cache.
 
 ## Handoff note
 

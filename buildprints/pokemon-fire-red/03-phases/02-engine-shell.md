@@ -14,13 +14,15 @@ Placeholders, functionless buttons, mocked/sample data, raw JSON as the user sur
 
 ## Building objective
 
-Playable shell: title → new game → blank overworld placeholder → return to title.
+Playable shell: title → new game → overworld entry point → return to title.
+
+The overworld may use a **minimal test room** only until phase 03 delivers real maps. Even the test room must use the chosen `world_art_mode` asset path (PNG sheet or documented SVG) — not a flat color rectangle labeled "placeholder".
 
 ### Scene graph
 
 1. **BootScene** — load manifest, fonts, UI atlas
 2. **TitleScene** — NEW GAME, CONTINUE (disabled if no save), OPTIONS stub
-3. **OverworldScene** — placeholder map or single test room
+3. **OverworldScene** — test room with world art loader wired (tileset or OW sheet from decisions); collision optional until phase 03
 4. **BattleScene** — stub transition target
 5. **MenuScene** — overlay or pause menu stub
 
@@ -55,13 +57,18 @@ Central `GameStateStore` with subscribe/emit; no scattered global variables.
 - Do not embed story logic in TitleScene
 - Do not use 1920×1080 native coords without scale awareness
 - Do not skip CONTINUE disabled state when no save
+- Do not use flat color rectangles as player or tile "placeholders" without recording blocker in setup receipt
+- Do not disable `pixelArt: true` or use fractional scale
 
 ## Minimum proof before moving on
 
-- `npm run dev` → title → new game → overworld placeholder → menu opens → title
+- `npm run dev` → title → new game → overworld (test room with world art loader invoked) → menu opens → title
 - `npm run typecheck` passes
-- Screenshot: title screen at 2× scale
+- Screenshot: `.buildprint/screenshots/phase-02-title-2x.png` at 2× integer scale (480×320 viewport)
+- Document in evidence: Phaser `pixelArt`, scale mode, and primary font choice
 - `.buildprint/evidence-phase-02.md`
+
+**Do not advance to phase 03** if pixel config is wrong or overworld shows only untextured color fills with no asset loader.
 
 ## Handoff note
 
