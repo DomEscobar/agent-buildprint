@@ -39,6 +39,16 @@ packet_shape:
     - 03-phases/phase-flow.md
     - README.md
     - HANDOVER.md
+  forbidden_shapes:
+    - slices/
+    - gates/
+    - 02-architecture.md
+    - 03-ux-contract.md
+    - 04-handover.md
+    - 04-review.md
+    - 05-handover.md
+    - generated/agent-prompt.md
+    - generated/codex-handoff.md
 
 story_scope:
   region: kanto
@@ -180,12 +190,19 @@ central_output_contract:
     - JSON editor as main game interface
     - random encounter levels without route tables
     - "TODO" gyms that auto-grant badges
+  reviewer_acceptance_questions:
+    - Can a fresh player understand the first minute without debug labels, proof jargon, or raw JSON?
+    - Does the dominant surface feel like a playable tile JRPG rather than a generic dashboard or web admin?
+    - Can the player perform the next powerful user action from every major state: move, talk, battle, choose move, open party, use item, save, or resume?
+    - Do screenshots prove title, overworld, battle, party, bag, dialogue, shop, faint, victory, and mobile/narrow layouts instead of prose-only claims?
+    - Does the current proof support the claimed maturity level, or must HANDOVER lower the claim?
   claim_gates:
     - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 82/82 maps
     - postgame_sevii requires `npm run story:validate -- --claim postgame_sevii` + CP-SeviiComplete
     - no ripped ROM assets in repo
 
 proven_implementation_requirements:
+  rule: Use proven libraries, proven packages, and proven tools for the game engine, fixed-format export, rich editing of map/story data, document parsing or document extraction of imported references, drag/reorder authoring where lists are edited, provider-backed data ingestion where needed, task orchestration for long content work, frontend UI runtime, component/state styling, responsive viewport proof, design token enforcement, migration for saves/data, and reject from-scratch custom implementation when a maintained library is the safer base.
   stack_selection:
     engine: Phaser 3.x (pin minor version)
     language: TypeScript 5.x
@@ -204,6 +221,28 @@ proven_implementation_requirements:
       requirement: Build-time fetch with rate-conscious sequential requests; output `public/data/generated/` JSON; never fetch at runtime in production build
     save_system:
       requirement: Versioned save schema with migration id; checksum; export/import file
+  implementation_notes:
+    fixed_format_export: Save files and evidence receipts must have stable JSON/Markdown formats.
+    rich_editing: Story scripts, trainer rosters, shops, items, and maps need editable data files rather than hardcoded scene logic.
+    document_parsing: Any imported reference tables must be parsed into normalized manual overrides with provenance.
+    drag_reorder: Party, bag, PC box, and move ordering must support direct manipulation or equivalent keyboard reorder behavior.
+    provider_and_task: PokeAPI is the provider for Pokemon data; long fetch/content tasks must be resumable and logged.
+    frontend_ui_runtime: Phaser owns the runtime surface; React may be used only for external tooling if justified.
+    component_state_styling: Game UI components must express empty, loading, error, blocked, selected, disabled, fainted, and focused states.
+    responsive_viewport_proof: Capture desktop and 375px mobile/narrow screenshots.
+    design_token_enforcement: Generated docs/DESIGN.md tokens must map to actual UI constants.
+    migration: Saves and generated data cache require versioned migration paths.
+
+harness:
+  provider: agents
+  default_profile: webapp
+  profiles:
+    webapp:
+      description: Browser game implementation with Phaser runtime, Vite build, Playwright screenshots, and game-state proof.
+    backend:
+      description: Data pipeline, validators, save migration, and PokeAPI cache proof.
+    full:
+      description: End-to-end game build with data, runtime, UI, playthrough, and review proof.
 
 execution_model:
   mode: phased_game_build

@@ -1,6 +1,6 @@
 # 01 Project Setup
 
-Foundation pour before identity or phase code. Create architecture, data pipeline skeleton, Phaser project, and verification commands.
+Foundation pour before identity or phase code. Create architecture, data pipeline skeleton, Phaser project, and verification commands. Do not start `02-ui-identity.md` or `03-phases/*` until this foundation pour is complete.
 
 ## How to implement setup
 
@@ -11,6 +11,24 @@ Before writing game code, read:
 - `references/data-sources-and-techniques-basis.md`
 - `00-questions.md` — confirm `world_overworld_art_mode` answered
 - confirmed `.buildprint/decisions.md`
+
+If `.buildprint/decisions.md` does not exist or says `No implementation decisions recorded yet`, stop. Return to `00-questions.md`; do not hide hard-stop questions behind defaults.
+
+Initialize the Buildprint skill harness:
+
+```bash
+agb harness init
+agb harness checkup
+```
+
+The local skill harness must install or document `.agents/skills` with at least:
+
+- `setup-runbook`
+- `frontend-ui-product-design`
+- `subagent-driven-implementation`
+- `verify-and-review`
+
+Record each skill's triggers, skips, and completion_signal in `AGENTS.md` so future agents know when to use it.
 
 ## Setup objective
 
@@ -49,6 +67,8 @@ Create before phase 01:
 - `ARCHITECTURE_STRUCTURE_TRACE.md`
 - `docs/architecture.md` — summary + framework decisions
 - `docs/assets-provenance.md` — legal/asset sources
+- `.env.example` — non-secret runtime configuration and PokeAPI/cache knobs
+- `.buildprint/setup-receipt.md` — setup proof and blockers
 
 Each architecture file: Mermaid diagram, component legend, Implementation Mapping section.
 
@@ -110,6 +130,14 @@ Record:
 - **idb** or **localforage** — IndexedDB wrapper
 - Rejected: Unity WebGL (heavier), raw Canvas (reinvent tilemap)
 
+Also include a section named **Framework And Styling Decisions**:
+
+- `React + Vite + TypeScript` is allowed only for non-game tooling screens; Phaser 3 owns the game runtime.
+- `Tailwind CSS v4 + tokenized CSS variables` is allowed only for wrapper/tooling UI if such UI is built.
+- `ui_stack_exception`: document any reason to use static DOM, plain CSS, or a static/vanilla screen instead of the declared runtime.
+- `proven_implementation_requirements`: list the chosen libraries, runtimes, SDKs, and platform services; explain every hand-roll/from-scratch decision.
+- Map every library to `docs/architecture.md`, implementation path, test command, and proof path.
+
 ## Data pipeline skeleton
 
 Implement `scripts/fetch-pokeapi.ts` that:
@@ -130,12 +158,21 @@ Write `.buildprint/setup-receipt.md` with:
 
 Minimum score **4** to continue.
 
+Engineering quality bar:
+
+- Scalable system ownership: data pipeline, overworld, battle, script VM, save, UI, and assets have separate module boundaries.
+- Maintainable code with SOLID where it helps, KISS where complexity is not earned, and clear separation of concerns.
+- Coding standards and best practices are enforced by lint, format, type-check, and tests.
+- No broad `utils/`, `helpers/`, or `services/` dumping ground without mapped responsibility.
+
 ## DO NOT
 
 - Do not start map content before data schema exists
 - Do not embed fetch calls to pokeapi.co in runtime game code
 - Do not copy Nintendo ROM assets into repo
 - Do not skip ARCHITECTURE_STRUCTURE_TRACE.md
+- Do not use placeholder commands, real secrets, or hide hard-stop blockers in setup notes
+- Do not start `03-phases/*` until the foundation, architecture, harness, and setup receipt pass
 
 ## Minimum proof before moving on
 

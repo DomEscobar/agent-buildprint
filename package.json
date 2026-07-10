@@ -14,7 +14,7 @@
     "check:authors": "node bin/agb.js packet check buildprints/capability-buildprint-author",
     "check:capability:regressions": "node scripts/check-capability-regressions.mjs",
     "check:packet:mapper": "node bin/agb.js packet check buildprints/buildprint-mapper-os",
-    "check:packets": "node bin/agb.js packet check buildprints/agentic-chat && node bin/agb.js packet check buildprints/ai-influencer-os && node bin/agb.js packet check buildprints/automated-ai-blog-os && node bin/agb.js packet check buildprints/buildprint-mapper-os",
+    "check:packets": "node bin/agb.js packet check buildprints/agentic-chat && node bin/agb.js packet check buildprints/ai-influencer-os && node bin/agb.js packet check buildprints/automated-ai-blog-os && node bin/agb.js packet check buildprints/buildprint-mapper-os && node bin/agb.js packet check buildprints/pokemon-fire-red",
     "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs",
     "eval:buildprint-variants": "node scripts/eval-buildprint-variants.mjs",
     "eval:buildprint-structures": "node scripts/eval-buildprint-structure-slices.mjs --help",

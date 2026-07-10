@@ -58,6 +58,50 @@ Machine-readable story enforcement — see `data/story/`.
 - **Game implementation:** `product_build_required` — not started
 - **10/10 quality:** not claimed (no real-host playthrough proof)
 
+## Built
+
+- Product Buildprint packet for `pokemon-fire-red`
+- Story/data scope files under `data/story/`
+- Asset policy, PokeAPI source notes, phase flow, maturity ladder, and critical review phase
+- Current v3 setup/UI/review standards for applying agents
+
+## Verified
+
+- Packet structure is expected to pass `node bin/agb.js packet check buildprints/pokemon-fire-red`
+- Story scope and asset source are documented
+- UI identity and screenshot gate is present: Local identity artifact must include `docs/ui-identity.md`, `UI-IDENTITY.md`, `docs/DESIGN.md`, `agb verify ui .`, and a Screenshot set for title, overworld, battle, party, bag, dialogue, shop, faint, victory, desktop, and mobile/narrow.
+
+## Blocked
+
+- Actual game implementation is not started in this packet.
+- World art mode remains a hard-stop applying-agent decision unless user delegation is recorded.
+- No public hosting, trademark/legal review, or full playthrough proof exists.
+
+## Not proven
+
+- `kanto_complete`
+- `postgame_sevii`
+- release-polish quality
+- real player playthrough
+- public deployment safety
+- No UI evidence binder exists yet for an implementation.
+
+## Next
+
+- Applying agent answers/records hard-stop decisions, then runs `01-project-setup.md`
+- Build data pipeline and vertical slice Pallet -> Route 1 -> Viridian
+- Capture UI evidence and playthrough receipts as phases advance
+- Run phase 14 and `99-critical-review-pushback` before any completion claim
+
+## UI evidence and action gate
+
+- UI evidence binder: `.buildprint/ui-evidence.md`
+- Consumer/action UI proven: not proven until screenshots and runtime actions show movement, talk, starter choice, battle move selection, party switch, bag item, shop, save, and resume.
+- Nearest bad silhouette comparison: compare against generic dashboard, central card grid, proof console, raw JSON explorer, and decorative retro demo.
+- The next powerful user action must be visible in every major state.
+
+Do not claim completion beyond the evidence. Lower the claim ceiling whenever proof, screenshots, story validation, save/load, or review independence is missing.
+
 ## Files to read first (applying agent)
 
 `BUILDPRINT.md` → `00-questions.md` → `01-project-setup.md` → `03-phases/01-data-pipeline.md`

@@ -1,4 +1,21 @@
-# Phase Flow
+# Phase Flow
+
+Work active phase only. Do not read every phase upfront. Read `03-phases/phase-index.yaml`, open only the active phase and its named prerequisite notes, then execute the loop below. This prevents context bloat and stale phase assumptions.
+
+## Active phase loop
+
+For every active phase:
+
+1. Observe current repo, AGENTS.md, `.buildprint/next-agent.md`, setup receipt, UI identity, docs/DESIGN.md, game runtime, screenshots, tests, and story progress.
+2. Thinking checkpoint: name the smallest real vertical user/operator path this phase can make playable or more truthful.
+3. Predict 3-7 likely failure modes before editing.
+4. Write a proof plan: commands, screenshots, playtest path, save/readback, data validator, or claim-gate artifact.
+5. Implement the smallest real repair or phase slice.
+6. Compare the result against the predicted failure modes.
+7. Repair one concrete weakness before advancing unless the weakness is externally blocked.
+8. Record what the proof does not prove and the current claim ceiling.
+
+This review loop is not a deliverable file. Do not create phase-run paperwork by default. Compare the result against the predicted failure modes, perform one concrete weakness repair, and record what the proof does not prove. Use `.buildprint/next-agent.md`, `.buildprint/playthrough-receipt.md`, `.buildprint/ui-evidence.md`, and HANDOVER only when they materially preserve state.
 
 ## Dependency graph
 
@@ -82,8 +99,37 @@ After phase 06 script VM:
 
 Vertical slice first (Pallet → Viridian → Pewter), then expand per story-graph quest order.
 
-## Phase discipline
-
-- Complete minimum proof before advancing `active_phase` in phase-index.yaml
-- Update `.buildprint/story-progress.json` every session
-- Lower claim in HANDOVER if any hard gate fails
+## Phase discipline
+
+- Complete minimum proof before advancing `active_phase` in phase-index.yaml
+- Update `.buildprint/story-progress.json` every session
+- Lower claim in HANDOVER if any hard gate fails
+- Edits alone, placeholder screens, mocked data, functionless buttons, raw JSON viewers, and decorative menus do not prove product progress; do not fake live success.
+- Before final completion, require `99-critical-review-pushback` in `03-phases/critical-review-pushback.md`. Final mandatory phase: if the rubric does not pass, fix real ad hoc flaws and rerun proof instead of claiming done.
+
+## UI identity verification gate
+
+Completion is blocked by:
+
+- missing local UI identity
+- missing local design system
+- missing UI evidence binder
+- missing `.buildprint/ui-evidence.md`
+- missing `docs/DESIGN.md`
+- no action stronger than "type and send"
+- missing screenshot evidence
+
+Run or document:
+
+```bash
+agb verify ui .
+```
+
+The UI evidence must prove title, overworld, battle, party, bag, dialogue, shop, faint, victory, desktop, and 375px mobile/narrow states.
+
+## Repair routing
+
+- If hard-stop decisions are missing, return to `00-questions.md`.
+- If setup, architecture, stack, harness, or project structure is weak, return to `01-project-setup.md`.
+- If UI identity, design tokens, screenshots, or action surface is weak, return to `02-ui-identity.md`.
+- If a phase cannot honestly pass, keep the active phase unchanged and record blocker/next repair.

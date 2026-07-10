@@ -12,9 +12,19 @@ Read `references/asset-policy.md` before recording visual decisions.
 
 Battle sprites, party icons, Pokédex art, evolution scenes, and any on-screen Pokémon graphic must come from cached [PokeAPI/sprites](https://github.com/PokeAPI/sprites) Gen III FireRed/LeafGreen paths. Do not ask the user. Do not use SVG, external packs, or ROM rips for Pokémon.
 
-## Hard-stop questions
+## Hard-stop questions
 
-These require `confirmed_by: user` or `confirmed_by: explicit_user_delegation` before setup, UI identity, or implementation. If the user explicitly says "you choose", "use your judgment", or equivalent, the agent may pick the answer only after recording the exact delegation phrase in `.buildprint/decisions.md`. `confirmed_by: agent_assumption` is invalid for every hard-stop row.
+These require `confirmed_by: user` or `confirmed_by: explicit_user_delegation` before setup, UI identity, or implementation. If the user explicitly says "you choose", "use your judgment", or equivalent, the agent may pick the answer only after recording the exact delegation phrase in `.buildprint/decisions.md`. `confirmed_by: agent_assumption` is invalid for every hard-stop row.
+
+Hard-stop standard categories:
+
+- **Deployment posture** — `trusted_local`, `private_demo`, or `public_web`; public web must record legal/trademark disclaimer and hosting boundary.
+- **Secrets and provider policy** — PokeAPI is public, but any analytics, hosting token, save sync, or external asset provider credential needs explicit permission before use.
+- **Destructive/data-loss behavior** — save deletion, save migration, cache regeneration, import overwrite, or map/data rewrite must be confirmed before destructive changes.
+- **Privacy/compliance exposure** — if public hosting, telemetry, crash logs, uploaded saves, user accounts, or minors-facing sharing are introduced, stop and record privacy/compliance posture.
+- **Product/artifact identity** — confirm Pokemon FireRed: Kanto Story Edition, FireRed/LeafGreen mechanics, scope ceiling, and asset boundary.
+
+For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegation` is required. `agent_assumption: invalid` for hard-stop questions.
 
 ### Product-shaping questions (ask first)
 
