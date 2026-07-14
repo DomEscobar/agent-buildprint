@@ -24,9 +24,9 @@ Produce `.buildprint/claim-gates.json` and finalize `.buildprint/playthrough-rec
   "highest_honest_claim": "postgame_sevii | kanto_complete | ...",
   "gates": {
     "data_pipeline": { "status": "pass|fail|blocked", "evidence": "path" },
-    "overworld_core": { "status": "...", "evidence": "..." },
-    "battle_core": { "status": "...", "evidence": "..." },
-    "vertical_slice": { "status": "pass|fail|blocked", "evidence": ".buildprint/sprite-audit.json" },
+    "battle_core": { "status": "pass|fail|blocked", "evidence": ".buildprint/battle-slice-proof.json" },
+    "starter_town_core": { "status": "pass|fail|blocked", "evidence": ".buildprint/pallet-world-proof.json" },
+    "overworld_core": { "status": "pass|fail|blocked", "evidence": ".buildprint/first-loop-proof.json" },
     "world_complete": { "status": "pass|fail|blocked", "evidence": ".buildprint/world-proof.json" },
     "progression_core": { "status": "...", "evidence": "..." },
     "kanto_complete": { "status": "...", "evidence": ".buildprint/evidence-playthrough-kanto.md" },
@@ -96,7 +96,9 @@ Lower claim if:
 - Missing maps cause story softlock
 - Battle formula tests fail
 - Ripped ROM assets found in repo
-- **sprite-audit.json fails or CP-VS not pass** — max claim is `overworld_core` or `data_pipeline` depending on what is proven
+- **battle proof fails or lacks independent visual pass** — max claim is `data_pipeline`
+- **Pallet proof fails or lacks independent visual pass** — max claim is `battle_core`
+- **first-loop integration fails, is partial, or has stale upstream receipts** — max claim is `starter_town_core`
 - **Placeholder art on screen** for Pokémon or world despite battle logic passing
 - missing, stale, or failing `.buildprint/world-proof.json`; without full current renders, trace-backed traversal, and independent visual review, `kanto_complete` and `postgame_sevii` are forbidden
 - repeated/empty map renders, unresolved similarity findings, or debug-teleport-only checkpoint evidence

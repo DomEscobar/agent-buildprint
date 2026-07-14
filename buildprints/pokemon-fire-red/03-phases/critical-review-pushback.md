@@ -54,6 +54,7 @@ External reviewer independence protocol:
 - If the same agent wrote the implementation and the final review without fresh context, write `REVIEW_INVALID`.
 - Reviewer must name five worst flaws before assigning scores.
 - Do not score until this section exists in `.buildprint/critical-review.md`.
+- Reviewer writes `.buildprint/reviewer-attestations/critical-review.json` outside all proof generators. It binds reviewer and implementer session identities, the reviewed clean commit/source-manifest hash, exact artifact hashes, five findings, scores, verdict, and timestamp. Identity overlap or generator ownership is `REVIEW_INVALID`.
 - Every score must cite a concrete artifact: screenshot path, command output, source file:line, save file, story-progress entry, or playtest note. Prose-only justification is invalid.
 
 ## Objective auto-fail triggers
@@ -65,13 +66,18 @@ Any trigger below forces failure until repaired:
 - Dead or decorative controls: buttons, menus, party slots, bag rows, or NPC interactions that do nothing.
 - Thin or default architecture: generic components/services/utils tree without game-system ownership.
 - Self-review without independence.
+- Missing or mismatched reviewer attestation, reviewer/implementer identity overlap, review files written by a proof generator, or attestation inputs that do not match the reviewed clean commit/source manifest.
 - Missing local UI identity or missing `ui-identity-present` evidence.
-- **Placeholder or flat-color sprites** for Pokémon, player, or map tiles when CP-VS or sprite-audit is claimed pass.
-- **Missing `.buildprint/sprite-audit.json`** or CP-VS screenshots when advancing past phase 05 battle engine.
-- **Battle_core claimed** without playable proof pass (damage tests alone insufficient).
+- **Placeholder, wrong-source, blurry, clipped, or visually broken Pokemon battle sprites/UI** when `battle_core` is claimed.
+- **Missing/stale `.buildprint/battle-slice-proof.json` or independent battle review**, or unresolved critical/high battle visual finding.
+- **Missing/stale `.buildprint/pallet-world-proof.json` or independent Pallet review**, compound-tile seam/corner error, atlas collage, collision/layer mismatch, or unresolved critical/high starter-town visual finding.
+- **Missing/stale `.buildprint/first-loop-proof.json`**, shortened CP-A, partial Run-only/Win-only flow, or receipts that do not bind the same source state.
+- **Battle_core claimed** from damage tests or screenshots without input-driven recomputed proof.
 - **Kanto/Sevii world claim without current `.buildprint/world-proof.json` pass**, full render index/contact sheets, trace-backed traversal, and independent world visual review.
 - Duplicate, empty, single-tile, inaccessible, or debug-teleport-only maps counted toward 88/88 or 18/18.
 - Reused screenshots, missing TMX/save/trace hashes, or hand-authored pass JSON presented as generated proof.
+- A `pass` produced from a dirty worktree, incomplete source manifest, relevant untracked input, or symlinked proof input.
+- Unsafe map ids or paths, shell-string interpolation, YAML custom tags, XML DTDs, or external entities accepted by map tooling.
 - Independent `world:proof:verify -- --recompute` output does not match the submitted bound proof.
 - Proof/debug console leakage into the primary player surface; record `proof-console-leakage` if any proof/debug UI dominates the player surface.
 - Missing UI evidence binder.
@@ -82,6 +88,8 @@ Any trigger below forces failure until repaired:
 
 Capture into `.buildprint/screenshots/`:
 
+- Phase 03 battle command, move menu, HP/status, faint, and victory at 1280px plus command/move/faint/victory at 375px, all bound to current deterministic fixtures
+- Phase 04 Pallet full-map render plus spawn, homes, Oak lab, north exit at 1280px and spawn/walking at 375px, all bound to current semantic source/TMX/tileset hashes
 - 375 px mobile/narrow title, overworld, battle, menu
 - 1280 px desktop title, overworld, battle, party, bag, dialogue, shop, victory
 - A screenshot comparing the forbidden silhouette and adjacent at-risk silhouette against the current dominant surface

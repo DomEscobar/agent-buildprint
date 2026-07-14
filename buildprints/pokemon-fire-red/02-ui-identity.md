@@ -99,7 +99,9 @@ Action surface gate:
 Proof obligations:
 
 - Capture title, overworld, battle, party, bag, dialogue, shop, faint, victory, 1280px desktop, and 375px mobile/narrow screenshots.
-- **Early proof (CP-VS):** before phase 06, minimum screenshots must prove PokeAPI battle sprites + world tileset + player walk cycle at 2× scale (see `05-playable-proof.md`).
+- **Phase 03 battle proof first:** before world implementation, capture command, move menu, HP/status, faint, and victory states at 1280px and 375px. They must use the production BattleScene, PokeAPI front/back sprites, real input, and the independent review in `references/battle-verification.md`.
+- **Phase 04 starter-town proof second:** before Route 1 expansion, capture the production Pallet full-map render plus spawn, homes, Oak lab, north exit, and 375px walking states. They must pass compound-tile, layering, collision, and independent visual review in `references/starter-town-verification.md`.
+- Early proof order is battle states, then Pallet Town states, then the integrated Route 1 loop. A combined screenshot binder cannot hide failure of either independent review.
 - Include content stress fixtures: long trainer names, 12-letter move names, six-party display, fainted party, full bag, empty PC box, loading data, error/blocked data, and save migration warning.
 - Empty, loading, error, and blocked states must look designed and must not expose raw JSON.
 - Reject generic dead UI: functionless buttons, dead controls, raw JSON player surfaces, proof labels, proof terms, and evaluator language are all failures.

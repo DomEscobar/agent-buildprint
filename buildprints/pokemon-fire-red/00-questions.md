@@ -33,13 +33,13 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
    - `postgame_sevii` (main story + Sevii Islands)
    - `kanto_complete` with Sevii explicitly deferred as blocked
 2. **Platform and stack** — Browser-only web game (default: TypeScript + Vite + Phaser 3), or another target? Record engine choice.
-3. **World/player/NPC/tiles source strategy and art mode** — For **trainers, NPCs, player avatar, map tiles, buildings** (NOT Pokémon):
-   - `safe_cc0_default` + `external_sprite_sheets` — **(Recommended)** approved CC0/open pool from `references/world-art-sources.md`: Ninja Adventure, Kenney RPG Urban Pack, OpenGameArt Top Down Pokemon-esque Sprites, OpenGameArt Character 4 directional walking, OpenGameArt Zelda-like tilesets and sprites, and Open RPG Fantasy Tilesets. Required default for CP-VS / visual `battle_core` certification.
+3. **World/player/NPC/tiles source strategy and art mode** — already resolved as `safe_cc0_default` + `external_sprite_sheets` from committed `assets/world/`. The alternatives below are historical and may be reopened only when the user explicitly asks to replace the confirmed bundle:
+   - `safe_cc0_default` + `external_sprite_sheets` — **Confirmed** committed CC0/open bundle documented in `references/world-art-sources.md`. Required for Phase 04 `starter_town_core` certification.
    - `pokemon_community_exception` + `external_sprite_sheets` — Ekat's Public Gen 3 Tilesets. Visually closest, but risky; only with explicit user approval and full credit/license capture. Public web blocked until license review.
-   - `custom_authored` — custom in-repo sprites/tiles created by the agent or user. Must include real player/NPC/tiles before phase 03; not placeholders.
-   - `custom_svg` — custom/programmatic SVG rasterized in Phaser. **Only with explicit user opt-in** — blocks CP-VS and `release_polish` visual claims by default because it tends to produce non-GBA results.
+   - `custom_authored` — custom in-repo sprites/tiles created by the agent or user. Must include real player/NPC/tiles before phase 04; not placeholders.
+   - `custom_svg` — custom/programmatic SVG rasterized in Phaser. **Only with explicit user opt-in** — blocks `starter_town_core` and `release_polish` visual claims by default because it tends to produce non-GBA results.
    
-   If user supplies a pack path, record it. Pokémon remain PokeAPI regardless of this answer. If the user delegates, choose `safe_cc0_default` + `external_sprite_sheets`.
+   Pokémon remain PokeAPI regardless of any future replacement decision. Applying agents copy the confirmed choice and must not ask this question again.
 4. **Fidelity mode** — `frlg_mechanics` (Gen III stats/abilities/natures, FRLG story) vs `gen1_nostalgia` (Gen I battle quirks). Default: `frlg_mechanics`.
 
 ### Safety and scope gates
@@ -67,7 +67,7 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
 
 After hard-stop rows are confirmed or delegated:
 
-- If user delegates world art mode/source strategy: default `safe_cc0_default` + `external_sprite_sheets` using `references/world-art-sources.md`
+- World art is not an assumable default: it is confirmed as `safe_cc0_default` + `external_sprite_sheets` under `assets/world/`
 - English language dialogue first
 - Keyboard + gamepad; touch virtual D-pad for mobile
 - 2× integer pixel scale on desktop
@@ -76,7 +76,7 @@ After hard-stop rows are confirmed or delegated:
 ## Deferrable questions
 
 - Exact color palette after `02-ui-identity.md`
-- External sprite pack URL — **not deferrable past phase 02** if mode is `external_sprite_sheets`; must exist or blocker recorded before phase 03
+- Replacement sprite-pack URL — not applicable to the confirmed committed bundle; it becomes a Phase 04 blocker only if the user explicitly changes the strategy
 - Optional speed-up / fast text toggle
 
 ## Decision ledger template
@@ -87,13 +87,13 @@ After hard-stop rows are confirmed or delegated:
 | Pokémon sprites | always PokeAPI | user | mandatory policy | no | yes | data pipeline + battle/party/pokedex |
 | Scope ceiling |  |  |  | no | yes | phase graph |
 | Platform and stack |  |  |  | no | yes | engine |
-| World/player/NPC/tiles source strategy | safe_cc0_default OR pokemon_community_exception OR custom_authored |  |  | yes | yes | asset source, legal posture, map art pipeline |
-| World/overworld art mode | external_sprite_sheets OR custom_svg |  |  | yes | yes | asset loader, Tiled vs SVG pipeline |
-| External pack URL/path (if external) |  |  |  | yes | yes | provenance + load paths |
-| Runtime asset coverage | player OW, NPC, tileset, grass, building/door |  |  | no | yes | CP-VS and phase 03 |
+| World/player/NPC/tiles source strategy | safe_cc0_default; committed under assets/world/ | user | confirmed packet decision; do not reopen | yes | no | asset source, legal posture, map art pipeline |
+| World/overworld art mode | external_sprite_sheets | user | confirmed packet decision; do not reopen | yes | no | asset loader, semantic-map to TMX pipeline |
+| External pack URL/path | assets/world/manifest.json | user | committed bundle; no setup download | yes | no | provenance + load paths |
+| Runtime asset coverage | player OW, NPC, tileset, grass, building/door from assets/world/runtime/ | user | committed bundle | no | yes | starter_town_core and phase 04 |
 | Fidelity mode |  |  |  | no | yes | battle formula |
 | Legal/trademark posture |  |  |  | no | yes | README, provenance |
 | Product/artifact identity |  |  |  | no | yes | story scope |
 ```
 
-If world art mode is blank, ask before `01-project-setup.md`. Do not substitute Pokémon with SVG.
+The copied ledger must not leave world-art rows blank. If they are blank, repair them from the confirmed table above instead of asking the user. Do not substitute Pokémon with SVG.

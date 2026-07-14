@@ -4,7 +4,7 @@
 
 Data-driven NPC and story scripting. No hardcoded Oak lecture in `OverworldScene.ts`.
 
-**Prerequisite:** phase `05-playable-proof` must pass — verify `.buildprint/sprite-audit.json` and CP-VS before starting story work.
+**Prerequisite:** phase `05-first-loop-integration` must pass. Recompute `.buildprint/battle-slice-proof.json`, `.buildprint/pallet-world-proof.json`, and `.buildprint/first-loop-proof.json`; all three must bind the same source state before story work starts.
 
 
 

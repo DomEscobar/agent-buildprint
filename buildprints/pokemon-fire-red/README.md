@@ -38,13 +38,15 @@ npm run dev
 2. `references/asset-policy.md`
 3. `references/world-art-sources.md`
 4. `alignment-slice/ALIGNMENT.md`
-5. `references/world-verification.md`
-6. `references/data-sources-and-techniques-basis.md`
-7. `00-questions.md`
-8. `01-project-setup.md`
-9. `02-ui-identity.md`
-10. `blueprint.yaml`
-11. `03-phases/phase-index.yaml` → active phase
+5. `references/battle-verification.md`
+6. `references/starter-town-verification.md`
+7. `references/world-verification.md`
+8. `references/data-sources-and-techniques-basis.md`
+9. `00-questions.md`
+10. `01-project-setup.md`
+11. `02-ui-identity.md`
+12. `blueprint.yaml`
+13. `03-phases/phase-index.yaml` → active phase
 
 ## Story contract (mandatory)
 
@@ -63,10 +65,9 @@ Before phase 06, read and implement against:
 |---|---|
 | 01 | PokeAPI cache + manual data |
 | 02 | Phaser scenes + game state |
-| 03 | Overworld maps + movement |
-| 04 | Wild encounters + battle UI |
-| 05 | Gen III battle engine |
-| 05b | **Playable proof (sprites + CP-VS)** — blocks phase 06+ |
+| 03 | **Battle core implementation + deterministic functional/visual certification** |
+| 04 | **Pallet Town semantic map + critical visual certification** |
+| 05 | Pallet → Route 1 → Viridian encounter integration; blocks phase 06+ |
 | 06 | Script VM + Oak/starter story |
 | 07 | Party, PC, evolution |
 | 08 | Items, bag, shops, HMs |
@@ -81,7 +82,7 @@ Before phase 06, read and implement against:
 ## Data sources
 
 - [PokeAPI v2](https://pokeapi.co/docs/v2) — species, moves, types, sprites (cached at build time)
-- Manual JSON — encounters, trainers, items, story scripts, maps (Tiled)
+- Manual JSON/YAML — encounters, trainers, items, and story scripts; maps are semantic YAML compiled deterministically to generated TMX for Tiled preview and runtime
 - Local world bundle — `assets/world/` contains the confirmed CC0 player/NPC and landscape/world sheets plus originals, licenses, and a machine-readable manifest
 
 ## World Art Bundle
@@ -96,11 +97,11 @@ The source choice is already confirmed. Before overworld/map implementation, the
 
 Confirmed bundle: `safe_cc0_default` + `external_sprite_sheets` using the committed Kenney RPG Urban Pack and OpenGameArt player/NPC sheet. Pokémon remain PokeAPI-only.
 
-Playable alignment reference: `alignment-slice/` demonstrates keyboard/touch walking, camera behavior, named player frame extraction, and coherent tile usage. See `alignment-slice/ALIGNMENT.md` before implementing phase 03.
+Playable alignment reference: `alignment-slice/` demonstrates keyboard/touch walking, camera behavior, named player frame extraction, and coherent tile usage. See `alignment-slice/ALIGNMENT.md` and `references/starter-town-verification.md` before implementing phase 04.
 
 ## Claim ladder
 
-`data_pipeline` → `overworld_core` → `battle_core` → `progression_core` → `kanto_complete` → `postgame_sevii` → `release_polish`
+`data_pipeline` → `battle_core` → `starter_town_core` → `overworld_core` → `progression_core` → `kanto_complete` → `postgame_sevii` → `release_polish`
 
 ## Legal
 

@@ -16,11 +16,11 @@ The selected strategy is item 1. Items 2 and 3 remain documented alternatives on
 2. `pokemon_community_exception` — closest visual fit, but risky; requires explicit user approval.
 3. `custom_authored` — custom in-repo world/player/NPC/tiles; safest legally, slowest.
 
-`external_sprite_sheets` remains the required implementation mode for visual `battle_core`, CP-VS, and `release_polish` unless the user explicitly accepts a lower/non-GBA visual claim.
+`external_sprite_sheets` remains the required implementation mode for `starter_town_core` and `release_polish` unless the user explicitly accepts a lower/non-GBA visual claim. Battle Pokemon sprites remain PokeAPI-only and are certified separately in Phase 03.
 
-## Recommended safe CC0 default
+## Confirmed safe CC0 bundle
 
-Use these as the approved default source pool. Download only from the source URLs below, keep originals in `third_party_assets/`, copy only normalized runtime assets into `public/assets/`, and record all licenses.
+The table below is provenance and disaster-recovery information for the already committed bundle. Normal setup copies `assets/world/originals/` and `assets/world/runtime/` and performs no network download. Download from these source URLs only if the committed bundle must be recovered or the user explicitly approves replacing it; then keep originals in `third_party_assets/`, copy only normalized runtime assets into `public/assets/`, and record all licenses.
 
 | Role | Source | URL | License posture | Use |
 |---|---|---|---|---|
@@ -31,7 +31,7 @@ Use these as the approved default source pool. Download only from the source URL
 | Route/cave/object supplement | OpenGameArt Zelda-like tilesets and sprites | https://opengameart.org/content/zelda-like-tilesets-and-sprites | CC0 per source page | Supplemental top-down terrain/objects |
 | Fantasy tiles supplement | Open RPG Fantasy Tilesets | https://finalbossblues.itch.io/openrtp-tiles | CC0/public domain per source page | Supplemental tiles; may need transparency/format cleanup |
 
-Minimum practical source mix for CP-VS:
+Minimum practical source mix for Phase 04 starter-town proof:
 
 - one player overworld sheet with front/back/side directions and standing/step frames, or a documented derived sheet built from CC0 source
 - one NPC sheet
@@ -56,7 +56,7 @@ Do not use this by default. It is allowed only when `.buildprint/decisions.md` r
 - No RPG Maker RTP/company assets in this Phaser/browser build unless a specific license review confirms use outside RPG Maker for this exact asset.
 - No random Pokemon-looking sprite sheet without source URL, license, and redistribution permission.
 - No AI-generated Pokemon/world sprites as a substitute for licensed world art.
-- No colored rectangles, CSS shapes, or flat debug tiles for CP-VS, visual `battle_core`, or higher claims.
+- No colored rectangles, CSS shapes, or flat debug tiles for `starter_town_core` or higher world claims.
 
 RPG Maker license reference: https://www.rpgmakerweb.com/eula
 
@@ -83,6 +83,6 @@ RPG Maker license reference: https://www.rpgmakerweb.com/eula
 - `.buildprint/decisions.md` records the selected world art strategy
 - external source files exist for player, NPC, and tiles when `external_sprite_sheets` is selected
 - no runtime world asset is sourced from a hard-banned class
-- CP-VS required sprite and tileset paths exist
+- starter-town proof required player, NPC, sprite, and tileset paths exist
 
-`custom_authored` must still include authored player/NPC/tiles files before phase 03; it is not permission to use placeholders.
+`custom_authored` must still include authored player/NPC/tiles files before phase 04; it is not permission to use placeholders.

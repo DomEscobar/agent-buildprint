@@ -9,6 +9,9 @@ Before writing game code, read:
 - `BUILDPRINT.md`
 - `references/asset-policy.md`
 - `references/world-art-sources.md`
+- `references/battle-verification.md`
+- `references/starter-town-verification.md`
+- `references/world-verification.md`
 - `references/data-sources-and-techniques-basis.md`
 - `00-questions.md` — confirm `world_overworld_art_mode` and world source strategy answered
 - confirmed `.buildprint/decisions.md`
@@ -40,14 +43,16 @@ Create a Vite + TypeScript + Phaser 3 project with:
 - `npm run test` — vitest unit tests
 - `npm run data:fetch` — PokeAPI cache builder (may stub first run)
 - `npm run data:validate` — schema validation on generated JSON
+- `npm run maps:compile` — compile semantic map sources through the canonical tile catalog into generated TMX files
 - `npm run maps:validate` — compare `data/maps/` to `data/story/map-manifest.yaml`
-- `npm run maps:render-proof` — render every required map through the production loader and write full-map PNGs, contact sheets, and a hash index
-- `npm run world:traverse-proof` — drive the production browser build, exercise map spawns/warps/reachability, and save a browser trace
+- Later owning phases add `maps:render-proof`, `world:traverse-proof`, and the scoped Pallet proof commands when production maps and traversal exist. Setup documents their contracts; it must not create stubs or fabricated outputs.
 - `npm run story:validate` — compare `.buildprint/story-progress.json` to story graph
 - `npm run assets:validate` — Pokémon sprites from PokeAPI cache only; world art matches `world_art_mode`; starter + Route 1 species sprite files exist
 - `npm run assets:world:prepare` — copy the committed packet assets from `assets/world/runtime/` into the applying project's `public/assets/`; no world-asset download in normal setup
 - `npm run assets:world:validate` — player/NPC/tiles/grass/building coverage and provenance checks
+- Phase 03 adds `battle:proof` and its recompute verifier against the production battle implementation. Setup defines only the command ownership and evidence schema.
 - `npm run typecheck` — tsc --noEmit
+- Phase 05 adds `first-loop:proof` and its recompute verifier once the certified battle and world implementations are integrated.
 
 ## Architecture files (required)
 
@@ -58,9 +63,10 @@ Copy story contract files from Buildprint packet:
 - `data/story/rival-progression.yaml`
 - `data/story/sevii-quest-chain.yaml`
 
-Implement validators in `scripts/validate-maps.ts` and `scripts/validate-story.ts`.
+Implement `scripts/compile-maps.ts` and the foundational validators in `scripts/validate-maps.ts` and `scripts/validate-story.ts`. Document battle, Pallet, first-loop, and full-world proof schemas and ownership, but implement each generator/verifier only in its owning phase against real production behavior. Never add placeholder commands or prefilled pass artifacts.
+Map tooling must allow only manifest-owned ids matching `^[a-z0-9_]+$`, pass child-process arguments as arrays, enforce resolved-path containment, and reject absolute paths, URLs, `..`, symlinks, unsafe YAML tags, XML DTDs, and external entities.
 Implement world asset scripts in `scripts/prepare-world-assets.ts` and `scripts/validate-world-assets.ts`.
-Implement `scripts/render-map-proof.ts` and `scripts/verify-world-proof.ts` against `references/world-verification.md`; browser traversal belongs in a real Playwright test, not a mock map walker.
+Reserve `scripts/render-map-proof.ts` and `scripts/verify-world-proof.ts` for the phases that have production maps to render. Browser traversal belongs in a real Playwright test, not a mock map walker.
 
 Create before phase 01:
 
@@ -77,7 +83,7 @@ Create before phase 01:
 - `public/assets/world-source-manifest.json` — selected source strategy, source URLs, local originals, runtime outputs, coverage status
 - `.env.example` — non-secret runtime configuration and PokeAPI/cache knobs
 - `.buildprint/setup-receipt.md` — setup proof and blockers
-- `.buildprint/map-audit.json`, `.buildprint/map-render-index.json`, `.buildprint/world-traversal.json`, and `.buildprint/world-proof.json` — generated evidence schemas from `references/world-verification.md`; never prefill pass results
+- `architecture/proof-contracts.md` — command ownership, schemas, clean-commit/source-manifest binding, and reviewer-attestation rules for later phases. Generated proof JSON, screenshots, renders, reviews, attestations, and traces must not exist until the owning phase creates them from real behavior.
 
 Each architecture file: Mermaid diagram, component legend, Implementation Mapping section.
 
@@ -112,7 +118,10 @@ scripts/
   validate-world-assets.ts
 data/
   manual/                 # encounters, trainers, items, type overrides
-  maps/                   # Tiled sources (.tmx)
+  maps/
+    tile-catalog.yaml     # semantic keys, stamps, sequences, collision, adjacency
+    source/               # coding-agent-authored semantic map layouts
+    generated/            # deterministic TMX output for Tiled preview/runtime; do not edit directly
   scripts/                # story YAML/JSON
 public/
   data/generated/         # built JSON cache
@@ -211,7 +220,7 @@ Engineering quality bar:
 - Do not skip ARCHITECTURE_STRUCTURE_TRACE.md
 - Do not use placeholder commands, real secrets, or hide hard-stop blockers in setup notes
 - Do not start `03-phases/*` until the foundation, architecture, harness, and setup receipt pass
-- Do not start phase 03 until `world_overworld_art_mode`, world source strategy, source URLs/paths, provenance, player OW sheet, NPC sheet, and exterior tileset are recorded or an honest blocker is recorded
+- Do not start phase 04 until `world_overworld_art_mode`, world source strategy, source URLs/paths, provenance, player OW sheet, NPC sheet, exterior tileset, and semantic tile catalog are recorded or an honest blocker is recorded
 
 ## Minimum proof before moving on
 
@@ -220,7 +229,7 @@ Engineering quality bar:
 - `npm run test` passes (even if minimal)
 - architecture score >= 4 in setup receipt
 - `.buildprint/decisions.md` populated from 00-questions
-- `npm run assets:world:validate` passes or setup records an honest blocker before phase 03
+- `npm run assets:world:validate` passes or setup records an honest blocker before phase 04
 - `docs/assets-provenance.md` links every selected world source and local path
 
 ## Handoff note

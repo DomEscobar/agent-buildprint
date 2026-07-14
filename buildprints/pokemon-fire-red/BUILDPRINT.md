@@ -11,14 +11,15 @@ Build **Pokémon FireRed: Kanto Story Edition**. Create a self-hosted web game w
 This packet is built as a **capability ladder**, not a single "done" line (see `capability_maturity` in `blueprint.yaml`):
 
 1. `data_pipeline` — offline-cached PokeAPI dataset normalized for `version-group/firered-leafgreen` with manual override tables for known API gaps.
-2. `overworld_core` — tile-based Kanto overworld with collision, warps, ledges, grass encounters, and map transitions.
-3. `battle_core` — turn-based wild and trainer battles with damage calculation, status, type effectiveness, and switch/faint flow. **Visual certification requires CP-VS (phase 05 playable proof) with correct PokeAPI + world sprites.**
-4. `progression_core` — party, bag, PC, evolution, move learning, badges, HMs, and story flag gating. **Blocked until CP-VS passes.**
-5. `kanto_complete` — full main story through Champion including Rocket arcs, dungeons, and HM-gated routes.
-6. `postgame_sevii` — Sevii Islands chain with post-game trainers and National Dex expansion.
-7. `release_polish` — save/load, audio, menus, Pokedex, and QA-verified playthrough receipt.
+2. `battle_core` — production wild and trainer battles with deterministic Gen III mechanics, real input, PokeAPI sprites, and independent visual review. Battle implementation and certification are one indivisible phase.
+3. `starter_town_core` — production-quality Pallet Town with semantic tile stamps, correct collision/layering, generated structural proof, runtime traversal, and independent visual review.
+4. `overworld_core` — Pallet Town, Route 1, and Viridian City connected through production transitions, grass encounters, battle return flow, collision, warps, and ledges.
+5. `progression_core` — party, bag, PC, evolution, move learning, badges, HMs, and story flag gating. **Blocked until battle, starter-town, and first-loop integration proofs pass.**
+6. `kanto_complete` — full main story through Champion including Rocket arcs, dungeons, and HM-gated routes.
+7. `postgame_sevii` — Sevii Islands chain with post-game trainers and National Dex expansion.
+8. `release_polish` — save/load, audio, menus, Pokedex, and QA-verified playthrough receipt.
 
-Each level is a strictly higher claim with its own proof. Do not market overworld-only work as story-complete. **Do not claim `battle_core` after damage tests alone — CP-VS and sprite-audit must pass.** Capabilities not yet proven stay as honestly blocked states — never stubbed menus that pretend to work.
+Each level is a strictly higher claim with its own proof. Do not market battle tests as a playable battle, one polished town as an overworld, or an overworld as story-complete. **Do not claim `battle_core` after damage tests or screenshots alone; `references/battle-verification.md` must pass. Do not claim `starter_town_core` from TMX validity alone; `references/starter-town-verification.md` must pass.** Capabilities not yet proven stay as honestly blocked states — never stubbed menus that pretend to work.
 
 Before final completion, run `03-phases/14-claim-verification.md`. If `.buildprint/claim-gates.json` is missing or cannot prove a playthrough from new game through Champion with persisted save, the product claim must be lowered.
 
@@ -32,7 +33,7 @@ Build the real game the packet asks for. Functionless menu buttons, unwinnable t
 
 Fake-success paths are forbidden. Do not ship functionless buttons, dead controls, mocked/sample data presented as real, a fake provider, raw JSON as the user-facing game, placeholder commands, debug panels as the product surface, or hardcoded one-off battles pretending to be a battle engine.
 
-Treat `blueprint.yaml` as the machine contract for maturity and story scope. `overworld_core` is only the foundation floor. `kanto_complete` requires the full story graph, gym progression, and Champion battle proven by playthrough evidence.
+Treat `blueprint.yaml` as the machine contract for maturity and story scope. `battle_core`, `starter_town_core`, and `overworld_core` are separate early claims in that order. `kanto_complete` requires the full story graph, gym progression, and Champion battle proven by playthrough evidence.
 
 Project setup must produce architecture and structure before implementation. Generic `utils/` or `components/` trees without game-system ownership are setup failures.
 
@@ -46,7 +47,7 @@ Read `references/asset-policy.md` and `references/world-art-sources.md`.
 
 **Pokémon (mandatory):** all species visuals from **PokeAPI/sprites** cached at build time — battle, party, Pokédex, evolution. Never SVG, never external Pokémon packs, never ROM rips.
 
-**World art (confirmed):** trainers, NPCs, player overworld sprite, tiles/buildings use the committed `safe_cc0_default` bundle under `assets/world/`. Read `alignment-slice/ALIGNMENT.md` before phase 03. A different strategy becomes a new hard-stop decision. Do not allow placeholder rectangles, undocumented sprite sheets, or random Pokemon-looking assets.
+**World art (confirmed):** trainers, NPCs, player overworld sprite, tiles/buildings use the committed `safe_cc0_default` bundle under `assets/world/`. Read `alignment-slice/ALIGNMENT.md` and `references/starter-town-verification.md` before phase 04. A different strategy becomes a new hard-stop decision. Do not allow placeholder rectangles, undocumented sprite sheets, or random Pokemon-looking assets.
 
 Also allowed:
 
@@ -60,18 +61,20 @@ Do not ship ripped GBA ROM assets. Record asset provenance in `docs/assets-prove
 2. `references/asset-policy.md`
 3. `references/world-art-sources.md`
 4. `alignment-slice/ALIGNMENT.md`
-5. `references/world-verification.md`
-6. `references/data-sources-and-techniques-basis.md`
-7. `00-questions.md`
-8. `01-project-setup.md`
-9. `02-ui-identity.md`
-10. `blueprint.yaml`
-11. `data/story/README.md` and all four story contract YAML files
-12. `03-phases/phase-index.yaml`
-13. `03-phases/phase-flow.md`
-14. The active phase file named by `03-phases/phase-index.yaml`
-15. `README.md`
-16. `03-phases/14-claim-verification.md` before any `kanto_complete` or `postgame_sevii` claim
-17. `HANDOVER.md` before stopping
+5. `references/battle-verification.md`
+6. `references/starter-town-verification.md`
+7. `references/world-verification.md`
+8. `references/data-sources-and-techniques-basis.md`
+9. `00-questions.md`
+10. `01-project-setup.md`
+11. `02-ui-identity.md`
+12. `blueprint.yaml`
+13. `data/story/README.md` and all four story contract YAML files
+14. `03-phases/phase-index.yaml`
+15. `03-phases/phase-flow.md`
+16. The active phase file named by `03-phases/phase-index.yaml`
+17. `README.md`
+18. `03-phases/14-claim-verification.md` before any `kanto_complete` or `postgame_sevii` claim
+19. `HANDOVER.md` before stopping
 
 Read sequentially. Do not inventory every phase before the active phase is known.

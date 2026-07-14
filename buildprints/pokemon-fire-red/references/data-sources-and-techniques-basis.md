@@ -67,5 +67,5 @@ Sources: PokeAPI docs; [Pokemon-Team-Planner/pokemon-team-planner-tools](https:/
 ## Unresolved questions for user (hard-stop in 00-questions)
 
 - Deployment posture (local-only vs public hosting — trademark exposure)
-- Asset strategy (PokeAPI mandatory for Pokémon; world art mode is user question — sprites vs custom SVG)
+- Asset strategy (PokeAPI mandatory for Pokémon; committed `safe_cc0_default` + `external_sprite_sheets` world bundle confirmed; replacement requires a new explicit user decision)
 - Scope ceiling if iteration budget exhausted (main story only vs Sevii)

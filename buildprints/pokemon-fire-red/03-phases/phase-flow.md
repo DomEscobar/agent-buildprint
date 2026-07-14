@@ -22,11 +22,10 @@ This review loop is not a deliverable file. Do not create phase-run paperwork by
 ```mermaid
 flowchart TD
   P01[01 Data Pipeline] --> P02[02 Engine Shell]
-  P02 --> P03[03 Overworld Core]
-  P03 --> P04[04 Wild Encounters + Battle UI]
-  P04 --> P05[05 Battle Engine Gen3]
-  P05 --> P05P[05 Playable Proof]
-  P05P --> P06[06 Script VM + Dialogue]
+  P02 --> P03[03 Battle Core + Certification]
+  P03 --> P04[04 Pallet Town World Proof]
+  P04 --> P05[05 First Loop Integration]
+  P05 --> P06[06 Script VM + Dialogue]
   P06 --> P07[07 Party PC Evolution]
   P07 --> P08[08 Items Bag Shops HMs + Save]
   P08 --> P09[09 Trainers Rival AI]
@@ -52,9 +51,10 @@ flowchart TD
 | After phase | Max honest claim |
 |---|---|
 | 01 | data_pipeline (sprites cached — not yet visual proof) |
-| 03 | overworld_core (blocked if world sprites are placeholders) |
-| 05 battle engine | battle_core (logic only — not visual/gameplay certified) |
-| **05 playable proof** | **battle_core (certified)** — requires CP-VS + sprite-audit pass |
+| 02 | data_pipeline (engine foundation is not a gameplay claim) |
+| **03 battle core** | **battle_core** — requires recomputed functional proof plus independent visual pass |
+| **04 Pallet Town world proof** | **starter_town_core** — requires semantic map validation, runtime traversal, and independent visual pass |
+| **05 first loop integration** | **overworld_core** — requires continuous Pallet → Route 1 → Viridian traversal and real encounter return flow |
 | 08 | progression_core |
 | 11 | kanto_complete |
 | 12 | postgame_sevii |
@@ -66,9 +66,10 @@ Agents must playtest and record in `.buildprint/playthrough-receipt.md`:
 
 | ID | After | Proof |
 |---|---|---|
-| **CP-A** | Phase 03 | Walk Pallet → Route 1 → Viridian without clipping |
-| **CP-B** | Phase 05 battle | Win wild battle Route 1 at Lv 5 starter |
-| **CP-VS** | **Phase 05 playable proof** | **Sprites correct + CP-A + CP-B + ui-evidence + sprite-audit.json — hard stop before phase 06** |
+| **CP-BATTLE** | Phase 03 | Deterministic production wild and trainer fixtures pass mechanics, real-input, PokeAPI sprite, recompute, and independent visual gates |
+| **CP-PALLET** | Phase 04 | Walk every required Pallet exterior path; landmarks, compound tiles, collision, layering, render, and independent visual review pass |
+| **CP-A** | Phase 05 | Walk Pallet → Route 1 → Viridian without clipping, debug teleport, or discontinuity |
+| **CP-B** | Phase 05 | Trigger a canonical Route 1 encounter; Win and Run both restore correct overworld state through the certified battle system |
 | **CP-C** | Phase 08 | Potion in battle; save/load preserves party; Cut after Brock |
 | **CP-D** | Phase 10 | Defeat Brock levels 8-12 |
 | **CP-M1** | Phase 10 | SS Anne complete, HM Cut, rival SS Anne battle |
@@ -83,6 +84,8 @@ Agents must playtest and record in `.buildprint/playthrough-receipt.md`:
 ## Validation commands
 
 ```bash
+npm run battle:proof:verify -- --recompute
+npm run pallet:proof:verify -- --recompute
 npm run maps:validate
 npm run story:validate
 npm run story:lint
@@ -96,7 +99,8 @@ Phase 12 cannot complete unless all sevii quests in `sevii-quest-chain.yaml` are
 
 After phase 06 script VM:
 
-- `data/maps/` — one Tiled file per `map-manifest.yaml` id
+- `data/maps/source/` — one semantic layout per `map-manifest.yaml` id, using `data/maps/tile-catalog.yaml`
+- `data/maps/generated/` — deterministic TMX compiler output for Tiled preview and production runtime; never edit directly
 - `data/manual/trainers/` — JSON per trainer id
 - `data/scripts/maps/` — per-map scripts keyed by story-graph
 
@@ -110,18 +114,18 @@ Phases cannot advance without required artifacts on disk. Prose-only handoff is 
 |---|---|---|
 | 01 | PokeAPI FRLG front/back cached for starters + Route 1 species | `assets:validate` pass + sprite sample screenshot |
 | 02 | Pixel config declared (`pixelArt`, integer scale) | evidence-phase-02 + title screenshot 2× |
-| 03 | World tileset + player OW sheet loaded (not flat color map) | CP-A + per-map screenshots |
-| 04 | Battle UI uses PokeAPI foe front + player back | battle screenshot wild Rattata |
-| **05 playable proof** | **All sprite rules + CP-VS** | **sprite-audit.json, ui-evidence.md, CP-VS screenshots** |
+| **03 battle** | Production BattleScene uses cached PokeAPI foe front + player back sprites and has no visual UI defects | battle proof JSON, trace, required desktop/mobile states, independent battle review |
+| **04 Pallet Town** | Committed world tiles/player sheet; semantic stamps assemble compound tiles without seams, collage, or bad layering | scoped Pallet proof, full-map render, traversal trace, required desktop/mobile states, independent Pallet review |
+| **05 integration** | Same certified battle and world implementations connect through canonical Route 1 encounter data | CP-A + CP-B continuous trace and same-commit battle/Pallet/integration receipts |
 | 10 | 88 Kanto maps are distinct, rendered, reachable, and continuously traversable at story checkpoints | map-audit.json + 88 renders/contact sheet + world traversal trace + independent visual review |
 | 12 | 18 Sevii maps pass the same world proof and are reachable from the persisted Champion save | Sevii renders/contact sheet + continuous traversal trace + independent visual review |
 
-**Phase 06 and all later phases are blocked** until `05-playable-proof` passes. Do not start story scripting with placeholder art.
+**Phase 06 and all later phases are blocked** until `05-first-loop-integration` passes and the current battle, Pallet, and integration receipts bind the same commit. Do not start story scripting with an uncertified battle, weak starter town, placeholder art, or partial Run-only flow.
 
 ## Phase discipline
 
 - Complete minimum proof before advancing `active_phase` in phase-index.yaml
-- Verify `required_artifacts` from phase-index.yaml exist on disk before advancing past a gate phase
+- Verify every artifact named by the active phase exists on disk before advancing past a gate phase
 - Update `.buildprint/story-progress.json` every session
 - Lower claim in HANDOVER if any hard gate fails
 - Edits alone, placeholder screens, mocked data, functionless buttons, raw JSON viewers, and decorative menus do not prove product progress; do not fake live success.
@@ -138,6 +142,8 @@ Completion is blocked by:
 - missing `docs/DESIGN.md`
 - no action stronger than "type and send"
 - missing screenshot evidence
+- missing or stale `.buildprint/battle-slice-proof.json` or independent battle visual review
+- missing or stale `.buildprint/pallet-world-proof.json` or independent Pallet visual review
 - missing or stale world-proof binding, render index, traversal trace, or independent world review
 
 Run or document:

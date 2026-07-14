@@ -36,6 +36,14 @@ Agents must place world art through semantic names, not raw frame ids:
 - map/world code must use `TILE_CATALOG`, `STAMP_CATALOG`, and `SEQUENCE_CATALOG`; arbitrary `frame: 123` placement is not an acceptable execution pattern
 - the development inspector lists catalog names, labels, frames, and placement modes next to the numbered atlas
 
+### Applying-project authoring pipeline
+
+The slice TypeScript catalogs prove the atlas semantics; they are not the full game's editable map format. Applying projects must serialize the same contract in `data/maps/tile-catalog.yaml` with semantic key, placement mode, source rectangle, stamp dimensions/anchor, ordered sequence pieces, allowed layers, collision semantics, interaction points, and allowed adjacency.
+
+Coding agents edit `data/maps/source/{map_id}.layout.yaml` with semantic keys. `npm run maps:compile -- --map {map_id}` deterministically emits `data/maps/generated/{map_id}.tmx` for Tiled preview and the production Phaser loader. Generated GIDs are valid compiler output, but direct edits to generated TMX are invalid and must be rejected by source/catalog/compiler/output hash checks.
+
+`npm run maps:validate -- --map {map_id}` must reject raw authoring frame/GID values, stamp-only pieces used solo, sequence pieces out of order, out-of-bounds stamps, disallowed adjacency or layer, collision that disagrees with catalog semantics, and generated output drift. Tiled may be used to inspect the compiled map; useful editor changes must be expressed back in semantic source and recompiled.
+
 ## Slice-local asset paths
 
 This slice intentionally flattens the runtime files to `public/assets/kanto-world.png` and `public/assets/player-npc.png` so the standalone Vite app can run without an applying-project folder layout.

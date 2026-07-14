@@ -33,7 +33,7 @@ Created **Product Buildprint** at `buildprints/pokemon-fire-red/` for a coding a
 3. **Trade evolutions** — blocked in v1 unless trade system added
 4. **Safari minigame** — full zone required; simplification only with lowered claim
 5. **No game code yet** — Buildprint packet only
-6. **Sprite gate added 2026-07-10** — CP-VS + `sprite-audit.json` hard-stops phase 06+; placeholder art is no longer acceptable past phase 02
+6. **Battle-first visual gates added 2026-07-14** — Phase 03 battle, Phase 04 Pallet Town, and Phase 05 integration each require current recomputable proof; phase 06+ is blocked behind all three
 
 ## Story contract (added 2026-07-09)
 
@@ -42,8 +42,8 @@ Machine-readable story enforcement — see `data/story/`.
 ## Asset policy (added 2026-07-09)
 
 - **Pokémon sprites:** always PokeAPI (mandatory, not a question)
-- **Trainers / NPCs / tiles:** source selection is a hard blocker via `00-questions.md` and `references/world-art-sources.md`
-- Recommended default: `safe_cc0_default` + `external_sprite_sheets`
+- **Trainers / NPCs / tiles:** confirmed committed bundle under `assets/world/`; applying agents copy the decision and do not ask again
+- Confirmed mode: `safe_cc0_default` + `external_sprite_sheets`
 - Risky exception: `pokemon_community_exception` only with explicit user approval and full provenance
 - See `references/asset-policy.md`
 - See `references/world-art-sources.md`
@@ -64,11 +64,11 @@ Applying agents must create `docs/assets-provenance.md`, `public/assets/world-so
 
 ## Recommended next direction
 
-1. Applying agent runs `01-project-setup.md` in a new `pokemon-fire-red-game/` implementation repo
-2. Execute phases 01→05 for vertical slice (data, engine, overworld, battle UI, battle engine)
-3. **Mandatory: phase `05-playable-proof` — CP-VS + sprite-audit.json + ui-evidence before any story work**
-4. Playtest checkpoint CP-VS before expanding map content or phase 06+
-5. Parallel content authoring: maps + trainers while engine phases continue (only after CP-VS)
+1. Applying agent runs `01-project-setup.md`, then completes Phase 01 data and Phase 02 engine foundation in a new `pokemon-fire-red-game/` implementation repo
+2. Execute Phase 03 `battle-core` as the first gameplay certification and require `.buildprint/battle-slice-proof.json` plus independent visual review
+3. Execute Phase 04 `pallet-town-world-proof` second and require semantic tile validation, scoped Pallet proof, traversal, and independent visual review
+4. Execute Phase 05 `first-loop-integration` and prove continuous Pallet → Route 1 → Viridian plus both Win and Run restoration
+5. Start story/map/trainer expansion only after all three current receipts bind the same source state
 6. Run phase 14 + 99 before any `kanto_complete` public claim
 
 ## Claim status for this packet
@@ -81,20 +81,19 @@ Applying agents must create `docs/assets-provenance.md`, `public/assets/world-so
 
 - Product Buildprint packet for `pokemon-fire-red`
 - Story/data scope files under `data/story/`
-- Asset policy, PokeAPI source notes, phase flow, maturity ladder, and critical review phase
+- Asset policy, PokeAPI source notes, battle verification, starter-town verification, semantic tile authoring, phase flow, maturity ladder, and critical review phase
 - Current v3 setup/UI/review standards for applying agents
 
 ## Verified
 
-- Packet structure is expected to pass `node bin/agb.js packet check buildprints/pokemon-fire-red`
+- Packet structure passes `agb packet check buildprints/pokemon-fire-red` after the battle-first phase rewrite
 - Story scope and asset source are documented
 - UI identity and screenshot gate is present: Local identity artifact must include `docs/ui-identity.md`, `UI-IDENTITY.md`, `docs/DESIGN.md`, `agb verify ui .`, and a Screenshot set for title, overworld, battle, party, bag, dialogue, shop, faint, victory, desktop, and mobile/narrow.
 
 ## Blocked
 
 - Actual game implementation is not started in this packet.
-- World art mode remains a hard-stop applying-agent decision unless user delegation is recorded.
-- World source strategy, source URLs, local paths, licenses, and coverage are hard-stop applying-agent decisions unless user delegation is recorded.
+- World art mode and source strategy are resolved: copy the committed `safe_cc0_default` + `external_sprite_sheets` decision and provenance. Only an explicit new user request may replace it.
 - No public hosting, trademark/legal review, or full playthrough proof exists.
 
 ## Not proven
@@ -108,8 +107,8 @@ Applying agents must create `docs/assets-provenance.md`, `public/assets/world-so
 
 ## Next
 
-- Applying agent answers/records hard-stop decisions, then runs `01-project-setup.md`
-- Build data pipeline and vertical slice Pallet -> Route 1 -> Viridian
+- Applying agent copies the resolved decisions, answers only still-open hard stops, and runs `01-project-setup.md`
+- Complete Phase 01 data and Phase 02 foundation, certify battle in Phase 03, certify Pallet Town in Phase 04, then integrate Pallet -> Route 1 -> Viridian in Phase 05
 - Capture UI evidence and playthrough receipts as phases advance
 - Run phase 14 and `99-critical-review-pushback` before any completion claim
 
@@ -124,4 +123,4 @@ Do not claim completion beyond the evidence. Lower the claim ceiling whenever pr
 
 ## Files to read first (applying agent)
 
-`BUILDPRINT.md` → `00-questions.md` → `01-project-setup.md` → `03-phases/01-data-pipeline.md`
+`BUILDPRINT.md` → verification references in its required order → `00-questions.md` → `01-project-setup.md` → `02-ui-identity.md` → `blueprint.yaml` → `03-phases/phase-index.yaml` → active phase

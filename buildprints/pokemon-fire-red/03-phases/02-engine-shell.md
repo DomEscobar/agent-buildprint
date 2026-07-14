@@ -14,16 +14,16 @@ Placeholders, functionless buttons, mocked/sample data, raw JSON as the user sur
 
 ## Building objective
 
-Playable shell: title → new game → overworld entry point → return to title.
+Foundation shell for the battle-first route: boot → title → typed test-fixture entry seam → registered production `BattleScene` → title. This phase proves architecture, input, scaling, and scene contracts only; it does not claim a playable battle or overworld.
 
-The overworld may use a **minimal test room** only until phase 03 delivers real maps. Even the test room must use the chosen `world_art_mode` asset path (PNG sheet or documented SVG) — not a flat color rectangle labeled "placeholder".
+The deterministic fixture entry is test/dev-only and absent from release navigation. It may pass typed initial state to the production BattleScene in Phase 03 but may never mutate outcomes or introduce a separate renderer or reducer.
 
 ### Scene graph
 
 1. **BootScene** — load manifest, fonts, UI atlas
 2. **TitleScene** — NEW GAME, CONTINUE (disabled if no save), OPTIONS stub
-3. **OverworldScene** — test room with world art loader wired (tileset or OW sheet from decisions); collision optional until phase 03
-4. **BattleScene** — stub transition target
+3. **BattleScene** — production scene boundary with typed initial-state/result contracts; implementation and certification belong to Phase 03
+4. **OverworldScene** — registered scene boundary only; semantic map loader and Pallet implementation belong to Phase 04
 5. **MenuScene** — overlay or pause menu stub
 
 ### Game state store (TypeScript)
@@ -57,19 +57,21 @@ Central `GameStateStore` with subscribe/emit; no scattered global variables.
 - Do not embed story logic in TitleScene
 - Do not use 1920×1080 native coords without scale awareness
 - Do not skip CONTINUE disabled state when no save
-- Do not use flat color rectangles as player or tile "placeholders" without recording blocker in setup receipt
+- Do not show fake battle/map placeholders, colored rectangles, or decorative dead controls as product progress
+- Do not expose the fixture entry seam in release navigation or player UI
 - Do not disable `pixelArt: true` or use fractional scale
 
 ## Minimum proof before moving on
 
-- `npm run dev` → title → new game → overworld (test room with world art loader invoked) → menu opens → title
+- `npm run dev` → boot → title renders at integer scale; no fake overworld or battle claim
+- automated scene-contract test enters and exits the registered production BattleScene boundary through the typed fixture seam without rendering a separate proof scene
 - `npm run typecheck` passes
 - Screenshot: `.buildprint/screenshots/phase-02-title-2x.png` at 2× integer scale (480×320 viewport)
 - Document in evidence: Phaser `pixelArt`, scale mode, and primary font choice
 - `.buildprint/evidence-phase-02.md`
 
-**Do not advance to phase 03** if pixel config is wrong or overworld shows only untextured color fills with no asset loader.
+**Do not advance to phase 03** if pixel config is wrong, the BattleScene boundary/fixture contract is untyped, the test seam is player-visible, or the shell presents placeholder battle/world art as implemented gameplay.
 
 ## Handoff note
 
-Scene list, game state module paths, input bindings, scale settings.
+Scene list, typed BattleScene entry/result and fixture contracts, game state module paths, input bindings, scale settings, and proof that the fixture seam is absent from release UI.

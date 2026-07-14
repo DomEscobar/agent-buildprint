@@ -9,37 +9,32 @@ phases:
   - phase_id: 02-engine-shell
     file: 03-phases/02-engine-shell.md
     status: included
-    maturity_level: overworld_core
+    maturity_level: data_pipeline
     depends_on: [01-data-pipeline]
-  - phase_id: 03-overworld-core
-    file: 03-phases/03-overworld-core.md
+  - phase_id: 03-battle-core
+    file: 03-phases/03-battle-core.md
+    status: included
+    maturity_level: battle_core
+    depends_on: [02-engine-shell]
+  - phase_id: 04-pallet-town-world-proof
+    file: 03-phases/04-pallet-town-world-proof.md
+    status: included
+    maturity_level: starter_town_core
+    depends_on: [03-battle-core]
+  - phase_id: 05-first-loop-integration
+    file: 03-phases/05-first-loop-integration.md
     status: included
     maturity_level: overworld_core
-    depends_on: [02-engine-shell]
-  - phase_id: 04-wild-encounters-battle-ui
-    file: 03-phases/04-wild-encounters-battle-ui.md
-    status: included
-    maturity_level: battle_core
-    depends_on: [03-overworld-core]
-  - phase_id: 05-battle-engine-gen3
-    file: 03-phases/05-battle-engine-gen3.md
-    status: included
-    maturity_level: battle_core
-    depends_on: [04-wild-encounters-battle-ui]
-  - phase_id: 05-playable-proof
-    file: 03-phases/05-playable-proof.md
-    status: included
-    maturity_level: battle_core
-    depends_on: [05-battle-engine-gen3]
+    depends_on: [04-pallet-town-world-proof]
   - phase_id: 06-script-vm-dialogue
     file: 03-phases/06-script-vm-dialogue.md
     status: included
-    maturity_level: progression_core
-    depends_on: [05-playable-proof]
+    maturity_level: overworld_core
+    depends_on: [05-first-loop-integration]
   - phase_id: 07-party-pc-evolution
     file: 03-phases/07-party-pc-evolution.md
     status: included
-    maturity_level: progression_core
+    maturity_level: overworld_core
     depends_on: [06-script-vm-dialogue]
   - phase_id: 08-items-bag-shops-hms
     file: 03-phases/08-items-bag-shops-hms.md
@@ -54,7 +49,7 @@ phases:
   - phase_id: 10-story-gyms-dungeons
     file: 03-phases/10-story-gyms-dungeons.md
     status: included
-    maturity_level: kanto_complete
+    maturity_level: progression_core
     depends_on: [09-trainers-rival-ai]
   - phase_id: 11-elite-four-champion
     file: 03-phases/11-elite-four-champion.md

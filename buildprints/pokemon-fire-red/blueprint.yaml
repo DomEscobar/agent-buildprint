@@ -17,6 +17,8 @@ read_order:
   - references/asset-policy.md
   - references/world-art-sources.md
   - alignment-slice/ALIGNMENT.md
+  - references/battle-verification.md
+  - references/starter-town-verification.md
   - references/world-verification.md
   - references/data-sources-and-techniques-basis.md
   - 00-questions.md
@@ -37,6 +39,8 @@ packet_shape:
     - references/world-art-sources.md
     - assets/world/manifest.json
     - alignment-slice/ALIGNMENT.md
+    - references/battle-verification.md
+    - references/starter-town-verification.md
     - references/world-verification.md
     - references/data-sources-and-techniques-basis.md
     - 00-questions.md
@@ -84,8 +88,8 @@ story_scope:
     source_reference: references/world-art-sources.md
     required_before:
       - 01-project-setup completion
-      - phase 03 map implementation
-      - CP-VS playable proof
+      - phase 04 Pallet Town implementation
+      - starter_town_core certification
     approved_source_strategies:
       safe_cc0_default:
         recommended: true
@@ -104,7 +108,7 @@ story_scope:
         public_web_default: blocked_until_license_review
       custom_authored:
         recommended: false
-        requires_authored_files_before_phase_03: true
+        requires_authored_files_before_phase_04: true
     allowed_modes:
       - external_sprite_sheets
       - custom_svg
@@ -160,24 +164,36 @@ capability_maturity:
         - PokeAPI FRLG sprites cached for all species used (mandatory)
         - npm run assets:validate passes — no non-PokeAPI Pokémon graphics
         - data/schema validation tests pass
-    overworld_core:
-      claim: walkable maps with warps and wild grass
-      required:
-        - at least pallet_town, route_1, viridian_city loaded
-        - 4-direction movement, collision, ledges
-        - map transitions and spawn points
-        - grass encounter trigger
     battle_core:
-      claim: wild and trainer battles
+      claim: deterministic, input-driven, independently reviewed wild and trainer battles
       required:
         - turn order by speed
         - damage formula gen3
         - type effectiveness
         - switch, faint, exp gain
         - battle UI with move selection
-        - CP-VS pass via 05-playable-proof (sprite-audit.json, ui-evidence, screenshots)
         - PokeAPI FRLG battle sprites on screen — not placeholders
-        - world tileset + player OW sheet if claiming visual battle_core
+        - npm run battle:proof:verify -- --recompute passes
+        - current `.buildprint/battle-slice-proof.json` and independent battle visual review pass
+    starter_town_core:
+      claim: production-quality Pallet Town with validated semantic tile composition
+      required:
+        - battle_core already certified
+        - pallet_town loads through the production Phaser/Tiled loader
+        - named homes, Oak lab, paths, signs, boundaries, north exit, collision, spawn, doors, and warps
+        - semantic tile source compiles deterministically to TMX and rejects raw authoring GIDs or generated drift
+        - npm run pallet:proof:verify -- --recompute passes
+        - current `.buildprint/pallet-world-proof.json` and independent Pallet visual review pass
+    overworld_core:
+      claim: connected Pallet Town, Route 1, and Viridian City with real encounters
+      required:
+        - starter_town_core already certified
+        - at least pallet_town, route_1, viridian_city loaded
+        - 4-direction movement, collision, ledges
+        - map transitions and spawn points
+        - canonical Route 1 grass encounter enters the certified battle system
+        - Win and Run restore the correct map/tile and clear encounter lock
+        - CP-A continuous Pallet to Route 1 to Viridian traversal passes
     progression_core:
       claim: party, bag, PC, badges, HMs
       required:
@@ -242,9 +258,10 @@ central_output_contract:
     - Do screenshots prove title, overworld, battle, party, bag, dialogue, shop, faint, victory, and mobile/narrow layouts instead of prose-only claims?
     - Does the current proof support the claimed maturity level, or must HANDOVER lower the claim?
   claim_gates:
-    - battle_core visual certification requires `.buildprint/sprite-audit.json` pass + CP-VS + `.buildprint/ui-evidence.md`
+    - battle_core requires `npm run battle:proof:verify -- --recompute` + `.buildprint/battle-slice-proof.json` + independent battle visual review
+    - starter_town_core requires `npm run pallet:proof:verify -- --recompute` + `.buildprint/pallet-world-proof.json` + independent Pallet visual review
     - world art source selection requires `.buildprint/decisions.md` + `docs/assets-provenance.md` + approved source strategy from `references/world-art-sources.md`
-    - phase 06+ blocked until 05-playable-proof passes (see phase-index.yaml)
+    - phase 06+ blocked until 05-first-loop-integration passes and current battle, Pallet, and integration receipts bind the same commit
     - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 88/88 maps
     - postgame_sevii requires `npm run story:validate -- --claim postgame_sevii` + CP-SeviiComplete
     - no ripped ROM assets in repo
@@ -263,7 +280,7 @@ proven_implementation_requirements:
     tile_overworld:
       requirement: Phaser Tilemap + arcade physics or grid movement; no freeform pixel collision hand-roll without map tool
     turn_battle_engine:
-      requirement: Deterministic battle state machine with explicit phases (command, execute, end turn); reference Bulbapedia Gen III damage formula; unit tests for formula
+      requirement: Deterministic battle state machine with explicit phases (command, execute, end turn); Gen III type-based physical/special split rather than modern per-move damage_class; reference Gen III damage formula; unit tests include a category-discriminator fixture
     script_vm:
       requirement: Data-driven event scripts (YAML or DSL) for NPC dialogue, battles, flag sets; no hardcoded story in scene files
     pokeapi_ingestion:
@@ -311,7 +328,9 @@ state_and_handoff:
   local_state_dir: .buildprint/
   setup_receipt: .buildprint/setup-receipt.md
   playthrough_receipt: .buildprint/playthrough-receipt.md
-  sprite_audit: .buildprint/sprite-audit.json
+  battle_proof: .buildprint/battle-slice-proof.json
+  starter_town_proof: .buildprint/pallet-world-proof.json
+  first_loop_proof: .buildprint/first-loop-proof.json
   claim_gates: .buildprint/claim-gates.json
 
 evidence:

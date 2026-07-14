@@ -38,8 +38,8 @@ The user confirmed that Pokémon stay PokeAPI-backed while player, landscape, an
 
 | Mode | Description | Visual claim impact |
 |---|---|---|
-| `external_sprite_sheets` | PNG tilesets + character OW sheets (PokeCommunity, OpenGameArt, itch.io, user-supplied pack) | **Required for CP-VS / visual `battle_core` certification** |
-| `custom_svg` | Custom/programmatic SVG for trainers, NPCs, player, UI chrome; rasterize at load in Phaser | **Blocks CP-VS and `release_polish`** unless user explicitly opts in |
+| `external_sprite_sheets` | PNG tilesets + character OW sheets (PokeCommunity, OpenGameArt, itch.io, user-supplied pack) | **Required for Phase 04 `starter_town_core` certification** |
+| `custom_svg` | Custom/programmatic SVG for trainers, NPCs, player, UI chrome; rasterize at load in Phaser | **Blocks `starter_town_core` and `release_polish`** unless user explicitly opts in |
 
 Default if user delegates: `external_sprite_sheets` (better fit for GBA pixel fidelity). **Agents must not choose `custom_svg` without explicit user opt-in.**
 
@@ -47,22 +47,22 @@ Default if user delegates: `external_sprite_sheets` (better fit for GBA pixel fi
 
 Use one of:
 
-- `safe_cc0_default` — recommended. Use CC0/open sources listed in `references/world-art-sources.md`: Ninja Adventure, Kenney RPG Urban Pack, OpenGameArt Top Down Pokemon-esque Sprites, OpenGameArt Character 4 directional walking, OpenGameArt Zelda-like tilesets and sprites, and Open RPG Fantasy Tilesets.
+- `safe_cc0_default` — confirmed. Use the committed CC0/open bundle documented in `references/world-art-sources.md`.
 - `pokemon_community_exception` — visually closest but risky. Requires explicit user approval and full credit/license capture before any use. Default public web posture is blocked until license review.
-- `custom_authored` — authored in-repo world/player/NPC/tiles. Still must provide real player/NPC/tiles before phase 03; not a placeholder escape hatch.
+- `custom_authored` — authored in-repo world/player/NPC/tiles. Still must provide real player/NPC/tiles before phase 04; not a placeholder escape hatch.
 
-Do not start phase 03 unless `docs/assets-provenance.md` records selected strategy, source URLs, licenses, local original paths, normalized runtime paths, coverage categories, attribution text, and redistribution status.
+Do not start phase 04 unless `docs/assets-provenance.md` records selected strategy, source URLs, licenses, local original paths, normalized runtime paths, coverage categories, attribution text, and redistribution status.
 
-### World art is a MUST blocker
+### World art is a MUST blocker for world claims
 
-Phases 03–05 and playable proof (phase 05) cannot pass with:
+Phase 03 battle certification is intentionally independent of world art. Phase 04, Phase 05, and every `starter_town_core` or higher world claim cannot pass with:
 
 - flat color rectangles as tiles or player
 - missing tileset PNG files
 - missing player walk-cycle sheet with front/back/side directions and a usable standing/step loop
 - unlicensed or undocumented asset packs
 
-Record pack URL/path and license in `docs/assets-provenance.md` before phase 03.
+Record pack URL/path and license in `docs/assets-provenance.md` before phase 04.
 
 ### What `custom_svg` covers
 
@@ -84,7 +84,7 @@ Record pack URL/path and license in `docs/assets-provenance.md` before phase 03.
 
 Record pack URL/path and license in `docs/assets-provenance.md`.
 
-Minimum required external files for CP-VS:
+Minimum required external files for `starter_town_core`:
 
 - player overworld sheet: front/back/side directions with standing and step frames
 - NPC sheet
@@ -139,4 +139,4 @@ Checks:
 
 ## Visual proof (required in addition to validate)
 
-File-path validation alone does not prove sprites look correct. CP-VS (phase `05-playable-proof`) requires screenshots at 2× integer scale. A passing `assets:validate` with ugly or wrong on-screen sprites is still **fail**.
+File-path validation alone does not prove sprites look correct. Phase `04-pallet-town-world-proof` requires production renders, 2× integer-scale screenshots, traversal, and independent visual review. A passing `assets:validate` with ugly or wrong on-screen sprites is still **fail**.

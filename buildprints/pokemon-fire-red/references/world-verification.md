@@ -12,13 +12,17 @@ Write `.buildprint/world-assets-proof.json` with the manifest hash, verified fil
 
 ### 2. Structural map proof
 
-`npm run maps:validate` must parse every required TMX file and emit `.buildprint/map-audit.json`. For every map it records:
+Coding agents author `data/maps/source/{map_id}.layout.yaml` against `data/maps/tile-catalog.yaml`. `npm run maps:compile` deterministically emits `data/maps/generated/{map_id}.tmx` for Tiled preview and the production loader. Generated GIDs are compiler output, not the editable source.
 
-- map id, dimensions, tileset references, layer names, non-empty tile count, distinct tile ids, object counts, collision cells, warps, NPCs, encounters, items, and script hooks
-- normalized hashes for geometry, tile layers, collision, objects, and the complete TMX
+`npm run maps:validate` must parse every semantic source and generated TMX file and emit `.buildprint/map-audit.json`. For every map it records:
+
+Map ids must match `^[a-z0-9_]+$` and be members of `map-manifest.yaml`. CLI arguments are process argument arrays, never interpolated shell strings. Resolve source, output, catalog, tileset, and imported paths and enforce containment within declared project roots; reject absolute paths, URLs, `..` segments, and symlinks. Parse YAML in safe mode without custom tags and XML/TMX with DTDs and external entities disabled.
+
+- map id, dimensions, tileset references, layer names, semantic key/stamp/sequence counts, non-empty tile count, distinct generated tile ids, object counts, collision cells, warps, NPCs, encounters, items, and script hooks
+- normalized hashes for semantic source, tile catalog, compiler, geometry, tile layers, collision, objects, and the complete generated TMX
 - validation against the corresponding `map-manifest.yaml` entry and story graph requirements
 
-The command must fail on missing/empty layers, broken tileset paths, out-of-bounds spawns, warps without valid destinations, one-way warps unless explicitly declared, unreachable required objects, missing collision/encounter semantics, or duplicate complete-map hashes unless the manifest explicitly allows the duplicate.
+The command must fail on raw frame/GID authoring, stamp-only pieces used solo, invalid sequence order, out-of-bounds stamps, disallowed adjacency/layer, collision that disagrees with catalog semantics, direct generated-TMX drift, missing/empty layers, broken tileset paths, out-of-bounds spawns, warps without valid destinations, one-way warps unless explicitly declared, unreachable required objects, missing collision/encounter semantics, or duplicate complete-map hashes unless the manifest explicitly allows the duplicate.
 
 Similarity is a review signal, not an automatic accusation. If two non-variant maps have the same geometry hash or more than 90% identical tile placement, `map-audit.json` marks both `needs_visual_review`; the independent reviewer must resolve that finding.
 
@@ -29,7 +33,7 @@ Similarity is a review signal, not an automatic accusation. If two non-variant m
 - `.buildprint/map-renders/{map_id}.png` for every required map enumerated by `map-manifest.yaml` (currently 88 Kanto and 18 additional Sevii maps); validators derive counts from entries and fail if the declared totals drift
 - `.buildprint/map-renders/contact-sheet-kanto.png`
 - `.buildprint/map-renders/contact-sheet-sevii.png`
-- `.buildprint/map-render-index.json` with map id, source TMX hash, rendered PNG hash, dimensions, camera/scale, tileset hash, and render timestamp
+- `.buildprint/map-render-index.json` with map id, semantic-source hash, tile-catalog/compiler hash, generated TMX hash, rendered PNG hash, dimensions, camera/scale, tileset hash, and render timestamp
 
 Every rendered PNG must be non-empty and unique unless an allowed variant is recorded. Missing renders, repeated screenshots, solid-color output, debug overlays, editor-only output, or a render hash not tied to the current TMX hash are hard failures.
 
@@ -61,7 +65,7 @@ The reviewer writes `.buildprint/world-visual-review.md` and must:
 
 Random selection must be recorded with seed and candidate list. Derive the seed from the reviewed commit SHA so the implementing agent cannot preselect only polished maps.
 
-Before accepting the proof, the independent reviewer runs `npm run world:proof:verify -- --recompute` in a fresh process. That command ignores the existing `.buildprint/world-proof.json`, recomputes every referenced hash and gate into a temporary result, and requires a byte-for-byte match after excluding only the generation timestamp. A mismatch is an automatic failure and the existing proof is treated as hand-authored or stale.
+Before accepting the proof, the independent reviewer runs `npm run world:proof:verify -- --recompute` in a fresh process. That command ignores the existing `.buildprint/world-proof.json`, recomputes every referenced hash and gate into a temporary result, and compares normalized audits, traversal events, screenshots, and asserted states. The submitted raw trace ZIP remains hash-bound diagnostic evidence, but a fresh ZIP is not byte-compared because browser timing and archive metadata are nondeterministic. Exclude timestamps, trace ids, ZIP metadata, and render timing only; never exclude gameplay or world-state fields. A semantic mismatch is an automatic failure and the existing proof is treated as hand-authored or stale.
 
 ## Evidence binding
 
@@ -69,7 +73,8 @@ Before accepting the proof, the independent reviewer runs `npm run world:proof:v
 
 ```json
 {
-  "commit": "git sha or dirty-worktree marker",
+  "commit": "clean git commit sha",
+  "source_manifest_sha256": "...",
   "asset_manifest_sha256": "...",
   "map_manifest_sha256": "...",
   "map_audit_sha256": "...",
@@ -81,12 +86,13 @@ Before accepting the proof, the independent reviewer runs `npm run world:proof:v
 }
 ```
 
-Any source, map, save fixture, screenshot, render, or trace change invalidates the bound proof and requires regeneration.
+Certification requires a clean commit and deterministic sorted source manifest covering production source, proof/verifier scripts, fixtures, configs, manifests, dependency lockfile, and assets. Dirty runs are diagnostic only. Relevant untracked files, omissions, absolute/out-of-root paths, and symlinks fail. Any source, map, save fixture, screenshot, render, or bound submitted-trace change invalidates the proof and requires regeneration.
 
 ## Claim ceilings
 
-- no valid asset proof: maximum `data_pipeline`
-- no CP-A traversal plus Pallet/Route 1/Viridian renders: maximum `data_pipeline`
+- no valid world-asset proof: world maturity cannot exceed `battle_core`; a current battle proof remains valid
+- no current scoped Pallet proof: maximum `battle_core`
+- no CP-A traversal plus Pallet/Route 1/Viridian renders: maximum `starter_town_core`
 - no full current-map render/audit set: maximum `progression_core`
 - no continuous checkpoint traversal through Champion: cannot claim `kanto_complete`
 - no 18/18 Sevii render/audit set and continuous Sevii traversal: cannot claim `postgame_sevii`
