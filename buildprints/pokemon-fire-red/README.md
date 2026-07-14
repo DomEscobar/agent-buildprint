@@ -37,19 +37,21 @@ npm run dev
 1. `BUILDPRINT.md`
 2. `references/asset-policy.md`
 3. `references/world-art-sources.md`
-4. `references/data-sources-and-techniques-basis.md`
-5. `00-questions.md`
-6. `01-project-setup.md`
-7. `02-ui-identity.md`
-8. `blueprint.yaml`
-9. `03-phases/phase-index.yaml` → active phase
+4. `alignment-slice/ALIGNMENT.md`
+5. `references/world-verification.md`
+6. `references/data-sources-and-techniques-basis.md`
+7. `00-questions.md`
+8. `01-project-setup.md`
+9. `02-ui-identity.md`
+10. `blueprint.yaml`
+11. `03-phases/phase-index.yaml` → active phase
 
 ## Story contract (mandatory)
 
 Before phase 06, read and implement against:
 
 - `data/story/story-graph.yaml` — 25+ main story quests with flags, items, trainers
-- `data/story/map-manifest.yaml` — 82 Kanto + 18 Sevii maps (100% required)
+- `data/story/map-manifest.yaml` — 88 Kanto + 18 Sevii maps (100% required)
 - `data/story/rival-progression.yaml` — 8 rival battles
 - `data/story/sevii-quest-chain.yaml` — full postgame arc
 
@@ -80,19 +82,21 @@ Before phase 06, read and implement against:
 
 - [PokeAPI v2](https://pokeapi.co/docs/v2) — species, moves, types, sprites (cached at build time)
 - Manual JSON — encounters, trainers, items, story scripts, maps (Tiled)
-- World/player/NPC/tiles sources — must be chosen from `references/world-art-sources.md` before setup completes
+- Local world bundle — `assets/world/` contains the confirmed CC0 player/NPC and landscape/world sheets plus originals, licenses, and a machine-readable manifest
 
-## World Art Blocker
+## World Art Bundle
 
-Do not start overworld/map implementation until the applying agent records:
+The source choice is already confirmed. Before overworld/map implementation, the applying agent copies `assets/world/runtime/` into `public/assets/` and records:
 
-- selected source strategy: `safe_cc0_default`, `pokemon_community_exception`, or `custom_authored`
+- selected source strategy: `safe_cc0_default` + `external_sprite_sheets`
 - selected source URLs and licenses in `docs/assets-provenance.md`
 - local original paths under `third_party_assets/world/`
 - normalized runtime files under `public/assets/ow/` and `public/assets/tilesets/`
 - `public/assets/world-source-manifest.json`
 
-Recommended default: `safe_cc0_default` + `external_sprite_sheets` using Ninja Adventure, Kenney RPG Urban Pack, and OpenGameArt supplemental sources listed in `references/world-art-sources.md`.
+Confirmed bundle: `safe_cc0_default` + `external_sprite_sheets` using the committed Kenney RPG Urban Pack and OpenGameArt player/NPC sheet. Pokémon remain PokeAPI-only.
+
+Playable alignment reference: `alignment-slice/` demonstrates keyboard/touch walking, camera behavior, named player frame extraction, and coherent tile usage. See `alignment-slice/ALIGNMENT.md` before implementing phase 03.
 
 ## Claim ladder
 
@@ -105,7 +109,7 @@ Fan/educational use. Include disclaimer in game title screen and README. Cache P
 **Asset rules:**
 
 - **Pokémon:** always PokeAPI (mandatory)
-- **Trainers / NPCs / tiles:** source strategy is a blocker. Use `safe_cc0_default` unless Dom explicitly approves a higher-risk exception.
+- **Trainers / NPCs / tiles:** confirmed committed `safe_cc0_default` bundle. Changing it requires a new explicit decision.
 
 ## Authoring metadata
 

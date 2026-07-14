@@ -1,10 +1,16 @@
 # World Art Sources
 
-Use this file before choosing any player, NPC, trainer overworld, tileset, building, prop, cave, shop, or UI-world art. This source decision is a hard blocker: do not start map or overworld implementation until the selected source strategy is recorded in `.buildprint/decisions.md` and `docs/assets-provenance.md`.
+Use this file before implementing any player, NPC, trainer overworld, tileset, building, prop, cave, shop, or UI-world art. The source decision is confirmed; setup must copy it into `.buildprint/decisions.md` and `docs/assets-provenance.md` before map work.
 
-## Required decision
+## Confirmed decision
 
-Choose exactly one source strategy before `01-project-setup.md` completes:
+Selected by the user: `safe_cc0_default` + `external_sprite_sheets`. The assets are committed under `assets/world/`; applying agents copy from there and must not introduce a setup-time download dependency.
+
+The runtime-proven frame coordinates, tile formula, pixel settings, and playable reference are in `alignment-slice/ALIGNMENT.md`. Applying agents must preserve that contract or replace it with stronger browser evidence.
+
+## Available strategies
+
+The selected strategy is item 1. Items 2 and 3 remain documented alternatives only and require a new explicit user decision before use:
 
 1. `safe_cc0_default` — recommended for GitHub/web publication.
 2. `pokemon_community_exception` — closest visual fit, but risky; requires explicit user approval.
@@ -27,7 +33,7 @@ Use these as the approved default source pool. Download only from the source URL
 
 Minimum practical source mix for CP-VS:
 
-- one player overworld sheet with 4 directions and at least 4 frames per direction, or a documented derived sheet built from CC0 source
+- one player overworld sheet with front/back/side directions and standing/step frames, or a documented derived sheet built from CC0 source
 - one NPC sheet
 - one 16x16 exterior tileset for Pallet/Route 1/Viridian-style maps
 - one tall-grass/encounter tile

@@ -28,7 +28,7 @@ Created **Product Buildprint** at `buildprints/pokemon-fire-red/` for a coding a
 
 ## Known gaps (for applying agent)
 
-1. **Map art/content** — 82+18 Tiled maps must be built; manifest lists ids, not geometry
+1. **Map art/content** — 88+18 Tiled maps must be built; manifest lists ids, not geometry
 2. **PokeAPI gaps** — encounters, trainer move sets need manual JSON
 3. **Trade evolutions** — blocked in v1 unless trade system added
 4. **Safari minigame** — full zone required; simplification only with lowered claim

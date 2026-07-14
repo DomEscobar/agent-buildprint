@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.buildprint/
+.playwright-cli/
+.playwright-output/
+dev-server.out.log
+dev-server.err.log
+.debug-journal.md

@@ -7,7 +7,7 @@ These files are **authoritative** for story completeness. Engine phases build sy
 | File | Purpose |
 |---|---|
 | `story-graph.yaml` | Quest order, flags, scripts, trainers, items — main story |
-| `map-manifest.yaml` | Every required map id per claim (82 Kanto + 18 Sevii) |
+| `map-manifest.yaml` | Every required map id per claim (88 Kanto + 18 Sevii) |
 | `rival-progression.yaml` | All 8 Rival battles with party scaling rules |
 | `sevii-quest-chain.yaml` | Full postgame arc (islands 1-7, Network Machine) |
 
@@ -29,8 +29,8 @@ Applying agent maintains `.buildprint/story-progress.json`:
     "quest_oaks_parcel": { "status": "complete", "evidence": "playthrough-log.md#parcel" },
     "quest_safari_zone": { "status": "blocked", "reason": "Safari minigame not implemented" }
   },
-  "maps_loaded": 82,
-  "maps_required": 82,
+  "maps_loaded": 88,
+  "maps_required": 88,
   "claim_ceiling": "progression_core"
 }
 ```

@@ -30,9 +30,9 @@ Implementation:
 - Ripped GBA Pokémon graphics
 - LLM-generated Pokémon images
 
-## Rule 2: World art — user chooses (hard-stop question)
+## Rule 2: World art — committed CC0 sheets (confirmed)
 
-Ask in `00-questions.md` before setup. Also read `references/world-art-sources.md`; the source strategy is part of the hard-stop answer.
+The user confirmed that Pokémon stay PokeAPI-backed while player, landscape, and world sprites live in this repository. The selected strategy is `safe_cc0_default` + `external_sprite_sheets`; canonical files and provenance are under `assets/world/`.
 
 **World/overworld art mode** — for player, NPCs, gym leaders, trainers (overworld), map tiles, buildings, items on ground:
 
@@ -59,7 +59,7 @@ Phases 03–05 and playable proof (phase 05) cannot pass with:
 
 - flat color rectangles as tiles or player
 - missing tileset PNG files
-- missing player walk-cycle sheet (4 directions × 4 frames minimum)
+- missing player walk-cycle sheet with front/back/side directions and a usable standing/step loop
 - unlicensed or undocumented asset packs
 
 Record pack URL/path and license in `docs/assets-provenance.md` before phase 03.
@@ -86,7 +86,7 @@ Record pack URL/path and license in `docs/assets-provenance.md`.
 
 Minimum required external files for CP-VS:
 
-- player overworld sheet: 4 directions, at least 4 frames per direction
+- player overworld sheet: front/back/side directions with standing and step frames
 - NPC sheet
 - 16x16 exterior tileset PNG for Pallet/Route 1/Viridian-style map
 - tall grass/encounter tile
@@ -100,11 +100,14 @@ load.image(`pokemon-${id}`, cachePath(`pokemon/${id}/front.png`));
 
 // World — branch on world_art_mode
 if (worldArtMode === 'external_sprite_sheets') {
-  load.spritesheet('player-ow', 'assets/ow/player.png', { frameWidth: 16, frameHeight: 32 });
+  load.image('player-npc-source', 'assets/ow/player-npc.png');
+  load.image('kanto-world', 'assets/tilesets/kanto-world.png');
 } else if (worldArtMode === 'custom_svg') {
   load.svg('trainer-youngster', 'assets/svg/trainers/youngster.svg', { scale: 2 });
 }
 ```
+
+The committed player/NPC source has gaps between its 16x16 frames. Do not treat it as a uniform Phaser spritesheet. Register the named frame rectangles from `alignment-slice/ALIGNMENT.md`; the playable slice is the canonical alignment proof.
 
 Phaser SVG loads rasterize to bitmap — set scale at load for integer pixel output. Use `pixelArt: true`, `roundPixels: true`.
 

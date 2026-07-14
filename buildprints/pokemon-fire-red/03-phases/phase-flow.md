@@ -43,7 +43,7 @@ flowchart TD
 | File | Role |
 |---|---|
 | `data/story/story-graph.yaml` | Quest order, flags, mandatory events |
-| `data/story/map-manifest.yaml` | 82 Kanto + 18 Sevii required maps |
+| `data/story/map-manifest.yaml` | 88 Kanto + 18 Sevii required maps |
 | `data/story/rival-progression.yaml` | 8 rival battles |
 | `data/story/sevii-quest-chain.yaml` | Full islands 1-7 postgame |
 
@@ -113,6 +113,8 @@ Phases cannot advance without required artifacts on disk. Prose-only handoff is 
 | 03 | World tileset + player OW sheet loaded (not flat color map) | CP-A + per-map screenshots |
 | 04 | Battle UI uses PokeAPI foe front + player back | battle screenshot wild Rattata |
 | **05 playable proof** | **All sprite rules + CP-VS** | **sprite-audit.json, ui-evidence.md, CP-VS screenshots** |
+| 10 | 88 Kanto maps are distinct, rendered, reachable, and continuously traversable at story checkpoints | map-audit.json + 88 renders/contact sheet + world traversal trace + independent visual review |
+| 12 | 18 Sevii maps pass the same world proof and are reachable from the persisted Champion save | Sevii renders/contact sheet + continuous traversal trace + independent visual review |
 
 **Phase 06 and all later phases are blocked** until `05-playable-proof` passes. Do not start story scripting with placeholder art.
 
@@ -136,6 +138,7 @@ Completion is blocked by:
 - missing `docs/DESIGN.md`
 - no action stronger than "type and send"
 - missing screenshot evidence
+- missing or stale world-proof binding, render index, traversal trace, or independent world review
 
 Run or document:
 

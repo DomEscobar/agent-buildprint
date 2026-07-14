@@ -27,6 +27,7 @@ Produce `.buildprint/claim-gates.json` and finalize `.buildprint/playthrough-rec
     "overworld_core": { "status": "...", "evidence": "..." },
     "battle_core": { "status": "...", "evidence": "..." },
     "vertical_slice": { "status": "pass|fail|blocked", "evidence": ".buildprint/sprite-audit.json" },
+    "world_complete": { "status": "pass|fail|blocked", "evidence": ".buildprint/world-proof.json" },
     "progression_core": { "status": "...", "evidence": "..." },
     "kanto_complete": { "status": "...", "evidence": ".buildprint/evidence-playthrough-kanto.md" },
     "postgame_sevii": { "status": "...", "evidence": "..." },
@@ -44,7 +45,7 @@ Produce `.buildprint/claim-gates.json` and finalize `.buildprint/playthrough-rec
   "computed_at": "ISO8601",
   "highest_honest_claim": "postgame_sevii | kanto_complete | ...",
   "story_validation": {
-    "maps_kanto": "82/82",
+    "maps_kanto": "88/88",
     "maps_sevii": "18/18",
     "quests_kanto": "25/25",
     "quests_sevii": "9/9",
@@ -61,6 +62,9 @@ npm run typecheck
 npm run test
 npm run data:validate
 npm run maps:validate
+npm run maps:render-proof
+npm run world:traverse-proof
+npm run world:proof:verify
 npm run assets:validate
 npm run story:validate
 npm run story:lint
@@ -77,7 +81,7 @@ Fresh new game playthrough log (human or scripted):
 4. ... or honest partial with lowered claim
 5. Champion Hall of Fame
 
-Each step: timestamp, map id, screenshot path optional.
+Each step: timestamp, map id, screenshot path, persisted save hash, and browser-trace reference. Screenshots are mandatory at every named checkpoint and must be bound to the current build by `references/world-verification.md`.
 
 ### Playthrough proof (postgame_sevii)
 
@@ -94,12 +98,15 @@ Lower claim if:
 - Ripped ROM assets found in repo
 - **sprite-audit.json fails or CP-VS not pass** — max claim is `overworld_core` or `data_pipeline` depending on what is proven
 - **Placeholder art on screen** for Pokémon or world despite battle logic passing
+- missing, stale, or failing `.buildprint/world-proof.json`; without full current renders, trace-backed traversal, and independent visual review, `kanto_complete` and `postgame_sevii` are forbidden
+- repeated/empty map renders, unresolved similarity findings, or debug-teleport-only checkpoint evidence
 
 ## DO NOT
 
 - Do not set `highest_honest_claim: postgame_sevii` without CP-F evidence
 - Do not omit failing tests from receipt
 - Do not claim "perfect" — use honest claim labels only
+- Do not accept hand-authored proof JSON, screenshots without TMX/save/trace binding, or a reviewer-selected showcase subset as full-world proof
 
 ## Minimum proof before moving on
 

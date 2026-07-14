@@ -16,6 +16,8 @@ read_order:
   - BUILDPRINT.md
   - references/asset-policy.md
   - references/world-art-sources.md
+  - alignment-slice/ALIGNMENT.md
+  - references/world-verification.md
   - references/data-sources-and-techniques-basis.md
   - 00-questions.md
   - 01-project-setup.md
@@ -33,6 +35,9 @@ packet_shape:
     - BUILDPRINT.md
     - references/asset-policy.md
     - references/world-art-sources.md
+    - assets/world/manifest.json
+    - alignment-slice/ALIGNMENT.md
+    - references/world-verification.md
     - references/data-sources-and-techniques-basis.md
     - 00-questions.md
     - 01-project-setup.md
@@ -64,7 +69,16 @@ story_scope:
     forbidden: [custom_svg, external_pokemon_packs, rom_extracts]
     cache_dir: public/data/generated/sprites/pokemon
   world_art:
-    user_choice: true
+    user_choice: false
+    confirmed_by: user
+    selected_strategy: safe_cc0_default
+    selected_mode: external_sprite_sheets
+    packet_bundle_dir: assets/world
+    packet_manifest: assets/world/manifest.json
+    alignment_contract: alignment-slice/ALIGNMENT.md
+    selected_sources:
+      - Kenney RPG Urban Pack
+      - OpenGameArt Top Down Pokemon-esque Sprites
     source_decision_is_hard_blocker: true
     question_id: world_overworld_art_mode
     source_reference: references/world-art-sources.md
@@ -107,7 +121,7 @@ story_scope:
     - npm run story:validate
     - npm run story:lint
   kanto_complete_requires:
-    maps: 82
+    maps: 88
     quests: 100_percent_from_story_graph
     rival_battles: 8
     mid_checkpoints: [CP-M1, CP-M2, CP-M3]
@@ -176,7 +190,7 @@ capability_maturity:
       claim: main story playable start to Champion
       required:
         - 100% quests in story-graph.yaml tagged kanto_complete
-        - 100% maps in map-manifest.yaml tagged kanto_complete (82 maps)
+        - 100% maps in map-manifest.yaml tagged kanto_complete (88 maps)
         - all 8 rival battles from rival-progression.yaml
         - all 8 gyms winnable in FRLG order
         - mandatory side quests (parcel, tea, rocket hideout, silph, safari, snorlax, tower)
@@ -231,9 +245,10 @@ central_output_contract:
     - battle_core visual certification requires `.buildprint/sprite-audit.json` pass + CP-VS + `.buildprint/ui-evidence.md`
     - world art source selection requires `.buildprint/decisions.md` + `docs/assets-provenance.md` + approved source strategy from `references/world-art-sources.md`
     - phase 06+ blocked until 05-playable-proof passes (see phase-index.yaml)
-    - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 82/82 maps
+    - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 88/88 maps
     - postgame_sevii requires `npm run story:validate -- --claim postgame_sevii` + CP-SeviiComplete
     - no ripped ROM assets in repo
+    - kanto_complete and postgame_sevii require a current `.buildprint/world-proof.json` pass bound to map renders, traversal trace, and independent visual review
 
 proven_implementation_requirements:
   rule: Use proven libraries, proven packages, and proven tools for the game engine, fixed-format export, rich editing of map/story data, document parsing or document extraction of imported references, drag/reorder authoring where lists are edited, provider-backed data ingestion where needed, task orchestration for long content work, frontend UI runtime, component/state styling, responsive viewport proof, design token enforcement, migration for saves/data, and reject from-scratch custom implementation when a maintained library is the safer base.

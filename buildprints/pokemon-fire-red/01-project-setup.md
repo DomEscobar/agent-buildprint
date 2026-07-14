@@ -41,9 +41,11 @@ Create a Vite + TypeScript + Phaser 3 project with:
 - `npm run data:fetch` — PokeAPI cache builder (may stub first run)
 - `npm run data:validate` — schema validation on generated JSON
 - `npm run maps:validate` — compare `data/maps/` to `data/story/map-manifest.yaml`
+- `npm run maps:render-proof` — render every required map through the production loader and write full-map PNGs, contact sheets, and a hash index
+- `npm run world:traverse-proof` — drive the production browser build, exercise map spawns/warps/reachability, and save a browser trace
 - `npm run story:validate` — compare `.buildprint/story-progress.json` to story graph
 - `npm run assets:validate` — Pokémon sprites from PokeAPI cache only; world art matches `world_art_mode`; starter + Route 1 species sprite files exist
-- `npm run assets:world:prepare` — download/copy selected world source packs into `third_party_assets/` and normalize runtime files
+- `npm run assets:world:prepare` — copy the committed packet assets from `assets/world/runtime/` into the applying project's `public/assets/`; no world-asset download in normal setup
 - `npm run assets:world:validate` — player/NPC/tiles/grass/building coverage and provenance checks
 - `npm run typecheck` — tsc --noEmit
 
@@ -58,6 +60,7 @@ Copy story contract files from Buildprint packet:
 
 Implement validators in `scripts/validate-maps.ts` and `scripts/validate-story.ts`.
 Implement world asset scripts in `scripts/prepare-world-assets.ts` and `scripts/validate-world-assets.ts`.
+Implement `scripts/render-map-proof.ts` and `scripts/verify-world-proof.ts` against `references/world-verification.md`; browser traversal belongs in a real Playwright test, not a mock map walker.
 
 Create before phase 01:
 
@@ -74,6 +77,7 @@ Create before phase 01:
 - `public/assets/world-source-manifest.json` — selected source strategy, source URLs, local originals, runtime outputs, coverage status
 - `.env.example` — non-secret runtime configuration and PokeAPI/cache knobs
 - `.buildprint/setup-receipt.md` — setup proof and blockers
+- `.buildprint/map-audit.json`, `.buildprint/map-render-index.json`, `.buildprint/world-traversal.json`, and `.buildprint/world-proof.json` — generated evidence schemas from `references/world-verification.md`; never prefill pass results
 
 Each architecture file: Mermaid diagram, component legend, Implementation Mapping section.
 
@@ -164,13 +168,11 @@ Implement `scripts/fetch-pokeapi.ts` that:
 
 Implement `scripts/prepare-world-assets.ts` that:
 
-1. Reads `.buildprint/decisions.md` for world source strategy and mode.
-2. For `safe_cc0_default`, accepts source archives/paths for approved sources from `references/world-art-sources.md` and copies originals under `third_party_assets/world/`.
+1. Reads `.buildprint/decisions.md` and `assets/world/manifest.json`; the confirmed mode is `external_sprite_sheets` and strategy is `safe_cc0_default`.
+2. Copies committed originals/provenance into `third_party_assets/world/` and committed runtime sheets into `public/assets/`. Normal setup must not download world assets.
 3. Extracts or copies runtime files into:
-   - `public/assets/ow/player.png`
-   - `public/assets/ow/npc-basic.png`
-   - `public/assets/tilesets/kanto-exterior.png`
-   - optional `public/assets/tilesets/kanto-interior.png`
+   - `public/assets/ow/player-npc.png`
+   - `public/assets/tilesets/kanto-world.png`
 4. Writes `public/assets/world-source-manifest.json` with source URL, license, original path, runtime path, dimensions, and coverage.
 5. Fails if required coverage is missing.
 
@@ -178,7 +180,7 @@ Implement `scripts/validate-world-assets.ts` that fails unless:
 
 - `docs/assets-provenance.md` exists and names the selected strategy
 - `public/assets/world-source-manifest.json` exists
-- player OW sheet has 4 directions and at least 4 frames per direction, or a documented equivalent
+- player OW sheet has front/back/side directions with standing and step frames, or a documented equivalent
 - NPC sheet exists
 - exterior 16x16 tileset exists
 - tall grass and building/door/warp coverage is declared

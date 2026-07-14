@@ -56,12 +56,12 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
 | Pokémon sprites | **always PokeAPI** (mandatory) | user | "we may use the https://pokeapi.co/docs/v2" | no | yes |
 | Scope ceiling | postgame_sevii | explicit_user_delegation | "perfect finished pokemon Gen 1 fire red" | no | yes |
 | Platform and stack | Browser: TS + Vite + Phaser 3 + Tiled | explicit_user_delegation | "coding agent needs to create" | no | yes |
-| World/player/NPC/tiles source strategy | **unanswered — agent must ask user or receive explicit delegation** | — | user said Pokémon=PokeAPI; world/player sprites now blocker | yes | yes |
+| World/player/NPC/tiles source strategy | **safe_cc0_default + external_sprite_sheets; committed under `assets/world/`** | user | "die sprites von den pokemon sollen aus der pokeapi kommen aber player, landscape world sprites nicht" | yes | no |
 | Fidelity mode | frlg_mechanics | explicit_user_delegation | FireRed remake scope | no | yes |
 | Legal/trademark posture | fan/educational + disclaimer | explicit_user_delegation | fan recreation | no | yes |
 | Product/artifact identity | Pokémon FireRed (Kanto + Sevii) | user | stated in request | no | yes |
 
-**Action for applying agent:** Ask question 3 (world art mode) if not answered. Copy all rows to `.buildprint/decisions.md` before setup.
+**Action for applying agent:** Copy all rows to `.buildprint/decisions.md` before setup. World art is already decided; do not ask again and do not replace the committed sheets with downloaded or generated substitutes.
 
 ## Assumable defaults
 

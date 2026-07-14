@@ -69,6 +69,10 @@ Any trigger below forces failure until repaired:
 - **Placeholder or flat-color sprites** for Pokémon, player, or map tiles when CP-VS or sprite-audit is claimed pass.
 - **Missing `.buildprint/sprite-audit.json`** or CP-VS screenshots when advancing past phase 05 battle engine.
 - **Battle_core claimed** without playable proof pass (damage tests alone insufficient).
+- **Kanto/Sevii world claim without current `.buildprint/world-proof.json` pass**, full render index/contact sheets, trace-backed traversal, and independent world visual review.
+- Duplicate, empty, single-tile, inaccessible, or debug-teleport-only maps counted toward 88/88 or 18/18.
+- Reused screenshots, missing TMX/save/trace hashes, or hand-authored pass JSON presented as generated proof.
+- Independent `world:proof:verify -- --recompute` output does not match the submitted bound proof.
 - Proof/debug console leakage into the primary player surface; record `proof-console-leakage` if any proof/debug UI dominates the player surface.
 - Missing UI evidence binder.
 - Weak action surface with no next powerful user action.
@@ -81,6 +85,7 @@ Capture into `.buildprint/screenshots/`:
 - 375 px mobile/narrow title, overworld, battle, menu
 - 1280 px desktop title, overworld, battle, party, bag, dialogue, shop, victory
 - A screenshot comparing the forbidden silhouette and adjacent at-risk silhouette against the current dominant surface
+- Both world contact sheets plus every full map render selected by the seeded random-review protocol in `references/world-verification.md`
 
 Use Playwright or equivalent browser screenshot tool chain. Each screenshot must list viewport, route/state, save fixture, and command.
 

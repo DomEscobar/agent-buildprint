@@ -39,12 +39,15 @@ Implement every quest tagged `required_for: kanto_complete` in `story-graph.yaml
 
 Every map in `map-manifest.yaml` tagged `kanto_complete` must:
 
-1. Exist as `data/maps/{map_id}.tmx`
-2. Load without error in `MapLoader`
-3. Have warps connecting to the story graph's `maps` list for that quest
+1. Exist as `data/maps/{map_id}.tmx`
+2. Load without error in `MapLoader`
+3. Have warps connecting to the story graph's `maps` list for that quest
+4. Pass the structural, render-every-map, similarity-review, and runtime traversal gates in `references/world-verification.md`
 
 ```bash
-npm run maps:validate   # must report 82/82 for kanto_complete
+npm run maps:validate   # must report 88/88 for kanto_complete
+npm run maps:render-proof -- --claim kanto_complete
+npm run world:traverse-proof -- --claim kanto_complete
 ```
 
 **Revoked:** the previous "50% of checklist maps" gate. Partial completion is a **blocker**, not pass.
@@ -96,10 +99,14 @@ Koga is **not** a gym in FRLG (Sabrina is 5th/6th depending on count — FRLG or
 - **CP-M1** (post-Misty): SS Anne ticket + Cut obtained
 - **CP-M2** (post-Silph): Silph Co cleared, Sabrina reachable
 - **CP-M3** (post-Giovanni): 8 badges, Route 22 rival 2 defeated
-- `npm run maps:validate` → 82/82
+- `npm run maps:validate` → 88/88
 - `npm run story:validate` → all kanto_complete quests complete
-- `.buildprint/evidence-phase-10.md` with quest checklist + map count
+- `.buildprint/evidence-phase-10.md` with quest checklist + map count
+- `.buildprint/map-audit.json` covers 88/88 Kanto maps with no unresolved duplicate, empty, or unreachable findings
+- `.buildprint/map-renders/contact-sheet-kanto.png` plus 88 full-resolution renders bound to current TMX hashes
+- `.buildprint/world-traversal.json` and browser trace prove every Kanto map loads, accepts legal movement, and has reachable warps; CP-M1/M2/M3 remain continuous save-backed runs, not debug-teleport proof
+- fresh-context reviewer completes the Kanto portion of `.buildprint/world-visual-review.md`, including randomly selected mid/late traversal samples and the five worst flaws
 
 ## Handoff note
 
-Quest completion table, maps 82/82, known blockers, HM Fly status, Safari implementation choice.
+Quest completion table, maps 88/88, known blockers, HM Fly status, Safari implementation choice.

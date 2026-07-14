@@ -1,0 +1,6 @@
+{"discovered_by": "manual", "domain": "github.com", "id": "src_0001", "priority": 0.5, "query": null, "source_type": "github", "status": "pending", "title": null, "url": "https://github.com/PokeAPI/sprites"}
+{"discovered_by": "manual", "domain": "raw.githubusercontent.com", "id": "src_0002", "priority": 0.5, "query": null, "source_type": "unknown", "status": "pending", "title": null, "url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/LICENCE.txt"}
+{"discovered_by": "manual", "domain": "pokeapi.co", "id": "src_0003", "priority": 0.5, "query": null, "source_type": "unknown", "status": "pending", "title": null, "url": "https://pokeapi.co/docs/v2"}
+{"discovered_by": "manual", "domain": "kenney.nl", "id": "src_0004", "priority": 0.5, "query": null, "source_type": "unknown", "status": "pending", "title": null, "url": "https://kenney.nl/assets/rpg-urban-pack"}
+{"discovered_by": "manual", "domain": "pixel-boy.itch.io", "id": "src_0005", "priority": 0.5, "query": null, "source_type": "unknown", "status": "pending", "title": null, "url": "https://pixel-boy.itch.io/ninja-adventure-asset-pack"}
+{"discovered_by": "manual", "domain": "opengameart.org", "id": "src_0006", "priority": 0.5, "query": null, "source_type": "unknown", "status": "pending", "title": null, "url": "https://opengameart.org/content/top-down-pokemon-esque-sprites"}

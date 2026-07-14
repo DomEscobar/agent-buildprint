@@ -74,9 +74,12 @@ Optional for `release_polish`; document in `rival-progression.yaml` postgame sec
 ## Minimum proof before moving on
 
 - **CP-F**: Reach One Island, meet Celio
-- **CP-SeviiComplete**: Network Machine complete, National Dex, Rainbow Pass, island 7 reachable
-- `npm run story:validate -- --claim postgame_sevii` passes
-- `.buildprint/evidence-phase-12.md`
+- **CP-SeviiComplete**: Network Machine complete, National Dex, Rainbow Pass, island 7 reachable
+- `npm run story:validate -- --claim postgame_sevii` passes
+- `.buildprint/evidence-phase-12.md`
+- `npm run maps:render-proof -- --claim postgame_sevii` produces 18/18 Sevii renders and `contact-sheet-sevii.png`
+- `npm run world:traverse-proof -- --claim postgame_sevii` binds continuous Champion-save-to-Sevii traversal evidence; debug teleport alone is invalid
+- independent world visual review resolves every Sevii similarity/render finding before `postgame_sevii` is claim-qualified
 
 ## Handoff note
 
