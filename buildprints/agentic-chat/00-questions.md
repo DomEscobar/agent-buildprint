@@ -34,7 +34,8 @@ After all hard-stop rows are user-confirmed, explicitly delegated, or recorded a
 - deterministic provider only as a test double in tests; the selected real provider must stream real tokens;
 - suggested stack starting points (local Ollama, Vercel AI SDK, SSE, SQLite, React + Vite + Tailwind) only when the user explicitly delegates the stack choice;
 - conservative UI scope that proves the first useful loop before breadth;
-- sample data only as novice/demo path, never as operator/live proof.
+- sample data only as novice/demo path, never as operator/live proof;
+- the exact first tool/skill implemented for phase-04 tool-calling proof (for example a calculator, note/file lookup, or a real search/weather call) may be chosen by the building agent, provided it is a real, working capability the agent authors or wires itself — not an assumed pre-existing/external tool and not a mock.
 
 **Scope-presentation mismatch is a hard-stop, not a default.** If the build will expose a broad product surface (full-featured UI, multi-panel workbench, multi-domain admin) while the runtime posture is a local proof or mock-only, that mismatch must be confirmed explicitly. Defaulting to a local proof stack while presenting as a full product is not a valid assumable default.
 

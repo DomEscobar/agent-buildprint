@@ -31,7 +31,7 @@ This packet is deliberately deep and **stack-neutral**. Provider/model, framewor
 **Level 3 — agentic_swarm (parallel multi-agent dispatching)** — built through `03-phases/05-swarm-dispatching.md`
 
 - A supervisor decomposes a goal and dispatches real parallel subagents with isolated context and scoped tool access.
-- Fan-in synthesis into one goal-tied answer, honest partial-failure handling, cancellation, and resumable swarm/subagent runs.
+- Fan-in synthesis into one goal-tied answer, honest partial-failure handling, cancellation, and resumable swarm/subagent runs replayed from a frozen decomposition plan artifact.
 
 Each level is a higher claim with its own proof. Lower levels never imply higher ones. Unproven levels stay honest blocked seams (`EXTENSIONS.md`) — designed but never stubbed or advertised as working.
 

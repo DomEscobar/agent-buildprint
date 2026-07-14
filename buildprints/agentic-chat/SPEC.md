@@ -43,7 +43,7 @@ Implemented through `03-phases/05-swarm-dispatching.md`.
 - isolated per-subagent context, scoped tool/MCP access, independent trace, and a per-subagent run record;
 - fan-in aggregation that the supervisor synthesizes into one goal-tied answer with honest partial-failure handling;
 - approval gate before spawning a side-effecting swarm, plus per-subagent and whole-swarm cancellation;
-- bounded per-subagent retry and resumable swarm/subagent state after restart.
+- bounded per-subagent retry and resumable swarm/subagent state after restart, replaying from a frozen decomposition plan artifact rather than re-invoking the supervisor.
 
 ## Honesty rule
 

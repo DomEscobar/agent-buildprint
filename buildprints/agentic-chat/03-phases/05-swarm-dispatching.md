@@ -21,11 +21,12 @@ Build the swarm on top of the proven phase-04 loop: each subagent is an instance
 
 Keep `02-ui-identity.md` open: swarm progress must render as an **inline, chat-native** affordance — a compact live panel of parallel workers attached to the supervisor message, each expandable to its own trace. It must not become a separate task dashboard or kanban that displaces the conversation thread.
 
-Build the smallest useful **supervisor/worker swarm** using multi-agent runtime techniques from `references/runtime-techniques-basis.md`: a user states a goal that benefits from parallel work; the supervisor (a model-driven step) decomposes it into typed subtasks with dependencies and records a **delegation ledger**; a **no-progress breaker** stops handoff/delegation drift; an approval gate fires before any side-effecting swarm; the dispatcher spawns subagents up to a concurrency limit; each subagent runs the phase-04 harnessed loop in isolation with scoped capability grants; the dispatcher streams per-subagent status; on completion (including partial failure) the supervisor performs fan-in synthesis with verifier/partial-failure honesty tied to the original goal; per-worker and swarm **run receipts** persist. The swarm run, subagent runs, and steps persist and resume after restart.
+Build the smallest useful **supervisor/worker swarm** using multi-agent runtime techniques from `references/runtime-techniques-basis.md`: a user states a goal that benefits from parallel work; the supervisor (a model-driven step) decomposes it into typed subtasks with dependencies and records a **delegation ledger**; once approved, the decomposition is frozen into a **`swarm_plan_artifact`**; a **no-progress breaker** stops handoff/delegation drift; an approval gate fires before any side-effecting swarm; the dispatcher spawns subagents up to a concurrency limit; each subagent runs the phase-04 harnessed loop in isolation with scoped capability grants; the dispatcher streams per-subagent status; on completion (including partial failure) the supervisor performs fan-in synthesis with verifier/partial-failure honesty tied to the original goal; per-worker and swarm **run receipts** persist. The swarm run, subagent runs, and steps persist and resume after restart — resume replays execution from the frozen `swarm_plan_artifact` rather than re-invoking the supervisor for a fresh (and possibly different) decomposition.
 
 Required runtime contracts (extend the phase-04 store; add a migration):
 
 - `swarm_run`: id, session id, parent agent run id, goal text, decomposition plan, concurrency limit, delegation ledger, no-progress breaker state, status (`planning`/`awaiting_approval`/`running`/`synthesizing`/`completed`/`failed`/`partial`/`cancelled`), aggregation/synthesis output, cancellation state, schema version.
+- `swarm_plan_artifact`: versioned, frozen snapshot of the approved decomposition (goal, ordered `subtask_spec` list with dependencies, assignees, retry policy) written once at `awaiting_approval`; restart/resume replays execution from this artifact instead of calling the supervisor again.
 - `delegation_ledger`: ordered handoff records with worker id, subtask id, typed result schema reference, and trace link.
 - `subtask_spec`: id, swarm id, typed objective, inputs, dependency ids, and assigned tool/MCP scope.
 - `subagent_run`: id, swarm id, subtask id, isolated context reference, status (`queued`/`running`/`completed`/`failed`/`blocked`/`cancelled`), retry count, output summary, and trace link to its own `agent_run`/`agent_step` records.
@@ -35,7 +36,7 @@ Product-proof contract for this phase:
 
 - Named product loop: Swarm Dispatch and Synthesis.
 - User/operator action: send a goal that needs parallel work; watch the supervisor decompose it; approve a side-effecting swarm; see multiple subagents run concurrently with live status; read the synthesized goal-tied answer; expand any subagent's independent trace; reload and confirm the swarm run, subagent runs, and aggregation persisted.
-- Named output/state: persisted `swarm_run`, ordered `subtask_spec` records, per-worker `subagent_run` records linked to their own `agent_run`/`agent_step` traces, the `aggregation_record` fan-in, approval/cancellation state, and the inline swarm-panel state attached to the supervisor message.
+- Named output/state: persisted `swarm_run`, the frozen `swarm_plan_artifact`, ordered `subtask_spec` records, per-worker `subagent_run` records linked to their own `agent_run`/`agent_step` traces, the `aggregation_record` fan-in, approval/cancellation state, and the inline swarm-panel state attached to the supervisor message.
 - Failure modes that must produce honest product-visible states: a subagent fails or times out (swarm continues, partial-failure synthesis is honest about gaps), all subagents fail (honest failed state, no fabricated answer), concurrency limit reached (queueing visible, not dropped work), whole-swarm cancellation (in-flight subagents cancelled, state persisted as `cancelled`), single-subagent cancellation, and persistence failure.
 - Concrete proof artifact: `.buildprint/evidence-phase-05.md` with an API/browser transcript and timing evidence proving the subagents ran **concurrently** (overlapping start/finish timestamps, not strictly sequential), at least one injected partial failure handled honestly, the supervisor fan-in synthesis tied to the goal, cancellation behavior, and persisted readback after restart.
 - Claim-gate artifact: `.buildprint/claim-gates.json` must include `agentic_swarm.status = pass` before this phase may raise the maturity claim. The gate must cite `SwarmConcurrencyEvidence`, `WorkerIsolationEvidence`, fan-in synthesis evidence, partial-failure evidence, cancellation evidence, UI state evidence, and `SwarmRestartEvidence`.
@@ -57,6 +58,7 @@ Required surface behavior:
 - Do not hide partial failures behind a confident synthesis; report what failed.
 - Do not let the swarm UI become a task dashboard/kanban that displaces the chat thread.
 - Do not regress the phase-04 single-agent loop or the streaming foundation.
+- Do not re-invoke the supervisor for a fresh decomposition on restart/resume; replay the frozen `swarm_plan_artifact` so the task graph is deterministic and auditable across restarts.
 - Do not ship placeholders, lorem ipsum, empty wrappers, or decorative-only swarm surfaces.
 - Do not create functionless buttons, inert worker rows, swallowed errors, or fake progress in the swarm panel.
 - Do not count mocked/sample data or fabricated subagent output as proof for real concurrent execution, persistence, or synthesis.
@@ -71,6 +73,7 @@ Required surface behavior:
 - Prove approval-gated dispatch for a side-effecting swarm, and both whole-swarm and single-subagent cancellation.
 - Prove each subagent had isolated context and scoped tool access.
 - Prove `swarm_run`, `subtask_spec`, `subagent_run`, and `aggregation_record` persist and read back after restart.
+- Prove resume replays from the frozen `swarm_plan_artifact` rather than re-invoking the supervisor, or record blockers.
 - Prove `delegation_ledger` and no-progress breaker behavior, or record blockers.
 - Prove per-worker and swarm-level run receipts, or record blockers.
 - Produce or update `.buildprint/claim-gates.json` and `.buildprint/claim-check.md`; if the swarm gate is missing, blocked, or has sequential timestamps, keep `agentic_swarm` unqualified.

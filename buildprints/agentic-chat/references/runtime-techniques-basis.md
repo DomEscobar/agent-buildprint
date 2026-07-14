@@ -125,6 +125,24 @@ Record as honest blockers in `EXTENSIONS.md` until implemented:
 - **Sequential subagents labeled parallel** — fails `agentic_swarm` claim.
 - **Flat chat transcript as the only state** — no harness, no append-only events, no resumable run records.
 - **Self-certifying completion** — worker decides it is done without verifier or typed blocker.
+- **Assumed pre-existing/external tool as the only proof** — the building agent must implement or wire at least one real tool/skill/MCP server itself during phase 04; pointing at a hypothetical third-party tool it never authored or configured does not satisfy `SelfImplementedActionEvidence`.
+- **Deterministic test double as the phase-04 proof provider** — the tool-calling and action-selection evidence must run against a live, real-running provider connection (local model runtime or paid provider actually invoked); the test double is a unit-test fixture only.
+
+## Live proof requirements (no paid-key mandate)
+
+"Live" means a real, running model connection actually invoked — not that a paid API key is required. A free local model runtime (for example Ollama) satisfies this as long as it is genuinely reachable and streaming real tokens; the deterministic test double never does. Pair this with a real tool/skill/MCP server the building agent authors or wires itself (see `01-project-setup.md` and `03-phases/04-agentic-loop-runtime.md`) so the tool-calling proof exercises actual working logic, not an assumed external capability.
+
+## Reference implementation: open-multi-agent (OMA)
+
+[open-multi-agent/open-multi-agent](https://github.com/open-multi-agent/open-multi-agent) is a TypeScript multi-agent orchestration framework (MIT, production use, 6k+ stars) that implements several of the techniques above concretely enough to adopt their shape directly:
+
+- **Frozen Plan Artifact + Replay** (`planOnly` → `createPlanArtifact` → `runFromPlan`) — the supervisor/coordinator decomposition runs once and freezes as a versioned, diffable JSON artifact (task ids, dependencies, assignees, retry policy); replay re-executes the exact graph without re-invoking the supervisor. This is the concrete mechanism this packet's `SwarmRun` resumability should implement: freeze the approved decomposition as a `SwarmPlanArtifact`, then restart/resume replays execution from that artifact instead of re-planning — deterministic, auditable, and cheaper than a fresh supervisor call.
+- **Proposer→Judge Consensus Loop** (`runConsensus`: a proposer emits an answer, a judge roster tries to refute it over bounded rounds, a quorum decides accept/reject, dissent optionally feeds back for revision) — a concrete, stronger implementation option for this packet's `VerifierResult` requirement, especially valuable for swarm fan-in synthesis or any high-stakes final answer.
+- **Budget invariant** — consensus/judge/delegation/subagent token usage all roll into the *same* run-level budget as the rest of the pipeline; there is no separate, bypassable sub-budget. This packet's `BudgetPolicy` must enforce the same invariant: model turns, tool calls, verifier/consensus rounds, and subagent/delegation spend all count against one run-level budget, never fragmented per-feature budgets that let total spend exceed the real ceiling.
+- **Named context strategies** (`sliding-window`, `summarize`, rule-based `compact`, `custom`) plus **already-consumed tool-result compression** (replace tool output with a short marker once the agent has acted on it) and **per-tool/per-agent output truncation** (head+tail excerpt with a marker) — concrete shapes for this packet's `ContextPack`/context-packing requirement, so compaction is a deliberate pluggable strategy rather than unspecified trimming.
+- **Deterministic model-routing rule table** (`modelRouting`: match by `phase`/`agent`/`taskRole`/`taskPriority`/`leaf`/`hasDependencies`, first match wins, opt-in, non-mutating) — a concrete shape for the optional "model cascading / tiered routing" seam in `EXTENSIONS.md`, should a builder implement it.
+
+Source: https://github.com/open-multi-agent/open-multi-agent — `docs/consensus.md`, `docs/plan-replay.md`, `docs/model-routing.md`, `docs/context-management.md`, `docs/checkpoint.md`.
 
 ## Architecture implications
 

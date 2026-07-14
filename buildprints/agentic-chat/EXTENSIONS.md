@@ -25,8 +25,8 @@ Hard rule: do not advertise an unavailable adapter as working. Either prove it t
 ### Tools and skills (phase 04)
 
 - Seam: a `tool_request` → `policy_result` → `approval_record` → `tool_result` path that runs through the same turn/event pipeline as a model turn.
-- Built rules: model-driven selection via the provider's native tool/function-calling interface (never keyword/regex intent matching), explicit allowlist, typed results, audit records, inline approval/block UI attached to the message, tool error recovery as observations, and no execution from implicit model text.
-- Proof: the model autonomously selects a deterministic safe tool that executes; a dangerous/unconfigured action blocks without side effect; both persist audit records.
+- Built rules: model-driven selection via the provider's native tool/function-calling interface (never keyword/regex intent matching), explicit allowlist, typed results, audit records, inline approval/block UI attached to the message, tool error recovery as observations, and no execution from implicit model text. The building agent implements or wires at least one real tool, skill, or MCP server itself during phase 04 — an assumed pre-existing/external capability the agent did not author or configure does not satisfy this seam.
+- Proof: the model autonomously selects, over a live real-running provider connection (not the deterministic test double), a real safe tool/skill the building agent implemented or wired itself; a dangerous/unconfigured action blocks without side effect; both persist audit records citing the authored tool's file/module reference (`SelfImplementedActionEvidence`).
 
 ### MCP policy (phase 04)
 
@@ -52,7 +52,7 @@ Core telemetry (per-turn/per-provider tokens, latency, cost) ships at the founda
 
 These techniques from the runtime catalog are **designed seams**, not hidden stubs:
 
-- **Model cascading / tiered routing** — cost-quality routing across models.
+- **Model cascading / tiered routing** — cost-quality routing across models. If implemented, use a deterministic, opt-in rule table (match by phase/agent/role/priority/leaf-position, first match wins, no mutation of the underlying agent config) rather than ad hoc branching — see the `open-multi-agent` model-routing reference in `references/runtime-techniques-basis.md`.
 - **Semantic / prompt caching** — repeated-prefix cost reduction.
 - **A2A remote agent protocol** — third-party remote agents beyond local MCP.
 - **Research loop artifacts** — source ledger, citation verifier, gap analysis (unless user extends scope).

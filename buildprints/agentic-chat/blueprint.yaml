@@ -136,6 +136,9 @@ execution_model:
       - cancellation with dangling tool-call repair before the next model request
       - model-driven action selection across model, tool, skill, MCP, and memory paths (not user-typed slash commands or keyword pattern-matching)
       - ActionSelectionEvidence proving provider-native tool/function calling or a normalized model action record, not slash commands, keywords, regex, or button-only routing
+      - at least one tool, skill, or MCP server implemented or wired by the building agent during this build (not an assumed pre-existing/external capability) as the live proof target
+      - SelfImplementedActionEvidence citing the authored file/module and the commit/change that added it
+      - the action-selection proof trace was captured against a live, real-running provider connection (local or paid, per 00-questions), never the deterministic test double
       - context packing or compaction before model calls with trust-zone labels and budget check
       - prompt-injection action firewall screening proposed actions against original user intent when untrusted context influenced the model
       - scoped capability grants per action with expiry; no unscoped global tool access
@@ -165,6 +168,7 @@ execution_model:
       - approval gate before spawning a swarm that performs side effects
       - per-subagent and whole-swarm cancellation
       - bounded per-subagent retry and partial-failure handling (some workers fail, swarm still synthesizes honestly)
+      - a frozen decomposition plan artifact (SwarmPlanArtifact) enabling restart/resume to replay the exact task graph without re-invoking the supervisor
       - resumable swarm run, subagent records, and aggregation after restart
       - per-worker and swarm-level run receipts
       - SwarmRestartEvidence for swarm_run, subtask_spec, subagent_run, per-worker agent traces, and aggregation_record
@@ -201,12 +205,14 @@ capability_maturity:
         - stateful harness with steering queue, cancellation, and dangling tool-call repair
         - planning/next-step loop with stale-plan replan
         - model-driven action selection via provider tool/function calling, not slash commands or keyword pattern-matching
+        - at least one tool/skill/MCP server implemented or wired by the building agent itself, exercised live over a real-running provider connection (not the deterministic test double)
         - context packing with trust zones before model calls
         - prompt-injection action firewall and scoped capability grants
         - tool/skill execution policy with typed results and tool error recovery
         - MCP adapter posture and allowlist boundary when enabled
         - memory/compaction read/write policy with audit trail
         - runtime budget policy and loop detection circuit breaker
+        - single run-level budget invariant covering model, tool, verifier/consensus, and subagent/delegation spend
         - idempotency keys on write/external side effects where needed
         - verifier or goal done-check before final synthesis
         - run receipt and append-only session event log
@@ -225,6 +231,7 @@ capability_maturity:
         - approval gate before side-effecting swarms
         - per-subagent and whole-swarm cancellation
         - bounded retry and honest partial-failure synthesis
+        - a frozen decomposition plan artifact enabling restart/resume replay without re-invoking the supervisor
         - resumable swarm run, subagent records, and aggregation after restart
         - benchmark evidence that the swarm build beats a single-agent and normal plan-mode baseline on completeness, latency-aware orchestration, UI, runtime behavior, and proof quality
         - .buildprint/claim-gates.json records agentic_swarm.status as pass with cited evidence
@@ -285,6 +292,7 @@ runtime_techniques:
     reliability:
       - loop detection and no-progress circuit breaker
       - runtime budget policy for tokens, time, tool calls, steps, and cost
+      - single run-level budget invariant covering model, tool, verifier/consensus, and subagent/delegation spend — no separate bypassable sub-budget
       - tool error-to-observation recovery with typed taxonomy
       - idempotency keys on write/external side effects
       - stale-plan detection and replan trigger
@@ -368,6 +376,7 @@ central_output_contract:
     - durability requires persistence readback after restart or blocker
     - public hosting requires auth, abuse, and secrets proof
     - agentic_chat requires a model-driven action selection trace (provider tool/function call) plus an approval-gated, audited tool/MCP/memory execution, not a slash-command demo
+    - agentic_chat requires at least one tool/skill/MCP server implemented or wired by the building agent itself, proven live over a real-running provider connection, not the deterministic test double and not an assumed pre-existing capability
     - agentic_swarm requires a real parallel subagent run trace with isolated per-worker context and a supervisor fan-in synthesis, not sequential or fabricated workers
     - if only streaming_chat_core passes, the handoff must say agentic_chat and agentic_swarm remain unqualified
   minimum_standard: A user-selected real provider streams chat tokens incrementally through the provider interface; the turn is persisted, inspectable through route/usage/trace, and survives readback. The deterministic provider exists only as a test fixture, never as the delivered outcome. This is the streaming core floor, not an agentic claim. To claim agentic_chat, the model autonomously selects an allowlisted action, the side effect is approval-gated and audited, and the observation re-enters the loop. To claim agentic_swarm, a supervisor dispatches real parallel subagents and synthesizes their fan-in results into one goal-tied answer with honest partial-failure handling.
@@ -461,7 +470,7 @@ proven_implementation_requirements:
     agentic_action_loop:
       requirement: Implement model-driven action selection using the provider's native tool/function-calling interface (or an equivalent structured-output contract). Wrap the loop in a stateful harness that separates the agent brain from UI/session/persistence, with caller-owned transcript, provider-neutral events, steering/follow-up queue, cancellation, and dangling tool-call repair. Each action runs through context packing with trust zones, prompt-injection action screening, scoped capability grants, typed policy → approval → execution → observation, tool error recovery, loop detection, runtime budget policy, idempotency keys on write/external effects, verifier/goal done-check, run receipt emission, and append-only session events. Use a proven agent-orchestration approach (provider tool-calling loop, or a library such as the Vercel AI SDK, LangGraph, or an explicit typed state machine); do not hand-roll fragile regex intent parsing.
     tools_skills_mcp:
-      requirement: Tools, skills, and MCP servers run through one allowlist-gated policy path with typed inputs/outputs, audit records, inline approval/block UI attached to the message, and no execution from implicit model text. External MCP/browser/file execution stays blocked until allowlist, credentials, side-effect class, timeout/error handling, and proof exist.
+      requirement: Tools, skills, and MCP servers run through one allowlist-gated policy path with typed inputs/outputs, audit records, inline approval/block UI attached to the message, and no execution from implicit model text. External MCP/browser/file execution stays blocked until allowlist, credentials, side-effect class, timeout/error handling, and proof exist. The building agent must implement or wire at least one real tool, skill, or MCP server itself during phase 04 as the live proof target — assuming a pre-existing/external capability the agent did not author or configure does not satisfy this requirement. That action must be exercised through a live, real-running provider connection (local model runtime or paid provider actually invoked), never the deterministic test double.
     memory_and_compaction:
       requirement: Scoped memory read/write decisions (auto-write/ask/skip/block) and compaction summaries that affect or explain a real turn, summarized in product language (no raw vector/store dumps), with privacy/retention posture and audit trail.
     swarm_orchestration:

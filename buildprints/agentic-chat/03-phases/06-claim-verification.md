@@ -60,6 +60,7 @@ Product-proof contract for this phase:
     "action_screening_against_user_intent": "<evidence id>",
     "scoped_capability_grants": "<evidence id>",
     "runtime_budget_policy": "<evidence id>",
+    "single_run_level_budget_invariant": "<evidence id>",
     "loop_breaker_or_no_progress_stop": "<evidence id>",
     "verifier_or_goal_done_check": "<evidence id>",
     "run_receipt_export": "<evidence id>",
@@ -67,6 +68,8 @@ Product-proof contract for this phase:
     "idempotency_on_write_external_effects": "<evidence id>",
     "model_driven_action_selection": "<pass/fail/blocker>",
     "provider_tool_call_or_normalized_action_trace": "<evidence id>",
+    "self_implemented_tool_or_mcp_evidence": "<evidence id citing authored file/module>",
+    "live_provider_connection_not_test_double": "<evidence id>",
     "no_slash_keyword_or_regex_intent_routing": "<evidence id>",
     "approval_or_block_before_side_effect": "<evidence id>",
     "typed_execution_result": "<evidence id>",
@@ -80,6 +83,7 @@ Product-proof contract for this phase:
     "status": "pass | fail | blocked",
     "delegation_ledger": "<evidence id>",
     "no_progress_breaker": "<evidence id>",
+    "frozen_plan_artifact_replay": "<evidence id>",
     "per_worker_run_receipts": "<evidence id>",
     "supervisor_decomposition": "<evidence id>",
     "bounded_concurrency_primitive": "<evidence id>",
@@ -105,7 +109,10 @@ If an evidence field cannot cite a concrete artifact, set the level to `blocked`
 
 - The model selected the action through provider-native tool/function calling or a normalized model action record. User-typed slash commands, keyword matching, regex intent routing, button-only action selection, or deterministic shortcut code fail this gate.
 - The trace contains an `ActionSelectionEvidence` record with: model/provider request id, model/provider response id or normalized action id, selected tool/skill/MCP/memory id, typed arguments, model rationale or tool-call payload, originating message id, policy result, approval requirement, and side-effect class.
+- The trace contains `SelfImplementedActionEvidence`: at least one tool/skill/MCP server was authored or wired by the building agent itself during this build, with a citable file/module reference — an assumed pre-existing/external capability alone does not satisfy this gate.
+- The action-selection proof trace was captured against a live, real-running provider connection (local model runtime or paid provider actually invoked), not the deterministic test double.
 - The trace contains harness, budget, loop-breaker, verifier, run receipt, and session-event evidence, or the gate records exact blockers.
+- The budget policy enforces a single run-level invariant: model, tool, verifier/consensus, and subagent/delegation spend all count against one budget, not separate, bypassable sub-budgets.
 - At least one side-effecting action is denied or left unapproved and the proof shows no side effect executed. A UI card saying "approval required" is insufficient without the audit result.
 - At least one allowed action produces a typed `ActionResult` and the result is fed back into the next model step as an observation. The final answer must reflect that observation; a scripted local append does not count.
 - The trace contains bounded critique/retry/recovery for one failure or blocked action.
@@ -119,6 +126,9 @@ Hard failures that force `agentic_chat.status = fail`:
 - missing runtime budget policy or loop breaker on multi-step runs
 - final synthesis without verifier pass or honest typed blocker
 - missing run receipt or session-event readback
+- budget policy is fragmented into separate per-feature (tool/verifier/subagent) budgets that let total spend exceed the configured run-level ceiling
+- no tool/skill/MCP server was implemented or wired by the building agent — only an assumed pre-existing/external capability, prose, or a config reference is offered as proof
+- the action-selection proof trace used the deterministic test double instead of a live, real-running provider connection
 - action selection is slash-command, keyword, regex, or button-only
 - model text implicitly triggers side effects
 - action execution occurs before approval for `write` or `external` side effects
@@ -139,7 +149,8 @@ Hard failures that force `agentic_chat.status = fail`:
 - The fan-in `AggregationRecord` cites each worker output, records any failed/blocked worker, and the supervisor synthesis is tied to the original user goal.
 - At least one injected worker failure or timeout produces honest partial-failure synthesis instead of a fabricated complete answer.
 - Whole-swarm cancellation and single-worker cancellation are proven or explicitly blocked with exact missing runtime support.
-- `swarm_run`, `subtask_spec`, `subagent_run`, per-worker `agent_run`/`agent_step`, and `aggregation_record` read back after reload or restart.
+- Restart/resume replays execution from a frozen `swarm_plan_artifact` rather than re-invoking the supervisor for a fresh decomposition.
+- `swarm_run`, `swarm_plan_artifact`, `subtask_spec`, `subagent_run`, per-worker `agent_run`/`agent_step`, and `aggregation_record` read back after reload or restart.
 - The UI evidence shows the compact inline swarm panel, worker status, failure/partial state, cancellation, synthesis, and restored run in the conversation context.
 
 Hard failures that force `agentic_swarm.status = fail`:
@@ -151,6 +162,7 @@ Hard failures that force `agentic_swarm.status = fail`:
 - partial worker failure is hidden
 - concurrency timestamps are missing or strictly sequential
 - persisted swarm readback is missing
+- restart/resume re-invokes the supervisor for a new decomposition instead of replaying the frozen `swarm_plan_artifact`
 - the UI advertises swarm behavior while only a single-agent loop is proven
 
 ## DO NOT
