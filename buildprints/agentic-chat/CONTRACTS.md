@@ -4,6 +4,8 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 
 ## Foundation contracts (streaming_chat_core)
 
+- `UserIntentContract`: user-confirmed primary user, representative natural-language goal, input/context boundary, expected useful result or decision, observable acceptance criteria, and unsafe/out-of-scope outcomes. It is versioned in `.buildprint/decisions.md` and inherited by architecture, UI identity, runtime policy, and evidence.
+- `OutcomeAlignmentEvidence`: UserIntentContract version, originating message id, session/run/trace ids, produced result reference, acceptance-criterion verdicts, policy/approval or blocked-action record when relevant, and a statement of which criteria remain unproven. It proves that a live trace served the user's stated outcome rather than a convenient generic demo.
 - `ArchitecturePacket`: setup-created `architecture/*.md` files with Mermaid diagrams, product-specific components, labeled edges, state/failure notes, claim ceilings, and implementation mappings.
 - `ProjectStructurePlan`: setup-created `PROJECT_STRUCTURE.md` organized by Agentic Chat product/runtime responsibility, with ownership, exclusions, architecture mapping, and tests/evals for each top-level source area.
 - `ArchitectureStructureTrace`: setup-created `ARCHITECTURE_STRUCTURE_TRACE.md` proving component-to-file-to-proof traceability and recording the anti-lazy architecture score.
@@ -27,7 +29,7 @@ This compatibility file summarizes product vocabulary only. `BUILDPRINT.md`, `01
 - `CapabilityGrant`: scoped tool/MCP/data access for one action or subtask, with expiry/revocation and audit link.
 - `ActionScreening`: prompt-injection action firewall result comparing proposed action to original user intent when untrusted context influenced the model (`allow` / `block` / `escalate`).
 - `VerifierResult`: goal acceptance check, rubric/tests outcome, or typed blocker preventing fake completion; may be a single-judge check or a stronger proposer→judge consensus loop (bounded rounds, quorum, dissent-driven revision) for high-stakes actions or swarm fan-in synthesis.
-- `RunReceipt`: exportable structured record of run id, goal, steps, tool calls, approvals, budgets, errors, synthesis, provenance links, and redaction policy.
+- `RunReceipt`: exportable structured record of run id, UserIntentContract version, goal, steps, tool calls, approvals, budgets, errors, synthesis, provenance links, outcome-alignment verdict, and redaction policy.
 - `IdempotencyKey`: key/ledger entry for write/external side effects to prevent duplicate execution on retry or crash recovery.
 - `ToolSpec` / `SkillSpec`: id, description, typed JSON input/output schema, side-effect class (`none`/`read`/`write`/`external`), and allowlist status. Exposed to the model as native tool/function definitions.
 - `McpServerSpec`: server id, transport/command, connection posture, allowlisted tools, credential posture, side-effect class, and timeout/error policy.

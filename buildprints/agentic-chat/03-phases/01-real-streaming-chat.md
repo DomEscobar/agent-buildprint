@@ -36,10 +36,10 @@ Required runtime contracts:
 Product-proof contract for this phase:
 
 - Named product loop: Real Streaming Chat Turn.
-- User/operator action: create or open a session, send one message to the real default model, observe the first assistant token before completion, inspect the inline/API trace, reload or restart, and read the persisted conversation back.
+- User/operator action: create or open a session, send the representative goal from the confirmed User Intent Contract to the real default model, observe the first assistant token before completion, inspect the inline/API trace, reload or restart, and read the persisted conversation back.
 - Named output/state: persisted `session`, user `message`, assistant `message`, ordered `stream_event` records, `provider_route`, `telemetry`, and `checkpoint` with schema version or migration path.
 - Failure modes: missing/unreachable model runtime, unknown provider, provider timeout, stream cancellation via `AbortSignal`, duplicate/repeated appends, and persistence write/read failure must produce product-visible blocked or failed states without fake assistant completion.
-- Concrete proof artifact: `.buildprint/evidence-phase-01.md` with an API/browser transcript proving incremental real-token streaming, first-token-before-completion timing, persisted readback after process restart, unreachable-model and unknown-provider blocked responses, and the concurrency/corruption stance.
+- Concrete proof artifact: `.buildprint/evidence-phase-01.md` with an API/browser transcript proving incremental real-token streaming, first-token-before-completion timing, persisted readback after process restart, unreachable-model and unknown-provider blocked responses, and the concurrency/corruption stance. It must include `OutcomeAlignmentEvidence` linking the confirmed representative goal, session/turn ids, visible useful result, and any unmet acceptance criterion or blocker.
 
 Required surface behavior:
 
@@ -69,6 +69,7 @@ This phase should leave a user, operator, or developer with a real path they can
 - Run the relevant build/test/typecheck/runtime command or record why it cannot run.
 - Inspect the real streaming chat path through UI/API/CLI/runtime, not only source files.
 - Prove the first `model.delta` from the real model is observed before `turn.completed`.
+- Prove the live turn used the confirmed representative goal and record `OutcomeAlignmentEvidence`; a generic “hello” or provider smoke prompt is insufficient as product proof.
 - Prove persistence/readback for session, messages, stream events, provider route, telemetry, and checkpoint after restart, or record the exact persistence blocker.
 - Prove unreachable-model and unknown-provider states block honestly without faking a deterministic success.
 - Prove `AbortSignal` cancellation produces a persisted `turn.failed{cancelled}` state.

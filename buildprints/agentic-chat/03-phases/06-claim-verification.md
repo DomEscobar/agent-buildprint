@@ -23,7 +23,7 @@ Before claiming completion, read:
 - `03-phases/05-swarm-dispatching.md`
 - `blueprint.yaml` (`execution_model`, `capability_maturity`, and `central_output_contract`)
 
-Then create `.buildprint/claim-gates.json` and `.buildprint/claim-check.md`. The JSON is the machine-readable verdict. The Markdown explains the evidence in human terms. Both must cite real files, commands, browser/API transcripts, timestamps, screenshot paths, and persisted record ids.
+Then create `.buildprint/claim-gates.json` and `.buildprint/claim-check.md`. The JSON is the machine-readable verdict. The Markdown explains the evidence in human terms. Both must cite real files, commands, browser/API transcripts, timestamps, screenshot paths, persisted record ids, and the confirmed User Intent Contract version used by each live scenario.
 
 ## Building objective
 
@@ -50,6 +50,7 @@ Product-proof contract for this phase:
   "highest_honest_claim": "streaming_chat_core | agentic_chat | agentic_swarm",
   "streaming_chat_core": {
     "status": "pass | fail | blocked",
+    "outcome_alignment": "<OutcomeAlignmentEvidence id>",
     "evidence": ["<file/path#line-or-record-id>"]
   },
   "agentic_chat": {
@@ -77,6 +78,7 @@ Product-proof contract for this phase:
     "critique_retry_or_recovery": "<evidence id>",
     "persisted_restart_readback": "<evidence id>",
     "ui_state_evidence": "<screenshot/source evidence id>",
+    "outcome_alignment": "<OutcomeAlignmentEvidence id>",
     "hard_failures": []
   },
   "agentic_swarm": {
@@ -96,6 +98,7 @@ Product-proof contract for this phase:
     "cancellation": "<evidence id>",
     "persisted_restart_readback": "<evidence id>",
     "ui_state_evidence": "<screenshot/source evidence id>",
+    "outcome_alignment": "<OutcomeAlignmentEvidence id>",
     "hard_failures": []
   }
 }
@@ -118,6 +121,7 @@ If an evidence field cannot cite a concrete artifact, set the level to `blocked`
 - The trace contains bounded critique/retry/recovery for one failure or blocked action.
 - `agent_run`, ordered `agent_step`, `action_request`, `policy_result`, `approval_record` when applicable, `action_result`, `agent_trace`, `session_event` log, and `run_receipt` read back after reload or process restart with the same ids/order.
 - The UI evidence shows the plan/next-step, approval/block, action result, observation, retry/recovery, and restored trace in a chat-native surface.
+- `OutcomeAlignmentEvidence` proves the trace began with the confirmed representative goal, the verifier evaluated its stated acceptance criteria, and the final synthesis either met them or names the exact unmet criterion/blocker.
 
 Hard failures that force `agentic_chat.status = fail`:
 
@@ -136,6 +140,7 @@ Hard failures that force `agentic_chat.status = fail`:
 - evidence uses sample/mock-only data while claiming a real runtime path
 - persisted trace readback is missing
 - the UI advertises agentic behavior but only a streaming chat path is proven
+- the trace proves a generic tool demo but cannot tie its final result to the confirmed User Intent Contract and acceptance criteria
 
 ## Swarm hard gate
 
@@ -152,6 +157,7 @@ Hard failures that force `agentic_chat.status = fail`:
 - Restart/resume replays execution from a frozen `swarm_plan_artifact` rather than re-invoking the supervisor for a fresh decomposition.
 - `swarm_run`, `swarm_plan_artifact`, `subtask_spec`, `subagent_run`, per-worker `agent_run`/`agent_step`, and `aggregation_record` read back after reload or restart.
 - The UI evidence shows the compact inline swarm panel, worker status, failure/partial state, cancellation, synthesis, and restored run in the conversation context.
+- `OutcomeAlignmentEvidence` ties the frozen decomposition, worker outputs, and supervisor synthesis back to the same confirmed goal and records acceptance criteria affected by partial failure.
 
 Hard failures that force `agentic_swarm.status = fail`:
 
@@ -164,6 +170,7 @@ Hard failures that force `agentic_swarm.status = fail`:
 - persisted swarm readback is missing
 - restart/resume re-invokes the supervisor for a new decomposition instead of replaying the frozen `swarm_plan_artifact`
 - the UI advertises swarm behavior while only a single-agent loop is proven
+- the swarm only proves generic parallelism and cannot show how its synthesis satisfies the confirmed user outcome
 
 ## DO NOT
 
@@ -193,6 +200,7 @@ The checker must derive `highest_honest_claim`; builders do not choose it manual
 - `.buildprint/claim-check.md` summarizes pass/fail/blocker status per maturity level and names every hard failure.
 - `HANDOVER.md` uses the same `highest_honest_claim` as `.buildprint/claim-gates.json`.
 - Screenshots and transcripts referenced by the gate exist.
+- Every passing level cites `OutcomeAlignmentEvidence`; otherwise it is blocked even if its technical trace exists.
 - Restart/readback evidence exists for every passed level.
 - The final critical review phase consumes this gate and does not override it with prose confidence.
 

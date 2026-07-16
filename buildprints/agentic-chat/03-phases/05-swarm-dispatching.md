@@ -15,7 +15,7 @@ Before writing code, read:
 - `04-agentic-loop-runtime.md` — the swarm reuses the proven single-agent loop as the worker runtime
 - `01-project-setup.md` and `02-ui-identity.md`
 
-Build the swarm on top of the proven phase-04 loop: each subagent is an instance of the single-agent action loop with its own run id, isolated context window, and scoped tool/MCP allowlist. Do not invent a second, weaker agent implementation for workers. Use a real concurrency primitive (worker pool / bounded task queue / `Promise`-based scheduler with a concurrency cap), not sequential awaits.
+Build the swarm on top of the proven phase-04 loop: each subagent is an instance of the single-agent action loop with its own run id, isolated context window, and scoped tool/MCP allowlist. The supervisor must decompose the confirmed representative goal and preserve its acceptance criteria in each `SubtaskSpec` and the fan-in verifier; do not demonstrate concurrency on an unrelated generic task. Do not invent a second, weaker agent implementation for workers. Use a real concurrency primitive (worker pool / bounded task queue / `Promise`-based scheduler with a concurrency cap), not sequential awaits.
 
 ## Building objective
 
@@ -38,7 +38,7 @@ Product-proof contract for this phase:
 - User/operator action: send a goal that needs parallel work; watch the supervisor decompose it; approve a side-effecting swarm; see multiple subagents run concurrently with live status; read the synthesized goal-tied answer; expand any subagent's independent trace; reload and confirm the swarm run, subagent runs, and aggregation persisted.
 - Named output/state: persisted `swarm_run`, the frozen `swarm_plan_artifact`, ordered `subtask_spec` records, per-worker `subagent_run` records linked to their own `agent_run`/`agent_step` traces, the `aggregation_record` fan-in, approval/cancellation state, and the inline swarm-panel state attached to the supervisor message.
 - Failure modes that must produce honest product-visible states: a subagent fails or times out (swarm continues, partial-failure synthesis is honest about gaps), all subagents fail (honest failed state, no fabricated answer), concurrency limit reached (queueing visible, not dropped work), whole-swarm cancellation (in-flight subagents cancelled, state persisted as `cancelled`), single-subagent cancellation, and persistence failure.
-- Concrete proof artifact: `.buildprint/evidence-phase-05.md` with an API/browser transcript and timing evidence proving the subagents ran **concurrently** (overlapping start/finish timestamps, not strictly sequential), at least one injected partial failure handled honestly, the supervisor fan-in synthesis tied to the goal, cancellation behavior, and persisted readback after restart.
+- Concrete proof artifact: `.buildprint/evidence-phase-05.md` with an API/browser transcript and timing evidence proving the subagents ran **concurrently** (overlapping start/finish timestamps, not strictly sequential), at least one injected partial failure handled honestly, the supervisor fan-in synthesis tied to the goal, cancellation behavior, and persisted readback after restart. It must contain `OutcomeAlignmentEvidence` mapping the confirmed goal and acceptance criteria to the decomposition, worker outputs, fan-in synthesis, and any criteria left blocked by partial failure.
 - Claim-gate artifact: `.buildprint/claim-gates.json` must include `agentic_swarm.status = pass` before this phase may raise the maturity claim. The gate must cite `SwarmConcurrencyEvidence`, `WorkerIsolationEvidence`, fan-in synthesis evidence, partial-failure evidence, cancellation evidence, UI state evidence, and `SwarmRestartEvidence`.
 
 Required surface behavior:
@@ -67,6 +67,7 @@ Required surface behavior:
 ## Minimum proof before moving on
 
 - Run the relevant build/test/typecheck/runtime command or record why it cannot run.
+- Prove the frozen decomposition and fan-in synthesis serve the confirmed representative goal; record `OutcomeAlignmentEvidence` rather than treating generic parallel execution as user-outcome proof.
 - Prove via timestamps that at least two subagents ran concurrently under the concurrency limit.
 - Prove the supervisor decomposed the goal into typed subtasks and synthesized a goal-tied answer from the fan-in.
 - Prove an injected subagent failure produced honest partial-failure synthesis, not a fabricated complete answer.

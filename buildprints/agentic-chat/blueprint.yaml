@@ -199,6 +199,7 @@ capability_maturity:
         - durable sessions/messages/events/routes/telemetry
         - cancellation/retry/error recovery
         - polished chat-native UI
+        - OutcomeAlignmentEvidence proving the representative user goal reaches its stated streaming outcome or blocks honestly
     agentic_chat:
       claim: model-driven single-agent tool loop with production runtime layers
       required:
@@ -220,6 +221,7 @@ capability_maturity:
         - approval gates for side effects with reject/edit/resume
         - observation re-ingestion, critique, bounded retry, and resumable trace
         - final synthesis tied to the original goal with provenance links
+        - OutcomeAlignmentEvidence proving the final synthesis and action path satisfy the confirmed acceptance criteria, or naming the unmet criterion/blocker
         - .buildprint/claim-gates.json records agentic_chat.status as pass with cited evidence
     agentic_swarm:
       claim: parallel multi-agent swarm dispatching
@@ -234,6 +236,7 @@ capability_maturity:
         - a frozen decomposition plan artifact enabling restart/resume replay without re-invoking the supervisor
         - resumable swarm run, subagent records, and aggregation after restart
         - benchmark evidence that the swarm build beats a single-agent and normal plan-mode baseline on completeness, latency-aware orchestration, UI, runtime behavior, and proof quality
+        - OutcomeAlignmentEvidence proving supervisor synthesis answers the same confirmed user goal rather than a generic parallel demo
         - .buildprint/claim-gates.json records agentic_swarm.status as pass with cited evidence
 
 agent_contract:
@@ -334,6 +337,7 @@ central_output_contract:
     - swarm run with supervisor decomposition, delegation ledger, per-subagent runs, isolated traces, and fan-in aggregation
     - WebUI/API chat surface state including inline action, approval, budget, and swarm-progress affordances
   quality_signals:
+    - each live proof uses the confirmed representative user goal and records an outcome-alignment verdict against its acceptance criteria
     - real model tokens stream before completion
     - unknown and unavailable providers are actionable, not silently substituted
     - the model (not a keyword matcher) decides when a tool, MCP, memory, or subagent action is needed
@@ -360,6 +364,7 @@ central_output_contract:
     - fabricated, sequential, or fake-parallel subagent work presented as a real swarm
     - tool/MCP/memory/subagent capabilities advertised as working while permanently blocked or stubbed
   reviewer_acceptance_questions:
+    - Does the demonstrated trace begin with the user-confirmed representative goal and produce the stated result or an honest, policy-grounded blocker?
     - Can the user send a turn and see real model tokens stream incrementally?
     - Can the operator inspect which provider/model/route and usage path was used?
     - Can blocked or failed providers recover safely within the retry policy?
@@ -370,6 +375,7 @@ central_output_contract:
     - Do agent runs and swarm runs survive restart and remain inspectable?
     - Which paid-provider, hosting, agentic, or swarm claims remain blocked?
   claim_gates:
+    - every passing maturity level requires OutcomeAlignmentEvidence linking the confirmed User Intent Contract to its live trace, result, acceptance criteria, and remaining blockers
     - implementation cannot start until setup architecture and project structure artifacts pass the architecture score gate or record an exact blocker
     - real provider success requires a real streaming token trace, not the test double
     - paid provider success requires a configured key and response trace

@@ -529,6 +529,14 @@ expectFailure('agentic-chat eval rejects uninstantiated central output',
   ['packet', 'check', uninstantiatedAgenticCentralOutput],
   ['✗ blueprint central output is instantiated, not template filler'])
 
+const missingAgenticOutcomeInheritance = path.join(tmp, 'missing-agentic-outcome-inheritance')
+fs.cpSync(agenticChatPacket, missingAgenticOutcomeInheritance, { recursive: true })
+edit(missingAgenticOutcomeInheritance, '00-questions.md', (s) => s
+  .replace(/## Intent inheritance contract[\s\S]*?## Assumable defaults/, '## Assumable defaults'))
+expectFailure('agentic-chat eval rejects a generic intake without outcome inheritance',
+  ['packet', 'check', missingAgenticOutcomeInheritance],
+  ['✗ agentic-chat inherits the intended user outcome into contracts and proof'])
+
 const bufferedAgenticStreamingPhase = path.join(tmp, 'buffered-agentic-streaming-phase')
 fs.cpSync(agenticChatPacket, bufferedAgenticStreamingPhase, { recursive: true })
 edit(bufferedAgenticStreamingPhase, '03-phases/01-real-streaming-chat.md', (s) => s

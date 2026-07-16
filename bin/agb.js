@@ -948,8 +948,24 @@ function packetCheckResults(dir) {
     /agent_assumption.*invalid|invalid.*agent_assumption/i.test(questions) &&
     !/If not answered,\s*the agent may choose a reversible default/i.test(questions)
   )
-
   const setup = safeReadText(path.join(dir, setupFile))
+  if (isAgenticChatPacket) {
+    const phase01 = safeReadText(path.join(dir, '03-phases/01-real-streaming-chat.md'))
+    const phase04 = safeReadText(path.join(dir, '03-phases/04-agentic-loop-runtime.md'))
+    const phase05 = safeReadText(path.join(dir, '03-phases/05-swarm-dispatching.md'))
+    const phase06 = safeReadText(path.join(dir, '03-phases/06-claim-verification.md'))
+    ok('agentic-chat inherits the intended user outcome into contracts and proof',
+      /Intended end-user outcome and acceptance scenario/i.test(questions) &&
+      /Intent inheritance contract/i.test(questions) &&
+      /User Intent Contract/i.test(setup) &&
+      /OutcomeAlignmentEvidence/i.test(blueprint) &&
+      /OutcomeAlignmentEvidence/i.test(phase01) &&
+      /OutcomeAlignmentEvidence/i.test(phase04) &&
+      /OutcomeAlignmentEvidence/i.test(phase05) &&
+      /OutcomeAlignmentEvidence/i.test(phase06)
+    )
+  }
+
   ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && (/Do not start `?03-phases\/\*`?/i.test(setup) || /Do not start `?02-ui-identity\.md`? or `?03-phases\/\*`?/i.test(setup)))
   ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
   ok('project setup requires local skill harness',
