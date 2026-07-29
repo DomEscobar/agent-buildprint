@@ -26,7 +26,9 @@ export const bindTouchControls = (state: InputState): (() => void) => {
     const start = (event: PointerEvent): void => {
       event.preventDefault();
       state[direction] = true;
-      button.setPointerCapture(event.pointerId);
+      if (event.isTrusted) {
+        button.setPointerCapture(event.pointerId);
+      }
     };
     const stop = (event: PointerEvent): void => {
       event.preventDefault();
@@ -35,10 +37,12 @@ export const bindTouchControls = (state: InputState): (() => void) => {
     button.addEventListener("pointerdown", start);
     button.addEventListener("pointerup", stop);
     button.addEventListener("pointercancel", stop);
+    button.addEventListener("lostpointercapture", stop);
     cleanups.push(() => {
       button.removeEventListener("pointerdown", start);
       button.removeEventListener("pointerup", stop);
       button.removeEventListener("pointercancel", stop);
+      button.removeEventListener("lostpointercapture", stop);
     });
   }
 

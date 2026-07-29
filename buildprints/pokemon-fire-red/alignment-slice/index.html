@@ -11,16 +11,16 @@
     <main class="shell">
       <header class="masthead">
         <div>
-          <p class="eyebrow">Viridian Edge</p>
-          <h1>A quiet road north</h1>
+          <p class="eyebrow" data-map-eyebrow>Viridian Edge</p>
+          <h1 data-map-title>A quiet road north</h1>
         </div>
         <p class="hint">Move with arrows or WASD</p>
       </header>
       <section class="game-frame" aria-label="Playable pixel world">
         <div id="game" data-testid="game-canvas"></div>
         <div class="location" aria-live="polite">
-          <span>Route Grove</span>
-          <small>Morning · Clear</small>
+          <span data-map-location>Route Grove</span>
+          <small data-map-conditions>Morning · Clear</small>
         </div>
       </section>
       <nav class="dpad" aria-label="Touch movement controls">
@@ -30,7 +30,8 @@
         <button type="button" data-direction="right" aria-label="Move right">→</button>
       </nav>
       <footer>
-        <span>Explore the pond, market path, and cedar grove.</span>
+        <span data-map-footer>Explore the pond, market path, and cedar grove.</span>
+        <a href="/?map=gallery" data-map-switch>Visit Atlas Park</a>
       </footer>
     </main>
     <script type="module" src="/src/main.ts"></script>

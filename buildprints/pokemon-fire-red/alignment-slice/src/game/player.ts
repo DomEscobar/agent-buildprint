@@ -7,9 +7,19 @@ import {
   PLAYER_TEXTURE_KEY,
   playerFrameRef,
 } from "./player-frames";
-import { sweepPosition } from "./world-data";
+import {
+  type PixelPoint,
+  type PixelVector,
+  pixelPoint,
+  pixelVector,
+} from "./world-model";
 
 const SPEED = 54;
+export type CollisionState = "blocked" | "clear";
+type MovementResolver = (
+  start: PixelPoint,
+  movement: PixelVector,
+) => PixelPoint;
 
 export class PlayerController {
   readonly sprite: Phaser.GameObjects.Sprite;
@@ -19,11 +29,13 @@ export class PlayerController {
   private readonly s: Phaser.Input.Keyboard.Key;
   private readonly d: Phaser.Input.Keyboard.Key;
   private facing: Direction = "down";
+  private collisionState: CollisionState = "clear";
 
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly touch: InputState,
     spawn: GridPoint,
+    private readonly resolveMovement: MovementResolver,
   ) {
     this.registerFrames();
     this.registerAnimations();
@@ -46,6 +58,7 @@ export class PlayerController {
   update(deltaMs: number): void {
     const direction = this.readDirection();
     if (direction === null) {
+      this.collisionState = "clear";
       this.sprite.anims.stop();
       this.sprite.setFrame(`${this.facing}-1`);
       return;
@@ -53,10 +66,16 @@ export class PlayerController {
     this.facing = direction;
     const distance = (SPEED * deltaMs) / 1000;
     const movement = this.vectorFor(direction, distance);
-    const next = sweepPosition(
-      { x: this.sprite.x, y: this.sprite.y },
+    const next = this.resolveMovement(
+      pixelPoint(this.sprite.x, this.sprite.y),
       movement,
     );
+    const intendedX = this.sprite.x + movement.x;
+    const intendedY = this.sprite.y + movement.y;
+    this.collisionState =
+      Math.abs(next.x - intendedX) > 0.01 || Math.abs(next.y - intendedY) > 0.01
+        ? "blocked"
+        : "clear";
     this.sprite.setPosition(next.x, next.y);
     this.sprite.setFlipX(direction === "left");
     this.sprite.play(`${direction}-walk`, true);
@@ -64,6 +83,10 @@ export class PlayerController {
 
   get direction(): Direction {
     return this.facing;
+  }
+
+  get collision(): CollisionState {
+    return this.collisionState;
   }
 
   private registerFrames(): void {
@@ -99,16 +122,16 @@ export class PlayerController {
     return null;
   }
 
-  private vectorFor(direction: Direction, distance: number): GridPoint {
+  private vectorFor(direction: Direction, distance: number): PixelVector {
     switch (direction) {
       case "up":
-        return { x: 0, y: -distance };
+        return pixelVector(0, -distance);
       case "down":
-        return { x: 0, y: distance };
+        return pixelVector(0, distance);
       case "left":
-        return { x: -distance, y: 0 };
+        return pixelVector(-distance, 0);
       case "right":
-        return { x: distance, y: 0 };
+        return pixelVector(distance, 0);
     }
   }
 }

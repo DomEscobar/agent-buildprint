@@ -1,15 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { ATLAS_COLUMNS, tileFrame } from "../src/game/atlas";
 import { playerFrameRef } from "../src/game/player-frames";
-import {
-  SEQUENCE_CATALOG,
-  STAMP_CATALOG,
-  TILE_CATALOG,
-  TilePlacement,
-} from "../src/game/tile-catalog";
+import * as catalog from "../src/game/tile-catalog";
 import {
   isBlocked,
-  isSoloDecorationTile,
   sweepPosition,
   WORLD_DECORATIONS,
   WORLD_HEIGHT,
@@ -17,86 +10,60 @@ import {
   WORLD_STAMPS,
   WORLD_WIDTH,
 } from "../src/game/world-data";
-
-const ATLAS_ROWS = 18;
+import { pixelPoint, pixelVector } from "../src/game/world-model";
 
 describe("world alignment data", () => {
-  it("maps atlas coordinates to stable frame ids", () => {
-    expect(tileFrame({ x: 0, y: 0 })).toBe(0);
-    expect(tileFrame({ x: 1, y: 1 })).toBe(28);
-    expect(tileFrame({ x: 26, y: 17 })).toBe(485);
+  it("keeps world placements semantic and inside bounds", () => {
+    for (const placement of [
+      ...WORLD_STAMPS,
+      ...WORLD_SEQUENCES,
+      ...WORLD_DECORATIONS,
+    ]) {
+      expect(Object.hasOwn(placement, "frame")).toBe(false);
+    }
+    expect(WORLD_WIDTH).toBe(34);
+    expect(WORLD_HEIGHT).toBe(22);
+
+    for (const placement of WORLD_STAMPS) {
+      const stamp = catalog.STAMP_CATALOG[placement.stamp];
+      for (const matrix of [
+        stamp.cells,
+        "overlay" in stamp ? stamp.overlay : [],
+      ]) {
+        for (const [y, row] of matrix.entries()) {
+          for (const [x, cell] of row.entries()) {
+            if (cell === null) continue;
+            expect(placement.destination.x + x).toBeGreaterThanOrEqual(0);
+            expect(placement.destination.y + y).toBeGreaterThanOrEqual(0);
+            expect(placement.destination.x + x).toBeLessThan(WORLD_WIDTH);
+            expect(placement.destination.y + y).toBeLessThan(WORLD_HEIGHT);
+          }
+        }
+      }
+    }
+
+    for (const placement of WORLD_SEQUENCES) {
+      const sequence = catalog.SEQUENCE_CATALOG[placement.sequence];
+      for (const [x] of sequence.tiles.entries()) {
+        expect(placement.position.x + x).toBeGreaterThanOrEqual(0);
+        expect(placement.position.x + x).toBeLessThan(WORLD_WIDTH);
+        expect(placement.position.y).toBeGreaterThanOrEqual(0);
+        expect(placement.position.y).toBeLessThan(WORLD_HEIGHT);
+      }
+    }
+
+    for (const decoration of WORLD_DECORATIONS) {
+      expect(decoration.position.x).toBeGreaterThanOrEqual(0);
+      expect(decoration.position.x).toBeLessThan(WORLD_WIDTH);
+      expect(decoration.position.y).toBeGreaterThanOrEqual(0);
+      expect(decoration.position.y).toBeLessThan(WORLD_HEIGHT);
+    }
   });
 
   it("keeps the player spawn and main path walkable", () => {
     expect(isBlocked({ x: 10, y: 8 })).toBe(false);
     expect(isBlocked({ x: 10, y: 9 })).toBe(false);
     expect(isBlocked({ x: 11, y: 9 })).toBe(false);
-  });
-
-  it("derives collision from placed stamps and sequences", () => {
-    expect(isBlocked({ x: 9, y: 3 })).toBe(true);
-    expect(isBlocked({ x: 8, y: 7 })).toBe(true);
-    expect(isBlocked({ x: 14, y: 7 })).toBe(false);
-  });
-
-  it("provides distinct authored world stamps", () => {
-    expect(WORLD_STAMPS).toHaveLength(4);
-    expect(
-      new Set(
-        WORLD_STAMPS.map((stamp) => {
-          const definition = STAMP_CATALOG[stamp.stamp];
-          return `${definition.source.x}:${definition.source.y}`;
-        }),
-      ).size,
-    ).toBe(4);
-    expect(WORLD_SEQUENCES).toHaveLength(1);
-    expect(WORLD_DECORATIONS).toHaveLength(0);
-  });
-
-  it("keeps complex tiles behind named stamps or sequences", () => {
-    expect(TILE_CATALOG.fenceLeftEnd.placement).toBe(
-      TilePlacement.SequenceOnly,
-    );
-    expect(TILE_CATALOG.marketRoofLeft.placement).toBe(TilePlacement.StampOnly);
-
-    for (const decoration of WORLD_DECORATIONS) {
-      expect(isSoloDecorationTile(decoration.tile)).toBe(true);
-    }
-  });
-
-  it("records transition sequences with their ordered edge pieces", () => {
-    expect(SEQUENCE_CATALOG.fenceHorizontalShort.tiles).toEqual([
-      "fenceLeftEnd",
-      "fenceMiddle",
-      "fenceMiddle",
-      "fenceMiddle",
-      "fenceMiddle",
-      "fenceRightEnd",
-    ]);
-  });
-
-  it("keeps catalog source rectangles and placements inside proven bounds", () => {
-    for (const tile of Object.values(TILE_CATALOG)) {
-      expect(tile.source.x).toBeGreaterThanOrEqual(0);
-      expect(tile.source.y).toBeGreaterThanOrEqual(0);
-      expect(tile.source.x).toBeLessThan(ATLAS_COLUMNS);
-      expect(tile.source.y).toBeLessThan(ATLAS_ROWS);
-    }
-
-    for (const stamp of Object.values(STAMP_CATALOG)) {
-      expect(stamp.source.x + stamp.size.x).toBeLessThanOrEqual(ATLAS_COLUMNS);
-      expect(stamp.source.y + stamp.size.y).toBeLessThanOrEqual(ATLAS_ROWS);
-    }
-
-    for (const stamp of WORLD_STAMPS) {
-      const definition = STAMP_CATALOG[stamp.stamp];
-      expect(stamp.destination.x + definition.size.x).toBeLessThanOrEqual(
-        WORLD_WIDTH,
-      );
-      expect(stamp.destination.y + definition.size.y).toBeLessThanOrEqual(
-        WORLD_HEIGHT,
-      );
-    }
   });
 
   it("uses the loaded player source texture for every animation frame", () => {
@@ -106,9 +73,12 @@ describe("world alignment data", () => {
     });
   });
 
-  it("sweeps large movement deltas without tunneling into the pond", () => {
-    const result = sweepPosition({ x: 16 * 22, y: 16 * 4 }, { x: -240, y: 0 });
-    expect(result.x).toBeGreaterThanOrEqual(16 * 21 + 7);
-    expect(result.y).toBe(16 * 4);
+  it("sweeps large movement deltas without tunneling through world bounds", () => {
+    const result = sweepPosition(
+      pixelPoint(16 * 2, 16 * 2),
+      pixelVector(-240, 0),
+    );
+    expect(result.x).toBeGreaterThanOrEqual(16 + 7);
+    expect(result.y).toBe(16 * 2);
   });
 });

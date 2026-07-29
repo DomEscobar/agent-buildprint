@@ -165,14 +165,29 @@ footer a {
 
 @media (max-width: 520px) {
   .game-frame,
-  #game canvas {
-    width: 240px;
-    height: 160px;
+  .is-inspector .game-frame {
+    width: 100%;
   }
 
-  .is-inspector .game-frame,
-  .is-inspector #game canvas {
+  #game canvas {
     width: 480px;
-    height: 460px;
+    height: 320px;
+    margin-left: -70px;
+  }
+
+  .is-inspector #game canvas {
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 350px) {
+  #game canvas {
+    margin-left: -96px;
+  }
+
+  .is-inspector #game canvas {
+    margin-left: 0;
   }
 }
