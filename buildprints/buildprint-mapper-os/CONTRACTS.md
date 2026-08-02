@@ -10,17 +10,20 @@ A selected packet must contain:
 
 ```text
 BUILDPRINT.md
-00-questions.md
-01-project-setup.md
-02-ui-identity.md
+00-goal.md
+01-setup.md
+02-identity.md
 blueprint.yaml
-03-phases/
-  phase-index.yaml
-  phase-flow.md
-  <phase>.md
+loops/
+  loop-index.yaml
+  loop-flow.md
+  <loop>.md
+review.md
 README.md
 HANDOVER.md
 ```
+
+Schema: `buildprint/kernel/v1`. Style: `kernel_loop`.
 
 ## Builder briefing contract
 
@@ -28,129 +31,70 @@ HANDOVER.md
 
 - introduce the builder’s role and responsibility;
 - demand perfection alignment, honest proof, and fake-success rejection;
+- state the kernel: goal → bare agentic loop → optional independent fan-out → contract review;
 - list the required read order;
-- avoid product-specific details, mapped source names, old repo names, old product names, dependency names, golden path prose, and implementation contract specifics.
-
-If product identity appears in `BUILDPRINT.md`, the packet has mixed responsibilities.
+- avoid product-specific details, mapped source names, old repo names, dependency names, golden path prose, and implementation contract specifics.
 
 ## Product contract location
 
-Product identity, artifact shape, central interface, golden path, runtime posture, provider/runtime constraints, state/readback expectations, and source-distilled product specifics belong in `blueprint.yaml`, `01-project-setup.md`, `02-ui-identity.md`, and the phase objectives — not in `BUILDPRINT.md`.
-
-`blueprint.yaml` is the machine-readable mirror. It routes and declares concise product contract facts. It must not become a full implementation manual.
+Product identity, artifact shape, central interface, golden path, runtime posture, provider constraints, state/readback expectations, and source-distilled specifics belong in `blueprint.yaml`, `00-goal.md`, `01-setup.md`, `02-identity.md`, and loop objectives — not in `BUILDPRINT.md`.
 
 ## Local skill harness contract
 
-Project setup must initialize a project-local Buildprint skill harness before phase work. `blueprint.yaml` declares the selected `harness.provider` and `harness.profiles`, and `.buildprint/next-agent.md` carries those values into `agb harness init`. The default provider is `agents`: it patches or creates root `AGENTS.md`, writes Buildprint-native local core skills for `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, and `verify-and-review`, and places them only in `.agents/skills/`. Provider-specific folders such as `.claude/skills/`, `.cline/skills/`, or `.cursor/rules/` require explicit, evidence-backed provider selection. Optional profiles add focused skills only when the artifact needs them: `webapp`, `backend`, `agentic`, or `full`. Every skill must declare trigger/skip boundaries and a completion signal. The harness must not silently install global skills or copy third-party skill packs.
+Setup must initialize a project-local Buildprint skill harness before loop work. `blueprint.yaml` declares `harness.provider` and `harness.profiles`. Default provider `agents`: root `AGENTS.md`, core skills `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation`, `verify-and-review` under `.agents/skills/`. Optional profiles: `webapp`, `backend`, `agentic`, `full`. Skills declare triggers, skips, and completion signals. No silent global installs or third-party skill pack copies.
+
+`subagent-driven-implementation` means independent fan-out with clean ownership. `verify-and-review` means proof plus preparation for independent contract review — not phase-paperwork completion.
 
 ## Central output contract
 
-Every selected packet must identify the artifact's central output and the minimum quality bar for that output. This belongs in `blueprint.yaml` as concise machine-readable routing and in Markdown as buildable guidance.
-
-The mapper must extract, from source evidence and product behavior:
-
-- the central output the user/operator actually values;
-- the output primitives or units that compose it;
-- the quality signals that make it useful, credible, publishable, actionable, correct, or otherwise domain-appropriate;
-- the generic-output failure modes that would look plausible but fail the product;
-- reviewer acceptance questions that a skeptical human can use after one real example path;
-- claim gates that must remain blocked until the output quality is proven.
-
-Output existence is not enough. Input-derived output is not enough. A selected packet must reject technically generated but domain-generic results.
+Every selected packet must identify central output, primitives, quality signals, unacceptable generic substitutes, reviewer acceptance questions, and claim gates in `blueprint.yaml` plus Markdown guidance. Output existence is not enough.
 
 ## Proven implementation requirements contract
 
-Some mapped products depend on hard technical domains that should not be casually hand-rolled. Buildprint Mapper must preserve those as product requirements without making the selected packet stack-fixed.
+When source evidence shows hard domains (fixed-format export, rich editing, document extraction, drag/canvas, charts, frontend UI runtime, providers, jobs, migrations, storage, etc.), `blueprint.yaml` must include `proven_implementation_requirements` with proven tool categories or equal proof. Route package choices into `01-setup.md` and `docs/architecture.md` when selected.
 
-When source evidence shows fixed-format export, rich editing, document extraction, drag/reorder/canvas interactions, charts/diagrams/visual primitives, frontend UI runtime, stateful screen composition, component/state styling, design token enforcement, responsive viewport proof, provider SDKs/OAuth/webhooks/external APIs, long-running jobs, queues, migrations, durable storage, or similar specialized domains, the selected `blueprint.yaml` must include `proven_implementation_requirements`.
+## Identity contract
 
-That section must name source-derived hard domains, require a proven library/SDK/runtime/platform service or equivalent tool category for each applicable domain, keep implementation choices stack-neutral unless source evidence makes a specific stack part of product behavior, allow from-scratch alternatives only with explicit justification and proof equal to the proven-tool path, and route selected package/runtime decisions into `01-project-setup.md` and `docs/architecture.md`.
+`02-identity.md` is mandatory. For UI-bearing artifacts it must open with UX-must-matter language and define metaphor, dominant object, primary gesture, thesis, tokens, typography, layout, components, states, and anti-generic rules. For non-UI artifacts it must say `not-ui-bearing` and define operator/developer experience with equivalent specificity.
 
-For UI-bearing artifacts, `docs/architecture.md` must include `Framework And Styling Decisions`: selected frontend framework/runtime, selected styling/design-system path, rejected alternatives, proof commands, and how the chosen tools cover stateful screen composition, component states, design tokens, and responsive viewport proof. Static DOM, plain CSS, static/vanilla WebUI, and custom DOM scripting require an explicit `ui_stack_exception`; otherwise they are not acceptable architecture for a UI-bearing packet.
+## Loop contract
 
-## UI identity contract
+Each loop file must include:
 
-`02-ui-identity.md` is mandatory for every UI-bearing artifact and must be detailed enough to guide later implementation without guessing. It must:
-
-- open by saying UX is a must and that confusing/generic/ugly UI is not finished product;
-- load the local `frontend-ui-product-design` skill and relevant references created by setup;
-- define design thesis, style direction, color system, typography, layout rhythm, screen-state contract, component language, motion, states, anti-generic rules, and phase obligation;
-- tell every later phase to preserve the style schema.
-
-For non-UI artifacts, it must explicitly say `not-ui-bearing` and define the developer/operator experience with equivalent specificity.
-
-When the source provides no precise visual direction, the mapper must not leave blanks for the implementation agent. The packet must require an autonomous design decision before UI work: choose style direction, color tokens, typography scale, layout model, component language, responsive behavior, and state treatment from the artifact type and user workflow. Vague adjectives are not a valid contract.
-
-Generated `docs/DESIGN.md` must be a screen construction contract, not taste prose. It must define exact tokens, type scale, layout contract, component specs, state matrix, implementation mapping, screenshot acceptance, and banned patterns. `.buildprint/ui-evidence.md` must then prove major UI identity, design, and action claims with screenshot paths or source `file:line` references; prose-only evidence cannot pass.
-
-## Typed proof contract
-
-The mapper must select proof obligations that fit the artifact instead of forcing one generic proof list:
-
-- UI-bearing artifacts: screenshot/browser inspection of the real path, interaction-state proof, no-overlap/no-clipping/no-horizontal-overflow checks when practical, and accessibility/focus sanity.
-- Responsive artifacts: desktop and mobile proof, or an explicit reason the artifact is single-viewport.
-- Editable or fixed-format artifacts: fixed-surface framing, long-content stress fixtures, edit/readback proof, and detail/control reachability.
-- AI/generative artifacts: central output specificity proof, repeated-generic-output rejection, provider/blocker honesty, and sample output review against the output contract.
-- Integration/plugin/service/CLI artifacts: install/configure/first-action proof, idempotency/retry/failure proof, operator logs/errors, and audit/recovery proof.
-
-Selected packets should put concise routing facts in `blueprint.yaml`, buildable proof setup in `01-project-setup.md`, UI/UX identity and screen-state decisions in `02-ui-identity.md`, phase-specific inspection in phase objectives, the product/operator-facing overview in `README.md`, and final evidence fields in `HANDOVER.md`.
-
-## Product README contract
-
-Every selected packet must include a root `README.md` that reads like the finished product's public/operator-facing README, not a Buildprint explanation. The final implementation phase must update it after verification so it reflects the artifact that actually exists.
-
-The README must include:
-
-- the product name and one concise product promise;
-- version/status badges, including at minimum product version, build/check status, license, runtime, and qualification/status;
-- a feature section explaining what the artifact does for its user or operator;
-- a requirements section naming only real user/operator prerequisites: required runtimes/CLIs, provider/API keys, database/storage/export services, OAuth/webhook/deployment credentials, and external service accounts needed by enabled features;
-- an environment/provider keys section with exact variable names from `.env.example`, blank secret examples only, and honest notes for optional, required, blocked, or live-proof-only providers;
-- a quick start section with install, configure, run, test/check, and first-use commands;
-- a verification or proof section listing the commands and manual surface checks that were actually run;
-- a limitations/blockers section that matches `HANDOVER.md` and does not claim live provider, deployment, security, or production readiness without proof.
-
-Do not describe Buildprint Mapper, the source repository, or the Buildprint packet as the main subject of the selected product README.
-
-## Phase contract
-
-Each phase file must include:
-
-- `How to implement this phase`
+- `How to implement this loop`
 - `Building objective`
 - `DO NOT`
 - `Minimum proof before moving on`
 - `Handoff note`
 
-The `Building objective` must be comprehensive and product-specific. It should read like a senior product-engineering assignment, not a decomposed schema or checklist fragment. Every phase must read `02-ui-identity.md` as standing comprehension, user-language, and visual identity responsibility for UI-bearing artifacts, even when the phase is runtime, data, report, verification, or backend work.
+The Building objective must be comprehensive and product-specific. UI-bearing loops keep `02-identity.md` as standing design responsibility.
+
+## Review contract
+
+`review.md` requires a fresh-context reviewer (separate subagent or session) that did not implement the artifact. Inputs: `00-goal.md`, active loop contract(s), diff/proof. Builder rationale and chat are excluded. Self-review is `REVIEW_INVALID`. Pass means the goal and acceptance criteria are met or blockers are honest. Do not require evidence ledgers or claim-gates JSON products.
 
 ## Machine contract
 
-`blueprint.yaml` routes files and declares policy. It must not become implementation guidance. Implementation guidance belongs in Markdown.
+`blueprint.yaml` routes files and declares policy. It must not become the implementation manual.
 
 ## Validation contract
 
 `agb packet check` must reject:
 
 - obsolete v2 structures;
-- obsolete selected packet filenames;
-- missing selected product README.md;
+- obsolete v3 phase spines (`03-phases/`, `phase_driven_comprehensive*`) as selected live packets;
+- evidence-ledger / claim-gates-JSON verification products as required shape;
+- missing kernel files;
 - generated prompt/handoff files as packet authority;
-- product-specific or mapped-source leakage in `BUILDPRINT.md`;
-- missing UX-must-matter preface/checklist in `02-ui-identity.md`;
-- weak/generic UI UI identitys;
-- phase files that do not read `02-ui-identity.md`;
-- tiny or missing phase objectives;
-- missing required phase headings;
-- phase index references to missing files;
+- product-specific leakage in `BUILDPRINT.md`;
+- missing UX-must-matter preface when UI-bearing;
+- loop files missing required headings or identity responsibility when UI-bearing;
+- loop index references to missing files;
+- missing central output quality contracts;
+- missing independent `review.md`;
+- missing proven implementation requirements for hard technical domains when applicable;
 - placeholder/fake-success leakage outside Mapper templates.
-- missing central output quality contracts in selected packets.
-- missing selected proof obligations for obvious visual, responsive, editor, generative, or integration artifact types.
-- missing critical-review-pushback phase in serious executable packets.
-- missing proven implementation requirements for hard technical domains, or setup guidance that fails to route selected library/runtime decisions into architecture.
 
 ## Completion contract
 
-A downstream implementation can only claim done when the real product path is checked. Packet structure alone never proves product completion.
-
-Final review must keep `phase_core_passed` separate from `claim_qualified`. A phase-local proof can pass while the product claim remains unqualified because UI evidence, architecture proof, hard-stop decisions, provider proof, or independent review is incomplete.
+Packet structure never proves product completion. Final review keeps `loop_core_passed` separate from `claim_qualified`. A loop-local proof can pass while the product claim remains unqualified because proof, hard-stop decisions, provider evidence, or independent review is incomplete.

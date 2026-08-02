@@ -65,7 +65,7 @@ agb --help
 
 ## What You Get
 
-A Buildprint snapshot gives the agent ordered files for setup, UI identity, implementation phases, proof obligations, blockers, and handover.
+A Buildprint snapshot is a **kernel packet**: goal, minimal setup, identity when UI-bearing, named loops, independent contract review, blockers, and handover. Default execution is goal → bare agentic loop → optional independent subagent fan-out → contract review. Production harness maturity is an upgrade, not the floor.
 
 The point is not to guess from a repo blindly. The point is to give the agent a precise build path it can follow, while still allowing explicit wishes such as a different door, a bigger garden, or another extension.
 

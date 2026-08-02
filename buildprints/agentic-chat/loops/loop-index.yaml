@@ -1,0 +1,28 @@
+schema_version: buildprint/loop-index/v1
+active_loop: loops/01-real-streaming-chat.md
+loops:
+  - loop_id: 01-real-streaming-chat
+    file: loops/01-real-streaming-chat.md
+    status: included
+    depends_on: []
+  - loop_id: 02-provider-routing-hardening
+    file: loops/02-provider-routing-hardening.md
+    status: included
+    depends_on: [01-real-streaming-chat]
+  - loop_id: 03-webui-and-verification
+    file: loops/03-webui-and-verification.md
+    status: included
+    depends_on: [02-provider-routing-hardening]
+  - loop_id: 04-agentic-loop-runtime
+    file: loops/04-agentic-loop-runtime.md
+    status: included
+    depends_on: [03-webui-and-verification]
+  - loop_id: 05-swarm-dispatching
+    file: loops/05-swarm-dispatching.md
+    status: included
+    depends_on: [04-agentic-loop-runtime]
+  - loop_id: 06-claim-verification
+    file: loops/06-claim-verification.md
+    status: included
+    depends_on: [05-swarm-dispatching]
+

@@ -1,5 +1,7 @@
 # BUILDPRINT: design-quality-lift
 
+This packet installs a bounded capability, not a whole-product rebuild.
+
 > **A trace-aware, direction-locked, signature-required Capability Buildprint for grafting a holistic design quality lift onto an existing app — with banned defaults, per-direction creative moments, and before/after receipts at a named quality bar.**
 
 This buildprint does not produce a product. It produces a design quality lift grafted onto an existing host. The host is your codebase; this buildprint is the contract that ensures the lift is real, evidence-backed, and direction-locked.
@@ -22,20 +24,19 @@ A Capability Buildprint for `design-quality-lift`. It is composed of:
 - It is not a UI component library. The host already has components; this buildprint upgrades them.
 - It is not an LLM default-override wrapper. Banned defaults are enforced, not hidden.
 
-## Read order
+## Required read order
 
-1. `BUILDPRINT.md` (this file) — canonical start.
-2. `capability.yaml` — machine-readable contract.
-3. `compatibility.md` — host compatibility and composition rules.
-4. `00-host-assessment.md` — audit-first protocol on existing projects.
-5. `00-assessment-questions.md` — hard-stop discovery questions.
-6. `01-integration-plan.md` — plan the lift.
-7. `apply.md` — apply the buildprint to the host.
-8. `02-implementation-phases/01..05` — the five phases.
-9. `verify.md` — verify the lift.
-10. `README.md` — human overview.
-11. `examples/` — concrete artifacts.
-12. `references/research-basis.md` — prior art and research.
+1. `BUILDPRINT.md`
+2. `capability.yaml`
+3. `compatibility.md`
+4. `00-goal.md`
+5. `01-host.md`
+6. `loops/` (see `loops/loop-flow.md`)
+7. `review.md`
+8. `verify.md`
+
+No source edits before `00-goal.md` hard stops and `01-host.md` assessment/plan. Kernel: goal → bare agentic loop → optional independent fan-out → contract review.
+
 
 ## Architecture (this is not a whole-product phase plan)
 

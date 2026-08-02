@@ -1,0 +1,24 @@
+schema_version: buildprint/loop-index/v1
+active_loop: loops/01-openclaw-foundation.md
+loops:
+  - loop_id: 01-openclaw-foundation
+    file: loops/01-openclaw-foundation.md
+    status: included
+    depends_on: []
+  - loop_id: 02-persona-memory-runtime
+    file: loops/02-persona-memory-runtime.md
+    status: included
+    depends_on: [01-openclaw-foundation]
+  - loop_id: 03-media-policy-and-wavespeed
+    file: loops/03-media-policy-and-wavespeed.md
+    status: included
+    depends_on: [02-persona-memory-runtime]
+  - loop_id: 04-social-planner-and-publisher
+    file: loops/04-social-planner-and-publisher.md
+    status: included
+    depends_on: [03-media-policy-and-wavespeed]
+  - loop_id: 05-manager-audit-and-handover
+    file: loops/05-manager-audit-and-handover.md
+    status: included
+    depends_on: [04-social-planner-and-publisher]
+

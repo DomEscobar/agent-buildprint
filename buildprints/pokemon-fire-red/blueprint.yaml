@@ -1,4 +1,4 @@
-schema_version: mapper-os/executable-blueprint/v3
+schema_version: buildprint/kernel/v1
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
@@ -21,17 +21,32 @@ read_order:
   - references/starter-town-verification.md
   - references/world-verification.md
   - references/data-sources-and-techniques-basis.md
-  - 00-questions.md
-  - 01-project-setup.md
-  - 02-ui-identity.md
+  - 00-goal.md
+  - 01-setup.md
+  - 02-identity.md
   - blueprint.yaml
-  - 03-phases/phase-index.yaml
-  - 03-phases/phase-flow.md
+  - loops/loop-index.yaml
+  - loops/loop-flow.md
   - README.md
   - HANDOVER.md
 
+kernel:
+  flow: goal → bare_agentic_loop → optional_independent_fan_out → contract_review
+  bare_agentic_loop: think → act → observe until done or stuck
+  independent_fan_out: clean ownership only; each worker gets goal slice + contract
+  contract_review: fresh-context reviewer against 00-goal.md and active loop contract
+  rule: Production maturity is never the floor for first success.
+
+maturity_upgrades:
+  rule: Optional and claim-gated. Do not require these for the first successful loop.
+  examples:
+    - budgets_and_loop_breakers
+    - run_receipts_and_session_logs
+    - swarm_ledgers_and_concurrency_proof
+    - trust_zones_and_capability_grants
+
 packet_shape:
-  style: phase_driven_comprehensive_game
+  style: kernel_loop
   principle: YAML routes; markdown teaches and builds; story graph and battle math are explicit contracts.
   required_files:
     - BUILDPRINT.md
@@ -43,15 +58,18 @@ packet_shape:
     - references/starter-town-verification.md
     - references/world-verification.md
     - references/data-sources-and-techniques-basis.md
-    - 00-questions.md
-    - 01-project-setup.md
-    - 02-ui-identity.md
+    - 00-goal.md
+    - 01-setup.md
+    - 02-identity.md
     - blueprint.yaml
-    - 03-phases/phase-index.yaml
-    - 03-phases/phase-flow.md
+    - loops/loop-index.yaml
+    - loops/loop-flow.md
     - README.md
     - HANDOVER.md
   forbidden_shapes:
+    - 03-phases/
+    - evidence-ledger
+    - claim-gates.json
     - slices/
     - gates/
     - 02-architecture.md

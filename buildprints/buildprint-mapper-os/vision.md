@@ -2,32 +2,40 @@
 
 Buildprint Mapper should make AI builders better at reconstruction, not better at filling schemas.
 
-The target output is a readable execution manual for a product-minded coding agent. It should teach the artifact identity, golden path, setup posture, UI/operator experience, phase flow, fake-success boundaries, and handover expectations without polluting the selected start file with product-specific source baggage.
+The target output is a short executable packet for a product-minded coding agent. It teaches the goal, first successful loop, setup posture, UI/operator identity when needed, independent fan-out, contract review, and honest handover — without burying the builder in orchestration paperwork or source baggage.
 
-## Why phase-driven
+## Why kernel-loop
 
-Phases are narrative and buildable. They let the mapper say: here is the coherent product path, here is what to read, here is what to build, here is what not to fake, here is the design responsibility, and here is what proves it.
+Strong results come from four primitives:
 
-The obsolete model failed because tiny implementation documents compressed judgment into file names and runner mechanics. The new model keeps routing in YAML and puts real building knowledge in Markdown.
+1. **Goal** — one observable outcome and acceptance criteria
+2. **Bare agentic loop** — think → act → observe until done or stuck
+3. **Independent subagent fan-out** — clean ownership when work splits
+4. **Contract-based review** — a fresh-context reviewer checks the result against the goal and loop contract
+
+Phases as heavy manuals optimized for orchestration completeness. Tiny v2 docs compressed judgment into filenames. The kernel shape keeps routing in YAML and judgment in Markdown, but the unit of work is a **named loop**, not a phase bureaucracy.
+
+Production maturity (budgets, receipts, swarm ledgers, trust zones) is an upgrade claimed with proof — never the path to first success.
 
 ## Why BUILDPRINT.md is generic
 
-A downstream builder needs the first file to orient their behavior: you are responsible, perfection matters, fake success is not allowed, read in this order. Product-specific details belong after that orientation. If the first file carries mapped-source names, old repo names, or source-specific implementation trivia, it teaches the builder to imitate stale source context instead of building the selected artifact cleanly.
+A downstream builder needs the first file to orient behavior: you are responsible, perfection matters, fake success is not allowed, read in this order. Product-specific details belong after that orientation. If the first file carries mapped-source names or implementation trivia, the builder imitates stale source context instead of building the selected artifact.
 
-## Why 02-ui-identity.md is mandatory
+## Why identity still matters
 
-UX is not polish after the real work. The user experiences the artifact through surfaces, states, copy, controls, motion, and feedback. A confusing or generic interface is an implementation failure. Buildprint Mapper therefore initializes the local skill harness in setup: `setup-runbook` captures architecture and proof paths, `frontend-ui-product-design` forces a detailed UI identity before phases begin, `subagent-driven-implementation` is used only for cleanly separable phase work, and `verify-and-review` blocks fake completion. Every phase reads the UI identity so design responsibility survives backend/runtime/report/verification work.
+UX is not polish after the real work. For UI-bearing artifacts, `02-identity.md` defines metaphor, primary gesture, and visual/operator contract before loops ship UI. Setup still initializes the local skill harness: `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation` for clean fan-out, and `verify-and-review` for contract review. Loops keep identity open so design responsibility survives backend work.
 
 ## Desired downstream behavior
 
 A fresh coding agent should:
 
 1. read the generic AI-builder briefing and read order;
-2. answer only hard-stop questions;
-3. create the setup foundation and local skill harness;
-4. read the UI identity, load the frontend skill, and understand why UX matters;
-5. load only the active phase;
-6. keep `02-ui-identity.md` open as design responsibility;
-7. build the smallest real product path for that phase;
-8. verify directly, including visible UX/state behavior when relevant;
-9. record a concise, honest handover.
+2. lock the goal and hard-stop answers in `00-goal.md`;
+3. create minimal setup and the local skill harness;
+4. read identity when the artifact is UI-bearing;
+5. load only the active loop;
+6. run a bare agentic loop against the goal;
+7. fan out independent subagents only when ownership is clean;
+8. verify directly;
+9. run independent contract review against goal + loop contract;
+10. record a concise, honest handover.

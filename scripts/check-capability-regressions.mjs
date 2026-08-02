@@ -129,29 +129,40 @@ try {
   }, ['credential capability.yaml proves full-secret verification after prefix lookup'])
 
   expectCapabilityFailure('capability regression catches missing discovery gate', (packet) => {
-    replaceInFile(packet, '00-host-assessment.md', [
+    replaceInFile(packet, '01-host.md', [
       [/\r?\n- finding classifications: `infer safely`, `patch locally`, `must ask user`, or `out of scope`/g, ''],
       [/\r?\n## Finding Classifications\r?\n/g, '\n'],
+      [/infer safely|patch locally|must ask user|out of scope/gi, 'note'],
     ])
     replaceInFile(packet, 'BUILDPRINT.md', [
-      [/## Discovery decision gate[\s\S]*?(?=\r?\n## Hard-stop conditions)/, ''],
+      [/## Discovery decision gate[\s\S]*?(?=\r?\n## |$)/, ''],
+      [/infer safely|patch locally|must ask user|out of scope/gi, 'note'],
     ])
-    replaceInFile(packet, 'apply.md', [
-      [/\r?\nHost assessment is a hard gate\.[\s\S]*?stop and ask before source edits\.\r?\n/, '\n'],
-    ])
+    if (fs.existsSync(path.join(packet, 'apply.md'))) {
+      replaceInFile(packet, 'apply.md', [
+        [/\r?\nHost assessment is a hard gate\.[\s\S]*?stop and ask before source edits\.\r?\n/, '\n'],
+        [/infer safely|patch locally|must ask user|out of scope/gi, 'note'],
+      ])
+    }
   }, ['capability packet requires discovery decision gate'])
 
   expectCapabilityFailure('capability regression catches missing proof reconciliation', (packet) => {
     replaceInFile(packet, 'BUILDPRINT.md', [
       [/Verification must reconcile against the assessment and plan; if a baseline command, Prisma\/schema validation, migration, runtime route, or negative security check fails, downgrade the claim instead of reporting installed success\./g, 'Verification should run the available checks.'],
+      [/reconcile|reconciliation|claim ceiling|downgrade/gi, 'record'],
     ])
     replaceInFile(packet, 'verify.md', [
       [/If a baseline command or schema validation failed before implementation, the receipt must say whether the failure was fixed, unrelated but still a claim ceiling, or blocking\./g, 'If a command failed before implementation, record it.'],
       [/\r?\n- `.buildprint\/capability-receipt.md` reconciles every host-assessment blocker, assumption, baseline failure, and hard-stop question with the final proof level/g, ''],
+      [/reconcile|reconciliation|claim ceiling|downgrade|not-proven/gi, 'record'],
     ])
-    replaceInFile(packet, '01-integration-plan.md', [
+    replaceInFile(packet, '01-host.md', [
       [/\r?\n- reconciliation with `.buildprint\/host-assessment.md`: every `must ask user`, blocker, baseline failure, and assumption is resolved, accepted as a claim ceiling, or left blocking/g, ''],
       [/\r?\n## Assessment Reconciliation\r?\n/g, '\n'],
+      [/reconcile|reconciliation|claim ceiling|downgrade|not-proven/gi, 'record'],
+    ])
+    replaceInFile(packet, 'review.md', [
+      [/reconcile|reconciliation|claim ceiling|downgrade|not-proven/gi, 'record'],
     ])
   }, ['capability packet requires proof reconciliation and claim downgrade'])
 
@@ -168,7 +179,7 @@ try {
     replaceInFile(packet, 'compatibility.md', [
       [/pre-retrieval filters/g, 'filters'],
     ])
-    replaceInFile(packet, '02-implementation-phases/01-contract-and-config.md', [
+    replaceInFile(packet, 'loops/01-contract-and-config.md', [
       [/The authorized corpus is computed before dense search, keyword search, fusion, reranking, citation, and generation\. Post-retrieval filtering is not the security boundary\./g, 'Authorization must be handled consistently.'],
     ])
   }, ['secure RAG capability requires pre-retrieval authorization'])
@@ -194,19 +205,14 @@ try {
   }, ['agentic chat eval requires trace-aware scenario harness'])
 
   expectAgenticChatEvalFailure('capability regression catches final-answer-only eval drift', (packet) => {
-    replaceInFile(packet, 'README.md', [
-      [/\r?\n- No pass from final text alone\./g, ''],
-    ])
-    replaceInFile(packet, 'capability.yaml', [
-      [/\r?\n\s+- grade only the final answer while ignoring trace and side effects/g, ''],
-      [/\r?\n\s+- final-answer-only grading hides bad tool calls or unsafe side effects/g, ''],
-      [/    - adopted paths keep trace evidence as the primary signal over the final answer alone\r?\n/g, ''],
-    ])
-    replaceInFile(packet, 'apply.md', [
-      [/\r?\n- Do not score only final assistant text\./g, ''],
-    ])
-    replaceInFile(packet, 'publication.json', [
-      [/Use trace-aware scenario harness; do not grade only the final answer/g, 'Use trace-aware scenario harness'],
+    replaceInAllFiles(packet, [
+      ['final-answer-only', 'full-path'],
+      ['final answer alone', 'full path'],
+      ['final text alone', 'full path'],
+      ['only the final answer', 'the full path'],
+      ['only final assistant text', 'the full path'],
+      ['grade only the final answer', 'grade the full path'],
+      ['No pass from final text alone', 'Pass from full path'],
     ])
   }, ['agentic chat eval forbids final-answer-only grading'])
 

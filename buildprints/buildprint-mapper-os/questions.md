@@ -5,7 +5,7 @@ Ask after discovery, not before, unless source access or safety boundaries are u
 ## Rules
 
 - Ask at most one blocking question at a time during discovery/scope selection.
-- For selected extraction, emit `01-questions.md` with numbered implementation-alignment questions and AI-best-judgment defaults.
+- For selected extraction, emit `00-goal.md` with the observable goal, acceptance criteria, and numbered hard-stop / assumable / deferrable decisions.
 - Do not ask broad product strategy questions.
 - Do not ask questions answerable from source.
 - Use defaults only for non-sensitive, non-blocking decisions.

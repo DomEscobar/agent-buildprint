@@ -1,0 +1,133 @@
+# 01 Host
+
+Merge of host assessment and integration plan. Complete before loop work. No source edits before `00-goal.md` hard stops and this host plan.
+
+## Host assessment
+
+Assess host signals from capability.yaml host_detection. Record compatible / blocked / needs decision.
+
+## Integration plan
+
+Plan bounded seams: config, core integration, host wiring, operator surface. Do not redesign the whole product.
+
+## Apply order
+
+Follow:
+
+1. `00-goal.md`
+2. `01-host.md` (this file)
+3. `loops/` in order
+4. `review.md`
+5. `verify.md`
+
+### Legacy apply notes
+
+# Apply A Capability Buildprint
+
+Use this file when authoring or applying a Capability Buildprint. `apply.md` is not permission to start editing. It is the protocol that forces host assessment, integration planning, phased implementation, and receipt writing.
+
+## How to author
+
+1. Pick one bounded capability.
+2. Name the host project types it supports.
+3. Define host-detection signals before implementation steps.
+4. Declare required secrets, services, migrations, providers, and user decisions.
+5. List the integration surfaces the agent may touch.
+6. Write an apply sequence that adapts to the host project instead of assuming a blank repo.
+7. Write concrete verification checks.
+8. Add composition notes for capabilities that commonly interact with it.
+
+## Capability scope test
+
+The capability is probably too broad if it needs a full product phase plan, a new brand/UI system, or more than one central user-visible promise.
+
+The capability is probably valid if it can be described as:
+
+```text
+Add <capability> to a host project that already has <host assumptions>.
+```
+
+Examples:
+
+- Add Stripe subscriptions to a Next.js app that already has user accounts.
+- Add RBAC to an app that already has authentication.
+- Add Supabase auth to a web app that needs login/session persistence.
+- Add an admin dashboard to an app that already has persisted entities.
+
+## Required host inspection
+
+Before applying a capability, inspect:
+
+- framework and router
+- package manager
+- auth/session model
+- database and migration path
+- env/config pattern
+- existing API route style
+- frontend component conventions
+- test runner and verification commands
+- deployment constraints when external services are involved
+
+The inspection must end in a decision contract. Classify important findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`. Stop before source edits when a `must ask user` finding changes product behavior, auth/tenant boundaries, data ownership, security posture, migrations, provider side effects, billing, or destructive operations.
+
+## Apply sequence model
+
+Each Capability Buildprint should define:
+
+```yaml
+apply:
+  inspect:
+    - host signal to read first
+  decisions:
+    - implementation-changing question or safe default
+  steps:
+    - bounded implementation action
+  forbidden:
+    - action the agent must not take
+```
+
+## Required local outputs
+
+Before implementation:
+
+```text
+.buildprint/host-assessment.md
+.buildprint/capability-questions.md
+.buildprint/capability-plan.md
+```
+
+After implementation:
+
+```text
+.buildprint/capability-receipt.md
+```
+
+The agent must run `00-assessment-questions.md` after host assessment and before integration planning. It must not make source edits before the host assessment, assessment-led question gate, and capability plan exist. The plan must map the generic capability to this host repo's framework, auth, data, env, route, UI/operator, and verification reality.
+
+If the host assessment says `block`, implementation must not start. If it says `proceed with assumptions`, the plan and receipt must carry those assumptions as claim ceilings until proof resolves them.
+
+## Phase order
+
+Apply the capability through these phases:
+
+1. Read `00-host-assessment.md` and create `.buildprint/host-assessment.md`.
+2. Read `01-integration-plan.md` and create `.buildprint/capability-plan.md`.
+3. Run `02-implementation-phases/01-contract-and-config.md`.
+4. Run `02-implementation-phases/02-core-integration.md`.
+5. Run `02-implementation-phases/03-host-wiring.md`.
+6. Run `02-implementation-phases/04-user-operator-surface.md` when the capability has user/operator visible states.
+7. Run `02-implementation-phases/05-verification-and-receipt.md`.
+8. Read `verify.md` before claiming success.
+
+## Boundaries
+
+The applying agent must not:
+
+- paste secret values into files
+- replace the host app architecture without cause
+- remove existing auth, database, or billing behavior silently
+- count fixture-only behavior as live proof
+- claim external integration success without configured credentials and runtime evidence
+
+
+Reconcile assessment assumptions with proof. Downgrade claim ceiling when proof is partial or blocked. Record not-proven honestly.

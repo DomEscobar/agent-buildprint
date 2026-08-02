@@ -1,0 +1,72 @@
+schema_version: buildprint/loop-index/v1
+active_loop: loops/01-data-pipeline.mdloops:
+  - loop_id: 01-data-pipeline
+    file: loops/01-data-pipeline.md
+    status: included
+    maturity_level: data_pipeline
+    depends_on: []
+  - loop_id: 02-engine-shell
+    file: loops/02-engine-shell.md
+    status: included
+    maturity_level: data_pipeline
+    depends_on: [01-data-pipeline]
+  - loop_id: 03-battle-core
+    file: loops/03-battle-core.md
+    status: included
+    maturity_level: battle_core
+    depends_on: [02-engine-shell]
+  - loop_id: 04-pallet-town-world-proof
+    file: loops/04-pallet-town-world-proof.md
+    status: included
+    maturity_level: starter_town_core
+    depends_on: [03-battle-core]
+  - loop_id: 05-first-loop-integration
+    file: loops/05-first-loop-integration.md
+    status: included
+    maturity_level: overworld_core
+    depends_on: [04-pallet-town-world-proof]
+  - loop_id: 06-script-vm-dialogue
+    file: loops/06-script-vm-dialogue.md
+    status: included
+    maturity_level: overworld_core
+    depends_on: [05-first-loop-integration]
+  - loop_id: 07-party-pc-evolution
+    file: loops/07-party-pc-evolution.md
+    status: included
+    maturity_level: overworld_core
+    depends_on: [06-script-vm-dialogue]
+  - loop_id: 08-items-bag-shops-hms
+    file: loops/08-items-bag-shops-hms.md
+    status: included
+    maturity_level: progression_core
+    depends_on: [07-party-pc-evolution]
+  - loop_id: 09-trainers-rival-ai
+    file: loops/09-trainers-rival-ai.md
+    status: included
+    maturity_level: progression_core
+    depends_on: [08-items-bag-shops-hms]
+  - loop_id: 10-story-gyms-dungeons
+    file: loops/10-story-gyms-dungeons.md
+    status: included
+    maturity_level: progression_core
+    depends_on: [09-trainers-rival-ai]
+  - loop_id: 11-elite-four-champion
+    file: loops/11-elite-four-champion.md
+    status: included
+    maturity_level: kanto_complete
+    depends_on: [10-story-gyms-dungeons]
+  - loop_id: 12-sevii-postgame
+    file: loops/12-sevii-postgame.md
+    status: included
+    maturity_level: postgame_sevii
+    depends_on: [11-elite-four-champion]
+  - loop_id: 13-menus-audio-polish
+    file: loops/13-menus-audio-polish.md
+    status: included
+    maturity_level: release_polish
+    depends_on: [12-sevii-postgame]
+  - loop_id: 14-claim-verification
+    file: loops/14-claim-verification.md
+    status: included
+    depends_on: [13-menus-audio-polish]
+

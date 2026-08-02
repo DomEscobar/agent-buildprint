@@ -430,8 +430,8 @@ export const HARNESS_SKILLS = [
     name: 'setup-runbook',
     body: `---
 name: setup-runbook
-description: Use during 01-project-setup to map the repo, commands, env, architecture, proof paths, and setup receipt before identity or phase work.
-phase: 01-project-setup
+description: Use during 01-setup to map the repo, commands, env, architecture, proof paths, and setup receipt before identity or loop work.
+phase: 01-setup
 triggers:
   - project setup
   - initialize project
@@ -450,21 +450,21 @@ Use during Buildprint project setup. The goal is to stop blind discovery and lea
 
 ## Workflow
 
-1. Read the Buildprint setup file, \`00-questions.md\`, \`blueprint.yaml\`, and existing project instructions.
+1. Read the Buildprint setup file, \`00-goal.md\`, \`blueprint.yaml\`, and existing project instructions.
 2. Inspect the repo shape, package manager, framework, runtime, ports, env files, data stores, generated folders, and existing tests.
 3. Create or update \`AGENTS.md\` with mandatory reads, ownership boundaries, verification expectations, and the Buildprint Skill Harness section.
-4. Create or update \`docs/architecture.md\` with stack, topology, persistence, provider seams, deployment posture, central output contract, typed quality gates, proof commands, blockers, and claim ceilings, plus an engineering quality bar: scalability seams (data growth, concurrency, load, feature growth), maintainability boundaries with separation of concerns and testability, and enforced coding standards (SOLID, KISS, DRY, typed boundaries, explicit error handling) with the lint, format, and type-check gates that enforce them.
+4. Create or update \`docs/architecture.md\` with stack, topology, persistence, provider seams, deployment posture, central output contract, proof commands, blockers, and claim ceilings. Name main modules and seams; deepen only as loops demand.
 5. Create or update \`.env.example\` with blank secrets only.
-6. Create or update \`.buildprint/setup-receipt.md\` with decisions, assumptions, blockers, commands discovered, and readiness for UI identity or phase work.
+6. Create or update \`.buildprint/setup-receipt.md\` with decisions, assumptions, blockers, commands discovered, and readiness for identity or loop work.
 7. End the setup note with \`SETUP_RUNBOOK_DONE\` only after the artifacts exist or blockers are recorded.
 
 ## Hard Rules
 
-- Do not start identity or phase work before setup facts exist.
-- Do not record a thin or default architecture; name the scalability seams, maintainability boundaries, and enforced coding standards (SOLID, KISS, DRY) with lint/format/type-check gates, or record an honest blocker.
+- Do not start identity or loop work before setup facts exist.
 - Do not invent commands; mark unknown commands as blockers.
 - Do not hide hard-stop questions as assumptions.
 - Do not put real secrets into docs, examples, tests, logs, screenshots, or handover.
+- Production maturity is not a setup floor.
 `,
     references: []
   },
@@ -473,7 +473,7 @@ Use during Buildprint project setup. The goal is to stop blind discovery and lea
     body: `---
 name: frontend-ui-product-design
 description: Use when building or changing any human-facing UI, frontend, dashboard, app, page, component, or visual workflow from a Buildprint.
-phase: 02-ui-identity
+phase: 02-identity
 triggers:
   - UI identity
   - frontend
@@ -532,13 +532,14 @@ End the identity or UI-design handoff with \`UI_IDENTITY_DONE\` only after the g
     name: 'subagent-driven-implementation',
     body: `---
 name: subagent-driven-implementation
-description: Use when executing a Buildprint phase or implementation plan with multiple tasks, review checkpoints, or separable workstreams.
-phase: 03-phases
+description: Use when executing a Buildprint loop or implementation plan with multiple tasks, review checkpoints, or separable workstreams.
+phase: loops
 triggers:
-  - multi-task phase
+  - multi-task loop
   - separable workstreams
   - parallel implementation
   - subagent
+  - fan-out
 skips:
   - one small edit
   - same-file changes
@@ -548,15 +549,15 @@ completion_signal: SUBAGENT_PHASE_DONE
 
 # Subagent-Driven Implementation
 
-Use when a Buildprint phase or plan has independent implementation tasks. Keep the controller responsible for context, sequencing, and final quality.
+Use when a Buildprint loop or plan has independent implementation tasks. Keep the controller responsible for context, sequencing, and final quality. This is independent fan-out — not supervisor theater.
 
 ## Controller Rules
 
-1. Read the active phase or plan once and extract concrete tasks.
-2. Dispatch fresh subagents only with the task text, owned files, relevant context, verification command, and expected report format.
+1. Read the active loop or plan once and extract concrete tasks.
+2. Dispatch fresh subagents only with the task text, owned files, goal slice + contract, verification command, and expected report format.
 3. Do not make a subagent read the whole plan or infer missing scope.
 4. Do not run parallel implementers over the same files or ownership boundary.
-5. After implementation, run two reviews before marking a task done: spec compliance first, code quality second.
+5. After implementation, run two reviews before marking a task done: spec/contract compliance first, code quality second.
 6. If a subagent reports BLOCKED or NEEDS_CONTEXT, resolve context, split the task, or escalate. Do not force blind retries.
 7. Keep moving through all dependency-ready tasks; do not ask the user whether to continue unless a real blocker or product decision stops progress.
 
@@ -571,10 +572,11 @@ Use when a Buildprint phase or plan has independent implementation tasks. Keep t
 
 ## Red Flags
 
-- Skipping spec review or code quality review.
-- Accepting close-enough behavior when the phase objective is explicit.
+- Skipping contract review or code quality review.
+- Accepting close-enough behavior when the loop objective is explicit.
 - Letting implementation agents broaden scope, rewrite unrelated files, or invent architecture not present in the plan.
 - Treating tests as enough when browser/runtime/product proof is required.
+- Shared mutable context across workers labeled as independent.
 
 End the controller summary with \`SUBAGENT_PHASE_DONE\` only after integration and controller review are complete.
 `,
@@ -584,8 +586,8 @@ End the controller summary with \`SUBAGENT_PHASE_DONE\` only after integration a
     name: 'verify-and-review',
     body: `---
 name: verify-and-review
-description: Use at the end of every Buildprint phase and before handover to run proof, inspect the diff, set claim ceilings, and block fake success.
-phase: phase-completion
+description: Use at the end of every Buildprint loop and before handover to run proof, prepare independent contract review, set claim ceilings, and block fake success.
+phase: loop-completion
 triggers:
   - verify
   - review
@@ -599,23 +601,24 @@ completion_signal: VERIFY_REVIEW_DONE
 
 # Verify And Review
 
-Use before claiming a phase, checkpoint, or Buildprint is complete.
+Use before claiming a loop, checkpoint, or Buildprint is complete. Proof prepares an independent contract review — it does not replace it.
 
 ## Workflow
 
-1. Re-read the active acceptance criteria and setup receipt.
+1. Re-read \`00-goal.md\` acceptance criteria and the active loop contract.
 2. Run the strongest available proof command, browser/API/runtime check, screenshot inspection, persistence readback, or manual check.
-3. For UI-bearing work, capture screenshots per the frontend skill's \`references/screenshot-capture.md\`: named tool chain, every required viewport, saved to \`.buildprint/screenshots/\`, and analyzed against \`docs/ui-identity.md\` and \`docs/DESIGN.md\`.
+3. For UI-bearing work, capture screenshots when surfaces changed and compare against identity/design artifacts.
 4. Inspect the diff and list unrelated changes, dead controls, placeholder paths, mocked/sample-only proof, and claim gaps.
-5. Compare proof against the predicted failure modes from phase-flow.
-6. Patch one concrete weakness if found, then rerun the relevant proof.
-7. Record what was verified, what was not proven, and what future agents may trust.
+5. Patch one concrete weakness if found, then rerun the relevant proof.
+6. Hand off to independent \`review.md\` (fresh-context reviewer; builder chat excluded). Self-review is invalid.
+7. Record what was verified, what was not proven, \`loop_core_passed\` vs \`claim_qualified\`, and what future agents may trust.
 8. End with \`VERIFY_REVIEW_DONE\` only when the claim ceiling is honest.
 
 ## Hard Rules
 
 - No fake success: edits alone do not prove behavior.
 - If proof cannot run, state the exact blocker and reduce the claim.
+- Do not invent evidence ledgers or claim-gates JSON products as the verification surface.
 - Do not approve unrelated churn unless it is required for the task.
 `,
     references: []

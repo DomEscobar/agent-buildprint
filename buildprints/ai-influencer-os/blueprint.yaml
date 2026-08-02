@@ -1,4 +1,4 @@
-schema_version: mapper-os/executable-blueprint/v3
+schema_version: buildprint/kernel/v1
 execution_start: BUILDPRINT.md
 machine_contract: blueprint.yaml
 claim_status: product_build_required
@@ -14,29 +14,47 @@ deployment_posture:
 
 read_order:
   - BUILDPRINT.md
-  - 00-questions.md
-  - 01-project-setup.md
-  - 02-ui-identity.md
+  - 00-goal.md
+  - 01-setup.md
+  - 02-identity.md
   - blueprint.yaml
-  - 03-phases/phase-index.yaml
-  - 03-phases/phase-flow.md
+  - loops/loop-index.yaml
+  - loops/loop-flow.md
   - README.md
   - HANDOVER.md
 
+kernel:
+  flow: goal → bare_agentic_loop → optional_independent_fan_out → contract_review
+  bare_agentic_loop: think → act → observe until done or stuck
+  independent_fan_out: clean ownership only; each worker gets goal slice + contract
+  contract_review: fresh-context reviewer against 00-goal.md and active loop contract
+  rule: Production maturity is never the floor for first success.
+
+maturity_upgrades:
+  rule: Optional and claim-gated. Do not require these for the first successful loop.
+  examples:
+    - budgets_and_loop_breakers
+    - run_receipts_and_session_logs
+    - swarm_ledgers_and_concurrency_proof
+    - trust_zones_and_capability_grants
+
 packet_shape:
-  style: phase_driven_comprehensive
+  style: kernel_loop
   principle: YAML routes; markdown teaches and builds.
   required_files:
     - BUILDPRINT.md
-    - 00-questions.md
-    - 01-project-setup.md
-    - 02-ui-identity.md
+    - 00-goal.md
+    - 01-setup.md
+    - 02-identity.md
     - blueprint.yaml
-    - 03-phases/phase-index.yaml
-    - 03-phases/phase-flow.md
+    - loops/loop-index.yaml
+    - loops/loop-flow.md
     - README.md
     - HANDOVER.md
   forbidden_shapes:
+    - 03-phases/
+    - evidence-ledger
+    - claim-gates.json
     - slices/
     - gates/
     - 02-architecture.md
@@ -47,9 +65,9 @@ packet_shape:
     - generated/agent-prompt.md
     - generated/codex-handoff.md
 
-phase_contract:
+loop_contract:
   required_headings:
-    - How to implement this phase
+    - How to implement this loop
     - Building objective
     - DO NOT
     - Minimum proof before moving on
@@ -146,8 +164,8 @@ typed_quality_gates:
       - explicit live-provider or external-side-effect blockers
   critical_review_pushback:
     applies_when: serious executable packet or user-facing artifact
-    phase_id: 99-critical-review-pushback
-    phase: 03-phases/critical-review-pushback.md
+    loop_id: 99-critical-review-pushback
+    phase: loops/critical-review-pushback.md
     pass_threshold: "42/50, no category below 4, no unresolved high-severity finding"
     repair_loop: "up to five flaw -> fix -> proof -> rescore iterations unless externally blocked"
 

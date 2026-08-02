@@ -119,7 +119,7 @@ function copyDir(src, dest) {
 
 
 function isUrl(value) {
-  return /^https?:\/\//.test(value)
+  return /^(https?:\/\/|file:\/\/)/i.test(value)
 }
 
 function looksLikeHtml(text) {
@@ -268,8 +268,9 @@ function isCapabilityPacket(dir) {
   const capabilityFile = path.join(dir, 'capability.yaml')
   if (!exists(capabilityFile)) return false
   const capability = safeReadText(capabilityFile)
+  if (/type:\s*capability-standard/i.test(capability)) return false
   return /schema:\s*agent-buildprint\/capability\.v0/i.test(capability) ||
-    /type:\s*capability/i.test(capability)
+    /type:\s*capability(?!-standard)/i.test(capability)
 }
 
 function isBuildprintAuthorPacket(dir) {
@@ -455,29 +456,29 @@ function capabilityPacketCheckResults(dir) {
   const verify = safeReadText(path.join(dir, 'verify.md'))
   const compatibility = safeReadText(path.join(dir, 'compatibility.md'))
   const publication = safeReadText(path.join(dir, 'publication.json'))
-  const phasesDir = '02-implementation-phases'
-  const phaseFiles = [
-    `${phasesDir}/01-contract-and-config.md`,
-    `${phasesDir}/02-core-integration.md`,
-    `${phasesDir}/03-host-wiring.md`,
-    `${phasesDir}/04-user-operator-surface.md`,
-    `${phasesDir}/05-verification-and-receipt.md`,
+  const loopFiles = [
+    'loops/loop-flow.md',
+    'loops/01-contract-and-config.md',
+    'loops/02-core-integration.md',
+    'loops/03-host-wiring.md',
+    'loops/04-operator-surface.md',
   ]
   const requiredFiles = [
     'BUILDPRINT.md',
     'README.md',
     'capability.yaml',
     'compatibility.md',
-    'apply.md',
+    '00-goal.md',
+    '01-host.md',
+    'review.md',
     'verify.md',
-    '00-host-assessment.md',
-    '00-assessment-questions.md',
-    '01-integration-plan.md',
-    ...phaseFiles,
+    ...loopFiles,
   ]
-  const phaseTexts = phaseFiles.map((file) => safeReadText(path.join(dir, file)))
-  const assessmentQuestions = safeReadText(path.join(dir, '00-assessment-questions.md'))
-  const combinedCapabilityText = [capability, buildprint, apply, verify, compatibility, publication, ...phaseTexts].join('\n')
+  const loopTexts = loopFiles.map((file) => safeReadText(path.join(dir, file)))
+  const goal = safeReadText(path.join(dir, '00-goal.md'))
+  const host = safeReadText(path.join(dir, '01-host.md'))
+  const reviewCap = safeReadText(path.join(dir, 'review.md'))
+  const combinedCapabilityText = [capability, buildprint, apply, verify, compatibility, publication, goal, host, reviewCap, ...loopTexts].join('\n')
   const requiredCapabilityItems = yamlListItemsInSection(capability, 'requires', 'existing_capabilities')
   const expectedCapabilityItems = yamlListItemsInSection(capability, 'composition', 'expects')
   const credentialCapability = isCredentialCapability(capability, buildprint, publication)
@@ -487,7 +488,7 @@ function capabilityPacketCheckResults(dir) {
   const evolutionaryCodingRuntimeCapability = isEvolutionaryCodingRuntimeCapability(capability, buildprint, publication)
 
   for (const file of requiredFiles) ok(`capability file exists: ${file}`, files.has(file))
-  ok('capability packet has no product-only v3 blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml') && !files.has('HANDOVER.md'))
+  ok('capability packet has no product-only blueprint router', !files.has('blueprint.yaml') && !files.has('03-phases/phase-index.yaml'))
   ok('capability packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
 
   ok('capability.yaml declares v0 schema', /schema:\s*agent-buildprint\/capability\.v0/i.test(capability))
@@ -521,20 +522,14 @@ function capabilityPacketCheckResults(dir) {
   }
 
   ok('BUILDPRINT identifies bounded capability, not whole product', /bounded capability|not a whole-product/i.test(buildprint) && !/Product Buildprint builds a whole/i.test(buildprint))
-  ok('BUILDPRINT enforces read order through verify', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*compatibility\.md[\s\S]*00-host-assessment\.md[\s\S]*00-assessment-questions\.md[\s\S]*01-integration-plan\.md[\s\S]*apply\.md[\s\S]*verify\.md/i.test(buildprint))
-  ok('BUILDPRINT forbids implementation before assessment and plan', /No source edits before host assessment and capability plan/i.test(buildprint) || /must not make source edits before.*host assessment.*capability plan/i.test(buildprint))
-  ok('capability packet requires discovery decision gate', hasDiscoveryDecisionGate(`${buildprint}\n${safeReadText(path.join(dir, '00-host-assessment.md'))}\n${apply}`))
-  ok('capability packet requires assessment-led questions after host assessment',
-    /after `?00-host-assessment\.md`?.*before `?01-integration-plan\.md`?/i.test(assessmentQuestions) &&
-    /Hard-stop questions/i.test(assessmentQuestions) &&
-    /Assumable defaults/i.test(assessmentQuestions) &&
-    /Deferrable questions/i.test(assessmentQuestions) &&
-    /agent_assumption.*invalid|invalid.*agent_assumption/i.test(assessmentQuestions)
-  )
-  ok('capability packet requires proof reconciliation and claim downgrade', hasAssessmentReconciliation(`${verify}\n${safeReadText(path.join(dir, '01-integration-plan.md'))}\n${buildprint}`))
+  ok('BUILDPRINT enforces kernel capability read order', /BUILDPRINT\.md[\s\S]*capability\.yaml[\s\S]*00-goal\.md[\s\S]*01-host\.md[\s\S]*loops\/[\s\S]*review\.md[\s\S]*verify\.md/i.test(buildprint))
+  ok('BUILDPRINT forbids implementation before goal and host', /No source edits before|must not make source edits before/i.test(buildprint) && /00-goal|01-host|host assessment|goal/i.test(buildprint))
+  ok('capability packet requires discovery decision gate', hasDiscoveryDecisionGate(`${buildprint}\n${host}\n${apply}`))
+  ok('capability packet requires goal hard-stops', /Hard-stop questions/i.test(goal) && /Assumable defaults/i.test(goal) && /Deferrable questions/i.test(goal))
+  ok('capability packet requires proof reconciliation and claim downgrade', hasAssessmentReconciliation(`${verify}\n${host}\n${reviewCap}\n${buildprint}`))
 
   ok('compatibility names host signals and block conditions', /host app|host project/i.test(compatibility) && /block|blocked|must not proceed/i.test(compatibility))
-  ok('apply requires assessment, questions, plan, phases, verify, and receipt in order', /00-host-assessment\.md[\s\S]*00-assessment-questions\.md[\s\S]*01-integration-plan\.md[\s\S]*02-implementation-phases[\s\S]*verify\.md[\s\S]*capability-receipt\.md/i.test(apply))
+  ok('apply or host requires goal → loops → review → verify order', /00-goal\.md[\s\S]*loops\/[\s\S]*review\.md[\s\S]*verify\.md/i.test(`${apply}\n${host}\n${buildprint}`))
   ok('apply forbids over-broad rewrites', /bounded|Do not redesign|Do not.*whole/i.test(apply))
   ok('verify defines structural/runtime/blocker checks', /Required structural checks/i.test(verify) && /Runtime checks/i.test(verify) && /Blocked checks/i.test(verify))
   ok('verify requires receipt before success claim', /capability-receipt\.md/i.test(verify) && /Pass condition/i.test(verify))
@@ -664,9 +659,9 @@ function capabilityPacketCheckResults(dir) {
       files.has('examples/minimal-evolution-run.json') && files.has('examples/fixture-evolution-receipt.md'))
   }
 
-  for (const file of phaseFiles) {
+  for (const file of loopFiles.filter((f) => f !== 'loops/loop-flow.md')) {
     const text = safeReadText(path.join(dir, file))
-    ok(`${file} has objective and proof gate`, /##\s*Objective/i.test(text) && /Proof before moving on|Required output|DO NOT/i.test(text))
+    ok(`${file} has objective and proof gate`, /##\s*(Objective|Building objective)/i.test(text) && /Proof before moving on|Minimum proof|Required output|DO NOT/i.test(text))
   }
 
   if (publication) {
@@ -756,6 +751,28 @@ function buildprintAuthorCheckResults(dir) {
   return checks
 }
 
+function loopFilesFromIndex(text) {
+  return [...text.matchAll(/^\s*file:\s*(loops\/[^\s#]+\.md)\s*$/gmi)].map((m) => m[1].trim())
+}
+
+function loopEntryBlock(text, loopId) {
+  const lines = text.split(/\r?\n/)
+  const start = lines.findIndex((line) => new RegExp(`^\\s*-\\s*loop_id:\\s*${escapeRegExp(loopId)}\\s*$`, 'i').test(line))
+  if (start < 0) return ''
+  const collected = [lines[start]]
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (/^\s*-\s*loop_id:/i.test(line) || /^\S/.test(line)) break
+    collected.push(line)
+  }
+  return collected.join('\n')
+}
+
+function loopFileForId(text, loopId) {
+  const block = loopEntryBlock(text, loopId)
+  return (block.match(/^\s*file:\s*(loops\/[^\s#]+\.md)\s*$/mi) || [])[1] || ''
+}
+
 function mapperOsRootCheckResults(dir) {
   const checks = []
   const ok = (label, pass, detail = '') => checks.push({ label, pass, detail })
@@ -764,16 +781,18 @@ function mapperOsRootCheckResults(dir) {
   const quality = safeReadText(path.join(dir, 'policies/quality.md'))
   const spec = safeReadText(path.join(dir, 'SPEC.md'))
   const readme = safeReadText(path.join(dir, 'README.md'))
+  const vision = safeReadText(path.join(dir, 'vision.md'))
   const templateDir = path.join(dir, 'templates', 'executable-packet')
   const templateChecks = packetCheckResults(templateDir)
-  const rootText = [buildprintJson, contracts, quality, spec, readme].join('\n')
+  const rootText = [buildprintJson, contracts, quality, spec, readme, vision].join('\n')
 
-  ok('mapper manifest includes critical review template source', /templates\/executable-packet\/03-phases\/critical-review-pushback\.md/i.test(buildprintJson))
-  ok('mapper root requires hard-stop decisions before setup', /hard-stop/i.test(rootText) && /decisions\.md/i.test(rootText) && /before .*setup|before any phase work/i.test(rootText))
-  ok('mapper root requires architecture framework and styling decisions', /Framework And Styling Decisions/i.test(rootText) && /ui_stack_exception/i.test(rootText) && /static DOM|plain CSS|static\/vanilla/i.test(rootText))
-  ok('mapper root requires design construction contract', /docs\/DESIGN\.md/i.test(rootText) && /construction contract/i.test(rootText) && /taste prose|moodboard/i.test(rootText))
-  ok('mapper root requires UI evidence binder', /\.buildprint\/ui-evidence\.md/i.test(rootText) && /screenshot|file:line/i.test(rootText) && /Identity prose is not evidence|prose-only/i.test(rootText))
-  ok('mapper root separates phase core pass from claim qualification', /phase_core_passed/i.test(rootText) && /claim_qualified/i.test(rootText))
+  ok('mapper manifest includes review template source', /templates\/executable-packet\/review\.md/i.test(buildprintJson))
+  ok('mapper root requires kernel packet shape', /buildprint\/kernel\/v1/i.test(rootText) && /kernel_loop/i.test(rootText))
+  ok('mapper root requires goal → loop → fan-out → review kernel', /bare agentic loop/i.test(rootText) && /independent/i.test(rootText) && /contract review/i.test(rootText))
+  ok('mapper root forbids phase_driven_comprehensive selected output', /phase_driven_comprehensive/i.test(rootText) && /forbid|reject|obsolete|do not emit/i.test(rootText))
+  ok('mapper root forbids evidence-ledger bureaucracy', /evidence-ledger/i.test(rootText) && /forbid|reject|do not/i.test(rootText))
+  ok('mapper root separates loop core pass from claim qualification', /loop_core_passed/i.test(rootText) && /claim_qualified/i.test(rootText))
+  ok('mapper root requires hard-stop decisions before setup', /hard-stop/i.test(rootText) && /decisions\.md/i.test(rootText))
 
   return [...checks, ...templateChecks]
 }
@@ -791,22 +810,18 @@ function packetCheckResults(dir) {
 
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
   const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
-  const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
-  const phaseFlow = safeReadText(path.join(dir, '03-phases/phase-flow.md'))
+  const loopIndex = safeReadText(path.join(dir, 'loops/loop-index.yaml'))
+  const loopFlow = safeReadText(path.join(dir, 'loops/loop-flow.md'))
+  const review = safeReadText(path.join(dir, 'review.md'))
   const isMapperTemplatePacket = normalizedPacketDir.endsWith('buildprints/buildprint-mapper-os/templates/executable-packet') ||
     normalizedPacketDir.endsWith('.buildprint/snapshots/templates/executable-packet') ||
     /Replace this template-level rule with the selected artifact's source-derived central output contract/i.test(blueprint)
-  const uiIdentityText = safeReadText(path.join(dir, '02-ui-identity.md'))
+  const identityText = safeReadText(path.join(dir, '02-identity.md'))
   const isAgenticChatPacket = normalizedPacketDir.endsWith('buildprints/agentic-chat') ||
-    /Product:\s*Agentic Chat/i.test(uiIdentityText) ||
+    /Product:\s*Agentic Chat/i.test(identityText) ||
     /capability_maturity:[\s\S]*full_claim:\s*agentic_chat/i.test(blueprint) ||
     /central_output_contract:[\s\S]*Agentic Chat/i.test(blueprint)
   const requiresTypedQualityRouting = isMapperTemplatePacket
-  const isPresentationPacket = /name:\s*AI Presentation Generation Workbench/i.test(blueprint)
-  const requiresCriticalReviewPushback = isMapperTemplatePacket ||
-    isPresentationPacket ||
-    /99-critical-review-pushback/i.test(phaseIndex) ||
-    /99-critical-review-pushback/i.test(blueprint)
 
   const obsoleteFiles = allFiles.filter((file) =>
     file === '02-architecture.md' ||
@@ -814,12 +829,16 @@ function packetCheckResults(dir) {
     file === '04-handover.md' ||
     file === '04-review.md' ||
     file === '05-handover.md' ||
+    file === '00-questions.md' ||
+    file === '01-project-setup.md' ||
+    file === '02-ui-identity.md' ||
     file.startsWith('slices/') ||
     file.startsWith('gates/') ||
     file.startsWith('teams/') ||
     file.startsWith('runner/') ||
     file.startsWith('generated/') ||
     file.startsWith('05-evidence/') ||
+    file.startsWith('03-phases/') ||
     file.includes('/slice.yaml') ||
     file.includes('/gate-index.yaml') ||
     packetHasObsoleteRouter(file)
@@ -830,19 +849,22 @@ function packetCheckResults(dir) {
     files.has('gates/gate-index.yaml') ||
     /slices_dir:|gates_dir:|capsules_dir:/i.test(blueprint)
 
-  ok('packet rejects obsolete v2 packet shape', !isLegacySliceGatePacket, isLegacySliceGatePacket ? 'found v2 schema, slices/gates, or slices_dir/gates_dir/capsules_dir' : '')
+  const isLegacyPhasePacket = /schema_version:\s*mapper-os\/executable-blueprint\/v3/i.test(blueprint) ||
+    /phase_driven_comprehensive/i.test(blueprint) ||
+    files.has('03-phases/phase-index.yaml')
 
-  const usesSetupFirstIdentitySecond = files.has('01-project-setup.md') && files.has('02-ui-identity.md')
-  const setupFile = usesSetupFirstIdentitySecond ? '01-project-setup.md' : '02-project-setup.md'
-  const uiIdentityFile = usesSetupFirstIdentitySecond ? '02-ui-identity.md' : '01-ui-identity.md'
+  ok('packet rejects obsolete v2 packet shape', !isLegacySliceGatePacket, isLegacySliceGatePacket ? 'found v2 schema, slices/gates, or slices_dir/gates_dir/capsules_dir' : '')
+  ok('packet rejects obsolete v3 phase spine', !isLegacyPhasePacket, isLegacyPhasePacket ? 'found v3 schema, phase_driven_comprehensive, or 03-phases/' : '')
+
   const need = [
     'BUILDPRINT.md',
-    '00-questions.md',
-    setupFile,
-    uiIdentityFile,
+    '00-goal.md',
+    '01-setup.md',
+    '02-identity.md',
     'blueprint.yaml',
-    '03-phases/phase-index.yaml',
-    '03-phases/phase-flow.md',
+    'loops/loop-index.yaml',
+    'loops/loop-flow.md',
+    'review.md',
     'README.md',
     'HANDOVER.md'
   ]
@@ -850,11 +872,17 @@ function packetCheckResults(dir) {
   ok('packet has no obsolete useless files', obsoleteFiles.length === 0, obsoleteFiles.length ? obsoleteFiles.join(', ') : '')
   ok('packet avoids obsolete routers/files recursively', !allFiles.some(packetHasObsoleteRouter))
 
-  ok('blueprint declares v3 phase-driven schema', /schema_version:\s*mapper-os\/executable-blueprint\/v3/i.test(blueprint))
+  ok('blueprint declares kernel v1 schema', /schema_version:\s*buildprint\/kernel\/v1/i.test(blueprint))
   ok('blueprint starts at BUILDPRINT and uses blueprint.yaml as machine contract', /execution_start:\s*BUILDPRINT\.md/i.test(blueprint) && /machine_contract:\s*blueprint\.yaml/i.test(blueprint))
-  ok('blueprint routes only, markdown teaches/builds', /YAML routes; markdown teaches and builds/i.test(blueprint) || /phase_driven_comprehensive/i.test(blueprint))
-  ok('blueprint declares required v3 packet files', need.every((file) => blueprint.includes(file)))
-  ok('blueprint forbids obsolete selected shapes', /forbidden_shapes:/i.test(blueprint) && /slices\//i.test(blueprint) && /gates\//i.test(blueprint) && /generated\/agent-prompt\.md/i.test(blueprint))
+  ok('blueprint declares kernel_loop style', /style:\s*kernel_loop/i.test(blueprint) && /YAML routes; markdown teaches and builds/i.test(blueprint))
+  ok('blueprint declares required kernel packet files', need.every((file) => blueprint.includes(file)))
+  ok('blueprint forbids obsolete selected shapes', /forbidden_shapes:/i.test(blueprint) && /slices\//i.test(blueprint) && /03-phases\//i.test(blueprint) && /evidence-ledger/i.test(blueprint))
+  ok('blueprint declares kernel execution model',
+    /kernel:\s*\n/i.test(blueprint) &&
+    /bare agentic loop|bare_agentic_loop/i.test(blueprint) &&
+    /independent.*fan-out|independent_fan_out|fan-out/i.test(blueprint) &&
+    /contract review|contract_review/i.test(blueprint)
+  )
   ok('blueprint declares canonical deployment posture', /deployment_posture:[\s\S]*current:\s*trusted_local/i.test(blueprint) && !/trusted-local|private authenticated|public webapp/i.test(blueprint))
   ok('blueprint declares central output quality contract',
     /central_output_contract:/i.test(blueprint) &&
@@ -866,36 +894,6 @@ function packetCheckResults(dir) {
     /claim_gates:/i.test(blueprint)
   )
   for (const check of centralOutputInstantiationChecks(blueprint, isMapperTemplatePacket, isAgenticChatPacket)) ok(check.label, check.pass, check.detail || '')
-  ok('agentic-chat declares explicit agentic execution model',
-    !isAgenticChatPacket ||
-    (/execution_model:/i.test(blueprint) &&
-     /mode:\s*agentic_loop/i.test(blueprint) &&
-     /builder_loop:/i.test(blueprint) &&
-     /product_loop:/i.test(blueprint) &&
-     /proof_loop:/i.test(blueprint) &&
-     /Observe|observe/i.test(blueprint) &&
-     /Interpret|interpret/i.test(blueprint) &&
-     /Plan|plan/i.test(blueprint) &&
-     /Act|act/i.test(blueprint) &&
-     /Inspect|inspect/i.test(blueprint) &&
-     /Critique|critique/i.test(blueprint) &&
-     /Repair|repair/i.test(blueprint) &&
-     /Verify|verify/i.test(blueprint) &&
-     /Decide|decide/i.test(blueprint))
-  )
-  ok('agentic-chat separates streaming core from full agentic maturity',
-    !isAgenticChatPacket ||
-    (/capability_maturity:/i.test(blueprint) &&
-     /current_floor:\s*streaming_chat_core/i.test(blueprint) &&
-     /full_claim:\s*agentic_(chat|swarm)/i.test(blueprint) &&
-     /Do not call the artifact (a complete Agentic Chat|agentic)/i.test(blueprint) &&
-     /planning\/next-step loop|plan or next-step/i.test(blueprint) &&
-     /tool\/skill execution policy|tool.*skill/i.test(blueprint) &&
-     /MCP adapter posture/i.test(blueprint) &&
-     /memory\/compaction/i.test(blueprint) &&
-     /subagent\/delegation/i.test(blueprint) &&
-     /benchmark evidence/i.test(blueprint))
-  )
   ok('blueprint declares harness provider and profile selection',
     /harness:\s*\n[\s\S]*profiles:/i.test(blueprint) &&
     /provider:\s*agents/i.test(blueprint) &&
@@ -903,567 +901,165 @@ function packetCheckResults(dir) {
   )
   ok('blueprint declares typed quality gate routing',
     !requiresTypedQualityRouting ||
-    /typed_quality_gates:/i.test(blueprint) &&
-    /ui_decision_precision:/i.test(blueprint) &&
-    /visual_viewport_acceptance:/i.test(blueprint) &&
-    /editor_stress_acceptance:/i.test(blueprint) &&
-    /semantic_output_acceptance:/i.test(blueprint) &&
-    /integration_operator_acceptance:/i.test(blueprint) &&
-    /critical_review_pushback:/i.test(blueprint) &&
-    /Select only the gates that match the artifact type/i.test(blueprint)
+    (/typed_quality_gates:/i.test(blueprint) &&
+    /Select only the gates that match the artifact type/i.test(blueprint))
   )
   ok('blueprint declares proven implementation requirements',
     /proven_implementation_requirements:/i.test(blueprint) &&
-    /proven libraries|proven packages|proven tool/i.test(blueprint) &&
-    /fixed-format export|fixed format export/i.test(blueprint) &&
-    /rich editing|rich text/i.test(blueprint) &&
-    /document parsing|document extraction/i.test(blueprint) &&
-    /drag|reorder/i.test(blueprint) &&
-    /provider/i.test(blueprint) &&
-    /task/i.test(blueprint) &&
-    /frontend UI runtime/i.test(blueprint) &&
-    /component\/state styling/i.test(blueprint) &&
-    /responsive viewport proof/i.test(blueprint) &&
-    /design token enforcement/i.test(blueprint) &&
-    /migration/i.test(blueprint) &&
-    /from-scratch|custom implementation/i.test(blueprint)
+    /proven libraries|proven packages|proven tool/i.test(blueprint)
+  )
+  ok('blueprint keeps production maturity as upgrade not floor',
+    /maturity_upgrades:|optional.*upgrade|upgrade layer|claim-gated/i.test(blueprint) ||
+    /never the (path|floor)|not required for first/i.test(blueprint)
   )
 
-  const readOrderPattern = usesSetupFirstIdentitySecond
-    ? /00-questions\.md[\s\S]*01-project-setup\.md[\s\S]*02-ui-identity\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i
-    : /00-questions\.md[\s\S]*01-ui-identity\.md[\s\S]*02-project-setup\.md[\s\S]*03-phases\/phase-index\.yaml[\s\S]*03-phases\/phase-flow\.md[\s\S]*HANDOVER\.md/i
-  ok('BUILDPRINT owns v3 read order', readOrderPattern.test(buildprint))
+  ok('BUILDPRINT owns kernel read order',
+    /00-goal\.md[\s\S]*01-setup\.md[\s\S]*02-identity\.md[\s\S]*loops\/loop-index\.yaml[\s\S]*loops\/loop-flow\.md[\s\S]*review\.md[\s\S]*HANDOVER\.md/i.test(buildprint)
+  )
   ok('BUILDPRINT is an AI builder briefing', /responsible builder/i.test(buildprint) && /senior product engineer/i.test(buildprint))
   ok('BUILDPRINT defines role, responsibility, and perfection alignment', /Your role/i.test(buildprint) && /Your responsibility/i.test(buildprint) && /Perfection alignment/i.test(buildprint))
+  ok('BUILDPRINT states kernel execution', /bare agentic loop/i.test(buildprint) && /fan-out|fan out/i.test(buildprint) && /contract review/i.test(buildprint))
   ok('BUILDPRINT avoids product-specific mapped-source briefing', !/MiroFish|mapped from|previous repository|original repo|source project/i.test(buildprint))
   ok('BUILDPRINT forbids fake-success paths', /functionless buttons|dead controls|mocked\/sample data|fake provider|raw JSON/i.test(buildprint))
 
-  const questions = safeReadText(path.join(dir, '00-questions.md'))
-  const hardStopBeforeFile = usesSetupFirstIdentitySecond ? setupFile : uiIdentityFile
-  ok('questions classify blocking power', /Hard-stop questions/i.test(questions) && /Assumable defaults/i.test(questions) && /Deferrable questions/i.test(questions) && new RegExp(`stop before \`?${hardStopBeforeFile.replace('.', '\\.')}\`?`, 'i').test(questions))
-  ok('questions hard-stop sensitive decisions', /Deployment posture/i.test(questions) && /Secrets and provider policy/i.test(questions) && /Destructive\/data-loss behavior/i.test(questions) && /Privacy\/compliance exposure/i.test(questions) && /Product\/artifact identity/i.test(questions))
-  ok('questions forbid hard-stop self-defaults',
-    /confirmed_by:\s*user/i.test(questions) &&
-    /confirmed_by:\s*explicit_user_delegation/i.test(questions) &&
-    /agent_assumption.*invalid|invalid.*agent_assumption/i.test(questions) &&
-    !/If not answered,\s*the agent may choose a reversible default/i.test(questions)
+  const goal = safeReadText(path.join(dir, '00-goal.md'))
+  ok('goal defines observable goal and acceptance', /##\s*Goal/i.test(goal) && /##\s*Acceptance criteria/i.test(goal))
+  ok('goal classifies blocking power', /Hard-stop questions/i.test(goal) && /Assumable defaults/i.test(goal) && /Deferrable questions/i.test(goal) && /stop before `?01-setup\.md`?/i.test(goal))
+  ok('goal hard-stop sensitive decisions', /Deployment posture/i.test(goal) && /Secrets and provider policy/i.test(goal) && /Destructive\/data-loss behavior/i.test(goal) && /Privacy\/compliance exposure/i.test(goal) && /Product\/artifact identity/i.test(goal))
+  ok('goal forbids hard-stop self-defaults',
+    /confirmed_by:\s*user/i.test(goal) &&
+    /confirmed_by:\s*explicit_user_delegation/i.test(goal) &&
+    /agent_assumption.*invalid|invalid.*agent_assumption/i.test(goal)
   )
-  const setup = safeReadText(path.join(dir, setupFile))
-  if (isAgenticChatPacket) {
-    const phase01 = safeReadText(path.join(dir, '03-phases/01-real-streaming-chat.md'))
-    const phase04 = safeReadText(path.join(dir, '03-phases/04-agentic-loop-runtime.md'))
-    const phase05 = safeReadText(path.join(dir, '03-phases/05-swarm-dispatching.md'))
-    const phase06 = safeReadText(path.join(dir, '03-phases/06-claim-verification.md'))
-    ok('agentic-chat inherits the intended user outcome into contracts and proof',
-      /Intended end-user outcome and acceptance scenario/i.test(questions) &&
-      /Intent inheritance contract/i.test(questions) &&
-      /User Intent Contract/i.test(setup) &&
-      /OutcomeAlignmentEvidence/i.test(blueprint) &&
-      /OutcomeAlignmentEvidence/i.test(phase01) &&
-      /OutcomeAlignmentEvidence/i.test(phase04) &&
-      /OutcomeAlignmentEvidence/i.test(phase05) &&
-      /OutcomeAlignmentEvidence/i.test(phase06)
-    )
-  }
 
-  ok('project setup defines foundation before phase work', /foundation pour/i.test(setup) && (/Do not start `?03-phases\/\*`?/i.test(setup) || /Do not start `?02-ui-identity\.md`? or `?03-phases\/\*`?/i.test(setup)))
-  ok('project setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
-  ok('project setup requires local skill harness',
+  const setup = safeReadText(path.join(dir, '01-setup.md'))
+  ok('setup defines foundation before loop work', /foundation|before loop|Do not start `?loops\//i.test(setup))
+  ok('setup requires durable setup artifacts', /AGENTS\.md/i.test(setup) && /docs\/architecture\.md/i.test(setup) && /\.env\.example/i.test(setup) && /setup-receipt\.md/i.test(setup))
+  ok('setup requires local skill harness',
     /agb harness init/i.test(setup) &&
-    /agb harness checkup/i.test(setup) &&
-    /Buildprint skill harness|local skill harness/i.test(setup) &&
     /setup-runbook/i.test(setup) &&
     /frontend-ui-product-design/i.test(setup) &&
     /subagent-driven-implementation/i.test(setup) &&
     /verify-and-review/i.test(setup) &&
-    /triggers/i.test(setup) &&
-    /skips/i.test(setup) &&
-    /completion_signal/i.test(setup) &&
-    /\.agents\/skills/i.test(setup) &&
-    /AGENTS\.md/i.test(setup)
+    /\.agents\/skills/i.test(setup)
   )
-  ok('project setup routes typed quality through architecture',
-    !requiresTypedQualityRouting ||
-    /typed_quality_gates/i.test(setup) &&
-    /docs\/architecture\.md/i.test(setup) &&
-    /applicable\/not applicable/i.test(setup) &&
-    /command\/proof path/i.test(setup) &&
-    /not applicable/i.test(setup)
-  )
-  ok('project setup routes proven implementation requirements',
+  ok('setup routes proven implementation requirements',
     /proven_implementation_requirements/i.test(setup) &&
-    /docs\/architecture\.md/i.test(setup) &&
-    /libraries|runtimes|SDKs|platform services/i.test(setup) &&
-    /hand-roll|from-scratch/i.test(setup) &&
-    /Framework And Styling Decisions/i.test(setup) &&
-    /React \+ Vite \+ TypeScript/i.test(setup) &&
-    /Tailwind CSS v4 \+ tokenized CSS variables/i.test(setup) &&
-    /ui_stack_exception/i.test(setup)
+    /docs\/architecture\.md/i.test(setup)
   )
-  ok('project setup requires engineering quality bar',
-    /scalab/i.test(setup) &&
-    /maintainab/i.test(setup) &&
-    /\bSOLID\b/i.test(setup) &&
-    /\bKISS\b/i.test(setup) &&
-    /coding standards|best practices/i.test(setup) &&
-    /module boundaries|separation of concerns/i.test(setup) &&
-    /lint|format|type-check/i.test(setup)
+  ok('setup leaves identity to the identity step',
+    !/docs\/ui-identity\.md|generated UI identity|forbidden default silhouette/i.test(setup)
   )
-  if (!usesSetupFirstIdentitySecond) {
-    ok('project setup requires UI identity screen-state contract',
-      /docs\/ui-identity\.md/i.test(setup) &&
-      /dominant (creative )?object/i.test(setup) &&
-      /primary (creative )?gesture/i.test(setup) &&
-      /screen states|screen-state|visible-together|hidden\/reachable/i.test(setup) &&
-      /forbidden default silhouette|old\/default layout patterns/i.test(setup) &&
-      /first[- ]run comprehension|first[- ]screen sketch|primary screen sketch/i.test(setup)
+  ok('setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
+  ok('setup requires decisions hard-stop before loop work',
+    /decisions\.md/i.test(setup) &&
+    /hard-stop/i.test(setup)
+  )
+
+  const identity = identityText
+  const notUiBearing = /not-ui-bearing/i.test(identity)
+  if (!notUiBearing) {
+    ok('identity opens with UX importance', /UX is a must/i.test(identity) && /not a finished product/i.test(identity))
+    ok('identity runs after setup before loops', /after `?01-setup\.md`?/i.test(identity) && /before `?loops\//i.test(identity))
+    ok('identity loads local frontend skill harness',
+      /frontend-ui-product-design/i.test(identity) &&
+      /\.agents\/skills\/frontend-ui-product-design\/SKILL\.md/i.test(identity)
     )
+    ok('identity defines product metaphor and primary gesture',
+      /product metaphor|metaphor/i.test(identity) &&
+      /dominant object|primary gesture/i.test(identity)
+    )
+    ok('identity rejects generic dead UI', /functionless buttons|dead controls/i.test(identity) && /raw JSON/i.test(identity))
   } else {
-    ok('project setup leaves UI identity to the identity step',
-      !/docs\/ui-identity\.md|generated UI identity|preserve the generated UI identity|dominant object|primary gesture|forbidden default silhouette/i.test(setup)
-    )
-  }
-  ok('project setup forbids fake setup shortcuts', /placeholder commands|real secrets|hide hard-stop/i.test(setup))
-
-  const uiux = safeReadText(path.join(dir, uiIdentityFile))
-  ok('ui identity opens with UX importance and understandability', /UX is a must/i.test(uiux) && /understand/i.test(uiux) && /not a finished product/i.test(uiux))
-  ok('ui identity runs in the declared setup order',
-    usesSetupFirstIdentitySecond
-      ? /after `?01-project-setup\.md`?/i.test(uiux) && /before `?03-phases\/\*`?/i.test(uiux)
-      : /before project setup/i.test(uiux) && /before `?02-project-setup\.md`?/i.test(uiux)
-  )
-  if (usesSetupFirstIdentitySecond) {
-    ok('ui identity loads local frontend skill harness',
-      /frontend-ui-product-design/i.test(uiux) &&
-      /\.agents\/skills\/frontend-ui-product-design\/SKILL\.md/i.test(uiux) &&
-      /references\/screen-states\.md/i.test(uiux) &&
-      /return to `?01-project-setup\.md`?/i.test(uiux)
-    )
-  }
-  ok('ui identity requires generated local identity and design artifacts', /docs\/ui-identity\.md/i.test(uiux) && /UI-IDENTITY\.md/i.test(uiux) && /docs\/DESIGN\.md/i.test(uiux) && /generated UI identity|generate a local/i.test(uiux))
-  ok('ui identity requires first-run comprehension and user-language control', /First-run comprehension contract/i.test(uiux) && /User-language map/i.test(uiux) && /internal.*terms|proof terms|evaluator language/i.test(uiux))
-  ok('ui identity is substantial enough to guide generation', uiux.trim().length >= (isMapperTemplatePacket ? 3500 : 4500))
-  ok('ui identity defines generated identity sections', /Product identity thesis/i.test(uiux) && /Chosen style direction/i.test(uiux) && /Layout model/i.test(uiux) && /Interaction model/i.test(uiux) && /Component language/i.test(uiux) && /Color and typography tokens/i.test(uiux))
-  ok('ui identity requires product metaphor and manipulation model',
-    /Creative product concept/i.test(uiux) &&
-    /product metaphor|emotional\/product metaphor|emotional\/operator affordance/i.test(uiux) &&
-    /dominant object|central creative object/i.test(uiux) &&
-    /primary (creative )?gesture|primary gesture\/manipulation/i.test(uiux) &&
-    /moment-to-moment manipulation/i.test(uiux)
-  )
-  ok('ui identity rejects default product silhouette',
-    /Silhouette rejection/i.test(uiux) &&
-    /forbidden default silhouette|forbidden silhouette/i.test(uiux) &&
-    /generic dashboard/i.test(uiux) &&
-    /renamed workbench|old workbench|proof workbench/i.test(uiux) &&
-    /card grid|central card grid/i.test(uiux) &&
-    /proof console/i.test(uiux)
-  )
-  ok('ui identity requires autonomous product reasoning before implementation', /reason from the artifact|Think through the product|think deeply/i.test(uiux) && /golden path/i.test(uiux) && /central output/i.test(uiux) && /before setup|before phase|before implementation/i.test(uiux))
-  ok('ui identity selects typed proof obligations without gate spam',
-    !requiresTypedQualityRouting ||
-    /Proof obligations/i.test(uiux) &&
-    /most likely UI failure|most likely quality failure|screenshot delta review/i.test(uiux)
-  )
-  ok('ui identity requires exact generated visual tokens', /exact semantic color/i.test(uiux) && /typography/i.test(uiux) && /state colors|focus/i.test(uiux))
-  ok('ui identity defines components, motion/states, stress fixtures, and proof', /Component language/i.test(uiux) && /empty\/loading\/error\/blocked|Empty, loading, error, and blocked/i.test(uiux) && /Content stress fixtures/i.test(uiux) && /Proof obligations/i.test(uiux))
-  ok('ui identity rejects generic dead UI and proof jargon', /functionless buttons|dead controls/i.test(uiux) && /raw JSON/i.test(uiux) && /proof.*labels|proof terms|evaluator language/i.test(uiux))
-  ok('ui identity requires nearest-silhouette distinguishing treatment',
-    !usesSetupFirstIdentitySecond ||
-    (/adjacent at-risk silhouette|adjacent silhouette/i.test(uiux) &&
-     /distinguish/i.test(uiux) &&
-     /do not count as a distinguishing treatment/i.test(uiux))
-  )
-  ok('ui identity requires anti-silhouette distinctiveness proof',
-    !usesSetupFirstIdentitySecond ||
-    (/anti-silhouette distinctiveness screenshot check/i.test(uiux) &&
-     /indistinguishable/i.test(uiux) &&
-     /Mechanical checks alone|mechanical checks/i.test(uiux))
-  )
-  ok('ui identity requires evidence binder and action surface gate',
-    !usesSetupFirstIdentitySecond ||
-    (/Evidence binder requirements/i.test(uiux) &&
-     /\.buildprint\/ui-evidence\.md/i.test(uiux) &&
-     /Identity prose is not evidence/i.test(uiux) &&
-     /Action surface gate/i.test(uiux) &&
-     /stronger than "type and send"/i.test(uiux) &&
-     /next powerful user action/i.test(uiux) &&
-     /status panels are subordinate/i.test(uiux))
-  )
-  ok('ui identity requires separate DESIGN.md visual taste system',
-    !usesSetupFirstIdentitySecond ||
-    (/Required sections in generated DESIGN\.md/i.test(uiux) &&
-     /screen construction contract/i.test(uiux) &&
-     /Visual Thesis/i.test(uiux) &&
-     /Exact Tokens/i.test(uiux) &&
-     /Type Scale/i.test(uiux) &&
-     /Layout Contract/i.test(uiux) &&
-     /Component Specs/i.test(uiux) &&
-     /State Matrix/i.test(uiux) &&
-     /Implementation Mapping/i.test(uiux) &&
-     /Screenshot Acceptance/i.test(uiux) &&
-     /Banned Patterns/i.test(uiux) &&
-     /Do not collapse `?docs\/ui-identity\.md`? and `?docs\/DESIGN\.md`?/i.test(uiux))
-  )
-  ok('agentic-chat requires chat-native action gate',
-    !isAgenticChatPacket ||
-    (/Product genre:\s*chat-native agent interface/i.test(uiux) &&
-     /conversation thread and composer\/input/i.test(uiux) &&
-     /Chat-native action gate/i.test(uiux) &&
-     /mission sheet.*guided-run.*task dashboard.*status lane.*workflow/i.test(uiux) &&
-     /action UI enhances chat; it does not displace chat/i.test(uiux))
-  )
-  ok('agentic-chat requires consumer chat craft gate',
-    !isAgenticChatPacket ||
-    (/references\/product-taste\.md/i.test(uiux) &&
-     /Design read and taste dials/i.test(uiux) &&
-     /Consumer chat craft gate/i.test(uiux) &&
-     /seeded feature-demo action cards/i.test(uiux) &&
-     /giant blank dead zone/i.test(uiux) &&
-     /system labels/i.test(uiux) &&
-     /cramped mobile composer\/chips/i.test(uiux))
-  )
-
-  ok('phase flow defines active phase loop',
-    /active phase only/i.test(phaseFlow) &&
-    /Do not read every phase upfront/i.test(phaseFlow) &&
-    /thinking checkpoint/i.test(phaseFlow) &&
-    /smallest real vertical user\/operator path/i.test(phaseFlow) &&
-    /3-7 likely failure modes/i.test(phaseFlow) &&
-    /proof plan/i.test(phaseFlow) &&
-    /claim ceiling/i.test(phaseFlow)
-  )
-  ok('phase flow activates agentic review without paperwork',
-    /not a deliverable file/i.test(phaseFlow) &&
-    /Do not create phase-run paperwork by default/i.test(phaseFlow) &&
-    /Compare the result against the predicted failure modes/i.test(phaseFlow) &&
-    /one concrete weakness repair/i.test(phaseFlow) &&
-    /what the proof does not prove/i.test(phaseFlow)
-  )
-  ok('agentic-chat phase flow binds builder, product, and proof loops',
-    !isAgenticChatPacket ||
-    (/builder loop/i.test(phaseFlow) &&
-     /product loop/i.test(phaseFlow) &&
-     /proof loop/i.test(phaseFlow) &&
-     /goal intake/i.test(phaseFlow) &&
-     /action selection/i.test(phaseFlow) &&
-     /policy\/approval/i.test(phaseFlow) &&
-     /observation ingestion/i.test(phaseFlow) &&
-     /critique\/retry\/recovery/i.test(phaseFlow) &&
-     /agentic_chat:\s*blocked|agentic_chat:\s*not_qualified/i.test(phaseFlow))
-  )
-  ok('phase flow rejects proof theater', /Edits alone, placeholder screens, mocked data, functionless buttons/i.test(phaseFlow) && /do not fake live success/i.test(phaseFlow))
-  ok('phase flow requires UI identity verification before completion',
-    /missing local UI identity/i.test(phaseFlow) &&
-    /missing local design system/i.test(phaseFlow) &&
-    /missing UI evidence binder/i.test(phaseFlow) &&
-    /\.buildprint\/ui-evidence\.md/i.test(phaseFlow) &&
-    /docs\/DESIGN\.md/i.test(phaseFlow) &&
-    /stronger than "type and send"/i.test(phaseFlow) &&
-    /agb verify ui \./i.test(phaseFlow) &&
-    /screenshot evidence/i.test(phaseFlow)
-  )
-  ok('agentic-chat phase flow blocks chat-native genre drift',
-    !isAgenticChatPacket ||
-    (/chat-native interface/i.test(phaseFlow) &&
-     /mission sheet.*guided-run.*task dashboard.*status lane.*form-first workflow/i.test(phaseFlow) &&
-     /conversation thread and composer\/input/i.test(phaseFlow))
-  )
-  ok('agentic-chat phase flow blocks consumer chat craft failure',
-    !isAgenticChatPacket ||
-    (/Consumer Chat Craft Gate/i.test(phaseFlow) &&
-     /seeded feature cards/i.test(phaseFlow) &&
-     /giant blank dead zone/i.test(phaseFlow) &&
-     /internal status labels/i.test(phaseFlow) &&
-     /cramped mobile composer\/chips/i.test(phaseFlow))
-  )
-  ok('phase flow defines repair routing', new RegExp(`return to \`?${setupFile.replace('.', '\\.')}\`?`, 'i').test(phaseFlow) && /return to `?00-questions\.md`?/i.test(phaseFlow) && new RegExp(`return to \`?${uiIdentityFile.replace('.', '\\.')}\`?`, 'i').test(phaseFlow))
-  ok('phase flow has no evidence-ledger bureaucracy', !/evidence-ledger\.jsonl|proof_contract|capability_id/i.test(phaseFlow))
-
-  ok('phase index declares v3 schema and active phase', /schema_version:\s*mapper-os\/phase-index\/v3/i.test(phaseIndex) && /active_phase:\s*03-phases\/[\w.-]+\.md/i.test(phaseIndex))
-  const phaseIds = [...phaseIndex.matchAll(/^\s*-\s*phase_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
-  const phaseIdSet = new Set(phaseIds)
-  const phaseIndexFiles = phaseFilesFromIndex(phaseIndex)
-  ok('phase index has unique phase ids', phaseIds.length > 0 && phaseIds.length === phaseIdSet.size)
-  ok('phase index referenced phase files exist', phaseIndexFiles.length > 0 && phaseIndexFiles.every((file) => files.has(file)))
-  const activePhase = (phaseIndex.match(/active_phase:\s*(03-phases\/[\w.-]+\.md)/i) || [])[1]
-  ok('phase index active phase exists', !!activePhase && files.has(activePhase))
-  ok('phase index routes only without role/gate/slice machinery', !/requires_roles|gate|slice|capsule|runner/i.test(phaseIndex))
-  if (requiresCriticalReviewPushback) {
-    const criticalReviewPhase = phaseFileForId(phaseIndex, '99-critical-review-pushback')
-    const criticalReviewText = criticalReviewPhase ? safeReadText(path.join(dir, criticalReviewPhase)) : ''
-    ok('phase index includes 99-critical-review-pushback final phase', criticalReviewPhase === '03-phases/critical-review-pushback.md' && files.has(criticalReviewPhase))
-    ok('phase flow requires 99-critical-review-pushback before final completion', /99-critical-review-pushback/i.test(phaseFlow) && /critical-review-pushback\.md/i.test(phaseFlow) && /Final mandatory phase/i.test(phaseFlow) && /rubric does not pass/i.test(phaseFlow) && /fix .*ad hoc flaws/i.test(phaseFlow))
-    ok('critical-review-pushback defines scored rubric and pass threshold',
-      /Score each category 0 to 5/i.test(criticalReviewText) &&
-      /total score out of 60/i.test(criticalReviewText) &&
-      /at least 50\/60/i.test(criticalReviewText) &&
-      /no category below 4/i.test(criticalReviewText) &&
-      /no unresolved high-severity finding/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback requires experience originality, disclosure, and screenshot delta',
-      /Experience originality/i.test(criticalReviewText) &&
-      /screenshot delta review/i.test(criticalReviewText) &&
-      /progressive-disclosure screenshot review/i.test(criticalReviewText) &&
-      /dominant surface/i.test(criticalReviewText) &&
-      /interaction model/i.test(criticalReviewText) &&
-      /creative\/operator object|creative object/i.test(criticalReviewText) &&
-      /information hierarchy/i.test(criticalReviewText) &&
-      /palette, copy, labels, spacing, iconography/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback defines repair loop for failed score',
-      /repair loop/i.test(criticalReviewText) &&
-      /name the flaw and severity/i.test(criticalReviewText) &&
-      /patch the smallest real fix/i.test(criticalReviewText) &&
-      /rerun the relevant proof/i.test(criticalReviewText) &&
-      /rescore/i.test(criticalReviewText) &&
-      /five iterations/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback requires external reviewer independence',
-      /External reviewer independence protocol/i.test(criticalReviewText) &&
-      /fresh-context reviewer/i.test(criticalReviewText) &&
-      /## Reviewer independence/i.test(criticalReviewText) &&
-      /REVIEW_INVALID/i.test(criticalReviewText) &&
-      /must not score its own work/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback requires worst-flaws-first and evidence-bound scores',
-      /five worst flaws/i.test(criticalReviewText) &&
-      /Do not score until this section exists/i.test(criticalReviewText) &&
-      /prose-only justification/i.test(criticalReviewText) &&
-      /cite a concrete artifact/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback defines objective auto-fail triggers',
-      /Objective auto-fail triggers/i.test(criticalReviewText) &&
-      /Echo or canned core output/i.test(criticalReviewText) &&
-      /Forbidden silhouette match/i.test(criticalReviewText) &&
-      /Dead or decorative controls/i.test(criticalReviewText) &&
-      /Thin or default architecture/i.test(criticalReviewText) &&
-      /Self-review without independence/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback defines screenshot capture protocol',
-      /\.buildprint\/screenshots/i.test(criticalReviewText) &&
-      /\b375\b/.test(criticalReviewText) &&
-      /\b1280\b/.test(criticalReviewText) &&
-      /Playwright|tool chain|browser screenshot/i.test(criticalReviewText) &&
-      /forbidden silhouette/i.test(criticalReviewText) &&
-      /adjacent at-risk silhouette/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback references artifact verification',
-      /agb verify ui/i.test(criticalReviewText) &&
-      /artifact-check\.md/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback separates phase core pass from claim qualification',
-      /phase_core_passed/i.test(criticalReviewText) &&
-      /claim_qualified/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback defines three-track pass requirement',
-      /Track A/i.test(criticalReviewText) &&
-      /Track B/i.test(criticalReviewText) &&
-      /Track C/i.test(criticalReviewText) &&
-      /Track B.*Track C.*must both be fully clear|Track B \(product\/UI\) and Track C/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback blocks pass on UI\/decisions track failure',
-      /may not reach PASS or PENDING_RECHECK.*Track B|PASS or PENDING_RECHECK.*resolving only Track A/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback blocks missing identity and proof-console leakage',
-      /Missing local UI identity/i.test(criticalReviewText) &&
-      /ui-identity-present/i.test(criticalReviewText) &&
-      /Proof\/debug console leakage/i.test(criticalReviewText) &&
-      /proof-console-leakage/i.test(criticalReviewText)
-    )
-    ok('critical-review-pushback requires evidence binder and action surface gate',
-      /\.buildprint\/ui-evidence\.md/i.test(criticalReviewText) &&
-      /Missing UI evidence binder/i.test(criticalReviewText) &&
-      /Weak action surface/i.test(criticalReviewText) &&
-      /Prose-only identity compliance/i.test(criticalReviewText) &&
-      /next powerful user action/i.test(criticalReviewText) &&
-      /nearest bad silhouette/i.test(criticalReviewText)
-    )
-    ok('agentic-chat critical review blocks chat-native genre drift',
-      !isAgenticChatPacket ||
-      (/Chat-native genre drift/i.test(criticalReviewText) &&
-       /conversation thread plus composer\/input/i.test(criticalReviewText) &&
-       /mission sheet.*guided-run.*task dashboard.*status lane.*form-first workflow/i.test(criticalReviewText))
-    )
-    ok('agentic-chat critical review blocks consumer chat craft failure',
-      !isAgenticChatPacket ||
-      (/Consumer chat craft failure/i.test(criticalReviewText) &&
-       /seeded approval\/memory\/restore cards/i.test(criticalReviewText) &&
-       /giant blank dead zone/i.test(criticalReviewText) &&
-       /internal route\/provider\/memory labels/i.test(criticalReviewText) &&
-       /cramped mobile chips\/composer/i.test(criticalReviewText))
-    )
+    ok('non-UI identity declares not-ui-bearing with operator experience', /not-ui-bearing/i.test(identity) && /operator|developer|CLI|API/i.test(identity))
   }
 
-  const setupForDecisions = safeReadText(path.join(dir, setupFile))
-  ok('project setup requires decisions hard-stop before phase work',
-    /decisions\.md/i.test(setupForDecisions) &&
-    /hard-stop/i.test(setupForDecisions) &&
-    /No implementation decisions recorded yet/i.test(setupForDecisions)
+  ok('loop flow defines kernel execution',
+    /goal/i.test(loopFlow) &&
+    /bare agentic loop/i.test(loopFlow) &&
+    /fan-out|fan out/i.test(loopFlow) &&
+    /contract review/i.test(loopFlow) &&
+    /active loop only/i.test(loopFlow)
   )
+  ok('loop flow rejects paperwork and fake success',
+    /Do not create .*paperwork|not a deliverable file/i.test(loopFlow) &&
+    /do not fake live success|Edits alone|mocked data|functionless buttons/i.test(loopFlow)
+  )
+  ok('loop flow defines repair routing',
+    /return to `?01-setup\.md`?/i.test(loopFlow) &&
+    /return to `?00-goal\.md`?/i.test(loopFlow) &&
+    /return to `?02-identity\.md`?/i.test(loopFlow)
+  )
+  ok('loop flow has no evidence-ledger bureaucracy', !/evidence-ledger\.jsonl|claim-gates\.json/i.test(loopFlow))
+  ok('loop flow requires review.md before final completion', /review\.md/i.test(loopFlow))
 
-  const collectPhaseMd = (root) => exists(root)
+  ok('loop index declares kernel schema and active loop', /schema_version:\s*buildprint\/loop-index\/v1/i.test(loopIndex) && /active_loop:\s*loops\/[\w.-]+\.md/i.test(loopIndex))
+  const loopIds = [...loopIndex.matchAll(/^\s*-\s*loop_id:\s*([^\s#]+)/gmi)].map((m) => m[1].trim())
+  const loopIdSet = new Set(loopIds)
+  const loopIndexFiles = loopFilesFromIndex(loopIndex)
+  ok('loop index has unique loop ids', loopIds.length > 0 && loopIds.length === loopIdSet.size)
+  ok('loop index referenced loop files exist', loopIndexFiles.length > 0 && loopIndexFiles.every((file) => files.has(file)))
+  const activeLoop = (loopIndex.match(/active_loop:\s*(loops\/[\w.-]+\.md)/i) || [])[1]
+  ok('loop index active loop exists', !!activeLoop && files.has(activeLoop))
+  ok('loop index routes only without role/gate/slice machinery', !/requires_roles|gate|slice|capsule|runner/i.test(loopIndex))
+
+  ok('review requires independent fresh-context reviewer',
+    /fresh-context reviewer|independent reviewer/i.test(review) &&
+    /REVIEW_INVALID/i.test(review) &&
+    /must not score its own work|must not review its own/i.test(review)
+  )
+  ok('review reads goal and loop contracts only',
+    /00-goal\.md/i.test(review) &&
+    (/loop contract|active loop|Building objective/i.test(review)) &&
+    /builder.*chat|builder rationale/i.test(review)
+  )
+  ok('review separates loop_core_passed from claim_qualified', /loop_core_passed/i.test(review) && /claim_qualified/i.test(review))
+  ok('review forbids evidence-ledger products', !/evidence-ledger\.jsonl/i.test(review) && /contract/i.test(review))
+
+  const collectLoopMd = (root) => exists(root)
     ? fs.readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
         const full = path.join(root, entry.name)
-        if (entry.isDirectory()) return collectPhaseMd(full)
-        return entry.name.endsWith('.md') && entry.name !== 'phase-flow.md' ? [full] : []
+        if (entry.isDirectory()) return collectLoopMd(full)
+        return entry.name.endsWith('.md') && entry.name !== 'loop-flow.md' ? [full] : []
       })
     : []
-  const phaseFiles = collectPhaseMd(path.join(dir, '03-phases')).sort()
-  ok('packet has comprehensive phase files', phaseFiles.length >= 1)
-  for (const fullPath of phaseFiles) {
+  const loopFiles = collectLoopMd(path.join(dir, 'loops')).sort()
+  ok('packet has comprehensive loop files', loopFiles.length >= 1)
+  for (const fullPath of loopFiles) {
     const file = path.relative(dir, fullPath).split(path.sep).join('/')
     const text = safeReadText(fullPath)
     const objective = (text.match(/##\s*Building objective\s*\n([\s\S]*?)(?=\n##\s*DO NOT)/i) || [])[1] || ''
-    ok(`${file} has comprehensive phase headings`, /##\s*How to implement this phase/i.test(text) && /##\s*Building objective/i.test(text) && /##\s*DO NOT/i.test(text) && /##\s*Minimum proof before moving on/i.test(text) && /##\s*Handoff note/i.test(text))
-    ok(`${file} has substantial building objective`, objective.trim().length >= (isMapperTemplatePacket ? 500 : 700), `objective length ${objective.trim().length}`)
-    ok(`${file} reads required phase context`, /03-phases\/phase-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text) && text.includes(uiIdentityFile))
+    ok(`${file} has comprehensive loop headings`, /##\s*How to implement this loop/i.test(text) && /##\s*Building objective/i.test(text) && /##\s*DO NOT/i.test(text) && /##\s*Minimum proof before moving on/i.test(text) && /##\s*Handoff note/i.test(text))
+    ok(`${file} has substantial building objective`, objective.trim().length >= (isMapperTemplatePacket ? 400 : 500), `objective length ${objective.trim().length}`)
+    ok(`${file} reads required loop context`, /loops\/loop-flow\.md/i.test(text) && /\.buildprint\/next-agent\.md/i.test(text) && /AGENTS\.md/i.test(text) && /02-identity\.md/i.test(text))
     ok(`${file} forbids placeholders/functionless/mocks`, /placeholders/i.test(text) && /functionless buttons/i.test(text) && /mocked\/sample data/i.test(text))
     ok(`${file} does not use decomposed v2/schema machinery`, !/slice\.yaml|acceptance-spec|build-brief|requires_roles|capability_id|proof_contract|evidence-ledger\.jsonl/i.test(text))
-    for (const check of phaseProofChecks({ file, text, objective, isMapperTemplatePacket, isAgenticChatPacket })) ok(check.label, check.pass, check.detail || '')
   }
 
   const handover = safeReadText(path.join(dir, 'HANDOVER.md'))
   ok('handover captures built/verified/blocked/not-proven/next', /##\s*Built/i.test(handover) && /##\s*Verified/i.test(handover) && /##\s*Blocked/i.test(handover) && /##\s*Not proven/i.test(handover) && /##\s*Next/i.test(handover))
-  ok('handover captures typed quality gate results',
-    !requiresTypedQualityRouting ||
-    /Typed quality gates/i.test(handover) &&
-    /UI decision precision/i.test(handover) &&
-    /Visual viewport acceptance/i.test(handover) &&
-    /Editor\/content stress acceptance/i.test(handover) &&
-    /Semantic output acceptance/i.test(handover) &&
-    /Integration\/operator acceptance/i.test(handover) &&
-    /Critical review pushback/i.test(handover)
-  )
-  ok('handover captures UI identity and screenshot gate',
-    /UI identity and screenshot gate/i.test(handover) &&
-    /Local identity artifact/i.test(handover) &&
-    /agb verify ui \./i.test(handover) &&
-    /Screenshot set/i.test(handover)
-  )
-  ok('handover captures UI evidence and action gate',
-    /UI evidence binder/i.test(handover) &&
-    /Consumer\/action UI proven/i.test(handover) &&
-    /Nearest bad silhouette comparison/i.test(handover) &&
-    /\.buildprint\/ui-evidence\.md/i.test(handover) &&
-    /next powerful user action/i.test(handover)
-  )
-  ok('agentic-chat handover captures chat-native action gate',
-    !isAgenticChatPacket ||
-    (/Chat-native action gate/i.test(handover) &&
-     /conversation thread and composer\/input/i.test(handover) &&
-     /inline rather than replacing chat/i.test(handover))
-  )
-  ok('agentic-chat handover captures consumer chat craft gate',
-    !isAgenticChatPacket ||
-    (/Consumer chat craft gate/i.test(handover) &&
-     /Design Read/i.test(handover) &&
-     /Taste Dials/i.test(handover) &&
-     /composer quality/i.test(handover) &&
-     /system-label suppression/i.test(handover))
-  )
-  ok('agentic-chat handover captures maturity and loop proof',
-    !isAgenticChatPacket ||
-    (/Capability maturity/i.test(handover) &&
-     /streaming_chat_core/i.test(handover) &&
-     /agentic_chat/i.test(handover) &&
-     /Builder loop/i.test(handover) &&
-     /Product loop/i.test(handover) &&
-     /Proof loop/i.test(handover) &&
-     /plan-mode baseline/i.test(handover))
-  )
   ok('handover warns against overclaiming', /Do not claim completion beyond the evidence/i.test(handover))
 
-  if (isPresentationPacket) {
-    const setup = safeReadText(path.join(dir, '02-project-setup.md'))
-    const uiux = safeReadText(path.join(dir, '01-ui-identity.md'))
-    const phase04 = safeReadText(path.join(dir, '03-phases/04-editable-deck-workbench.md'))
-    const phase08 = safeReadText(path.join(dir, '03-phases/08-verification-and-handover.md'))
-
-    for (const gate of [
-      'deck_output_quality',
-      'outline_quality',
-      'layout_template_quality',
-      'editable_workbench_quality',
-      'desktop_visual_acceptance',
-      'mobile_visual_acceptance',
-      'content_specificity_acceptance',
-      'long_text_stress_acceptance',
-      'export_runtime_probe',
-      'provider_probe',
-      'document_parser_probe',
-      'api_webhook_mcp_probe',
-      'desktop_runtime_probe',
-      'auth_privacy_observability_deployment'
-    ]) {
-      ok(`presentation blueprint declares gate: ${gate}`, blueprint.includes(gate))
-    }
-
-    ok('presentation blueprint declares verification artifacts',
-      /verification_artifacts:/i.test(blueprint) &&
-      /required_generated_app_scripts:/i.test(blueprint) &&
-      /required_screenshot_proofs:/i.test(blueprint) &&
-      /required_semantic_proofs:/i.test(blueprint) &&
-      /screenshot_capture/i.test(blueprint) &&
-      /deck_desktop_1440_or_wider/i.test(blueprint) &&
-      /deck_mobile_phone_width/i.test(blueprint) &&
-      /long_text_desktop/i.test(blueprint) &&
-      /long_text_mobile/i.test(blueprint)
+  if (isAgenticChatPacket) {
+    ok('agentic-chat keeps maturity upgrades optional',
+      /maturity_upgrades|upgrade/i.test(blueprint) &&
+      /streaming_chat_core|first successful loop|agentic_chat/i.test(blueprint + handover + goal)
     )
-
-    ok('presentation setup requires generated proof commands',
-      /desktop screenshot/i.test(setup) &&
-      /mobile screenshot/i.test(setup) &&
-      /content-specificity/i.test(setup) &&
-      /long-text stress/i.test(setup) &&
-      /proven runtime behavior/i.test(setup) &&
-      /intentionally blocked/i.test(setup)
-    )
-
-    ok('presentation UI requires repeatable viewport and semantic checks',
-      /repeatable commands/i.test(uiux) &&
-      /page-level horizontal overflow/i.test(uiux) &&
-      /overlapping canvas regions/i.test(uiux) &&
-      /repeated generic slide content/i.test(uiux) &&
-      /missing stress fixtures/i.test(uiux)
-    )
-
-    ok('presentation phase 04 requires geometry and overflow assertions',
-      /1440px or wider/i.test(phase04) &&
-      /mobile Deck screenshot/i.test(phase04) &&
-      /same deck id/i.test(phase04) &&
-      /page-level horizontal overflow/i.test(phase04) &&
-      /stable 16:9 canvas bounds/i.test(phase04) &&
-      /long-text stress states/i.test(phase04)
-    )
-
-    ok('presentation phase 08 requires repeatable proof assertions',
-      /desktop geometry/i.test(phase08) &&
-      /mobile overflow/i.test(phase08) &&
-      /content-specificity/i.test(phase08) &&
-      /long-text stress/i.test(phase08) &&
-      /test runner/i.test(phase08)
-    )
-
-    ok('presentation handover requires proof paths and pass/fail status',
-      /wide desktop Deck screenshot path/i.test(handover) &&
-      /desktop visual acceptance result/i.test(handover) &&
-      /mobile Deck screenshot path/i.test(handover) &&
-      /mobile visual acceptance/i.test(handover) &&
-      /content-specificity proof/i.test(handover) &&
-      /long-text stress proof/i.test(handover) &&
-      /generated-app proof commands/i.test(handover)
+    ok('agentic-chat does not require claim-gates JSON product',
+      !files.has('.buildprint/claim-gates.json') &&
+      !/claim-gates\.json/i.test(loopFlow)
     )
   }
 
   ok('no generated sentinel placeholders remain', isMapperTemplatePacket || !allFiles.some((file) => {
     if (!/\.(md|yaml|json|jsonl)$/.test(file)) return false
-    const text = safeReadText(path.join(dir, file)).replace(/<phase>/g, '').replace(/<phase-id>/g, '')
+    const text = safeReadText(path.join(dir, file)).replace(/<loop>/g, '').replace(/<loop-id>/g, '').replace(/<phase>/g, '')
     return /MAPPER_REQUIRED_|<mapped-app>|<capability name/i.test(text)
   }))
 
   return checks
 }
+
 
 function printPacketChecks(checks) {
   let failed = 0
@@ -1482,13 +1078,14 @@ async function packetCheck(ref) {
 
 async function packetNext(ref) {
   const dir = packetCheckRoot(await packetDirFromRef(ref))
-  const phaseIndex = safeReadText(path.join(dir, '03-phases/phase-index.yaml'))
-  const activePath = phaseIndex.match(/active_phase:\s*([^\s#]+)/)?.[1]
-  if (!activePath) throw new Error('missing active_phase in 03-phases/phase-index.yaml')
+  const loopIndex = safeReadText(path.join(dir, 'loops/loop-index.yaml'))
+  const activePath = loopIndex.match(/active_loop:\s*([^\s#]+)/)?.[1]
+  if (!activePath) throw new Error('missing active_loop in loops/loop-index.yaml')
   const active = safeReadText(path.join(dir, activePath))
-  if (!active) throw new Error(`missing active phase ${activePath}`)
+  if (!active) throw new Error(`missing active loop ${activePath}`)
   console.log(active.trim())
 }
+
 
 
 function uniqueStrings(values) {
@@ -1498,16 +1095,23 @@ function uniqueStrings(values) {
 function readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile) {
   if (Array.isArray(manifest.instructions?.readOrder) && manifest.instructions.readOrder.length) return manifest.instructions.readOrder
   if (Array.isArray(manifest.readOrder) && manifest.readOrder.length) return manifest.readOrder
-  const setupFile = hasManifestFile('01-project-setup.md') ? '01-project-setup.md' : '02-project-setup.md'
-  const uiIdentityFile = hasManifestFile('02-ui-identity.md') ? '02-ui-identity.md' : '01-ui-identity.md'
   return isExecutablePacket
-    ? ['BUILDPRINT.md', '00-questions.md', setupFile, uiIdentityFile, 'blueprint.yaml', '03-phases/phase-index.yaml', '03-phases/phase-flow.md', 'README.md', 'HANDOVER.md'].filter(hasManifestFile)
+    ? ['BUILDPRINT.md', '00-goal.md', '01-setup.md', '02-identity.md', 'blueprint.yaml', 'loops/loop-index.yaml', 'loops/loop-flow.md', 'review.md', 'README.md', 'HANDOVER.md'].filter(hasManifestFile)
     : ['BUILDPRINT.md'].filter(hasManifestFile)
 }
 
 function phaseIndexActiveInfo(phaseIndexText) {
-  const activePhase = phaseIndexText.match(/active_phase:\s*([^\s#]+)/)?.[1] || null
+  const activePhase = phaseIndexText.match(/active_loop:\s*([^\s#]+)/)?.[1]
+    || phaseIndexText.match(/active_phase:\s*([^\s#]+)/)?.[1]
+    || null
   if (!activePhase) return { activePhase: null, activePhaseId: null }
+  const loopBlocks = phaseIndexText.split(/\n\s*-\s+loop_id:\s*/).slice(1)
+  for (const block of loopBlocks) {
+    const firstLine = block.split(/\r?\n/, 1)[0] || ''
+    const phaseId = firstLine.trim().split(/\s+/)[0]
+    const file = block.match(/\n\s*file:\s*([^\s#]+)/)?.[1]
+    if (file === activePhase) return { activePhase, activePhaseId: phaseId || null }
+  }
   const blocks = phaseIndexText.split(/\n\s*-\s+phase_id:\s*/).slice(1)
   for (const block of blocks) {
     const firstLine = block.split(/\r?\n/, 1)[0] || ''
@@ -1520,17 +1124,16 @@ function phaseIndexActiveInfo(phaseIndexText) {
 }
 
 function executableReadOrder(baseReadOrder, hasManifestFile, activePhase) {
-  const setupFile = hasManifestFile('01-project-setup.md') ? '01-project-setup.md' : '02-project-setup.md'
-  const uiIdentityFile = hasManifestFile('02-ui-identity.md') ? '02-ui-identity.md' : '01-ui-identity.md'
   const canonical = [
     'BUILDPRINT.md',
-    '00-questions.md',
-    setupFile,
-    uiIdentityFile,
+    '00-goal.md',
+    '01-setup.md',
+    '02-identity.md',
     'blueprint.yaml',
-    '03-phases/phase-index.yaml',
-    '03-phases/phase-flow.md',
+    'loops/loop-index.yaml',
+    'loops/loop-flow.md',
     activePhase,
+    'review.md',
     'README.md',
     'HANDOVER.md'
   ].filter((file, index, arr) => file && hasManifestFile(file) && arr.indexOf(file) === index)
@@ -1588,21 +1191,21 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     .map((filePath) => safeManifestPath(filePath))
     .filter((filePath) => !filePath.includes('*'))
   const executablePacketPrefix = (() => {
-    const rootHasExecutablePacket = ['00-questions.md', 'blueprint.yaml', '03-phases/phase-index.yaml']
+    const rootHasExecutablePacket = ['00-goal.md', 'blueprint.yaml', 'loops/loop-index.yaml']
       .every((file) => manifestFilePaths.includes(file))
     if (rootHasExecutablePacket) return ''
     const templatePrefix = 'templates/executable-packet/'
-    const templateHasExecutablePacket = ['00-questions.md', 'blueprint.yaml', '03-phases/phase-index.yaml']
+    const templateHasExecutablePacket = ['00-goal.md', 'blueprint.yaml', 'loops/loop-index.yaml']
       .every((file) => manifestFilePaths.includes(`${templatePrefix}${file}`))
     return templateHasExecutablePacket ? templatePrefix : ''
   })()
   const manifestPathFor = (filePath) => `${executablePacketPrefix}${filePath}`
   const hasManifestFile = (filePath) => manifestFilePaths.includes(manifestPathFor(filePath))
   const snapshotPathFor = (filePath) => `.buildprint/snapshots/${manifestPathFor(filePath)}`
-  const setupFile = hasManifestFile('01-project-setup.md') ? '01-project-setup.md' : '02-project-setup.md'
-  const uiIdentityFile = hasManifestFile('02-ui-identity.md') ? '02-ui-identity.md' : '01-ui-identity.md'
-  const usesSetupFirstIdentitySecond = setupFile === '01-project-setup.md' && uiIdentityFile === '02-ui-identity.md'
-  const isExecutablePacket = hasManifestFile('00-questions.md') && hasManifestFile(setupFile) && hasManifestFile(uiIdentityFile) && hasManifestFile('blueprint.yaml')
+  const setupFile = '01-setup.md'
+  const uiIdentityFile = '02-identity.md'
+  const usesSetupFirstIdentitySecond = true
+  const isExecutablePacket = hasManifestFile('00-goal.md') && hasManifestFile(setupFile) && hasManifestFile(uiIdentityFile) && hasManifestFile('blueprint.yaml')
   const baseReadOrder = readOrderFromManifest(manifest, isExecutablePacket, hasManifestFile)
 
   const targetRoot = path.resolve(cwd, targetFolder)
@@ -1638,8 +1241,8 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     if (safePath === 'blueprint.yaml' && !/schema_version:/i.test(text)) {
       throw new Error(`downloaded blueprint.yaml is missing schema_version: — content appears invalid or truncated from ${source}`)
     }
-    if (safePath === '03-phases/phase-index.yaml' && !/active_phase:/i.test(text)) {
-      throw new Error(`downloaded 03-phases/phase-index.yaml is missing active_phase: — content appears invalid or truncated from ${source}`)
+    if (safePath === 'loops/loop-index.yaml' && !/active_loop:/i.test(text)) {
+      throw new Error(`downloaded loops/loop-index.yaml is missing active_loop: — content appears invalid or truncated from ${source}`)
     }
     const dest = safePathInside(snapshotDir, safePath)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
@@ -1667,7 +1270,7 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   }
   const now = new Date().toISOString()
   const executableSnapshotDir = path.join(snapshotDir, ...executablePacketPrefix.split('/').filter(Boolean))
-  const phaseIndexPath = path.join(executableSnapshotDir, '03-phases', 'phase-index.yaml')
+  const phaseIndexPath = path.join(executableSnapshotDir, 'loops', 'loop-index.yaml')
   const phaseIndexText = fs.existsSync(phaseIndexPath) ? fs.readFileSync(phaseIndexPath, 'utf8') : ''
   const blueprintPath = path.join(executableSnapshotDir, 'blueprint.yaml')
   const blueprintText = fs.existsSync(blueprintPath) ? fs.readFileSync(blueprintPath, 'utf8') : ''
@@ -1707,17 +1310,15 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
 
   writeJson(path.join(stateDir, 'state.json'), {
     buildprint: manifest.slug,
-    currentPhase: isExecutablePacket ? activePhaseId || 'active-phase' : '00-alignment',
+    currentPhase: isExecutablePacket ? activePhaseId || 'active-loop' : '00-alignment',
     activePhase,
     activePhaseId,
-    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'product-led-phase-flow' : null),
+    executionMode: manifest.executionMode || manifest.execution_mode || (isExecutablePacket ? 'kernel-loop' : null),
     completedPhases: [],
     blocked: false,
     lastAction: `downloaded ${downloaded.length} exact Buildprint snapshot files`,
     nextAction: isExecutablePacket
-      ? usesSetupFirstIdentitySecond
-        ? 'read .buildprint/next-agent.md, complete project setup and local skill harness, generate UI identity, then follow the active phase loop'
-        : 'read .buildprint/next-agent.md, initialize local skill harness, generate UI identity, complete project setup, then follow the active phase loop'
+      ? 'read .buildprint/next-agent.md, complete setup and local skill harness, generate identity, then follow the active kernel loop'
       : 'read .buildprint/next-agent.md and begin alignment or default-preset flow',
     runtimeEvidenceLedger: hasLegacyRuntimeEvidence ? '.buildprint/evidence/evidence-ledger.jsonl' : null,
     harnessProfiles,
@@ -1725,13 +1326,13 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
   })
 
   fs.writeFileSync(path.join(stateDir, 'progress.md'), isExecutablePacket
-    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared product-led phase-flow state.\n\n## Current\n- Active phase: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, ${usesSetupFirstIdentitySecond ? 'complete product setup and local skill harness, generate UI identity' : 'initialize the local skill harness, generate UI identity, complete product setup'}, then execute the active phase loop.\n`
+    ? `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n- Prepared kernel-loop state.\n\n## Current\n- Active loop: \`${activePhase || 'unknown'}\`.\n\n## Next\n- Follow \`.buildprint/next-agent.md\`, complete setup and local skill harness, generate identity, then execute the active kernel loop.\n`
     : `# Build Progress\n\n## Done\n- Bootstrapped .buildprint/ from package manifest.\n- Downloaded ${downloaded.length} exact Buildprint snapshot files.\n\n## Current\n- Phase 00 - Alignment.\n\n## Next\n- Read snapshots and follow the Buildprint alignment rules.\n`)
   fs.writeFileSync(path.join(stateDir, 'decisions.md'), `# Decisions
 
 No implementation decisions recorded yet. Add confirmed alignment choices here.
 
-Hard-stop rows must be filled before setup or phase work. Use \`confirmed_by: user\`, \`confirmed_by: explicit_user_delegation\`, or \`confirmed_by: blocker\`; never use \`confirmed_by: agent_assumption\` for hard-stops.
+Hard-stop rows must be filled before setup or loop work. Use \`confirmed_by: user\`, \`confirmed_by: explicit_user_delegation\`, or \`confirmed_by: blocker\`; never use \`confirmed_by: agent_assumption\` for hard-stops.
 
 | Question | answer | confirmed_by | delegation_quote | reversible | blocks_setup |
 |---|---|---|---|---:|---:|
@@ -1746,34 +1347,36 @@ Hard-stop rows must be filled before setup or phase work. Use \`confirmed_by: us
 
 Start here.
 
-This is a Mapper OS v3 executable Buildprint. Local runtime state wins over stale assumptions, but package snapshots remain read-only.
+This is a kernel_loop executable Buildprint (\`buildprint/kernel/v1\`). Local runtime state wins over stale assumptions, but package snapshots remain read-only.
+
+Kernel: goal → bare agentic loop → optional independent fan-out → contract review.
 
 1. Read \`.buildprint/source.json\` and \`.buildprint/state.json\`.
 2. Read order: ${manifestReadOrder.map((file) => `\`${snapshotPathFor(file)}\``).join(' -> ')}.
-3. Read \`${snapshotPathFor('00-questions.md')}\`; stop at \`00-questions.md\` unless every hard-stop row is user-confirmed, explicitly delegated, or recorded as a blocker in \`.buildprint/decisions.md\`. Ask unresolved hard-stop questions before \`${snapshotPathFor(setupFile)}\`.
+3. Read \`${snapshotPathFor('00-goal.md')}\`; stop unless every hard-stop row is user-confirmed, explicitly delegated, or recorded as a blocker in \`.buildprint/decisions.md\`. Ask unresolved hard-stop questions before \`${snapshotPathFor(setupFile)}\`.
 4. Read and complete \`${snapshotPathFor(setupFile)}\`; initialize the project-local skill harness from the profiles declared in \`${snapshotPathFor('blueprint.yaml')}\` by running \`${harnessInitCommand}\` if \`agb\` is available. Then run \`agb harness check . --provider agents${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\` and \`agb harness checkup . --provider agents${harnessProfiles.map((profile) => profile === 'default' ? '' : ` --profile ${profile}`).join('')}\`. If \`agb\` is unavailable, create the \`AGENTS.md\` harness section and local skills described by the setup file.
-5. Read \`${snapshotPathFor(uiIdentityFile)}\`; for UI-bearing artifacts, load the local \`frontend-ui-product-design\` skill and generate local \`docs/ui-identity.md\` or \`UI-IDENTITY.md\` before phase work.
-6. Confirm setup and identity proof are complete before phase work.
-7. Read \`${snapshotPathFor('03-phases/phase-flow.md')}\`.
-8. Load only the active phase named in \`${snapshotPathFor('03-phases/phase-index.yaml')}\`: \`${activePhase || 'unknown'}\`.
-9. Execute the phase-flow loop: restate the smallest real vertical product path, build it, verify it, repair visible slop/fake-success shortcuts, and record useful handover facts.
-10. If verification or product review fails, route repair to the current phase unless the failure proves setup/questions/prior phase/external blocker is responsible.
+5. Read \`${snapshotPathFor(uiIdentityFile)}\`; for UI-bearing artifacts, load the local \`frontend-ui-product-design\` skill and generate local identity/design artifacts before loop work.
+6. Confirm setup and identity proof are complete before loop work.
+7. Read \`${snapshotPathFor('loops/loop-flow.md')}\`.
+8. Load only the active loop named in \`${snapshotPathFor('loops/loop-index.yaml')}\`: \`${activePhase || 'unknown'}\`.
+9. Run a bare agentic loop against the goal: think → act → observe, verify, repair visible slop/fake-success shortcuts, and record useful handover facts. Fan out only with clean ownership.
+10. Before claiming done, run independent \`${snapshotPathFor('review.md')}\`.
 11. Before completion or stopping, write the handover described in \`${snapshotPathFor('HANDOVER.md')}\`.
 
-Whenever you stop, end your handover with this menu so the developer has a concrete choice (fill in real phase ids from \`03-phases/phase-index.yaml\`):
+Whenever you stop, end your handover with this menu so the developer has a concrete choice (fill in real loop ids from \`loops/loop-index.yaml\`):
 
-1. Continue one phase — implement the next phase only, then stop and show this menu again.
+1. Continue one loop — implement the next loop only, then stop and show this menu again.
 2. Continue to the next checkpoint — implement through verification, pausing only on a real blocker.
-3. Do all remaining phases — implement every dependency-ready phase through final handover, stopping only on real blockers.
+3. Do all remaining loops — implement every dependency-ready loop through final handover, stopping only on real blockers.
 4. Stop here.
 
 Rules:
 
-- Do not read every phase upfront.
+- Do not read every loop upfront.
 - Do not write, rewrite, or append to \`.buildprint/snapshots/**\`; snapshots are immutable downloaded package files.
 - Project root/local \`AGENTS.md\` files belong in the implementation project and should be created or patched by \`${harnessInitCommand}\` from \`${setupFile}\`, not shipped in the packet. Use the profiles declared in \`blueprint.yaml\`; do not default to \`full\`.
 - Keep claims scoped until the built product has been checked directly.
-- Do not create proof theater; local checks and product review are useful only insofar as they catch real defects.
+- Do not create proof theater or evidence-ledger bureaucracy; contract review against the goal is the verification surface.
 - Update \`.buildprint/state.json\`, \`.buildprint/progress.md\`, and this file before stopping.
 - If blocked, update \`.buildprint/blockers.md\` with the real blocker and next repair route.
 ` : `# Next Agent Instructions

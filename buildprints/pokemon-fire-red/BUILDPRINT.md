@@ -21,7 +21,7 @@ This packet is built as a **capability ladder**, not a single "done" line (see `
 
 Each level is a strictly higher claim with its own proof. Do not market battle tests as a playable battle, one polished town as an overworld, or an overworld as story-complete. **Do not claim `battle_core` after damage tests or screenshots alone; `references/battle-verification.md` must pass. Do not claim `starter_town_core` from TMX validity alone; `references/starter-town-verification.md` must pass.** Capabilities not yet proven stay as honestly blocked states — never stubbed menus that pretend to work.
 
-Before final completion, run `03-phases/14-claim-verification.md`. If `.buildprint/claim-gates.json` is missing or cannot prove a playthrough from new game through Champion with persisted save, the product claim must be lowered.
+Before final completion, run `loops/14-claim-verification.md`. If `.buildprint/claim-gates.json` is missing or cannot prove a playthrough from new game through Champion with persisted save, the product claim must be lowered.
 
 ## Your role
 
@@ -36,6 +36,16 @@ Fake-success paths are forbidden. Do not ship functionless buttons, dead control
 Treat `blueprint.yaml` as the machine contract for maturity and story scope. `battle_core`, `starter_town_core`, and `overworld_core` are separate early claims in that order. `kanto_complete` requires the full story graph, gym progression, and Champion battle proven by playthrough evidence.
 
 Project setup must produce architecture and structure before implementation. Generic `utils/` or `components/` trees without game-system ownership are setup failures.
+
+## Kernel
+
+Default execution is:
+
+```text
+goal → bare agentic loop → optional independent fan-out → contract review
+```
+
+Run a bare agentic loop against `00-goal.md`. Fan out independent subagents only when ownership is clean. Finish with independent contract review in `review.md`. Production maturity is an upgrade claimed with proof — never the path to first success.
 
 ## Perfection alignment
 
@@ -58,23 +68,15 @@ Do not ship ripped GBA ROM assets. Record asset provenance in `docs/assets-prove
 ## Required read order
 
 1. `BUILDPRINT.md`
-2. `references/asset-policy.md`
-3. `references/world-art-sources.md`
-4. `alignment-slice/ALIGNMENT.md`
-5. `references/battle-verification.md`
-6. `references/starter-town-verification.md`
-7. `references/world-verification.md`
-8. `references/data-sources-and-techniques-basis.md`
-9. `00-questions.md`
-10. `01-project-setup.md`
-11. `02-ui-identity.md`
-12. `blueprint.yaml`
-13. `data/story/README.md` and all four story contract YAML files
-14. `03-phases/phase-index.yaml`
-15. `03-phases/phase-flow.md`
-16. The active phase file named by `03-phases/phase-index.yaml`
-17. `README.md`
-18. `03-phases/14-claim-verification.md` before any `kanto_complete` or `postgame_sevii` claim
-19. `HANDOVER.md` before stopping
+2. `00-goal.md`
+3. `01-setup.md`
+4. `02-identity.md` when the artifact has UI or human-facing interaction
+5. `blueprint.yaml`
+6. `loops/loop-index.yaml`
+7. `loops/loop-flow.md`
+8. The active loop file named by `loops/loop-index.yaml`
+9. `review.md` before claiming completion
+10. `README.md` as the product/operator-facing overview before final handoff
+11. `HANDOVER.md` before stopping or claiming completion
 
-Read sequentially. Do not inventory every phase before the active phase is known.
+Read sequentially. Do not inventory every loop before the active loop is known.

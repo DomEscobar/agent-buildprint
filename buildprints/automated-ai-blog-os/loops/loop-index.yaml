@@ -1,0 +1,24 @@
+schema_version: buildprint/loop-index/v1
+active_loop: loops/01-editorial-foundation.md
+loops:
+  - loop_id: 01-editorial-foundation
+    file: loops/01-editorial-foundation.md
+    status: included
+    depends_on: []
+  - loop_id: 02-source-memory-and-ideas
+    file: loops/02-source-memory-and-ideas.md
+    status: included
+    depends_on: [01-editorial-foundation]
+  - loop_id: 03-drafting-visuals-and-claims
+    file: loops/03-drafting-visuals-and-claims.md
+    status: included
+    depends_on: [02-source-memory-and-ideas]
+  - loop_id: 04-seo-approval-and-publishing
+    file: loops/04-seo-approval-and-publishing.md
+    status: included
+    depends_on: [03-drafting-visuals-and-claims]
+  - loop_id: 05-manager-audit-and-handover
+    file: loops/05-manager-audit-and-handover.md
+    status: included
+    depends_on: [04-seo-approval-and-publishing]
+

@@ -1,28 +1,25 @@
 # BUILDPRINT: <Capability Name>
 
-You are applying one Capability Buildprint to an existing host project. Follow the read order, assess the host, plan the integration, implement through phases, verify, and write the receipt.
+You are applying one Capability Buildprint to an existing host project. Follow the read order, lock the goal, assess the host, implement through loops, review, and verify.
+
+This packet installs a bounded capability, not a whole-product rebuild.
 
 ## Required read order
 
 1. `BUILDPRINT.md`
 2. `capability.yaml`
 3. `compatibility.md`
-4. `00-host-assessment.md`
-5. `00-assessment-questions.md`
-6. `01-integration-plan.md`
-7. `apply.md`
-8. `02-implementation-phases/01-contract-and-config.md`
-9. `02-implementation-phases/02-core-integration.md`
-10. `02-implementation-phases/03-host-wiring.md`
-11. `02-implementation-phases/04-user-operator-surface.md`
-12. `02-implementation-phases/05-verification-and-receipt.md`
-13. `verify.md`
+4. `00-goal.md`
+5. `01-host.md`
+6. `loops/` (see `loops/loop-flow.md`)
+7. `review.md`
+8. `verify.md`
 
 ## Rule
 
-No source edits before `.buildprint/host-assessment.md`, the assessment-led question gate, and `.buildprint/capability-plan.md` exist.
+No source edits before `00-goal.md` hard stops and `01-host.md` assessment/plan exist.
 
-Run `00-assessment-questions.md` after host assessment. Capability questions must be evidence-led; do not ask broad questions before inspecting the host project.
+Kernel: goal → bare agentic loop → optional independent fan-out → contract review.
 
 Before planning or editing, inspect the packet's `evidence` section in `capability.yaml`. Re-check current official docs/source for volatile providers, frameworks, auth, billing, data migration, webhooks, security, and benchmark-sensitive claims. If evidence is missing or stale, block or downgrade the claim instead of guessing from memory.
 
@@ -39,4 +36,4 @@ Stop before implementation when a `must ask user` finding changes product behavi
 
 ## Brutal quality rule
 
-Do not call this capability complete, proven, perfect, or 10/10 unless verification includes real command/runtime evidence, blocked/not-proven claims, and an adversarial self-review. For credential, token, secret, or API-key capabilities, require negative tests for storage posture and full-secret verification, not only successful authentication.
+Do not claim 10/10 or perfect until real-host proof and adversarial review pass. Happy-path-only installs are incomplete; negative tests and failure modes are required.

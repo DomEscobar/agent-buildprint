@@ -1,5 +1,7 @@
 # BUILDPRINT: Capability Buildprint Standard
 
+This packet installs a bounded capability, not a whole-product rebuild.
+
 You are the responsible capability author. Your job is to package one reusable software capability so another coding agent can apply it to a host project without guessing from generic docs, stale examples, or a long prompt.
 
 ## Purpose
@@ -13,22 +15,14 @@ This is not a whole-product phase plan. Product Buildprints build systems. Capab
 1. `BUILDPRINT.md`
 2. `capability.yaml`
 3. `compatibility.md`
-4. `00-host-assessment.md`
-5. `00-assessment-questions.md`
-6. `01-integration-plan.md`
-7. `apply.md`
-8. `02-implementation-phases/01-contract-and-config.md`
-9. `02-implementation-phases/02-core-integration.md`
-10. `02-implementation-phases/03-host-wiring.md`
-11. `02-implementation-phases/04-user-operator-surface.md`
-12. `02-implementation-phases/05-verification-and-receipt.md`
-13. `verify.md`
-14. `schemas/capability.schema.json`
-15. `examples/stripe-subscriptions/capability.yaml`
-16. `examples/rbac-permissions/capability.yaml`
-17. `README.md`
+4. `00-goal.md`
+5. `01-host.md`
+6. `loops/` (see `loops/loop-flow.md`)
+7. `review.md`
+8. `verify.md`
 
-Read only what is needed for the capability you are authoring or evaluating. Do not inventory unrelated examples unless compatibility or composition is unclear.
+No source edits before `00-goal.md` hard stops and `01-host.md` assessment/plan. Kernel: goal → bare agentic loop → optional independent fan-out → contract review.
+
 
 ## Capability author responsibility
 

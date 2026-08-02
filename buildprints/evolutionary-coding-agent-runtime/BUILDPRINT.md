@@ -19,20 +19,14 @@ That repository is currently **research and architecture only** — no runnable 
 1. `BUILDPRINT.md`
 2. `capability.yaml`
 3. `compatibility.md`
-4. `00-host-assessment.md`
-5. `00-assessment-questions.md`
-6. `01-integration-plan.md`
-7. `apply.md`
-8. `02-implementation-phases/01-contract-and-config.md`
-9. `02-implementation-phases/02-core-integration.md`
-10. `02-implementation-phases/03-host-wiring.md`
-11. `02-implementation-phases/04-user-operator-surface.md`
-12. `02-implementation-phases/05-verification-and-receipt.md`
-13. `verify.md`
-14. `references/evolution-runtime-basis.md`
-15. `references/research-basis.md`
+4. `00-goal.md`
+5. `01-host.md`
+6. `loops/` (see `loops/loop-flow.md`)
+7. `review.md`
+8. `verify.md`
 
-No source edits before host assessment and capability plan. The applying agent must inspect the host, classify findings as `infer safely`, `patch locally`, `must ask user`, or `out of scope`, record the decision path, and block when the fitness function, sandbox boundary, editable surfaces, or evaluator integrity plan is unclear.
+No source edits before `00-goal.md` hard stops and `01-host.md` assessment/plan. Kernel: goal → bare agentic loop → optional independent fan-out → contract review.
+
 
 ## Architecture thesis
 

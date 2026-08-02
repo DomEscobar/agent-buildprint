@@ -1,0 +1,18 @@
+schema_version: buildprint/loop-index/v1
+active_loop: loops/01-foundation-and-first-loop.md
+loops:
+  - loop_id: 01-foundation-and-first-loop
+    file: loops/01-foundation-and-first-loop.md
+    status: included
+  - loop_id: 02-core-product-loop
+    file: loops/02-core-product-loop.md
+    status: included
+  - loop_id: 03-state-runtime-and-integrations
+    file: loops/03-state-runtime-and-integrations.md
+    status: included
+  - loop_id: 04-ui-polish-and-interaction
+    file: loops/04-ui-polish-and-interaction.md
+    status: included
+  - loop_id: 05-verification-and-handover
+    file: loops/05-verification-and-handover.md
+    status: included

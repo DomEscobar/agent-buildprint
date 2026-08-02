@@ -1,7 +1,7 @@
 ---
 name: frontend-ui-product-design
 description: Use when building or changing any human-facing UI, frontend, dashboard, app, page, component, or visual workflow from a Buildprint.
-phase: 02-ui-identity
+phase: 02-identity
 triggers:
   - UI identity
   - frontend

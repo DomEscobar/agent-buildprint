@@ -34,7 +34,7 @@ routes:
     do_not_create_capability_packet: true
   capability_buildprint:
     when: request is one reusable graft into an existing host project
-    action: continue through internet deepsearch, intake, boundary, contract, phases, validation, and publication
+    action: continue through internet deepsearch, intake, boundary, contract, loops, validation, and publication
   ambiguous:
     action: ask one classifier question before deepsearch or authoring
 outputs:
@@ -42,15 +42,14 @@ outputs:
     - BUILDPRINT.md
     - capability.yaml
     - compatibility.md
-    - 00-host-assessment.md
-    - 00-assessment-questions.md
-    - 01-integration-plan.md
-    - apply.md
-    - 02-implementation-phases/01-contract-and-config.md
-    - 02-implementation-phases/02-core-integration.md
-    - 02-implementation-phases/03-host-wiring.md
-    - 02-implementation-phases/04-user-operator-surface.md
-    - 02-implementation-phases/05-verification-and-receipt.md
+    - 00-goal.md
+    - 01-host.md
+    - loops/loop-flow.md
+    - loops/01-contract-and-config.md
+    - loops/02-core-integration.md
+    - loops/03-host-wiring.md
+    - loops/04-operator-surface.md
+    - review.md
     - verify.md
     - README.md
 internet_deepsearch_policy:
