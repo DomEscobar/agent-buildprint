@@ -52,7 +52,6 @@ packet_shape:
     - BUILDPRINT.md
     - references/asset-policy.md
     - references/world-art-sources.md
-    - assets/world/manifest.json
     - alignment-slice/ALIGNMENT.md
     - references/battle-verification.md
     - references/starter-town-verification.md
@@ -79,6 +78,10 @@ packet_shape:
     - 05-handover.md
     - generated/agent-prompt.md
     - generated/codex-handoff.md
+  deprecated_unused:
+    - assets/
+    - assets/world/
+    - assets/world/manifest.json
 
 story_scope:
   region: kanto
@@ -88,48 +91,64 @@ story_scope:
   pokemon_sprites:
     source: pokeapi
     mandatory: true
-    forbidden: [custom_svg, external_pokemon_packs, rom_extracts]
+    forbidden: [custom_svg, canvas_procedural, media4agents, external_pokemon_packs, rom_extracts]
     cache_dir: public/data/generated/sprites/pokemon
   world_art:
     user_choice: false
     confirmed_by: user
-    selected_strategy: safe_cc0_default
-    selected_mode: external_sprite_sheets
-    packet_bundle_dir: assets/world
-    packet_manifest: assets/world/manifest.json
+    confirmed_at: 2026-08-06
+    selected_strategy: procedural_or_generated_world_art
+    selected_modes: [custom_svg, canvas_procedural, media4agents]
+    packet_bundle_dir: null
+    packet_manifest: null
+    forbidden_sources:
+      - buildprints/pokemon-fire-red/assets/
+      - assets/world/
+      - third_party_pack_downloads_as_primary_pipeline
+    media4agents:
+      token: m4a_pub_5601e4aa0cfaad9d
+      image_url_pattern: https://media4agents.com/m/m4a_pub_5601e4aa0cfaad9d/{name}.png?prompt={description}
+      preferred_game_workflow: RetroDiffusion (Games)
+      retrodiffusion_rule: select as media4agents dashboard image default; do not invent undocumented model query slugs
+      optional_model_overrides: [flux-2-flash, krea-v2-turbo, wan-2.7, gpt-image-2]
+      optional_model_overrides_note: use only when intentionally overriding away from dashboard RetroDiffusion default
+      optional_styles: [illustration, background_image, icon, free_definition]
+      optional_sizes: [16x16, 32x32, 64x64, 128x128, 256x256, 512x512, 1024x1024]
+      transparent_png_flag: removeBackground=true
+      video_and_3d: optional_polish_only
+      cors_proxy: same_origin_/media/{key}.png mapping to WORLD_MEDIA URLs; see references/asset-policy.md
     alignment_contract: alignment-slice/ALIGNMENT.md
-    selected_sources:
-      - Kenney RPG Urban Pack
-      - OpenGameArt Top Down Pokemon-esque Sprites
+    alignment_note: movement_camera_semantic_tile_lessons_only; demo_png_paths_obsolete
     source_decision_is_hard_blocker: true
     question_id: world_overworld_art_mode
     source_reference: references/world-art-sources.md
     required_before:
-      - 01-project-setup completion
+      - 01-setup.md completion
       - phase 04 Pallet Town implementation
       - starter_town_core certification
     approved_source_strategies:
-      safe_cc0_default:
+      procedural_or_generated_world_art:
         recommended: true
-        mode: external_sprite_sheets
-        sources:
-          - Ninja Adventure Asset Pack
-          - Kenney RPG Urban Pack
-          - OpenGameArt Top Down Pokemon-esque Sprites
-          - OpenGameArt Character 4 directional walking
-          - OpenGameArt Zelda-like tilesets and sprites
-          - Open RPG Fantasy Tilesets
+        modes:
+          - custom_svg
+          - canvas_procedural
+          - media4agents
+        notes: Mix allowed per category; no packet assets/ usage
+      safe_cc0_default:
+        recommended: false
+        superseded: true
+        superseded_at: 2026-08-06
       pokemon_community_exception:
         recommended: false
+        superseded: true
         requires_explicit_user_approval: true
-        source: Ekat's Public Gen 3 Tilesets
-        public_web_default: blocked_until_license_review
-      custom_authored:
+      custom_authored_pack_files:
         recommended: false
-        requires_authored_files_before_phase_04: true
+        superseded: true
     allowed_modes:
-      - external_sprite_sheets
       - custom_svg
+      - canvas_procedural
+      - media4agents
     applies_to: [player_overworld, npcs, trainers_overworld, map_tiles, buildings, ui_chrome_optional]
     excludes: [pokemon_battle, pokemon_party, pokedex_species, evolution_sprites]
   story_contract_dir: data/story
@@ -278,7 +297,8 @@ central_output_contract:
   claim_gates:
     - battle_core requires `npm run battle:proof:verify -- --recompute` + `.buildprint/battle-slice-proof.json` + independent battle visual review
     - starter_town_core requires `npm run pallet:proof:verify -- --recompute` + `.buildprint/pallet-world-proof.json` + independent Pallet visual review
-    - world art source selection requires `.buildprint/decisions.md` + `docs/assets-provenance.md` + approved source strategy from `references/world-art-sources.md`
+    - world art requires `.buildprint/decisions.md` + `docs/assets-provenance.md` + `procedural_or_generated_world_art` (SVG / Canvas / media4agents); packet `assets/` unused
+    - media4agents world URLs must include token `m4a_pub_5601e4aa0cfaad9d`; Pokémon never use media4agents
     - phase 06+ blocked until 05-first-loop-integration passes and current battle, Pallet, and integration receipts bind the same commit
     - kanto_complete requires `.buildprint/evidence-playthrough-kanto.md` + `npm run story:validate` pass + 88/88 maps
     - postgame_sevii requires `npm run story:validate -- --claim postgame_sevii` + CP-SeviiComplete

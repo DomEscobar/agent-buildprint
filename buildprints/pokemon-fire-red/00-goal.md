@@ -24,7 +24,7 @@ Read `references/asset-policy.md` and `references/world-art-sources.md` before r
 
 **Pokémon sprites and species visual elements — always PokeAPI.**
 
-Battle sprites, party icons, Pokédex art, evolution scenes, and any on-screen Pokémon graphic must come from cached [PokeAPI/sprites](https://github.com/PokeAPI/sprites) Gen III FireRed/LeafGreen paths. Do not ask the user. Do not use SVG, external packs, or ROM rips for Pokémon.
+Battle sprites, party icons, Pokédex art, evolution scenes, and any on-screen Pokémon graphic must come from cached [PokeAPI/sprites](https://github.com/PokeAPI/sprites) Gen III FireRed/LeafGreen paths. Do not ask the user. Do not use SVG, Canvas, media4agents, external packs, or ROM rips for Pokémon.
 
 ## Hard-stop questions
 
@@ -47,13 +47,13 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
    - `postgame_sevii` (main story + Sevii Islands)
    - `kanto_complete` with Sevii explicitly deferred as blocked
 2. **Platform and stack** — Browser-only web game (default: TypeScript + Vite + Phaser 3), or another target? Record engine choice.
-3. **World/player/NPC/tiles source strategy and art mode** — already resolved as `safe_cc0_default` + `external_sprite_sheets` from committed `assets/world/`. The alternatives below are historical and may be reopened only when the user explicitly asks to replace the confirmed bundle:
-   - `safe_cc0_default` + `external_sprite_sheets` — **Confirmed** committed CC0/open bundle documented in `references/world-art-sources.md`. Required for Phase 04 `starter_town_core` certification.
-   - `pokemon_community_exception` + `external_sprite_sheets` — Ekat's Public Gen 3 Tilesets. Visually closest, but risky; only with explicit user approval and full credit/license capture. Public web blocked until license review.
-   - `custom_authored` — custom in-repo sprites/tiles created by the agent or user. Must include real player/NPC/tiles before phase 04; not placeholders.
-   - `custom_svg` — custom/programmatic SVG rasterized in Phaser. **Only with explicit user opt-in** — blocks `starter_town_core` and `release_polish` visual claims by default because it tends to produce non-GBA results.
+3. **World/player/NPC/tiles source strategy and art mode** — already resolved as `procedural_or_generated_world_art` using **SVG**, **Canvas**, and/or **media4agents.com** (token `m4a_pub_5601e4aa0cfaad9d`). Prefer RetroDiffusion (Games) for pixel game assets. Packet `assets/` is unused. Historical pack strategies below are superseded and must not be implemented unless the user explicitly reopens them:
+   - `procedural_or_generated_world_art` — **Confirmed**. Mix `custom_svg`, `canvas_procedural`, and `media4agents` per category. Required for Phase 04 `starter_town_core` certification.
+   - ~~`safe_cc0_default` + committed `assets/world/`~~ — superseded 2026-08-06
+   - ~~`pokemon_community_exception`~~ — superseded; high-risk if ever reopened
+   - ~~Downloaded Kenney/OpenGameArt pack pipeline~~ — superseded
    
-   Pokémon remain PokeAPI regardless of any future replacement decision. Applying agents copy the confirmed choice and must not ask this question again.
+   Pokémon remain PokeAPI regardless. Applying agents copy the confirmed choice and must not ask this question again.
 4. **Fidelity mode** — `frlg_mechanics` (Gen III stats/abilities/natures, FRLG story) vs `gen1_nostalgia` (Gen I battle quirks). Default: `frlg_mechanics`.
 
 ### Safety and scope gates
@@ -70,18 +70,20 @@ For all rows above: `confirmed_by: user` or `confirmed_by: explicit_user_delegat
 | Pokémon sprites | **always PokeAPI** (mandatory) | user | "we may use the https://pokeapi.co/docs/v2" | no | yes |
 | Scope ceiling | postgame_sevii | explicit_user_delegation | "perfect finished pokemon Gen 1 fire red" | no | yes |
 | Platform and stack | Browser: TS + Vite + Phaser 3 + Tiled | explicit_user_delegation | "coding agent needs to create" | no | yes |
-| World/player/NPC/tiles source strategy | **safe_cc0_default + external_sprite_sheets; committed under `assets/world/`** | user | "die sprites von den pokemon sollen aus der pokeapi kommen aber player, landscape world sprites nicht" | yes | no |
+| World/player/NPC/tiles source strategy | **procedural_or_generated_world_art** (SVG / Canvas / media4agents; no packet `assets/`) | user | media4agents handover + ban on `assets/` usage | yes | no |
+| World/overworld art modes | custom_svg + canvas_procedural + media4agents (mix allowed) | user | same | yes | no |
+| media4agents token | m4a_pub_5601e4aa0cfaad9d | user | account overview / agent handover | no | yes |
 | Fidelity mode | frlg_mechanics | explicit_user_delegation | FireRed remake scope | no | yes |
 | Legal/trademark posture | fan/educational + disclaimer | explicit_user_delegation | fan recreation | no | yes |
 | Product/artifact identity | Pokémon FireRed (Kanto + Sevii) | user | stated in request | no | yes |
 
-**Action for applying agent:** Copy all rows to `.buildprint/decisions.md` before setup. World art is already decided; do not ask again and do not replace the committed sheets with downloaded or generated substitutes.
+**Action for applying agent:** Copy all rows to `.buildprint/decisions.md` before setup. World art is already decided; do not ask again and do not recreate a removed `assets/world/` pack pipeline.
 
 ## Assumable defaults
 
 After hard-stop rows are confirmed or delegated:
 
-- World art is not an assumable default: it is confirmed as `safe_cc0_default` + `external_sprite_sheets` under `assets/world/`
+- World art is not an assumable default: it is confirmed as `procedural_or_generated_world_art` (SVG / Canvas / media4agents)
 - English language dialogue first
 - Keyboard + gamepad; touch virtual D-pad for mobile
 - 2× integer pixel scale on desktop
@@ -90,7 +92,7 @@ After hard-stop rows are confirmed or delegated:
 ## Deferrable questions
 
 - Exact color palette after `02-identity.md`
-- Replacement sprite-pack URL — not applicable to the confirmed committed bundle; it becomes a Phase 04 blocker only if the user explicitly changes the strategy
+- Per-category SVG vs Canvas vs media4agents mix details (as long as coverage and visual bar are met)
 - Optional speed-up / fast text toggle
 
 ## Decision ledger template
@@ -101,13 +103,14 @@ After hard-stop rows are confirmed or delegated:
 | Pokémon sprites | always PokeAPI | user | mandatory policy | no | yes | data pipeline + battle/party/pokedex |
 | Scope ceiling |  |  |  | no | yes | phase graph |
 | Platform and stack |  |  |  | no | yes | engine |
-| World/player/NPC/tiles source strategy | safe_cc0_default; committed under assets/world/ | user | confirmed packet decision; do not reopen | yes | no | asset source, legal posture, map art pipeline |
-| World/overworld art mode | external_sprite_sheets | user | confirmed packet decision; do not reopen | yes | no | asset loader, semantic-map to TMX pipeline |
-| External pack URL/path | assets/world/manifest.json | user | committed bundle; no setup download | yes | no | provenance + load paths |
-| Runtime asset coverage | player OW, NPC, tileset, grass, building/door from assets/world/runtime/ | user | committed bundle | no | yes | starter_town_core and phase 04 |
+| World/player/NPC/tiles source strategy | procedural_or_generated_world_art | user | confirmed packet decision; do not reopen | yes | no | asset source, legal posture, map art pipeline |
+| World/overworld art modes | custom_svg, canvas_procedural, media4agents | user | confirmed packet decision; do not reopen | yes | no | asset loader, semantic-map to TMX pipeline |
+| media4agents token | m4a_pub_5601e4aa0cfaad9d | user | keep in every media URL | no | yes | world PNG/MP4/GLB URLs |
+| Packet assets/ usage | unused / forbidden | user | do not copy assets/world | no | yes | provenance + validators |
+| Runtime asset coverage | player OW, NPC, tileset/atlas, grass, building/door via SVG/Canvas/media4agents | user | confirmed | no | yes | starter_town_core and phase 04 |
 | Fidelity mode |  |  |  | no | yes | battle formula |
 | Legal/trademark posture |  |  |  | no | yes | README, provenance |
 | Product/artifact identity |  |  |  | no | yes | story scope |
 ```
 
-The copied ledger must not leave world-art rows blank. If they are blank, repair them from the confirmed table above instead of asking the user. Do not substitute Pokémon with SVG.
+The copied ledger must not leave world-art rows blank. If they are blank, repair them from the confirmed table above instead of asking the user. Do not substitute Pokémon with SVG, Canvas, or media4agents.

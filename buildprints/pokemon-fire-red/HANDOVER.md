@@ -39,32 +39,30 @@ Created **Product Buildprint** at `buildprints/pokemon-fire-red/` for a coding a
 
 Machine-readable story enforcement — see `data/story/`.
 
-## Asset policy (added 2026-07-09)
+## Asset policy (updated 2026-08-06)
 
 - **Pokémon sprites:** always PokeAPI (mandatory, not a question)
-- **Trainers / NPCs / tiles:** confirmed committed bundle under `assets/world/`; applying agents copy the decision and do not ask again
-- Confirmed mode: `safe_cc0_default` + `external_sprite_sheets`
-- Risky exception: `pokemon_community_exception` only with explicit user approval and full provenance
+- **Trainers / NPCs / tiles:** `procedural_or_generated_world_art` — SVG, Canvas procedural textures, and/or media4agents.com
+- Media token: `m4a_pub_5601e4aa0cfaad9d` (public, revocable; keep in every media URL)
+- Prefer RetroDiffusion (Games) for pixel game assets
+- Packet `assets/` was **removed**; do not recreate a CC0/Kenney pack pipeline
 - See `references/asset-policy.md`
 - See `references/world-art-sources.md`
 
-## World art source patch (added 2026-07-10)
+## World art rewrite (2026-08-06)
 
-The Buildprint now provides approved source guidance instead of leaving agents to search randomly:
+Supersedes the 2026-07-10 CC0 pack guidance. Applying agents must:
 
-- Ninja Adventure Asset Pack
-- Kenney RPG Urban Pack
-- OpenGameArt Top Down Pokemon-esque Sprites
-- OpenGameArt Character 4 directional walking
-- OpenGameArt Zelda-like tilesets and sprites
-- Open RPG Fantasy Tilesets
-- Ekat's Public Gen 3 Tilesets only as explicit high-risk exception
-
-Applying agents must create `docs/assets-provenance.md`, `public/assets/world-source-manifest.json`, local originals under `third_party_assets/world/`, and normalized runtime assets under `public/assets/`.
+- write media4agents PNG URLs and/or author SVG/Canvas atlases
+- create `docs/assets-provenance.md` and `public/assets/world-source-manifest.json` describing the mode mix
+- never recreate Kenney/OpenGameArt files as the primary world pipeline
+- never use media4agents/SVG/Canvas for Pokémon species art
+- select RetroDiffusion (Games) as the media4agents dashboard default; do not invent undocumented model query slugs
+- proxy media4agents textures through same-origin `/media/{key}.png` when Phaser CORS requires it
 
 ## Recommended next direction
 
-1. Applying agent runs `01-project-setup.md`, then completes Phase 01 data and Phase 02 engine foundation in a new `pokemon-fire-red-game/` implementation repo
+1. Applying agent runs `01-setup.md`, then completes Phase 01 data and Phase 02 engine foundation in a new `pokemon-fire-red-game/` implementation repo
 2. Execute Phase 03 `battle-core` as the first gameplay certification and require `.buildprint/battle-slice-proof.json` plus independent visual review
 3. Execute Phase 04 `pallet-town-world-proof` second and require semantic tile validation, scoped Pallet proof, traversal, and independent visual review
 4. Execute Phase 05 `first-loop-integration` and prove continuous Pallet → Route 1 → Viridian plus both Win and Run restoration
@@ -93,7 +91,7 @@ Applying agents must create `docs/assets-provenance.md`, `public/assets/world-so
 ## Blocked
 
 - Actual game implementation is not started in this packet.
-- World art mode and source strategy are resolved: copy the committed `safe_cc0_default` + `external_sprite_sheets` decision and provenance. Only an explicit new user request may replace it.
+- World art strategy is resolved: copy `procedural_or_generated_world_art` (SVG / Canvas / media4agents token `m4a_pub_5601e4aa0cfaad9d`). Only an explicit new user request may replace it.
 - No public hosting, trademark/legal review, or full playthrough proof exists.
 
 ## Not proven
@@ -107,7 +105,7 @@ Applying agents must create `docs/assets-provenance.md`, `public/assets/world-so
 
 ## Next
 
-- Applying agent copies the resolved decisions, answers only still-open hard stops, and runs `01-project-setup.md`
+- Applying agent copies the resolved decisions, answers only still-open hard stops, and runs `01-setup.md`
 - Complete Phase 01 data and Phase 02 foundation, certify battle in Phase 03, certify Pallet Town in Phase 04, then integrate Pallet -> Route 1 -> Viridian in Phase 05
 - Capture UI evidence and playthrough receipts as phases advance
 - Run phase 14 and `99-critical-review-pushback` before any completion claim
@@ -123,4 +121,4 @@ Do not claim completion beyond the evidence. Lower the claim ceiling whenever pr
 
 ## Files to read first (applying agent)
 
-`BUILDPRINT.md` → verification references in its required order → `00-questions.md` → `01-project-setup.md` → `02-ui-identity.md` → `blueprint.yaml` → `03-phases/phase-index.yaml` → active phase
+`BUILDPRINT.md` → verification references in its required order → `00-goal.md` → `01-setup.md` → `02-identity.md` → `blueprint.yaml` → `loops/loop-index.yaml` → active loop

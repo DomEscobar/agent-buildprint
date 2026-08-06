@@ -22,7 +22,7 @@ Tiled remains the preview and runtime interchange format. Any useful editor chan
 
 ## Required town content
 
-The production map must provide a coherent starter-town composition using the committed world bundle, without copying Nintendo map files or ROM assets:
+The production map must provide a coherent starter-town composition using SVG / Canvas / media4agents world art, without copying Nintendo map files, ROM assets, or packet `assets/`:
 
 - player home, rival home, and Oak lab as visually distinct named structures
 - connective walking paths with intentional open breathing space
@@ -90,7 +90,7 @@ Before pass/fail, the reviewer writes the five worst visible flaws in `.buildpri
 2. no atlas collage, accidental single-tile fill, visual noise, or meaningless repetition
 3. correct top-left/top-right/bottom/middle assembly, water/roof/tree/fence seams, and corner continuity
 4. layer and z-order correctness around roofs, trees, props, doors, and the player
-5. coherent palette and material transitions using only approved committed world art
+5. coherent palette and material transitions using only approved world art modes (SVG / Canvas / media4agents; never packet `assets/`)
 6. collision-to-visual agreement, player foot alignment, camera framing, pixel crispness, and 375px touch comfort
 
 Findings use `critical`, `high`, `medium`, or `low`. Any unresolved critical or high finding fails the phase. Automated checks can prove structure, hashes, reachability, blank output, or exact duplication; they cannot certify that the town looks good.

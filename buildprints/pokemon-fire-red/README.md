@@ -20,7 +20,7 @@ Agent-executable **Product Buildprint** for a browser-based Pokémon FireRed rec
 # 1. Read BUILDPRINT.md and follow read order
 # 2. Copy decisions template
 mkdir -p .buildprint
-# 3. Scaffold from 01-project-setup.md
+# 3. Scaffold from 01-setup.md
 npm create vite@latest pokemon-fire-red-game -- --template vanilla-ts
 # ... follow setup for Phaser 3 integration
 
@@ -37,16 +37,16 @@ npm run dev
 1. `BUILDPRINT.md`
 2. `references/asset-policy.md`
 3. `references/world-art-sources.md`
-4. `alignment-slice/ALIGNMENT.md`
+4. `alignment-slice/ALIGNMENT.md` (geometry only — not art sources)
 5. `references/battle-verification.md`
 6. `references/starter-town-verification.md`
 7. `references/world-verification.md`
 8. `references/data-sources-and-techniques-basis.md`
-9. `00-questions.md`
-10. `01-project-setup.md`
-11. `02-ui-identity.md`
+9. `00-goal.md`
+10. `01-setup.md`
+11. `02-identity.md`
 12. `blueprint.yaml`
-13. `03-phases/phase-index.yaml` → active phase
+13. `loops/loop-index.yaml` → active loop
 
 ## Story contract (mandatory)
 
@@ -83,21 +83,22 @@ Before phase 06, read and implement against:
 
 - [PokeAPI v2](https://pokeapi.co/docs/v2) — species, moves, types, sprites (cached at build time)
 - Manual JSON/YAML — encounters, trainers, items, and story scripts; maps are semantic YAML compiled deterministically to generated TMX for Tiled preview and runtime
-- Local world bundle — `assets/world/` contains the confirmed CC0 player/NPC and landscape/world sheets plus originals, licenses, and a machine-readable manifest
+- World art — **SVG**, **Canvas procedural atlases**, and/or **[media4agents.com](https://media4agents.com)** PNG URLs (token `m4a_pub_5601e4aa0cfaad9d`). Packet `assets/` is unused.
 
-## World Art Bundle
+## World art (confirmed)
 
-The source choice is already confirmed. Before overworld/map implementation, the applying agent copies `assets/world/runtime/` into `public/assets/` and records:
+Before overworld/map implementation, the applying agent records and implements:
 
-- selected source strategy: `safe_cc0_default` + `external_sprite_sheets`
-- selected source URLs and licenses in `docs/assets-provenance.md`
-- local original paths under `third_party_assets/world/`
-- normalized runtime files under `public/assets/ow/` and `public/assets/tilesets/`
-- `public/assets/world-source-manifest.json`
+- strategy: `procedural_or_generated_world_art`
+- modes: `custom_svg` | `canvas_procedural` | `media4agents` (mix allowed)
+- media4agents image URLs written into code, e.g. `https://media4agents.com/m/m4a_pub_5601e4aa0cfaad9d/{name}.png?prompt=...`
+- prefer RetroDiffusion (Games) as the media4agents dashboard image default (do not invent undocumented `&model=` slugs)
+- provenance in `docs/assets-provenance.md` and `public/assets/world-source-manifest.json`
+- same-origin `/media/{key}.png` proxy when Phaser needs CORS-safe textures
 
-Confirmed bundle: `safe_cc0_default` + `external_sprite_sheets` using the committed Kenney RPG Urban Pack and OpenGameArt player/NPC sheet. Pokémon remain PokeAPI-only.
+Pokémon remain PokeAPI-only. Do not recreate a packet `assets/` pack pipeline.
 
-Playable alignment reference: `alignment-slice/` demonstrates keyboard/touch walking, camera behavior, named player frame extraction, and coherent tile usage. See `alignment-slice/ALIGNMENT.md` and `references/starter-town-verification.md` before implementing phase 04.
+Playable alignment reference: `alignment-slice/` demonstrates keyboard/touch walking, camera behavior, and semantic tile usage. Its demo PNG paths are obsolete — rebuild art via SVG/Canvas/media4agents. See `alignment-slice/ALIGNMENT.md` and `references/starter-town-verification.md` before phase 04.
 
 ## Claim ladder
 
@@ -110,7 +111,7 @@ Fan/educational use. Include disclaimer in game title screen and README. Cache P
 **Asset rules:**
 
 - **Pokémon:** always PokeAPI (mandatory)
-- **Trainers / NPCs / tiles:** confirmed committed `safe_cc0_default` bundle. Changing it requires a new explicit decision.
+- **Trainers / NPCs / tiles:** SVG, Canvas, and/or media4agents (`m4a_pub_5601e4aa0cfaad9d`). Packet `assets/` unused. Changing this requires a new explicit decision.
 
 ## Authoring metadata
 

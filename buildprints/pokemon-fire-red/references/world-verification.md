@@ -6,9 +6,15 @@ This contract exists because file counts and a few hand-picked screenshots do no
 
 ### 1. Immutable asset proof
 
-`npm run assets:world:validate` must compare every runtime world file against `assets/world/manifest.json` and fail on a missing file, dimension mismatch, hash mismatch, undeclared replacement, remote runtime URL, or Pokemon graphic inside the world bundle.
+`npm run assets:world:validate` must compare every runtime world asset against `public/assets/world-source-manifest.json` for strategy `procedural_or_generated_world_art` and fail on:
 
-Write `.buildprint/world-assets-proof.json` with the manifest hash, verified files, and zero policy violations. The validator generates this file; agents must not hand-author a passing result.
+- missing player / NPC / tile / grass / building coverage
+- undeclared mode (`custom_svg` | `canvas_procedural` | `media4agents`)
+- media4agents entries missing token `m4a_pub_5601e4aa0cfaad9d` or prompt/`{name}`
+- any path that resolves to packet `assets/` / `assets/world/`
+- Pokémon graphics sourced from SVG, Canvas, or media4agents
+
+Remote media4agents URLs are allowed and expected for world art. Write `.buildprint/world-assets-proof.json` with the manifest hash, verified files/URL keys, modes, and zero policy violations. The validator generates this file; agents must not hand-author a passing result.
 
 ### 2. Structural map proof
 

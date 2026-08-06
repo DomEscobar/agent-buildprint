@@ -55,9 +55,9 @@ The perfection target is not "a Pokemon-themed demo." The target is a player-bel
 
 Read `references/asset-policy.md` and `references/world-art-sources.md`.
 
-**Pokémon (mandatory):** all species visuals from **PokeAPI/sprites** cached at build time — battle, party, Pokédex, evolution. Never SVG, never external Pokémon packs, never ROM rips.
+**Pokémon (mandatory):** all species visuals from **PokeAPI/sprites** cached at build time — battle, party, Pokédex, evolution. Never SVG, never media4agents, never external Pokémon packs, never ROM rips.
 
-**World art (confirmed):** trainers, NPCs, player overworld sprite, tiles/buildings use the committed `safe_cc0_default` bundle under `assets/world/`. Read `alignment-slice/ALIGNMENT.md` and `references/starter-town-verification.md` before phase 04. A different strategy becomes a new hard-stop decision. Do not allow placeholder rectangles, undocumented sprite sheets, or random Pokemon-looking assets.
+**World art (confirmed):** trainers, NPCs, player overworld sprite, tiles/buildings use **SVG, Canvas procedural textures, and/or media4agents.com PNG URLs** (`procedural_or_generated_world_art`). Prefer RetroDiffusion (Games) via the media4agents dashboard default — do not invent undocumented `&model=` slugs for it. Media token: `m4a_pub_5601e4aa0cfaad9d` — keep it in every media4agents URL. Packet `assets/` was removed; do not recreate a CC0 pack pipeline. Read `alignment-slice/ALIGNMENT.md` for movement/camera/semantic-tile lessons only. Read `references/starter-town-verification.md` before phase 04. Do not allow placeholder rectangles or undocumented third-party sheets.
 
 Also allowed:
 

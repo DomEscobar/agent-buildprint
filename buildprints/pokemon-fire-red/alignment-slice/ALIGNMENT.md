@@ -1,12 +1,37 @@
-# World sprite alignment contract
+# World alignment contract (geometry only)
 
-This playable slice records the first runtime-proven usage contract for the committed CC0 world assets. Run it with `npm install && npm run dev`; append `?inspect=1` for the development-only atlas inspector. Production builds do not expose the inspector.
+**Read this for:** 16px grid movement, player foot-point, integer camera scale, semantic tile/stamp/sequence catalogs.
 
-## Player source sheet
+**Do not read this for art sources.** Applying projects must create player/world art with **SVG**, **Canvas**, and/or **media4agents** (`references/asset-policy.md`). Never copy packet `assets/` (removed), never treat slice demo PNGs as production art, never revive Kenney/OpenGameArt pack paths.
 
-Source: `public/assets/player-npc.png`, 152x101 PNG.
+Run the historical demo slice with `npm install && npm run dev` (append `?inspect=1` for the development-only atlas inspector). That demo still loads obsolete local PNGs so movement proofs remain runnable; those bytes are not the Buildprint art contract.
 
-The source is not a uniform Phaser spritesheet. Every pose is 16x16, but frames have 1px or 2px gaps. Register named texture frames explicitly:
+## Durable requirements (copy these)
+
+- Logical tile size: **16px**
+- Player visual foot point: **bottom-center** of the 16×16 frame; centered origin
+- Camera: **integer** zoom (2× desktop / 1× narrow); clamp to map bounds
+- Phaser: `pixelArt: true`, `roundPixels: true`, `antialias: false`
+- Collision on **logical tile** coordinates
+- Player-facing canvas scales only: **480×320** (2×) desktop and **240×160** (1×) below 520px — no fractional `Scale.FIT`
+- Place world art through **semantic names** (`TILE_CATALOG` / `STAMP_CATALOG` / `SEQUENCE_CATALOG`), never raw `frame: 123` collage
+- Serialize the same semantics in applying-project `data/maps/tile-catalog.yaml`
+- Agents edit `data/maps/source/{map_id}.layout.yaml`; `npm run maps:compile` emits generated TMX; validators reject raw GIDs, stamp-only solo use, bad sequences, adjacency/layer errors, and generated drift
+
+### Applying-project art sources
+
+Rebuild coverage with:
+
+- Canvas/SVG atlases under `public/assets/generated/` or `public/assets/svg/`
+- and/or media4agents URLs in a `world-media` module (token `m4a_pub_5601e4aa0cfaad9d`)
+
+## Historical demo only (obsolete PNG geometry)
+
+> **Forbidden for production.** The tables below describe the old slice demo sheets so the local Vite app still runs. Do **not** copy `public/assets/player-npc.png` or `public/assets/kanto-world.png` into an applying game. Do **not** require matching frame coordinates after you replace the art.
+
+### Demo player sheet (obsolete)
+
+Historical demo path: `alignment-slice/public/assets/player-npc.png` (152×101). Frames were 16×16 with 1–2px gaps — not a uniform `frameWidth: 16` spritesheet.
 
 | Direction | Y | Frame X coordinates | Runtime loop |
 |---|---:|---|---|
@@ -15,67 +40,23 @@ The source is not a uniform Phaser spritesheet. Every pose is 16x16, but frames 
 | left | 0 | 52, 68, 85 | right frames with `flipX: true` |
 | up | 0 | 102, 119, 136 | 0, 1, 2, 1 |
 
-Use texture key `player-source`, a centered origin, and a visual foot point at the bottom-center of the 16x16 frame. Do not call `load.spritesheet(..., { frameWidth: 16 })` for this file; that ignores source gaps and produces incorrect frames.
+When you ship new media4agents/SVG/Canvas player art, register **your** frame rectangles; do not preserve these coordinates unless your new sheet happens to match.
 
-## World atlas
+### Demo world atlas (obsolete)
 
-Source: `public/assets/kanto-world.png`, 432x288 PNG.
+Historical demo path: `alignment-slice/public/assets/kanto-world.png` (432×288, 27×18 of 16×16).
 
-- Grid: 27 columns x 18 rows
-- Tile size: 16x16
-- Frame formula: `frame = row * 27 + column`
-- Proven base grass: frame 28
-- Proven plain dirt: frame 180
-- Preserve multi-tile source-relative rectangles for water edges, buildings, trees, and market props; repeating arbitrary atlas cells produces visible seams.
+- Historical grass/dirt examples: frames 28 / 180 — **demo-only**
+- Multi-tile stamps must still be named structures after art replacement
 
-Agents must place world art through semantic names, not raw frame ids:
+## Visual evidence (slice only)
 
-- repeatable base tiles may be used for broad fills, for example `grassBase` and `dirtBase`
-- ordered transition pieces such as `fenceLeftEnd`, `fenceMiddle`, and `fenceRightEnd` are `sequence-only`
-- building, water, tree, and prop rectangles are `stamp-only` unless promoted to a named repeatable tile after visual proof
-- map/world code must use `TILE_CATALOG`, `STAMP_CATALOG`, and `SEQUENCE_CATALOG`; arbitrary `frame: 123` placement is not an acceptable execution pattern
-- the development inspector lists catalog names, labels, frames, and placement modes next to the numbered atlas
+- `evidence/world-desktop-1280.png`, `evidence/world-mobile-375.png`, `evidence/atlas-inspector-1280.png`
 
-### Applying-project authoring pipeline
+These prove this slice’s movement/camera behavior only. They do not prove applying-project world art or the full Kanto map set.
 
-The slice TypeScript catalogs prove the atlas semantics; they are not the full game's editable map format. Applying projects must serialize the same contract in `data/maps/tile-catalog.yaml` with semantic key, placement mode, source rectangle, stamp dimensions/anchor, ordered sequence pieces, allowed layers, collision semantics, interaction points, and allowed adjacency.
+## Verification receipt (slice)
 
-Coding agents edit `data/maps/source/{map_id}.layout.yaml` with semantic keys. `npm run maps:compile -- --map {map_id}` deterministically emits `data/maps/generated/{map_id}.tmx` for Tiled preview and the production Phaser loader. Generated GIDs are valid compiler output, but direct edits to generated TMX are invalid and must be rejected by source/catalog/compiler/output hash checks.
-
-`npm run maps:validate -- --map {map_id}` must reject raw authoring frame/GID values, stamp-only pieces used solo, sequence pieces out of order, out-of-bounds stamps, disallowed adjacency or layer, collision that disagrees with catalog semantics, and generated output drift. Tiled may be used to inspect the compiled map; useful editor changes must be expressed back in semantic source and recompiled.
-
-## Slice-local asset paths
-
-This slice intentionally flattens the runtime files to `public/assets/kanto-world.png` and `public/assets/player-npc.png` so the standalone Vite app can run without an applying-project folder layout.
-
-Do not copy those flat paths into the full game. Applying projects must keep the packet-normalized paths from `assets/world/README.md`:
-
-- `public/assets/tilesets/kanto-world.png`
-- `public/assets/ow/player-npc.png`
-
-The alignment contract is the atlas geometry, frame naming, and semantic tile/stamp/sequence catalog, not the slice-local URL shape.
-
-## Runtime rendering
-
-- Logical tile size: 16px
-- Camera zoom: 2x integer
-- Phaser: `pixelArt: true`, `roundPixels: true`, `antialias: false`
-- Player speed in the reference slice: 54px/s
-- Collision uses logical tile coordinates; the player sprite remains visually centered on its current tile
-- Player-facing canvas uses discrete logical scales only: 480x320 (2x) on desktop and 240x160 (1x) below 520px. Do not use arbitrary `Scale.FIT` fractional scaling for the game viewport
-
-## Visual evidence
-
-- `evidence/world-desktop-1280.png`: desktop world and player alignment
-- `evidence/world-mobile-375.png`: touch movement at 375px without horizontal overflow
-- `evidence/atlas-inspector-1280.png`: numbered world atlas and enlarged player source frames
-
-These images prove this slice only. They do not prove the full Kanto map set.
-
-## Verification receipt
-
-- `npm run check`: Biome pass, strict TypeScript pass, 9 Vitest tests pass, 2 Playwright tests pass, Vite production build pass
-- Desktop and mobile browser runs: zero console errors, no horizontal overflow
-- Runtime asset hashes: world `305e71fa...ad389`, player `dcbcf29f...9d59`; both match `assets/world/manifest.json`
-- Evidence hashes: desktop `da5c8d2c...af839`, mobile `1fe12504...6ad9`, inspector `d60f7d29...914b`
-- Independent review found and forced repairs for missing texture keys, raw atlas collage composition, swept collision, stale inspector coordinates, debug-link leakage, favicon failure, integer scaling, and stale map-count claims
+- `npm run check`: Biome, strict TypeScript, Vitest, Playwright, Vite production build
+- Desktop/mobile: zero console errors, no horizontal overflow
+- Applying projects must prove their own SVG/Canvas/media4agents world art separately

@@ -13,7 +13,7 @@ Before writing game code, read:
 - `references/starter-town-verification.md`
 - `references/world-verification.md`
 - `references/data-sources-and-techniques-basis.md`
-- `00-goal.md` — confirm `world_overworld_art_mode` and world source strategy answered
+- `00-goal.md` — confirm `procedural_or_generated_world_art` and media4agents token rows are in decisions
 - confirmed `.buildprint/decisions.md`
 
 If `.buildprint/decisions.md` does not exist or says `No implementation decisions recorded yet`, stop. Return to `00-goal.md`; do not hide hard-stop questions behind defaults.
@@ -47,9 +47,9 @@ Create a Vite + TypeScript + Phaser 3 project with:
 - `npm run maps:validate` — compare `data/maps/` to `data/story/map-manifest.yaml`
 - Later owning phases add `maps:render-proof`, `world:traverse-proof`, and the scoped Pallet proof commands when production maps and traversal exist. Setup documents their contracts; it must not create stubs or fabricated outputs.
 - `npm run story:validate` — compare `.buildprint/story-progress.json` to story graph
-- `npm run assets:validate` — Pokémon sprites from PokeAPI cache only; world art matches `world_art_mode`; starter + Route 1 species sprite files exist
-- `npm run assets:world:prepare` — copy the committed packet assets from `assets/world/runtime/` into the applying project's `public/assets/`; no world-asset download in normal setup
-- `npm run assets:world:validate` — player/NPC/tiles/grass/building coverage and provenance checks
+- `npm run assets:validate` — Pokémon sprites from PokeAPI cache only; world art matches SVG/Canvas/media4agents provenance; starter + Route 1 species sprite files exist
+- `npm run assets:world:prepare` — build or register world art from SVG sources, Canvas atlas scripts, and/or media4agents URL map; **must not** copy packet `assets/world/`
+- `npm run assets:world:validate` — player/NPC/tiles/grass/building coverage and provenance checks; fail if any path resolves to packet `assets/`
 - Phase 03 adds `battle:proof` and its recompute verifier against the production battle implementation. Setup defines only the command ownership and evidence schema.
 - `npm run typecheck` — tsc --noEmit
 - Phase 05 adds `first-loop:proof` and its recompute verifier once the certified battle and world implementations are integrated.
@@ -65,7 +65,7 @@ Copy story contract files from Buildprint packet:
 
 Implement `scripts/compile-maps.ts` and the foundational validators in `scripts/validate-maps.ts` and `scripts/validate-story.ts`. Document battle, Pallet, first-loop, and full-world proof schemas and ownership, but implement each generator/verifier only in its owning phase against real production behavior. Never add placeholder commands or prefilled pass artifacts.
 Map tooling must allow only manifest-owned ids matching `^[a-z0-9_]+$`, pass child-process arguments as arrays, enforce resolved-path containment, and reject absolute paths, URLs, `..`, symlinks, unsafe YAML tags, XML DTDs, and external entities.
-Implement world asset scripts in `scripts/prepare-world-assets.ts` and `scripts/validate-world-assets.ts`.
+Implement world asset scripts in `scripts/prepare-world-assets.ts` and `scripts/validate-world-assets.ts` for the SVG / Canvas / media4agents pipeline.
 Reserve `scripts/render-map-proof.ts` and `scripts/verify-world-proof.ts` for the phases that have production maps to render. Browser traversal belongs in a real Playwright test, not a mock map walker.
 
 Create before loop 01:
@@ -79,9 +79,10 @@ Create before loop 01:
 - `PROJECT_STRUCTURE.md`
 - `ARCHITECTURE_STRUCTURE_TRACE.md`
 - `docs/architecture.md` — summary + framework decisions
-- `docs/assets-provenance.md` — legal/asset sources
-- `public/assets/world-source-manifest.json` — selected source strategy, source URLs, local originals, runtime outputs, coverage status
-- `.env.example` — non-secret runtime configuration and PokeAPI/cache knobs
+- `docs/assets-provenance.md` — legal/asset sources (PokeAPI + SVG/Canvas/media4agents)
+- `public/assets/world-source-manifest.json` — strategy `procedural_or_generated_world_art`, mode per category, media4agents URL keys, SVG/Canvas module paths, coverage status
+- `src/assets/world-media.ts` (or equivalent) — full media4agents PNG URLs with token `m4a_pub_5601e4aa0cfaad9d` when that mode is used
+- `.env.example` — non-secret runtime configuration and PokeAPI/cache knobs (media token may be documented as a public constant, not a signing secret)
 - `.buildprint/setup-receipt.md` — setup proof and blockers
 - `architecture/proof-contracts.md` — command ownership, schemas, clean-commit/source-manifest binding, and reviewer-attestation rules for later phases. Generated proof JSON, screenshots, renders, reviews, attestations, and traces must not exist until the owning phase creates them from real behavior.
 
@@ -114,8 +115,9 @@ src/
 scripts/
   fetch-pokeapi.ts        # build-time data ingestion
   validate-data.ts
-  prepare-world-assets.ts # selected CC0/source pack normalization
+  prepare-world-assets.ts # SVG/Canvas atlas build + optional media4agents proxy/cache
   validate-world-assets.ts
+  build-canvas-atlas.ts   # optional deterministic Canvas tile/player atlas builder
 data/
   manual/                 # encounters, trainers, items, type overrides
   maps/
@@ -123,20 +125,21 @@ data/
     source/               # coding-agent-authored semantic map layouts
     generated/            # deterministic TMX output for Tiled preview/runtime; do not edit directly
   scripts/                # story YAML/JSON
+src/assets/
+  world-media.ts          # media4agents URL map (tokenized); never Pokémon species
 public/
   data/generated/         # built JSON cache
   data/generated/sprites/pokemon/  # PokeAPI FRLG sprites (mandatory)
   assets/
-    ow/                     # external_sprite_sheets mode: PNG sheets
-    svg/                    # custom_svg mode: trainers, NPCs, player
-    tilesets/               # Tiled PNG tilesets
-  assets/world-source-manifest.json
-third_party_assets/
-  world/                    # original downloaded/unpacked source packs; do not edit in place
+    svg/                    # custom_svg world/UI art
+    generated/              # Canvas-built atlases / prepared textures
+    world-source-manifest.json
 tests/
   battle/damage.test.ts
   data/schema.test.ts
 ```
+
+Forbidden in applying projects: recreating a packet `assets/` / Kenney/OpenGameArt pack pipeline or depending on removed `assets/world/manifest.json`.
 
 Forbidden: flat `utils/` dumping ground without mapped ownership.
 
@@ -145,15 +148,16 @@ Forbidden: flat `utils/` dumping ground without mapped ownership.
 Record:
 
 - **Pokémon sprites:** PokeAPI FRLG cache only (`references/asset-policy.md` Rule 1)
-- **World art mode:** `external_sprite_sheets` | `custom_svg` from decisions ledger
-- **World art source strategy:** `safe_cc0_default` | `pokemon_community_exception` | `custom_authored` from `references/world-art-sources.md`
-- **World asset sources:** selected source URLs, licenses, local `third_party_assets/` paths, normalized `public/assets/` outputs, redistribution status
+- **World art strategy:** `procedural_or_generated_world_art`
+- **World art modes:** `custom_svg` | `canvas_procedural` | `media4agents` (mix allowed per category)
+- **media4agents:** token `m4a_pub_5601e4aa0cfaad9d`; prefer RetroDiffusion (Games) for pixel sprites/tiles; write full URLs into code
+- **World asset sources:** SVG paths, Canvas builder modules, and/or media4agents URLs recorded in provenance — never packet `assets/`
 - **Phaser 3** — tilemaps, scenes, input, WebAudio
-- **Vite** — dev server and bundle
+- **Vite** — dev server and bundle; optional `/media/*` proxy for media4agents CORS
 - **Vitest** — unit tests for battle math and data schema
-- **Tiled** — map authoring (external tool)
+- **Tiled** — map authoring (external tool) against generated TMX from semantic sources
 - **idb** or **localforage** — IndexedDB wrapper
-- Rejected: Unity WebGL (heavier), raw Canvas (reinvent tilemap)
+- Rejected: Unity WebGL (heavier); inventing a full tilemap engine outside Phaser; reviving the deprecated CC0 pack bundle
 
 Also include a section named **Framework And Styling Decisions**:
 
@@ -177,23 +181,24 @@ Implement `scripts/fetch-pokeapi.ts` that:
 
 Implement `scripts/prepare-world-assets.ts` that:
 
-1. Reads `.buildprint/decisions.md` and `assets/world/manifest.json`; the confirmed mode is `external_sprite_sheets` and strategy is `safe_cc0_default`.
-2. Copies committed originals/provenance into `third_party_assets/world/` and committed runtime sheets into `public/assets/`. Normal setup must not download world assets.
-3. Extracts or copies runtime files into:
-   - `public/assets/ow/player-npc.png`
-   - `public/assets/tilesets/kanto-world.png`
-4. Writes `public/assets/world-source-manifest.json` with source URL, license, original path, runtime path, dimensions, and coverage.
-5. Fails if required coverage is missing.
+1. Reads `.buildprint/decisions.md`; confirmed strategy is `procedural_or_generated_world_art` with modes `custom_svg` | `canvas_procedural` | `media4agents`.
+2. **Never** recreate a packet `assets/` / `assets/world/` pack pipeline.
+3. For `canvas_procedural`: run deterministic atlas builders into `public/assets/generated/` (or register Canvas textures at boot).
+4. For `custom_svg`: ensure SVG files exist under `public/assets/svg/` (or equivalent) and are loadable by Phaser at integer scale.
+5. For `media4agents`: ensure `src/assets/world-media.ts` (or equivalent) contains full tokenized URLs; optionally configure a same-origin `/media/{key}.png` proxy that fetches the upstream media4agents URL.
+6. Writes `public/assets/world-source-manifest.json` with strategy, mode per category, media URL keys/prompts, SVG/Canvas paths, dimensions/coverage.
+7. Fails if required coverage is missing.
 
 Implement `scripts/validate-world-assets.ts` that fails unless:
 
-- `docs/assets-provenance.md` exists and names the selected strategy
+- `docs/assets-provenance.md` exists and names `procedural_or_generated_world_art`
 - `public/assets/world-source-manifest.json` exists
-- player OW sheet has front/back/side directions with standing and step frames, or a documented equivalent
-- NPC sheet exists
-- exterior 16x16 tileset exists
+- player OW has front/back/side directions with standing and step frames, or a documented multi-texture equivalent
+- NPC coverage exists
+- exterior 16x16 tile language / atlas exists
 - tall grass and building/door/warp coverage is declared
-- no hard-banned source is used
+- no path recreates a packet `assets/world/` or third-party pack copy as the primary pipeline
+- no Pokémon graphic is sourced from media4agents, SVG, or Canvas
 
 ## Setup receipt
 
@@ -201,7 +206,7 @@ Write `.buildprint/setup-receipt.md` with:
 
 - architecture score (0-5 rubric from Agentic Chat pattern)
 - commands verified
-- blockers (Tiled install, asset pack missing, etc.)
+- blockers (Tiled install, missing world SVG/Canvas/media4agents coverage, etc.)
 
 Minimum score **4** to continue.
 
@@ -220,7 +225,8 @@ Engineering quality bar:
 - Do not skip ARCHITECTURE_STRUCTURE_TRACE.md
 - Do not use placeholder commands, real secrets, or hide hard-stop blockers in setup notes
 - Do not start `loops/*` until the foundation, architecture, harness, and setup receipt pass
-- Do not start phase 04 until `world_overworld_art_mode`, world source strategy, source URLs/paths, provenance, player OW sheet, NPC sheet, exterior tileset, and semantic tile catalog are recorded or an honest blocker is recorded
+- Do not start phase 04 until world strategy/modes, media4agents URLs or SVG/Canvas builders, provenance, player OW, NPC, exterior tile atlas, and semantic tile catalog are recorded or an honest blocker is recorded
+- Do not copy or restore the deprecated packet `assets/` bundle
 
 ## Minimum proof before moving on
 
@@ -228,9 +234,9 @@ Engineering quality bar:
 - `npm run typecheck` passes
 - `npm run test` passes (even if minimal)
 - architecture score >= 4 in setup receipt
-- `.buildprint/decisions.md` populated from 00-questions
+- `.buildprint/decisions.md` populated from 00-goal (including media4agents token row)
 - `npm run assets:world:validate` passes or setup records an honest blocker before loop 04
-- `docs/assets-provenance.md` links every selected world source and local path
+- `docs/assets-provenance.md` lists SVG/Canvas/media4agents sources per world category and states packet `assets/` unused
 
 ## Handoff note
 

@@ -64,8 +64,8 @@ Sources: PokeAPI docs; [Pokemon-Team-Planner/pokemon-team-planner-tools](https:/
 - Phaser 3 API minor version drift — pin version in package.json
 - Move learnset API shape for version groups — verify against sample species each phase
 
-## Unresolved questions for user (hard-stop in 00-questions)
+## Settled hard-stops (also in 00-goal.md)
 
-- Deployment posture (local-only vs public hosting — trademark exposure)
-- Asset strategy (PokeAPI mandatory for Pokémon; committed `safe_cc0_default` + `external_sprite_sheets` world bundle confirmed; replacement requires a new explicit user decision)
+- Deployment posture (local-only vs public hosting — trademark exposure) may still be open until recorded
+- Asset strategy (PokeAPI mandatory for Pokémon; world art confirmed as SVG / Canvas / media4agents with token `m4a_pub_5601e4aa0cfaad9d`; packet `assets/` removed; replacement requires a new explicit user decision)
 - Scope ceiling if iteration budget exhausted (main story only vs Sevii)

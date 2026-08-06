@@ -12,7 +12,7 @@ Placeholders, functionless buttons, mocked/sample data, raw JSON as the user sur
 
 ## Building objective
 
-Deliver `pallet_town` through the production Phaser/Tiled loader as a coherent, attractive starter town using the committed CC0 world assets. The proof target is visual and structural craft, not reproduction of Nintendo map geometry.
+Deliver `pallet_town` through the production Phaser/Tiled loader as a coherent, attractive starter town using SVG, Canvas procedural atlases, and/or media4agents world art (`procedural_or_generated_world_art`). Prefer RetroDiffusion (Games) as the media4agents dashboard default; proxy textures via `/media/{key}.png` when Phaser CORS requires it. Do not recreate a packet `assets/` pack pipeline. The proof target is visual and structural craft, not reproduction of Nintendo map geometry.
 
 The map must read immediately as a small starting settlement with intentional landmark hierarchy, connective paths, breathing space, boundaries, and a clear northward direction. The player can walk naturally around it without sticky collision, clipping, wrong layering, fractional blur, or exposed void.
 
@@ -104,7 +104,7 @@ The review must critically inspect:
 - top-left/top-right/bottom/middle assembly and roof/water/tree/fence seams
 - accidental atlas collage, meaningless repetition, single-tile fill, and visual noise
 - Ground/Overhead z-order around player, roofs, trees, doors, and props
-- palette/material transitions and use of only approved world assets
+- palette/material transitions and use of only approved world art modes (SVG / Canvas / media4agents; never packet `assets/`)
 - collision-to-visual agreement, player foot alignment, pixel crispness, camera framing, and 375px touch comfort
 
 Any unresolved critical or high visual finding keeps this loop active. A valid TMX and green automated checks cannot certify aesthetic quality.
