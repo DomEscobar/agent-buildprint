@@ -4,6 +4,8 @@ Keep outside public source/export; publish only sanitized totals and approved as
 
 Before preparing a paid intent, link the verified Asset-Maker access/capability evidence and user approval required by `../references/providers-and-sources.md#asset-maker-quality-contract`. Track WaveSpeed Seedream edits and Bria background removal as billable operations alongside companion generation; include all in the approved cap. Missing access invokes the disclosed free-only fallback policy, not an unapproved substitute.
 
+For Media4Agents, a first PNG load is the submission intent (including prefetch/QA). Keep the exact configured URL in a private operational record, with its non-secret parameter hash here; record request IDs as not supplied when absent. Follow [exact-URL recovery](../references/media4agents-url-sprites.md): identical URL reuse is free per the supplied contract, but any URL change needs a new cost decision; no cache-busting or automatic variant generation.
+
 One row per submission intent:
 
 | Intent | Provider/operation | Parameter + reference hashes | Quote/currency + approved cap/attempts | Approval ref | State | Request/task IDs | Reserved/actual charge | Recovery action | Final asset hashes |

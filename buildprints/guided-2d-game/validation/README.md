@@ -8,7 +8,10 @@ From repository root:
 ```sh
 node buildprints/guided-2d-game/validation/check.mjs buildprints/guided-2d-game/validation/fixtures/manifest.json
 node --test buildprints/guided-2d-game/validation/contracts.test.mjs
+node --test buildprints/guided-2d-game/validation/media4agents-url-sprites.test.mjs
 ```
+
+The Media4Agents test parses the documented template URLs and executes the JavaScript example against offline DOM/Image doubles. It checks approval blocking, exact URL reuse, loading, errors and timeout handling without network access; it is not live provider or browser proof.
 
 In an applied project, run `check.mjs` against the **real runtime manifest path**, not `fixtures/manifest.json`. Integrate that command into its build/CI. Paths are relative to the manifest's directory; keep approved static images there or below. The Node loader rejects escaping symlinks. Unknown schema, broken decode, unsupported PNG export, wrong hash or invalid contract exits nonzero. Receipt reports manifest byte hash, loaded image byte hashes and static route coverage—not visual or gameplay approval.
 
@@ -20,6 +23,9 @@ In an applied project, run `check.mjs` against the **real runtime manifest path*
 5. Add engine binding tests asserting actual loaded frame indices, scale, anchor, feet/physics origin, layers and state timings. In a temporary copy, corrupt one referenced rect/placement and confirm **the production loader** rejects it. Exercise real controls and record motion on target devices; fixture tests prove none of that.
 
 The browser adapter enforces same-origin manifest/assets, expected JSON/PNG MIME and HTTP success, decodes with `createImageBitmap`, and preserves the canvas for engine registration. Hashes cover fetched PNG bytes, while alpha checks cover actual decoded pixels. It requires a secure-context Web Crypto API, Canvas 2D and createImageBitmap. Its source is provided; **no real browser execution is claimed for this packet**. Test its behavior in the applying engine/browser. Browser color management/premultiplication can alter transparent RGB, so visual alpha-fringe review remains mandatory.
+
+### Media4Agents direct URLs
+The [URL-sprite integration](../references/media4agents-url-sprites.md) loads provider PNGs directly in game code, but is not a validated-manifest binding. The starter loader intentionally accepts only same-origin static assets and rejects generation URLs. Do not insert provider URLs into `assets[].path` or silently relax these checks: use an explicitly reviewed runtime adapter that validates the exact fetched bytes/resources, or an approved static export for this loader. Remote CORS, decode, hashes, actual frame layout and runtime bindings still need proof after spend approval.
 
 ## Schema by reference
 `fixtures/manifest.json` is the canonical, runnable example. It is intentionally small enough to read. Do not change its approval text to imply in-game acceptance.
