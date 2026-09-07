@@ -10,7 +10,7 @@ Use ground position `(x,y)` plus independent visual height `z` for belt-scrollin
 
 Define `idle → move → anticipation → active → recovery → idle`, plus hurt, knockback, death and permitted defense/air transitions. Record input buffering, cancel rules, invulnerability, facing lock/turn permission and priority when attack/defense/hurt coincide. Animation timing is in milliseconds or simulation ticks with a declared fixed step, never render frames.
 
-Example attack contract (tune after graybox): six frames with durations `[80,60,50,50,90,110]` ms; frames 0–1 anticipation, 2–3 active, 4–5 recovery. Hitbox is a ground-relative rectangle, e.g. forward reach 0.8 world units and depth tolerance 0.3, not the entire weapon picture. These numbers are illustrative, not universal balance rules. A stable swing ID permits each target to take damage once unless a multi-hit action explicitly specifies intervals. Hitstop must define whether simulation, animation and input buffers pause; no frame-rate-dependent repeated hits.
+Example attack contract (tune through input-driven mechanic tests): six frames with durations `[80,60,50,50,90,110]` ms; frames 0–1 anticipation, 2–3 active, 4–5 recovery. Hitbox is a ground-relative rectangle, e.g. forward reach 0.8 world units and depth tolerance 0.3, not the entire weapon picture. These numbers are illustrative, not universal balance rules. A stable swing ID permits each target to take damage once unless a multi-hit action explicitly specifies intervals. Hitstop must define whether simulation, animation and input buffers pause; no frame-rate-dependent repeated hits.
 
 ### Combat acceptance table
 | Contract | Positive proof | Negative/boundary proof |
@@ -27,7 +27,7 @@ Example attack contract (tune after graybox): six frames with durations `[80,60,
 Debug overlays show feet, ground footprint, hurtbox, active hitbox, facing, lane distance and state clock. Record actual contact in slow playback and at game speed; a static box diagram is not enough. Separate engine-independent combat tests from in-engine binding tests so correct math cannot hide a wrong runtime frame map.
 
 ## Platformer
-**Proposed slice:** one short course, one jump, one hazard, one checkpoint only if essential, one exit. Graybox jump arc, acceleration, gravity, landing and camera before art. Negotiate coyote time, jump buffer and variable-height jump; do not assume them mandatory. Source animation must preserve intentional rise/fall offsets without moving the collision origin twice.
+**Proposed slice:** one short course, one jump, one hazard, one checkpoint only if essential, one exit. Test jump arc, acceleration, gravity, landing and camera alongside art development in the actual runtime; optional graybox probes can isolate specific movement questions without delaying graphics. Negotiate coyote time, jump buffer and variable-height jump; do not assume them mandatory. Source animation must preserve intentional rise/fall offsets without moving the collision origin twice.
 
 Test grounded/air transitions, ceiling contact, slopes/one-way platforms only if used, edge landings, high-speed sweeps, hazard death and restart. A cardinal grid flood fill cannot prove jump reachability: add engine trajectory/replay tests from spawn through required platforms to exit, including missed-jump failure. Art silhouette is not a collision polygon. Camera and mobile controls must reveal landing targets and allow direction+jump together.
 
@@ -37,7 +37,7 @@ Test grounded/air transitions, ceiling contact, slopes/one-way platforms only if
 Test one seed cannot plant twice, one harvest cannot pay twice, day rollover is deterministic, input cannot interact through a blocking object, and restart/undo returns the agreed state. Make tool range, selected tile and crop readiness legible on touch. Trees use trunk footprints independent from canopy. Large seasons/NPC/economy systems remain backlog until the bounded loop is approved.
 
 ## Puzzle
-**Proposed slice:** one mechanic, a small hand-verified level set with a stated count, success feedback, undo and restart. Define board coordinates, legal moves and state serialization before decorative effects. Separate logical turns from animation so rapid taps cannot enqueue illegal double moves.
+**Proposed slice:** one mechanic, a small hand-verified level set with a stated count, success feedback, undo and restart. Define board coordinates, legal moves and state serialization alongside visual effects; bind effects to verified logical transitions rather than using animation as game state. Separate logical turns from animation so rapid taps cannot enqueue illegal double moves.
 
 Test a known solution through production input, invalid move, softlock/deadlock policy, undo through victory, and exact restart. Generated puzzles need a solver or recorded solution witness **using the same rules**; visual symmetry does not prove solvability. Placement rules may be angular or grid-tight; foliage spacing defaults are irrelevant. Confirm controls at mobile sizes and avoid color-only logic cues.
 

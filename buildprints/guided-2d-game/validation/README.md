@@ -9,7 +9,10 @@ From repository root:
 node buildprints/guided-2d-game/validation/check.mjs buildprints/guided-2d-game/validation/fixtures/manifest.json
 node --test buildprints/guided-2d-game/validation/contracts.test.mjs
 node --test buildprints/guided-2d-game/validation/media4agents-url-sprites.test.mjs
+node --test buildprints/guided-2d-game/validation/work-order.test.mjs
 ```
+
+The work-order tests check independent gameplay/art routing, optional graybox instructions, preserved quality/runtime obligations and the actual `agb start` bootstrap. They make no game-runtime or provider-access claim.
 
 The Media4Agents test parses the documented template URLs and executes the JavaScript example against offline DOM/Image doubles. It checks approval blocking, exact URL reuse, loading, errors and timeout handling without network access; it is not live provider or browser proof.
 

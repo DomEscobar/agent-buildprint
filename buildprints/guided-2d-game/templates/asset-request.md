@@ -1,7 +1,8 @@
 # Asset/action request — approve before generation or import
 
 - Asset ID/category and consuming scene/state; source rights/license and upload permission.
-- Approved seed: local content hash, approval reference and in-game scale capture.
+- Stage: initial seed/direction exploration or reference-locked production family; either may run alongside gameplay within approved scope, rights and spend, with no graybox prerequisite.
+- Seed: for initial exploration, record direction and intended scale, then submit the candidate for approval; no already-approved seed is required to create the first seed. For a production family, record approved local content hash, approval reference and in-game scale capture.
 - Source identity lock: face/costume/silhouette/palette/facing invariants; any explicitly allowed changes.
 - Output: decoded width/height, cell width/height, columns/rows, margin/gutter, exact frame count and row-major mapping; transparency and color-space expectation.
 - Scale: one action-wide scale, pixels/world-unit, shared feet anchor in cell pixels.

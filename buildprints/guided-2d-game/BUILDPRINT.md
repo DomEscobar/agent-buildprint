@@ -11,6 +11,9 @@ Protect agreed scope, rights, user decisions, and evidence. Reject functionless 
 ## Asset-Maker
 Use **WaveSpeed + (RetroDiffusion OR Media4Agents)** as the preferred quality stack. Follow `references/providers-and-sources.md#asset-maker-quality-contract` for the two essential WaveSpeed models, verified access, paid-use approval and free-only fallback rules. Missing access is an explicit quality limitation, never permission for a silent graphics downgrade; custom SVG is last resort, not equivalent quality. All asset routes face the same visual QA. When selecting Media4Agents, follow [URL sprites](references/media4agents-url-sprites.md): write the PNG URL directly into game code, with first-load spend approval and actual sheet inspection before slicing.
 
+## Work order
+High-quality assets, art direction, provider work and animation iteration may start immediately after the relevant scope, rights, access and cost decisions, before or in parallel with gameplay implementation. Graybox is optional for targeted mechanic tests, never a prerequisite for graphics or provider usage. Follow `loops/loop-flow.md` for parallel tracks and convergence; acceptance evidence qualifies results, not permission to begin art.
+
 ## Perfection alignment
 Quality means the agreed central interaction works, reads clearly, and survives failure and recovery. Polish cannot compensate for an unplayable core. Lower claims when evidence is incomplete.
 

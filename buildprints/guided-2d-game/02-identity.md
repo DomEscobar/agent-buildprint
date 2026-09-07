@@ -1,6 +1,6 @@
 # Identity: readable play at pixel scale
 
-**UX is a must.** A functioning engine is not a finished product. Run after `01-setup.md` and before `loops/`; read `.agents/skills/frontend-ui-product-design/SKILL.md` when present, recording missing harness honestly.
+**UX is a must.** A functioning engine is not a finished product. Revisit this brief after `01-setup.md` and before `loops/` runtime integration to carry direction decisions into the engine. This is a briefing checkpoint, not a completed-art or graybox gate: start direction work alongside setup once the relevant decisions are resolved; in-engine proof follows when the renderer is available, not as a prerequisite to starting gameplay or asset iteration; read `.agents/skills/frontend-ui-product-design/SKILL.md` when present, recording missing harness honestly.
 
 ## Direction agreement
 The product metaphor is a small playable place, not an admin dashboard. The dominant object is the action space; the primary gesture is the genre's core verb (strike, jump, tend or solve). Propose two distinct directions using the user's references and choose one with the user: e.g. chunky high-contrast street action versus restrained storybook garden. Record what is deliberately rejected. Never use “pixel art” as the whole design brief.
@@ -10,7 +10,7 @@ Create `docs/DESIGN.md` with camera/projection, logical viewport, pixels per til
 Apply the Asset-Maker quality contract in `references/providers-and-sources.md` to this direction. Missing preferred-stack access must be disclosed; a free fallback, including last-resort custom SVG, is not an equivalent-quality substitute. Any changed target needs user agreement, and fallback art must pass the same construction proof below.
 
 ## Construction proof
-Approve a tiny in-engine composition: one player, one prop, one terrain patch, one enemy or interactable and the real HUD. Judge readability at native scale and target display sizes, then test the same space as graybox. Iterate art and movement together before adding content. A moodboard is not approval of shipped assets.
+Approve a tiny in-engine composition: one player, one prop, one terrain patch, one enemy or interactable and the real HUD. Judge readability at native scale and target display sizes and test movement in this actual composition. Use a labeled graybox only when it helps isolate a specific mechanic; no duplicate graybox pass is required. Iterate high-quality art and movement together from the outset, within agreed scope; approve the representative feel and art before scaling content. A moodboard is not approval of shipped assets.
 
 States include start/instructions, playing, paused, objective/victory, failure or undo, restart, loading and missing-asset error. Buttons have real actions; no functionless buttons or raw JSON surface. Touch controls must not obscure threats, crops or puzzle targets; test simultaneous direction/action, safe areas and released input on blur. Sound communicates feedback without being the only cue.
 

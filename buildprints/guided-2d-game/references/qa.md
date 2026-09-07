@@ -36,7 +36,7 @@ Capture overlays from the actual scene: feet/pivots, opaque bounds, physical foo
 - Changed placement: shared manifest validator, changed terrain/occupancy/spacing/route tests and local traversal/occlusion.
 - Changed action/input: state and collision tests, active-frame binding, affected win/loss/restart and frame rates.
 - Changed loader/coordinate transform: all affected assets/scenes and bindings, not just a fixture smoke test.
-- Full slice: at graybox/art convergence, integrated slice and final frozen release (or a systemic change invalidating them). Do not replay a full campaign for every small edit. Keep prior evidence only when its code/assets/contract remain applicable; record why.
+- Full slice: at gameplay/art convergence, integrated slice and final frozen release (or a systemic change invalidating them). Do not replay a full campaign for every small edit. Keep prior evidence only when its code/assets/contract remain applicable; record why.
 
 ## Frozen release proof
 Use `templates/milestone-evidence.md`: commit, build hash, actual loaded manifest and asset hashes, test commands/results, browser/device details, screenshots/recordings and reviewer. If code or content changes, regenerate affected evidence and bind a new version. Independent reviewer follows `review.md`; same-session review is REVIEW_INVALID.

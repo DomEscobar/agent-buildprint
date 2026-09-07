@@ -34,7 +34,7 @@ World lore, a full cast, progression trees, extra biomes, store launch, online r
 
 ## Acceptance criteria
 - Agreement states numerical content bounds and exact win/failure/restart or objective/undo behavior; player input completes the actual loop.
-- Graybox feel and an in-game art/animation seed are approved **before** content scaling; a readable identity persists across assets, tiles, HUD and motion.
+- Gameplay feel and an in-game art/animation seed are approved **before** content scaling, not before starting graphics or animation work; graybox is optional for targeted mechanic tests; a readable identity persists across assets, tiles, HUD and motion.
 - Loaded production manifests pass asset and scene contracts, including negative cases; manual and generated placement use the same validator.
 - Runtime proves movement across frame rates, collisions, multiple directions/camera positions, target desktop/mobile input and animation recordings. Screenshots or a loaded page alone cannot pass.
 - Asset-Maker access evidence or explicit quality limitation and free-only fallback decision are recorded; custom SVG is last resort, not equivalent quality, and fallback art passes the same visual QA.

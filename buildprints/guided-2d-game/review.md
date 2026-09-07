@@ -14,4 +14,6 @@ Judge input-driven core-loop completion, bounded scope, identity in motion, sour
 
 Check the Asset-Maker quality gate in `references/qa.md`, including both exact WaveSpeed models, actual-access evidence, paid-use approval and disclosed free-only fallbacks with unchanged visual QA; reject interchangeable-provider claims or silent downgrades.
 
+Check that gameplay and art can start independently, graybox remains optional, and integration still requires gameplay, art/motion and world-contract proof. Do not reject high-quality early art merely because no graybox was built.
+
 Authored-packet review checks routing, runnable fixtures/negative cases, instructions and honesty. It cannot certify a future game, provider integration or deployment.

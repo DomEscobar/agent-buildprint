@@ -11,7 +11,8 @@ Record answers already known; do not present this as a bulk questionnaire.
 - Budget: no-spend or live estimate basis, currency, cap, allowed attempts, uncertain-charge reserve, review/time constraints; no guaranteed final cost.
 - Exclusions: named systems/content explicitly not in this slice.
 - Backlog: optional follow-ups; each requires a new scope/cost decision before work.
-- Proof: graybox approval, art/seed approval, objective/failure/restart, devices and applicable deployment matrix.
+- Work order: high-quality art and gameplay may start in parallel; graybox is optional for targeted mechanic tests, never required for asset/provider work. Keep iteration within agreed scope and spend.
+- Proof: gameplay feel approval, art/seed approval, objective/failure/restart, devices and applicable deployment matrix; no mandatory graybox artifact.
 - Hard stops: deployment, provider/secrets, destruction, privacy, identity; each confirmed or blocked with reason.
 - Approval: confirmed_by (user or explicit_user_delegation), decision reference, date and delegated bounds. Agent assumption cannot approve hard stops.
 

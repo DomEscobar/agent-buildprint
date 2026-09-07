@@ -51,7 +51,8 @@ central_output_contract:
     - Are rights, provider spending, scope exclusions and untested devices honest?
     - Does frozen evidence match the code and actual loaded manifests?
   claim_gates:
-    - graybox requires approved feel and playable objective/restart before content expansion.
+    - gameplay_ready requires approved feel and playable objective/failure-or-undo/restart before content expansion, not before starting art.
+    - art work and approved provider usage may start immediately or alongside gameplay; graybox is optional for targeted mechanic tests, never a prerequisite.
     - art_ready requires in-game seed, contact sheet, animation motion and runtime review.
     - art_ready also requires the Asset-Maker quality contract in references/providers-and-sources.md, including verified preferred-stack access or disclosed free-only fallback with the same visual QA.
     - slice_playable requires asset/placement tests plus real core-loop and device evidence.
