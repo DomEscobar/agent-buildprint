@@ -10,7 +10,7 @@ Ask **one decision at a time**, acknowledge the answer, suggest a concrete defau
 2. “What does the player do repeatedly, and what counts as success or failure?” Offer a 2–5 minute slice as a negotiable demonstration length, not a delivery promise. For relaxing play, a completed objective plus undo/restart can replace death.
 3. “Which devices and controls must this first slice support?” Clarify desktop keyboard/gamepad, touch/mobile orientations, native or browser. Explicitly mark excluded devices unproven.
 4. “Is this solo, local co-op, or online multiplayer?” Explain that online play adds authority, latency, reconnect, synchronization, abuse and hosting tests; never silently downgrade it or bolt it on at the end.
-5. “Which art/audio assets do you own or have licensed, and which may be created?” Check files and licenses before proposing generation. Ask permission before uploading private reference images.
+5. “Which art/audio assets do you own or have licensed, and which may be created?” Check files and licenses before proposing generation. Ask permission before uploading private reference images. Explain the preferred **WaveSpeed + (RetroDiffusion OR Media4Agents)** Asset-Maker stack and its access-dependent quality contract in `references/providers-and-sources.md`; do not promise it before verification or silently substitute lower-quality graphics.
 6. “What spending ceiling and production time constraints should govern this slice?” Start with **no paid generation** unless approved. Include provider attempts, edits, failed outputs, storage/hosting and review time in planning; never invent a fixed cost, guaranteed output quality, or free credit entitlement.
 7. Summarize one bounded proposal: included scene(s), actors, actions, states, devices, assets, test targets, exclusions, and backlog. Ask for agreement before setup. If uncertainty remains, negotiate the smallest experiment that answers it.
 
@@ -37,5 +37,6 @@ World lore, a full cast, progression trees, extra biomes, store launch, online r
 - Graybox feel and an in-game art/animation seed are approved **before** content scaling; a readable identity persists across assets, tiles, HUD and motion.
 - Loaded production manifests pass asset and scene contracts, including negative cases; manual and generated placement use the same validator.
 - Runtime proves movement across frame rates, collisions, multiple directions/camera positions, target desktop/mobile input and animation recordings. Screenshots or a loaded page alone cannot pass.
+- Asset-Maker access evidence or explicit quality limitation and free-only fallback decision are recorded; custom SVG is last resort, not equivalent quality, and fallback art passes the same visual QA.
 - Rights/provenance and spend recovery are recorded without secrets; milestone evidence binds immutable code, manifest and asset hashes.
 - Independent reviewer qualifies only the proven slice. Public HTTP/MIME/assets, browser interaction and WSS multiplayer proof are separate when applicable. Handover names rollback and limits.

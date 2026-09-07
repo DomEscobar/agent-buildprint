@@ -8,6 +8,9 @@ Understand the goal and existing runtime before editing. Choose the smallest rea
 ## Your responsibility
 Protect agreed scope, rights, user decisions, and evidence. Reject functionless buttons, dead controls, mocked/sample data presented as live proof, fake providers, and raw JSON as the player surface. Report genuine blockers rather than substituting a different product.
 
+## Asset-Maker
+Use **WaveSpeed + (RetroDiffusion OR Media4Agents)** as the preferred quality stack. Follow `references/providers-and-sources.md#asset-maker-quality-contract` for the two essential WaveSpeed models, verified access, paid-use approval and free-only fallback rules. Missing access is an explicit quality limitation, never permission for a silent graphics downgrade; custom SVG is last resort, not equivalent quality. All asset routes face the same visual QA.
+
 ## Perfection alignment
 Quality means the agreed central interaction works, reads clearly, and survives failure and recovery. Polish cannot compensate for an unplayable core. Lower claims when evidence is incomplete.
 

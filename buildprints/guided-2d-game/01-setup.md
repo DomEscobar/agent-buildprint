@@ -7,6 +7,9 @@ Inspect the target engine and installed libraries first. Compare a small number 
 
 Route `proven_implementation_requirements` into architecture: renderer, input, physics, map loading, audio and test runner. Do not hand-roll these merely to avoid reading engine docs. Custom logic is appropriate for the small game-specific rules and contracts, with tests.
 
+## Asset-Maker preflight
+Apply `references/providers-and-sources.md#asset-maker-quality-contract`: verify actual access/availability for WaveSpeed image editing `bytedance/seedream-v5.0-pro/edit` (Seedream) **and** background removal `bria/remove-background`, plus the chosen RetroDiffusion or Media4Agents companion, before promising the preferred workflow. Record dated capability/access evidence and gaps in `.buildprint/setup-receipt.md`; obtain approval before any paid usage. Missing access requires explicit quality-limit disclosure and only free solutions or suitably licensed free assets; custom SVG is last resort, never equivalent quality. Carry the fallback decision into the agreement and preserve the same visual QA gates.
+
 ## Project-local harness
 Use existing `.agents/skills` and `agb harness check .`. Where the user permits initializing a missing Buildprint-native local harness, use `agb harness init .`; otherwise record a missing-harness blocker. No global configuration changes, third-party plugin installation, or skill publication. Follow `setup-runbook`, `frontend-ui-product-design`, `subagent-driven-implementation` only for independent fan-out, and `verify-and-review` for proof and review; respect completion signals. This repository packet authors no skills.
 

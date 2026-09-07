@@ -44,6 +44,7 @@ central_output_contract:
     - Page-loaded smoke test called release validation.
     - An unapproved full-game roadmap instead of a bounded playable loop.
     - Parallel fixture manifests or proof-only renderers substituted for loaded content.
+    - Interchangeable-provider claims, silent graphics downgrades or custom SVG claimed as equivalent-quality art.
   reviewer_acceptance_questions:
     - Can a new player understand and complete the agreed core loop using target inputs?
     - Do motion recordings and overlays show coherent feet, contact, sorting and collisions?
@@ -52,6 +53,7 @@ central_output_contract:
   claim_gates:
     - graybox requires approved feel and playable objective/restart before content expansion.
     - art_ready requires in-game seed, contact sheet, animation motion and runtime review.
+    - art_ready also requires the Asset-Maker quality contract in references/providers-and-sources.md, including verified preferred-stack access or disclosed free-only fallback with the same visual QA.
     - slice_playable requires asset/placement tests plus real core-loop and device evidence.
     - release_qualified requires independent review and deployment-specific checks where claimed.
 proven_implementation_requirements:

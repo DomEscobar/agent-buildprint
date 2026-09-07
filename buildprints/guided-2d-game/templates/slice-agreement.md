@@ -7,7 +7,7 @@ Record answers already known; do not present this as a bulk questionnaire.
 - Scope bounds: exact scene/level count, controllable actors, enemy/interactable types, actions, animation families and content count.
 - Devices: platform, viewports/orientation, controls, real-device versus emulation proof expected.
 - Players: solo/local/online; authority and reconnect scope if online.
-- Assets: existing files, ownership/license, permitted uploads, creation route and attribution.
+- Assets: existing files, ownership/license, permitted uploads, creation route and attribution; preferred WaveSpeed + (RetroDiffusion OR Media4Agents) access evidence per the Asset-Maker contract, or explicit quality limitation and free-only fallback. Custom SVG last resort, not equivalent quality; changed targets require agreement, never silent downgrade.
 - Budget: no-spend or live estimate basis, currency, cap, allowed attempts, uncertain-charge reserve, review/time constraints; no guaranteed final cost.
 - Exclusions: named systems/content explicitly not in this slice.
 - Backlog: optional follow-ups; each requires a new scope/cost decision before work.

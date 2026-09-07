@@ -12,4 +12,6 @@ Judge input-driven core-loop completion, bounded scope, identity in motion, sour
 - `blocked`: missing external decision, device, service or reviewer limits the claim.
 - `REVIEW_INVALID`: review was not independent; redo with a separate reviewer.
 
+Check the Asset-Maker quality gate in `references/qa.md`, including both exact WaveSpeed models, actual-access evidence, paid-use approval and disclosed free-only fallbacks with unchanged visual QA; reject interchangeable-provider claims or silent downgrades.
+
 Authored-packet review checks routing, runnable fixtures/negative cases, instructions and honesty. It cannot certify a future game, provider integration or deployment.

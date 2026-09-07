@@ -4,6 +4,9 @@ A guided **product Buildprint**, not a game, engine, skill or asset-generation p
 
 Start at `BUILDPRINT.md`. Intake asks sequential questions, then the builder proves a graybox and in-game art direction **before scaling content**. Default spend is zero. Multiplayer and public hosting are explicit scope decisions, not implied features.
 
+## Asset-Maker quality stack
+Preferred: **WaveSpeed + (RetroDiffusion OR Media4Agents)**, not three alternatives. WaveSpeed image editing `bytedance/seedream-v5.0-pro/edit` (**Seedream, not Seedance**) and background removal `bria/remove-background` are both essential to the intended high-quality pipeline. Verify actual access/availability before promising it; obtain approval before paid usage. Missing access must be disclosed as a quality limitation: use only free solutions or suitably licensed free assets, with custom SVG last resort and never equivalent quality. The same visual QA applies; no silent graphics downgrade. See `references/providers-and-sources.md#asset-maker-quality-contract` for the operational policy.
+
 ## Packet map
 - `00-goal.md`: guided intake, large-vision warning, exclusions and decisions.
 - `01-setup.md`, `02-identity.md`: existing-tool/license preflight and readable pixel identity.

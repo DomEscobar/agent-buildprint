@@ -7,6 +7,8 @@ The product metaphor is a small playable place, not an admin dashboard. The domi
 
 Create `docs/DESIGN.md` with camera/projection, logical viewport, pixels per tile, pixels per world unit, character height in world units, outline/light direction, named palette tokens, contrast, cluster size and pattern grain. Document organic vs angular silhouettes according to the selected art—not compulsory circles or rounded islands. Name HUD safe areas, font/license and readable size, spacing, touch hit targets, focus indicators and reduced-motion/screen-shake settings. Integer scaling/letterboxing is preferred; document any fractional fallback and inspect shimmer during camera motion.
 
+Apply the Asset-Maker quality contract in `references/providers-and-sources.md` to this direction. Missing preferred-stack access must be disclosed; a free fallback, including last-resort custom SVG, is not an equivalent-quality substitute. Any changed target needs user agreement, and fallback art must pass the same construction proof below.
+
 ## Construction proof
 Approve a tiny in-engine composition: one player, one prop, one terrain patch, one enemy or interactable and the real HUD. Judge readability at native scale and target display sizes, then test the same space as graybox. Iterate art and movement together before adding content. A moodboard is not approval of shipped assets.
 

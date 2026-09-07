@@ -5,6 +5,9 @@ Use `validation/README.md`. The loader validates the manifest it actually parsed
 
 The bundled fixtures prove the checker, not a future game's manifests. Add engine-specific tests around the actual scene loader and state transitions. No proof-only renderer, fake provider, hardcoded winning reducer or intercepted game outcomes.
 
+## Asset-Maker quality gate
+Check `providers-and-sources.md#asset-maker-quality-contract`: dated actual-access evidence for both essential WaveSpeed models and the selected RetroDiffusion or Media4Agents companion, plus approval before any paid usage. If access is missing/unverified, require explicit quality-limit disclosure and only free solutions or suitably licensed free assets. Custom SVG must be justified as last resort, never called equivalent quality. Reject silent graphics downgrades; fallback art must meet the same visual checks and agreed in-engine target, or remain blocked.
+
 ## Asset checks
 For **every loaded asset**: decode successfully, match declared dimensions and SHA-256, validate all frame source rectangles/gutters/layout, provenance/license/source identity, shared scale, anchors, alpha threshold/body bounds and intended displacement. Check all visual frames, not just file existence. No arbitrary file-size cutoff. Missing assets and wrong MIME must surface clear loading errors rather than invisible empty sprites. Inspect against contrasting backgrounds for alpha contamination, then contact sheet and motion preview for identity, timing and drift. Render repeated tile patches and inspect palette/grain/seams in motion.
 

@@ -9,6 +9,8 @@ Name agreed scope and exclusions, branch/commit/build, core loop, engine version
 List exact commands, results, target devices, core-loop recordings, loaded content hashes, independent reviewer verdict and evidence locations. Distinguish packet/fixture validation, loop_core_passed and claim_qualified. Never infer runtime proof from packet structure checks.
 
 ## Blocked
+State verified Asset-Maker capabilities, any missing preferred-stack access and the disclosed quality limitation; name free fallback assets/tools, licenses, last-resort SVG justification if used, agreed target changes and the same visual QA results. Never imply equivalent quality or hide a graphics downgrade.
+
 Name missing decision, credential setup, provider contract, device access or independent reviewer; say who can resolve it without requesting secrets in chat.
 
 ## Not proven
