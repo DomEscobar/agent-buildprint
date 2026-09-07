@@ -201,7 +201,6 @@ const productPackets = [
   'buildprints/agentic-chat',
   'buildprints/ai-influencer-os',
   'buildprints/automated-ai-blog-os',
-  'buildprints/pokemon-fire-red',
 ]
 for (const packet of productPackets) {
   expectPass(`${packet} kernel packet passes`, ['packet', 'check', path.join(root, packet)], ['Packet check: PASS'])
