@@ -22,5 +22,16 @@ npm run check:guided-2d-game
 
 The second command also decodes the fixture PNG, validates the **loaded** manifest and runs negative tests. See `validation/README.md` for runtime integration and coverage limits. Do not treat synthetic fixture art as approved game art or fixture tests as a playthrough.
 
+## Start from the published packet
+
+Use the latest repository CLI until a release includes byte-exact binary snapshot downloading; older installed AGB versions can corrupt the bundled PNG fixture. No global install is needed:
+
+```sh
+git clone https://github.com/DomEscobar/agent-buildprint
+node agent-buildprint/bin/agb.js start https://agent-buildprint.com/buildprints/guided-2d-game/package.json my-game
+```
+
+Then give `my-game/.buildprint/next-agent.md` to the builder. The repository's `check:guided-2d-game` also bootstraps this actual packet, compares all 33 snapshot files byte-for-byte, and validates the downloaded PNG.
+
 ## Claim ceiling
 No game was built, no paid generation performed, no provider plugin installed and no browser/game deployment certified by this packet. Public provider docs were inspected on 2026-09-07; volatile catalogs and protected setup must be rechecked before use. media4agents' public API details could not be verified; that route is conditional. Independent runtime review is required before qualifying an applied game. No third-party scripts or proprietary game assets are bundled.

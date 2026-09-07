@@ -192,14 +192,18 @@ function redactUrl(value) {
   }
 }
 
-async function fetchTextExact(url) {
-  if (url.startsWith('file://')) return readText(fileURLToPath(url))
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`failed to fetch ${url}: HTTP ${res.status}`)
-  const text = await res.text()
+async function fetchSnapshotExact(url) {
+  let bytes
+  if (url.startsWith('file://')) bytes = fs.readFileSync(fileURLToPath(url))
+  else {
+    const res = await fetch(url)
+    if (!res.ok) throw new Error(`failed to fetch ${url}: HTTP ${res.status}`)
+    bytes = Buffer.from(await res.arrayBuffer())
+  }
+  const text = bytes.toString('utf8')
   if (looksLikeHtml(text)) throw new Error(`expected Buildprint snapshot text but received HTML from ${url}`)
   if (/^not\s+found\s*$/i.test(text.trim())) throw new Error(`expected Buildprint snapshot content but received "${text.trim()}" from ${url} — the file may not be published yet or the URL is stale; re-run agb start after the packet is published`)
-  return text
+  return bytes
 }
 
 function writeJson(file, data) {
@@ -1226,12 +1230,14 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
       source = pathToFileURL(safePathInside(path.dirname(manifestPath), safePath)).href
     }
     if (!source) throw new Error(`missing source URL for ${safePath}`)
-    const text = await fetchTextExact(source)
+    const bytes = await fetchSnapshotExact(source)
+    const text = bytes.toString('utf8')
     if (!text.trim() && !safePath.endsWith('.gitkeep')) throw new Error(`downloaded empty snapshot for ${safePath}`)
     // Minimum content length — suspiciously short files indicate a broken CDN or unpublished asset
-    const snapshotBytes = Buffer.byteLength(text)
+    const snapshotBytes = bytes.length
+    const textSnapshot = /\.(?:md|ya?ml|jsonl?|txt|[cm]?js|tsx?|css|html|svg)$/i.test(safePath)
     const minBytes = 32
-    if (snapshotBytes < minBytes && !safePath.endsWith('.gitkeep') && !safePath.endsWith('.jsonl')) {
+    if (textSnapshot && snapshotBytes < minBytes && !safePath.endsWith('.gitkeep') && !safePath.endsWith('.jsonl')) {
       throw new Error(`downloaded snapshot ${safePath} is suspiciously short (${snapshotBytes} bytes from ${source}) — expected at least ${minBytes} bytes; the file may not be published or the URL is stale`)
     }
     // Key-file content assertions: critical spine files must contain their canonical anchor
@@ -1246,8 +1252,8 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     }
     const dest = safePathInside(snapshotDir, safePath)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
-    fs.writeFileSync(dest, text)
-    downloaded.push({ path: safePath, sourceUrl: redactUrl(source), bytes: Buffer.byteLength(text) })
+    fs.writeFileSync(dest, bytes)
+    downloaded.push({ path: safePath, sourceUrl: redactUrl(source), bytes: bytes.length })
   }
 
   // Post-download corruption check: if key spine files are missing or broken, fail loudly

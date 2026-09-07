@@ -18,7 +18,7 @@
     "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs",
     "eval:buildprint-variants": "node scripts/eval-buildprint-variants.mjs",
     "eval:buildprint-structures": "node scripts/eval-buildprint-structure-slices.mjs --help",
-    "check:guided-2d-game": "node bin/agb.js packet check buildprints/guided-2d-game && node buildprints/guided-2d-game/validation/check.mjs buildprints/guided-2d-game/validation/fixtures/manifest.json && node --test buildprints/guided-2d-game/validation/contracts.test.mjs",
+    "check:guided-2d-game": "node bin/agb.js packet check buildprints/guided-2d-game && node buildprints/guided-2d-game/validation/check.mjs buildprints/guided-2d-game/validation/fixtures/manifest.json && node --test buildprints/guided-2d-game/validation/contracts.test.mjs && node scripts/check-guided-bootstrap.mjs",
     "check:blueprint-yaml": "npm run check:packets"
   },
   "description": "CLI for bootstrapping Agent Buildprints for coding agents.",
