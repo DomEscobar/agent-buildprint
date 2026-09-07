@@ -1,0 +1,23 @@
+# World, placement and tile contract
+
+## One coordinate system
+Declare world units, `tileWorldSize`, `pixelsPerWorldUnit` and each asset's shared export scale. For a 16 px tile that spans 1 world unit, density is 16 px/world unit; a 32 px-tall actor is 2 world units, not “two tiles wide.” Rendering computes `imagePixels × scale / pixelsPerWorldUnit`. Physics uses world units, not CSS size or device pixels. Validate density across props and actors before content generation.
+
+Use feet/pivot as the world origin. A sprite source cell and its alpha-derived visual bounds are distinct from its physical ground footprint. A tree can have a 3×4-unit canopy and a 0.6×0.5-unit trunk footprint. Shadows and VFX have their own layers and never inflate opaque body bounds or navigation collision. Alpha bounds use a declared threshold (starter fixture: 128/255) and are reviewed against actual decoded pixels; low-alpha glow is not a trunk. Preserve intended black art; see `animation.md` for contamination removal.
+
+## Placement proposal contract
+Use one canonical manifest loaded by the game. Every manual editor action, imported map and generated candidate calls the **same** validator before acceptance and again in the production loader. No permissive manual bypass and no stricter fake test manifest. An adapter may convert Tiled or engine resources into canonical data, but hash and test the **converted bytes actually loaded** and source mapping.
+
+Each placement declares asset ID, feet position in world units, terrain permissions (asset), occupancy layer, tags, relative physical footprint and sorting policy. Scene declares bounds, terrain grid, valid layers, overlap exceptions, allowed visual overscan, required routes and scene-specific spacing/adjacency. Example: a garden may require each crop next to a path and trees two units apart; a market may permit tightly packed stalls; puzzle cells may require exact adjacency. No universal “all props need two-tile spacing” rule.
+
+The starter schema uses axis-aligned rectangles and half-open overlap (touching edges are legal), per-layer occupancy with explicit cross-layer overlap exceptions, minimum feet distance by tag pair, and optional maximum adjacency distance. Blocking layers block navigation; decorative canopy layers may overlap. Bounds check physical footprints independently of declared visual overscan. Terrain permissions apply across **all** footprint-touched cells, not just the pivot. Reject unknown IDs/layers, nonfinite values, negative sizes, invalid grid rows and duplicate IDs.
+
+## Connectivity and sorting
+Validate spawn and required objectives/exits within scene bounds and reachable for the actual actor footprint, not a dimensionless point. Starter flood fill is conservative static cardinal tile-center traversal, considering terrain and physical blockers. It is **not** proof of slopes, platform jumps, diagonal corner cutting, moving gates, combat knockback or dynamic navigation: add engine movement/path tests for those. Recheck route after moving blockers and at runtime. A maze that passes cell connectivity may still feel bad; play it.
+
+Sort ground actors by projected feet Y with stable ID tie-break; split tall objects into trunk/body and canopy/foreground pieces when necessary. Draw background, ground decals, bodies, canopy and VFX in explicit order. Do not sort by sprite top-left or treat the whole canopy as a solid wall. Overlays show feet, opaque visual bounds, footprints, collision/hurtboxes, layer and sort key. Walk behind and in front of tall props, near corners and across camera bounds from multiple directions. Inspect actual occlusion, not just sort values.
+
+## Tiles
+Specify single-tile dimensions, columns/rows, padding/margin, source rectangles and autotile convention (e.g. selected Wang/blob layout) before generation. Never guess cell mapping from a nice sheet. Use the selected art's palette, cluster size and pattern grain so terrain does not look like noisy wallpaper beside clean sprites. Organic versus angular boundaries follow the style and gameplay.
+
+Preview each repeatable tile in at least a 3×3 repeat and a larger mixed patch, including transitions, corners and adjacent actor/prop scale. Pan the production camera at target zoom to detect seams, shimmer, repeated motifs, transparent gaps and filtering bleed. Opposite edge equality alone cannot certify texture quality; a visibly repeating stripe can be byte-perfect. Validate all atlas rectangles and texture settings, then record native-scale and in-game previews. Only approve content scaling when the patch and movement both read clearly.

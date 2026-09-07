@@ -14,10 +14,11 @@
     "check:authors": "node bin/agb.js packet check buildprints/capability-buildprint-author",
     "check:capability:regressions": "node scripts/check-capability-regressions.mjs",
     "check:packet:mapper": "node bin/agb.js packet check buildprints/buildprint-mapper-os",
-    "check:packets": "node bin/agb.js packet check buildprints/agentic-chat && node bin/agb.js packet check buildprints/ai-influencer-os && node bin/agb.js packet check buildprints/automated-ai-blog-os && node bin/agb.js packet check buildprints/buildprint-mapper-os && node bin/agb.js packet check buildprints/pokemon-fire-red",
+    "check:packets": "node bin/agb.js packet check buildprints/agentic-chat && node bin/agb.js packet check buildprints/ai-influencer-os && node bin/agb.js packet check buildprints/automated-ai-blog-os && node bin/agb.js packet check buildprints/buildprint-mapper-os && node bin/agb.js packet check buildprints/pokemon-fire-red && node bin/agb.js packet check buildprints/guided-2d-game",
     "eval:mapper-overhaul": "node scripts/eval-mapper-overhaul.mjs",
     "eval:buildprint-variants": "node scripts/eval-buildprint-variants.mjs",
     "eval:buildprint-structures": "node scripts/eval-buildprint-structure-slices.mjs --help",
+    "check:guided-2d-game": "node bin/agb.js packet check buildprints/guided-2d-game && node buildprints/guided-2d-game/validation/check.mjs buildprints/guided-2d-game/validation/fixtures/manifest.json && node --test buildprints/guided-2d-game/validation/contracts.test.mjs",
     "check:blueprint-yaml": "npm run check:packets"
   },
   "description": "CLI for bootstrapping Agent Buildprints for coding agents.",

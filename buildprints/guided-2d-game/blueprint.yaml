@@ -1,0 +1,82 @@
+schema_version: buildprint/kernel/v1
+execution_start: BUILDPRINT.md
+machine_contract: blueprint.yaml
+title: Guided 2D Game / vertical slice
+type: product
+claim_status: packet_authored_runtime_unproven
+qualification_label: bounded_slice_requires_runtime_and_independent_review
+deployment_posture:
+  current: trusted_local
+  allowed_values: [trusted_local, private_demo, public_web]
+  claim_ceiling: Only agreed devices and recorded runtime paths; hosting and online play require separate proof.
+kernel:
+  flow: goal → bare_agentic_loop → optional_independent_fan_out → contract_review
+  bare_agentic_loop: think → act → observe until done or stuck
+  independent_fan_out: Independent tasks with clean file ownership only.
+  contract_review: Fresh-context reviewer against goal and active loop contracts.
+maturity_upgrades:
+  rule: Production maturity is an optional claim-gated upgrade, never the floor for first success.
+packet_shape:
+  style: kernel_loop
+  principle: YAML routes; markdown teaches and builds.
+  required_files:
+    - BUILDPRINT.md
+    - 00-goal.md
+    - 01-setup.md
+    - 02-identity.md
+    - blueprint.yaml
+    - loops/loop-index.yaml
+    - loops/loop-flow.md
+    - review.md
+    - README.md
+    - HANDOVER.md
+  forbidden_shapes: [slices/, gates/, 03-phases/, evidence-ledger, claim-gates.json, generated/agent-prompt.md]
+central_output_contract:
+  central_output: An agreed original pixel-game vertical slice where player input completes a genre-specific core loop and restart works.
+  output_primitives: [slice_agreement, player_state, action_state, asset_manifest, scene_manifest, input_map, objective_state]
+  quality_signals:
+    - Core verb is readable and responsive at native pixel scale.
+    - Approved seed and animation preserve character identity in the actual scene.
+    - Feet, physical footprints, collision and world density agree during movement.
+    - Objective, failure or undo, and restart run through production state transitions.
+  unacceptable_generic_substitutes:
+    - Static screenshot or generated contact sheet called a playable game.
+    - Page-loaded smoke test called release validation.
+    - An unapproved full-game roadmap instead of a bounded playable loop.
+    - Parallel fixture manifests or proof-only renderers substituted for loaded content.
+  reviewer_acceptance_questions:
+    - Can a new player understand and complete the agreed core loop using target inputs?
+    - Do motion recordings and overlays show coherent feet, contact, sorting and collisions?
+    - Are rights, provider spending, scope exclusions and untested devices honest?
+    - Does frozen evidence match the code and actual loaded manifests?
+  claim_gates:
+    - graybox requires approved feel and playable objective/restart before content expansion.
+    - art_ready requires in-game seed, contact sheet, animation motion and runtime review.
+    - slice_playable requires asset/placement tests plus real core-loop and device evidence.
+    - release_qualified requires independent review and deployment-specific checks where claimed.
+proven_implementation_requirements:
+  rule: Prefer proven libraries, proven packages and proven tools over custom engine, physics, editor or networking infrastructure.
+  domains: [2d_engine, input, physics, map_authoring, image_decoding, browser_testing]
+  selection: Compare installed stack, Phaser or Godot, map tools and rights-cleared packs before custom work.
+harness:
+  provider: agents
+  default_profile: default
+  profiles:
+    default: Minimal project-local core harness.
+    webapp: Optional browser runtime and responsive proof.
+routes:
+  genres: references/genre-modules.md
+  animation: references/animation.md
+  world: references/world-and-tiles.md
+  providers: references/providers-and-sources.md
+  qa: references/qa.md
+  agreement: templates/slice-agreement.md
+  asset_request: templates/asset-request.md
+  spend_recovery: templates/generation-ledger.md
+  frozen_evidence: templates/milestone-evidence.md
+  validators: validation/README.md
+evidence:
+  docs_inspected: 2026-09-07
+  source_notes: references/providers-and-sources.md
+  runtime_proven: false
+  no_benchmark_evidence_found: true

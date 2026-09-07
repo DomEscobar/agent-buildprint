@@ -1,0 +1,246 @@
+{
+  "schema": "guided-2d-game/manifest/v1",
+  "pixelsPerWorldUnit": 16,
+  "tileWorldSize": 1,
+  "assets": [
+    {
+      "id": "fixture-body",
+      "path": "contract-atlas.png",
+      "width": 32,
+      "height": 16,
+      "sha256": "0cdd526e811a646bea781c7573d1f3c367da46e01672fc41fc1881bc22169a0a",
+      "role": "body",
+      "scale": 1,
+      "nativePixelsPerWorldUnit": 16,
+      "alphaThreshold": 128,
+      "provenance": {
+        "source": "Original geometric validator fixture authored for this packet; not game art",
+        "license": "MIT (repository license)",
+        "approval": "Fixture only; no in-game art approval claimed",
+        "seedSha256": "0cdd526e811a646bea781c7573d1f3c367da46e01672fc41fc1881bc22169a0a"
+      },
+      "sheet": {
+        "cellWidth": 16,
+        "cellHeight": 16,
+        "columns": 2,
+        "rows": 1,
+        "count": 2,
+        "margin": 0,
+        "gutter": 0
+      },
+      "anchor": [
+        8,
+        14
+      ],
+      "facing": "right",
+      "animationSeedSha256": "0cdd526e811a646bea781c7573d1f3c367da46e01672fc41fc1881bc22169a0a",
+      "action": "idle",
+      "frames": [
+        {
+          "source": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 16
+          },
+          "durationMs": 120,
+          "offset": [
+            0,
+            0
+          ],
+          "opaqueBounds": {
+            "x": 4,
+            "y": 3,
+            "w": 8,
+            "h": 11
+          },
+          "phase": "idle"
+        },
+        {
+          "source": {
+            "x": 16,
+            "y": 0,
+            "w": 16,
+            "h": 16
+          },
+          "durationMs": 120,
+          "offset": [
+            0,
+            0
+          ],
+          "opaqueBounds": {
+            "x": 4,
+            "y": 3,
+            "w": 8,
+            "h": 11
+          },
+          "phase": "idle"
+        }
+      ],
+      "footprint": {
+        "x": -0.25,
+        "y": -0.25,
+        "w": 0.5,
+        "h": 0.5
+      },
+      "allowedTerrain": [
+        "grass"
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "id": "fixture-room",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 5
+      },
+      "terrainTypes": [
+        "grass",
+        "water"
+      ],
+      "terrain": [
+        [
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass"
+        ],
+        [
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass"
+        ],
+        [
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass"
+        ],
+        [
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass"
+        ],
+        [
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass",
+          "grass"
+        ]
+      ],
+      "layers": {
+        "solid": {
+          "blocking": true,
+          "sort": "feet-y"
+        },
+        "decor": {
+          "blocking": false,
+          "sort": "fixed"
+        }
+      },
+      "allowOverlap": [
+        [
+          "decor",
+          "decor"
+        ],
+        [
+          "solid",
+          "decor"
+        ]
+      ],
+      "visualOverscan": 1,
+      "placements": [
+        {
+          "id": "tree-a",
+          "asset": "fixture-body",
+          "feet": [
+            2.5,
+            2.5
+          ],
+          "layer": "solid",
+          "tags": [
+            "tree"
+          ]
+        },
+        {
+          "id": "tree-b",
+          "asset": "fixture-body",
+          "feet": [
+            4.5,
+            2.5
+          ],
+          "layer": "solid",
+          "tags": [
+            "tree"
+          ]
+        },
+        {
+          "id": "sign",
+          "asset": "fixture-body",
+          "feet": [
+            2.5,
+            3.5
+          ],
+          "layer": "decor",
+          "tags": [
+            "sign"
+          ]
+        }
+      ],
+      "spacing": [
+        {
+          "a": "tree",
+          "b": "tree",
+          "min": 1.5
+        }
+      ],
+      "adjacency": [
+        {
+          "from": "sign",
+          "to": "tree",
+          "max": 1.1
+        }
+      ],
+      "navigation": {
+        "footprint": {
+          "x": -0.2,
+          "y": -0.2,
+          "w": 0.4,
+          "h": 0.4
+        },
+        "allowedTerrain": [
+          "grass"
+        ],
+        "spawn": [
+          0,
+          0
+        ],
+        "required": [
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            0
+          ]
+        ]
+      }
+    }
+  ]
+}

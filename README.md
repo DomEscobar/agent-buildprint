@@ -71,6 +71,10 @@ The point is not to guess from a repo blindly. The point is to give the agent a 
 
 Product Buildprints package whole systems. Capability Buildprints package bounded integrations such as Stripe subscriptions, RBAC permissions, API key management, webhooks, auth, analytics, or deployment.
 
+## Guided game packet
+
+[Guided 2D Game / vertical slice](buildprints/guided-2d-game/README.md) guides scoped intake, graybox/art convergence, coherent sprite animation, validated world placement and evidence-backed game QA. It includes dependency-free contract validators and negative fixtures—not a prebuilt game or paid-generation requirement.
+
 ## Local Development
 
 From this repository:
@@ -80,6 +84,7 @@ node ./bin/agb.js --help
 npm run check:syntax
 npm run check:packet:mapper
 npm run check:packets
+npm run check:guided-2d-game
 npm run check:capabilities
 npm run check:authors
 npm run check:capability:regressions
