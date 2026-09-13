@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AGB versioned loop routing mirror",
+  "type": "object",
+  "required": [
+    "schema",
+    "approvals",
+    "bindingFiles",
+    "loops"
+  ],
+  "properties": {
+    "schema": {
+      "const": "agb/loops/v2"
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+      },
+      "minItems": 0
+    },
+    "bindingFiles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240,
+        "description": "Runtime additionally rejects traversal, absolute paths, backslashes, reserved names and symlinks."
+      },
+      "minItems": 1,
+      "contains": {
+        "const": "PROJECT_CONTRACT.md"
+      }
+    },
+    "runtimeRoots": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240,
+        "description": "Runtime additionally rejects traversal, absolute paths, backslashes, reserved names and symlinks."
+      },
+      "minItems": 0
+    },
+    "acceptancePlan": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "description": "Runtime additionally rejects traversal, absolute paths, backslashes, reserved names and symlinks."
+    },
+    "loops": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "file",
+          "dependsOn",
+          "approvals",
+          "requirements",
+          "acceptance",
+          "independentReview"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "description": "Runtime additionally rejects traversal, absolute paths, backslashes, reserved names and symlinks."
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+            },
+            "minItems": 0
+          },
+          "approvals": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+            },
+            "minItems": 0
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+            },
+            "minItems": 1
+          },
+          "acceptance": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "implemented",
+                "functional",
+                "visual"
+              ]
+            }
+          },
+          "independentReview": {
+            "type": "boolean"
+          },
+          "fullCoverage": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "description": "Dependencies must precede dependents. Runtime checks unknown IDs, included files and fullCoverage plan requirement."
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "agent-buildprint/publication.v1",
+  "publish": false,
+  "slug": "standalone-isometric-game",
+  "title": "Full Standalone Isometric Game",
+  "creator": "Agent Buildprint",
+  "category": "Game",
+  "tier": "agent-grade",
+  "status": "local-authored-runtime-unproven",
+  "runtime": [
+    "Standalone browser game",
+    "Isometric Framework"
+  ],
+  "stack": [
+    "TypeScript",
+    "Vite",
+    "PixiJS",
+    "Pinned Isometric Framework"
+  ],
+  "summary": "A full original standalone game workflow: one approved contract, mobile-first UX, pinned scaffold/public APIs, original world production and evidence-bound visual/gameplay acceptance.",
+  "promise": "Guides the entire agreed game without shrinking it to calibration or copying framework demos.",
+  "includes": [
+    "Kernel packet and six full-game loops",
+    "One PROJECT_CONTRACT.md outline with preserved approvals",
+    "Pinned upstream skill routing and v3 visual acceptance reuse",
+    "Exact asset-stack policy and capability gaps",
+    "Local package manifest and scaffold-first bootstrap instructions",
+    "Provenance, spending and capture templates"
+  ],
+  "risks": [
+    "Locally authored; bootstrap and runtime untested",
+    "Bria and Media4Agents routes require separately verified authorized integrations",
+    "Actual game captures and honest reviewer capability required",
+    "No publication, deployment or paid generation authorized"
+  ],
+  "checks": [
+    "Static source/diff inspection only during authoring",
+    "Future game acceptance requires explicit user authorization",
+    "Do not claim visual/motion/gameplay acceptance from structural checks"
+  ],
+  "publicStatus": {
+    "label": "Local only / untested",
+    "explanation": "publish is false; no game implemented, tests run or deployment performed."
+  }
+}

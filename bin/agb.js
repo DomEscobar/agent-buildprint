@@ -8,6 +8,10 @@ import { evidenceCheck } from '../src/evidence/evidence-ledger.js'
 import { harnessCheckResult, harnessInit, printHarnessResult } from '../src/harness/local-harness.js'
 import { architectureUiStackChecks, centralOutputInstantiationChecks, claimChecks, designSystemChecks, hardStopDecisionChecks, phaseProofChecks, uiEvidenceChecks } from '../src/product-proof-checks.js'
 
+import { startCommand, runtimeCommand, runtimeHelp, hasRuntime } from '../src/runtime/cli.js'
+import { next as runtimeNext, definitionCheck } from '../src/runtime/state.js'
+import { manifestSource, safeAbsolute } from '../src/runtime/io.js'
+
 const cwd = process.cwd()
 const cliDir = path.dirname(fileURLToPath(import.meta.url))
 const packageRoot = path.resolve(cliDir, '..')
@@ -57,7 +61,7 @@ function usage(exitCode = 0) {
 Usage:
   agb check <blueprint-folder> [--code <generated-code-folder>]
   agb start <buildprint-package-json-url-or-file> [target-folder]
-  agb packet check <packet-folder-or-package-json-url>
+  agb packet check <packet-folder-or-package-json-url> [--manifest-sha256 <sha256>]
   agb packet next <packet-folder-or-build-state-folder>
   agb harness init [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
   agb harness check [project-folder] [--provider agents|codex|claude|cline|cursor|all] [--profile default|webapp|backend|agentic|full] [--profiles webapp,backend] [--json]
@@ -81,6 +85,8 @@ Examples:
   agb verify ui /path/to/my-build
   agb claim check .
   agb check:design-quality-lift .
+
+${runtimeHelp}
 
 Mapper note:
   The old agb map CLI has been removed. To map a source project, run an agent
@@ -124,22 +130,6 @@ function isUrl(value) {
 
 function looksLikeHtml(text) {
   return /^\s*<!doctype html/i.test(text) || /^\s*<html[\s>]/i.test(text)
-}
-
-async function readJsonFromUrlOrFile(ref) {
-  if (isUrl(ref)) {
-    const res = await fetch(ref)
-    if (!res.ok) throw new Error(`failed to fetch ${ref}: HTTP ${res.status}`)
-    const text = await res.text()
-    if (looksLikeHtml(text)) throw new Error(`expected JSON manifest but received HTML from ${ref}`)
-    try {
-      return { json: JSON.parse(text), baseUrl: ref }
-    } catch (error) {
-      throw new Error(`invalid JSON manifest from ${ref}: ${error.message}`)
-    }
-  }
-  const absolute = path.resolve(cwd, ref)
-  return { json: JSON.parse(readText(absolute)), baseUrl: pathToFileURL(absolute).href }
 }
 
 function resolveManifestUrl(manifestRef, maybeRelative) {
@@ -192,20 +182,6 @@ function redactUrl(value) {
   }
 }
 
-async function fetchSnapshotExact(url) {
-  let bytes
-  if (url.startsWith('file://')) bytes = fs.readFileSync(fileURLToPath(url))
-  else {
-    const res = await fetch(url)
-    if (!res.ok) throw new Error(`failed to fetch ${url}: HTTP ${res.status}`)
-    bytes = Buffer.from(await res.arrayBuffer())
-  }
-  const text = bytes.toString('utf8')
-  if (looksLikeHtml(text)) throw new Error(`expected Buildprint snapshot text but received HTML from ${url}`)
-  if (/^not\s+found\s*$/i.test(text.trim())) throw new Error(`expected Buildprint snapshot content but received "${text.trim()}" from ${url} — the file may not be published yet or the URL is stale; re-run agb start after the packet is published`)
-  return bytes
-}
-
 function writeJson(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
 }
@@ -215,40 +191,17 @@ function looksLikeManifestRef(value) {
   return /package\.json(?:$|[?#])/i.test(value) || (exists(value) && path.basename(value) === 'package.json')
 }
 
-async function fetchJson(ref) {
-  if (isUrl(ref)) {
-    const res = await fetch(ref)
-    if (!res.ok) throw new Error(`failed to fetch ${ref}: ${res.status}`)
-    return await res.json()
-  }
-  return JSON.parse(readText(path.resolve(cwd, ref)))
-}
-
 async function packetDirFromRef(ref) {
   if (!ref) throw new Error('missing packet reference')
   const local = path.resolve(cwd, ref)
-  if (exists(local) && fs.statSync(local).isDirectory()) return local
+  if (exists(local) && fs.statSync(safeAbsolute(local)).isDirectory()) return local
   if (!looksLikeManifestRef(ref)) return local
-  const manifest = await fetchJson(ref)
+  const source = await manifestSource(ref, optionValue('--manifest-sha256'))
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'agb-packet-check-'))
-  const files = Array.isArray(manifest.files) ? manifest.files : []
-  const baseUrl = isUrl(ref) ? new URL('.', ref).toString() : null
-  for (const entry of files) {
-    const rawFile = typeof entry === 'string' ? entry : entry?.path
-    const url = typeof entry === 'object' ? (entry.url || entry.rawUrl || entry.siteUrl) : null
-    if (!rawFile) continue
-    const file = safeManifestPath(rawFile)
-    const target = safePathInside(temp, file)
+  for (const entry of source.entries) {
+    const target = safePathInside(temp, entry.path)
     fs.mkdirSync(path.dirname(target), { recursive: true })
-    if (url || baseUrl) {
-      const source = url || new URL(file, baseUrl).toString()
-      const res = await fetch(source)
-      if (!res.ok) throw new Error(`failed to fetch packet file ${file}: ${res.status}`)
-      fs.writeFileSync(target, await res.text())
-    } else {
-      const source = safePathInside(path.dirname(path.resolve(cwd, ref)), file)
-      if (exists(source)) fs.copyFileSync(source, target)
-    }
+    fs.writeFileSync(target, entry.payload)
   }
   return temp
 }
@@ -811,6 +764,19 @@ function packetCheckResults(dir) {
   const files = new Set(packetFiles(dir))
   const allFiles = Array.from(files)
   const normalizedPacketDir = dir.split(path.sep).join('/')
+  const packageFile = path.join(dir, 'package.json')
+  if (exists(packageFile)) {
+    try {
+      const manifest = JSON.parse(readText(packageFile))
+      if (manifest.runtime) {
+        if (manifest.runtime.schema !== 'agb/runtime/v2') throw new Error('unsupported runtime version')
+        const definition = JSON.parse(readText(safeAbsolute(safePathInside(dir, manifest.runtime.definition))))
+        definitionCheck(definition, allFiles.map(file => ({ path: file })))
+        ok('Opt-in runtime definition is structurally valid (not acceptance)', true)
+      }
+    } catch (error) { ok('Opt-in runtime definition', false, error.message) }
+  }
+
 
   const blueprint = safeReadText(path.join(dir, 'blueprint.yaml'))
   const buildprint = safeReadText(path.join(dir, 'BUILDPRINT.md'))
@@ -1081,11 +1047,14 @@ async function packetCheck(ref) {
 }
 
 async function packetNext(ref) {
+  const local = path.resolve(cwd, ref)
+  const project = path.basename(local) === '.buildprint' ? path.dirname(local) : local
+  if (!isUrl(ref) && hasRuntime(project)) { console.log(runtimeNext(project)); return }
   const dir = packetCheckRoot(await packetDirFromRef(ref))
   const loopIndex = safeReadText(path.join(dir, 'loops/loop-index.yaml'))
   const activePath = loopIndex.match(/active_loop:\s*([^\s#]+)/)?.[1]
   if (!activePath) throw new Error('missing active_loop in loops/loop-index.yaml')
-  const active = safeReadText(path.join(dir, activePath))
+  const active = safeReadText(safeAbsolute(safePathInside(dir, activePath, 'active loop path')))
   if (!active) throw new Error(`missing active loop ${activePath}`)
   console.log(active.trim())
 }
@@ -1186,8 +1155,8 @@ function harnessInitCommandForProfiles(profiles) {
   return `agb harness init . --provider agents${profileArgs}`
 }
 
-async function startBuildprint(manifestRef, targetFolder = cwd) {
-  const { json: manifest, baseUrl } = await readJsonFromUrlOrFile(manifestRef)
+async function startBuildprint(manifestRef, targetFolder = cwd, loaded) {
+  const { manifest, baseUrl } = loaded
   if (!manifest.slug || !Array.isArray(manifest.files)) throw new Error('invalid Buildprint package manifest: expected slug and files[]')
   const manifestFilePaths = manifest.files
     .map((file) => typeof file === 'string' ? file : file.path)
@@ -1224,13 +1193,14 @@ async function startBuildprint(manifestRef, targetFolder = cwd) {
     if (!rawPath) continue
     const safePath = safeManifestPath(rawPath)
     if (safePath.includes('*')) continue
-    let source = resolveManifestUrl(baseUrl, typeof file === 'object' ? file.siteUrl || file.rawUrl : null)
+    let source = resolveManifestUrl(baseUrl, typeof file === 'object' ? file.url || file.rawUrl || file.siteUrl : null)
     if (!source && baseUrl.startsWith('file://')) {
       const manifestPath = fileURLToPath(baseUrl)
       source = pathToFileURL(safePathInside(path.dirname(manifestPath), safePath)).href
     }
-    if (!source) throw new Error(`missing source URL for ${safePath}`)
-    const bytes = await fetchSnapshotExact(source)
+    if (!source) source = new URL(safePath, baseUrl).href
+    const bytes = loaded.entries.find(entry => entry.path === safePath)?.payload
+    if (!bytes) throw new Error(`missing bounded payload: ${safePath}`)
     const text = bytes.toString('utf8')
     if (!text.trim() && !safePath.endsWith('.gitkeep')) throw new Error(`downloaded empty snapshot for ${safePath}`)
     // Minimum content length — suspiciously short files indicate a broken CDN or unpublished asset
@@ -1419,18 +1389,16 @@ if (args[0] === 'analyze') {
 
 
 
-if (args[0] === 'start') {
+if (args[0] === 'start' || args[0] === 'bootstrap') {
   if (isHelp(args[1])) usage(0)
-  const manifest = args[1]
-  const target = args[2] ?? cwd
-  if (!manifest) usage(1)
-  try {
-    await startBuildprint(manifest, target)
-    process.exit(0)
-  } catch (error) {
-    console.error(`Start failed: ${error.message}`)
-    process.exit(1)
-  }
+  try { await startCommand(args, startBuildprint); process.exit(0) }
+  catch (error) { console.error(`Bootstrap failed: ${error.message}`); process.exit(1) }
+}
+
+if (args[0] === 'state' || args[0] === 'loop' || (args[0] === 'evidence' && ['bind', 'record'].includes(args[1]))) {
+  if (isHelp(args[1]) || isHelp(args[2])) usage(0)
+  try { await runtimeCommand(args); process.exit(0) }
+  catch (error) { console.error(`Runtime failed: ${error.message}`); process.exit(1) }
 }
 
 if (args[0] === 'harness') {

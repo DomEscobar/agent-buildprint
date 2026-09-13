@@ -75,6 +75,16 @@ Product Buildprints package whole systems. Capability Buildprints package bounde
 
 [Guided 2D Game / vertical slice](buildprints/guided-2d-game/README.md) guides scoped intake, graybox/art convergence, coherent sprite animation, validated world placement and evidence-backed game QA. It includes dependency-free contract validators and negative fixtures—not a prebuilt game or paid-generation requirement.
 
+## Full standalone isometric game packet
+
+[Full Standalone Isometric Game](buildprints/standalone-isometric-game/README.md) covers the entire agreed original game using a pinned [Isometric Framework](https://github.com/DomEscobar/isometric-framework/commit/7542ff68de04ca6ea6736974b54ec5b5dde1cc33) scaffold and its existing skills: one approved contract, mobile-first UX, complete world/gameplay production, and user-requested running-build visual/gameplay acceptance. It is separate from Guided 2D Game and does not cap delivery at calibration.
+
+Local-only, authored and untested; no game implementation, paid generation or deployment. Read the packet directly for alignment, then use **`agb bootstrap` with pinned templates/trusted archive**, or scaffold first and use its local package.json with `agb start`. See its [CLI limitations](buildprints/standalone-isometric-game/references/cli-integration.md) and [authoring report](buildprints/standalone-isometric-game/AUTHORING_REPORT.md).
+
+## Opt-in local runtime v2
+
+[CLI runtime guide](docs/cli-runtime-v2.md): safe staged `start`, copy-only pinned `bootstrap`, resumable hash-linked state, explicit approvals and loop transitions, defects/returns, and current-build-bound evidence attestations. `state status`, `loop next/begin/accept/advance`, `evidence bind/record` are real commands; none execute tests, manifest scripts, providers or deployment. Legacy manifests keep legacy state and packet operations. Existing state/user files are never overwritten. Byte hashes and recorded review claims are not publisher authentication or verified visual acceptance. [Source delivery report](docs/cli-overhaul-report.md).
+
 ## Local Development
 
 From this repository:
@@ -85,6 +95,7 @@ npm run check:syntax
 npm run check:packet:mapper
 npm run check:packets
 npm run check:guided-2d-game
+npm run check:standalone-isometric-game
 npm run check:capabilities
 npm run check:authors
 npm run check:capability:regressions

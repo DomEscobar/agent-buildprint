@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AGB atomic state commit pointer",
+  "type": "object",
+  "required": [
+    "schema",
+    "revision",
+    "file",
+    "sha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "agb/state/v2"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9999
+    },
+    "file": {
+      "type": "string",
+      "pattern": "^revisions/[0-9]{8}-[a-f0-9]{64}\\.json$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "description": "The selected immutable revision contains state, snapshot inventory, definition, approvals, loops, evidence, defects, returns, candidate, history and a previous HEAD pointer. CLI verifies complete hash/revision chain. Not authenticated or rollback resistant."
+}
