@@ -79,7 +79,7 @@ Product Buildprints package whole systems. Capability Buildprints package bounde
 
 [Full Standalone Isometric Game](buildprints/standalone-isometric-game/README.md) covers the entire agreed original game using a pinned [Isometric Framework](https://github.com/DomEscobar/isometric-framework/commit/7542ff68de04ca6ea6736974b54ec5b5dde1cc33) scaffold and its existing skills: one approved contract, mobile-first UX, complete world/gameplay production, and user-requested running-build visual/gameplay acceptance. It is separate from Guided 2D Game and does not cap delivery at calibration.
 
-Local-only, authored and untested; no game implementation, paid generation or deployment. Read the packet directly for alignment, then use **`agb bootstrap` with pinned templates/trusted archive**, or scaffold first and use its local package.json with `agb start`. See its [CLI limitations](buildprints/standalone-isometric-game/references/cli-integration.md) and [authoring report](buildprints/standalone-isometric-game/AUTHORING_REPORT.md).
+Published packet with pinned source CLI; npm `agent-buildprint@0.0.17` does not contain v2. No game implementation, paid generation or game acceptance is claimed. Follow its exact source-install instructions or read directly for alignment, then use source **`bootstrap` with pinned templates/trusted archive**, or scaffold first and use its local package.json with source `start`. See its [CLI limitations](buildprints/standalone-isometric-game/references/cli-integration.md) and [authoring report](buildprints/standalone-isometric-game/AUTHORING_REPORT.md).
 
 ## Opt-in local runtime v2
 

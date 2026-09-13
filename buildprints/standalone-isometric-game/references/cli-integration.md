@@ -1,4 +1,4 @@
-# Local CLI integration — versioned opt-in
+# Pinned source CLI integration — versioned opt-in
 
 This package now opts into the implemented `agb/runtime/v2` engine through `package.json` → `runtime.json`. The kernel/v1 spine and loop-index/v1 remain backward-compatible packet structures. `runtime.json` supplies explicit dependency/approval/acceptance routing for the same six loops. The mutable active loop lives in `.buildprint/HEAD.json`'s selected revision, never by editing snapshots.
 
@@ -6,8 +6,7 @@ Source-authoring status only: no CLI command, scaffold, tests, build, browser QA
 
 ## Commands that now exist
 
-From the agent-buildprint repository, or use installed `agb` instead of `node ./bin/agb.js`:
-
+Use a fresh source checkout pinned at `35f2623b0d72a1b09d39c1a7f14a0eaf6bf4a409` from https://github.com/DomEscobar/agent-buildprint. See `README.md` for exact clone and source invocation commands. Public npm `agent-buildprint@0.0.17` has no v2 runtime: do not substitute installed `agb`. The commands below are relative to that pinned source checkout. Code availability is not full regression, scaffold or game acceptance. If source access is unavailable, direct-read for planning and report the automation blocker, never simulate state.
 ```sh
 node ./bin/agb.js start ./buildprints/standalone-isometric-game/package.json /existing/scaffolded/game
 node ./bin/agb.js start ./buildprints/standalone-isometric-game/package.json /existing/scaffolded/game --resume
@@ -23,7 +22,7 @@ node ./bin/agb.js loop accept /game --revision <current> --receipt /game/.game-q
 node ./bin/agb.js loop advance /game --revision <current> --receipt /game/.game-quality/advance.json
 ```
 
-`loop defect`, `resolve-defect`, `return`, `resolve-return` use the same revision/receipt arguments. All receipts have `schema: agb/receipt/v2`. The installed distribution includes `docs/cli-runtime-v2.md` and `docs/schemas/` with exact fields, recovery commands, limits and security boundaries. These are code-backed commands, not instructions to execute checks during this authoring task.
+`loop defect`, `resolve-defect`, `return`, `resolve-return` use the same revision/receipt arguments. All receipts have `schema: agb/receipt/v2`. The pinned source checkout includes `docs/cli-runtime-v2.md` and `docs/schemas/` with exact fields, recovery commands, limits and security boundaries. These are code-backed commands, not instructions to execute checks during this authoring task.
 
 ## Bootstrap and authority
 
@@ -31,7 +30,7 @@ node ./bin/agb.js loop advance /game --revision <current> --receipt /game/.game-
 
 The framework pin/tree is enforced only by the fixed `bootstrap` adapter. Plain `start` just snapshots the lock. Archive hash matching establishes byte identity, not publisher authentication or provenance from that source. Missing trusted archive/build authorization is a setup blocker; do not fabricate one or run upstream `build:package` when its included checks are prohibited.
 
-Remote manifests use bounded credential-free HTTPS, no redirects, same-origin payloads and versioned manifest/file digests. Local v2 strings resolve beside the manifest. No hosted endpoint is claimed. Old manifests without runtime opt-in retain legacy state shapes and packet operations; existing state is never overwritten or silently migrated. `--resume` validates the existing v2 snapshot and same source inventory, not a refresh.
+Remote manifests use bounded credential-free HTTPS, no redirects, same-origin payloads and versioned manifest/file digests. Local v2 strings resolve beside the manifest. The website publishes https://agent-buildprint.com/buildprints/standalone-isometric-game/package.json with real same-origin payload digests and https://agent-buildprint.com/buildprints/standalone-isometric-game/package.sha256. The sidecar establishes byte identity, not a separately trusted manifest channel. Public npm v2 compatibility is not claimed; use the pinned source CLI. Old manifests without runtime opt-in retain legacy state shapes and packet operations; existing state is never overwritten or silently migrated. `--resume` validates the existing v2 snapshot and same source inventory, not a refresh.
 
 ## Game loop binding
 

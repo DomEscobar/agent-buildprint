@@ -1,9 +1,9 @@
 {
   "slug": "standalone-isometric-game",
   "title": "Full Standalone Isometric Game",
-  "category": "Game",
+  "category": "Product OS",
   "tier": "agent-grade",
-  "status": "local-authored-runtime-unproven",
+  "status": "dry-run-needed",
   "executionMode": "kernel-loop",
   "files": [
     "00-goal.md",
