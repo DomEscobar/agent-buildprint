@@ -16,3 +16,6 @@ No placeholder commands, real secrets, or fake harness receipts. Do not hide har
 
 ## Versioned routing handoff
 After the actual prerequisites exist, record applicable real decisions with `agb state approve` and `agb/receipt/v2` JSON receipts (not invented approvals). `runtime.json` names required approvals and bound files. `agb loop begin` checks prerequisites; `evidence bind/record` and `loop accept/advance` are explicit operations. Open `loop return` to setup/alignment/identity when blocked; preserve history and fix the cause. Consult `references/cli-integration.md` and pinned source `docs/cli-runtime-v2.md`. CLI claims remain attestations; no setup flag authorizes tests, paid providers, skill writes or deployment.
+
+## Source and evidence hygiene
+Record maintained source/test roots, protected input roots and evidence/archive roots in setup proof. Hash exclusion is NOT test-discovery exclusion. Preserve historical source as non-executable text or archives; when authorized, configure the host's actual runner to discover maintained tests and exclude evidence without dropping active fixtures. The pinned scaffold has tsc/Vite, not an existing Vitest runner: do not invent a universal config. When a runner is introduced, test discovery with an archived failing test snapshot (must not run) AND an active failing test (must still fail).

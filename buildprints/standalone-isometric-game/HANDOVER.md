@@ -16,3 +16,8 @@ List every untested device, action, mode, stale criterion and missing capture/re
 
 ## Next
 Name the next eligible check from upstream production status and current loop, unresolved defects and remaining agreed scope. Preserve immutable snapshots/receipts and reference the contract amendment history. For stopped work, offer the actual next loop or blocker decision; do not solicit redundant permission to continue already-authorized work.
+
+## Compact continuation pointer (not another ledger)
+Keep one current pointer: artifact hash + candidate, owned phase, completed evidence, next action, dispatched owner/run or explicit none, blocker evidence and completion boundary. Reconcile newer receipts/reviews before redispatch: a newer bounded review supersedes an old “review unavailable” pointer, not the immutable historical report. Deduplicate completion by artifact/run; changed candidates inherit no old result. Call work running only with an actual live process/session. Source completion closes only its owned phase; parent retains preparation, integration, capture and review through the integrated deliverable.
+
+Separate measurement / experience / aesthetic / human acceptance / preview permission / production release permission. Record user rejection against the candidate through existing defect/return revocation before proposing acceptance; no implicit approval from a stable image.

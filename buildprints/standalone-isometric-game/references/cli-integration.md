@@ -2,7 +2,7 @@
 
 This package now opts into the implemented `agb/runtime/v2` engine through `package.json` → `runtime.json`. The kernel/v1 spine and loop-index/v1 remain backward-compatible packet structures. `runtime.json` supplies explicit dependency/approval/acceptance routing for the same six loops. The mutable active loop lives in `.buildprint/HEAD.json`'s selected revision, never by editing snapshots.
 
-Source-authoring status only: no CLI command, scaffold, tests, build, browser QA or independent review has been run for this integration. The original `AUTHORING_REPORT.md` remains historical; see the appended overhaul note and repository `docs/cli-overhaul-report.md`.
+Historical initial integration was source-only. Current patch verification is recorded in repository `docs/standalone-production-patch.md`; it does not establish game acceptance. The original `AUTHORING_REPORT.md` remains historical; see the appended overhaul note and repository `docs/cli-overhaul-report.md`.
 
 ## Commands that now exist
 
@@ -36,7 +36,7 @@ Remote manifests use bounded credential-free HTTPS, no redirects, same-origin pa
 
 Five recorded approvals bind to the actual contract hash: `contract`, `setup`, `mobile-ux`, `asset-policy`, `acceptance-execution`. They mirror real authorized decisions, not grant them. Preserve prior answers; ask at most three independently answerable unresolved decisions per batch, with reversible defaults. Record no-spend/fallback decisions without pretending provider access exists. User/host policy remains authoritative.
 
-In the pinned source, `runtime.json.productionEvidence` points to the existing upstream baseline and receipt directory. Loop 01 additionally requires all protected preflight/layout checks to have current completed passing receipts before advance; loop 02 requires representative assembly checks. A missing check, later fail/unverified receipt, wrong baseline, changed inputs or changed evidence blocks the transition. This reader checks existing upstream record linkage, not geometry re-execution, pixel quality, reviewer identity or arbitrary filesystem writes. Existing snapshots and older source pins do not gain these gates retroactively.
+In the pinned source, `runtime.json.productionEvidence` points to the existing upstream baseline and receipt directory. Loop 01 additionally requires all protected preflight/layout checks to have current completed passing receipts before advance; loop 02 requires representative assembly checks. The current packet opts into reader `productionEvidence.validationVersion: 2`: loops 03/04/05 require static/motion/final respectively; loop 06 rechecks all six stages. Version 2 validates complete stage and protected requirement/view coverage, final all-input dependencies, domain-correct motion evidence and actual production-receipt artifact linkage. It adds no upstream schema fields and never reruns automatic geometry/layout checks. A missing check, later fail/unverified receipt, wrong baseline, changed inputs or changed evidence blocks the transition. This reader checks existing upstream record linkage, not geometry re-execution, pixel quality, reviewer identity or arbitrary filesystem writes. Existing snapshots and older source pins do not gain these gates retroactively.
 
 Loop 01 requires implementation attestation; loops 02–06 require separately selected implementation, functional and visual attestations. Calibration does not reduce scope. Full-coverage loops 05 and 06 additionally require every requirement and protected view from the bound upstream v3 acceptance plan. Use the loop ID as the routing coverage entry, plus real plan requirement IDs. The plan is derived from the one contract, not an alternate human brief.
 
@@ -46,7 +46,7 @@ CLI state references upstream detailed production receipts; it does not replace 
 
 ## Remaining real gaps
 
-- No executed compatibility/security/acceptance proof for this overhaul; authored regressions remain unexecuted.
+- Offline runtime regression results are bounded to synthetic plumbing; no game acceptance, host latency or independent raster/gait verifier is proven.
 - No automated legacy migration, granular input-root reuse, remote scaffold checkout/archive downloader, source-to-archive attestation or publisher signature verification.
 - No adversarial-filesystem race sandbox, cross-filesystem atomicity, shared-host lock recovery or tamper-proof history.
 - No built-in live capture, motion playback/semantic judgment, reviewer identity authentication or completeness inference from prose.

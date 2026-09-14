@@ -154,6 +154,14 @@
           "minLength": 1,
           "maxLength": 240,
           "description": "Runtime additionally rejects traversal, absolute paths, backslashes, reserved names and symlinks."
+        },
+        "validationVersion": {
+          "type": "integer",
+          "enum": [
+            1,
+            2
+          ],
+          "description": "Optional reader policy. Omitted/1 preserves historical partial-plan behavior; 2 requires complete upstream production coverage and current artifact linkage. Not an upstream schema version."
         }
       }
     }

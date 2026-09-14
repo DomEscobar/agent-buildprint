@@ -60,9 +60,44 @@ export function productionPlan(root, definition) {
     insist(['measurement', 'image', 'motion'].includes(check.evidenceKind), 'production evidence kind invalid')
     if (check.method === 'review' && ['assembly', 'static', 'final'].includes(check.stage)) insist(check.evidenceKind === 'image', 'production assembly/static/final review requires images')
   }
+  if (config.validationVersion === 2) validateCompletePlan(plan, roots)
   // Do not allow evidence storage inside source roots (self-invalidating evidence).
   for (const output of [config.baseline, config.receipts]) insist(!roots.some(r => output === r || output.startsWith(`${r}/`)), 'production outputs must be outside input roots')
   return { plan, baselineHash: digest(baselineFile) }
+}
+// Versioned reader policy, not an upstream schema extension or checker execution.
+// Older snapshots retain their original partial-plan behavior.
+function validateCompletePlan(plan, roots) {
+  const checks = plan.production.checks
+  const requirements = new Map(plan.requirements.map(r => [r.id, r]))
+  const dependency = (check, name) => nonempty(name) && check.inputs.some(p => name === p || name.startsWith(`${p}/`))
+  for (const stage of productionStages) insist(checks.some(c => c.stage === stage), `production stage missing from plan: ${stage}`)
+  for (const stage of ['layout', 'static']) insist(checks.some(c => c.stage === stage && c.method === 'layout'), `production ${stage} layout checker missing`)
+  for (const stage of ['assembly', 'final']) insist(checks.some(c => c.stage === stage && c.method === 'review'), `production ${stage} review missing`)
+  for (const check of checks) {
+    if (check.stage === 'motion' && check.requirements.some(id => requirements.get(id).domain === 'motion')) insist(check.evidenceKind === 'motion', 'production motion requirements need motion evidence')
+    if (check.stage === 'final') insist(roots.every(root => dependency(check, root)), 'production final must cover every input root')
+    if (check.method !== 'review') {
+      insist(dependency(check, check.source), 'production checker source must be a declared dependency'); relative(check.source)
+    }
+    if (check.method === 'layout') {
+      const scope = check.requiredScope
+      insist(object(scope) && Object.keys(scope).sort().join(',') === 'bridges,instances,regions,routes' && Object.values(scope).every(v => Array.isArray(v) && v.every(nonempty) && new Set(v).size === v.length) && scope.regions.length && scope.routes.length, 'production layout needs protected scope')
+    }
+    if (check.method === 'art') {
+      insist(Array.isArray(check.assets) && check.assets.length && check.assets.every(nonempty), 'production art needs protected asset IDs')
+      insist(dependency(check, check.binding), 'production art binding must be a declared dependency'); relative(check.binding)
+    }
+  }
+  for (const r of requirements.values()) {
+    insist(Array.isArray(r.views) && r.views.length && r.views.every(nonempty), 'production requirement views required')
+    const stage = r.domain === 'visual' ? 'static' : 'motion'
+    insist(r.views.every(view => checks.some(c => c.method === 'review' && c.stage === stage && c.requirements.includes(r.id) && c.views.includes(view))), `production protected requirement/view coverage missing: ${r.id}`)
+  }
+  const rigid = plan.production.rigidAssets
+  insist(Array.isArray(rigid) && rigid.every(nonempty) && new Set(rigid).size === rigid.length, 'production rigidAssets must be unique IDs')
+  insist(rigid.every(id => checks.some(c => c.method === 'art' && c.assets.includes(id))), 'production rigid asset coverage missing')
+  if (rigid.length) insist(checks.some(c => c.stage === 'assembly' && c.method === 'art'), 'production rigid assembly check missing')
 }
 export function productionCurrent(root, definition, loop) {
   if (!loop.productionStages?.length) return []
@@ -85,8 +120,8 @@ export function productionCurrent(root, definition, loop) {
     insist(plan.production.checks.some(c => c.id === receipt.check), 'production receipt names unknown check')
     insist(nonempty(receipt.completedAt) && Number.isFinite(Date.parse(receipt.completedAt)), 'production receipt completion time invalid')
     const prior = latest.get(receipt.check)
-    insist(!prior || prior.receipt.completedAt !== receipt.completedAt, 'production receipts have ambiguous completion time')
-    if (!prior || receipt.completedAt > prior.receipt.completedAt) latest.set(receipt.check, { receipt, file })
+    insist(!prior || Date.parse(prior.receipt.completedAt) !== Date.parse(receipt.completedAt), 'production receipts have ambiguous completion time')
+    if (!prior || Date.parse(receipt.completedAt) > Date.parse(prior.receipt.completedAt)) latest.set(receipt.check, { receipt, file })
   }
   return checks.map(check => {
     const found = latest.get(check.id)

@@ -21,3 +21,6 @@ Current packed-art/geometry results plus actual ground-only/dressed captures, ap
 
 ## Handoff note
 Record the actual implemented scope, observed evidence, exact candidate/inputs, open defects and capability/authorization blockers. Link upstream production status/receipts instead of copying their verdicts. Keep current loop/next eligible work in local progress; the immutable packet index is not an auto-advancing scheduler. Preserve approvals, full scope and delegated-work ownership.
+
+## Calibration exit conditions
+Record `assembly-measured-geometry` using the existing coverage seam and `templates/measured-geometry-review.md`; failed or unavailable independent observations block advancement, regardless of aesthetic/parity pass. The pinned art checker is not independent pixel measurement. Exercise short taps across sampling phase, holds/chords/release and blocked/open floor through the input-feel contract before full-world expansion; link actual traces and rendered response, not only displacement equations.

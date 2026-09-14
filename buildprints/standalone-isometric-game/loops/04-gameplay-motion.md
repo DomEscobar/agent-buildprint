@@ -21,3 +21,5 @@ All agreed systems and states implemented; authorized real normal-journey/restar
 
 ## Handoff note
 Record the actual implemented scope, observed evidence, exact candidate/inputs, open defects and capability/authorization blockers. Link upstream production status/receipts instead of copying their verdicts. Keep current loop/next eligible work in local progress; the immutable packet index is not an auto-advancing scheduler. Preserve approvals, full scope and delegated-work ownership.
+
+Recheck the agreed input-feel contract after camera/menu/display changes: actual delivered event times, first rendered response, current/previous/interpolated position, camera transform and native/CSS displacement. Repeat adverse-phase short presses, natural hold/release/chords, blocked/open floor, resize/cancel/focus on required desktop/portrait views. Blocked movement is not input loss. Host-specific event-to-raster latency verification is not supplied by this packet.

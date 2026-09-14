@@ -19,6 +19,7 @@ export function definitionCheck(definition, entries) {
   if (definition.productionEvidence !== undefined) {
     insist(definition.acceptancePlan && definition.productionEvidence && typeof definition.productionEvidence === 'object', 'productionEvidence requires acceptancePlan')
     relative(definition.productionEvidence.baseline); relative(definition.productionEvidence.receipts)
+    insist([undefined, 1, 2].includes(definition.productionEvidence.validationVersion), 'unsupported production validationVersion')
   }
   for (const loop of definition.loops) {
     insist(identifier(loop.id) && !ids.has(loop.id), 'duplicate/invalid loop id'); ids.add(loop.id)
@@ -254,10 +255,15 @@ export function operation(context, action, receipt) {
       for (const view of views) for (const kind of viewKinds) insist(receipt.artifacts.some(a => a.view === view && a.kind === kind), `missing ${kind} artifact for protected view: ${view}`)
     }
 
+    const currentProduction = passing && kinds.has('production-receipt') && state.definition.productionEvidence?.validationVersion === 2
+      ? productionCurrent(root, state.definition, loop) : null
     for (const artifact of receipt.artifacts) {
       insist(text(artifact.observation) && /^[a-f0-9]{64}$/.test(artifact.sha256), 'artifact needs observation and explicit SHA-256')
       const raw = bytes(inside(root, artifact.path), 256 * 1024 * 1024)
       insist(hash(raw) === artifact.sha256, 'artifact SHA-256 mismatch')
+      if (artifact.kind === 'production-receipt' && currentProduction) {
+        insist(currentProduction.some(item => item.path === artifact.path && item.sha256 === artifact.sha256), 'production-receipt artifact must name a current required stage receipt')
+      }
       if (artifact.kind === 'running-capture') insist(raw.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) || raw.subarray(0, 3).equals(Buffer.from([255,216,255])) || (raw.toString('ascii', 0, 4) === 'RIFF' && raw.toString('ascii', 8, 12) === 'WEBP'), 'capture needs PNG/JPEG/WebP bytes; this is not pixel or live-build verification')
       if (artifact.kind === 'motion') insist(raw.toString('ascii', 4, 8) === 'ftyp' || raw.subarray(0, 4).equals(Buffer.from([26,69,223,163])) || /^GIF8[79]a/.test(raw.toString('ascii', 0, 6)), 'motion needs MP4/WebM/GIF media, not a timed still list; playback is not verified by CLI')
     }

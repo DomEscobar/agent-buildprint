@@ -34,6 +34,7 @@
     "templates/asset-provenance.md",
     "templates/capture-receipt.md",
     "templates/generation-ledger.md",
+    "templates/measured-geometry-review.md",
     "templates/setup-receipt.md",
     "templates/ux-intent.md",
     "runtime.json"

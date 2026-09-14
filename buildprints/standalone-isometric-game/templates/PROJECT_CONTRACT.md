@@ -58,3 +58,8 @@ For each screen/state: purpose, information hierarchy, next action, touch intera
 
 ## Approved amendments
 Record date, decision source, changed requirement IDs, reason and superseded text. Preserve history; revise technical plan/freeze explicitly when necessary. Do not put changing task status, attempts or verdicts here: upstream receipts own those.
+
+## Acceptance meaning (freeze before implementation)
+For each reference record content hash, decision source and distinct role: preference reference, approved target or regression comparator (in addition to style/layout/both). Do not promote the last stable candidate into the target without an authorized amendment. Define separate measurement, input/experience, aesthetic and required human-acceptance requirements; record preview and production-release permission separately from all quality verdicts. State who may decide each outcome. Human acceptance remains pending without that actual decision; neither implementation permission nor a critic score substitutes.
+
+On rejection, preserve the actual candidate-specific decision and open the existing `loop defect` (or `loop return` for a contract/UX decision), invalidating affected acceptance before requesting a new decision. Unchanged bytes do not preserve an older PASS against later rejection. No target reset or new cozy/numeric threshold repairs a failed measurement.

@@ -14,3 +14,8 @@
 - Blockers and next eligible work:
 
 A populated file is not a successful setup unless backed by actual observations. No synthetic success markers. When setup-runbook governs work, report its real completion signal only if its criteria hold.
+
+- Maintained source/test roots, protected input roots, evidence/archive roots and actual runner/config (or none):
+- Archive representation and discovery canary command/result: archived failing snapshot excluded, active failing test still fails; no active fixtures removed:
+
+Excluding evidence from hashes does not exclude it from discovery. No runner means the canary remains not applicable until one is introduced, not an invented Vitest pass.

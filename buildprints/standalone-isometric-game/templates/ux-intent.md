@@ -13,3 +13,5 @@ Do not create a competing UI brief. For each agreed screen/state, record:
 | Evidence | Real input journey and protected viewport/state that will prove the intent when acceptance is authorized. |
 
 Cover start/loading/error, play, pause/settings, contextual actions, result/restart and every promised menu/inventory/save state. List not-applicable states rather than inventing features. Accessibility and reduced-motion/audio choices must have real effects. A beautiful target image is not interaction evidence.
+
+For Touch/Desktop rows, specify direction space, queued edges, tap/hold/chord/release, chosen projected/world speed metric, response/travel bounds and camera behavior. Evidence includes event-to-render observations under adverse sampling phase and open/blocked floor, not a universal numeric feel target.

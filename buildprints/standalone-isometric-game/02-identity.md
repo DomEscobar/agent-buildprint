@@ -11,3 +11,6 @@ Fill the UX and visual target sections of the existing `PROJECT_CONTRACT.md`, pr
 5. Protect target images and reference roles. Describe silhouettes, pixel density, palette/light, material transitions, ground connections, actor/prop ratios and scene-relevant animation. Use actual user references; concepts remain clearly labeled non-runtime targets. An absent target/capture facility leaves visual acceptance unverified.
 
 Finish when the contract provides observable views and action sequences, and the derived implementation mapping identifies real host controls and public APIs. Later authorized rendered verification uses those same views and states, not easier framing chosen after defects appear.
+
+## Input-feel contract before expansion
+Specify screen-relative versus world-relative direction; tap/hold/chord/release and queued-edge policy; intended speed metric and response/travel bounds; camera follow/interpolation and release behavior. Use `templates/capture-receipt.md` for event-to-render traces. Do not mandate a universal sampling interval, chord window or speed. A standing sprite translating still fails promised walking even if input latency passes.

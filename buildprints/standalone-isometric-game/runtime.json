@@ -56,7 +56,8 @@
         "acceptance-execution"
       ],
       "requirements": [
-        "02-playable-calibration"
+        "02-playable-calibration",
+        "assembly-measured-geometry"
       ],
       "acceptance": [
         "implemented",
@@ -91,7 +92,10 @@
         "visual"
       ],
       "independentReview": false,
-      "fullCoverage": false
+      "fullCoverage": false,
+      "productionStages": [
+        "static"
+      ]
     },
     {
       "id": "04-gameplay-motion",
@@ -115,7 +119,10 @@
         "visual"
       ],
       "independentReview": false,
-      "fullCoverage": false
+      "fullCoverage": false,
+      "productionStages": [
+        "motion"
+      ]
     },
     {
       "id": "05-visual-gameplay-acceptance",
@@ -139,7 +146,10 @@
         "visual"
       ],
       "independentReview": false,
-      "fullCoverage": true
+      "fullCoverage": true,
+      "productionStages": [
+        "final"
+      ]
     },
     {
       "id": "06-local-handover",
@@ -163,11 +173,20 @@
         "visual"
       ],
       "independentReview": false,
-      "fullCoverage": true
+      "fullCoverage": true,
+      "productionStages": [
+        "preflight",
+        "layout",
+        "assembly",
+        "static",
+        "motion",
+        "final"
+      ]
     }
   ],
   "productionEvidence": {
     "baseline": ".game-quality/baseline.json",
-    "receipts": ".game-quality/production-receipts"
+    "receipts": ".game-quality/production-receipts",
+    "validationVersion": 2
   }
 }
