@@ -93,7 +93,7 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$NODE_AUTH_TOKEN"
-          tarballs=(release-tarball/*.tgz)
+          tarballs=(./release-tarball/*.tgz)
           test "${#tarballs[@]}" -eq 1
           tarball="${tarballs[0]}"
           test -f "$tarball"
