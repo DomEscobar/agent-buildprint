@@ -15,10 +15,10 @@ https://agent-buildprint.com/
 
 ## Shortcuts
 
-AGB is the optional CLI helper for loading exact Buildprint snapshots into a workspace. You can install it globally for convenience:
+AGB is the optional CLI helper for loading exact Buildprint snapshots into a workspace. Version `0.1.0` includes the v2 runtime and bundled packets; install it globally for convenience:
 
 ```bash
-npm install -g agent-buildprint
+npm install -g agent-buildprint@0.1.0
 ```
 
 Then start from a published Buildprint:
@@ -79,11 +79,27 @@ Product Buildprints package whole systems. Capability Buildprints package bounde
 
 [Full Standalone Isometric Game](buildprints/standalone-isometric-game/README.md) covers the entire agreed original game using a pinned [Isometric Framework](https://github.com/DomEscobar/isometric-framework/commit/7542ff68de04ca6ea6736974b54ec5b5dde1cc33) scaffold and its existing skills: one approved contract, mobile-first UX, complete world/gameplay production, and user-requested running-build visual/gameplay acceptance. It is separate from Guided 2D Game and does not cap delivery at calibration.
 
-Published packet with pinned source CLI; npm `agent-buildprint@0.0.17` does not contain v2. No game implementation, paid generation or game acceptance is claimed. Follow its exact source-install instructions or read directly for alignment, then use source **`bootstrap` with pinned templates/trusted archive**, or scaffold first and use its local package.json with source `start`. See its [CLI limitations](buildprints/standalone-isometric-game/references/cli-integration.md) and [authoring report](buildprints/standalone-isometric-game/AUTHORING_REPORT.md).
+Version `0.1.0` contains the v2 runtime and this packet. Scaffold the pinned framework host first, then add the CLI to that host and start the bundled packet with the locally resolved executable:
+
+```bash
+npm install --save-dev agent-buildprint@0.1.0
+npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json .
+npx --no-install agb state status .
+npx --no-install agb loop next .
+```
+
+```powershell
+npm install --save-dev agent-buildprint@0.1.0
+npx --no-install agb start .\node_modules\agent-buildprint\buildprints\standalone-isometric-game\package.json .
+npx --no-install agb state status .
+npx --no-install agb loop next .
+```
+
+`start` records packet state; it does not scaffold the framework host. The framework remains separately pinned and locally built as described by the packet. AGB does not bundle framework skills or inject them into an agent session: the host reads the installed framework catalog and the selected skill files. Remote hosted manifests are separate website bytes; npm publishing does not update them or existing snapshots. Remote v2 starts still require an exact manifest SHA-256 from a separately trusted channel. See [CLI limitations](buildprints/standalone-isometric-game/references/cli-integration.md), [release notes](CHANGELOG.md), and the historical [authoring report](buildprints/standalone-isometric-game/AUTHORING_REPORT.md).
 
 ## Opt-in local runtime v2
 
-[CLI runtime guide](docs/cli-runtime-v2.md): safe staged `start`, copy-only pinned `bootstrap`, resumable hash-linked state, explicit approvals and loop transitions, defects/returns, and current-build-bound evidence attestations. `state status`, `loop next/begin/accept/advance`, `evidence bind/record` are real commands; none execute tests, manifest scripts, providers or deployment. Legacy manifests keep legacy state and packet operations. Existing state/user files are never overwritten. Byte hashes and recorded review claims are not publisher authentication or verified visual acceptance. [Source delivery report](docs/cli-overhaul-report.md).
+[CLI runtime guide](docs/cli-runtime-v2.md): safe staged `start`, copy-only pinned `bootstrap`, resumable hash-linked state, explicit approvals and loop transitions, defects/returns, skill-file routing, and current-build-bound evidence attestations. `state status`, `loop next/begin/accept/advance`, `evidence bind/record` are real commands; none execute tests, manifest scripts, providers or deployment. Legacy manifests keep legacy state and packet operations; there is no automatic migration. Existing state/user files are never overwritten. Byte hashes and recorded review claims are not publisher authentication or verified visual acceptance. [Source delivery report](docs/cli-overhaul-report.md).
 
 ## Local Development
 

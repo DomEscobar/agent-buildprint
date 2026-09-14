@@ -14,7 +14,7 @@ try {
   const files = walk(packet);
   const manifest = path.join(tmp, 'package.json'), target = path.join(tmp, 'target');
   fs.writeFileSync(manifest, JSON.stringify({ slug: 'guided-2d-game', files: files.map((f) =>
-    ({ path: path.relative(packet, f), rawUrl: pathToFileURL(f).href })) }));
+    ({ path: path.relative(packet, f).split(path.sep).join('/'), rawUrl: pathToFileURL(f).href })) }));
   execFileSync(process.execPath, [path.join(repo, 'bin/agb.js'), 'start', manifest, target], { stdio: 'pipe' });
   const snapshot = path.join(target, '.buildprint/snapshots');
   for (const file of files) assert.deepEqual(fs.readFileSync(path.join(snapshot, path.relative(packet, file))), fs.readFileSync(file));

@@ -46,7 +46,7 @@ function syncTree(root) {
   for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
     const file = inside(root, entry.name)
     if (entry.isDirectory()) syncTree(file)
-    else { const fd = fs.openSync(file, 'r'); try { fs.fsyncSync(fd) } finally { fs.closeSync(fd) } }
+    else { const fd = fs.openSync(file, process.platform === 'win32' ? 'r+' : 'r'); try { fs.fsyncSync(fd) } finally { fs.closeSync(fd) } }
   }
   syncDir(root)
 }
@@ -88,7 +88,7 @@ export async function bootstrap(ref, target, options, legacyStart) {
         initialize(dir, source)
         const phaseReading = source.manifest.instructions?.phaseReadOrder
         const phaseNote = phaseReading ? '\nPhase-local reading (only when that phase is applicable; active loop via loop next):\n' + Object.entries(phaseReading).map(([phase, files]) => `- ${phase}: ${files.map(f => `snapshots/${f}`).join(', ')}`).join('\n') + '\nDo not pre-read future loops or handover.\n' : ''
-        put(inside(dir, 'next-agent.md'), Buffer.from('# Next agent\n\nRead PROJECT_CONTRACT.md and snapshots/BUILDPRINT.md, then `agb state status .` and `agb loop next .`. Read-only snapshot loop-index is the packet default, not mutable progress. HEAD.json selects authoritative versioned state; never hand-edit it.\n\nAsk at most three independently answerable unresolved decisions per batch; draft reversible defaults and preserve approvals and full agreed scope. Mobile-first UX before UI implementation. Reuse available framework skills; do not auto-write harness skills. Tests, captures, reviews, dependency/script execution, uploads, paid calls and deployment require the actual owner\'s applicable authorization. Missing capabilities stay unverified.\n' + phaseNote))
+        put(inside(dir, 'next-agent.md'), Buffer.from('# Next agent\n\nRead PROJECT_CONTRACT.md and snapshots/BUILDPRINT.md, then `agb state status .` and `agb loop next .`. Read-only snapshot loop-index is the packet default, not mutable progress. HEAD.json selects authoritative versioned state; never hand-edit it.\n\nAsk at most three independently answerable unresolved decisions per batch; preserve approvals and full agreed scope. Follow the agreed devices and UX. When the loop declares skill dependencies, open the catalog and required files reported by `loop next`, plus optional skills that apply to the approved technique. Available files and hashes do not prove they were read or followed. Reuse upstream skills without copying a competing pack.\n\nWithin authorized implementation, run the relevant build, tests and requested visual/gameplay checks without asking for repeated permission. Respect explicit execution restrictions; paid generation, external uploads and publication must stay within existing authorization. Missing capabilities remain unverified.\n' + phaseNote))
         for (const name of ['progress', 'decisions', 'blockers']) put(inside(dir, `${name}.md`), Buffer.from(`# ${name}\n\nSupporting notes only. PROJECT_CONTRACT.md owns requirements; versioned CLI state owns routing and recorded attestations; upstream framework receipts own detailed production evidence.\n`))
       } else {
         // Feed already bounded/verified bytes through the existing legacy bootstrap writer.

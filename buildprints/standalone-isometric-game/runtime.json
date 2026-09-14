@@ -4,8 +4,7 @@
     "contract",
     "setup",
     "mobile-ux",
-    "asset-policy",
-    "acceptance-execution"
+    "asset-policy"
   ],
   "bindingFiles": [
     "PROJECT_CONTRACT.md",
@@ -40,7 +39,22 @@
       "productionStages": [
         "preflight",
         "layout"
-      ]
+      ],
+      "skills": {
+        "required": [
+          "isometric-visual-loop"
+        ],
+        "optional": [
+          {
+            "id": "consistent-tileset-authoring",
+            "when": "Connected terrain or composed ground: read the recipe matching the approved technique."
+          },
+          {
+            "id": "multi-tile-asset-assembly",
+            "when": "Buildings, bridges, openings or raised walking surfaces need measured support and depth."
+          }
+        ]
+      }
     },
     {
       "id": "02-playable-calibration",
@@ -52,8 +66,7 @@
         "contract",
         "setup",
         "mobile-ux",
-        "asset-policy",
-        "acceptance-execution"
+        "asset-policy"
       ],
       "requirements": [
         "02-playable-calibration",
@@ -68,7 +81,35 @@
       "fullCoverage": false,
       "productionStages": [
         "assembly"
-      ]
+      ],
+      "skills": {
+        "required": [
+          "isometric-visual-loop",
+          "isometric-art-integration"
+        ],
+        "optional": [
+          {
+            "id": "consistent-tileset-authoring",
+            "when": "Connected terrain or composed ground: read the recipe matching the approved technique."
+          },
+          {
+            "id": "multi-tile-asset-assembly",
+            "when": "Buildings, bridges, openings or raised walking surfaces need measured support and depth."
+          },
+          {
+            "id": "game-asset-generation",
+            "when": "The approved asset family needs new generated raster artwork or cutout preparation."
+          },
+          {
+            "id": "directional-sprite-authoring",
+            "when": "Authoring or repairing the promised actor facings and action poses."
+          },
+          {
+            "id": "animated-environments",
+            "when": "Authoring or repairing promised water, foliage or other scenery motion."
+          }
+        ]
+      }
     },
     {
       "id": "03-complete-world",
@@ -80,8 +121,7 @@
         "contract",
         "setup",
         "mobile-ux",
-        "asset-policy",
-        "acceptance-execution"
+        "asset-policy"
       ],
       "requirements": [
         "03-complete-world"
@@ -95,7 +135,27 @@
       "fullCoverage": false,
       "productionStages": [
         "static"
-      ]
+      ],
+      "skills": {
+        "required": [
+          "isometric-visual-loop",
+          "isometric-art-integration"
+        ],
+        "optional": [
+          {
+            "id": "consistent-tileset-authoring",
+            "when": "Connected terrain or composed ground: read the recipe matching the approved technique."
+          },
+          {
+            "id": "multi-tile-asset-assembly",
+            "when": "Buildings, bridges, openings or raised walking surfaces need measured support and depth."
+          },
+          {
+            "id": "game-asset-generation",
+            "when": "The approved asset family needs new generated raster artwork or cutout preparation."
+          }
+        ]
+      }
     },
     {
       "id": "04-gameplay-motion",
@@ -107,8 +167,7 @@
         "contract",
         "setup",
         "mobile-ux",
-        "asset-policy",
-        "acceptance-execution"
+        "asset-policy"
       ],
       "requirements": [
         "04-gameplay-motion"
@@ -122,7 +181,26 @@
       "fullCoverage": false,
       "productionStages": [
         "motion"
-      ]
+      ],
+      "skills": {
+        "required": [
+          "isometric-visual-loop"
+        ],
+        "optional": [
+          {
+            "id": "game-asset-generation",
+            "when": "The approved asset family needs new generated raster artwork or cutout preparation."
+          },
+          {
+            "id": "directional-sprite-authoring",
+            "when": "Authoring or repairing the promised actor facings and action poses."
+          },
+          {
+            "id": "animated-environments",
+            "when": "Authoring or repairing promised water, foliage or other scenery motion."
+          }
+        ]
+      }
     },
     {
       "id": "05-visual-gameplay-acceptance",
@@ -134,8 +212,7 @@
         "contract",
         "setup",
         "mobile-ux",
-        "asset-policy",
-        "acceptance-execution"
+        "asset-policy"
       ],
       "requirements": [
         "05-visual-gameplay-acceptance"
@@ -149,7 +226,13 @@
       "fullCoverage": true,
       "productionStages": [
         "final"
-      ]
+      ],
+      "skills": {
+        "required": [
+          "isometric-visual-loop"
+        ],
+        "optional": []
+      }
     },
     {
       "id": "06-local-handover",
@@ -161,8 +244,7 @@
         "contract",
         "setup",
         "mobile-ux",
-        "asset-policy",
-        "acceptance-execution"
+        "asset-policy"
       ],
       "requirements": [
         "06-local-handover"
@@ -181,12 +263,19 @@
         "static",
         "motion",
         "final"
-      ]
+      ],
+      "skills": {
+        "required": [
+          "isometric-visual-loop"
+        ],
+        "optional": []
+      }
     }
   ],
   "productionEvidence": {
     "baseline": ".game-quality/baseline.json",
     "receipts": ".game-quality/production-receipts",
     "validationVersion": 2
-  }
+  },
+  "skillRoot": "node_modules/isometric-framework/skills"
 }

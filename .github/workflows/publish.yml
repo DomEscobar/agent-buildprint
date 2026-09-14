@@ -1,4 +1,4 @@
-name: Publish package
+name: Validate and publish package
 
 on:
   push:
@@ -6,40 +6,130 @@ on:
       - 'v*'
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
-  publish:
+  validate:
+    name: ${{ matrix.os }} Node ${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: ['20', '22']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: DomEscobar/isometric-framework
+          ref: 7542ff68de04ca6ea6736974b54ec5b5dde1cc33
+          path: .framework-test
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - name: Install package dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Run runtime regressions against the separately checked-out pinned framework
+        env:
+          AGB_TEST_FRAMEWORK: ${{ github.workspace }}/.framework-test
+        run: npm run check:runtime:regressions
+      - name: Check published packets
+        run: npm run check:packets
+      - name: Run existing package compatibility gates
+        run: |
+          npm run check:guided-2d-game
+          npm run check:capabilities
+          npm run check:authors
+          npm run check:capability:regressions
+      - name: Exercise the actual packed install
+        run: npm run check:package
+
+  package:
+    name: Build validated release tarball
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - name: Install package dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Pack and validate the exact release tarball
+        run: node scripts/check-packed-cli.mjs --output-dir "${{ runner.temp }}/agent-buildprint-release"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-buildprint-tarball
+          path: ${{ runner.temp }}/agent-buildprint-release/*.tgz
+          if-no-files-found: error
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+  publish:
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: agent-buildprint-tarball
+          path: release-tarball
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Verify tag matches package version
-        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
         run: |
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match package.json version $PACKAGE_VERSION"
-            exit 1
-          fi
-
-      - name: Publish to npm
+          package_version="$(node -p "require('./package.json').version")"
+          tag_version="${GITHUB_REF_NAME#v}"
+          test "$package_version" = "$tag_version"
+      - name: Publish the validated artifact or verify existing registry integrity
+        shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          PACKAGE_NAME="$(node -p "require('./package.json').name")"
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version >/dev/null 2>&1; then
-            echo "$PACKAGE_NAME@$PACKAGE_VERSION is already published; skipping npm publish."
-            exit 0
+          set -euo pipefail
+          test -n "$NODE_AUTH_TOKEN"
+          tarballs=(./release-tarball/*.tgz)
+          test "${#tarballs[@]}" -eq 1
+          tarball="${tarballs[0]}"
+          test -f "$tarball"
+          package_name="$(node -p "require('./package.json').name")"
+          package_version="$(node -p "require('./package.json').version")"
+          local_integrity="$(node -e "const fs=require('fs'),crypto=require('crypto'); process.stdout.write('sha512-'+crypto.createHash('sha512').update(fs.readFileSync(process.argv[1])).digest('base64'))" "$tarball")"
+          set +e
+          registry_integrity="$(npm view "$package_name@$package_version" dist.integrity --json 2>registry-error.txt)"
+          registry_status=$?
+          set -e
+          if [ "$registry_status" -eq 0 ]; then
+            registry_integrity="${registry_integrity#\"}"
+            registry_integrity="${registry_integrity%\"}"
+            test "$registry_integrity" = "$local_integrity"
+            echo "Registry already has identical $package_name@$package_version; skipping publish."
+          elif grep -q 'E404' registry-error.txt; then
+            npm publish "$tarball" --ignore-scripts --access public --tag latest
+            published_integrity=''
+            for attempt in 1 2 3 4 5; do
+              set +e
+              published_integrity="$(npm view "$package_name@$package_version" dist.integrity --json 2>registry-error.txt)"
+              published_status=$?
+              set -e
+              published_integrity="${published_integrity#\"}"
+              published_integrity="${published_integrity%\"}"
+              if [ "$published_status" -eq 0 ] && [ "$published_integrity" = "$local_integrity" ]; then
+                break
+              fi
+              if [ "$attempt" -eq 5 ]; then
+                cat registry-error.txt
+                exit 1
+              fi
+              sleep "$attempt"
+            done
+            test "$published_integrity" = "$local_integrity"
+          else
+            cat registry-error.txt
+            exit "$registry_status"
           fi
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          npm publish --access public

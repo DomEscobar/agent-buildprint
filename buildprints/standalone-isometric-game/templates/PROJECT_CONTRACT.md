@@ -7,7 +7,7 @@ This is an unapproved outline, not a game choice or evidence. Populate the game'
 - Status: unapproved / approved (record actual owner decision, date and boundary).
 - Prior decisions reused, source and exact scope:
 - `confirmed_by: user` or `confirmed_by: explicit_user_delegation`, with delegated boundaries:
-- Explicit constraints on implementation, paid generation, tests, captures, independent review and release:
+- Explicit constraints or opt-outs for implementation verification, paid generation/uploads, captures, independent review and release:
 
 ## Experience and full scope
 - Player fantasy, repeated verbs and observable feedback:
@@ -35,10 +35,10 @@ For each screen/state: purpose, information hierarchy, next action, touch intera
 
 ## Assets, rights and spending
 - Technique per asset family; supplied/licensed/generated/composed/layered selection:
-- Preferred WaveSpeed + (RetroDiffusion OR Media4Agents); exact edit and Bria capabilities:
+- Chosen technique and any optional provider route; exact edit/removal capabilities when selected:
 - Current access/price evidence or missing capability; no paid probe without permission:
 - Approved ceiling/currency, permitted operations/uploads, spend owner and retry boundary:
-- Licensed free fallback decision and explicit quality limitation; custom SVG last resort, not equivalent:
+- Licensed free, user-owned or authored route decision; quality criteria and any genuine limitations:
 - Provenance/attribution record location; secrets handled outside project/chat:
 
 ## Data, platform and release authority
@@ -49,7 +49,7 @@ For each screen/state: purpose, information hierarchy, next action, touch intera
 - No implied push/deploy or provider spend:
 
 ## Requested acceptance
-- Explicit owner request for actual running-build visual/gameplay acceptance (or refusal and unverified claim ceiling):
+- Required running-build visual/gameplay acceptance, or an explicit opt-out and unverified claim ceiling:
 - Required devices, complete normal journeys, motion and source/build-bound capture coverage:
 - Independent reviewer when possible; whether independence is mandatory; honest self-review fallback:
 - Performance measurement authorization and agreed budget with renderer/device context:

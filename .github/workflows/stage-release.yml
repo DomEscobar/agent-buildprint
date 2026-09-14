@@ -1,0 +1,122 @@
+name: Stage validated npm release
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Exact successful 0.1.0 validation run ID (34822919792)
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify the requested validation run and locate its sole package artifact
+        id: validated-run
+        uses: actions/github-script@v7
+        env:
+          RUN_ID: ${{ inputs.run_id }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const runId = process.env.RUN_ID
+            const failures = []
+            const expectedHead = 'cf4f1fcc22460329006cc200a232067689f7c700'
+            if (!/^\d+$/.test(runId)) failures.push('run_id must be a numeric GitHub Actions run ID')
+            if (runId !== '34822919792') failures.push('this staging workflow only accepts the exact validated 0.1.0 run 34822919792')
+            if (failures.length) throw new Error(failures.join('; '))
+            const { owner, repo } = context.repo
+            const { data: run } = await github.rest.actions.getWorkflowRun({ owner, repo, run_id: Number(runId) })
+            if (run.repository.full_name !== `${owner}/${repo}`) failures.push('validation run belongs to a different repository')
+            if (run.path !== '.github/workflows/publish.yml' && !run.path.startsWith('.github/workflows/publish.yml@')) failures.push('validation run did not use .github/workflows/publish.yml')
+            if (run.status !== 'completed') failures.push('validation run is not completed')
+            if (run.head_sha !== expectedHead) failures.push('validation run does not match the tested v0.1.0 source SHA')
+            const { data: jobsPage } = await github.rest.actions.listJobsForWorkflowRun({ owner, repo, run_id: Number(runId), filter: 'all', per_page: 100 })
+            const jobs = jobsPage.jobs
+            const required = ['ubuntu-latest Node 20', 'ubuntu-latest Node 22', 'windows-latest Node 20', 'windows-latest Node 22', 'Build validated release tarball']
+            for (const name of required) {
+              const job = jobs.filter(item => item.name === name).sort((a, b) => Date.parse(b.started_at || 0) - Date.parse(a.started_at || 0) || b.id - a.id)[0]
+              if (!job || job.status !== 'completed' || job.conclusion !== 'success') failures.push(`required validation job did not succeed: ${name}`)
+            }
+            // The publish job may fail: this workflow exists to stage its already-validated artifact.
+            const { data: artifactsPage } = await github.rest.actions.listWorkflowRunArtifacts({ owner, repo, run_id: Number(runId), per_page: 100 })
+            const artifacts = artifactsPage.artifacts
+            const matches = artifacts.filter(item => item.name === 'agent-buildprint-tarball' && !item.expired)
+            if (matches.length !== 1) failures.push('expected exactly one unexpired agent-buildprint-tarball artifact')
+            if (failures.length) throw new Error(failures.join('; '))
+            core.setOutput('artifact_id', String(matches[0].id))
+            core.setOutput('head_sha', run.head_sha)
+      - name: Download the validated artifact without rebuilding it
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.run_id }}
+          artifact-ids: ${{ steps.validated-run.outputs.artifact_id }}
+          merge-multiple: true
+          path: staged-artifact
+      - name: Verify exact tarball metadata and that this version is not public
+        id: tarball
+        shell: bash
+        run: |
+          set -euo pipefail
+          tarballs=(./staged-artifact/*.tgz)
+          test "${#tarballs[@]}" -eq 1
+          tarball="$(realpath "${tarballs[0]}")"
+          test -f "$tarball"
+          tar -xOf "$tarball" package/package.json > packed-package.json
+          node -e "const p=require('./packed-package.json'); if(p.name!=='agent-buildprint'||p.version!=='0.1.0') throw new Error('unexpected packed package identity: '+p.name+'@'+p.version)"
+          expected_integrity='sha512-2INpAM7VRSOQQvkxCaacvXrzqINDani0sO6SJ6Qli/JkjYJ0LggR16mE0me8R4fgs7Zv2P3HQQ6w0FOdGeFBeA=='
+          actual_integrity="$(node -e "const fs=require('fs'),crypto=require('crypto'); process.stdout.write('sha512-'+crypto.createHash('sha512').update(fs.readFileSync(process.argv[1])).digest('base64'))" "$tarball")"
+          test "$actual_integrity" = "$expected_integrity"
+          set +e
+          npm view agent-buildprint@0.1.0 version --json > registry-version.json 2>registry-error.txt
+          registry_status=$?
+          set -e
+          if [ "$registry_status" -eq 0 ]; then
+            echo 'agent-buildprint@0.1.0 is already public; refusing to stage a duplicate version.' >&2
+            exit 1
+          fi
+          grep -q 'E404' registry-error.txt
+          echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
+      - name: Install the pinned npm staging CLI without lifecycle scripts
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Verify Node and npm staging prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --global npm@11.19.1 --ignore-scripts --no-audit --no-fund
+          node -e "const [major,minor]=process.versions.node.split('.').map(Number); if(major<22||(major===22&&minor<14)) throw new Error('Node 22.14.0 or newer is required')"
+          node -e "const {execFileSync}=require('child_process'); const [major,minor]=execFileSync('npm',['--version'],{encoding:'utf8'}).trim().split('.').map(Number); if(major<11||(major===11&&minor<15)) throw new Error('npm 11.15.0 or newer is required')"
+      - name: Stage the exact validated artifact for manual npm approval
+        id: npm-stage
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          TARBALL: ${{ steps.tarball.outputs.tarball }}
+          VALIDATED_RUN: ${{ inputs.run_id }}
+          VALIDATED_SHA: ${{ steps.validated-run.outputs.head_sha }}
+        run: |
+          set -euo pipefail
+          test -n "$NODE_AUTH_TOKEN"
+          npm stage publish "$TARBALL" --ignore-scripts --access public --tag latest --json > stage-response.json
+          stage_id="$(node -e "const x=require('./stage-response.json'); const find=v=>v&&typeof v==='object'?(v.stageId||v.stage_id||v.id||Object.values(v).map(find).find(Boolean)):null; process.stdout.write(String(find(x)||'unavailable'))")"
+          echo "stage_id=$stage_id" >> "$GITHUB_OUTPUT"
+          {
+            echo '## npm release staged'
+            echo
+            printf 'Validated workflow run: `%s`\n' "$VALIDATED_RUN"
+            printf 'Validated source SHA: `%s`\n' "$VALIDATED_SHA"
+            printf 'Stage ID: `%s`\n' "$stage_id"
+            echo
+            echo 'This workflow staged the exact validated tarball. It did **not** approve or publish the package.'
+            echo 'A maintainer must review the staged package and explicitly approve it with npm 2FA using npmjs.com or `npm stage approve <stage-id>`.'
+          } >> "$GITHUB_STEP_SUMMARY"

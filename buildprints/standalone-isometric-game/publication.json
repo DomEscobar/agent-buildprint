@@ -7,50 +7,18 @@
   "category": "Product OS",
   "tier": "agent-grade",
   "status": "dry-run-needed",
-  "runtime": [
-    "Standalone browser game",
-    "Isometric Framework"
-  ],
-  "stack": [
-    "TypeScript",
-    "Vite",
-    "PixiJS",
-    "Pinned Isometric Framework"
-  ],
-  "summary": "Full original isometric game workflow: one approved contract, mobile-first UX, pinned source CLI and evidence-bound acceptance. Source runtime available; npm v2 unreleased and game acceptance unverified.",
+  "runtime": ["Standalone browser game", "Isometric Framework"],
+  "stack": ["TypeScript", "Vite", "PixiJS", "Pinned Isometric Framework"],
+  "summary": "Full original isometric game workflow: one approved contract, mobile-first UX, versioned v2 CLI routing and evidence-bound acceptance. The current source adds production-gate routing beyond the immutable 0.1.0 package.",
   "promise": "Guides the entire agreed game without shrinking it to calibration or copying framework demos.",
-  "includes": [
-    "Kernel packet and six full-game loops",
-    "One PROJECT_CONTRACT.md outline with preserved approvals",
-    "Pinned upstream skill routing and v3 visual acceptance reuse",
-    "Exact asset-stack policy and capability gaps",
-    "Local package manifest and scaffold-first bootstrap instructions",
-    "Provenance, spending and capture templates"
-  ],
-  "risks": [
-    "npm agent-buildprint@0.0.17 lacks the v2 runtime. Use the pinned source commit and node bin/agb.js, not installed public agb.",
-    "Framework is not on npm; pinned local build:package includes prerequisite checks and requires separate execution authorization.",
-    "Bria and Media4Agents routes require separately verified authorized integrations and budget approval.",
-    "Actual game captures and genuine review capability remain required; unavailable evidence is unverified, not accepted.",
-    "Independent raster measurement, host event-to-render latency and semantic gait/legal-motion verification remain upstream/host work; the CLI checks recorded claims, not pixels."
-  ],
-  "checks": [
-    "45 offline runtime regressions passed, including synthetic pinned-template copy",
-    "Generated packet payloads and hosted-manifest loader byte validation passed",
-    "Future game acceptance requires explicit user authorization; structural checks do not prove visual/motion/gameplay quality"
-  ],
-  "publicStatus": {
-    "label": "Source CLI available \u00b7 game unverified",
-    "explanation": "Published packet and tested pinned source CLI are available. Public agent-buildprint@0.0.17 lacks v2; use the exact source checkout in README.md or read directly. Offline synthetic receipt/copy regressions are not a built framework package, game acceptance or independent pixel verification."
-  },
+  "includes": ["Kernel packet and six full-game loops", "One PROJECT_CONTRACT.md outline with preserved approvals", "Pinned upstream skill routing and v3 visual acceptance reuse", "Technique-driven optional providers and capability gaps", "Local package manifest and scaffold-first bootstrap instructions", "Provenance, spending and capture templates"],
+  "risks": ["Historical npm agent-buildprint@0.0.17 lacks the v2 runtime. Version 0.1.0 supplies initial v2 routing; the later production-gate source policy needs one fresh matching source checkout for its CLI and local packet.", "Framework is not on npm; pinned local build:package includes prerequisite checks that run with authorized implementation unless explicitly restricted.", "Bria and Media4Agents routes require separately verified authorized integrations and budget approval.", "Actual game captures and genuine review capability remain required; unavailable evidence is unverified, not accepted.", "Independent raster measurement, host event-to-render latency and semantic gait/legal-motion verification remain upstream/host work; the CLI checks recorded claims, not pixels."],
+  "checks": ["Source runtime and packaged routing checks are bounded CLI verification, not game acceptance", "Authorized implementation runs routine verification unless explicitly restricted", "Do not claim visual, motion or gameplay acceptance from structural checks"],
+  "publicStatus": {"label": "v2 CLI routing · game unverified", "explanation": "Version 0.1.0 supplies the bundled initial v2 packet. Current source production-gate additions and existing snapshots are separate; no game or visual acceptance is claimed."},
   "difficulty": "Advanced",
   "updatedAt": "2026-09-14T08:25:01Z",
-  "copyPrompt": "Use the Full Standalone Isometric Game Buildprint at https://agent-buildprint.com/buildprints/standalone-isometric-game/agent.md.\nFetch https://agent-buildprint.com/buildprints/standalone-isometric-game/package.json.\nRead order: `BUILDPRINT.md` -> `00-goal.md`. Use https://agent-buildprint.com/buildprints/standalone-isometric-game/files/package.json for instructions.phaseReadOrder. Then load only the applicable phase entry and the active loop; do not pre-read all six loops or handover.\nRead README.md and references/cli-integration.md before executing commands. Public npm agent-buildprint@0.0.17 does not include v2. The complete CLI source is available at https://github.com/DomEscobar/agent-buildprint/tree/a7b712b56c218631821ed1626285035b2c7010cd; clone into a new directory and pin that commit, then invoke node bin/agb.js as documented. Do not overwrite an existing checkout. Direct reading remains available without CLI execution. Remote v2 start requires the real manifest SHA-256 from a separately trusted channel, and verifies each payload digest; the website sidecar alone is not independent trust. Alternatively use the local packet manifest in the pinned source checkout.\nPreserve one PROJECT_CONTRACT.md and all prior approvals; ask at most three independently answerable unresolved decisions per batch and draft reversible defaults. A source checkout or packet load is not authorization for game implementation, tests, provider spending or deployment. Keep all six loops and the full agreed game scope; calibration is not the final game. Follow the pinned framework source-build path in 01-setup.md; no prebuilt registry archive is supplied and build:package includes prerequisite checks requiring authorization.\nPreferred assets: WaveSpeed + (RetroDiffusion OR Media4Agents), with bytedance/seedream-v5.0-pro/edit and bria/remove-background, subject to actual access and bounded spending approval. Preserve full visual, motion, gameplay, reviewer and byte-bound evidence requirements. Missing capabilities remain unverified, never simulated approvals or accepted evidence. CLI records attestations, not verified pixels or gameplay. Finish with an honest evidence/blocker handover.",
-  "sourceCli": {
-    "repository": "https://github.com/DomEscobar/agent-buildprint",
-    "commit": "a7b712b56c218631821ed1626285035b2c7010cd",
-    "npmVersion": "0.0.17",
-    "npmSupportsRuntime": false,
-    "claim": "45 offline runtime tests passed; synthetic copy/receipt plumbing only, not framework build or game acceptance."
-  }
+  "copyPrompt": "Use the Full Standalone Isometric Game Buildprint at https://agent-buildprint.com/buildprints/standalone-isometric-game/agent.md.\nRead BUILDPRINT.md, then 00-goal.md. For hosted phase routing, use https://agent-buildprint.com/buildprints/standalone-isometric-game/files/package.json and load only the applicable phase entry and active loop.\nScaffold the pinned framework host first. For released v2 routing, run npm install --save-dev agent-buildprint@0.1.0 and npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json . The later current-source production-gate policy requires one fresh source checkout's matching CLI and local packet: record git rev-parse HEAD and keep that checkout unchanged for the run. Neither route updates existing snapshots. Remote v2 start requires a manifest SHA-256 from a separately trusted source.\nPreserve one PROJECT_CONTRACT.md and all prior approvals. Loading a packet does not authorize provider spending, uploads, publication or deployment. Authorized implementation includes routine build, test and contract-required acceptance work unless explicitly restricted. Choose asset technique before optional providers. CLI records byte-bound attestations, not verified pixels or gameplay. Finish with an honest evidence/blocker handover.",
+  "sourceCli": {"repository": "https://github.com/DomEscobar/agent-buildprint", "releaseTag": "v0.1.0", "npmVersion": "0.1.0", "npmSupportsRuntime": true, "claim": "0.1.0 packages initial v2 routing. For current source additions, use one fresh checkout's matching CLI and local packet, record git rev-parse HEAD, and keep it unchanged for the run."},
+  "productionPolicyHistory": {"commit": "a7b712b56c218631821ed1626285035b2c7010cd", "claim": "Historical introduction of the production-gate policy; not the recommended current CLI checkout."},
+  "historicalSourceCli": {"repository": "https://github.com/DomEscobar/agent-buildprint", "commit": "24ff2c5cf4291a8a7f45ce5ce58e6ee21eb5d636", "npmVersion": "0.0.17", "npmSupportsRuntime": false, "claim": "Historical source snapshot; it lacks the 0.1.0 release changes."}
 }

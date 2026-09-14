@@ -1,6 +1,6 @@
 # Contract review and honest completion
 
-This is the FUTURE GAME acceptance step, only under explicit user authorization recorded during alignment. No tests, benchmarks, browser QA or independent review are run to author this packet.
+This is the game acceptance step after authorized implementation reaches it. Run the required tests, captures, review and measurements unless the approved contract explicitly opts out; disclose every resulting unverified dimension.
 
 Read `00-goal.md`, the approved `PROJECT_CONTRACT.md`, the active loop contract (Building objective), and `references/visual-acceptance.md`. A fresh-context reviewer receives current frozen inputs, real captures/playback, targets and prior defects, not builder chat or builder rationale. The builder must not score its own work as independent: fabricated independence is REVIEW_INVALID. When no independent reviewer is available, upstream self-review is explicitly labeled; a contractual independent-review requirement remains blocked.
 

@@ -131,6 +131,49 @@
                 "final"
               ]
             }
+          },
+          "skills": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "required",
+              "optional"
+            ],
+            "properties": {
+              "required": {
+                "type": "array",
+                "maxItems": 100,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]{0,95}$"
+                }
+              },
+              "optional": {
+                "type": "array",
+                "maxItems": 100,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "when"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9-]{0,95}$"
+                    },
+                    "when": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Requires skillRoot. IDs must be unique across required and optional. Optional skills are conditional suggestions, not automatic prerequisites."
           }
         }
       }
@@ -164,6 +207,12 @@
           "description": "Optional reader policy. Omitted/1 preserves historical partial-plan behavior; 2 requires complete upstream production coverage and current artifact linkage. Not an upstream schema version."
         }
       }
+    },
+    "skillRoot": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "description": "Optional project-relative installed skill directory containing README.md and <id>/SKILL.md; runtime rejects unsafe or symlinked paths."
     }
   },
   "description": "Dependencies must precede dependents. Runtime checks unknown IDs, included files and fullCoverage plan requirement."

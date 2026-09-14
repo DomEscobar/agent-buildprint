@@ -13,7 +13,7 @@ const digest = file => hash(bytes(file, 256 * 1024 * 1024))
 function protectedFiles(root, expected, actual, label) {
   insist(object(actual) && same(expected, actual), `production ${label} binding changed or incomplete`)
   for (const [file, sha] of Object.entries(actual)) {
-    const rel = path.relative(root, file)
+    const rel = path.relative(root, file).split(path.sep).join('/')
     insist(inside(root, rel) === file && digest(file) === sha, `production ${label} stale`)
   }
 }
@@ -138,6 +138,6 @@ export function productionCurrent(root, definition, loop) {
       insist(raw.length > 0 && hash(raw) === item.sha256 && extensions[check.evidenceKind].includes(path.extname(evidenceFile).toLowerCase()), `production evidence changed/invalid: ${check.id}`)
     }
     insist(check.views.every(view => receipt.evidence.some(e => e.view === view)), `production evidence views incomplete: ${check.id}`)
-    return { check: check.id, path: path.relative(root, file), sha256: digest(file) }
+    return { check: check.id, path: path.relative(root, file).split(path.sep).join('/'), sha256: digest(file) }
   })
 }

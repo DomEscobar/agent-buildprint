@@ -1,6 +1,19 @@
 # AGB local runtime v2
 
-Implementation status: source-authored; regression tests, CLI execution, builds, browser QA and independent review **NOT RUN** for this overhaul. The commands below exist in `bin/agb.js` and `src/runtime/`; examples are future operator actions, not executed proof.
+## 0.1.0 distribution
+
+`npm install -g agent-buildprint@0.1.0` installs this runtime, its documentation and bundled Buildprint packets. This document describes package contents and does not assert current registry availability. The historical `0.0.17` package did not include v2.
+
+For a scaffolded game host, the most portable way to start the bundled standalone packet is a local development dependency and `npx --no-install`:
+
+```sh
+npm install --save-dev agent-buildprint@0.1.0
+npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json .
+```
+
+`start` creates packet state only; it does not scaffold the framework host. Npm publication packages the packet but does not itself change hosted manifest bytes or existing snapshots. The normal release workflow may synchronize website content separately. Remote v2 starts still require an exact `--manifest-sha256` from a separately trusted channel.
+
+Local verification (2026-09-14): all 40 runtime regression cases passed on Windows, including the pinned-template scaffold case. A separate real-package smoke check verified missing-to-available skill routing after host dependency installation without changing revision or approvals. Independent source and instruction review completed. This is CLI evidence, not game, browser or visual acceptance; commands below are usage examples unless identified as executed checks.
 
 ## Compatibility and existing-solution boundary
 
@@ -25,7 +38,7 @@ agb start https://publisher.example/packet/package.json /new/project --manifest-
 agb bootstrap /trusted/packet/package.json /new/game --allow-scaffold --framework /pinned/checkout --archive /trusted/isometric-framework-0.1.0.tgz --archive-sha256 <trusted-sha256>
 ```
 
-Replace angle-bracket values; do not paste them literally. The standalone packet is published through https://agent-buildprint.com/buildprints/standalone-isometric-game/package.json. Public npm 0.0.17 lacks this runtime; use the pinned source checkout documented by the packet. The website digest sidecar is byte identity, not independent trust. `--resume` only supports v2, verifies HEAD/history/source-record/snapshot bytes, and requires the same manifest digest AND payload inventory. It does not reset state, redownload over snapshots, change approvals or rerun scaffold. For offline continuation, use `state status` / `loop next`; these need no manifest download. Changed manifest/source bytes require a separately planned migration, never an implicit refresh.
+Replace angle-bracket values; do not paste them literally. The standalone packet is bundled with the `0.1.0` npm package and may also be supplied by a compatible checkout. The hosted standalone manifest remains a separately published website artifact. The website digest sidecar is byte identity, not independent trust. `--resume` only supports v2, verifies HEAD/history/source-record/snapshot bytes, and requires the same manifest digest AND payload inventory. It does not reset state, redownload over snapshots, change approvals or rerun scaffold. For offline continuation, use `state status` / `loop next`; these need no manifest download. Changed manifest/source bytes require a separately planned migration, never an implicit refresh.
 
 `bootstrap` is a deliberately pinned isometric adapter, not manifest shell execution. It reads committed ordinary template blobs from framework commit `7542ff68de04ca6ea6736974b54ec5b5dde1cc33`, checks tree `5363d058a3e15e6025a5a66bda09da343ca5215e`, renames template `gitignore`, and installs the archive as an opaque vendor file with a local package dependency. It never executes the framework scaffold script, package manager, install hooks, tests or build. `--allow-scaffold` consents only to these copies. A dirty checkout is not changed; template reads come from pinned Git objects, not the worktree. The adapter refuses other pins until source-reviewed adaptation. Git is invoked with fixed argument arrays, replacement objects disabled, transport protocols/hooks/fsmonitor disabled, no shell and no checkout. Required Git objects must already be present; the adapter does not fetch them. It does not install framework skill files separately.
 
@@ -103,7 +116,7 @@ When evidence cannot be produced, record a non-pass verdict with an explicit `ca
 
 CLI output explicitly says `implemented_attested`, `functional_attested`, `visual_attested`. A selected `pass` is a human/tool receipt verdict; it never becomes a CLI-authenticated functional/visual PASS. Bind the actual running candidate, inspect normal journeys and media, use a genuine critic where available, preserve failures, fix source/assets, then bind and capture again. Do not generate evidence records for work that has not run. No automatic pixels, reviewer, provider, budget or authentication adapter is implied.
 
-## Optional phase-specific upstream receipt gates (local patch)
+## Optional phase-specific upstream receipt routing
 
 A loops/v2 definition may add `productionEvidence: {baseline, receipts}` with project-relative paths and an `acceptancePlan`. Each opted-in loop may select `productionStages`, a nonempty unique subset of preflight/layout/assembly/static/motion/final. Other packets and existing snapshots retain their old behavior. Standalone selects preflight/layout for loop 01 and assembly for loop 02; no generic motion gate is added to foundation work.
 
@@ -117,5 +130,53 @@ Manifest `instructions.readOrder` is the initial reading entry; optional `instru
 
 Targeted synthetic regression command: `node --test scripts/runtime-v2-production.test.mjs`. Fixtures are explicitly not game acceptance or provider proof.
 
-## Authored regression coverage (unexecuted)
-`npm run check:runtime:regressions` runs the dependency-free Node test sources only when explicitly authorized. The pinned scaffold integration is skipped unless `AGB_TEST_FRAMEWORK` points at a trusted checkout containing the documented commit. Tests use synthetic claim fixtures, never game evidence; their format assertions cannot establish real playback or reviewer independence. No test command, syntax check, package build or CLI smoke test was executed during authoring.
+## Installed skill routing
+
+Definitions may set `skillRoot` to a project-relative directory containing
+`README.md` and `<id>/SKILL.md` files. Each loop can opt in with:
+
+```json
+{
+  "skills": {
+    "required": ["isometric-visual-loop"],
+    "optional": [
+      {"id": "game-asset-generation", "when": "The approved technique needs new generated artwork."}
+    ]
+  }
+}
+```
+
+The standalone packet resolves these under
+`node_modules/isometric-framework/skills`. Other packets may use their own local
+root. `loop next` reports the active loop's files; `state status.skillReadiness`
+reports file paths, availability, SHA-256 and blockers per loop. Missing or invalid
+required files/catalog block `begin`. Optional skills remain conditional and do
+not block a loop merely because they are absent. The agent must read applicable
+optional skills before doing the feature they govern, and report a missing
+capability for that feature. Definitions without skill routing retain their prior
+behavior; existing snapshots do not change on resume.
+
+This resolver performs bounded local file reads for existence and hashing. It
+does not install, execute, copy or inject skills into an agent session. The
+executing agent must open the reported required files and applicable optional
+recipes before work. Hashes establish byte identity, not reading, compliance,
+skill provenance or visual quality. A declared skill root is not a framework pin
+check; use the pinned package installation/provenance workflow separately.
+
+## Windows filesystem behavior
+
+Bootstrap flushes files using writable handles on Windows. Directory fsync is
+unsupported by the Node/Windows path used here, so directory entries are not
+explicitly flushed there. File flushing, exclusive creation, integrity checks and
+recovery records remain in use. Do not claim power-loss durability for directory
+publication on Windows. POSIX directory flushing remains unchanged.
+
+## Regression coverage
+
+`npm run check:runtime:regressions` runs the core, upstream-production and skill
+routing tests. The pinned scaffold integration also runs when `AGB_TEST_FRAMEWORK`
+points at a trusted checkout containing the documented commit. Windows path-link
+tests use directory junctions where file symlink privilege is unavailable.
+Tests use synthetic claim fixtures, never game evidence; format assertions cannot
+establish real playback or reviewer independence. Original authoring records
+describe their historical unexecuted state; report current runs separately.

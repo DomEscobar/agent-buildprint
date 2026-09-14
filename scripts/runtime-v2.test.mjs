@@ -1,4 +1,4 @@
-// AUTHORED, NOT EXECUTED during the overhaul. Run only when explicitly authorized.
+// Runtime regression tests; the original overhaul authored these before execution.
 // Synthetic receipts below test state/claim plumbing; they are NOT game evidence.
 import test from 'node:test'
 import assert from 'node:assert/strict'
@@ -185,14 +185,21 @@ test('traversal, normalized collisions, symlinks and partial sources are refused
   const target = path.join(f.base, 'failed-target')
   await assert.rejects(bootstrap(f.manifest, target, {}, () => {}), /ENOENT/)
   assert.equal(fs.existsSync(target), false)
-  manifest.files = ['link.md']; write(f.manifest, manifest)
-  fs.symlinkSync(path.join(f.project, 'PROJECT_CONTRACT.md'), path.join(f.packet, 'link.md'))
+  if (process.platform === 'win32') {
+    // Junctions exercise the same path-component rejection without symlink privilege.
+    manifest.files = ['linked/PROJECT_CONTRACT.md']
+    fs.symlinkSync(f.project, path.join(f.packet, 'linked'), 'junction')
+  } else {
+    manifest.files = ['link.md']
+    fs.symlinkSync(path.join(f.project, 'PROJECT_CONTRACT.md'), path.join(f.packet, 'link.md'))
+  }
+  write(f.manifest, manifest)
   await assert.rejects(manifestSource(f.manifest), /symlink/)
 })
 
 test('target symlink and existing user files survive bootstrap refusal', async t => {
   const f = await fixture(t)
-  const link = path.join(f.base, 'game-link'); fs.symlinkSync(f.project, link)
+  const link = path.join(f.base, 'game-link'); fs.symlinkSync(f.project, link, process.platform === 'win32' ? 'junction' : 'dir')
   await assert.rejects(bootstrap(f.manifest, link, {}, () => {}), /symlink/)
   const other = path.join(f.base, 'other'); write(path.join(other, 'user.txt'), 'preserve me')
   await assert.rejects(bootstrap(f.manifest, other, { scaffold: true, allowScaffold: true }, () => {}), /contract-only/)
