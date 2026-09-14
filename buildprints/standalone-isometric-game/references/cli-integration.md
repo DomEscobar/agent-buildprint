@@ -2,28 +2,29 @@
 
 This package now opts into the implemented `agb/runtime/v2` engine through `package.json` → `runtime.json`. The kernel/v1 spine and loop-index/v1 remain backward-compatible packet structures. `runtime.json` supplies explicit dependency/approval/acceptance routing for the same six loops. The mutable active loop lives in `.buildprint/HEAD.json`'s selected revision, never by editing snapshots.
 
-The historical `AUTHORING_REPORT.md` records its authoring-session checks only. Version `0.1.0` documents installed-package v2 routing; it does not contain the later source production-gate reader. Commit `a7b712b56c218631821ed1626285035b2c7010cd` introduced that policy, but use a fresh current source checkout with its matching local packet and CLI instead. Record `git rev-parse HEAD` and keep that checkout unchanged for the run. Existing package snapshots are not retrofitted.
+The historical `AUTHORING_REPORT.md` records its authoring-session checks only. The `v0.1.0` source tag contains initial v2 routing, but npm `agent-buildprint@0.1.0` is not published and public `0.0.17` lacks v2. Commit `a7b712b56c218631821ed1626285035b2c7010cd` introduced the later source production-gate reader, but use a fresh current source checkout with its matching local packet and CLI instead of that historical commit. Record `git rev-parse HEAD` and keep that checkout unchanged for the run. Existing snapshots are not retrofitted.
 
 ## Commands that now exist
 
-From the already scaffolded game host, install version `0.1.0` and use its bundled manifest for the released v2 route. For the current production-gate policy, use the same fresh source checkout for the CLI and local manifest, record its HEAD, and do not drift it during the run. Public npm `agent-buildprint@0.0.17` has no v2 runtime. Code availability is not full regression, scaffold or game acceptance. If the matching CLI is unavailable, continue authorized framework implementation and report only the automation blocker without simulating state.
+From a parent workspace containing the already scaffolded game host, create one fresh source checkout for the CLI and local manifest, record its HEAD, and do not drift it during the run. npm `0.1.0` is unavailable and public `0.0.17` has no v2 runtime. Code availability is not full regression, scaffold or game acceptance. If the matching source CLI is unavailable, continue authorized framework implementation and report only the automation blocker without simulating state.
 ```sh
-npm install --save-dev agent-buildprint@0.1.0
-npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json .
-npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json . --resume
-npx --no-install agb bootstrap ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json /new/game --allow-scaffold --framework /pinned/framework --archive /trusted/isometric-framework-0.1.0.tgz --archive-sha256 <trusted-digest>
-npx --no-install agb state status .
-npx --no-install agb loop next .
-npx --no-install agb packet next .
-npx --no-install agb state approve . --revision <current> --receipt ./.game-quality/approval.json
-npx --no-install agb loop begin . --revision <current> --receipt ./.game-quality/begin.json
-npx --no-install agb evidence bind . --revision <current> --receipt ./.game-quality/build-binding.json
-npx --no-install agb evidence record . --revision <current> --receipt ./.game-quality/evidence.json
-npx --no-install agb loop accept . --revision <current> --receipt ./.game-quality/accept.json
-npx --no-install agb loop advance . --revision <current> --receipt ./.game-quality/advance.json
+git clone https://github.com/DomEscobar/agent-buildprint.git agb-runtime-v2
+git -C agb-runtime-v2 rev-parse HEAD
+node agb-runtime-v2/bin/agb.js start agb-runtime-v2/buildprints/standalone-isometric-game/package.json ./my-isometric-game
+node agb-runtime-v2/bin/agb.js start agb-runtime-v2/buildprints/standalone-isometric-game/package.json ./my-isometric-game --resume
+node agb-runtime-v2/bin/agb.js bootstrap agb-runtime-v2/buildprints/standalone-isometric-game/package.json /new/game --allow-scaffold --framework /pinned/framework --archive /trusted/isometric-framework-0.1.0.tgz --archive-sha256 <trusted-digest>
+node agb-runtime-v2/bin/agb.js state status ./my-isometric-game
+node agb-runtime-v2/bin/agb.js loop next ./my-isometric-game
+node agb-runtime-v2/bin/agb.js packet next ./my-isometric-game
+node agb-runtime-v2/bin/agb.js state approve ./my-isometric-game --revision <current> --receipt ./my-isometric-game/.game-quality/approval.json
+node agb-runtime-v2/bin/agb.js loop begin ./my-isometric-game --revision <current> --receipt ./my-isometric-game/.game-quality/begin.json
+node agb-runtime-v2/bin/agb.js evidence bind ./my-isometric-game --revision <current> --receipt ./my-isometric-game/.game-quality/build-binding.json
+node agb-runtime-v2/bin/agb.js evidence record ./my-isometric-game --revision <current> --receipt ./my-isometric-game/.game-quality/evidence.json
+node agb-runtime-v2/bin/agb.js loop accept ./my-isometric-game --revision <current> --receipt ./my-isometric-game/.game-quality/accept.json
+node agb-runtime-v2/bin/agb.js loop advance ./my-isometric-game --revision <current> --receipt ./my-isometric-game/.game-quality/advance.json
 ```
 
-`loop defect`, `resolve-defect`, `return`, `resolve-return` use the same revision/receipt arguments. All receipts have `schema: agb/receipt/v2`. The installed package includes CLI documentation and schemas with exact fields, recovery commands, limits and security boundaries.
+`loop defect`, `resolve-defect`, `return`, `resolve-return` use the same revision/receipt arguments. All receipts have `schema: agb/receipt/v2`. The source checkout includes CLI documentation and schemas with exact fields, recovery commands, limits and security boundaries.
 
 ## Bootstrap and authority
 
@@ -37,7 +38,7 @@ Remote manifests use bounded credential-free HTTPS, no redirects, same-origin pa
 
 Recorded approvals bind the actual contract hash and mirror real authorized decisions; they do not grant them. Preserve prior answers; ask at most three independently answerable unresolved decisions per batch, with reversible defaults. Record no-spend/fallback decisions without pretending provider access exists. Implementation authorization covers routine build/test/acceptance work unless the user explicitly opts out. User/host policy remains authoritative.
 
-In the current pinned source, `runtime.json.productionEvidence` points to the existing upstream baseline and receipt directory. Loop 01 additionally requires all protected preflight/layout checks to have current completed passing receipts before advance; loop 02 requires representative assembly checks. The source packet opts into reader `productionEvidence.validationVersion: 2`: loops 03/04/05 require static/motion/final respectively; loop 06 rechecks all six stages. Version 2 validates complete stage and protected requirement/view coverage, final all-input dependencies, domain-correct motion evidence and actual production-receipt artifact linkage. It adds no upstream schema fields and never reruns automatic geometry/layout checks. A missing check, later fail/unverified receipt, wrong baseline, changed inputs or changed evidence blocks the transition. This reader checks existing upstream record linkage, not geometry re-execution, pixel quality, reviewer identity or arbitrary filesystem writes. `agent-buildprint@0.1.0` and existing snapshots do not gain these later source gates retroactively.
+In the current recorded source checkout, `runtime.json.productionEvidence` points to the existing upstream baseline and receipt directory. Loop 01 additionally requires all protected preflight/layout checks to have current completed passing receipts before advance; loop 02 requires representative assembly checks. The source packet opts into reader `productionEvidence.validationVersion: 2`: loops 03/04/05 require static/motion/final respectively; loop 06 rechecks all six stages. Version 2 validates complete stage and protected requirement/view coverage, final all-input dependencies, domain-correct motion evidence and actual production-receipt artifact linkage. It adds no upstream schema fields and never reruns automatic geometry/layout checks. A missing check, later fail/unverified receipt, wrong baseline, changed inputs or changed evidence blocks the transition. This reader checks existing upstream record linkage, not geometry re-execution, pixel quality, reviewer identity or arbitrary filesystem writes. Existing snapshots do not gain these later source gates retroactively.
 
 Loop 01 requires implementation attestation; loops 02–06 require separately selected implementation, functional and visual attestations. Calibration does not reduce scope. Full-coverage loops 05 and 06 additionally require every requirement and protected view from the bound upstream v3 acceptance plan. Use the loop ID as the routing coverage entry, plus real plan requirement IDs. The plan is derived from the one contract, not an alternate human brief.
 

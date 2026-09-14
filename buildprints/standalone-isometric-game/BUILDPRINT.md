@@ -1,7 +1,7 @@
 # BUILDPRINT: Full Standalone Isometric Game
 
 ## Distribution boundary
-This packet is bundled with `agent-buildprint@0.1.0`. Historical `agent-buildprint@0.0.17` lacks `agb/runtime/v2`. Read `README.md` for the direct-reading path and installed-package command requirements before setup. No generated state, simulated approval or missing evidence can substitute for real runtime/capture/review capability.
+This packet is present in the current source tree and the `v0.1.0` source tag, but npm `agent-buildprint@0.1.0` is not published. Public `agent-buildprint@0.0.17` lacks `agb/runtime/v2`. Read `README.md` for the current-source and direct-reading paths before setup. No generated state, simulated approval or missing evidence can substitute for real runtime/capture/review capability.
 
 ## Your role
 You are the responsible builder and senior product engineer. Deliver the full original standalone game agreed in `PROJECT_CONTRACT.md`, using the pinned Isometric Framework scaffold, public APIs and existing authoring skills. This is not guided-2d-game, a demo reskin, an engine rewrite, or a vertical-slice scope limit.

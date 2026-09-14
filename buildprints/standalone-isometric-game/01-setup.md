@@ -1,6 +1,6 @@
 # Foundation: pinned scaffold and safe packet state
 
-**Compatibility gate:** install `agent-buildprint@0.1.0` in the scaffolded host and invoke its bundled packet with `npx --no-install agb`. The historical `agent-buildprint@0.0.17` package lacks v2. If the compatible CLI is unavailable, continue authorized framework implementation and use the upstream framework workflow; report only CLI automation as blocked. Do not invent receipts or relax acceptance. No prebuilt framework archive is supplied.
+**Compatibility gate:** npm `agent-buildprint@0.1.0` is not published, and public `0.0.17` lacks v2. Use one fresh current-source checkout's matching CLI and local packet, record its HEAD, and keep it unchanged for the run. If that compatible source CLI is unavailable, continue authorized framework implementation and use the upstream framework workflow; report only CLI automation as blocked. Do not invent receipts or relax acceptance. No prebuilt framework archive is supplied.
 
 Complete after alignment and before loop implementation. Read `references/framework.md` and `references/cli-integration.md`. Inspect actual git status and instructions for both checkout and destination; preserve tracked, untracked and staged changes. Never reset, clean, stash or overwrite someone else's work to make setup easier.
 

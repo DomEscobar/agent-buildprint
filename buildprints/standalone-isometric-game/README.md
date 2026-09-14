@@ -2,27 +2,17 @@
 
 A complete local authoring packet for an original game built with DomEscobar/isometric-framework. Full means the approved game scope, not the framework demo and not a vertical-slice cap. Completely separate from `guided-2d-game`; no dependency on or modifications to that packet.
 
-**Package version: `agent-buildprint@0.1.0`.** It contains the initial v2 runtime and this packet; `agent-buildprint@0.0.17` did not contain v2. The current source checkout pairs the production-gate and measured-geometry policy with its matching CLI and packet; those later source additions are not in the immutable `0.1.0` package. Commit `a7b712b` introduced the production policy, but is historical and is not the recommended current CLI checkout. Website deployment checks are not full runtime regressions, scaffold proof or game/visual acceptance.
+**Current distribution:** npm `agent-buildprint@0.1.0` is not published; the registry currently exposes only `0.0.17`, which lacks v2. The `v0.1.0` source tag contains the initial v2 runtime and this packet, while current source also contains the later production-gate and measured-geometry policy. Use one fresh current-source checkout with its matching CLI and packet. Commit `a7b712b` is historical and is not the recommended checkout. Website deployment checks are not full runtime regressions, scaffold proof or game/visual acceptance.
 
 ## Install and start
 
-Install version `0.1.0` in the already scaffolded game host for its bundled v2 packet. `start` creates `.buildprint` state only; it does not scaffold the framework host or change existing snapshots. Use the pinned source route below when the current six-loop production receipt and measured-geometry policy is required. Existing snapshots do not acquire either newer source policy or newer package routing automatically.
+The supported v2 route currently uses source. `start` creates `.buildprint` state only; it does not scaffold the framework host or change existing snapshots. Existing snapshots do not acquire newer source policy automatically.
 
 ## Start here
 
 1. Read the local packet's `BUILDPRINT.md` and `00-goal.md`, then only the applicable `instructions.phaseReadOrder` entry. Direct reading supports alignment/planning without executing a CLI or fabricating state.
 2. Preserve one approved `PROJECT_CONTRACT.md`; ask at most three independently answerable unresolved decisions per batch, with reversible defaults. Loading a packet never authorizes paid generation, uploads, publishing or deployment.
-3. Install `agent-buildprint@0.1.0` locally in the scaffolded host and use its bundled packet path. Node >=22.18.0 satisfies the framework requirement.
-
-```sh
-# Run from the scaffolded game host.
-npm install --save-dev agent-buildprint@0.1.0
-npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json .
-npx --no-install agb state status .
-npx --no-install agb loop next .
-```
-
-The CLI has no runtime npm dependencies beyond Node. For the current source production policy, use one fresh checkout for both the CLI and its local packet, record its exact revision, and keep that checkout unchanged for the run:
+3. From a parent workspace, create one fresh source checkout beside the already scaffolded game host. Use that checkout for both CLI and packet, record its exact revision, and keep it unchanged for the run. Node >=22.18.0 satisfies the framework requirement.
 
 ```sh
 git clone https://github.com/DomEscobar/agent-buildprint.git agb-runtime-v2
@@ -33,7 +23,7 @@ node agb-runtime-v2/bin/agb.js state status ./my-isometric-game
 node agb-runtime-v2/bin/agb.js loop next ./my-isometric-game
 ```
 
-Both routes create packet state, **not a game scaffold**. For a real game, scaffold first into a new/empty/contract-only destination following `01-setup.md`, then start the packet in that host. Preserve any approved contract and existing state. The source checkout contains the later production policy; it is not a claim that `0.1.0` includes those additions.
+These commands create packet state, **not a game scaffold**. For a real game, scaffold first into a new/empty/contract-only destination following `01-setup.md`, then start the packet in that host. Preserve any approved contract and existing state. Do not install public `0.0.17` as a substitute.
 
 ## Framework setup is a real local build
 
@@ -57,7 +47,7 @@ When using CLI state, read `.buildprint/next-agent.md`, the matching CLI's `docs
 - `references/cli-integration.md`: current supported manifest/CLI behavior and real gaps.
 - `templates/`: contract, UX outline, setup receipt, acceptance-plan routing, asset provenance, generation ledger, measured-geometry review and capture receipt.
 - `review.md`, `HANDOVER.md`: authorized future acceptance and honest delivery.
-- `package.json`: explicit local snapshot file manifest for v2 `start`, bundled with the npm package after release.
+- `package.json`: explicit local snapshot file manifest for source-based v2 `start`; it may be bundled by a future npm publication only after that publication is verified.
 - `publication.json`: existing publication metadata format with `publish: true` for website publication only.
 - `AUTHORING_REPORT.md`: local scope, static inspection evidence, gaps and untested status.
 
