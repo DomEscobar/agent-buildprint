@@ -6,7 +6,7 @@ Historical initial integration was source-only. Current patch verification is re
 
 ## Commands that now exist
 
-Use a fresh source checkout pinned at `24ff2c5cf4291a8a7f45ce5ce58e6ee21eb5d636` from https://github.com/DomEscobar/agent-buildprint. See `README.md` for exact clone and source invocation commands. Public npm `agent-buildprint@0.0.17` has no v2 runtime: do not substitute installed `agb`. The commands below are relative to that pinned source checkout. Code availability is not full regression, scaffold or game acceptance. If source access is unavailable, direct-read for planning and report the automation blocker, never simulate state.
+Use a fresh source checkout pinned at `a7b712b56c218631821ed1626285035b2c7010cd` from https://github.com/DomEscobar/agent-buildprint. See `README.md` for exact clone and source invocation commands. Public npm `agent-buildprint@0.0.17` has no v2 runtime: do not substitute installed `agb`. The commands below are relative to that pinned source checkout. Code availability is not full regression, scaffold or game acceptance. If source access is unavailable, direct-read for planning and report the automation blocker, never simulate state.
 ```sh
 node ./bin/agb.js start ./buildprints/standalone-isometric-game/package.json /existing/scaffolded/game
 node ./bin/agb.js start ./buildprints/standalone-isometric-game/package.json /existing/scaffolded/game --resume

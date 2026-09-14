@@ -2,11 +2,11 @@
 
 A complete local authoring packet for an original game built with DomEscobar/isometric-framework. Full means the approved game scope, not the framework demo and not a vertical-slice cap. Completely separate from `guided-2d-game`; no dependency on or modifications to that packet.
 
-**Status: published packet and versioned source CLI; npm v2 unreleased.** The complete source is available at [commit 24ff2c5](https://github.com/DomEscobar/agent-buildprint/tree/24ff2c5cf4291a8a7f45ce5ce58e6ee21eb5d636). Public `agent-buildprint@0.0.17` does not contain v2. Website deployment checks are not full runtime regressions, scaffold proof or game/visual acceptance.
+**Status: published packet and versioned source CLI; npm v2 unreleased.** The complete source is available at [commit a7b712b](https://github.com/DomEscobar/agent-buildprint/tree/a7b712b56c218631821ed1626285035b2c7010cd). Public `agent-buildprint@0.0.17` does not contain v2. Website deployment checks are not full runtime regressions, scaffold proof or game/visual acceptance.
 
 ## Published phase-gate source
 
-The pinned source below includes optional phase receipt gates and phase-local onboarding. Public npm remains unchanged. Existing snapshots do not acquire these gates retroactively.
+The pinned source below includes the tested six-loop production receipt policy and phase-local onboarding. Offline regression details are in repository `docs/standalone-production-patch.md`; these are not game acceptance. Public npm remains unchanged. Existing snapshots do not acquire these gates retroactively.
 
 ## Start here
 
@@ -16,14 +16,14 @@ The pinned source below includes optional phase receipt gates and phase-local on
 
 ```sh
 git clone https://github.com/DomEscobar/agent-buildprint.git agb-runtime-v2
-git -C agb-runtime-v2 checkout --detach 24ff2c5cf4291a8a7f45ce5ce58e6ee21eb5d636
+git -C agb-runtime-v2 checkout --detach a7b712b56c218631821ed1626285035b2c7010cd
 # Local packet from this exact source revision; no remote-manifest trust shortcut.
 node agb-runtime-v2/bin/agb.js start agb-runtime-v2/buildprints/standalone-isometric-game/package.json ./my-isometric-game
 node agb-runtime-v2/bin/agb.js state status ./my-isometric-game
 node agb-runtime-v2/bin/agb.js loop next ./my-isometric-game
 ```
 
-The CLI has no npm dependencies; these source invocations do not need a global install. `start` creates packet state, **not a game scaffold**. For a real game, scaffold first into a new/empty/contract-only destination following `01-setup.md`, then start the packet in that host. Preserve any approved contract and existing state. The pinned CLI checkout contains the authored local packet; the current hosted packet additionally carries updated publication/source-install guidance without weakening acceptance.
+The CLI has no npm dependencies; these source invocations do not need a global install. `start` creates packet state, **not a game scaffold**. For a real game, scaffold first into a new/empty/contract-only destination following `01-setup.md`, then start the packet in that host. Preserve any approved contract and existing state. The pinned CLI checkout contains this production policy and authored local packet; its own README retains the previous historical source pin. Use the exact checkout command above. The current hosted packet updates publication/source-install guidance only; existing snapshots are not auto-upgraded.
 
 ## Framework setup is a real local build
 
@@ -37,7 +37,7 @@ The [remote manifest](https://agent-buildprint.com/buildprints/standalone-isomet
 
 Remote source-CLI `start` additionally requires `--manifest-sha256` from a separately trusted source. Do not invent a digest or treat the sidecar as independent provenance. The pinned local-manifest command above avoids that remote trust requirement. Resume requires the exact original manifest and payload identity, with `start --resume`; changed sources need an explicit migration decision.
 
-Read `.buildprint/next-agent.md`, source `docs/cli-runtime-v2.md` and the active loop. Approvals, begin/accept/advance, returns/defects and candidate-bound evidence are explicit. `implemented_attested`, `functional_attested` and `visual_attested` are recorded claims—not authenticated execution, reviewer independence, pixels, motion or gameplay. Full runtime regressions and pinned-framework scaffold execution remain unverified unless separately reported from actual authorized runs. Missing evidence cannot be accepted.
+Read `.buildprint/next-agent.md`, source `docs/cli-runtime-v2.md` and the active loop. Approvals, begin/accept/advance, returns/defects and candidate-bound evidence are explicit. `implemented_attested`, `functional_attested` and `visual_attested` are recorded claims—not authenticated execution, reviewer independence, pixels, motion or gameplay. The pinned source passed 45 offline runtime tests, including a synthetic opaque-archive template-copy test; actual framework package build/install and game execution remain unverified. Missing evidence cannot be accepted.
 
 ## Package map
 - `BUILDPRINT.md`, `00-goal.md`, `01-setup.md`, `02-identity.md`: briefing, alignment, safe scaffold/bootstrap, mobile-first UX.
@@ -45,7 +45,7 @@ Read `.buildprint/next-agent.md`, source `docs/cli-runtime-v2.md` and the active
 - `framework-lock.json`, `references/framework.md`: exact upstream pin, verified provenance and skill catalog links.
 - `references/assets.md`, `references/visual-acceptance.md`: preferred asset policy and substantive reuse of upstream v3 visual acceptance.
 - `references/cli-integration.md`: current supported manifest/CLI behavior and real gaps.
-- `templates/`: contract, UX outline, setup receipt, acceptance-plan routing, asset provenance, generation ledger and capture receipt.
+- `templates/`: contract, UX outline, setup receipt, acceptance-plan routing, asset provenance, generation ledger, measured-geometry review and capture receipt.
 - `review.md`, `HANDOVER.md`: authorized future acceptance and honest delivery.
 - `package.json`: explicit local snapshot file manifest for source v2 `start`, not public npm `agb`.
 - `publication.json`: existing publication metadata format with `publish: true` for website publication only.
