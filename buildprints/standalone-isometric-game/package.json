@@ -41,17 +41,33 @@
   "instructions": {
     "readOrder": [
       "BUILDPRINT.md",
-      "00-goal.md",
-      "01-setup.md",
-      "02-identity.md",
-      "blueprint.yaml",
-      "loops/loop-index.yaml",
-      "loops/loop-flow.md",
-      "review.md",
-      "README.md",
-      "HANDOVER.md",
-      "runtime.json"
-    ]
+      "00-goal.md"
+    ],
+    "phaseReadOrder": {
+      "alignment": [
+        "00-goal.md"
+      ],
+      "setup": [
+        "README.md",
+        "01-setup.md",
+        "references/cli-integration.md"
+      ],
+      "identity": [
+        "02-identity.md"
+      ],
+      "production": [
+        "blueprint.yaml",
+        "runtime.json",
+        "loops/loop-index.yaml",
+        "loops/loop-flow.md"
+      ],
+      "review": [
+        "review.md"
+      ],
+      "handover": [
+        "HANDOVER.md"
+      ]
+    }
   },
   "runtime": {
     "schema": "agb/runtime/v2",

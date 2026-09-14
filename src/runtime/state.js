@@ -2,6 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { LIMIT, hash, jsonBytes, insist, relative, safeAbsolute, inside, bytes, readJson, put, atomicJson, locked, syncDir } from './io.js'
 
+import { productionStages, productionPlan, productionCurrent } from './production.js'
+
 export const STATE_SCHEMA = 'agb/state/v2'
 const now = () => new Date().toISOString()
 const identifier = value => typeof value === 'string' && /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$/.test(value)
@@ -14,6 +16,10 @@ export function definitionCheck(definition, entries) {
   definition.bindingFiles.forEach(relative)
   if (definition.acceptancePlan) relative(definition.acceptancePlan)
   if (definition.runtimeRoots) { insist(Array.isArray(definition.runtimeRoots), 'runtimeRoots must be an array'); definition.runtimeRoots.forEach(relative) }
+  if (definition.productionEvidence !== undefined) {
+    insist(definition.acceptancePlan && definition.productionEvidence && typeof definition.productionEvidence === 'object', 'productionEvidence requires acceptancePlan')
+    relative(definition.productionEvidence.baseline); relative(definition.productionEvidence.receipts)
+  }
   for (const loop of definition.loops) {
     insist(identifier(loop.id) && !ids.has(loop.id), 'duplicate/invalid loop id'); ids.add(loop.id)
     insist(entries.some(e => e.path === relative(loop.file)), `missing loop file: ${loop.file}`)
@@ -22,6 +28,7 @@ export function definitionCheck(definition, entries) {
     insist(Array.isArray(loop.acceptance) && loop.acceptance.length > 0 && new Set(loop.acceptance).size === loop.acceptance.length && loop.acceptance.every(x => ['implemented', 'functional', 'visual'].includes(x)), 'invalid acceptance dimensions')
     insist(Array.isArray(loop.requirements) && loop.requirements.length > 0 && loop.requirements.every(identifier), 'loop needs contract coverage requirement identifiers')
     insist(typeof loop.independentReview === 'boolean', 'independentReview must be explicit')
+    if (loop.productionStages !== undefined) insist(definition.productionEvidence && Array.isArray(loop.productionStages) && loop.productionStages.length > 0 && new Set(loop.productionStages).size === loop.productionStages.length && loop.productionStages.every(s => productionStages.includes(s)), 'productionStages requires configured upstream evidence and unique valid stages')
     if (loop.fullCoverage) insist(definition.acceptancePlan, 'fullCoverage requires an upstream acceptancePlan')
   }
   return definition
@@ -119,6 +126,7 @@ function eligible(root, state, loop, visited = new Set()) {
     insist(state.loops[id].status === 'complete', `incomplete prerequisite: ${id}`)
     const dependency = loopFor(state, id)
     approvalsCurrent(root, state, dependency)
+    productionCurrent(root, state.definition, dependency)
     for (const dimension of dependency.acceptance) {
       const accepted = state.loops[id].acceptance[dimension]
       insist(accepted, `prerequisite ${id} missing ${dimension} attestation`)
@@ -163,7 +171,12 @@ export function status(project) {
       catch (error) { acceptanceFreshness[loop.id][dimension] = `historical/stale: ${error.message}` }
     }
   }
-  return { ...state, candidateStatus, eligibility, acceptanceFreshness, claimCeiling: 'Recorded attestations only; integrity/eligibility checks do not verify execution, pixels, completeness, approval authority, or reviewer independence.' }
+  const productionReadiness = {}
+  for (const loop of state.definition.loops) if (loop.productionStages?.length) {
+    try { productionCurrent(root, state.definition, loop); productionReadiness[loop.id] = 'current upstream phase receipt claims' }
+    catch (error) { productionReadiness[loop.id] = error.message }
+  }
+  return { ...state, candidateStatus, eligibility, acceptanceFreshness, productionReadiness, claimCeiling: 'Recorded attestations only; integrity/eligibility checks do not verify execution, pixels, completeness, approval authority, or reviewer independence.' }
 }
 export function next(project) {
   const { root, dir, state } = load(project)
@@ -172,6 +185,9 @@ export function next(project) {
   // Reading the next work is allowed even while blocked. This never advances anything.
   let blocker = ''
   try { eligible(root, state, loop) } catch (error) { blocker = `\nBlocked: ${error.message}\n` }
+  if (loop.productionStages?.length) {
+    try { productionCurrent(root, state.definition, loop) } catch (error) { blocker += `\nAdvance blocked: ${error.message}\n` }
+  }
   return `Revision ${state.revision}; loop ${loop.id}; ${state.loops[loop.id].status}${blocker}\n${bytes(inside(dir, `snapshots/${loop.file}`)).toString('utf8')}`
 }
 export function operation(context, action, receipt) {
@@ -196,7 +212,8 @@ export function operation(context, action, receipt) {
       insist(new Set(plan.requirements.map(r => r.id)).size === plan.requirements.length, 'duplicate plan requirement IDs')
       insist(Array.isArray(plan.comparisons) && plan.comparisons.length > 0, 'acceptance plan needs retained original comparison references')
     }
-    const names = [...new Set([...state.definition.bindingFiles, ...(plan ? [state.definition.acceptancePlan, ...plan.comparisons.map(c => relative(c.reference))] : []), ...receipt.buildFiles, ...receipt.runtimeFiles])]
+    if (state.definition.productionEvidence) productionPlan(root, state.definition)
+    const names = [...new Set([...state.definition.bindingFiles, ...(state.definition.productionEvidence ? [state.definition.productionEvidence.baseline] : []), ...(plan ? [state.definition.acceptancePlan, ...plan.comparisons.map(c => relative(c.reference))] : []), ...receipt.buildFiles, ...receipt.runtimeFiles])]
     insist(names.length <= 500, 'too many binding files')
     for (const file of receipt.buildFiles) insist(inventory.files.some(f => f.path === file), 'buildFiles must be within fingerprinted project inputs')
     const boundFiles = names.map(file => ({ path: relative(file), sha256: hash(bytes(inside(root, file), 256 * 1024 * 1024)) }))
@@ -308,6 +325,7 @@ export function operation(context, action, receipt) {
   }
   if (action === 'advance') {
     eligible(root, state, loop)
+    productionCurrent(root, state.definition, loop)
     insist(state.loops[loop.id].status === 'active', 'begin loop before advance')
     for (const dimension of loop.acceptance) {
       const accepted = state.loops[loop.id].acceptance[dimension]

@@ -103,5 +103,19 @@ When evidence cannot be produced, record a non-pass verdict with an explicit `ca
 
 CLI output explicitly says `implemented_attested`, `functional_attested`, `visual_attested`. A selected `pass` is a human/tool receipt verdict; it never becomes a CLI-authenticated functional/visual PASS. Bind the actual running candidate, inspect normal journeys and media, use a genuine critic where available, preserve failures, fix source/assets, then bind and capture again. Do not generate evidence records for work that has not run. No automatic pixels, reviewer, provider, budget or authentication adapter is implied.
 
+## Optional phase-specific upstream receipt gates (local patch)
+
+A loops/v2 definition may add `productionEvidence: {baseline, receipts}` with project-relative paths and an `acceptancePlan`. Each opted-in loop may select `productionStages`, a nonempty unique subset of preflight/layout/assembly/static/motion/final. Other packets and existing snapshots retain their old behavior. Standalone selects preflight/layout for loop 01 and assembly for loop 02; no generic motion gate is added to foundation work.
+
+The read-only adapter consumes the pinned upstream `verify-world.py` freeze shape (`version: 1`, plan path/hash, artSpecs, references, contract) and `production_flow.py` finish shape (`kind: production-receipt`, baselineSha256, check, inputs, ticketSha256, startedAt, completedAt, status, reviewer, observed, evidence, automatic). It does not execute upstream or manifest code. Keep receipt outputs outside input roots; the standalone paths are `.game-quality/baseline.json` and `.game-quality/production-receipts/`. Use the existing upstream freeze/begin/draft/finish commands, never a second plan or fabricated pass.
+
+`evidence bind` protects the baseline with the candidate. `loop advance` and subsequent dependent eligibility require every selected stage check's latest matching-baseline receipt to be completed/pass, with exact current recursive input hashes, evidence hashes/formats/views and a passing recorded automatic result for layout/art. Tied completion times fail closed. Plan/reference/art-spec/contract bindings remain protected. `state status.productionReadiness` and `loop next` expose phase blockers without requiring completion before starting that phase. Generic acceptance records alone do not satisfy the new advance gate.
+
+This is structural receipt validation, not upstream checker re-execution, decoded-image assessment, reviewer authentication, authenticity of timestamps or a filesystem sandbox. A user able to forge all files can forge claims. Relevant-input freshness does not remove the existing conservative whole-project candidate/ancestor re-attestation policy.
+
+Manifest `instructions.readOrder` is the initial reading entry; optional `instructions.phaseReadOrder` maps phases to included files. V2 bootstrap includes this routing in next-agent.md. Load only an applicable phase plus the active loop, and ask at most three independently answerable unresolved decisions with reversible defaults. Existing next-agent files are not overwritten on resume.
+
+Targeted synthetic regression command: `node --test scripts/runtime-v2-production.test.mjs`. Fixtures are explicitly not game acceptance or provider proof.
+
 ## Authored regression coverage (unexecuted)
 `npm run check:runtime:regressions` runs the dependency-free Node test sources only when explicitly authorized. The pinned scaffold integration is skipped unless `AGB_TEST_FRAMEWORK` points at a trusted checkout containing the documented commit. Tests use synthetic claim fixtures, never game evidence; their format assertions cannot establish real playback or reviewer independence. No test command, syntax check, package build or CLI smoke test was executed during authoring.

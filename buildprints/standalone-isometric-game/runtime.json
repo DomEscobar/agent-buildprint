@@ -36,7 +36,11 @@
         "implemented"
       ],
       "independentReview": false,
-      "fullCoverage": false
+      "fullCoverage": false,
+      "productionStages": [
+        "preflight",
+        "layout"
+      ]
     },
     {
       "id": "02-playable-calibration",
@@ -60,7 +64,10 @@
         "visual"
       ],
       "independentReview": false,
-      "fullCoverage": false
+      "fullCoverage": false,
+      "productionStages": [
+        "assembly"
+      ]
     },
     {
       "id": "03-complete-world",
@@ -158,5 +165,9 @@
       "independentReview": false,
       "fullCoverage": true
     }
-  ]
+  ],
+  "productionEvidence": {
+    "baseline": ".game-quality/baseline.json",
+    "receipts": ".game-quality/production-receipts"
+  }
 }

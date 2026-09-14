@@ -116,7 +116,44 @@
           },
           "fullCoverage": {
             "type": "boolean"
+          },
+          "productionStages": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "preflight",
+                "layout",
+                "assembly",
+                "static",
+                "motion",
+                "final"
+              ]
+            }
           }
+        }
+      }
+    },
+    "productionEvidence": {
+      "type": "object",
+      "required": [
+        "baseline",
+        "receipts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "baseline": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Runtime additionally rejects traversal, absolute paths, backslashes, reserved names and symlinks."
+        },
+        "receipts": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Runtime additionally rejects traversal, absolute paths, backslashes, reserved names and symlinks."
         }
       }
     }

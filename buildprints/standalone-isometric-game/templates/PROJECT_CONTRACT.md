@@ -1,6 +1,6 @@
 # PROJECT_CONTRACT.md — sole human requirements source
 
-This is an unapproved outline, not a game choice or evidence. Populate the game's single `PROJECT_CONTRACT.md`; merge into an existing approved contract instead of creating another. Ask at most three consequential questions at a time. Remove explanatory prompts once answered, preserve explicit decisions and do not default approval to the agent.
+This is an unapproved outline, not a game choice or evidence. Populate the game's single `PROJECT_CONTRACT.md`; merge into an existing approved contract instead of creating another. Ask at most three independently answerable consequential decisions at a time; draft reversible defaults for delegated details. Remove explanatory prompts once answered, preserve explicit decisions and do not default approval to the agent.
 
 ## Approval and decision authority
 - Game/project identity and intended destination:

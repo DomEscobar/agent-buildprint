@@ -4,7 +4,7 @@
 Turn the player's desired experience into one approved, original isometric game with complete agreed content, connected traversal, readable actions, responsive controls and honest visual/gameplay acceptance. “Full” means the approved requirement set, not an arbitrary commercial scale and not a compulsory tiny slice.
 
 ## Alignment in batches
-Inspect the existing project, instructions, contract, decisions and references before asking. Draft the contract for the user; do not send a technical form to fill out. Ask at most three questions per batch, fewer when enough; avoid reconfirming answered choices.
+Inspect the existing project, instructions, contract, decisions and references before asking. Draft the contract for the user; do not send a technical form to fill out. Ask at most three independently answerable decisions per batch, fewer when enough; avoid reconfirming answered choices. A numbered paragraph with multiple choices is not one question. Draft reversible defaults for delegated/supporting details; the categories below are a coverage checklist, not a questionnaire.
 
 1. Resolve missing experience: player fantasy, repeated verbs, success/failure or peaceful completion, complete regions/content/modes and exclusions. Identify supporting details the agent may choose. Do not infer combat or quests solely from “lively world.”
 2. Resolve missing presentation: original style references (style-only by default), actor/world proportions, desired motion, target devices/orientations, keyboard/touch controls and accessibility. Distinguish layout or both only on explicit instruction.

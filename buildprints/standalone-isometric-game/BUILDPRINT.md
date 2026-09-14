@@ -7,7 +7,7 @@ This is a published instruction packet, not an npm CLI release. Public `agent-bu
 You are the responsible builder and senior product engineer. Deliver the full original standalone game agreed in `PROJECT_CONTRACT.md`, using the pinned Isometric Framework scaffold, public APIs and existing authoring skills. This is not guided-2d-game, a demo reskin, an engine rewrite, or a vertical-slice scope limit.
 
 ## Your responsibility
-Preserve existing files and approvals. Ask at most three consequential alignment questions per batch. One approved `PROJECT_CONTRACT.md` owns user requirements; plans and measurements derive from it. Do not create competing briefs. Do not implement or spend before the relevant approval. Reject functionless buttons, dead controls, mocked/sample data as live proof, and fake provider success. Keep secrets out of chat, source, assets and evidence.
+Preserve existing files and approvals. Ask at most three independently answerable consequential decisions per batch; draft reversible defaults, not compound questionnaires. One approved `PROJECT_CONTRACT.md` owns user requirements; plans and measurements derive from it. Do not create competing briefs. Do not implement or spend before the relevant approval. Reject functionless buttons, dead controls, mocked/sample data as live proof, and fake provider success. Keep secrets out of chat, source, assets and evidence.
 
 This packet authors a future game workflow; loading it is not permission to generate assets, publish, deploy or run tests. Observe the active user's execution authorization. Visual/gameplay acceptance must be explicitly requested for the future game; request that decision during alignment, preserve an existing request, and execute the authorized acceptance work without repeatedly asking. If declined or unavailable, continue only authorized implementation and report it unverified, not complete.
 
@@ -20,15 +20,15 @@ Preferred quality stack: **WaveSpeed + (RetroDiffusion OR Media4Agents)**. WaveS
 ## Kernel and read order
 Goal → bare agentic loop (think → act → observe) → optional independent fan-out with clean ownership → contract review. Production infrastructure is optional; agreed full game quality is not.
 
-1. `00-goal.md` — reuse answers; approve the one contract.
-2. `01-setup.md` — pinned copy-only scaffold+packet bootstrap, or scaffold first then safe packet start.
-3. `02-identity.md` — mobile-first intent before UI implementation.
-4. `blueprint.yaml`
-5. `loops/loop-index.yaml` and `runtime.json` (versioned routing/approval mirror)
-6. `loops/loop-flow.md`
-7. Active loop and its selected pinned framework skills only.
-8. `review.md` — authorized future runtime/visual acceptance.
-9. `README.md` — package use and limitations.
-10. `HANDOVER.md` — exact scope, claims, blockers and continuation.
+Start with this file and `00-goal.md` only; reuse existing answers. The manifest's `instructions.phaseReadOrder` supplies phase-local entries: setup after alignment, identity before UI, production routing before the active loop, review when eligible, handover when reporting. Load only that phase and the active loop's selected pinned framework skills; do not pre-read all six loops or end-of-work reports. Before any command, read the setup compatibility guidance. `agb loop next` identifies current work and advancement blockers, not permission to expand early.
+
+| When needed | Phase-local files (not an eager reading checklist) |
+| --- | --- |
+| Alignment | `00-goal.md` |
+| Approved setup | `README.md`, `01-setup.md`, `references/cli-integration.md` |
+| Before UI | `02-identity.md` |
+| Production entry | `blueprint.yaml`, `runtime.json`, `loops/loop-index.yaml`, `loops/loop-flow.md`, then the active loop only |
+| Eligible acceptance | `review.md` |
+| Reporting/continuation | `HANDOVER.md` |
 
 The framework pin, source routes and actual CLI limitations are in `references/framework.md` and `references/cli-integration.md`. Framework skills remain upstream files; do not copy, rewrite or install a competing skill pack. The local 2D quality-loop guidance is adapted in this packet without importing its separate contract/art-direction/acceptance ledgers or deployment mandate.

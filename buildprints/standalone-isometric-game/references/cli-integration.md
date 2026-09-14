@@ -34,7 +34,9 @@ Remote manifests use bounded credential-free HTTPS, no redirects, same-origin pa
 
 ## Game loop binding
 
-Five recorded approvals bind to the actual contract hash: `contract`, `setup`, `mobile-ux`, `asset-policy`, `acceptance-execution`. They mirror real authorized decisions, not grant them. Preserve prior answers; ask at most three unresolved alignment questions per batch. Record no-spend/fallback decisions without pretending provider access exists. User/host policy remains authoritative.
+Five recorded approvals bind to the actual contract hash: `contract`, `setup`, `mobile-ux`, `asset-policy`, `acceptance-execution`. They mirror real authorized decisions, not grant them. Preserve prior answers; ask at most three independently answerable unresolved decisions per batch, with reversible defaults. Record no-spend/fallback decisions without pretending provider access exists. User/host policy remains authoritative.
+
+In this local patch candidate, `runtime.json.productionEvidence` points to the existing upstream baseline and receipt directory. Loop 01 additionally requires all protected preflight/layout checks to have current completed passing receipts before advance; loop 02 requires representative assembly checks. A missing check, later fail/unverified receipt, wrong baseline, changed inputs or changed evidence blocks the transition. This reader checks existing upstream record linkage, not geometry re-execution, pixel quality, reviewer identity or arbitrary filesystem writes. Existing snapshots and the historical public source pin do not gain these gates retroactively.
 
 Loop 01 requires implementation attestation; loops 02–06 require separately selected implementation, functional and visual attestations. Calibration does not reduce scope. Full-coverage loops 05 and 06 additionally require every requirement and protected view from the bound upstream v3 acceptance plan. Use the loop ID as the routing coverage entry, plus real plan requirement IDs. The plan is derived from the one contract, not an alternate human brief.
 

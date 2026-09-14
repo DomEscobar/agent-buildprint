@@ -140,5 +140,7 @@ export async function manifestSource(ref, expectedHash) {
   }
   const readOrder = manifest.instructions?.readOrder || manifest.readOrder || []
   insist(Array.isArray(readOrder) && readOrder.every(p => entries.some(e => e.path === p)), 'readOrder must reference included files')
+  const phases = manifest.instructions?.phaseReadOrder
+  if (phases !== undefined) insist(phases && typeof phases === 'object' && !Array.isArray(phases) && Object.keys(phases).length <= 12 && Object.entries(phases).every(([phase, files]) => /^[a-z][a-z-]{0,31}$/.test(phase) && Array.isArray(files) && files.length > 0 && files.every(p => entries.some(e => e.path === p))), 'phaseReadOrder must map named phases to included files')
   return { manifest, entries, digest, baseUrl: remote ? ref : pathToFileURL(file).href }
 }

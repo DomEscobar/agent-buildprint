@@ -4,10 +4,14 @@ A complete local authoring packet for an original game built with DomEscobar/iso
 
 **Status: published packet and versioned source CLI; npm v2 unreleased.** The complete source is available at [commit 35f2623](https://github.com/DomEscobar/agent-buildprint/tree/35f2623b0d72a1b09d39c1a7f14a0eaf6bf4a409). Public `agent-buildprint@0.0.17` does not contain v2. Website deployment checks are not full runtime regressions, scaffold proof or game/visual acceptance.
 
+## Local patch candidate (not published)
+
+This working tree adds optional phase receipt gates and phase-local onboarding beyond the historical source pin below. Evaluate with this exact local checkout and its recorded diff hash; do not clone the old public pin and claim to test these changes. Hosted/npm bytes are unchanged. Existing snapshots do not acquire these gates retroactively.
+
 ## Start here
 
-1. Read the [agent guide](https://agent-buildprint.com/buildprints/standalone-isometric-game/agent.md) and [manifest](https://agent-buildprint.com/buildprints/standalone-isometric-game/package.json), starting with `BUILDPRINT.md` and `00-goal.md`, then `instructions.readOrder`. Direct reading supports alignment/planning without executing a CLI or fabricating state.
-2. Preserve one approved `PROJECT_CONTRACT.md`; ask at most three unresolved consequential questions per batch. No game execution, tests, paid generation or deployment is authorized merely by loading this packet.
+1. Read the [agent guide](https://agent-buildprint.com/buildprints/standalone-isometric-game/agent.md) and [manifest](https://agent-buildprint.com/buildprints/standalone-isometric-game/package.json), starting with `BUILDPRINT.md` and `00-goal.md`, then only the applicable `instructions.phaseReadOrder` entry. Direct reading supports alignment/planning without executing a CLI or fabricating state.
+2. Preserve one approved `PROJECT_CONTRACT.md`; ask at most three independently answerable unresolved decisions per batch, with reversible defaults. No game execution, tests, paid generation or deployment is authorized merely by loading this packet.
 3. For automated packet state, use the exact source checkout below—not installed public `agb` or `npx`. Node >=22.18.0 satisfies the framework requirement. Clone into a **new** directory; never switch/reset an existing dirty checkout.
 
 ```sh
