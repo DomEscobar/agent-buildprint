@@ -1,5 +1,11 @@
 # Local CLI overhaul source delivery — 2026-09-13
 
+## 0.1.0 release note
+
+This report preserves the historical implementation boundary below. Version `0.1.0` packages the runtime, docs and packets for npm distribution; this document does not itself publish npm bytes, website manifests or existing project snapshots. See [CHANGELOG.md](../CHANGELOG.md) for the current release-facing summary and [cli-runtime-v2.md](cli-runtime-v2.md) for installation and platform limits.
+
+This is the historical 2026-09-13 authoring record. Its execution restrictions and unexecuted-test status describe that delivery only, not current operator instructions. For subsequent runtime changes and executed verification, see [the runtime guide](cli-runtime-v2.md).
+
 ## Delivered scope and claim ceiling
 
 Implemented source in `/root/agent-buildprint`, preserving the incoming dirty root README/package changes and all 31 original standalone package files. The standalone package now has 32 files (31 explicit payload entries plus its loader manifest). No reset, clean, checkout, stash, commit, push, publish, deploy, dependency install or npm release was performed. No paid actions or new provider/skill integrations.

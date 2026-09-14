@@ -12,6 +12,6 @@ Use one record per asset family/output; link actual technical manifests rather t
 - Measured alpha/crops/scale/contact results and actual in-game review links:
 - Generation budget/job record if applicable; known and uncertain cost:
 - Technique disclosure (e.g. generated materials with deterministic assembly):
-- Explicit fallback quality limitation and unresolved requirements:
+- Observed quality limitations, if any, and unresolved requirements:
 
 A provider URL is not a durable production asset. An atlas entry does not prove the game loads it, and a license label without its source is not rights evidence.

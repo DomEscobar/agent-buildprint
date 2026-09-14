@@ -150,8 +150,12 @@ test('wrong check identity, missing completion, missing views, and tied latest t
 
 test('symlinked evidence storage is refused', async t => {
   const f = await phaseFixture(t); f.phase('preflight'); f.phase('layout');
-  fs.symlinkSync(f.file('.game-quality/measurement.txt'), f.file('.game-quality/link.txt'));
-  f.phase('preflight', { evidence: [{ path: '.game-quality/link.txt', sha256: f.sha('.game-quality/measurement.txt'), view: 'desktop' }] });
+  let linked = '.game-quality/link.txt';
+  if (process.platform === 'win32') {
+    fs.symlinkSync(f.file('.game-quality'), f.file('linked-quality'), 'junction');
+    linked = 'linked-quality/measurement.txt';
+  } else fs.symlinkSync(f.file('.game-quality/measurement.txt'), f.file(linked));
+  f.phase('preflight', { evidence: [{ path: linked, sha256: f.sha('.game-quality/measurement.txt'), view: 'desktop' }] });
   await assert.rejects(f.change('advance', { loop: 'a' }), /symlink/);
 });
 

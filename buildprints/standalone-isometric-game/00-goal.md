@@ -8,7 +8,7 @@ Inspect the existing project, instructions, contract, decisions and references b
 
 1. Resolve missing experience: player fantasy, repeated verbs, success/failure or peaceful completion, complete regions/content/modes and exclusions. Identify supporting details the agent may choose. Do not infer combat or quests solely from “lively world.”
 2. Resolve missing presentation: original style references (style-only by default), actor/world proportions, desired motion, target devices/orientations, keyboard/touch controls and accessibility. Distinguish layout or both only on explicit instruction.
-3. Resolve missing authority: asset rights/technique; generation only if needed, access and budget; local versus hosting; privacy/saves/destruction. Obtain explicit authorization for future running-build visual/gameplay acceptance, independent review where available and performance measurement if required by full-world acceptance. These are game-workflow decisions, not authorization to run them during packet authoring.
+3. Resolve missing authority: asset rights/technique; generation only if needed, access and budget; local versus hosting; privacy/saves/destruction. Record any explicit restriction on builds, tests, captures, review or performance measurement. Otherwise, implementation authorization covers the routine verification needed to establish the agreed result.
 
 Summarize the entire deliverable using `templates/PROJECT_CONTRACT.md`. Offer reversible defaults with tradeoffs; mark assumptions distinctly from user requirements. Obtain approval before implementation or paid generation. Already-approved contracts proceed unchanged. Later changes require a user-approved amendment identifying superseded requirement IDs and downstream baseline implications, not a second contract.
 
@@ -36,6 +36,6 @@ Store listing, future expansions, monetization and unrelated multiplayer service
 - An aligned observable target covers visual hierarchy, material treatment, contacts, scale, motion and interaction; original references remain protected.
 - Mobile-first UX specifies purpose, information hierarchy, next action, touch behavior and desktop adaptation before UI coding.
 - Original maps and host-owned art use public package exports; no demo/example host, sprites, maps, palettes, characters, layouts or asset URLs are copied by default.
-- Preferred-stack availability, spending approval, provenance and explicit free-only limitations are honest; fallback receives the same visual scrutiny.
+- Chosen asset technique, any spending approval, provenance and free/authored alternatives are honest; every chosen route receives the same visual scrutiny.
 - The framework v3 visual production loop establishes actual packed-art, complete world, motion and gameplay acceptance tied to current inputs and captures. Missing capability or authorization means unverified.
 - Handover separates implemented, functionally verified and visually accepted, with motion/performance and independent-review status separate; no unsupported completion or deployment claim.

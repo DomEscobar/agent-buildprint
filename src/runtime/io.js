@@ -48,6 +48,12 @@ export function bytes(file, limit = LIMIT) {
 }
 export const readJson = file => JSON.parse(bytes(file).toString('utf8'))
 export function syncDir(dir) {
+  // Node's Windows directory handle cannot be flushed with fsync. Files are
+  // still flushed by put/atomicJson; directory crash durability is not promised.
+  if (process.platform === 'win32') {
+    insist(fs.lstatSync(safeAbsolute(dir)).isDirectory(), 'syncDir requires a directory')
+    return
+  }
   const fd = fs.openSync(dir, 'r')
   try { fs.fsyncSync(fd) } finally { fs.closeSync(fd) }
 }

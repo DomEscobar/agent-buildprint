@@ -3,6 +3,7 @@ import path from 'node:path'
 import { LIMIT, hash, jsonBytes, insist, relative, safeAbsolute, inside, bytes, readJson, put, atomicJson, locked, syncDir } from './io.js'
 
 import { productionStages, productionPlan, productionCurrent } from './production.js'
+import { skillDefinitionCheck, skillReadiness, requireSkills, skillInstructions } from './skills.js'
 
 export const STATE_SCHEMA = 'agb/state/v2'
 const now = () => new Date().toISOString()
@@ -31,6 +32,7 @@ export function definitionCheck(definition, entries) {
     if (loop.productionStages !== undefined) insist(definition.productionEvidence && Array.isArray(loop.productionStages) && loop.productionStages.length > 0 && new Set(loop.productionStages).size === loop.productionStages.length && loop.productionStages.every(s => productionStages.includes(s)), 'productionStages requires configured upstream evidence and unique valid stages')
     if (loop.fullCoverage) insist(definition.acceptancePlan, 'fullCoverage requires an upstream acceptancePlan')
   }
+  skillDefinitionCheck(definition)
   return definition
 }
 export function initialize(dir, source) {
@@ -122,6 +124,7 @@ function eligible(root, state, loop, visited = new Set()) {
   if (visited.has(loop.id)) return
   visited.add(loop.id)
   approvalsCurrent(root, state, loop)
+  requireSkills(root, state.definition, loop)
   for (const id of loop.dependsOn) {
     insist(state.loops[id].status === 'complete', `incomplete prerequisite: ${id}`)
     const dependency = loopFor(state, id)
@@ -176,7 +179,13 @@ export function status(project) {
     try { productionCurrent(root, state.definition, loop); productionReadiness[loop.id] = 'current upstream phase receipt claims' }
     catch (error) { productionReadiness[loop.id] = error.message }
   }
-  return { ...state, candidateStatus, eligibility, acceptanceFreshness, productionReadiness, claimCeiling: 'Recorded attestations only; integrity/eligibility checks do not verify execution, pixels, completeness, approval authority, or reviewer independence.' }
+  const skillReadiness = {}
+  for (const loop of state.definition.loops) skillReadiness[loop.id] = skillReadinessForStatus(root, state.definition, loop)
+  return { ...state, candidateStatus, eligibility, acceptanceFreshness, productionReadiness, skillReadiness, claimCeiling: 'Recorded attestations only; integrity/eligibility checks do not verify execution, pixels, completeness, approval authority, reviewer independence, or whether an agent read an available skill.' }
+}
+function skillReadinessForStatus(root, definition, loop) {
+  try { return skillReadiness(root, definition, loop) }
+  catch (error) { return { declared: loop.skills !== undefined, ready: false, blockers: [error.message] } }
 }
 export function next(project) {
   const { root, dir, state } = load(project)
@@ -188,7 +197,8 @@ export function next(project) {
   if (loop.productionStages?.length) {
     try { productionCurrent(root, state.definition, loop) } catch (error) { blocker += `\nAdvance blocked: ${error.message}\n` }
   }
-  return `Revision ${state.revision}; loop ${loop.id}; ${state.loops[loop.id].status}${blocker}\n${bytes(inside(dir, `snapshots/${loop.file}`)).toString('utf8')}`
+  const routing = skillReadinessForStatus(root, state.definition, loop)
+  return `Revision ${state.revision}; loop ${loop.id}; ${state.loops[loop.id].status}${blocker}${skillInstructions(routing)}\n${bytes(inside(dir, `snapshots/${loop.file}`)).toString('utf8')}`
 }
 export function operation(context, action, receipt) {
   const { root, state } = context

@@ -1,6 +1,6 @@
 {
   "name": "agent-buildprint",
-  "version": "0.0.17",
+  "version": "0.1.0",
   "type": "module",
   "bin": {
     "agb": "bin/agb.js"
@@ -21,7 +21,8 @@
     "check:guided-2d-game": "node bin/agb.js packet check buildprints/guided-2d-game && node buildprints/guided-2d-game/validation/check.mjs buildprints/guided-2d-game/validation/fixtures/manifest.json && node --test buildprints/guided-2d-game/validation/contracts.test.mjs && node scripts/check-guided-bootstrap.mjs",
     "check:standalone-isometric-game": "node bin/agb.js packet check buildprints/standalone-isometric-game",
     "check:blueprint-yaml": "npm run check:packets",
-    "check:runtime:regressions": "node --test scripts/runtime-v2.test.mjs scripts/runtime-v2-scaffold.test.mjs"
+    "check:runtime:regressions": "node --test scripts/runtime-v2.test.mjs scripts/runtime-v2-scaffold.test.mjs scripts/runtime-v2-production.test.mjs scripts/runtime-v2-skills.test.mjs",
+    "check:package": "node scripts/check-packed-cli.mjs"
   },
   "description": "CLI for bootstrapping Agent Buildprints for coding agents.",
   "license": "MIT",
@@ -55,6 +56,7 @@
     "docs/",
     "scripts/",
     "templates/",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ]
 }

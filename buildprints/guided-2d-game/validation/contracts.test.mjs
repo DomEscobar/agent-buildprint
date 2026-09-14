@@ -130,7 +130,13 @@ test('on-disk loader rejects actual altered manifest, image corruption, missing 
     const corrupt = Buffer.from(png); corrupt[corrupt.length - 1] ^= 1;
     await writeFile(asset, corrupt); await assert.rejects(loadNodeManifest(manifest), /PNG: CRC/);
     await rm(asset); await assert.rejects(loadNodeManifest(manifest), /ENOENT/);
-    await symlink(path.join(fixtureDir, a(base).path), asset);
+    if (process.platform === 'win32') {
+      // A directory junction exercises the same realpath escape without requiring
+      // Windows file-symlink privileges on developer machines or CI runners.
+      await symlink(fixtureDir, path.join(dir, 'outside'), 'junction');
+      const linked = structuredClone(base); a(linked).path = `outside/${a(base).path}`;
+      await writeFile(manifest, JSON.stringify(linked));
+    } else await symlink(path.join(fixtureDir, a(base).path), asset);
     await assert.rejects(loadNodeManifest(manifest), /symlink escapes/);
   } finally { await rm(dir, { recursive: true, force: true }); }
 });

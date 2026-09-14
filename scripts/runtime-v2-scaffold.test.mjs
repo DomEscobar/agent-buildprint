@@ -1,6 +1,5 @@
-// AUTHORED ONLY. No execution during the overhaul.
-// Optional pinned-template integration; set AGB_TEST_FRAMEWORK to a trusted read-only
-// checkout containing the documented commit before explicitly authorizing this test.
+// Pinned-template regression: release CI sets AGB_TEST_FRAMEWORK to a checkout
+// containing the documented commit. Local runs without it skip this case.
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
