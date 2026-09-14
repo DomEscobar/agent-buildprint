@@ -77,7 +77,7 @@ Product Buildprints package whole systems. Capability Buildprints package bounde
 
 ## Full standalone isometric game packet
 
-[Full Standalone Isometric Game](buildprints/standalone-isometric-game/README.md) covers the entire agreed original game using a pinned [Isometric Framework](https://github.com/DomEscobar/isometric-framework/commit/53cf6b17eabbb2ed146e31111864d6812e3d755b) scaffold and its existing skills: one approved contract, explicit text-to-image/image-to-image technique choice, mobile-first UX, complete world/gameplay production, and user-requested running-build visual/gameplay acceptance. It is separate from Guided 2D Game and does not cap delivery at calibration.
+[Full Standalone Isometric Game](buildprints/standalone-isometric-game/README.md) covers the entire agreed original game using a pinned [Isometric Framework](https://github.com/DomEscobar/isometric-framework/commit/56f6e65d3f15112551fd7b56c69345e1b0195d86) scaffold and its existing skills: one approved contract, separate world assembly and per-family image-source choices, mobile-first UX, complete world/gameplay production, and user-requested running-build visual/gameplay acceptance. It is separate from Guided 2D Game and does not cap delivery at calibration.
 
 Scaffold the pinned framework host first. Keep one fresh Agent Buildprint source checkout beside it, record that checkout's HEAD, and start the matching local packet with its CLI:
 

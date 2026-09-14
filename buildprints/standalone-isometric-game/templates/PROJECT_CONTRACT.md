@@ -4,7 +4,7 @@ This is an unapproved outline, not a game choice or evidence. Populate the game'
 
 ## Approval and decision authority
 - Game/project identity and intended destination:
-- Status: unapproved / approved (record actual owner decision, date and boundary).
+- Status: unapproved / approved (record actual owner decision, date and boundary). Preserve any authorized concept and spending scope; implementation proceeds through the existing prerequisite checks without repeated approval.
 - Prior decisions reused, source and exact scope:
 - `confirmed_by: user` or `confirmed_by: explicit_user_delegation`, with delegated boundaries:
 - Explicit constraints or opt-outs for implementation verification, paid generation/uploads, captures, independent review and release:
@@ -34,12 +34,10 @@ For each screen/state: purpose, information hierarchy, next action, touch intera
 - Text/contrast/non-color cues, accessibility and motion/audio controls:
 
 ## Assets, rights and spending
-- Technique per asset family; supplied/licensed/authored, text-to-image foundation,
-  image-to-image adaptation, modular generation, composed/layered, or hybrid selection:
-- Approved visual authority after candidate selection; projection, palette, scale,
-  light and pixel treatment that later asset families must preserve:
-- Chosen technique and any optional provider route; exact edit/removal capabilities when selected.
-  Image-to-image is optional and must not be required when text-to-image is selected:
+- World representation per family: modular terrain, composed flat ground, layered scene, or hybrid; record required natural transitions/routes separately from raster source:
+- Image source per family: supplied/licensed, authored, text-to-image or image-to-image; provider and exact edit/removal capability only where that source needs one. Image-to-image is optional after text-to-image:
+- Bounded concept exploration and candidate-selection rule. Resolve missing visual direction through the chosen supplied/authored/generated route before acceptance freeze:
+- Approved visual authority is recorded in `.game-quality/art-direction.json` with image, role and provenance; it fixes projection, palette, scale, light and pixel treatment for related families without rewriting this contract for ordinary candidate iterations:
 - Current access/price evidence or missing capability; no paid probe without permission:
 - Approved ceiling/currency, permitted operations/uploads, spend owner and retry boundary:
 - Licensed free, user-owned or authored route decision; quality criteria and any genuine limitations:
@@ -63,7 +61,7 @@ For each screen/state: purpose, information hierarchy, next action, touch intera
 ## Approved amendments
 Record date, decision source, changed requirement IDs, reason and superseded text. Preserve history; revise technical plan/freeze explicitly when necessary. Do not put changing task status, attempts or verdicts here: upstream receipts own those.
 
-## Acceptance meaning (freeze before implementation)
+## Acceptance meaning (protect requirements before calibration; ticket candidates before capture)
 For each reference record content hash, decision source and distinct role: preference reference, approved target or regression comparator (in addition to style/layout/both). Do not promote the last stable candidate into the target without an authorized amendment. Define separate measurement, input/experience, aesthetic and required human-acceptance requirements; record preview and production-release permission separately from all quality verdicts. State who may decide each outcome. Human acceptance remains pending without that actual decision; neither implementation permission nor a critic score substitutes.
 
 On rejection, preserve the actual candidate-specific decision and open the existing `loop defect` (or `loop return` for a contract/UX decision), invalidating affected acceptance before requesting a new decision. Unchanged bytes do not preserve an older PASS against later rejection. No target reset or new cozy/numeric threshold repairs a failed measurement.
