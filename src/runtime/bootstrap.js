@@ -4,8 +4,8 @@ import { execFileSync } from 'node:child_process'
 import { hash, jsonBytes, insist, safeAbsolute, inside, bytes, readJson, put, locked, syncDir, manifestSource } from './io.js'
 import { initialize, load } from './state.js'
 
-const PIN = '7542ff68de04ca6ea6736974b54ec5b5dde1cc33'
-const TREE = '5363d058a3e15e6025a5a66bda09da343ca5215e'
+const PIN = '53cf6b17eabbb2ed146e31111864d6812e3d755b'
+const TREE = '7036c0659bc1b4cfab7679a632527aab13179e87'
 const git = (repo, args) => execFileSync('git', ['--no-replace-objects', '-c', 'protocol.allow=never', '-c', 'core.hooksPath=/dev/null', '-c', 'core.fsmonitor=false', '-C', repo, ...args], { maxBuffer: 16 * 1024 * 1024, timeout: 30000, env: { ...process.env, GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_GLOBAL: '/dev/null', GIT_NO_REPLACE_OBJECTS: '1' } })
 function scaffold(stage, options, source) {
   insist(options.allowScaffold === true, 'scaffold copy requires explicit --allow-scaffold; no manifest commands are ever executed')

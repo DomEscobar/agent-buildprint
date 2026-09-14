@@ -15,18 +15,18 @@ https://agent-buildprint.com/
 
 ## Shortcuts
 
-AGB is the optional CLI helper for loading exact Buildprint snapshots into a workspace. Version `0.1.0` includes the v2 runtime and bundled packets; install it globally for convenience:
+AGB is the optional CLI helper for loading exact Buildprint snapshots into a workspace. The `v0.1.0` source tag contains the v2 runtime, but npm `0.1.0` is not published and public `0.0.17` lacks v2. For current v2 work, use one fresh source checkout and record its HEAD:
 
 ```bash
-npm install -g agent-buildprint@0.1.0
+git clone https://github.com/DomEscobar/agent-buildprint agent-buildprint-runtime
+git -C agent-buildprint-runtime rev-parse HEAD
 ```
 
 Then start from a published Buildprint:
 
 ```bash
-mkdir my-build
-cd my-build
-agb start https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json .
+node agent-buildprint-runtime/bin/agb.js start \
+  https://agent-buildprint.com/buildprints/buildprint-mapper-os/package.json ./my-build
 ```
 
 No global install required:
@@ -77,22 +77,24 @@ Product Buildprints package whole systems. Capability Buildprints package bounde
 
 ## Full standalone isometric game packet
 
-[Full Standalone Isometric Game](buildprints/standalone-isometric-game/README.md) covers the entire agreed original game using a pinned [Isometric Framework](https://github.com/DomEscobar/isometric-framework/commit/7542ff68de04ca6ea6736974b54ec5b5dde1cc33) scaffold and its existing skills: one approved contract, mobile-first UX, complete world/gameplay production, and user-requested running-build visual/gameplay acceptance. It is separate from Guided 2D Game and does not cap delivery at calibration.
+[Full Standalone Isometric Game](buildprints/standalone-isometric-game/README.md) covers the entire agreed original game using a pinned [Isometric Framework](https://github.com/DomEscobar/isometric-framework/commit/53cf6b17eabbb2ed146e31111864d6812e3d755b) scaffold and its existing skills: one approved contract, explicit text-to-image/image-to-image technique choice, mobile-first UX, complete world/gameplay production, and user-requested running-build visual/gameplay acceptance. It is separate from Guided 2D Game and does not cap delivery at calibration.
 
-Version `0.1.0` contains the v2 runtime and this packet. Scaffold the pinned framework host first, then add the CLI to that host and start the bundled packet with the locally resolved executable:
+Scaffold the pinned framework host first. Keep one fresh Agent Buildprint source checkout beside it, record that checkout's HEAD, and start the matching local packet with its CLI:
 
 ```bash
-npm install --save-dev agent-buildprint@0.1.0
-npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json .
-npx --no-install agb state status .
-npx --no-install agb loop next .
+git clone https://github.com/DomEscobar/agent-buildprint.git agb-runtime-v2
+git -C agb-runtime-v2 rev-parse HEAD
+node agb-runtime-v2/bin/agb.js start agb-runtime-v2/buildprints/standalone-isometric-game/package.json ./my-isometric-game
+node agb-runtime-v2/bin/agb.js state status ./my-isometric-game
+node agb-runtime-v2/bin/agb.js loop next ./my-isometric-game
 ```
 
 ```powershell
-npm install --save-dev agent-buildprint@0.1.0
-npx --no-install agb start .\node_modules\agent-buildprint\buildprints\standalone-isometric-game\package.json .
-npx --no-install agb state status .
-npx --no-install agb loop next .
+git clone https://github.com/DomEscobar/agent-buildprint.git agb-runtime-v2
+git -C agb-runtime-v2 rev-parse HEAD
+node .\agb-runtime-v2\bin\agb.js start .\agb-runtime-v2\buildprints\standalone-isometric-game\package.json .\my-isometric-game
+node .\agb-runtime-v2\bin\agb.js state status .\my-isometric-game
+node .\agb-runtime-v2\bin\agb.js loop next .\my-isometric-game
 ```
 
 `start` records packet state; it does not scaffold the framework host. The framework remains separately pinned and locally built as described by the packet. AGB does not bundle framework skills or inject them into an agent session: the host reads the installed framework catalog and the selected skill files. Remote hosted manifests are separate website bytes; npm publishing does not update them or existing snapshots. Remote v2 starts still require an exact manifest SHA-256 from a separately trusted channel. See [CLI limitations](buildprints/standalone-isometric-game/references/cli-integration.md), [release notes](CHANGELOG.md), and the historical [authoring report](buildprints/standalone-isometric-game/AUTHORING_REPORT.md).

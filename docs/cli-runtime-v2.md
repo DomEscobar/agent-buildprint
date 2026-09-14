@@ -1,17 +1,18 @@
 # AGB local runtime v2
 
-## 0.1.0 distribution
+## Current source distribution
 
-`npm install -g agent-buildprint@0.1.0` installs this runtime, its documentation and bundled Buildprint packets. This document describes package contents and does not assert current registry availability. The historical `0.0.17` package did not include v2.
+The `v0.1.0` source tag contains this runtime, its documentation and bundled Buildprint packets, but npm `agent-buildprint@0.1.0` is not published. Public `0.0.17` does not include v2. Use one fresh source checkout, record its HEAD, and keep its CLI and local packet at that revision.
 
-For a scaffolded game host, the most portable way to start the bundled standalone packet is a local development dependency and `npx --no-install`:
+From a parent workspace containing the scaffolded game host:
 
 ```sh
-npm install --save-dev agent-buildprint@0.1.0
-npx --no-install agb start ./node_modules/agent-buildprint/buildprints/standalone-isometric-game/package.json .
+git clone https://github.com/DomEscobar/agent-buildprint.git agb-runtime-v2
+git -C agb-runtime-v2 rev-parse HEAD
+node agb-runtime-v2/bin/agb.js start agb-runtime-v2/buildprints/standalone-isometric-game/package.json ./my-isometric-game
 ```
 
-`start` creates packet state only; it does not scaffold the framework host. Npm publication packages the packet but does not itself change hosted manifest bytes or existing snapshots. The normal release workflow may synchronize website content separately. Remote v2 starts still require an exact `--manifest-sha256` from a separately trusted channel.
+`start` creates packet state only; it does not scaffold the framework host. A future npm publication would not itself change hosted manifest bytes or existing snapshots. The normal release workflow may synchronize website content separately. Remote v2 starts still require an exact `--manifest-sha256` from a separately trusted channel.
 
 Local verification (2026-09-14): all 40 runtime regression cases passed on Windows, including the pinned-template scaffold case. A separate real-package smoke check verified missing-to-available skill routing after host dependency installation without changing revision or approvals. Independent source and instruction review completed. This is CLI evidence, not game, browser or visual acceptance; commands below are usage examples unless identified as executed checks.
 
@@ -38,9 +39,9 @@ agb start https://publisher.example/packet/package.json /new/project --manifest-
 agb bootstrap /trusted/packet/package.json /new/game --allow-scaffold --framework /pinned/checkout --archive /trusted/isometric-framework-0.1.0.tgz --archive-sha256 <trusted-sha256>
 ```
 
-Replace angle-bracket values; do not paste them literally. The standalone packet is bundled with the `0.1.0` npm package and may also be supplied by a compatible checkout. The hosted standalone manifest remains a separately published website artifact. The website digest sidecar is byte identity, not independent trust. `--resume` only supports v2, verifies HEAD/history/source-record/snapshot bytes, and requires the same manifest digest AND payload inventory. It does not reset state, redownload over snapshots, change approvals or rerun scaffold. For offline continuation, use `state status` / `loop next`; these need no manifest download. Changed manifest/source bytes require a separately planned migration, never an implicit refresh.
+Replace angle-bracket values; do not paste them literally. The standalone packet is supplied by the matching source checkout because npm `0.1.0` is unavailable. The hosted standalone manifest remains a separately published website artifact. The website digest sidecar is byte identity, not independent trust. `--resume` only supports v2, verifies HEAD/history/source-record/snapshot bytes, and requires the same manifest digest AND payload inventory. It does not reset state, redownload over snapshots, change approvals or rerun scaffold. For offline continuation, use `state status` / `loop next`; these need no manifest download. Changed manifest/source bytes require a separately planned migration, never an implicit refresh.
 
-`bootstrap` is a deliberately pinned isometric adapter, not manifest shell execution. It reads committed ordinary template blobs from framework commit `7542ff68de04ca6ea6736974b54ec5b5dde1cc33`, checks tree `5363d058a3e15e6025a5a66bda09da343ca5215e`, renames template `gitignore`, and installs the archive as an opaque vendor file with a local package dependency. It never executes the framework scaffold script, package manager, install hooks, tests or build. `--allow-scaffold` consents only to these copies. A dirty checkout is not changed; template reads come from pinned Git objects, not the worktree. The adapter refuses other pins until source-reviewed adaptation. Git is invoked with fixed argument arrays, replacement objects disabled, transport protocols/hooks/fsmonitor disabled, no shell and no checkout. Required Git objects must already be present; the adapter does not fetch them. It does not install framework skill files separately.
+`bootstrap` is a deliberately pinned isometric adapter, not manifest shell execution. It reads committed ordinary template blobs from framework commit `53cf6b17eabbb2ed146e31111864d6812e3d755b`, checks tree `7036c0659bc1b4cfab7679a632527aab13179e87`, renames template `gitignore`, and installs the archive as an opaque vendor file with a local package dependency. It never executes the framework scaffold script, package manager, install hooks, tests or build. `--allow-scaffold` consents only to these copies. A dirty checkout is not changed; template reads come from pinned Git objects, not the worktree. The adapter refuses other pins until source-reviewed adaptation. Git is invoked with fixed argument arrays, replacement objects disabled, transport protocols/hooks/fsmonitor disabled, no shell and no checkout. Required Git objects must already be present; the adapter does not fetch them. It does not install framework skill files separately.
 
 The archive must already exist, and match the operator-provided SHA-256. This is **not proof that the archive was built from that commit**, safe to execute, signed or publisher-authenticated. Obtain/reproduce it through a trusted, separately authorized path. The upstream `build:package` includes checks; do not run it when checks are prohibited. Dependency installation may execute untrusted lifecycle code and needs actual user consent outside this CLI. No automatic execution-consent flag exists because there is no execution path to authorize.
 

@@ -34,8 +34,12 @@ For each screen/state: purpose, information hierarchy, next action, touch intera
 - Text/contrast/non-color cues, accessibility and motion/audio controls:
 
 ## Assets, rights and spending
-- Technique per asset family; supplied/licensed/generated/composed/layered selection:
-- Chosen technique and any optional provider route; exact edit/removal capabilities when selected:
+- Technique per asset family; supplied/licensed/authored, text-to-image foundation,
+  image-to-image adaptation, modular generation, composed/layered, or hybrid selection:
+- Approved visual authority after candidate selection; projection, palette, scale,
+  light and pixel treatment that later asset families must preserve:
+- Chosen technique and any optional provider route; exact edit/removal capabilities when selected.
+  Image-to-image is optional and must not be required when text-to-image is selected:
 - Current access/price evidence or missing capability; no paid probe without permission:
 - Approved ceiling/currency, permitted operations/uploads, spend owner and retry boundary:
 - Licensed free, user-owned or authored route decision; quality criteria and any genuine limitations:

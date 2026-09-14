@@ -1,13 +1,14 @@
 {
   "repository": "https://github.com/DomEscobar/isometric-framework",
-  "commit": "7542ff68de04ca6ea6736974b54ec5b5dde1cc33",
+  "commit": "53cf6b17eabbb2ed146e31111864d6812e3d755b",
   "packageName": "isometric-framework",
   "packageVersion": "0.1.0",
-  "sourceTree": "5363d058a3e15e6025a5a66bda09da343ca5215e",
-  "verifiedOn": "2026-09-13",
+  "sourceTree": "7036c0659bc1b4cfab7679a632527aab13179e87",
+  "verifiedOn": "2026-09-14",
   "verification": [
     "clean local git HEAD and origin inspected",
-    "GitHub commit API returned the exact commit SHA"
+    "origin/main and git ls-remote returned the exact commit SHA",
+    "package build, packed starter, desktop journey and touch journey passed"
   ],
   "claim": "Source identity only; not latest-tip, signature, build, runtime or provider verification",
   "newGameGuide": "docs/CREATE_GAME.md",

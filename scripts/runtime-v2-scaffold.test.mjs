@@ -17,7 +17,7 @@ test('pinned template copy preserves sole contract, verifies archive digest and 
   const packet = path.join(base, 'packet'); const target = path.join(base, 'game')
   const contract = Buffer.from('# Synthetic approved-contract preservation fixture\n')
   write(path.join(target, 'PROJECT_CONTRACT.md'), contract)
-  const lock = { commit: '7542ff68de04ca6ea6736974b54ec5b5dde1cc33', sourceTree: '5363d058a3e15e6025a5a66bda09da343ca5215e', packageName: 'isometric-framework', packageVersion: '0.1.0' }
+  const lock = { commit: '53cf6b17eabbb2ed146e31111864d6812e3d755b', sourceTree: '7036c0659bc1b4cfab7679a632527aab13179e87', packageName: 'isometric-framework', packageVersion: '0.1.0' }
   const definition = { schema: 'agb/loops/v2', approvals: [], bindingFiles: ['PROJECT_CONTRACT.md'], loops: [{ id: 'a', file: 'loops/a.md', dependsOn: [], approvals: [], requirements: ['a'], acceptance: ['implemented'], independentReview: false }] }
   write(path.join(packet, 'framework-lock.json'), jsonBytes(lock))
   write(path.join(packet, 'runtime.json'), jsonBytes(definition))
